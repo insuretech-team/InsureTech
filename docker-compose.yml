@@ -1,0 +1,445 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: insuretech-redis
+    ports:
+      - "6379:6379"
+    command: ["redis-server", "--appendonly", "yes"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: insuretech-kafka
+    ports:
+      - "9092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    restart: unless-stopped
+
+  # ── db-migrate ────────────────────────────────────────────────────────────
+  # Runs ONCE at startup. Migrates primary then backup DB (proto→SQL→seeders).
+  # Exits 0 on success, 1 on failure. Gateway and microservices depend on this.
+  # To run manually: docker compose run --rm db-migrate
+  db-migrate:
+    image: golang:1.24-alpine
+    container_name: insuretech-db-migrate
+    profiles: ["full"]
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+      - go_mod_cache:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    env_file:
+      - .env
+    command: >
+      sh -lc "go run ./backend/inscore/cmd/dbops/main.go migrate --target=both"
+    restart: "no"
+
+  # ── db-sidecar ────────────────────────────────────────────────────────────
+  # Long-running companion: continuous primary→backup sync + auto-backup loop.
+  # Does NOT run migrations. Starts after db-migrate completes successfully.
+  # To run: docker compose --profile full up db-sidecar
+  db-sidecar:
+    image: golang:1.24-alpine
+    container_name: insuretech-db-sidecar
+    profiles: ["sidecar", "full"]
+    working_dir: /workspace
+    volumes:
+      - ./:/workspace
+      - go_mod_cache:/go/pkg/mod
+      - go_build_cache:/root/.cache/go-build
+    env_file:
+      - .env
+    command: >
+      sh -lc "go run ./backend/inscore/cmd/dbops/main.go sidecar"
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+  tenant:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/tenant/Dockerfile
+    container_name: insuretech-tenant
+    profiles: ["tenant", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50050:50050"
+      - "50051:50051"
+    restart: unless-stopped
+
+  authn:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/authn/Dockerfile
+    container_name: insuretech-authn
+    profiles: ["authn", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "50060:50060"
+      - "50061:50061"
+    restart: unless-stopped
+
+  authz:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/authz/Dockerfile
+    container_name: insuretech-authz
+    profiles: ["authz", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50070:50070"
+      - "50071:50071"
+    restart: unless-stopped
+
+  audit:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/audit/Dockerfile
+    container_name: insuretech-audit
+    profiles: ["audit", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50080:50080"
+      - "50081:50081"
+    restart: unless-stopped
+
+  kyc:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/kyc/Dockerfile
+    container_name: insuretech-kyc
+    profiles: ["kyc", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50090:50090"
+      - "50091:50091"
+    restart: unless-stopped
+
+  partner:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/partner/Dockerfile
+    container_name: insuretech-partner
+    profiles: ["partner", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50100:50100"
+      - "50101:50101"
+    restart: unless-stopped
+
+  beneficiary:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/beneficiary/Dockerfile
+    container_name: insuretech-beneficiary
+    profiles: ["beneficiary", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50110:50110"
+      - "50111:50111"
+    restart: unless-stopped
+
+  b2b:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/b2b/Dockerfile
+    container_name: insuretech-b2b
+    profiles: ["b2b", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50112:50112"
+      - "50113:50113"
+    restart: unless-stopped
+
+  workflow:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/workflow/Dockerfile
+    container_name: insuretech-workflow
+    profiles: ["workflow", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50180:50180"
+      - "50181:50181"
+    restart: unless-stopped
+
+  payment:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/payment/Dockerfile
+    container_name: insuretech-payment
+    profiles: ["payment", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50190:50190"
+      - "50191:50191"
+    restart: unless-stopped
+
+  fraud:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/fraud/Dockerfile
+    container_name: insuretech-fraud
+    profiles: ["fraud", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50220:50220"
+      - "50221:50221"
+    restart: unless-stopped
+
+  notification:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/notification/Dockerfile
+    container_name: insuretech-notification
+    profiles: ["notification", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50230:50230"
+      - "50231:50231"
+    restart: unless-stopped
+
+  support:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/support/Dockerfile
+    container_name: insuretech-support
+    profiles: ["support", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50240:50240"
+      - "50241:50241"
+    restart: unless-stopped
+
+  webrtc:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/webrtc/Dockerfile
+    container_name: insuretech-webrtc
+    profiles: ["webrtc", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50250:50250"
+      - "50251:50251"
+    restart: unless-stopped
+
+  media:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/media/Dockerfile
+    container_name: insuretech-media
+    profiles: ["media", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50260:50260"
+      - "50261:50261"
+    restart: unless-stopped
+
+  ocr:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/ocr/Dockerfile
+    container_name: insuretech-ocr
+    profiles: ["ocr", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50270:50270"
+      - "50271:50271"
+    restart: unless-stopped
+
+  docgen:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/docgen/Dockerfile
+    container_name: insuretech-docgen
+    profiles: ["docgen", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50280:50280"
+      - "50281:50281"
+    restart: unless-stopped
+
+  storage:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/storage/Dockerfile
+    container_name: insuretech-storage
+    profiles: ["storage", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50290:50290"
+      - "50291:50291"
+    restart: unless-stopped
+
+  iot:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/iot/Dockerfile
+    container_name: insuretech-iot
+    profiles: ["iot", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50300:50300"
+      - "50301:50301"
+    restart: unless-stopped
+
+  analytics:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/analytics/Dockerfile
+    container_name: insuretech-analytics
+    profiles: ["analytics", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50310:50310"
+      - "50311:50311"
+    restart: unless-stopped
+
+  ai:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/ai/Dockerfile
+    container_name: insuretech-ai
+    profiles: ["ai", "full"]
+    env_file:
+      - .env
+    ports:
+      - "50320:50320"
+      - "50321:50321"
+    restart: unless-stopped
+
+  b2b_portal:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/b2b_portal/Dockerfile
+    container_name: insuretech-b2b-portal
+    profiles: ["frontend", "full"]
+    env_file:
+      - .env
+    ports:
+      - "3000:3000"
+    restart: unless-stopped
+
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  # PoliSync — C# .NET 8 Insurance Commerce & Policy Engine
+  # Hosts: product(50120/50121), quote(50130/50131), order(50140/50141),
+  #        commission(50150/50151), policy(50160/50161),
+  #        underwriting(50170/50171), claim(50210/50211)
+  # ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+  polisync:
+    build:
+      context: ./backend/polisync
+      dockerfile: Dockerfile
+    container_name: polisync
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ConnectionStrings__InsuranceDb: "Host=postgres;Port=5432;Database=insuretech;Username=app;Password=${DB_PASSWORD:-devpassword};SearchPath=insurance_schema"
+      ConnectionStrings__CommissionDb: "Host=postgres;Port=5432;Database=insuretech;Username=app;Password=${DB_PASSWORD:-devpassword};SearchPath=commission_schema"
+      ConnectionStrings__Redis: "redis:6379"
+      Kafka__BootstrapServers: "kafka:9092"
+      GrpcClients__AuthnService: "http://authn-service:50060"
+      GrpcClients__AuthzService: "http://authz-service:50070"
+      GrpcClients__AuditService: "http://audit-service:50080"
+      GrpcClients__KycService: "http://kyc-service:50090"
+      GrpcClients__PartnerService: "http://partner-service:50100"
+      GrpcClients__FraudService: "http://fraud-service:50220"
+      GrpcClients__PaymentService: "http://payment-service:50190"
+      GrpcClients__NotificationService: "http://notification-service:50230"
+      GrpcClients__StorageService: "http://storage-service:50290"
+      GrpcClients__DocgenService: "http://docgen-service:50280"
+      GrpcClients__WorkflowService: "http://workflow-service:50180"
+      Pii__EncryptionKeyHex: "${PII_ENCRYPTION_KEY_HEX:-0000000000000000000000000000000000000000000000000000000000000000}"
+      Observability__OtlpEndpoint: "http://otel-collector:4317"
+    ports:
+      # gRPC ports (HTTP/2)
+      - "50120:50120"   # product-service gRPC
+      - "50121:50121"   # product-service HTTP
+      - "50130:50130"   # quote-service gRPC
+      - "50131:50131"   # quote-service HTTP
+      - "50140:50140"   # order-service gRPC
+      - "50141:50141"   # order-service HTTP
+      - "50150:50150"   # commission-service gRPC
+      - "50151:50151"   # commission-service HTTP
+      - "50160:50160"   # policy-service gRPC
+      - "50161:50161"   # policy-service HTTP
+      - "50170:50170"   # underwriting-service gRPC
+      - "50171:50171"   # underwriting-service HTTP
+      - "50210:50210"   # claim-service gRPC
+      - "50211:50211"   # claim-service HTTP
+    depends_on:
+      postgres:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50161/healthz"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 30s
+    restart: unless-stopped
+    networks:
+      - default
+
+volumes:
+  redis_data:
+  kafka_data:
+  go_mod_cache:
+  go_build_cache:

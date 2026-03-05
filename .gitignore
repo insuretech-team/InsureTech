@@ -416,3 +416,17 @@ FodyWeavers.xsd
 *.msix
 *.msm
 *.msp
+/Android/LabAidInsureTech
+/api
+/b2b_portal
+/docs
+/documentation
+/gen
+/iOS
+/ops
+/proto
+/rules
+/scripts
+/sdks
+/system_portal
+/web_shared

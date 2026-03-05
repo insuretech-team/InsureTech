@@ -1,0 +1,59 @@
+database:
+  # Primary database configuration (Neon)
+  primary:
+    provider: "neon"
+    host: "${PGHOST}"
+    port: "${PGPORT}"
+    database: "${PGDATABASE}"
+    username: "${PGUSER}"
+    password: "${PGPASSWORD}"
+    ssl_mode: "${PGSSLMODE}"
+   
+  
+    
+    # Reduced connections for pool stability
+    max_open_conns: 15
+    max_idle_conns: 5
+    conn_max_lifetime: "30m"
+    
+  # Backup database configuration (Neon DB)
+  backup:
+    provider: "neon"
+    host: "${PGHOST2}"
+    port: "${PGPORT2}"
+    database: "${PGDATABASE2}"
+    username: "${PGUSER2}"
+    password: "${PGPASSWORD2}"
+    ssl_mode: "${PGSSLMODE2}"
+    max_open_conns: 15
+    max_idle_conns: 5
+    conn_max_lifetime: "30m"
+  signal_db:
+    provider: "neon"
+    host: "${PGHOST3}"
+    port: "${PGPORT3}"
+    database: "${PGDATABASE3}"
+    username: "${PGUSER3}"
+    password: "${PGPASSWORD3}"
+    ssl_mode: "${PGSSLMODE3}"
+    max_open_conns: 15
+    max_idle_conns: 5
+    conn_max_lifetime: "30m"
+      
+  # Failover configuration
+  failover:
+    enabled: true
+    health_check_interval: "5s"  # More frequent health checks
+    max_retry_attempts: 3        # More retry attempts before failover
+    retry_delay: "1s"           # Faster retry
+    switch_back_delay: "30s"    # Quick recovery to primary
+    
+  # Synchronization configuration
+  sync:
+    enabled: true
+    interval: "15m"  # Reduced from 1h to 15m for faster consistency
+    batch_size: 500  # Smaller batches for more frequent sync
+    # When empty, the service auto-discovers tables from the current DB schema,
+    # which is created/updated by proto-driven migrations. This keeps the list
+    # in sync with new proto tables automatically.
+    tables_to_sync: []

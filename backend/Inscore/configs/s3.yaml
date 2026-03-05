@@ -1,0 +1,7 @@
+storage:
+  s3:
+    bucket: "${SPACES_BUCKET_NAME}"
+    region: "${SPACES_REGION}"
+    endpoint: "${SPACES_ENDPOINT}"
+    cdn_endpoint: "${SPACES_CDN_ENDPOINT}"
+    root_folder: "${SPACES_ROOT_FOLDER}"

@@ -1,0 +1,16 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <Nullable>enable</Nullable>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <RootNamespace>PoliSync.Products</RootNamespace>
+  </PropertyGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\PoliSync.SharedKernel\PoliSync.SharedKernel.csproj" />
+    <ProjectReference Include="..\PoliSync.Infrastructure\PoliSync.Infrastructure.csproj" />
+  </ItemGroup>
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.4.1" />
+    <PackageReference Include="FluentValidation" Version="11.11.0" />
+  </ItemGroup>
+</Project>

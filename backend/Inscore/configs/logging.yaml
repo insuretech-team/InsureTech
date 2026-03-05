@@ -1,0 +1,44 @@
+logging:
+  # Log level: debug, info, warn, error
+  level: "info"
+  
+  # Log format: json (structured) or text (human-readable)
+  format: "json"
+  
+  # Output destination: file, console, both
+  output: "both"
+  
+  # Directory for log files
+  log_dir: "./logs"
+  
+  # Log rotation settings
+  rotation:
+    # Maximum size in MB before rotation
+    max_size: 100
+    
+    # Maximum number of old log files to keep
+    max_backups: 10
+    
+    # Maximum age in days before deletion
+    max_age: 30
+    
+    # Compress rotated files
+    compress: true
+
+# Environment-specific overrides
+development:
+  logging:
+    level: "debug"
+    format: "text"
+    output: "console"
+
+production:
+  logging:
+    level: "info"
+    format: "json"
+    output: "both"
+    log_dir: "/var/log/lpc"
+    rotation:
+      max_size: 500
+      max_backups: 20
+      max_age: 90

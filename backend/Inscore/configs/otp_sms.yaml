@@ -1,0 +1,50 @@
+# SSL Wireless OTP SMS Configuration
+# Docs: https://smsplus.sslwireless.com
+# Reference: rules/sslwireless.md
+
+provider: sslwireless
+
+sslwireless:
+  # API Endpoint (ISMSPlus platform)
+  domain: ${SSL_DOMAIN}              # https://smsplus.sslwireless.com
+  endpoint: /api/v3/send-sms         # Full: domain + endpoint
+  
+  # Authentication (from SSL Wireless portal)
+  sid: ${SS_SID}                     # Service ID
+  api_token: ${SSL_API_TOKEN}        # API Token (preferred auth method)
+  user: ${SSL_USER}                  # Legacy auth (fallback)
+  password: ${SSL_PASSWORD}          # Legacy auth (fallback)
+  
+  # Sender ID (BTRC-registered masking)
+  sender_id: ${SSL_SENDER_ID}        # labaidinsuretech
+  message_type: ${SSL_MESSAGE_TYPE}  # EN (English GSM-7) or BN (Bangla UCS-2)
+  
+  # Delivery Reports
+  dlr_webhook_url: ${DLR_WEBHOOK_URL}
+  
+  # Timeout settings
+  timeout_seconds: 10
+
+otp:
+  # OTP Generation
+  length: ${OTP_LENGTH}                      # 6 digits (default)
+  validity_minutes: ${OTP_VALIDITY_MINUTES}  # 5 min (default)
+  
+  # Rate Limiting (BTRC compliance)
+  cooldown_seconds: 60               # Between resends
+  max_resends_per_hour: 5            # Hourly limit per phone
+  max_resends_per_day: 10            # Daily limit per phone
+  max_verify_attempts: 5             # Max verification attempts before block
+  
+  # Retry Strategy (gateway failures only, not 4xx errors)
+  retry:
+    max_attempts: 3
+    initial_backoff_ms: 1000
+    max_backoff_ms: 4000
+    multiplier: 2.0
+
+# Message Templates
+templates:
+  registration: "Your Labaid Insuretech verification code is {OTP}. Valid for {VALIDITY} minutes. Do not share."
+  login: "Your Labaid Insuretech login OTP is {OTP}. Do not share with anyone."
+  reset_password: "Your password reset code is {OTP}. If you didn't request this, ignore this message."

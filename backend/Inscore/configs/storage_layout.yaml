@@ -1,0 +1,82 @@
+version: 1
+
+storage_layout:
+  base_prefix: "insuretech"
+  timezone: "UTC"
+
+  retrieval:
+    primary_index:
+      - tenant_id
+      - reference_type
+      - reference_id
+    secondary_index:
+      - tenant_id
+      - user_id
+      - file_type
+      - created_at
+
+  naming:
+    date_path_format: "{yyyy}/{mm}/{dd}"
+    default_filename_template: "{file_id}.{ext}"
+
+  categories:
+    user_kyc_profile:
+      enabled: true
+      reference_type: "USER_KYC_PROFILE"
+      file_type: "FILE_TYPE_IMAGE"
+      visibility: "private"
+      retention_days: 7300
+      folder_template: "{base_prefix}/{tenant_id}/kyc/profiles/{user_id}/{kyc_verification_id}/{yyyy}/{mm}/{dd}/"
+      filename_template: "{file_id}.{ext}"
+      allowed_content_types:
+        - "image/jpeg"
+        - "image/png"
+        - "image/webp"
+
+    user_identity_document:
+      enabled: true
+      reference_type: "USER_IDENTITY_DOC"
+      file_type: "FILE_TYPE_DOCUMENT"
+      visibility: "private"
+      retention_days: 7300
+      folder_template: "{base_prefix}/{tenant_id}/kyc/identity-docs/{user_id}/{document_type}/{document_id}/{yyyy}/{mm}/{dd}/"
+      filename_template: "{file_id}.{ext}"
+      allowed_content_types:
+        - "application/pdf"
+        - "image/jpeg"
+        - "image/png"
+
+    policy_purchase_document:
+      enabled: true
+      reference_type: "POLICY_PURCHASE_DOC"
+      file_type: "FILE_TYPE_DOCUMENT"
+      visibility: "private"
+      retention_days: 3650
+      folder_template: "{base_prefix}/{tenant_id}/policies/{policy_id}/purchase-docs/{document_type}/{yyyy}/{mm}/{dd}/"
+      filename_template: "{file_id}.{ext}"
+      allowed_content_types:
+        - "application/pdf"
+        - "image/jpeg"
+        - "image/png"
+
+    claim_document:
+      enabled: true
+      reference_type: "CLAIM_DOC"
+      file_type: "FILE_TYPE_DOCUMENT"
+      visibility: "private"
+      retention_days: 3650
+      folder_template: "{base_prefix}/{tenant_id}/claims/{claim_id}/documents/{document_type}/{yyyy}/{mm}/{dd}/"
+      filename_template: "{file_id}.{ext}"
+      allowed_content_types:
+        - "application/pdf"
+        - "image/jpeg"
+        - "image/png"
+        - "video/mp4"
+
+  integrations:
+    flve:
+      profile_upload_mode: "caller_managed"
+      fallback_mode: "flve_managed"
+      expected_profile_payload_field: "captured_image_base64"
+      expected_profile_url_field: "profile_image_url"
+

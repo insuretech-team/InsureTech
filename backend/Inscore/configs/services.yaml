@@ -1,0 +1,221 @@
+services:
+  # Core Infrastructure (InScore - Go)
+  tenant:
+    name: tenant-service
+    backend: inscore
+    description: "Organization & Config Management"
+    ports:
+      grpc: 50050
+      http: 50051
+  authn:
+    name: authn-service
+    backend: inscore
+    description: "Identity, Session, OTP (Hybrid Auth)"
+    ports:
+      grpc: 50060
+      http: 50061
+  authz:
+    name: authz-service
+    backend: inscore
+    description: "Permissions, Policies (RBAC/ABAC)"
+    ports:
+      grpc: 50070
+      http: 50071
+  audit:
+    name: audit-service
+    backend: inscore
+    description: "Centralized Audit Logging"
+    ports:
+      grpc: 50080
+      http: 50081
+
+  # User & Partner Management (InScore - Go)
+  kyc:
+    name: kyc-service
+    backend: inscore
+    description: "Identity Verification Orchestrator"
+    ports:
+      grpc: 50090
+      http: 50091
+  partner:
+    name: partner-service
+    backend: inscore
+    description: "Agency/Broker Portal Backend"
+    ports:
+      grpc: 50100
+      http: 50101
+  beneficiary:
+    name: beneficiary-service
+    backend: inscore
+    description: "Beneficiary & Nominee Management"
+    ports:
+      grpc: 50110
+      http: 50111
+  b2b:
+    name: b2b-service
+    backend: inscore
+    description: "B2B Employee & Department Management"
+    ports:
+      grpc: 50112
+      http: 50113
+
+  # Commerce & Production (PoliSync - C#)
+  product:
+    name: product-service
+    backend: polisync
+    description: "Product Factory, Pricing Rules"
+    ports:
+      grpc: 50120
+      http: 50121
+  quote:
+    name: quote-service
+    backend: polisync
+    description: "Quotation Management (Pre-Order)"
+    ports:
+      grpc: 50130
+      http: 50131
+  order:
+    name: order-service
+    backend: polisync
+    description: "Cart, Checkout, Order Lifecycle"
+    ports:
+      grpc: 50140
+      http: 50141
+  commission:
+    name: commission-service
+    backend: polisync
+    description: "Revenue Share & Payouts"
+    ports:
+      grpc: 50150
+      http: 50151
+
+  # Policy Lifecycle (PoliSync - C#)
+  policy:
+    name: policy-service
+    backend: polisync
+    description: "Core Policy Mgmt, Issuance"
+    ports:
+      grpc: 50160
+      http: 50161
+  underwriting:
+    name: underwriting-service
+    backend: polisync
+    description: "Risk Assessment & Decision Engine"
+    ports:
+      grpc: 50170
+      http: 50171
+  workflow:
+    name: workflow-engine
+    backend: inscore
+    description: "Business Process Orchestration"
+    ports:
+      grpc: 50180
+      http: 50181
+
+  # Financials (Mixed)
+  payment:
+    name: payment-service
+    backend: inscore
+    description: "Payment Gateway Integration"
+    ports:
+      grpc: 50190
+      http: 50191
+  ledger:
+    name: ledger-service
+    backend: ledgerclaw
+    description: "Double-entry Accounting"
+    ports:
+      grpc: 50200
+      http: 50201
+
+  # Claims & Fraud (Mixed)
+  claim:
+    name: claim-service
+    backend: polisync
+    description: "FNOL & Claim Settlement"
+    ports:
+      grpc: 50210
+      http: 50211
+  fraud:
+    name: fraud-engine
+    backend: inscore
+    description: "Real-time Fraud Detection"
+    ports:
+      grpc: 50220
+      http: 50221
+
+  # Communications & Media (InScore - Go)
+  notification:
+    name: notification-service
+    backend: inscore
+    description: "SMS, Email, Push Dispatcher"
+    ports:
+      grpc: 50230
+      http: 50231
+  support:
+    name: support-service
+    backend: inscore
+    description: "Ticketing & Customer Support"
+    ports:
+      grpc: 50240
+      http: 50241
+  webrtc:
+    name: webrtc-service
+    backend: inscore
+    description: "Video Signaling & Conference Mgmt"
+    ports:
+      grpc: 50250
+      http: 50251
+  media:
+    name: media-processor
+    backend: inscore
+    description: "Video/Image Transcoding & Opt"
+    ports:
+      grpc: 50260
+      http: 50261
+  ocr:
+    name: ocr-service
+    backend: inscore
+    description: "Optical Character Recognition"
+    ports:
+      grpc: 50270
+      http: 50271
+
+  # Documents & Storage (InScore - Go)
+  docgen:
+    name: docgen-service
+    backend: inscore
+    description: "PDF Generation"
+    ports:
+      grpc: 50280
+      http: 50281
+  storage:
+    name: storage-service
+    backend: inscore
+    description: "S3/Blob Storage Wrapper"
+    ports:
+      grpc: 50290
+      http: 50291
+
+  # Intelligence (InScore - Go)
+  iot:
+    name: iot-broker
+    backend: inscore
+    description: "Telemetry Ingestion (MQTT/HTTP)"
+    ports:
+      grpc: 50300
+      http: 50301
+  analytics:
+    name: analytics-engine
+    backend: inscore
+    description: "Reporting & Insights"
+    ports:
+      grpc: 50310
+      http: 50311
+  ai:
+    name: ai-assistant
+    backend: inscore
+    description: "LLM Agents & Copilot"
+    ports:
+      grpc: 50320
+      http: 50321

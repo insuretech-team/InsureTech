@@ -1,0 +1,142 @@
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║              DETAILED TABLE INFORMATION - PRIMARY                  ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📁 Schema: webrtc (4 tables)
+═══════════════════════════════════════════════════════════════════════
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║                      TABLE INFORMATION                                ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📋 Table: webrtc.peer_sessions
+   Description: Historical record of individual peer participation in sessions
+
+📊 Statistics:
+   Rows: 0
+   Table Size: 8192 bytes
+   Index Size: 8192 bytes
+   Total Size: 16 kB
+
+🗂️  Columns (10):
+───────────────────────────────────────────────────────────────────────
+NAME                TYPE                      NULL  DEFAULT             KEY
+────                ────                      ────  ───────             ───
+peer_session_id     uuid                      NO    uuid_generate_v4()  PK
+session_id          uuid                      YES   uuid_generate_v4()  
+peer_id             uuid                      YES   uuid_generate_v4()  
+display_name        text                      YES   ''::text            
+joined_at           timestamp with time zone  YES                       
+left_at             timestamp with time zone  YES                       
+duration_seconds    bigint                    YES   0                   
+reconnection_count  integer                   YES   0                   
+user_agent          text                      YES   ''::text            
+metrics             jsonb                     YES   '{}'::jsonb         
+
+📇 Indexes (1):
+───────────────────────────────────────────────────────────────────────
+   peer_sessions_pkey UNIQUE (btree) on (peer_session_id)
+
+
+───────────────────────────────────────────────────────────────────────
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║                      TABLE INFORMATION                                ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📋 Table: webrtc.peers
+   Description: WebRTC conference participants and their connection state
+
+📊 Statistics:
+   Rows: 0
+   Table Size: 8192 bytes
+   Index Size: 8192 bytes
+   Total Size: 16 kB
+
+🗂️  Columns (9):
+───────────────────────────────────────────────────────────────────────
+NAME          TYPE                      NULL  DEFAULT             KEY
+────          ────                      ────  ───────             ───
+peer_id       uuid                      NO    uuid_generate_v4()  PK
+room_id       uuid                      YES   uuid_generate_v4()  
+display_name  text                      YES   ''::text            
+state         integer                   YES   0                   
+metadata      jsonb                     YES   '{}'::jsonb         
+joined_at     timestamp with time zone  YES                       
+last_seen_at  timestamp with time zone  YES                       
+user_agent    text                      YES   ''::text            
+left_at       timestamp with time zone  YES                       
+
+📇 Indexes (1):
+───────────────────────────────────────────────────────────────────────
+   peers_pkey UNIQUE (btree) on (peer_id)
+
+
+───────────────────────────────────────────────────────────────────────
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║                      TABLE INFORMATION                                ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📋 Table: webrtc.room_sessions
+   Description: Historical record of room sessions for analytics and reporting
+
+📊 Statistics:
+   Rows: 0
+   Table Size: 8192 bytes
+   Index Size: 0 bytes
+   Total Size: 8192 bytes
+
+🗂️  Columns (8):
+───────────────────────────────────────────────────────────────────────
+NAME                TYPE                      NULL  DEFAULT             KEY
+────                ────                      ────  ───────             ───
+session_id          uuid                      YES   uuid_generate_v4()  
+room_id             uuid                      YES   uuid_generate_v4()  
+started_at          timestamp with time zone  YES                       
+ended_at            timestamp with time zone  YES                       
+duration_seconds    bigint                    YES   0                   
+peak_participants   integer                   YES   0                   
+total_participants  integer                   YES   0                   
+metrics             jsonb                     YES   '{}'::jsonb         
+
+
+───────────────────────────────────────────────────────────────────────
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║                      TABLE INFORMATION                                ║
+╚═══════════════════════════════════════════════════════════════════════╝
+
+📋 Table: webrtc.rooms
+   Description: WebRTC conference rooms with configuration and state
+
+📊 Statistics:
+   Rows: 0
+   Table Size: 16 kB
+   Index Size: 16 kB
+   Total Size: 32 kB
+
+🗂️  Columns (10):
+───────────────────────────────────────────────────────────────────────
+NAME               TYPE                      NULL  DEFAULT             KEY
+────               ────                      ────  ───────             ───
+room_id            uuid                      NO    uuid_generate_v4()  PK
+name               text                      YES   ''::text            
+config             jsonb                     YES   '{}'::jsonb         
+participant_count  integer                   YES   0                   
+max_participants   integer                   YES   0                   
+created_at         timestamp with time zone  YES   now()               
+metadata           jsonb                     YES   '{}'::jsonb         
+state              integer                   YES   0                   
+closed_at          timestamp with time zone  YES                       
+creator_id         uuid                      YES   uuid_generate_v4()  
+
+📇 Indexes (1):
+───────────────────────────────────────────────────────────────────────
+   rooms_pkey UNIQUE (btree) on (room_id)
+
+
+╔═══════════════════════════════════════════════════════════════════════╗
+║  Total tables processed: 4                                                ║
+╚═══════════════════════════════════════════════════════════════════════╝

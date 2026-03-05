@@ -1,0 +1,54 @@
+# ============================================
+# FLVE (Face Liveness & Verification Engine)
+# Core Configuration
+# ============================================
+
+flve:
+  # --------------------------------------------
+  # Server Configuration
+  # --------------------------------------------
+  port: 50051
+
+  # --------------------------------------------
+  # Inference Backend Configuration
+  # --------------------------------------------
+  backend: "hybrid"
+  
+  # HuggingFace Space URL (use the hf.space domain)
+  hf_endpoint: "https://farukhannan-flve.hf.space"
+  hf_token: "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"
+  
+  # Models S3 Bucket (CDN)
+  main_cdn: "https://lcst.sgp1.cdn.digitaloceanspaces.com"
+  cdn_url: "https://lcst.sgp1.cdn.digitaloceanspaces.com/labaidai/models"
+  access_key: "DO00KHVNHGMWXAGZCBCB"
+  secret_key: "POboLPZf/VTXo7gwapINAgZWDAHk5fPcJ/0WpRfMFk4"
+  
+  # Local models directory
+  models_path: "./models"
+  
+  # Model filenames (relative to models_path)
+  model_detector: "yolo-face.onnx"
+  model_embedding: "arcface.onnx"
+  model_liveness: "liveness.onnx"
+  
+  # GPU acceleration for local inference
+  use_gpu: false
+
+  # --------------------------------------------
+  # Detection & Matching Thresholds
+  # --------------------------------------------
+  liveness_threshold: 0.5
+  match_threshold: 0.6
+
+  # --------------------------------------------
+  # Session Management
+  # --------------------------------------------
+  session_type: "memory"
+  redis_url: "localhost:6379"
+  session_ttl: 3600
+
+  # --------------------------------------------
+  # Authentication & Security
+  # --------------------------------------------
+  jwt_secret: "dev-secret-change-in-production"

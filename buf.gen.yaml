@@ -1,0 +1,48 @@
+version: v2
+managed:
+  enabled: true
+  override:
+    - file_option: go_package_prefix
+      value: github.com/newage-saint/insuretech/gen/go
+    - file_option: go_package
+      module: buf.build/googleapis/googleapis
+      value: google.golang.org/genproto/googleapis/api
+plugins:
+  # ===========================
+  # Go - Standard protoc-gen-go (GORM tags injected via post-processing)
+  # ===========================
+  - remote: buf.build/protocolbuffers/go:v1.34.2
+    out: gen/go
+    opt:
+      - paths=source_relative
+  
+  - remote: buf.build/grpc/go:v1.5.1
+    out: gen/go
+    opt:
+      - paths=source_relative
+      - require_unimplemented_servers=false
+  
+  # ===========================
+  # TypeScript - For SvelteKit Admin Portal
+  # ===========================
+  # Note: This plugin requires @bufbuild/protoc-gen-es to be installed
+  # Install with: npm install -g @bufbuild/protoc-gen-es
+  # Or use remote plugin instead for CI/CD environments
+  - remote: buf.build/bufbuild/es:v2.2.2
+    out: gen/ts
+    opt:
+      - target=ts
+      - import_extension=none
+  
+  # ===========================
+  # C# - .NET Support with folder structure
+  # ===========================
+  - remote: buf.build/protocolbuffers/csharp:v28.3
+    out: gen/csharp
+    opt:
+      - base_namespace=Insuretech
+  
+  - remote: buf.build/grpc/csharp:v1.76.0
+    out: gen/csharp
+    opt:
+      - base_namespace=Insuretech

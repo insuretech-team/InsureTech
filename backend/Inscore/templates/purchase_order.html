@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Purchase Order</title>
+  <style>
+    body { font-family: 'Segoe UI', Arial, sans-serif; margin: 32px; color: #111827; }
+    .sheet { border: 1px solid #e5e7eb; border-radius: 12px; overflow: hidden; }
+    .header { background: linear-gradient(120deg, #0b3b66, #0d9488); color: #fff; padding: 22px 26px; display: flex; justify-content: space-between; }
+    .header h1 { margin: 0; font-size: 24px; }
+    .header .po { text-align: right; font-size: 13px; }
+    .content { padding: 22px 26px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin-bottom: 18px; }
+    .box { background: #f9fafb; border-radius: 10px; padding: 12px; }
+    .box h3 { margin: 0 0 8px; font-size: 12px; text-transform: uppercase; color: #6b7280; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { padding: 10px 8px; border-bottom: 1px solid #e5e7eb; }
+    th { font-size: 12px; text-transform: uppercase; color: #6b7280; text-align: left; }
+    .num { text-align: right; }
+    .summary { margin-top: 16px; width: 320px; margin-left: auto; }
+    .summary .row { display: flex; justify-content: space-between; padding: 5px 0; }
+    .summary .final { border-top: 2px solid #111827; margin-top: 6px; padding-top: 8px; font-weight: 700; }
+    .note { margin-top: 18px; font-size: 12px; color: #4b5563; }
+    .qr { margin-top: 16px; text-align: right; }
+    .qr img { width: 96px; height: 96px; }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="header">
+      <h1>{{.company_name}}</h1>
+      <div class="po">
+        <div><strong>Purchase Order</strong></div>
+        <div>PO #: {{.purchase_order_number}}</div>
+        <div>Date: {{.issue_date}}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="box">
+          <h3>Vendor</h3>
+          <div>{{.vendor_name}}</div>
+          <div>{{.vendor_address}}</div>
+          <div>{{.vendor_email}}</div>
+        </div>
+        <div class="box">
+          <h3>Ship To</h3>
+          <div>{{.ship_to_name}}</div>
+          <div>{{.ship_to_address}}</div>
+          <div>{{.ship_to_contact}}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="num">Qty</th>
+            <th class="num">Unit Cost</th>
+            <th class="num">Line Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .items}}
+          <tr>
+            <td>{{.description}}</td>
+            <td class="num">{{.quantity}}</td>
+            <td class="num">{{.unit_price}}</td>
+            <td class="num">{{.amount}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+
+      <div class="summary">
+        <div class="row"><span>Subtotal</span><span>{{.subtotal}}</span></div>
+        <div class="row"><span>Shipping</span><span>{{.shipping_cost}}</span></div>
+        <div class="row"><span>Tax</span><span>{{.tax}}</span></div>
+        <div class="row final"><span>Total</span><span>{{.total}}</span></div>
+      </div>
+
+      <div class="note">Terms: {{.terms}}</div>
+
+      {{if .qr_code_data_uri}}
+      <div class="qr">
+        <img src="{{.qr_code_data_uri}}" alt="QR Code" />
+      </div>
+      {{end}}
+    </div>
+  </div>
+</body>
+</html>

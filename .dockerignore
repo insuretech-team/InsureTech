@@ -10,13 +10,6 @@
 **/obj
 **/coverage
 
-logs
-docs
-documentation
-Android
-iOS
-customer_portal
-
 **/*.log
 **/*.tmp
 **/.DS_Store

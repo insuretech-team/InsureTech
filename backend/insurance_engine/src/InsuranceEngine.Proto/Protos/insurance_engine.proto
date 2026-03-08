@@ -1,0 +1,25 @@
+syntax = "proto3";
+
+option csharp_namespace = "InsuranceEngine.Proto";
+
+package insurance_engine;
+
+service InsuranceEngineService {
+  rpc GetProductQuestions (GetProductQuestionsRequest) returns (GetProductQuestionsResponse);
+}
+
+message GetProductQuestionsRequest {
+  string product_id = 1;
+}
+
+message GetProductQuestionsResponse {
+  repeated RiskAssessmentQuestionProto questions = 1;
+}
+
+message RiskAssessmentQuestionProto {
+  string id = 1;
+  string question_text = 2;
+  string question_text_bn = 3;
+  string options_json = 4;
+  int32 weight = 5;
+}

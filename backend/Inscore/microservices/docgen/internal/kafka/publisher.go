@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"time"
 
+	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 )
@@ -46,8 +47,8 @@ type templateCreatedEvent struct {
 
 // PublishTemplateCreated publishes a document.template.created event
 func (p *Publisher) PublishTemplateCreated(ctx context.Context, templateID, tenantID, templateName string) error {
-	if templateID == "" || tenantID == "" {
-		return fmt.Errorf("templateID and tenantID are required")
+	if templateID == "" {
+		return fmt.Errorf("templateID is required")
 	}
 
 	event := templateCreatedEvent{
@@ -58,7 +59,11 @@ func (p *Publisher) PublishTemplateCreated(ctx context.Context, templateID, tena
 		TemplateName: templateName,
 	}
 
-	err := p.producer.Produce(ctx, p.topic, tenantID, event)
+	key := tenantID
+	if key == "" {
+		key = templateID
+	}
+	err := p.producer.Produce(ctx, p.topic, key, event)
 	if err != nil {
 		logger.Errorf("Failed to publish template.created event: %v", err)
 		return fmt.Errorf("failed to publish template.created event: %w", err)
@@ -78,8 +83,8 @@ type templateUpdatedEvent struct {
 
 // PublishTemplateUpdated publishes a document.template.updated event
 func (p *Publisher) PublishTemplateUpdated(ctx context.Context, templateID, tenantID string) error {
-	if templateID == "" || tenantID == "" {
-		return fmt.Errorf("templateID and tenantID are required")
+	if templateID == "" {
+		return fmt.Errorf("templateID is required")
 	}
 
 	event := templateUpdatedEvent{
@@ -89,7 +94,11 @@ func (p *Publisher) PublishTemplateUpdated(ctx context.Context, templateID, tena
 		TemplateID: templateID,
 	}
 
-	err := p.producer.Produce(ctx, p.topic, tenantID, event)
+	key := tenantID
+	if key == "" {
+		key = templateID
+	}
+	err := p.producer.Produce(ctx, p.topic, key, event)
 	if err != nil {
 		logger.Errorf("Failed to publish template.updated event: %v", err)
 		return fmt.Errorf("failed to publish template.updated event: %w", err)
@@ -99,75 +108,122 @@ func (p *Publisher) PublishTemplateUpdated(ctx context.Context, templateID, tena
 	return nil
 }
 
-// documentGeneratedEvent represents a document.generated event
-type documentGeneratedEvent struct {
-	EventType    string    `json:"event_type"`
-	Timestamp    time.Time `json:"timestamp"`
-	TenantID     string    `json:"tenant_id"`
-	GenerationID string    `json:"generation_id"`
-	TemplateID   string    `json:"template_id"`
-	EntityID     string    `json:"entity_id"`
-	EntityType   string    `json:"entity_type"`
-	Format       string    `json:"format"`
+// documentGenerationRequestedEvent aligns with document.events.v1.DocumentGenerationRequestedEvent.
+type documentGenerationRequestedEvent struct {
+	EventID              string    `json:"event_id"`
+	DocumentGenerationID string    `json:"document_generation_id"`
+	DocumentTemplateID   string    `json:"document_template_id"`
+	EntityType           string    `json:"entity_type"`
+	EntityID             string    `json:"entity_id"`
+	CorrelationID        string    `json:"correlation_id"`
+	Timestamp            time.Time `json:"timestamp"`
 }
 
-// PublishDocumentGenerated publishes a document.generated event
-func (p *Publisher) PublishDocumentGenerated(ctx context.Context, generationID, templateID, tenantID, entityID, entityType, format string) error {
-	if generationID == "" || templateID == "" || tenantID == "" {
-		return fmt.Errorf("generationID, templateID, and tenantID are required")
+// PublishGenerationRequested publishes a document generation requested event.
+func (p *Publisher) PublishGenerationRequested(ctx context.Context, generationID, templateID, tenantID, entityType, entityID, correlationID string) error {
+	if generationID == "" || templateID == "" {
+		return fmt.Errorf("generationID and templateID are required")
 	}
 
-	event := documentGeneratedEvent{
-		EventType:    "document.generated",
-		Timestamp:    time.Now().UTC(),
-		TenantID:     tenantID,
-		GenerationID: generationID,
-		TemplateID:   templateID,
-		EntityID:     entityID,
-		EntityType:   entityType,
-		Format:       format,
+	event := documentGenerationRequestedEvent{
+		EventID:              uuid.NewString(),
+		DocumentGenerationID: generationID,
+		DocumentTemplateID:   templateID,
+		EntityType:           entityType,
+		EntityID:             entityID,
+		CorrelationID:        correlationID,
+		Timestamp:            time.Now().UTC(),
 	}
 
-	err := p.producer.Produce(ctx, p.topic, tenantID, event)
+	key := tenantID
+	if key == "" {
+		key = generationID
+	}
+	err := p.producer.Produce(ctx, p.topic, key, event)
 	if err != nil {
-		logger.Errorf("Failed to publish document.generated event: %v", err)
-		return fmt.Errorf("failed to publish document.generated event: %w", err)
+		logger.Errorf("Failed to publish document generation requested event: %v", err)
+		return fmt.Errorf("failed to publish document generation requested event: %w", err)
 	}
 
-	logger.Infof("Published document.generated event (generationID=%s, templateID=%s, tenantID=%s)", generationID, templateID, tenantID)
+	logger.Infof("Published document generation requested event (generationID=%s, templateID=%s)", generationID, templateID)
 	return nil
 }
 
-// generationFailedEvent represents a document.generation.failed event
-type generationFailedEvent struct {
-	EventType    string    `json:"event_type"`
-	Timestamp    time.Time `json:"timestamp"`
-	TenantID     string    `json:"tenant_id"`
-	GenerationID string    `json:"generation_id"`
-	Reason       string    `json:"reason"`
+// documentGeneratedEvent aligns with document.events.v1.DocumentGeneratedEvent.
+type documentGeneratedEvent struct {
+	EventID              string    `json:"event_id"`
+	DocumentGenerationID string    `json:"document_generation_id"`
+	EntityType           string    `json:"entity_type"`
+	EntityID             string    `json:"entity_id"`
+	FileURL              string    `json:"file_url"`
+	CorrelationID        string    `json:"correlation_id"`
+	Timestamp            time.Time `json:"timestamp"`
 }
 
-// PublishGenerationFailed publishes a document.generation.failed event
-func (p *Publisher) PublishGenerationFailed(ctx context.Context, generationID, tenantID, reason string) error {
-	if generationID == "" || tenantID == "" {
-		return fmt.Errorf("generationID and tenantID are required")
+// PublishDocumentGenerated publishes a document generated event.
+func (p *Publisher) PublishDocumentGenerated(ctx context.Context, generationID, tenantID, entityID, entityType, fileURL, correlationID string) error {
+	if generationID == "" {
+		return fmt.Errorf("generationID is required")
+	}
+
+	event := documentGeneratedEvent{
+		EventID:              uuid.NewString(),
+		DocumentGenerationID: generationID,
+		EntityType:           entityType,
+		EntityID:             entityID,
+		FileURL:              fileURL,
+		CorrelationID:        correlationID,
+		Timestamp:            time.Now().UTC(),
+	}
+
+	key := tenantID
+	if key == "" {
+		key = generationID
+	}
+	err := p.producer.Produce(ctx, p.topic, key, event)
+	if err != nil {
+		logger.Errorf("Failed to publish document generated event: %v", err)
+		return fmt.Errorf("failed to publish document generated event: %w", err)
+	}
+
+	logger.Infof("Published document generated event (generationID=%s)", generationID)
+	return nil
+}
+
+// generationFailedEvent aligns with document.events.v1.DocumentGenerationFailedEvent.
+type generationFailedEvent struct {
+	EventID              string    `json:"event_id"`
+	DocumentGenerationID string    `json:"document_generation_id"`
+	ErrorMessage         string    `json:"error_message"`
+	CorrelationID        string    `json:"correlation_id"`
+	Timestamp            time.Time `json:"timestamp"`
+}
+
+// PublishGenerationFailed publishes a document generation failed event.
+func (p *Publisher) PublishGenerationFailed(ctx context.Context, generationID, tenantID, errorMessage, correlationID string) error {
+	if generationID == "" {
+		return fmt.Errorf("generationID is required")
 	}
 
 	event := generationFailedEvent{
-		EventType:    "document.generation.failed",
-		Timestamp:    time.Now().UTC(),
-		TenantID:     tenantID,
-		GenerationID: generationID,
-		Reason:       reason,
+		EventID:              uuid.NewString(),
+		DocumentGenerationID: generationID,
+		ErrorMessage:         errorMessage,
+		CorrelationID:        correlationID,
+		Timestamp:            time.Now().UTC(),
 	}
 
-	err := p.producer.Produce(ctx, p.topic, tenantID, event)
+	key := tenantID
+	if key == "" {
+		key = generationID
+	}
+	err := p.producer.Produce(ctx, p.topic, key, event)
 	if err != nil {
-		logger.Errorf("Failed to publish generation.failed event: %v", err)
-		return fmt.Errorf("failed to publish generation.failed event: %w", err)
+		logger.Errorf("Failed to publish document generation failed event: %v", err)
+		return fmt.Errorf("failed to publish document generation failed event: %w", err)
 	}
 
-	logger.Infof("Published generation.failed event (generationID=%s, tenantID=%s)", generationID, tenantID)
+	logger.Infof("Published document generation failed event (generationID=%s)", generationID)
 	return nil
 }
 

@@ -32,12 +32,12 @@ type CombinedAuthResult struct {
 	TokenID     string
 	DeviceID    string
 	Valid       bool
-	
+
 	// AuthZ fields
-	Allowed      bool
-	MatchedRule  string
-	Reason       string
-	
+	Allowed     bool
+	MatchedRule string
+	Reason      string
+
 	// Cache metadata
 	CachedAt time.Time
 }
@@ -55,17 +55,17 @@ func NewCombinedAuthCache(ttl time.Duration) *CombinedAuthCache {
 		cache: make(map[string]*CombinedAuthResult),
 		ttl:   ttl,
 	}
-	
+
 	// Start cleanup goroutine
 	go c.cleanupExpired()
-	
+
 	return c
 }
 
 func (c *CombinedAuthCache) cleanupExpired() {
 	ticker := time.NewTicker(1 * time.Minute)
 	defer ticker.Stop()
-	
+
 	for range ticker.C {
 		c.mu.Lock()
 		for key, result := range c.cache {
@@ -80,24 +80,24 @@ func (c *CombinedAuthCache) cleanupExpired() {
 func (c *CombinedAuthCache) Get(key string) (*CombinedAuthResult, bool) {
 	c.mu.RLock()
 	defer c.mu.RUnlock()
-	
+
 	result, exists := c.cache[key]
 	if !exists {
 		return nil, false
 	}
-	
+
 	// Check if expired
 	if time.Since(result.CachedAt) > c.ttl {
 		return nil, false
 	}
-	
+
 	return result, true
 }
 
 func (c *CombinedAuthCache) Set(key string, result *CombinedAuthResult) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	
+
 	result.CachedAt = time.Now()
 	c.cache[key] = result
 }
@@ -105,7 +105,7 @@ func (c *CombinedAuthCache) Set(key string, result *CombinedAuthResult) {
 func (c *CombinedAuthCache) Invalidate(userID string) {
 	c.mu.Lock()
 	defer c.mu.Unlock()
-	
+
 	// Remove all entries for this user
 	for key := range c.cache {
 		if strings.Contains(key, userID) {
@@ -117,13 +117,13 @@ func (c *CombinedAuthCache) Invalidate(userID string) {
 // CombinedAuthMiddleware performs both AuthN and AuthZ in a single optimized flow
 // with caching and circuit breaker support
 type CombinedAuthMiddleware struct {
-	authnClient      authnservicev1.AuthServiceClient
-	authzClient      authzservicev1.AuthZServiceClient
-	cache            *CombinedAuthCache
-	authnCircuit     *middleware.CircuitBreaker
-	authzCircuit     *middleware.CircuitBreaker
-	servicePrefix    string
-	extractResource  ResourceExtractorFn
+	authnClient     authnservicev1.AuthServiceClient
+	authzClient     authzservicev1.AuthZServiceClient
+	cache           *CombinedAuthCache
+	authnCircuit    *middleware.CircuitBreaker
+	authzCircuit    *middleware.CircuitBreaker
+	servicePrefix   string
+	extractResource ResourceExtractorFn
 }
 
 // NewCombinedAuthMiddleware creates an optimized combined auth middleware
@@ -149,14 +149,14 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ctx := r.Context()
-			
+
 			// Extract token/session
 			jwt := bearerToken(r.Header.Get("Authorization"))
 			sessionToken := ""
 			if c, err := r.Cookie(SessionCookieName); err == nil {
 				sessionToken = c.Value
 			}
-			
+
 			// Build resource info for AuthZ
 			resource := ""
 			if m.extractResource != nil {
@@ -164,10 +164,10 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 			}
 			object := buildObject(m.servicePrefix, resource)
 			action := r.Method
-			
+
 			// Generate cache key
 			cacheKey := m.buildCacheKey(jwt, sessionToken, object, action)
-			
+
 			// Check cache first
 			if cached, found := m.cache.Get(cacheKey); found {
 				if cached.Valid && cached.Allowed {
@@ -176,42 +176,42 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 						zap.String("object", object),
 						zap.String("action", action),
 					)
-					
+
 					// Record cache hit
 					metrics.RecordCombinedAuthCacheHit(true)
 					duration := time.Since(time.Now()).Seconds() // Minimal duration for cache hit
 					metrics.RecordCombinedAuthRequest(cached.Portal, "success", duration, true)
-					
+
 					m.populateContext(r, cached)
 					next.ServeHTTP(w, r)
 					return
 				}
 			}
-			
+
 			// Cache miss
 			metrics.RecordCombinedAuthCacheHit(false)
-			
+
 			// Cache miss - perform full validation
 			validationStart := time.Now()
 			result, err := m.validateAuth(ctx, r, jwt, sessionToken, object, action)
 			validationDuration := time.Since(validationStart).Seconds()
-			
+
 			if err != nil {
 				logger.Error("Combined auth validation failed", zap.Error(err))
 				metrics.RecordCombinedAuthRequest("unknown", "error", validationDuration, false)
 				http.Error(w, "Authentication/Authorization failed", http.StatusUnauthorized)
 				return
 			}
-			
+
 			// Cache the result
 			m.cache.Set(cacheKey, result)
-			
+
 			if !result.Valid {
 				metrics.RecordCombinedAuthRequest(result.Portal, "authn_failed", validationDuration, false)
 				http.Error(w, "Unauthorized", http.StatusUnauthorized)
 				return
 			}
-			
+
 			if !result.Allowed {
 				reason := result.Reason
 				if reason == "" {
@@ -227,19 +227,19 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 				http.Error(w, "Forbidden: "+reason, http.StatusForbidden)
 				return
 			}
-			
+
 			// Success
 			metrics.RecordCombinedAuthRequest(result.Portal, "success", validationDuration, false)
-			
+
 			// Populate context and headers
 			m.populateContext(r, result)
-			
+
 			logger.Debug("Combined auth SUCCESS",
 				zap.String("user_id", result.UserID),
 				zap.String("object", object),
 				zap.String("action", action),
 			)
-			
+
 			next.ServeHTTP(w, r)
 		})
 	}
@@ -252,7 +252,7 @@ func (m *CombinedAuthMiddleware) validateAuth(
 	jwt, sessionToken, object, action string,
 ) (*CombinedAuthResult, error) {
 	result := &CombinedAuthResult{}
-	
+
 	// Step 1: AuthN validation with circuit breaker
 	var authnResp *authnservicev1.ValidateTokenResponse
 	err := m.authnCircuit.Execute(func() error {
@@ -267,7 +267,7 @@ func (m *CombinedAuthMiddleware) validateAuth(
 			"user-agent":      r.UserAgent(),
 		})
 		ctx = metadata.NewOutgoingContext(ctx, md)
-		
+
 		resp, err := m.authnClient.ValidateToken(ctx, &authnservicev1.ValidateTokenRequest{
 			AccessToken: jwt,
 			SessionId:   sessionToken,
@@ -275,16 +275,16 @@ func (m *CombinedAuthMiddleware) validateAuth(
 		authnResp = resp
 		return err
 	})
-	
+
 	if err != nil {
 		return nil, fmt.Errorf("authn validation failed: %w", err)
 	}
-	
+
 	if authnResp == nil || !authnResp.Valid {
 		result.Valid = false
 		return result, nil
 	}
-	
+
 	// Populate AuthN fields
 	result.Valid = true
 	result.UserID = authnResp.UserId
@@ -295,7 +295,7 @@ func (m *CombinedAuthMiddleware) validateAuth(
 	result.TenantID = authnResp.TenantId
 	result.TokenID = authnResp.TokenId
 	result.DeviceID = authnResp.DeviceId
-	
+
 	// Device binding check
 	requestDeviceID := strings.TrimSpace(r.Header.Get("X-Device-Id"))
 	if requestDeviceID != "" && authnResp.SessionType == "JWT" && authnResp.DeviceId != "" {
@@ -305,10 +305,10 @@ func (m *CombinedAuthMiddleware) validateAuth(
 			return result, nil
 		}
 	}
-	
+
 	// Step 2: AuthZ validation with circuit breaker
-	domain := buildDomain(result.Portal, result.TenantID)
-	
+	domain := buildRequestDomain(r, result.Portal, result.TenantID)
+
 	// Build access context with API key scopes if present
 	accessCtx := &authzservicev1.AccessContext{
 		SessionId: result.SessionID,
@@ -317,47 +317,48 @@ func (m *CombinedAuthMiddleware) validateAuth(
 		IpAddress: realIP(r),
 		UserAgent: r.UserAgent(),
 	}
-	
+
 	// Check if this is an API key authentication and pass scopes to AuthZ
 	if authnResp.SessionType == "API_KEY" && len(authnResp.ApiKeyScopes) > 0 {
 		if accessCtx.Attributes == nil {
 			accessCtx.Attributes = make(map[string]string)
 		}
-		
+
 		// Pass API key scopes as comma-separated string
 		// The AuthZ service will validate these scopes before checking Casbin policies
 		accessCtx.Attributes["api_key_scopes"] = strings.Join(authnResp.ApiKeyScopes, ",")
 		accessCtx.Attributes["auth_type"] = "api_key"
-		
+
 		logger.Debug("API key authentication detected",
 			zap.String("user_id", result.UserID),
 			zap.Int("scope_count", len(authnResp.ApiKeyScopes)),
 		)
 	}
-	
+
 	var authzResp *authzservicev1.CheckAccessResponse
 	err = m.authzCircuit.Execute(func() error {
-		resp, err := m.authzClient.CheckAccess(ctx, &authzservicev1.CheckAccessRequest{
-			UserId: result.UserID,
-			Domain: domain,
-			Object: object,
-			Action: action,
+		authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+		resp, err := m.authzClient.CheckAccess(authzCtx, &authzservicev1.CheckAccessRequest{
+			UserId:  result.UserID,
+			Domain:  domain,
+			Object:  object,
+			Action:  action,
 			Context: accessCtx,
 		})
 		authzResp = resp
 		return err
 	})
-	
+
 	if err != nil {
 		return nil, fmt.Errorf("authz validation failed: %w", err)
 	}
-	
+
 	if authzResp != nil {
 		result.Allowed = authzResp.Allowed
 		result.MatchedRule = authzResp.MatchedRule
 		result.Reason = authzResp.Reason
 	}
-	
+
 	return result, nil
 }
 
@@ -372,7 +373,7 @@ func (m *CombinedAuthMiddleware) populateContext(r *http.Request, result *Combin
 	r.Header.Set("X-Tenant-ID", result.TenantID)
 	r.Header.Set("X-Token-ID", result.TokenID)
 	r.Header.Set("X-Device-ID", result.DeviceID)
-	
+
 	// Store in context
 	ctx := r.Context()
 	ctx = context.WithValue(ctx, "user_id", result.UserID)
@@ -383,7 +384,7 @@ func (m *CombinedAuthMiddleware) populateContext(r *http.Request, result *Combin
 	ctx = context.WithValue(ctx, "tenant_id", result.TenantID)
 	ctx = context.WithValue(ctx, "token_id", result.TokenID)
 	ctx = context.WithValue(ctx, "device_id", result.DeviceID)
-	
+
 	*r = *r.WithContext(ctx)
 }
 

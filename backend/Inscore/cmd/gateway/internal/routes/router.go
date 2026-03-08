@@ -10,6 +10,8 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/handlers"
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/middleware"
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/resilience"
+	authnv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
+	authzv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"google.golang.org/grpc"
 )
 
@@ -18,6 +20,7 @@ import (
 // authzConn: gRPC connection to authz service (required for AuthZ enforcement; nil = portal-gate only)
 func NewRouter(authnHandler *handlers.AuthnHandler, authnConn *grpc.ClientConn, authzConn *grpc.ClientConn, clientManager *resilience.ResilientClientManager, dlrHandler *handlers.DLRHandler) http.Handler {
 	mux := http.NewServeMux()
+	paymentConn := getServiceConn(clientManager, "payment")
 
 	authMW := AuthMiddleware(authnConn)
 	csrfMW := CSRFMiddleware(authnConn)
@@ -143,18 +146,66 @@ func NewRouter(authnHandler *handlers.AuthnHandler, authnConn *grpc.ClientConn, 
 		mux.Handle("POST /v1/auth/api-keys/{key_id}/revoke", authMW(csrfMW(authzAPIKey(http.HandlerFunc(authnHandler.RevokeAPIKey)))))
 	}
 
+	if paymentConn != nil {
+		paymentCallbackHandler := handlers.NewPaymentCallbackHandler(paymentConn)
+		mux.HandleFunc("POST /v1/payments/webhook/sslcommerz", paymentCallbackHandler.Webhook)
+		mux.HandleFunc("POST /v1/payments/sslcommerz/success", paymentCallbackHandler.Success)
+		mux.HandleFunc("POST /v1/payments/sslcommerz/fail", paymentCallbackHandler.Fail)
+		mux.HandleFunc("POST /v1/payments/sslcommerz/cancel", paymentCallbackHandler.Cancel)
+		mux.HandleFunc("GET /v1/payments/sslcommerz/success", paymentCallbackHandler.Success)
+		mux.HandleFunc("GET /v1/payments/sslcommerz/fail", paymentCallbackHandler.Fail)
+		mux.HandleFunc("GET /v1/payments/sslcommerz/cancel", paymentCallbackHandler.Cancel)
+	}
+
 	// ── B2B APIs (auth + authz) ───────────────────────────────────────────────
-	if b2bConn := getServiceConn(clientManager, "b2b"); b2bConn != nil {
-		b2bHandler := handlers.NewB2BServiceHandler(b2bConn)
+	b2bConn := getServiceConn(clientManager, "b2b")
+	authnConn = getServiceConn(clientManager, "authn")
+	authzConn = getServiceConn(clientManager, "authz")
+
+	if b2bConn != nil && authnConn != nil && authzConn != nil {
+		authnClient := authnv1.NewAuthServiceClient(authnConn)
+		authzClient := authzv1.NewAuthZServiceClient(authzConn)
+		b2bHandler := handlers.NewB2BServiceHandler(b2bConn, authnClient, authzClient)
+		b2bContext := middleware.NewB2BContextMiddleware(b2bConn)
 		authzB2B := authzMW("svc:b2b", PathSegmentExtractor("/v1/b2b/"))
 
+		// Purchase Orders
 		mux.Handle("GET /v1/b2b/purchase-orders/catalog", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListPurchaseOrderCatalog))))
-		mux.Handle("GET /v1/b2b/purchase-orders", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListPurchaseOrders))))
+		mux.Handle("GET /v1/b2b/purchase-orders", authMW(b2bContext.InjectOrganisationContext(authzB2B(http.HandlerFunc(b2bHandler.ListPurchaseOrders)))))
 		mux.Handle("GET /v1/b2b/purchase-orders/{purchase_order_id}", authMW(authzB2B(http.HandlerFunc(b2bHandler.GetPurchaseOrder))))
 		mux.Handle("POST /v1/b2b/purchase-orders", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.CreatePurchaseOrder)))))
-		mux.Handle("GET /v1/b2b/departments", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListDepartments))))
-		mux.Handle("GET /v1/b2b/employees", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListEmployees))))
+		// UpdatePurchaseOrder / DeletePurchaseOrder RPCs are not yet defined in the proto.
+		// Return 501 so clients get a clear "not implemented" instead of a catch-all 404.
+		mux.Handle("PATCH /v1/b2b/purchase-orders/{purchase_order_id}", authMW(http.HandlerFunc(notImplementedHandler)))
+		mux.Handle("DELETE /v1/b2b/purchase-orders/{purchase_order_id}", authMW(http.HandlerFunc(notImplementedHandler)))
+
+		// Departments (full CRUD)
+		mux.Handle("GET /v1/b2b/departments", authMW(b2bContext.InjectOrganisationContext(authzB2B(http.HandlerFunc(b2bHandler.ListDepartments)))))
+		mux.Handle("GET /v1/b2b/departments/{department_id}", authMW(authzB2B(http.HandlerFunc(b2bHandler.GetDepartment))))
+		mux.Handle("POST /v1/b2b/departments", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.CreateDepartment)))))
+		mux.Handle("PATCH /v1/b2b/departments/{department_id}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.UpdateDepartment)))))
+		mux.Handle("DELETE /v1/b2b/departments/{department_id}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.DeleteDepartment)))))
+
+		// Employees (full CRUD + bulk upload)
+		mux.Handle("GET /v1/b2b/employees", authMW(b2bContext.InjectOrganisationContext(authzB2B(http.HandlerFunc(b2bHandler.ListEmployees)))))
 		mux.Handle("GET /v1/b2b/employees/{employee_uuid}", authMW(authzB2B(http.HandlerFunc(b2bHandler.GetEmployee))))
+		mux.Handle("POST /v1/b2b/employees", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.CreateEmployee)))))
+		mux.Handle("PATCH /v1/b2b/employees/{employee_uuid}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.UpdateEmployee)))))
+		mux.Handle("DELETE /v1/b2b/employees/{employee_uuid}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.DeleteEmployee)))))
+		// Bulk upload: POST /v1/b2b/employees:bulkUpload  (multipart/form-data)
+		mux.Handle("POST /v1/b2b/employees/bulk-upload", authMW(csrfMW(b2bContext.InjectOrganisationContext(authzB2B(http.HandlerFunc(b2bHandler.BulkUploadEmployees))))))
+
+		// Organisations (full CRUD + members)
+		mux.Handle("GET /v1/b2b/organisations", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListOrganisations))))
+		mux.Handle("GET /v1/b2b/organisations/me", authMW(http.HandlerFunc(b2bHandler.ResolveMyOrganisation)))
+		mux.Handle("GET /v1/b2b/organisations/{organisation_id}", authMW(authzB2B(http.HandlerFunc(b2bHandler.GetOrganisation))))
+		mux.Handle("POST /v1/b2b/organisations", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.CreateOrganisation)))))
+		mux.Handle("PATCH /v1/b2b/organisations/{organisation_id}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.UpdateOrganisation)))))
+		mux.Handle("DELETE /v1/b2b/organisations/{organisation_id}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.DeleteOrganisation)))))
+		mux.Handle("GET /v1/b2b/organisations/{organisation_id}/members", authMW(authzB2B(http.HandlerFunc(b2bHandler.ListOrgMembers))))
+		mux.Handle("POST /v1/b2b/organisations/{organisation_id}/members", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.AddOrgMember)))))
+		mux.Handle("POST /v1/b2b/organisations/{organisation_id}/admins", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.AssignOrgAdmin)))))
+		mux.Handle("DELETE /v1/b2b/organisations/{organisation_id}/members/{member_id}", authMW(csrfMW(authzB2B(http.HandlerFunc(b2bHandler.RemoveOrgMember)))))
 	}
 
 	// ── Media APIs (auth + authz) ─────────────────────────────────────────────
@@ -303,6 +354,50 @@ func NewRouter(authnHandler *handlers.AuthnHandler, authnConn *grpc.ClientConn, 
 		mux.Handle("POST /v1/orders/{order_id}/cancel", authMW(csrfMW(authzOrder(orderHandler.Proxy()))))
 	}
 
+	// Payment APIs (payment-service :50190)
+	if paymentConn := getServiceConn(clientManager, "payment"); paymentConn != nil {
+		paymentHandler := handlers.NewPoliSyncHandler(paymentConn, "payment-service")
+		authzPayment := authzMW("svc:payment", PathSegmentExtractor("/v1/"))
+
+		// Core payment CRUD
+		mux.Handle("POST /v1/payments", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("GET /v1/payments", authMW(authzPayment(paymentHandler.Proxy())))
+		mux.Handle("GET /v1/payments/{payment_id}", authMW(authzPayment(paymentHandler.Proxy())))
+		mux.Handle("POST /v1/payments/{payment_id}/verify", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("POST /v1/payments/{payment_id}/refunds", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("GET /v1/refunds/{refund_id}", authMW(authzPayment(paymentHandler.Proxy())))
+		mux.Handle("GET /v1/users/{user_id}/payment-methods", authMW(authzPayment(paymentHandler.Proxy())))
+		mux.Handle("POST /v1/users/{user_id}/payment-methods", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("POST /v1/payments/reconcile", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+
+		// Provider reference lookup (admin/agent)
+		mux.Handle("GET /v1/payments/provider/{provider}/references/{provider_reference}", authMW(authzPayment(paymentHandler.Proxy())))
+
+		// Manual payment proof — customer submits bank transfer proof, admin reviews
+		mux.Handle("POST /v1/payments/{payment_id}/submit-proof", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("POST /v1/payments/{payment_id}/review", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+
+		// Receipt generation and retrieval
+		mux.Handle("POST /v1/payments/{payment_id}/generate-receipt", authMW(csrfMW(authzPayment(paymentHandler.Proxy()))))
+		mux.Handle("GET /v1/payments/{payment_id}/receipt", authMW(authzPayment(paymentHandler.Proxy())))
+	}
+
+	// 🧾 Billing APIs (billing-service :50195)
+	if billingConn := getServiceConn(clientManager, "billing"); billingConn != nil {
+		billingHandler := handlers.NewPoliSyncHandler(billingConn, "billing-service")
+		authzBilling := authzMW("svc:billing", PathSegmentExtractor("/v1/"))
+
+		mux.Handle("POST /v1/invoices", authMW(csrfMW(authzBilling(billingHandler.Proxy()))))
+		mux.Handle("GET /v1/invoices", authMW(authzBilling(billingHandler.Proxy())))
+		mux.Handle("GET /v1/invoices/{invoice_id}", authMW(authzBilling(billingHandler.Proxy())))
+		mux.Handle("POST /v1/invoices/{invoice_id}/mark-paid", authMW(csrfMW(authzBilling(billingHandler.Proxy()))))
+		mux.Handle("POST /v1/invoices/{invoice_id}/cancel", authMW(csrfMW(authzBilling(billingHandler.Proxy()))))
+		mux.Handle("POST /v1/invoices/{invoice_id}/issue", authMW(csrfMW(authzBilling(billingHandler.Proxy()))))
+		mux.Handle("GET /v1/invoices/{invoice_id}/pdf", authMW(authzBilling(billingHandler.Proxy())))
+		mux.Handle("POST /v1/invoices/{invoice_id}/generate-pdf", authMW(csrfMW(authzBilling(billingHandler.Proxy()))))
+		mux.Handle("GET /v1/orders/{order_id}/invoice", authMW(authzBilling(billingHandler.Proxy())))
+	}
+
 	// 📋 Policy APIs (policy-service :50161) — incl. Endorsement + Renewal
 	if policyConn := getServiceConn(clientManager, "policy"); policyConn != nil {
 		policyHandler := handlers.NewPoliSyncHandler(policyConn, "policy-service")
@@ -417,6 +512,14 @@ func NewRouter(authnHandler *handlers.AuthnHandler, authnConn *grpc.ClientConn, 
 	return h
 }
 
+// notImplementedHandler returns 501 Not Implemented for routes that are defined
+// in the gateway routing table but whose backend RPC has not yet been added to the proto.
+func notImplementedHandler(w http.ResponseWriter, _ *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(http.StatusNotImplemented)
+	_, _ = w.Write([]byte(`{"ok":false,"message":"not implemented"}`))
+}
+
 // getServiceConn retrieves a gRPC connection for a named service from the client manager.
 // Returns nil if the service is not registered or the connection is unavailable.
 func getServiceConn(cm *resilience.ResilientClientManager, name string) *grpc.ClientConn {
@@ -437,7 +540,7 @@ func getServiceConn(cm *resilience.ResilientClientManager, name string) *grpc.Cl
 func corsMiddleware(next http.Handler) http.Handler {
 	allowedOriginsEnv := os.Getenv("CORS_ALLOWED_ORIGINS")
 	if allowedOriginsEnv == "" {
-		allowedOriginsEnv = "http://localhost:3000,http://localhost:5173"
+		allowedOriginsEnv = "http://localhost:3000,http://localhost:5173,http://b2b.labaidinsuretech.com,https://b2b.labaidinsuretech.com,http://system.labaidinsuretech.com,https://system.labaidinsuretech.com,http://146.190.97.242,http://146.190.97.242:3000"
 	}
 	allowedOrigins := strings.Split(allowedOriginsEnv, ",")
 
@@ -489,7 +592,16 @@ func customVerbCompatMiddleware(next http.Handler) http.Handler {
 		_ = normalize("/v1/partners/", ":verify", "/verify") ||
 			normalize("/v1/partners/", ":updateStatus", "/updateStatus") ||
 			normalize("/v1/fraud-rules/", ":activate", "/activate") ||
-			normalize("/v1/fraud-rules/", ":deactivate", "/deactivate")
+			normalize("/v1/fraud-rules/", ":deactivate", "/deactivate") ||
+			normalize("/v1/payments/", ":submit-proof", "/submit-proof") ||
+			normalize("/v1/payments/", ":review", "/review") ||
+			normalize("/v1/payments/", ":generate-receipt", "/generate-receipt") ||
+			normalize("/v1/payments/", ":verify", "/verify") ||
+			normalize("/v1/payments/", ":reconcile", "/reconcile") ||
+			normalize("/v1/invoices/", ":mark-paid", "/mark-paid") ||
+			normalize("/v1/invoices/", ":cancel", "/cancel") ||
+			normalize("/v1/invoices/", ":issue", "/issue") ||
+			normalize("/v1/invoices/", ":generate-pdf", "/generate-pdf")
 
 		// Avoid Go 1.22+ ServeMux route ambiguity while preserving public API path.
 		if strings.HasPrefix(r.URL.Path, "/v1/policies/number/") &&

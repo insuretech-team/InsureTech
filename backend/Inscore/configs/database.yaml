@@ -1,7 +1,7 @@
 database:
-  # Primary database configuration (Neon)
+  # Primary database configuration (DigitalOcean)
   primary:
-    provider: "neon"
+    provider: "digitalocean"
     host: "${PGHOST}"
     port: "${PGPORT}"
     database: "${PGDATABASE}"
@@ -16,7 +16,7 @@ database:
     max_idle_conns: 5
     conn_max_lifetime: "30m"
     
-  # Backup database configuration (Neon DB)
+  # Backup database configuration (Neon)
   backup:
     provider: "neon"
     host: "${PGHOST2}"

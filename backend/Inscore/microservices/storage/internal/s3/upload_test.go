@@ -19,11 +19,11 @@ Created at: ` + time.Now().Format(time.RFC3339) + `
 
 This file demonstrates successful integration with DigitalOcean Spaces.
 - Bucket: merchbd
-- Root folder: lpc
+- Root folder: inscore
 - Schema: storage
 `)
 
-	// Generate key with lpc prefix
+	// Generate key with inscore prefix
 	key := client.GenerateKey("test-tenant", "FILE_TYPE_DOCUMENT", "test-upload.txt")
 	
 	t.Logf("Uploading test file to key: %s", key)

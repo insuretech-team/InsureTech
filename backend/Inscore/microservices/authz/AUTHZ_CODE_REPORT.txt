@@ -1,0 +1,648 @@
+================================================================================
+AUTHZ MICROSERVICE - COMPLETE CODE REPORT
+================================================================================
+
+OVERVIEW:
+The AuthZ microservice implements RBAC (Role-Based Access Control) with Casbin
+enforcer, domain-scoped roles, policy caching, audit logging, and API key
+scope validation. All policies are seeded on startup per portal.
+
+================================================================================
+1. CASBIN MODEL (PERM - Parameterized RBAC)
+================================================================================
+
+Built-in model in casbin_enforcer.go:
+
+[request_definition]
+r = sub, dom, obj, act
+
+[policy_definition]
+p = sub, dom, obj, act, eft
+
+[role_definition]
+g = _, _, _
+
+[policy_effect]
+e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
+
+[matchers]
+m = g(r.sub, p.sub, r.dom) && r.dom == p.dom && keyMatch2(r.obj, p.obj) && regexMatch(r.act, p.act)
+
+FORMAT STANDARDS:
+- Subject:  "user:<uuid>" or "role:<name>"
+- Domain:   "portal:tenant_id" (e.g., "system:root", "b2b:tenant-abc")
+- Object:   "svc:service/resource" (e.g., "svc:policy/create")
+- Action:   HTTP verb or "*" (e.g., "POST", "GET", "*")
+- Effect:   "allow" or "deny"
+
+ENFORCEMENT FLOW:
+1. Cache check (Redis) - miss continues to Casbin
+2. Casbin Enforce: g(sub, role, dom) && dom match && keyMatch2(obj) && regexMatch(act)
+3. Deny-by-default: no matching rule → DENY
+4. B2B special case: if denied in "b2b:tenant-X", check "b2b:root" fallback
+
+================================================================================
+2. ROLE DEFINITIONS & SEEDED ROLES (portal_seeder.go)
+================================================================================
+
+PORTAL_SYSTEM roles:
+  - super_admin     → svc:* / *
+  - admin           → svc:user/*, svc:role/*, svc:policy/*, svc:storage/*, svc:audit/GET
+  - support         → svc:user/GET, svc:claim/GET, svc:session/DELETE, svc:b2b/* (CRUD)
+  - auditor         → svc:audit/GET, svc:*/GET
+  - readonly        → svc:*/GET
+
+PORTAL_BUSINESS roles:
+  - owner           → svc:* / *
+  - admin           → svc:user/*, svc:policy/*, svc:claim/*, svc:document/*, svc:storage/*
+  - finance         → svc:invoice/*, svc:payment/*, svc:report/GET
+  - hr              → svc:employee/*, svc:enrollment/*
+  - readonly        → svc:*/GET
+
+PORTAL_B2B roles:
+  - partner_admin   → svc:b2b/*, svc:partner/*, svc:policy/*, svc:user/*
+  - partner_user    → svc:b2b/* (CRUD), svc:policy/GET, svc:claim/*, svc:storage/* (uploads)
+  - b2b_org_admin   → svc:b2b/*, svc:user/*, svc:policy/*, svc:claim/*, svc:document/*, svc:invoice/*, svc:payment/*, svc:employee/*, svc:enrollment/*
+  - api_client      → svc:policy/quote POST, svc:policy/bind POST, svc:claim/submit POST
+
+PORTAL_AGENT roles:
+  - senior_agent    → svc:policy/*, svc:claim/*, svc:customer/*, svc:document/*, svc:commission/GET, svc:storage/*
+  - agent           → svc:policy/GET, svc:policy/quote POST, svc:claim/GET, svc:customer/GET, svc:document/*, svc:storage/* (uploads)
+  - agent_trainee   → svc:policy/GET, svc:customer/GET
+
+PORTAL_REGULATOR roles:
+  - regulator_admin → svc:audit/*, svc:report/*, svc:compliance/*
+  - inspector       → svc:audit/GET, svc:report/GET, svc:compliance/GET
+  - auditor         → svc:audit/GET, svc:report/GET
+
+PORTAL_B2C (CUSTOMER) roles:
+  - customer        → svc:policy/my/GET, svc:claim/my/*, svc:profile/*, svc:document/*, svc:storage/* (uploads)
+
+SYSTEM DEFAULT ROLE BINDINGS (on startup):
+- All SYSTEM_USER accounts get "support" role in "system:root" domain
+
+================================================================================
+3. SUBJECT/OBJECT/ACTION DERIVATION IN enforce() CALL
+================================================================================
+
+CheckAccess RPC Handler (authz_handler.go):
+```
+req.UserId            → subject = "user:" + req.UserId
+req.Domain            → domain = "portal:tenant_id"  (format validated)
+req.Object            → object = "svc:service/resource"
+req.Action            → action = "POST" | "GET" | "*"
+req.Context.Attributes → api_key_scopes (optional, pre-validated)
+```
+
+Service Layer (authz_service.go CheckAccess):
+1. API Key Scope Validation FIRST (if api_key_scopes present in attributes)
+   - ValidateScope(scopes, object, action)
+   - Returns before Casbin if denied
+2. Cache check: permCache.Get(userID, domain, object, action)
+3. Casbin enforce: enforcer.Enforce(subject, domain, object, action)
+   - Returns (allowed bool, matchedRule string, error)
+4. B2B fallback: if denied and domain="b2b:*", check "b2b:root" policies
+5. Audit & Metrics: record decision, audit if denied or auditAllDecisions=true
+6. Cache set: permCache.Set(userID, domain, object, action, allowed)
+
+================================================================================
+4. ORG_ID / TENANT_ID USAGE IN POLICIES
+================================================================================
+
+Domain Format: "{portal}:{tenant_id}"
+  - portal: system, business, b2b, agent, regulator, b2c
+  - tenant_id: "root" (default), or "tenant-abc", "org-xyz", etc.
+
+Example Domains:
+  - "system:root"       (system portal, root tenant)
+  - "b2b:tenant-abc123" (B2B portal, specific partner org)
+  - "business:org-456"  (Business portal, specific org)
+  - "agent:root"        (Agent portal, root tenant)
+
+Usage in Seeding:
+- SeedPortal(ctx, portal, tenantID, dryRun) seeds for portal + specific tenantID
+- SeedAllPortals() seeds all portals with GlobalTenantID="root"
+- portalDomainKey(portal, tenantID) → "{lowercasePortal}:{tenantID}"
+
+B2B Scoped Policies:
+- Policies created in "b2b:root" can be copied to "b2b:tenant-X" on role assignment
+- ensureScopedRolePolicies() copies root policies to tenant-specific domain
+
+Tenant Isolation:
+- All casbin_rules have v1 (domain) with tenant info
+- Queries filter by domain in CheckAccess
+- No cross-tenant data leakage (deny-by-default enforcement)
+
+================================================================================
+5. CASBIN ENFORCER INITIALIZATION & POLICY LOADING
+================================================================================
+
+CasbinEnforcer (casbin_enforcer.go):
+- Uses gorm-adapter: table="casbin_rules", schema="authz_schema"
+- Table: entityv1.CasbinRule{} with columns: ptype, v0-v5
+- PERM format: p-rules (policies) and g-rules (role assignments)
+
+Initialization in main.go:
+```go
+enf, err := enforcer.New(database, cfg.Casbin.ModelPath)
+if err != nil {
+    appLogger.Fatal("failed to init casbin enforcer", zap.Error(err))
+}
+if cfg.Casbin.AutoReloadInterval > 0 {
+    enf.StartAutoReload(int(cfg.Casbin.AutoReloadInterval.Seconds()))
+}
+```
+
+Policy Loading:
+- LoadPolicy() called on startup in New()
+- Reads casbin_rules table → populates enforcer in-memory
+- AutoReload every N seconds (configurable, default 30s)
+- InvalidateCache() forces full reload from DB
+
+Casbin Rules Storage:
+- ptype: "p" (policy) or "g" (role)
+- v0: subject (user:uuid or role:name)
+- v1: domain (portal:tenant_id)
+- v2: object (svc:service/resource)
+- v3: action (POST, GET, *)
+- v4: effect (allow, deny)
+- v5: (unused in PERM)
+
+================================================================================
+6. HANDLER FILES (RPC Implementations)
+================================================================================
+
+authz_handler.go - AuthZHandler struct:
+
+Core Enforcement:
+  - CheckAccess(ctx, req) → h.svc.CheckAccess()
+  - BatchCheckAccess(ctx, req) → h.svc.BatchCheckAccess()
+
+Role Management:
+  - CreateRole(ctx, req) → validates name, portal
+  - GetRole(ctx, req) → validates role_id
+  - UpdateRole(ctx, req) → validates role_id
+  - DeleteRole(ctx, req) → validates role_id
+  - ListRoles(ctx, req) → no validation
+  - AssignRole(ctx, req) → validates user_id, role_id, domain
+  - RemoveRole(ctx, req) → validates user_id, role_id, domain
+  - ListUserRoles(ctx, req) → validates user_id
+  - GetUserPermissions(ctx, req) → validates user_id, domain
+
+Policy Management:
+  - CreatePolicyRule(ctx, req) → validates subject, domain, object, action
+  - UpdatePolicyRule(ctx, req) → validates policy_id
+  - DeletePolicyRule(ctx, req) → validates policy_id
+  - ListPolicyRules(ctx, req) → no validation
+
+Portal Configuration:
+  - GetPortalConfig(ctx, req) → validates portal
+  - UpdatePortalConfig(ctx, req) → validates portal
+
+Audit:
+  - ListAccessDecisionAudits(ctx, req) → no validation
+
+Cache:
+  - InvalidatePolicyCache(ctx, req) → no validation
+
+JWKS:
+  - GetJWKS(ctx, req) → returns RS256 public key for JWT verification
+
+================================================================================
+7. SERVICE FILES (Business Logic)
+================================================================================
+
+authz_service.go - AuthZService struct:
+
+Constructor:
+```go
+func New(
+    enforcer EnforcerIface,
+    roleRepo RoleRepository,
+    userRoleRepo UserRoleRepository,
+    policyRepo PolicyRuleRepository,
+    portalRepo PortalConfigRepository,
+    auditRepo AuditRepository,
+    auditAllDecisions bool,
+    publisher *authzevents.Publisher,
+) *AuthZService
+```
+
+CORE ENFORCEMENT:
+CheckAccess():
+  1. subject := "user:" + req.UserId
+  2. API Key Scope Validation (if req.Context.Attributes["api_key_scopes"])
+  3. Cache check: permCache.Get(userID, domain, object, action)
+  4. Casbin enforce: enforcer.Enforce(sub, dom, obj, act) → (allowed, matchedRule, error)
+  5. B2B Fallback: if denied and b2b:* domain, check b2b:root policies
+  6. Audit: if denied or auditAllDecisions, write to auditRepo
+  7. Events: if denied, publish AccessDeniedEvent → Kafka
+  8. Cache set: permCache.Set(..., allowed)
+  9. Metrics: RecordDecision(domain, allowed, latencyMs)
+
+BatchCheckAccess():
+  - Multiple (obj, act) checks for same user+domain
+  - Returns []AccessCheckResult with individual allow/deny
+
+ROLE MANAGEMENT:
+CreateRole():
+  - Generate UUID, set isActive=true, isSystem=false
+  - Persist to roleRepo
+  - Publish RoleCreatedEvent
+
+GetRole():
+  - Fetch by role_id from roleRepo
+
+UpdateRole():
+  - Get existing, apply updates, persist
+  - Update to roleRepo
+
+DeleteRole():
+  - SoftDelete (is_active=false) in roleRepo
+
+ListRoles():
+  - roleRepo.List(portal, activeOnly, limit, offset)
+
+AssignRole():
+  - ensureScopedRolePolicies(role, domain) — copy b2b:root → b2b:tenant if needed
+  - enforcer.AddRoleForUserInDomain(subject, role, domain) — Casbin g-rule
+  - userRoleRepo.Assign(UserRole entity)
+  - Publish RoleAssignedEvent
+  - Cache invalidation for user: permCache.InvalidateUser(userID)
+
+RemoveRole():
+  - enforcer.DeleteRoleForUserInDomain()
+  - userRoleRepo.Remove()
+
+ListUserRoles():
+  - userRoleRepo.ListByUser(userID, domain)
+
+GetUserPermissions():
+  - enforcer.GetPermissionsForUserInDomain(sub, domain)
+  - enforcer.GetRolesForUserInDomain(sub, domain)
+  - Returns effective permissions (direct + role-inherited)
+
+POLICY MANAGEMENT:
+CreatePolicyRule():
+  1. enforcer.AddPolicy(sub, dom, obj, act, effect) — p-rule to Casbin
+  2. policyRepo.Create(PolicyRule entity) — persist to DB
+  3. Publish PolicyRuleCreatedEvent
+  4. Cache invalidation: permCache.InvalidateDomain(domain)
+
+UpdatePolicyRule():
+  - enforcer.RemovePolicy(old)
+  - Apply updates
+  - policyRepo.Update()
+  - enforcer.AddPolicy(new)
+  - Cache invalidation
+
+DeletePolicyRule():
+  - policyRepo.SoftDelete() — is_active=false
+  - Note: Casbin rule NOT auto-removed; call InvalidatePolicyCache()
+
+ListPolicyRules():
+  - policyRepo.List(domain, activeOnly, limit, offset)
+
+PORTAL CONFIGURATION:
+GetPortalConfig():
+  - portalRepo.GetByPortal(portal)
+
+UpdatePortalConfig():
+  - portalRepo.Upsert(PortalConfig)
+  - Publish PortalConfigUpdatedEvent
+
+AUDIT:
+ListAccessDecisionAudits():
+  - auditRepo.List(req) with filters: userId, domain, decision, from, to
+
+CACHE INVALIDATION:
+InvalidatePolicyCache():
+  - enforcer.InvalidateCache() — reloads all policies from DB
+  - Publish PolicyCacheInvalidatedEvent
+
+JWKS:
+GetJWKS():
+  - Read RS256 public key from file (AUTHZ_JWKS_PUBLIC_KEY_PATH env)
+  - Extract N, E from RSA key
+  - Return JWK format for /.well-known/jwks.json
+
+================================================================================
+8. REPOSITORY FILES (Database Queries)
+================================================================================
+
+policy_repository.go - PolicyRepo:
+  - Create(ctx, pr) → INSERT policy_rules
+  - GetByID(ctx, id) → SELECT by policy_id
+  - Update(ctx, pr) → UPDATE policy_rules
+  - SoftDelete(ctx, policyID) → UPDATE is_active=false
+  - List(ctx, domain, activeOnly, limit, offset) → SELECT with filters
+  - Delete(ctx, id) → physical DELETE
+
+role_repository.go - RoleRepo:
+  - Create(ctx, role) → INSERT roles (or return if exists)
+  - GetByID(ctx, id) → SELECT by role_id
+  - GetByNameAndPortal(ctx, name, portal) → SELECT by name + portal
+  - Update(ctx, role) → UPDATE roles
+  - SoftDelete(ctx, roleID) → UPDATE is_active=false
+  - List(ctx, portal, activeOnly, limit, offset) → SELECT with filters
+  - Delete(ctx, id) → physical DELETE
+
+user_role_repository.go - UserRoleRepo:
+  - Assign(ctx, ur) → UPSERT user_roles (on conflict: update assigned_by, assigned_at, expires_at)
+  - Remove(ctx, userID, roleID, domain) → DELETE user_roles
+  - ListByUser(ctx, userID, domain) → SELECT by user_id + domain
+  - ListByRole(ctx, roleID, domain) → SELECT by role_id + domain
+  - Revoke(ctx, userID, roleID, domain) → DELETE user_roles
+
+audit_repository.go - AuditRepo:
+  - Create(ctx, audit) → INSERT access_decision_audits
+  - List(ctx, req) → SELECT with filters: userId, domain, decision, from/to timestamps
+
+authz_repository.go - CasbinRuleRepo:
+  - Upsert(ctx, rule) → INSERT ... ON CONFLICT UPDATE casbin_rules
+  - Delete(ctx, rule) → DELETE casbin_rules
+  - ListByDomain(ctx, domain) → SELECT WHERE v1=domain
+  - DeleteByDomainAndSubject(ctx, domain, subject) → DELETE WHERE v1=domain AND v0=subject
+
+portal_repository.go - PortalRepo & TokenConfigRepo:
+  PortalRepo:
+    - Upsert(ctx, cfg) → INSERT ... ON CONFLICT portal_configs
+    - GetByPortal(ctx, portal) → SELECT by portal
+    - List(ctx) → SELECT all portal_configs
+  TokenConfigRepo:
+    - GetActive(ctx) → SELECT WHERE is_active=true
+    - List(ctx) → SELECT all token_configs
+    - Create(ctx, cfg) → INSERT token_configs
+
+================================================================================
+9. MIDDLEWARE FILES
+================================================================================
+
+jwt_interceptor.go - JWTInterceptor:
+  - Validates Bearer JWT on incoming gRPC requests
+  - publicKey: *rsa.PublicKey (nil = no-op mode for dev/test)
+  - skipMethods: map[string]bool for public endpoints
+  
+  Public Methods (no auth required):
+    - /insuretech.authz.services.v1.AuthZService/CheckPermission
+    - /insuretech.authz.services.v1.AuthZService/CheckAccess
+    - /insuretech.authz.services.v1.AuthZService/GetJWKS
+    - /insuretech.authz.services.v1.AuthZService/ListRoles
+    - /insuretech.authz.services.v1.AuthZService/AssignRole
+    - /insuretech.authz.services.v1.AuthZService/CreatePolicyRule
+    - /grpc.health.v1.Health/Check
+    - /grpc.health.v1.Health/Watch
+  
+  Trusted Internal Services:
+    - gateway
+    - b2b-service
+  
+  Methods:
+    - UnaryInterceptor() → unaryIntercept(ctx, req, info, handler)
+    - StreamInterceptor() → streamIntercept(srv, ss, info, handler)
+    - extractClaims(ctx) → parses JWT, returns AuthClaims
+    - ParseRSAPublicKeyFromPEM(pemStr) → loads public key from PEM/file
+
+  AuthClaims struct:
+    - UserID: from JWT "sub" claim
+    - PortalID: from JWT "portal" claim
+    - Roles: from JWT "roles" claim (array or string)
+    - Email: from JWT "email" claim
+
+ratelimit_interceptor.go - RateLimiter:
+  - Token bucket rate limiter per client IP
+  - rate: 100 rps (steady-state)
+  - capacity: 200 (burst)
+  - cleanup loop: evicts idle buckets every minute
+  
+  Methods:
+    - allow(ip string) bool → token bucket algorithm
+    - UnaryInterceptor() → checks rate limit
+    - StreamInterceptor() → checks rate limit
+
+================================================================================
+10. CACHE FILES
+================================================================================
+
+permission_cache.go - PermissionCache:
+  - Redis-backed permission cache
+  - Key format: "authz:perm:{user_id}:{domain}:{object}:{action}"
+  - Value: "allow" or "deny"
+  - TTL: configurable (default 5 minutes)
+  
+  Methods:
+    - Get(ctx, userID, domain, object, action) → (bool, bool) [decision, found]
+    - Set(ctx, userID, domain, object, action, allowed) → error
+    - InvalidateUser(ctx, userID) → delete all keys for user
+    - InvalidateDomain(ctx, domain) → delete all keys for domain
+    - InvalidateAll(ctx) → clear entire cache
+    - deleteByPattern(ctx, pattern) → SCAN + DEL
+
+================================================================================
+11. CONFIG & DOMAIN INTERFACES
+================================================================================
+
+config.go - Config struct:
+  - Server: Host, GRPCPort, HTTPPort
+  - Database: Host, Port, User, Password, Database, SSLMode
+  - Redis: URL, Password, DB, PolicyCacheTTL
+  - Kafka: Brokers, Topic
+  - Casbin: ModelPath, AutoReloadInterval, AuditAllDecisions, DenyByDefault
+  - Auth: PublicKeyPEM (JWT verification key)
+  - FLVE: Face Liveness Verification Engine config
+  
+  Load() loads from env vars with defaults, validates DB_PASSWORD required
+
+domain/interfaces.go - Interfaces:
+  - EnforcerIface: Enforce, AddPolicy, RemovePolicy, AddRoleForUserInDomain, etc.
+  - RoleRepository: Create, GetByID, GetByNameAndPortal, Update, SoftDelete, List
+  - UserRoleRepository: Assign, Remove, ListByUser, ListByRole, Revoke
+  - PolicyRuleRepository: Create, Update, SoftDelete, List
+  - PortalConfigRepository: GetByPortal, Upsert
+  - AuditRepository: Create, List
+  - TokenConfigRepository: GetActive, List, Create
+
+================================================================================
+12. EVENTS & PUBLISHING
+================================================================================
+
+publisher.go - Publisher:
+  Topics: "authz.events"
+  
+  Events Published:
+    - RoleCreatedEvent(eventId, roleId, name, portal, createdBy, occurredAt)
+    - RoleUpdatedEvent(eventId, roleId, occurredAt)
+    - RoleDeletedEvent(eventId, roleId, deletedBy, occurredAt)
+    - RoleAssignedEvent(eventId, userId, roleId, roleName, domain, assignedBy, occurredAt)
+    - RoleRemovedEvent(eventId, userId, roleId, roleName, domain, removedBy, occurredAt)
+    - PolicyRuleCreatedEvent(eventId, policyId, subject, domain, object, action, effect, createdBy, occurredAt)
+    - PolicyRuleUpdatedEvent(eventId, policyId, occurredAt)
+    - PolicyRuleDeletedEvent(eventId, policyId, deletedBy, occurredAt)
+    - AccessDeniedEvent(eventId, userId, sessionId, domain, subject, object, action, reason, ipAddress, occurredAt)
+    - AccessGrantedEvent(eventId, userId, domain, subject, object, action, occurredAt)
+    - PortalConfigUpdatedEvent(eventId, portal, updatedBy, changedFields, occurredAt)
+    - PolicyCacheInvalidatedEvent(eventId, domain, occurredAt)
+
+consumers.go - Kafka Consumers:
+  Topic: "authn.user.registered"
+    - UserRegisteredHandler: assigns default role on new user registration
+    - Default roles: b2c→customer, agent→agent, business→admin, b2b→partner_user, system→support, regulator→inspector
+    - Format: UserRegisteredPayload{UserId, Portal, TenantID}
+    - Creates g-rule: AddRoleForUserInDomain("user:"+userId, "role:"+defaultRole, portal+":"+tenantID)
+  
+  Topic: "authz.events"
+    - PolicyCacheInvalidatedHandler: reloads Casbin on cache invalidation events
+    - Format: PolicyCacheInvalidatedPayload{Domain, InvalidatedBy}
+    - Calls enforcer.InvalidateCache()
+  
+  FanOutHandler: dispatches to correct handler based on msg.Topic
+
+================================================================================
+13. MAIN.GO & SERVER STARTUP
+================================================================================
+
+cmd/server/main.go - Server initialization:
+
+1. Logger initialization
+2. .env loading
+3. Config loading from environment + YAML (services.yaml, database.yaml, flve.yaml)
+4. Database initialization
+5. Casbin enforcer creation
+6. Repository creation (role, userRole, policy, portal, audit, tokenConfig)
+7. Seeder creation
+8. Kafka producer initialization (with retry: 5 retries, 3s timeout)
+9. Event publisher creation
+10. AuthZService instantiation
+11. Kafka consumer group setup (topics: authn.user.registered, authz.events)
+12. Portal seeding (SeedAllPortals with 60s timeout)
+13. JWT interceptor setup (public key from AUTHZ_JWT_PUBLIC_KEY_PEM env)
+14. Rate limiter (100 rps steady, 200 burst)
+15. gRPC server setup with interceptors
+16. Health check registration
+17. Graceful shutdown on SIGTERM/SIGINT
+
+Interceptor Chain:
+  - JWTInterceptor (unary + stream)
+  - RateLimiter (unary + stream)
+  - loggingInterceptor
+  - recoveryInterceptor
+
+Public gRPC Methods (no JWT required):
+  - CheckPermission, CheckAccess, GetJWKS, ListRoles, AssignRole, CreatePolicyRule
+  - Health/Check, Health/Watch
+
+Port Configuration:
+  - Read from services.yaml (not env vars)
+  - Format: grpc_port in services.yaml under authz service
+
+================================================================================
+14. API KEY SCOPE VALIDATION
+================================================================================
+
+apikey_scope_validator.go - ApiKeyScopeValidator:
+
+ValidateScope(scopes []string, object, action) → (bool, reason):
+  - Checks if API key scopes permit the requested object+action
+  - Runs BEFORE Casbin enforce
+  
+  Scope Patterns:
+    - "*" → allows everything
+    - "svc:policy/read" → exact match
+    - "svc:policy/*" → all actions on policy
+    - "svc:*/read" → read action on all resources
+    - "svc:policy" → any action on policy (no / needed)
+
+ParseScopesFromAttributes(attributes map[string]string) → []string:
+  - Extracts "api_key_scopes" attribute (comma-separated)
+
+Default Scopes by Owner Type:
+  - INSURER: svc:policy/*, svc:claim/*, svc:payment/*, svc:customer/read, svc:agent/read, svc:report/*
+  - PARTNER: svc:policy/read, svc:policy/create, svc:customer/read, svc:customer/create, svc:commission/read
+  - INTERNAL: * (full access)
+
+Integration in CheckAccess:
+  1. If api_key_scopes present in req.Context.Attributes
+  2. Validate before Casbin (more restrictive)
+  3. Record scope validation metrics
+  4. If denied, return immediately (don't call Casbin)
+
+================================================================================
+15. SEEDER (POLICY BOOTSTRAP)
+================================================================================
+
+portal_seeder.go - PortalSeeder:
+
+SeedAllPortals(ctx):
+  - Seeds all 6 portals with GlobalTenantID="root"
+  - For each portal: SeedPortal(ctx, portal, "root", false)
+  - Then: SeedPortalConfigs(), SeedTokenConfig(), SeedDefaultSystemRoleBindings()
+
+SeedPortal(ctx, portal, tenantID, dryRun):
+  - Load portalSeedMap[portal] → []portalRole
+  - For each portalRole:
+    1. Create role if not exists (or get existing)
+    2. For each seedPolicy in role:
+       - Build policyKey = "{subject}|{domain}|{object}|{action}|{effect}"
+       - Skip if already present
+       - Create PolicyRule entity
+       - Call enforcer.AddPolicy(roleSubject, domainKey, object, action, effect)
+       - Persist to policyRepo
+  - Returns SeedResult{RolesSeeded, PoliciesSeeded, RulesSeeded}
+
+SeedDefaultSystemRoleBindings(ctx):
+  - Query authn_schema.users WHERE user_type='SYSTEM_USER' AND deleted_at IS NULL
+  - For each system user:
+    - enforcer.AddRoleForUserInDomain("user:"+userId, "role:support", "system:root")
+  - Idempotent: skips if role already assigned
+
+SeedPortalConfigs(ctx):
+  - UPSERT portal_configs for all 6 portals
+  - Sets MFA requirements, token TTLs, session config per portal
+
+SeedTokenConfig(ctx):
+  - Reads JWT_PUBLIC_KEY_PEM env var
+  - Creates TokenConfig with kid (default: "insuretech-2025-01")
+  - Skips if kid already exists (idempotent)
+
+portalDomainKey(portal, tenantID) → string:
+  - Returns "{lowercasePortal}:{tenantID}"
+  - e.g., "system:root", "b2b:tenant-abc"
+
+================================================================================
+16. METRICS
+================================================================================
+
+metrics.go - Prometheus Metrics:
+
+  authz_decisions_total{portal, decision}
+    - Counter: total CheckAccess decisions by portal + outcome (allow/deny)
+  
+  authz_decision_latency_ms{portal}
+    - Histogram: CheckAccess latency buckets (0.5, 1, 2, 5, 10, 25, 50, 100, 250, 500 ms)
+  
+  authz_cache_hit_ratio{level}
+    - Gauge: L1 (in-process) and L2 (Redis) cache hit ratios
+  
+  authz_api_scope_validations_total{portal, result}
+    - Counter: API key scope validation outcomes (allowed/denied)
+  
+  authz_api_scope_validation_latency_ms
+    - Histogram: scope validation latency (0.1, 0.25, 0.5, 1, 2.5, 5, 10 ms)
+  
+  authz_api_scope_denial_reasons_total{reason}
+    - Counter: scope denial reasons (no_scopes, scope_mismatch)
+  
+  authz_portal_config_requests_total{portal, status}
+    - Counter: portal config requests by portal + status (success, not_found, error)
+
+Recording Functions:
+  - RecordDecision(domain, allowed, latencyMs)
+  - UpdateCacheHitRatio(level, ratio)
+  - RecordCacheHit(hit bool)
+  - RecordAPIScopeValidation(domain, allowed, latencyMs)
+  - RecordAPIScopeDenial(reason)
+  - RecordPortalConfigRequest(portal, status)
+
+================================================================================
+END OF REPORT
+================================================================================

@@ -22,6 +22,9 @@ package routes
 //   r.Use(AuthZMiddleware(authzConn, "svc:claim",  ResourceExtractorFromPath))
 
 import (
+	"bytes"
+	"encoding/json"
+	"io"
 	"net/http"
 	"strings"
 
@@ -29,6 +32,7 @@ import (
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
+	"google.golang.org/grpc/metadata"
 )
 
 // ResourceExtractorFn extracts the resource path segment from a request.
@@ -79,7 +83,7 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 
 			// ── Build Casbin (sub, dom, obj, act) tuple ───────────────────────
 			// domain = "portal:tenant_id"
-			domain := buildDomain(portal, tenantID)
+			domain := buildRequestDomain(r, portal, tenantID)
 			// object = "svc:<service>/<resource>"
 			resource := ""
 			if extractResource != nil {
@@ -90,7 +94,8 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 			action := r.Method
 
 			// ── Call AuthZ.CheckAccess ─────────────────────────────────────────
-			resp, err := client.CheckAccess(ctx, &authzservicev1.CheckAccessRequest{
+			authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+			resp, err := client.CheckAccess(authzCtx, &authzservicev1.CheckAccessRequest{
 				UserId: userID,
 				Domain: domain,
 				Object: object,
@@ -105,6 +110,27 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 			})
 
 			if err != nil {
+				// Check if this is a connectivity error (authz service not running).
+				// In that case, degrade gracefully: log a warning and fall through
+				// to portal-gate enforcement only (user-type check already passed).
+				// Hard 503 is reserved for when authz is reachable but returns an error.
+				errStr := err.Error()
+				isConnErr := strings.Contains(errStr, "connection refused") ||
+					strings.Contains(errStr, "No connection could be made") ||
+					strings.Contains(errStr, "Unavailable") ||
+					strings.Contains(errStr, "transport:")
+				if isConnErr {
+					logger.Warn("AuthZ service unreachable — falling back to portal-gate enforcement only",
+						zap.String("user_id", userID),
+						zap.String("domain", domain),
+						zap.String("object", object),
+						zap.String("action", action),
+						zap.Error(err),
+					)
+					// Allow request through; portal-gate middleware provides baseline enforcement.
+					next.ServeHTTP(w, r.WithContext(ctx))
+					return
+				}
 				logger.Error("AuthZ.CheckAccess RPC failed",
 					zap.Error(err),
 					zap.String("user_id", userID),
@@ -253,15 +279,86 @@ func AnyAuthenticatedMiddleware(next http.Handler) http.Handler {
 // ── Helper functions ──────────────────────────────────────────────────────────
 
 // buildDomain constructs the Casbin domain string: "portal:tenant_id".
+// The portal prefix is normalized to lowercase without the "PORTAL_" prefix
+// so it matches the seeder's portalDomainKey format (e.g. "b2b:root").
 // If tenantID is empty, uses "root" (system-wide scope).
 func buildDomain(portal, tenantID string) string {
 	if portal == "" {
 		portal = "b2c"
 	}
+	// Strip "PORTAL_" prefix (e.g. "PORTAL_B2B" → "b2b") and lowercase.
+	// The authz seeder stores domains as "<portal>:<tenantID>" without the enum prefix.
+	portal = strings.ToLower(strings.TrimPrefix(portal, "PORTAL_"))
+	if portal == "unspecified" || portal == "" {
+		portal = "b2c"
+	}
+	// System-portal roles are seeded in the global root domain. Do not scope
+	// them by tenant_id or super-admin access to cross-portal operations breaks.
+	if portal == "system" {
+		return "system:root"
+	}
 	if tenantID == "" {
 		tenantID = "root"
 	}
 	return portal + ":" + tenantID
+}
+
+func buildRequestDomain(r *http.Request, portal, tenantID string) string {
+	normalizedPortal := strings.ToLower(strings.TrimPrefix(portal, "PORTAL_"))
+	if normalizedPortal == "b2b" {
+		businessID := resolveRequestBusinessID(r)
+		if businessID != "" {
+			return "b2b:" + businessID
+		}
+	}
+
+	return buildDomain(portal, tenantID)
+}
+
+func resolveRequestBusinessID(r *http.Request) string {
+	candidates := []string{
+		r.Header.Get("X-Business-ID"),
+		r.URL.Query().Get("business_id"),
+		r.PathValue("organisation_id"),
+	}
+	for _, candidate := range candidates {
+		candidate = strings.TrimSpace(candidate)
+		if candidate != "" {
+			return candidate
+		}
+	}
+
+	if r.Body == nil || !strings.Contains(strings.ToLower(r.Header.Get("Content-Type")), "application/json") {
+		return ""
+	}
+
+	body, err := io.ReadAll(r.Body)
+	if err != nil {
+		return ""
+	}
+	r.Body = io.NopCloser(bytes.NewReader(body))
+
+	var payload map[string]any
+	if err := json.Unmarshal(body, &payload); err != nil {
+		return ""
+	}
+
+	for _, key := range []string{"business_id", "businessId", "organisation_id", "organisationId"} {
+		if value := stringValue(payload[key]); value != "" {
+			return value
+		}
+	}
+
+	return ""
+}
+
+func stringValue(value any) string {
+	switch v := value.(type) {
+	case string:
+		return strings.TrimSpace(v)
+	default:
+		return ""
+	}
 }
 
 // buildObject constructs the Casbin object string: "svc:<service>/<resource>".

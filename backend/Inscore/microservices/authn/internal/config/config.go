@@ -381,17 +381,17 @@ func (c *Config) Validate() error {
 		logger.Errorf("KYC_SERVICE_ADDRESS is required when KYC_SERVICE_ENABLED=true")
 		return errors.New("KYC_SERVICE_ADDRESS is required when KYC_SERVICE_ENABLED=true")
 	}
-	if c.SMS.APIBase == "" && c.SMS.MaskingEnabled {
-		logger.Errorf("SSLWIRELESS_API_BASE is required when SMS is enabled")
-		return errors.New("SSLWIRELESS_API_BASE is required when SMS is enabled")
-	}
-	if c.SMS.SID == "" && c.SMS.MaskingEnabled {
-		logger.Errorf("SSLWIRELESS_SID is required when SMS is enabled")
-		return errors.New("SSLWIRELESS_SID is required when SMS is enabled")
-	}
-	if c.SMS.APIKey == "" && c.SMS.MaskingEnabled {
-		logger.Errorf("SSLWIRELESS_API_KEY is required when SMS is enabled")
-		return errors.New("SSLWIRELESS_API_KEY is required when SMS is enabled")
+	// SMS credentials are only required when SSLWIRELESS_API_BASE is explicitly set.
+	// If API_BASE is empty, SMS is considered disabled (dev/local mode) regardless of masking flags.
+	if c.SMS.APIBase != "" && c.SMS.MaskingEnabled {
+		if c.SMS.SID == "" {
+			logger.Errorf("SSLWIRELESS_SID is required when SMS masking is enabled")
+			return errors.New("SSLWIRELESS_SID is required when SMS masking is enabled")
+		}
+		if c.SMS.APIKey == "" {
+			logger.Errorf("SSLWIRELESS_API_KEY is required when SMS masking is enabled")
+			return errors.New("SSLWIRELESS_API_KEY is required when SMS masking is enabled")
+		}
 	}
 	if c.Database.Password == "" {
 		logger.Errorf("DB_PASSWORD is required")

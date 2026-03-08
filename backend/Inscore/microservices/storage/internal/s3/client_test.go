@@ -35,7 +35,7 @@ func getTestS3Client(t *testing.T) *Client {
 		endpoint = "https://sgp1.digitaloceanspaces.com"
 	}
 	if rootFolder == "" {
-		rootFolder = "lpc"
+		rootFolder = "inscore"
 	}
 
 	cfg := Config{
@@ -73,7 +73,7 @@ func TestS3Client_GenerateKey(t *testing.T) {
 			referenceID:   "kyc-123",
 			fileID:        "file-123",
 			filename:      "profile.jpg",
-			expectPrefix:  "lpc/test-tenant/kyc/profiles/kyc-123/file-123/",
+			expectPrefix:  "inscore/test-tenant/kyc/profiles/kyc-123/file-123/",
 		},
 		{
 			name:          "Identity document",
@@ -82,7 +82,7 @@ func TestS3Client_GenerateKey(t *testing.T) {
 			referenceID:   "doc-456",
 			fileID:        "file-456",
 			filename:      "nid.pdf",
-			expectPrefix:  "lpc/test-tenant/kyc/identity-docs/doc-456/file-456/",
+			expectPrefix:  "inscore/test-tenant/kyc/identity-docs/doc-456/file-456/",
 		},
 		{
 			name:          "Policy purchase document",
@@ -91,7 +91,7 @@ func TestS3Client_GenerateKey(t *testing.T) {
 			referenceID:   "policy-789",
 			fileID:        "file-789",
 			filename:      "policy.pdf",
-			expectPrefix:  "lpc/test-tenant/policies/purchase-docs/policy-789/file-789/",
+			expectPrefix:  "inscore/test-tenant/policies/purchase-docs/policy-789/file-789/",
 		},
 		{
 			name:          "Claim document",
@@ -100,7 +100,7 @@ func TestS3Client_GenerateKey(t *testing.T) {
 			referenceID:   "claim-111",
 			fileID:        "file-111",
 			filename:      "claim.jpg",
-			expectPrefix:  "lpc/test-tenant/claims/documents/claim-111/file-111/",
+			expectPrefix:  "inscore/test-tenant/claims/documents/claim-111/file-111/",
 		},
 	}
 
@@ -108,7 +108,7 @@ func TestS3Client_GenerateKey(t *testing.T) {
 		t.Run(tt.name, func(t *testing.T) {
 			key := client.GenerateInsuranceKey(tt.tenantID, tt.fileID, tt.referenceType, tt.referenceID, tt.filename)
 			assert.Contains(t, key, tt.expectPrefix, "Generated key should contain expected prefix")
-			assert.Contains(t, key, "lpc/", "Generated key should contain root folder")
+			assert.Contains(t, key, "inscore/", "Generated key should contain root folder")
 		})
 	}
 }
@@ -118,7 +118,7 @@ func TestS3Client_GenerateKeyWithReference(t *testing.T) {
 
 	key := client.GenerateInsuranceKey("test-tenant", "file-999", "POLICY_PURCHASE_DOC", "policy-123", "invoice.pdf")
 
-	assert.Contains(t, key, "lpc/", "Key should contain root folder")
+	assert.Contains(t, key, "inscore/", "Key should contain root folder")
 	assert.Contains(t, key, "policies/purchase-docs/", "Key should contain policy purchase folder")
 	assert.Contains(t, key, "policy-123", "Key should contain reference ID")
 	assert.Contains(t, key, "file-999", "Key should contain file ID")

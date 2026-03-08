@@ -6,24 +6,30 @@ import (
 )
 
 type Config struct {
-	Server ServerConfig
-}
-
-type ServerConfig struct {
-	GRPCPort int
-	HTTPPort int
-	Host     string
+	GRPCPort        int
+	DBHost          string
+	DBPort          int
+	DBUser          string
+	DBPassword      string
+	DBName          string
+	KafkaBrokers    []string
+	AuthZServiceURL string
 }
 
 func Load() (*Config, error) {
-	cfg := &Config{
-		Server: ServerConfig{
-			GRPCPort: getEnvAsInt("B2B_GRPC_PORT", 50112),
-			HTTPPort: getEnvAsInt("B2B_HTTP_PORT", 50113),
-			Host:     getEnv("B2B_HOST", "0.0.0.0"),
-		},
-	}
-	return cfg, nil
+	grpcPort, _ := strconv.Atoi(getEnv("GRPC_PORT", "50112"))
+	dbPort, _ := strconv.Atoi(getEnv("DB_PORT", "5432"))
+
+	return &Config{
+		GRPCPort:        grpcPort,
+		DBHost:          getEnv("DB_HOST", "localhost"),
+		DBPort:          dbPort,
+		DBUser:          getEnv("DB_USER", "postgres"),
+		DBPassword:      getEnv("DB_PASSWORD", "postgres"),
+		DBName:          getEnv("DB_NAME", "insuretech"),
+		KafkaBrokers:    []string{getEnv("KAFKA_BROKERS", "localhost:9092")},
+		AuthZServiceURL: getEnv("AUTHZ_GRPC_ADDR", getEnv("AUTHZ_SERVICE_URL", "")),
+	}, nil
 }
 
 func getEnv(key, defaultValue string) string {
@@ -31,16 +37,4 @@ func getEnv(key, defaultValue string) string {
 		return value
 	}
 	return defaultValue
-}
-
-func getEnvAsInt(key string, defaultValue int) int {
-	valueStr := os.Getenv(key)
-	if valueStr == "" {
-		return defaultValue
-	}
-	value, err := strconv.Atoi(valueStr)
-	if err != nil {
-		return defaultValue
-	}
-	return value
 }

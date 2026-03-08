@@ -1,0 +1,438 @@
+services:
+  redis:
+    image: redis:7-alpine
+    container_name: insuretech-redis
+    # Bind to localhost only ΓÇö Redis must NEVER be publicly accessible.
+    # Containers on the same Docker network reach it via service name 'redis:6379'.
+    # DO NOT change to 0.0.0.0 ΓÇö see DigitalOcean security report.
+    ports:
+      - "127.0.0.1:6379:6379"
+    command: ["redis-server", "--appendonly", "yes", "--bind", "0.0.0.0", "--protected-mode", "no"]
+    volumes:
+      - redis_data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+    restart: unless-stopped
+
+  kafka:
+    image: apache/kafka:latest
+    container_name: insuretech-kafka
+    # Bind Kafka external listener to localhost only ΓÇö never expose to internet.
+    # Internal services use INTERNAL://kafka:9092 within the Docker network.
+    ports:
+      - "127.0.0.1:9092:29092"
+    environment:
+      KAFKA_NODE_ID: 1
+      KAFKA_PROCESS_ROLES: broker,controller
+      KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
+      KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:29092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9092
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
+      KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
+      KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+      KAFKA_NUM_PARTITIONS: 3
+      CLUSTER_ID: MkU3OEVBNTcwNTJENDM2Qk
+    volumes:
+      - kafka_data:/var/lib/kafka/data
+    healthcheck:
+      test: ["CMD-SHELL", "/opt/kafka/bin/kafka-topics.sh --bootstrap-server localhost:9092 --list >/dev/null 2>&1"]
+      interval: 15s
+      timeout: 10s
+      retries: 20
+    restart: unless-stopped
+
+  # ΓöÇΓöÇ db-migrate ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  # Runs ONCE at startup. Migrates primary then backup DB (protoΓåÆSQLΓåÆseeders).
+  # Exits 0 on success, 1 on failure. Gateway and microservices depend on this.
+  # To run manually: docker compose run --rm db-migrate
+  db-migrate:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/dbops/Dockerfile
+    image: insuretech-dbops
+    container_name: insuretech-db-migrate
+    profiles: ["full"]
+    env_file:
+      - .env
+    command: ["./dbops", "migrate", "--target=both"]
+    restart: "no"
+
+  # ΓöÇΓöÇ db-sidecar ΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇΓöÇ
+  # Long-running companion: continuous primaryΓåÆbackup sync + auto-backup loop.
+  # Does NOT run migrations. Starts after db-migrate completes successfully.
+  # To run: docker compose --profile full up db-sidecar
+  db-sidecar:
+    build:
+      context: .
+      dockerfile: backend/infra/docker/dbops/Dockerfile
+    image: insuretech-dbops
+    container_name: insuretech-db-sidecar
+    profiles: ["sidecar", "full"]
+    env_file:
+      - .env
+    command: ["./dbops", "sidecar"]
+    depends_on:
+      db-migrate:
+        condition: service_completed_successfully
+    restart: unless-stopped
+
+#  tenant:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/tenant/Dockerfile
+#    container_name: insuretech-tenant
+#    profiles: ["tenant", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50050:50050"
+#      - "50051:50051"
+#    restart: unless-stopped
+
+  authn:
+    image: insuretech-authn
+    build:
+      context: .
+      dockerfile: backend/infra/docker/authn/Dockerfile
+    container_name: insuretech-authn
+    profiles: ["authn", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    # gRPC ports ΓÇö localhost only, gateway reaches authn via Docker network (authn:50060)
+    ports:
+      - "127.0.0.1:50060:50060"
+      - "127.0.0.1:50061:50061"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --tries=1 --timeout=3 http://localhost:50061/healthz >/dev/null 2>&1 || cat /proc/net/tcp 2>/dev/null | awk '{print $2}' | grep -qi ':C38C'"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
+
+  authz:
+    image: insuretech-authz
+    build:
+      context: .
+      dockerfile: backend/infra/docker/authz/Dockerfile
+    container_name: insuretech-authz
+    profiles: ["authz", "full"]
+    env_file:
+      - .env
+    environment:
+      KAFKA_BROKERS: "kafka:9092"
+    # gRPC ports ΓÇö localhost only, gateway reaches authz via Docker network (authz:50070)
+    ports:
+      - "127.0.0.1:50070:50070"
+      - "127.0.0.1:50071:50071"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --tries=1 --timeout=3 http://localhost:50071/healthz >/dev/null 2>&1 || cat /proc/net/tcp 2>/dev/null | awk '{print $2}' | grep -qi ':C396'"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
+
+  gateway:
+    image: insuretech-gateway
+    build:
+      context: .
+      dockerfile: backend/infra/docker/gateway/Dockerfile
+    container_name: insuretech-gateway
+    profiles: ["gateway", "full"]
+    env_file:
+      - .env
+    depends_on:
+      authn:
+        condition: service_healthy
+      authz:
+        condition: service_healthy
+    # HTTP port ΓÇö localhost only on production. nginx proxies public traffic via 127.0.0.1:8080.
+    ports:
+      - "127.0.0.1:8080:8080"
+    restart: unless-stopped
+
+#  audit:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/audit/Dockerfile
+#    container_name: insuretech-audit
+#    profiles: ["audit", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50080:50080"
+#      - "50081:50081"
+#    restart: unless-stopped
+#
+#  kyc:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/kyc/Dockerfile
+#    container_name: insuretech-kyc
+#    profiles: ["kyc", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50090:50090"
+#      - "50091:50091"
+#    restart: unless-stopped
+#
+#  partner:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/partner/Dockerfile
+#    container_name: insuretech-partner
+#    profiles: ["partner", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50100:50100"
+#      - "50101:50101"
+#    restart: unless-stopped
+#
+#  beneficiary:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/beneficiary/Dockerfile
+#    container_name: insuretech-beneficiary
+#    profiles: ["beneficiary", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50110:50110"
+#      - "50111:50111"
+#    restart: unless-stopped
+
+  b2b:
+    image: insuretech-b2b
+    build:
+      context: .
+      dockerfile: backend/infra/docker/b2b/Dockerfile
+    container_name: insuretech-b2b
+    profiles: ["b2b", "full"]
+    env_file:
+      - .env
+    # gRPC ports ΓÇö localhost only, gateway reaches b2b via Docker network (b2b:50112)
+    ports:
+      - "127.0.0.1:50112:50112"
+      - "127.0.0.1:50113:50113"
+    restart: unless-stopped
+
+#  workflow:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/workflow/Dockerfile
+#    container_name: insuretech-workflow
+#    profiles: ["workflow", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50180:50180"
+#      - "50181:50181"
+#    restart: unless-stopped
+#
+#  payment:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/payment/Dockerfile
+#    container_name: insuretech-payment
+#    profiles: ["payment", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50190:50190"
+#      - "50191:50191"
+#    restart: unless-stopped
+#
+#  fraud:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/fraud/Dockerfile
+#    container_name: insuretech-fraud
+#    profiles: ["fraud", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50220:50220"
+#      - "50221:50221"
+#    restart: unless-stopped
+#
+#  notification:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/notification/Dockerfile
+#    container_name: insuretech-notification
+#    profiles: ["notification", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50230:50230"
+#      - "50231:50231"
+#    restart: unless-stopped
+#
+#  support:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/support/Dockerfile
+#    container_name: insuretech-support
+#    profiles: ["support", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50240:50240"
+#      - "50241:50241"
+#    restart: unless-stopped
+#
+#  webrtc:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/webrtc/Dockerfile
+#    container_name: insuretech-webrtc
+#    profiles: ["webrtc", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50250:50250"
+#      - "50251:50251"
+#    restart: unless-stopped
+#
+#  media:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/media/Dockerfile
+#    container_name: insuretech-media
+#    profiles: ["media", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50260:50260"
+#      - "50261:50261"
+#    restart: unless-stopped
+#
+#  ocr:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/ocr/Dockerfile
+#    container_name: insuretech-ocr
+#    profiles: ["ocr", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50270:50270"
+#      - "50271:50271"
+#    restart: unless-stopped
+#
+#  docgen:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/docgen/Dockerfile
+#    container_name: insuretech-docgen
+#    profiles: ["docgen", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50280:50280"
+#      - "50281:50281"
+#    restart: unless-stopped
+
+  storage:
+    image: insuretech-storage
+    build:
+      context: .
+      dockerfile: backend/infra/docker/storage/Dockerfile
+    container_name: insuretech-storage
+    profiles: ["storage", "full"]
+    env_file:
+      - .env
+    # gRPC ports ΓÇö localhost only, gateway reaches storage via Docker network (storage:50290)
+    ports:
+      - "127.0.0.1:50290:50290"
+      - "127.0.0.1:50291:50291"
+    restart: unless-stopped
+
+#  iot:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/iot/Dockerfile
+#    container_name: insuretech-iot
+#    profiles: ["iot", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50300:50300"
+#      - "50301:50301"
+#    restart: unless-stopped
+#
+#  analytics:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/analytics/Dockerfile
+#    container_name: insuretech-analytics
+#    profiles: ["analytics", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50310:50310"
+#      - "50311:50311"
+#    restart: unless-stopped
+#
+#  ai:
+#    build:
+#      context: .
+#      dockerfile: backend/infra/docker/ai/Dockerfile
+#    container_name: insuretech-ai
+#    profiles: ["ai", "full"]
+#    env_file:
+#      - .env
+#    ports:
+#      - "50320:50320"
+#      - "50321:50321"
+#    restart: unless-stopped
+
+  b2b_portal:
+    image: insuretech-b2b_portal
+    build:
+      context: .
+      dockerfile: backend/infra/docker/b2b_portal/Dockerfile
+      args:
+        # NEXT_PUBLIC_* vars are baked into JS bundle at build time.
+        # Set this to your public-facing gateway URL (e.g. https://api.yourdomain.com).
+        # Overridden at build time via: docker compose build --build-arg NEXT_PUBLIC_INSURETECH_API_BASE_URL=...
+        # Or set B2B_PORTAL_API_BASE_URL in your .env file.
+        NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${B2B_PORTAL_API_BASE_URL:-http://localhost:8080}
+    container_name: insuretech-b2b-portal
+    profiles: ["frontend", "full"]
+    env_file:
+      - .env
+    environment:
+      # Runtime server-side URL (read by Node.js at request time ΓÇö can differ from public URL).
+      # e.g. inside Docker network, gateway is reachable as http://gateway:8080 not localhost.
+      INSURETECH_API_BASE_URL: ${B2B_PORTAL_INTERNAL_API_BASE_URL:-http://gateway:8080}
+      NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${B2B_PORTAL_API_BASE_URL:-http://localhost:8080}
+    ports:
+      - "3000:8081"
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+
+
+volumes:
+  redis_data:
+  kafka_data:
+  go_mod_cache:
+  go_build_cache:

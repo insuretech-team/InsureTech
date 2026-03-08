@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2B Insurance Purchase Order</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 20px; color: #0f172a; background: #f8fafc; }
+    .sheet { max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid #dbe3ef; border-radius: 12px; overflow: hidden; }
+    .top { display: flex; justify-content: space-between; gap: 16px; padding: 18px 20px; background: #0f172a; color: #fff; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .logo-wrap { width: auto; height: 21px; display: flex; align-items: center; flex: 0 0 auto; }
+    .logo { height: 21px; width: auto; display: block; }
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: #cbd5e1; }
+    .meta { font-size: 12px; text-align: right; }
+    .meta div { margin-bottom: 4px; }
+    .content { padding: 18px 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .box { border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; padding: 10px; }
+    .box h3 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .line { margin: 2px 0; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border-bottom: 1px solid #e2e8f0; padding: 8px 6px; text-align: left; font-size: 13px; }
+    th { font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .num { text-align: right; }
+    .totals { width: 340px; margin-left: auto; margin-top: 12px; }
+    .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+    .totals .total { border-top: 2px solid #0f172a; margin-top: 4px; padding-top: 7px; font-weight: 700; }
+    .footer { margin-top: 14px; font-size: 12px; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="top">
+      <div class="brand">
+        <div class="logo-wrap">
+          <img class="logo" src="../logos/insuretech-brand.png" alt="Labaid InsureTech" />
+        </div>
+        <div>
+          <h1>B2B Insurance Purchase Order</h1>
+          <p>Organisation enrollment request</p>
+        </div>
+      </div>
+      <div class="meta">
+        <div><strong>PO #:</strong> {{.purchase_order_number}}</div>
+        <div><strong>PO ID:</strong> {{or .purchase_order_id .reference_id}}</div>
+        <div><strong>Created:</strong> {{.issue_date}}</div>
+        <div><strong>Status:</strong> {{.status_label}}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="box">
+          <h3>Organisation Profile</h3>
+          <div class="line">Name: {{or .org_name .business_name .organisation_name}}</div>
+          <div class="line">Org Code: {{or .org_code .business_code .code}}</div>
+          <div class="line">Business ID: {{.business_reference}}</div>
+          <div class="line">Email: {{or .org_email .contact_email}}</div>
+          <div class="line">Phone: {{or .org_contact .contact_phone}}</div>
+          <div class="line">Address: {{or .org_address .address}}</div>
+        </div>
+        <div class="box">
+          <h3>Plan Selection</h3>
+          <div class="line">Insurance Category: {{.insurance_category_label}}</div>
+          <div class="line">Product: {{or .product_name .product_reference}}</div>
+          <div class="line">Plan: {{or .plan_name .plan_reference}}</div>
+          <div class="line">Department: {{or .department_name .department_reference}}</div>
+        </div>
+        <div class="box">
+          <h3>Enrollment Metrics</h3>
+          <div class="line">Employees: {{.employee_count_display}}</div>
+          <div class="line">Dependents: {{.dependent_count_display}}</div>
+          <div class="line">Coverage Amount: {{.coverage_amount_display}}</div>
+          <div class="line">Estimated Premium: {{.estimated_premium_display}}</div>
+        </div>
+        <div class="box">
+          <h3>Requester & Notes</h3>
+          <div class="line">Requested By: {{.requested_by}}</div>
+          <div class="line">Reference: {{.reference_id}}</div>
+          <div class="line">Notes: {{.notes}}</div>
+          <div class="line">Terms: {{.terms}}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Item</th>
+            <th class="num">Qty</th>
+            <th class="num">Unit Price</th>
+            <th class="num">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .items}}
+          <tr>
+            <td>{{.description}}</td>
+            <td class="num">{{.quantity}}</td>
+            <td class="num">{{.unit_price}}</td>
+            <td class="num">{{.amount}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>{{.subtotal}}</span></div>
+        <div class="row"><span>Tax</span><span>{{.tax}}</span></div>
+        <div class="row total"><span>Total</span><span>{{.total}}</span></div>
+      </div>
+
+      <div class="footer">Generated for corporate insurance purchase workflow.</div>
+    </div>
+  </div>
+</body>
+</html>

@@ -11,6 +11,7 @@ import (
 	"time"
 
 	"github.com/IBM/sarama"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/brokerutil"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 )
 
@@ -75,6 +76,15 @@ func NewConsumerGroup(cfg Config) (*ConsumerGroup, error) {
 		return nil, fmt.Errorf("kafka consumer: handler is required")
 	}
 
+	effectiveBrokers := cfg.Brokers
+	reachable, unreachable := brokerutil.ReachableBrokers(cfg.Brokers, time.Second)
+	if len(reachable) > 0 {
+		effectiveBrokers = reachable
+	}
+	if len(unreachable) > 0 {
+		appLogger.Warnf("kafka consumer skipping unreachable brokers: %v", unreachable)
+	}
+
 	sarCfg := sarama.NewConfig()
 	sarCfg.Version = sarama.V2_8_0_0
 	if cfg.ClientID != "" {
@@ -109,7 +119,7 @@ func NewConsumerGroup(cfg Config) (*ConsumerGroup, error) {
 	}
 	sarCfg.Consumer.Group.Rebalance.GroupStrategies = []sarama.BalanceStrategy{strategy}
 
-	client, err := newConsumerGroupWithTimeout(cfg.Brokers, cfg.GroupID, sarCfg, 12*time.Second)
+	client, err := newConsumerGroupWithTimeout(effectiveBrokers, cfg.GroupID, sarCfg, 12*time.Second)
 	if err != nil {
 		return nil, fmt.Errorf("kafka consumer: failed to create group client: %w", err)
 	}
@@ -134,7 +144,7 @@ func NewConsumerGroup(cfg Config) (*ConsumerGroup, error) {
 		dlqCfg.Net.WriteTimeout = 10 * time.Second
 		dlqCfg.Metadata.Retry.Max = 3
 		dlqCfg.Metadata.Retry.Backoff = 500 * time.Millisecond
-		dlqProd, dlqErr := newSyncProducerWithTimeout(cfg.Brokers, dlqCfg, 12*time.Second)
+		dlqProd, dlqErr := newSyncProducerWithTimeout(effectiveBrokers, dlqCfg, 12*time.Second)
 		if dlqErr != nil {
 			appLogger.Warnf("kafka consumer: DLQ producer failed to connect (topic=%s): %v — DLQ disabled", cfg.DLQTopic, dlqErr)
 		} else {
@@ -142,7 +152,7 @@ func NewConsumerGroup(cfg Config) (*ConsumerGroup, error) {
 		}
 	}
 
-	appLogger.Infof("Kafka consumer group created (group=%s, topics=%v, brokers=%v)", cfg.GroupID, cfg.Topics, cfg.Brokers)
+	appLogger.Infof("Kafka consumer group created (group=%s, topics=%v, brokers=%v)", cfg.GroupID, cfg.Topics, effectiveBrokers)
 	return cg, nil
 }
 

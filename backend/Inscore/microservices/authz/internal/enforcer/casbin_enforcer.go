@@ -8,7 +8,7 @@ package enforcer
 //   [role_definition]     g = _, _, _          (user → role, domain-scoped)
 //   [policy_effect]       e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 //   [matchers]            m = g(r.sub, p.sub, r.dom) && r.dom == p.dom &&
-//                             keyMatch2(r.obj, p.obj) && regexMatch(r.act, p.act)
+//                             keyMatch2(r.obj, p.obj) && actionMatch(r.act, p.act)
 //
 // Domain format:  "portal:tenant_id"  e.g. "system:root", "agent:tenant-abc"
 // Subject format: "user:<uuid>"       e.g. "user:550e8400-..."
@@ -26,6 +26,7 @@ import (
 	"github.com/casbin/casbin/v3"
 	"github.com/casbin/casbin/v3/model"
 	gormadapter "github.com/casbin/gorm-adapter/v3"
+	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/domain"
 	entityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
 	"gorm.io/gorm"
 )
@@ -44,7 +45,7 @@ g = _, _, _
 e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 
 [matchers]
-m = g(r.sub, p.sub, r.dom) && r.dom == p.dom && keyMatch2(r.obj, p.obj) && regexMatch(r.act, p.act)
+m = g(r.sub, p.sub, r.dom) && r.dom == p.dom && keyMatch2(r.obj, p.obj) && actionMatch(r.act, p.act)
 `
 
 // CasbinEnforcer wraps casbin.SyncedEnforcer and implements domain.EnforcerIface.
@@ -79,6 +80,7 @@ func New(db *gorm.DB, modelPath string) (*CasbinEnforcer, error) {
 	if err != nil {
 		return nil, errors.New("casbin enforcer init: " + err.Error())
 	}
+	registerMatcherFunctions(e)
 
 	// Load policies from DB on startup.
 	if err := e.LoadPolicy(); err != nil {
@@ -86,6 +88,13 @@ func New(db *gorm.DB, modelPath string) (*CasbinEnforcer, error) {
 	}
 
 	return &CasbinEnforcer{enforcer: e}, nil
+}
+
+func registerMatcherFunctions(e *casbin.SyncedEnforcer) {
+	// Canonical action semantics for all ACL paths.
+	e.AddFunction("actionMatch", domain.ActionMatchExpressionFunc)
+	// Backward-compatible safety net for external models still using regexMatch.
+	e.AddFunction("regexMatch", domain.ActionMatchExpressionFunc)
 }
 
 // StartAutoReload starts background policy reloading every interval.

@@ -7,6 +7,7 @@ import (
 
 	grpchandler "github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/grpc"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
+	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
@@ -56,6 +57,7 @@ type mockAuthService struct {
 	listDocumentTypesErr  error
 	submitKYCFrameErr     error
 	completeKYCSessionErr error
+	lastRegisterEmailUserReq *authnservicev1.RegisterEmailUserRequest
 }
 
 func (m *mockAuthService) Register(_ context.Context, _ *authnservicev1.RegisterRequest) (*authnservicev1.RegisterResponse, error) {
@@ -106,7 +108,8 @@ func (m *mockAuthService) GetCurrentSession(_ context.Context, _ *authnservicev1
 func (m *mockAuthService) RevokeAllSessions(_ context.Context, _ *authnservicev1.RevokeAllSessionsRequest) (*authnservicev1.RevokeAllSessionsResponse, error) {
 	return &authnservicev1.RevokeAllSessionsResponse{}, m.revokeAllSessionsErr
 }
-func (m *mockAuthService) RegisterEmailUser(_ context.Context, _ *authnservicev1.RegisterEmailUserRequest) (*authnservicev1.RegisterEmailUserResponse, error) {
+func (m *mockAuthService) RegisterEmailUser(_ context.Context, req *authnservicev1.RegisterEmailUserRequest) (*authnservicev1.RegisterEmailUserResponse, error) {
+	m.lastRegisterEmailUserReq = req
 	return &authnservicev1.RegisterEmailUserResponse{}, m.registerEmailUserErr
 }
 func (m *mockAuthService) SendEmailOTP(_ context.Context, _ *authnservicev1.SendEmailOTPRequest) (*authnservicev1.SendEmailOTPResponse, error) {
@@ -285,6 +288,19 @@ func TestLogin_MissingPassword(t *testing.T) {
 		MobileNumber: "8801712345678",
 	})
 	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestRegisterEmailUser_NormalizesMobileToPlusE164(t *testing.T) {
+	mockSvc := &mockAuthService{}
+	h := newHandler(mockSvc)
+	_, err := h.RegisterEmailUser(context.Background(), &authnservicev1.RegisterEmailUserRequest{
+		Email:        "u@example.com",
+		Password:     "Pass123!@",
+		MobileNumber: "01712345678",
+	})
+	require.NoError(t, err)
+	require.NotNil(t, mockSvc.lastRegisterEmailUserReq)
+	require.Equal(t, "+8801712345678", mockSvc.lastRegisterEmailUserReq.MobileNumber)
 }
 
 func TestValidateToken_MissingToken(t *testing.T) {

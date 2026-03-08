@@ -1,19 +1,8 @@
-using Microsoft.Extensions.DependencyInjection;
-using PoliSync.Products.Domain;
-using PoliSync.Products.Persistence;
-
 namespace PoliSync.Products;
 
 /// <summary>
-/// Products module DI registration.
+/// Module marker for Products bounded context
 /// </summary>
-public static class ProductsModule
+public sealed class ProductsModule
 {
-    public static IServiceCollection AddProductsModule(this IServiceCollection services)
-    {
-        // Repository
-        services.AddScoped<IProductRepository, ProductRepository>();
-
-        return services;
-    }
 }

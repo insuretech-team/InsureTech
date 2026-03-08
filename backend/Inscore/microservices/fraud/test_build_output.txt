@@ -1,0 +1,13 @@
+?   	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud	[no test files]
+# github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/repository
+internal\repository\fraud_rule_repository.go:12:23: undefined: errors
+internal\repository\fraud_rule_repository.go:58:6: undefined: errors
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/cmd/server [build failed]
+?   	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/config	[no test files]
+?   	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/domain	[no test files]
+ok  	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/events	(cached)
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/grpc [build failed]
+ok  	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/metrics	(cached)
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/repository [build failed]
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/service [build failed]
+FAIL

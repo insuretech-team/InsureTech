@@ -1,0 +1,66 @@
+version: '3.8'
+
+services:
+  polisync:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: polisync
+    ports:
+      - "50120:50120"  # product-service gRPC
+      - "50121:50121"  # product-service HTTP
+      - "50130:50130"  # quote-service gRPC
+      - "50131:50131"  # quote-service HTTP
+      - "50140:50140"  # order-service gRPC
+      - "50141:50141"  # order-service HTTP
+      - "50150:50150"  # commission-service gRPC
+      - "50151:50151"  # commission-service HTTP
+      - "50160:50160"  # policy-service gRPC
+      - "50161:50161"  # policy-service HTTP
+      - "50170:50170"  # underwriting-service gRPC
+      - "50171:50171"  # underwriting-service HTTP
+      - "50210:50210"  # claim-service gRPC
+      - "50211:50211"  # claim-service HTTP
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Production
+      - DB_PASSWORD=${DB_PASSWORD}
+      - REDIS_PASSWORD=${REDIS_PASSWORD}
+      - PII_ENCRYPTION_KEY=${PII_ENCRYPTION_KEY}
+      - ConnectionStrings__InsuranceDb=Host=postgres;Port=5432;Database=insuretech;Username=app;Password=${DB_PASSWORD};SearchPath=insurance_schema
+      - ConnectionStrings__CommissionDb=Host=postgres;Port=5432;Database=insuretech;Username=app;Password=${DB_PASSWORD};SearchPath=commission_schema
+      - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD}
+      - Kafka__BootstrapServers=kafka:9092
+      - GrpcClients__AuthnService=http://authn-service:50060
+      - GrpcClients__AuthzService=http://authz-service:50070
+      - GrpcClients__PartnerService=http://partner-service:50100
+      - GrpcClients__FraudService=http://fraud-service:50220
+      - GrpcClients__PaymentService=http://payment-service:50190
+      - GrpcClients__NotificationService=http://notification-service:50230
+      - GrpcClients__AuditService=http://audit-service:50080
+      - GrpcClients__KycService=http://kyc-service:50090
+      - GrpcClients__StorageService=http://storage-service:50290
+      - GrpcClients__DocgenService=http://docgen-service:50280
+      - GrpcClients__WorkflowService=http://workflow-service:50180
+    volumes:
+      - ./logs:/app/logs
+      - ../inscore/secrets:/app/secrets:ro
+    networks:
+      - insuretech
+    depends_on:
+      - postgres
+      - redis
+      - kafka
+    restart: unless-stopped
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:50121/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+
+networks:
+  insuretech:
+    external: true
+
+volumes:
+  logs:

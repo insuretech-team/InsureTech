@@ -10,6 +10,9 @@ import (
 
 // startHealthCheck starts the health check routine for database connections
 func (dm *DatabaseManager) startHealthCheck() {
+	// Wait a bit before starting health checks to allow initial connections to stabilize
+	time.Sleep(5 * time.Second)
+	
 	ticker := time.NewTicker(dm.config.Database.Failover.HealthCheckInterval)
 	defer ticker.Stop()
 
@@ -28,7 +31,7 @@ func (dm *DatabaseManager) startHealthCheck() {
 
 // performHealthCheck checks the health of both database connections
 func (dm *DatabaseManager) performHealthCheck() {
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()
 
 	// Check primary database health
@@ -126,7 +129,7 @@ func (dm *DatabaseManager) delayedSwitchBack() {
 	time.Sleep(dm.config.Database.Failover.SwitchBackDelay)
 
 	// Re-check primary health before switching
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), 45*time.Second)
 	defer cancel()
 
 	if dm.checkDatabaseHealth(dm.primaryDB, "primary", ctx) {

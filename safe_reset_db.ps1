@@ -62,35 +62,45 @@ if ($DryRun) {
   exit 0
 }
 
-$targets = if ($Target -eq "both") { @("primary","backup") } else { @($Target) }
-
 $root = Split-Path -Parent $MyInvocation.MyCommand.Path
 Set-Location "$root\backend\inscore"
 
-foreach ($db in $targets) {
-  Write-Host "Resetting $db..." -ForegroundColor Yellow
-  
-  # Save SQL to temp file to avoid escaping issues
-  $tempSqlFile = [System.IO.Path]::GetTempFileName() + ".sql"
-  $nukeSQL | Out-File -FilePath $tempSqlFile -Encoding UTF8 -NoNewline
-  
-  try {
-    # Read the SQL from file and execute
-    $sqlContent = Get-Content $tempSqlFile -Raw
-    go run ./cmd/dbmanager sql --sql=$sqlContent --target=$db
-    
-    if ($LASTEXITCODE -ne 0) { 
-      Write-Host "Error: Reset failed for $db" -ForegroundColor Red
-      Write-Host "Exit code: $LASTEXITCODE" -ForegroundColor Red
-      throw "Reset failed for $db" 
-    }
-    
-    Write-Host "✓ Reset complete for $db" -ForegroundColor Green
+Write-Host "Resetting $Target..." -ForegroundColor Yellow
+
+# Save SQL to temp file to avoid escaping issues
+$tempSqlFile = [System.IO.Path]::GetTempFileName() + ".sql"
+$nukeSQL | Out-File -FilePath $tempSqlFile -Encoding UTF8 -NoNewline
+
+# Keep Go compile memory low on constrained Windows hosts.
+$prevGoFlags = $env:GOFLAGS
+$prevGoMaxProcs = $env:GOMAXPROCS
+
+try {
+  if ([string]::IsNullOrWhiteSpace($env:GOFLAGS)) {
+    $env:GOFLAGS = "-p=1"
+  } elseif ($env:GOFLAGS -notmatch "(^|\s)-p=1(\s|$)") {
+    $env:GOFLAGS = "$($env:GOFLAGS) -p=1"
   }
-  finally {
-    # Clean up temp file
-    if (Test-Path $tempSqlFile) {
-      Remove-Item $tempSqlFile -Force
-    }
+  $env:GOMAXPROCS = "1"
+
+  # Use lightweight SQL runner (avoids heavy dbmanager compile graph).
+  go run ./cmd/dbsql --sql-file="$tempSqlFile" --target=$Target
+
+  if ($LASTEXITCODE -ne 0) {
+    Write-Host "Error: Reset failed for $Target" -ForegroundColor Red
+    Write-Host "Exit code: $LASTEXITCODE" -ForegroundColor Red
+    throw "Reset failed for $Target"
+  }
+
+  Write-Host "Reset complete for $Target" -ForegroundColor Green
+}
+finally {
+  # Restore environment
+  if ($null -eq $prevGoFlags) { Remove-Item Env:GOFLAGS -ErrorAction SilentlyContinue } else { $env:GOFLAGS = $prevGoFlags }
+  if ($null -eq $prevGoMaxProcs) { Remove-Item Env:GOMAXPROCS -ErrorAction SilentlyContinue } else { $env:GOMAXPROCS = $prevGoMaxProcs }
+
+  # Clean up temp file
+  if (Test-Path $tempSqlFile) {
+    Remove-Item $tempSqlFile -Force
   }
 }

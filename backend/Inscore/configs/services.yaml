@@ -59,6 +59,15 @@ services:
       grpc: 50112
       http: 50113
 
+  # Insurance Data Layer (InScore - Go)
+  insurance:
+    name: insurance-service
+    backend: inscore
+    description: "Insurance Schema CRUD (Products, Policies, Claims, etc.)"
+    ports:
+      grpc: 50115
+      http: 50116
+
   # Commerce & Production (PoliSync - C#)
   product:
     name: product-service
@@ -81,6 +90,13 @@ services:
     ports:
       grpc: 50140
       http: 50141
+  orders:
+    name: orders-service
+    backend: inscore
+    description: "Order Lifecycle (Go data layer for PoliSync orders)"
+    ports:
+      grpc: 50142
+      http: 50143
   commission:
     name: commission-service
     backend: polisync
@@ -116,10 +132,17 @@ services:
   payment:
     name: payment-service
     backend: inscore
-    description: "Payment Gateway Integration"
+    description: "Payment Gateway Integration (SSLCommerz, bKash, Nagad, Manual)"
     ports:
       grpc: 50190
       http: 50191
+  billing:
+    name: billing-service
+    backend: inscore
+    description: "Invoice lifecycle — B2C orders and B2B purchase orders"
+    ports:
+      grpc: 50195
+      http: 50196
   ledger:
     name: ledger-service
     backend: ledgerclaw
@@ -219,3 +242,40 @@ services:
     ports:
       grpc: 50320
       http: 50321
+
+  # Edge / Frontend / Infra Endpoints
+  gateway:
+    name: gateway-service
+    backend: inscore
+    description: "API Gateway (HTTP entrypoint)"
+    ports:
+      grpc: 0
+      http: 8080
+  b2b_portal:
+    name: b2b-portal
+    backend: inscore
+    description: "B2B web portal frontend"
+    ports:
+      grpc: 0
+      http: 3000
+  redis:
+    name: redis
+    backend: inscore
+    description: "Redis cache"
+    ports:
+      grpc: 0
+      http: 6379
+  kafka:
+    name: kafka
+    backend: inscore
+    description: "Kafka broker external listener"
+    ports:
+      grpc: 0
+      http: 9092
+  gotenberg:
+    name: gotenberg
+    backend: inscore
+    description: "HTML-to-PDF renderer"
+    ports:
+      grpc: 0
+      http: 50330

@@ -1,0 +1,56 @@
+=== RUN   TestFraudAlertRepository_LiveDB_CreateGetListUpdateStatus
+[90m[18:20][0m [32m[INFO][0m dbops [36m[db/manager.go:273][0m
+   database connection {"type": "primary", "success": true, "host": "db-postgresql-sgp1-03392-do-user-30821835-0.i.db.ondigitalocean.com"}
+[90m[18:20][0m [32m[INFO][0m [36m[db/manager.go:274][0m
+   Connected to primary database {"provider": "digitalocean", "host": "db-postgresql-sgp1-03392-do-user-30821835-0.i.db.ondigitalocean.com"}
+[90m[18:20][0m [32m[INFO][0m [36m[db/manager.go:165][0m
+   Service running on primary database (failover disabled)
+[90m[18:20][0m [32m[INFO][0m [36m[db/manager.go:747][0m
+   Database manager initialized for service with automatic failover
+    fraud_alert_repository_live_test.go:36: 
+        	Error Trace:	E:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_alert_repository_live_test.go:36
+        	Error:      	Received unexpected error:
+        	            	ERROR: column "created_at" of relation "fraud_alerts" does not exist (SQLSTATE 42703)
+        	Test:       	TestFraudAlertRepository_LiveDB_CreateGetListUpdateStatus
+--- FAIL: TestFraudAlertRepository_LiveDB_CreateGetListUpdateStatus (0.85s)
+=== RUN   TestFraudAlertRepository_LiveDB_GetByID_NotFound
+
+2026/03/05 18:20:32 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_alert_repository.go:70
+[0m[31m[error] [0minvalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+
+2026/03/05 18:20:32 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_alert_repository.go:70
+[0m[31m[error] [0mfailed to parse field: AuditInfo, error: invalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+--- PASS: TestFraudAlertRepository_LiveDB_GetByID_NotFound (0.00s)
+=== RUN   TestFraudCaseRepository_LiveDB_CreateGetUpdate
+    fraud_case_repository_live_test.go:34: 
+        	Error Trace:	E:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_case_repository_live_test.go:34
+        	Error:      	Received unexpected error:
+        	            	ERROR: column "created_at" of relation "fraud_alerts" does not exist (SQLSTATE 42703)
+        	Test:       	TestFraudCaseRepository_LiveDB_CreateGetUpdate
+--- FAIL: TestFraudCaseRepository_LiveDB_CreateGetUpdate (0.30s)
+=== RUN   TestFraudCaseRepository_LiveDB_GetByID_NotFound
+
+2026/03/05 18:20:32 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_case_repository.go:72
+[0m[31m[error] [0minvalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+
+2026/03/05 18:20:32 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_case_repository.go:72
+[0m[31m[error] [0mfailed to parse field: AuditInfo, error: invalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+--- PASS: TestFraudCaseRepository_LiveDB_GetByID_NotFound (0.00s)
+=== RUN   TestFraudRuleRepository_LiveDB_CreateGetUpdateList
+    fraud_rule_repository_live_test.go:35: 
+        	Error Trace:	E:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_rule_repository_live_test.go:35
+        	Error:      	Received unexpected error:
+        	            	ERROR: column "created_at" of relation "fraud_rules" does not exist (SQLSTATE 42703)
+        	Test:       	TestFraudRuleRepository_LiveDB_CreateGetUpdateList
+--- FAIL: TestFraudRuleRepository_LiveDB_CreateGetUpdateList (0.21s)
+=== RUN   TestFraudRuleRepository_LiveDB_GetByID_NotFound
+
+2026/03/05 18:20:33 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_rule_repository.go:61
+[0m[31m[error] [0minvalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+
+2026/03/05 18:20:33 [35mE:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/repository/fraud_rule_repository.go:61
+[0m[31m[error] [0mfailed to parse field: AuditInfo, error: invalid field found for struct github.com/newage-saint/insuretech/gen/go/insuretech/common/v1.AuditInfo's field CreatedAt: define a valid foreign key for relations or implement the Valuer/Scanner interface
+--- PASS: TestFraudRuleRepository_LiveDB_GetByID_NotFound (0.00s)
+FAIL
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/repository	1.953s
+FAIL

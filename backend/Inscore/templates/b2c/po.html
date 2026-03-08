@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2C Policy Service Order</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 20px; color: #0f172a; background: #f8fafc; }
+    .sheet { max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid #dbe3ef; border-radius: 12px; overflow: hidden; }
+    .top { display: flex; justify-content: space-between; gap: 16px; padding: 18px 20px; background: #1e3a8a; color: #fff; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .logo-wrap { width: auto; height: 21px; display: flex; align-items: center; flex: 0 0 auto; }
+    .logo { height: 21px; width: auto; display: block; }
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: #cbd5e1; }
+    .meta { font-size: 12px; text-align: right; }
+    .meta div { margin-bottom: 4px; }
+    .content { padding: 18px 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .box { border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; padding: 10px; }
+    .box h3 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .line { margin: 2px 0; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border-bottom: 1px solid #e2e8f0; padding: 8px 6px; text-align: left; font-size: 13px; }
+    th { font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .num { text-align: right; }
+    .totals { width: 340px; margin-left: auto; margin-top: 12px; }
+    .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+    .totals .total { border-top: 2px solid #0f172a; margin-top: 4px; padding-top: 7px; font-weight: 700; }
+    .footer { margin-top: 14px; font-size: 12px; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="sheet">
+    <div class="top">
+      <div class="brand">
+        <div class="logo-wrap">
+          <img class="logo" src="../logos/insuretech-brand.png" alt="Labaid InsureTech" />
+        </div>
+        <div>
+          <h1>B2C Policy Service Order</h1>
+          <p>Customer self-service request document</p>
+        </div>
+      </div>
+      <div class="meta">
+        <div><strong>Request No:</strong> {{.purchase_order_number}}</div>
+        <div><strong>Request ID:</strong> {{or .reference_id .request_id}}</div>
+        <div><strong>Created:</strong> {{.issue_date}}</div>
+        <div><strong>Status:</strong> {{.status_label}}</div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="box">
+          <h3>Customer Details</h3>
+          <div class="line">Name: {{or .customer_name .requester_name}}</div>
+          <div class="line">Customer ID: {{or .customer_reference .customer_id}}</div>
+          <div class="line">Email: {{or .customer_email .requester_email}}</div>
+          <div class="line">Phone: {{or .customer_phone .requester_phone}}</div>
+        </div>
+        <div class="box">
+          <h3>Request Context</h3>
+          <div class="line">Request Type: {{.request_type_label}}</div>
+          <div class="line">Policy Ref: {{or .policy_reference .policy_id}}</div>
+          <div class="line">Processed By: {{.processed_by}}</div>
+          <div class="line">Processed Date: {{.processed_date}}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Service Line</th>
+            <th class="num">Qty</th>
+            <th class="num">Unit Price</th>
+            <th class="num">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .items}}
+          <tr>
+            <td>{{.description}}</td>
+            <td class="num">{{.quantity}}</td>
+            <td class="num">{{.unit_price}}</td>
+            <td class="num">{{.amount}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>{{.subtotal}}</span></div>
+        <div class="row"><span>Tax</span><span>{{.tax}}</span></div>
+        <div class="row"><span>Processing Fee</span><span>{{.processing_fee}}</span></div>
+        <div class="row total"><span>Total</span><span>{{.total}}</span></div>
+      </div>
+
+      <div class="footer">Terms: {{.terms}}</div>
+    </div>
+  </div>
+</body>
+</html>

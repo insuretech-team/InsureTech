@@ -2,6 +2,7 @@ package events
 
 import (
 	"context"
+	"reflect"
 	"time"
 
 	"github.com/google/uuid"
@@ -43,8 +44,26 @@ type Publisher struct {
 	producer EventProducer
 }
 
+const publishTimeout = 500 * time.Millisecond
+
 func NewPublisher(producer EventProducer) *Publisher {
+	if isNilProducer(producer) {
+		producer = nil
+	}
 	return &Publisher{producer: producer}
+}
+
+func isNilProducer(producer EventProducer) bool {
+	if producer == nil {
+		return true
+	}
+	value := reflect.ValueOf(producer)
+	switch value.Kind() {
+	case reflect.Chan, reflect.Func, reflect.Interface, reflect.Map, reflect.Pointer, reflect.Slice:
+		return value.IsNil()
+	default:
+		return false
+	}
 }
 
 func (p *Publisher) PublishUserRegistered(ctx context.Context, userID, mobile, email, ip, deviceType string) error {
@@ -170,11 +189,33 @@ func (p *Publisher) PublishPasswordResetByEmailRequested(ctx context.Context, us
 // publish is the internal helper that sends to Kafka if a producer is wired,
 // or logs a warning and no-ops if running without Kafka (e.g. dev/test).
 func (p *Publisher) publish(ctx context.Context, topic, key string, msg interface{}) error {
-	if p.producer == nil {
+	if p == nil || isNilProducer(p.producer) {
 		appLogger.Infof("Kafka producer not configured - event dropped (topic=%s, key=%s)", topic, key)
 		return nil
 	}
-	return p.producer.Produce(ctx, topic, key, msg)
+	if ctx != nil {
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+	}
+
+	// Auth flows should not block on best-effort event publication.
+	publishCtx, cancel := context.WithTimeout(context.Background(), publishTimeout)
+	defer cancel()
+
+	errCh := make(chan error, 1)
+	go func() {
+		errCh <- p.producer.Produce(publishCtx, topic, key, msg)
+	}()
+
+	select {
+	case err := <-errCh:
+		return err
+	case <-publishCtx.Done():
+		return publishCtx.Err()
+	}
 }
 
 // PublishOTPSent publishes a typed OTPSentEvent (proto) when an OTP is sent.

@@ -34,7 +34,7 @@ func main() {
 	}
 
 	// Initialize database connection
-	configPath := "lpc/configs/database.yaml"
+	configPath := "inscore/configs/database.yaml"
 	if err := db.InitializeManagerForService(configPath); err != nil {
 		appLogger.Errorf("Failed to initialize database: %v", err)
 		appLogger.Fatal("Database initialization failed")

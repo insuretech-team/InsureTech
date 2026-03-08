@@ -216,7 +216,7 @@ func resolveServiceAddr(explicit string, services map[string]struct {
 	if !ok || svc.Ports.Grpc <= 0 {
 		return ""
 	}
-	return "localhost:" + strconv.Itoa(svc.Ports.Grpc)
+	return key + ":" + strconv.Itoa(svc.Ports.Grpc)
 }
 
 func loggingInterceptor() grpc.UnaryServerInterceptor {

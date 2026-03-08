@@ -1,0 +1,151 @@
+import { DataTable } from "@/components/dashboard/employees/data-table/data-table";
+import {
+  employeeColumns,
+  Employee,
+} from "@/components/dashboard/employees/data-table/columns";
+import DashboardLayout from "../dashboard-layout";
+
+const data: Employee[] = [
+  {
+    id: "EMP-001",
+    name: "John Doe",
+    employeeID: "LPBL10032",
+    department: "HR",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-002",
+    name: "Jane Smith",
+    employeeID: "LPBL10033",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+  {
+    id: "EMP-003",
+    name: "Bob Johnson",
+    employeeID: "LPBL10034",
+    department: "IT",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-004",
+    name: "Alice Williams",
+    employeeID: "LPBL10032",
+    department: "Marketing",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-005",
+    name: "Jane Smith",
+    employeeID: "LPBL10032",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+  {
+    id: "EMP-001",
+    name: "John Doe",
+    employeeID: "LPBL10032",
+    department: "HR",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-002",
+    name: "Jane Smith",
+    employeeID: "LPBL10032",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+  {
+    id: "EMP-003",
+    name: "Bob Johnson",
+    employeeID: "LPBL10032",
+    department: "IT",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-004",
+    name: "Alice Williams",
+    employeeID: "LPBL10035",
+    department: "Marketing",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Active",
+  },
+  {
+    id: "EMP-005",
+    name: "Jane Smith",
+    employeeID: "LPBL10032",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+  {
+    id: "EMP-005",
+    name: "Jane Smith",
+    employeeID: "LPBL10032",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+  {
+    id: "EMP-005",
+    name: "Jane Smith",
+    employeeID: "LPBL10032",
+    department: "Finance",
+    insuranceCategory: "Health",
+    assignedPlan: "Premium Health Plan",
+    coverage: "$100,000 ",
+    premiumAmount: "$500",
+    status: "Inactive",
+  },
+];
+
+export default function EmployeesPage() {
+  return (
+    <DashboardLayout>
+      <div className="space-y-4">
+        <DataTable columns={employeeColumns} data={data} loading={false} />
+      </div>
+    </DashboardLayout>
+  );
+}

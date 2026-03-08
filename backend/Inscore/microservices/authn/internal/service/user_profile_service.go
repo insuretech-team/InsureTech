@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
@@ -70,6 +71,9 @@ func (s *AuthService) CreateUserProfile(ctx context.Context, req *authnservicev1
 }
 
 // GetUserProfile retrieves the profile for a user.
+// If no profile row exists yet (new user who has never visited My Profile),
+// a minimal empty profile is created on-the-fly and returned so the
+// Settings page always has something to display / save into.
 func (s *AuthService) GetUserProfile(ctx context.Context, req *authnservicev1.GetUserProfileRequest) (*authnservicev1.GetUserProfileResponse, error) {
 	if s.userProfileRepo == nil {
 		return nil, errors.New("user profile repository not configured")
@@ -77,14 +81,34 @@ func (s *AuthService) GetUserProfile(ctx context.Context, req *authnservicev1.Ge
 
 	profile, err := s.userProfileRepo.GetByUserID(ctx, req.UserId)
 	if err != nil {
-		logger.Errorf("profile not found: %v", err)
-		return nil, errors.New("profile not found")
+		// Profile does not exist yet — auto-create a minimal empty one so
+		// the My Profile tab renders correctly on first visit.
+		appLogger.Infof("GetUserProfile: no profile for user %s, auto-creating empty profile", req.UserId)
+		// date_of_birth is NOT NULL in the DB — supply a zero-epoch sentinel.
+		// The user can update it to a real value from the My Profile form.
+		zeroDOB := timestamppb.New(time.Time{})
+		profile = &authnentityv1.UserProfile{
+			UserId:      req.UserId,
+			DateOfBirth: zeroDOB,
+			CreatedAt:   timestamppb.Now(),
+			UpdatedAt:   timestamppb.Now(),
+		}
+		if createErr := s.userProfileRepo.Create(ctx, profile); createErr != nil {
+			// Creation failed — log and surface the original not-found error
+			// rather than the internal create error so callers get a clean message.
+			appLogger.Errorf("GetUserProfile: auto-create profile failed for user %s: %v", req.UserId, createErr)
+			logger.Errorf("profile not found: %v", err)
+			return nil, errors.New("profile not found")
+		}
+		appLogger.Infof("GetUserProfile: auto-created empty profile for user %s", req.UserId)
 	}
 
 	return &authnservicev1.GetUserProfileResponse{Profile: profile}, nil
 }
 
 // UpdateUserProfile updates existing profile fields (non-zero values only).
+// If no profile row exists yet (new user saving for the first time), one is
+// created with the supplied fields so the upsert always succeeds.
 func (s *AuthService) UpdateUserProfile(ctx context.Context, req *authnservicev1.UpdateUserProfileRequest) (*authnservicev1.UpdateUserProfileResponse, error) {
 	if s.userProfileRepo == nil {
 		return nil, errors.New("user profile repository not configured")
@@ -92,7 +116,21 @@ func (s *AuthService) UpdateUserProfile(ctx context.Context, req *authnservicev1
 
 	existing, err := s.userProfileRepo.GetByUserID(ctx, req.UserId)
 	if err != nil || existing == nil {
-		return nil, errors.New("profile not found")
+		// No profile yet — create a new one seeded with the incoming fields.
+		appLogger.Infof("UpdateUserProfile: no profile for user %s, auto-creating on first save", req.UserId)
+		// date_of_birth is NOT NULL in DB — use zero-epoch sentinel for auto-create.
+		zeroDOB := timestamppb.New(time.Time{})
+		existing = &authnentityv1.UserProfile{
+			UserId:      req.UserId,
+			DateOfBirth: zeroDOB,
+			CreatedAt:   timestamppb.Now(),
+			UpdatedAt:   timestamppb.Now(),
+		}
+		if createErr := s.userProfileRepo.Create(ctx, existing); createErr != nil {
+			appLogger.Errorf("UpdateUserProfile: auto-create failed for user %s: %v", req.UserId, createErr)
+			return nil, errors.New("failed to create profile")
+		}
+		appLogger.Infof("UpdateUserProfile: auto-created profile for user %s", req.UserId)
 	}
 
 	if req.FullName != "" {

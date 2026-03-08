@@ -1,0 +1,5 @@
+<Solution>
+  <Project Path="AnalyticsReporting/AnalyticsReporting.Service.csproj" />
+  <Project Path="InsuranceEngine/InsuranceEngine.Service.csproj" />
+  <Project Path="PartnerManagement/PartnerManagement.Service.csproj" />
+</Solution>

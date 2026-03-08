@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"os"
 	"strconv"
 	"strings"
 	"time"
@@ -13,11 +14,23 @@ import (
 	b2bv1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1"
 	b2bservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
+	"google.golang.org/grpc/metadata"
 	"gorm.io/gorm"
 )
 
 type B2BService struct {
-	repo domain.B2BRepository
+	repo      domain.B2BRepository
+	publisher EventPublisher
+}
+
+// EventPublisher interface for publishing B2B events
+type EventPublisher interface {
+	PublishOrganisationCreated(ctx context.Context, organisationID, tenantID, name, code, createdBy string) error
+	PublishOrganisationUpdated(ctx context.Context, organisationID, name string, status b2bv1.OrganisationStatus, updatedBy string) error
+	PublishOrganisationApproved(ctx context.Context, organisationID, approvedBy string) error
+	PublishOrgMemberAdded(ctx context.Context, memberID, organisationID, userID string, role b2bv1.OrgMemberRole, addedBy string) error
+	PublishOrgMemberRemoved(ctx context.Context, memberID, organisationID, userID, removedBy string) error
+	PublishB2BAdminAssigned(ctx context.Context, organisationID, userID, assignedBy string) error
 }
 
 var seededCatalogPlans = map[string]*domain.CatalogPlan{
@@ -59,8 +72,44 @@ var seededCatalogPlans = map[string]*domain.CatalogPlan{
 	},
 }
 
-func NewB2BService(repo domain.B2BRepository) *B2BService {
-	return &B2BService{repo: repo}
+func NewB2BService(repo domain.B2BRepository, publisher EventPublisher) *B2BService {
+	return &B2BService{
+		repo:      repo,
+		publisher: publisher,
+	}
+}
+
+func resolveTenantID(ctx context.Context, requestedTenantID string) string {
+	tenantID := strings.TrimSpace(requestedTenantID)
+	if tenantID != "" {
+		return tenantID
+	}
+
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if vals := md.Get("x-tenant-id"); len(vals) > 0 && strings.TrimSpace(vals[0]) != "" {
+			return strings.TrimSpace(vals[0])
+		}
+	}
+
+	if envTenantID := strings.TrimSpace(os.Getenv("DEFAULT_TENANT_ID")); envTenantID != "" {
+		return envTenantID
+	}
+
+	return "00000000-0000-0000-0000-000000000001"
+}
+
+// resolveCallerID extracts the acting user's ID from gRPC metadata (x-user-id header).
+// Falls back to the provided default if not present.
+func resolveCallerID(ctx context.Context, fallback string) string {
+	if md, ok := metadata.FromIncomingContext(ctx); ok {
+		if vals := md.Get("x-user-id"); len(vals) > 0 && strings.TrimSpace(vals[0]) != "" {
+			return strings.TrimSpace(vals[0])
+		}
+	}
+	if strings.TrimSpace(fallback) != "" {
+		return strings.TrimSpace(fallback)
+	}
+	return "system"
 }
 
 func parseOffset(token string) int {
@@ -470,6 +519,7 @@ func (s *B2BService) ListEmployees(
 		offset,
 		req.GetDepartmentId(),
 		req.GetBusinessId(),
+		req.GetStatus(),
 	)
 	if err != nil {
 		return nil, err
@@ -490,11 +540,11 @@ func (s *B2BService) ListEmployees(
 	if err != nil {
 		return nil, err
 	}
-		planCatalog, err := s.repo.GetCatalogPlansByPlanIDs(ctx, planIDs)
-		if err != nil {
-			return nil, err
-		}
-		planCatalog = mergeCatalogMapWithSeedFallback(planCatalog)
+	planCatalog, err := s.repo.GetCatalogPlansByPlanIDs(ctx, planIDs)
+	if err != nil {
+		return nil, err
+	}
+	planCatalog = mergeCatalogMapWithSeedFallback(planCatalog)
 
 	items := make([]*b2bservicev1.EmployeeView, 0, len(employees))
 	for _, employee := range employees {
@@ -586,3 +636,554 @@ func (s *B2BService) GetEmployee(
 		},
 	}, nil
 }
+
+// ─── CreateEmployee ───────────────────────────────────────────────────────────
+
+func (s *B2BService) CreateEmployee(
+	ctx context.Context,
+	req *b2bservicev1.CreateEmployeeRequest,
+) (*b2bservicev1.CreateEmployeeResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetName()) == "" {
+		return nil, fmt.Errorf("%w: name is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetEmployeeId()) == "" {
+		return nil, fmt.Errorf("%w: employee_id is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetDepartmentId()) == "" {
+		return nil, fmt.Errorf("%w: department_id is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetBusinessId()) == "" {
+		return nil, fmt.Errorf("%w: business_id is required — must be injected from session", ErrInvalidArgument)
+	}
+
+	// Resolve plan premium before insert so it is persisted on the employee row.
+	var planPremiumAmount *commonv1.Money
+	assignedPlanName := "N/A"
+	if strings.TrimSpace(req.GetAssignedPlanId()) != "" {
+		planCatalog, err := s.repo.GetCatalogPlansByPlanIDs(ctx, []string{req.GetAssignedPlanId()})
+		if err != nil {
+			return nil, err
+		}
+		planCatalog = mergeCatalogMapWithSeedFallback(planCatalog)
+		if plan := planCatalog[req.GetAssignedPlanId()]; plan != nil {
+			assignedPlanName = plan.PlanName
+			planPremiumAmount = cloneMoney(plan.PremiumAmount)
+		}
+	}
+
+	input := domain.EmployeeCreateInput{
+		EmployeeUUID:      uuid.NewString(),
+		Name:              strings.TrimSpace(req.GetName()),
+		EmployeeID:        strings.TrimSpace(req.GetEmployeeId()),
+		DepartmentID:      req.GetDepartmentId(),
+		BusinessID:        req.GetBusinessId(),
+		InsuranceCategory: req.GetInsuranceCategory(),
+		AssignedPlanID:    req.GetAssignedPlanId(),
+		CoverageAmount:    req.GetCoverageAmount(),
+		PremiumAmount:     planPremiumAmount,
+		NumberOfDependent: req.GetNumberOfDependent(),
+		Email:             strings.TrimSpace(req.GetEmail()),
+		MobileNumber:      strings.TrimSpace(req.GetMobileNumber()),
+		DateOfBirth:       req.GetDateOfBirth(),
+		DateOfJoining:     req.GetDateOfJoining(),
+		Gender:            req.GetGender(),
+	}
+
+	employee, err := s.repo.CreateEmployee(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	_ = s.repo.UpdateDepartmentTotalPremium(ctx, employee.GetDepartmentId())
+
+	// Enrich with department name (plan name already resolved above)
+	departmentNames, err := s.repo.GetDepartmentNames(ctx, []string{employee.GetDepartmentId()})
+	if err != nil {
+		return nil, err
+	}
+	departmentName := departmentNames[employee.GetDepartmentId()]
+	if strings.TrimSpace(departmentName) == "" {
+		departmentName = "Unassigned"
+	}
+
+	return &b2bservicev1.CreateEmployeeResponse{
+		Employee: &b2bservicev1.EmployeeView{
+			Employee:         employee,
+			DepartmentName:   departmentName,
+			AssignedPlanName: assignedPlanName,
+		},
+		Message: "Employee created successfully",
+	}, nil
+}
+
+// ─── UpdateEmployee ───────────────────────────────────────────────────────────
+
+func (s *B2BService) UpdateEmployee(
+	ctx context.Context,
+	req *b2bservicev1.UpdateEmployeeRequest,
+) (*b2bservicev1.UpdateEmployeeResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetEmployeeUuid()) == "" {
+		return nil, fmt.Errorf("%w: employee_uuid is required", ErrInvalidArgument)
+	}
+
+	oldEmp, _ := s.repo.GetEmployee(ctx, req.GetEmployeeUuid())
+	var oldDeptID string
+	if oldEmp != nil {
+		oldDeptID = oldEmp.GetDepartmentId()
+	}
+
+	input := domain.EmployeeUpdateInput{
+		EmployeeUUID:      req.GetEmployeeUuid(),
+		Name:              req.GetName(),
+		DepartmentID:      req.GetDepartmentId(),
+		Email:             req.GetEmail(),
+		MobileNumber:      req.GetMobileNumber(),
+		DateOfBirth:       req.GetDateOfBirth(),
+		DateOfJoining:     req.GetDateOfJoining(),
+		Gender:            req.GetGender(),
+		InsuranceCategory: req.GetInsuranceCategory(),
+		AssignedPlanID:    req.GetAssignedPlanId(),
+		CoverageAmount:    req.GetCoverageAmount(),
+		NumberOfDependent: req.GetNumberOfDependent(),
+		Status:            req.GetStatus(),
+	}
+
+	employee, err := s.repo.UpdateEmployee(ctx, input)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: employee not found", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	_ = s.repo.UpdateDepartmentTotalPremium(ctx, employee.GetDepartmentId())
+	if oldDeptID != "" && oldDeptID != employee.GetDepartmentId() {
+		_ = s.repo.UpdateDepartmentTotalPremium(ctx, oldDeptID)
+	}
+
+	departmentNames, err := s.repo.GetDepartmentNames(ctx, []string{employee.GetDepartmentId()})
+	if err != nil {
+		return nil, err
+	}
+	departmentName := departmentNames[employee.GetDepartmentId()]
+	if strings.TrimSpace(departmentName) == "" {
+		departmentName = "Unassigned"
+	}
+
+	assignedPlanName := "N/A"
+	if strings.TrimSpace(employee.GetAssignedPlanId()) != "" {
+		planCatalog, err := s.repo.GetCatalogPlansByPlanIDs(ctx, []string{employee.GetAssignedPlanId()})
+		if err != nil {
+			return nil, err
+		}
+		planCatalog = mergeCatalogMapWithSeedFallback(planCatalog)
+		if plan := planCatalog[employee.GetAssignedPlanId()]; plan != nil {
+			assignedPlanName = plan.PlanName
+		}
+	}
+
+	return &b2bservicev1.UpdateEmployeeResponse{
+		Employee: &b2bservicev1.EmployeeView{
+			Employee:         employee,
+			DepartmentName:   departmentName,
+			AssignedPlanName: assignedPlanName,
+		},
+		Message: "Employee updated successfully",
+	}, nil
+}
+
+// ─── DeleteEmployee ───────────────────────────────────────────────────────────
+
+func (s *B2BService) DeleteEmployee(
+	ctx context.Context,
+	req *b2bservicev1.DeleteEmployeeRequest,
+) (*b2bservicev1.DeleteEmployeeResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetEmployeeUuid()) == "" {
+		return nil, fmt.Errorf("%w: employee_uuid is required", ErrInvalidArgument)
+	}
+
+	emp, _ := s.repo.GetEmployee(ctx, req.GetEmployeeUuid())
+	var deptID string
+	if emp != nil {
+		deptID = emp.GetDepartmentId()
+	}
+
+	if err := s.repo.DeleteEmployee(ctx, req.GetEmployeeUuid()); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: employee not found", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	if deptID != "" {
+		_ = s.repo.UpdateDepartmentTotalPremium(ctx, deptID)
+	}
+
+	return &b2bservicev1.DeleteEmployeeResponse{Message: "Employee deleted successfully"}, nil
+}
+
+// ─── DEPARTMENT CRUD ──────────────────────────────────────────────────────────
+
+func (s *B2BService) GetDepartment(
+	ctx context.Context,
+	req *b2bservicev1.GetDepartmentRequest,
+) (*b2bservicev1.GetDepartmentResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetDepartmentId()) == "" {
+		return nil, fmt.Errorf("%w: department_id is required", ErrInvalidArgument)
+	}
+	dept, err := s.repo.GetDepartment(ctx, req.GetDepartmentId())
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: department not found", ErrNotFound)
+		}
+		return nil, err
+	}
+	return &b2bservicev1.GetDepartmentResponse{Department: dept}, nil
+}
+
+func (s *B2BService) CreateDepartment(
+	ctx context.Context,
+	req *b2bservicev1.CreateDepartmentRequest,
+) (*b2bservicev1.CreateDepartmentResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetName()) == "" {
+		return nil, fmt.Errorf("%w: department name is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetBusinessId()) == "" {
+		return nil, fmt.Errorf("%w: business_id is required (must be injected from session)", ErrInvalidArgument)
+	}
+
+	input := domain.DepartmentCreateInput{
+		DepartmentID: uuid.NewString(),
+		Name:         strings.TrimSpace(req.GetName()),
+		BusinessID:   req.GetBusinessId(),
+	}
+
+	dept, err := s.repo.CreateDepartment(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+	return &b2bservicev1.CreateDepartmentResponse{
+		Department: dept,
+		Message:    "Department created successfully",
+	}, nil
+}
+
+func (s *B2BService) UpdateDepartment(
+	ctx context.Context,
+	req *b2bservicev1.UpdateDepartmentRequest,
+) (*b2bservicev1.UpdateDepartmentResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetDepartmentId()) == "" {
+		return nil, fmt.Errorf("%w: department_id is required", ErrInvalidArgument)
+	}
+	input := domain.DepartmentUpdateInput{
+		DepartmentID: req.GetDepartmentId(),
+		Name:         strings.TrimSpace(req.GetName()),
+	}
+	dept, err := s.repo.UpdateDepartment(ctx, input)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: department not found", ErrNotFound)
+		}
+		return nil, err
+	}
+	return &b2bservicev1.UpdateDepartmentResponse{
+		Department: dept,
+		Message:    "Department updated successfully",
+	}, nil
+}
+
+func (s *B2BService) DeleteDepartment(
+	ctx context.Context,
+	req *b2bservicev1.DeleteDepartmentRequest,
+) (*b2bservicev1.DeleteDepartmentResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetDepartmentId()) == "" {
+		return nil, fmt.Errorf("%w: department_id is required", ErrInvalidArgument)
+	}
+	if err := s.repo.DeleteDepartment(ctx, req.GetDepartmentId()); err != nil {
+		return nil, err
+	}
+	return &b2bservicev1.DeleteDepartmentResponse{Message: "Department deleted successfully"}, nil
+}
+
+// ─── ORGANISATION CRUD ────────────────────────────────────────────────────────
+
+func (s *B2BService) CreateOrganisation(
+	ctx context.Context,
+	req *b2bservicev1.CreateOrganisationRequest,
+) (*b2bservicev1.CreateOrganisationResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetName()) == "" {
+		return nil, fmt.Errorf("%w: organisation name is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetCode()) == "" {
+		return nil, fmt.Errorf("%w: organisation code is required", ErrInvalidArgument)
+	}
+	tenantID := resolveTenantID(ctx, req.GetTenantId())
+	if strings.TrimSpace(tenantID) == "" {
+		return nil, fmt.Errorf("%w: tenant_id is required", ErrInvalidArgument)
+	}
+
+	input := domain.OrganisationCreateInput{
+		OrganisationID: uuid.NewString(),
+		TenantID:       tenantID,
+		Name:           strings.TrimSpace(req.GetName()),
+		Code:           strings.ToUpper(strings.TrimSpace(req.GetCode())),
+		Industry:       req.GetIndustry(),
+		ContactEmail:   req.GetContactEmail(),
+		ContactPhone:   req.GetContactPhone(),
+		Address:        req.GetAddress(),
+	}
+
+	org, err := s.repo.CreateOrganisation(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	// Publish event
+	if s.publisher != nil {
+		callerID := resolveCallerID(ctx, "system")
+		_ = s.publisher.PublishOrganisationCreated(ctx, org.OrganisationId, org.TenantId, org.Name, org.Code, callerID)
+	}
+
+	return &b2bservicev1.CreateOrganisationResponse{
+		Organisation: org,
+		Message:      "Organisation created successfully",
+	}, nil
+}
+
+func (s *B2BService) GetOrganisation(
+	ctx context.Context,
+	req *b2bservicev1.GetOrganisationRequest,
+) (*b2bservicev1.GetOrganisationResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetOrganisationId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id is required", ErrInvalidArgument)
+	}
+	org, err := s.repo.GetOrganisation(ctx, req.GetOrganisationId())
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: organisation not found", ErrNotFound)
+		}
+		return nil, err
+	}
+	return &b2bservicev1.GetOrganisationResponse{Organisation: org}, nil
+}
+
+func (s *B2BService) ListOrganisations(
+	ctx context.Context,
+	req *b2bservicev1.ListOrganisationsRequest,
+) (*b2bservicev1.ListOrganisationsResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	pageSize := int(req.GetPageSize())
+	if pageSize <= 0 {
+		pageSize = 50
+	}
+	offset := parseOffset(req.GetPageToken())
+	tenantID := resolveTenantID(ctx, req.GetTenantId())
+
+	orgs, total, err := s.repo.ListOrganisations(ctx, pageSize, offset, tenantID, req.GetStatus())
+	if err != nil {
+		return nil, err
+	}
+
+	next := ""
+	if int64(offset+len(orgs)) < total {
+		next = strconv.Itoa(offset + len(orgs))
+	}
+	return &b2bservicev1.ListOrganisationsResponse{
+		Organisations: orgs,
+		NextPageToken: next,
+		TotalCount:    int32(total),
+	}, nil
+}
+
+func (s *B2BService) UpdateOrganisation(
+	ctx context.Context,
+	req *b2bservicev1.UpdateOrganisationRequest,
+) (*b2bservicev1.UpdateOrganisationResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetOrganisationId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id is required", ErrInvalidArgument)
+	}
+	input := domain.OrganisationUpdateInput{
+		OrganisationID: req.GetOrganisationId(),
+		Name:           req.GetName(),
+		Industry:       req.GetIndustry(),
+		ContactEmail:   req.GetContactEmail(),
+		ContactPhone:   req.GetContactPhone(),
+		Address:        req.GetAddress(),
+		Status:         req.GetStatus(),
+	}
+	org, err := s.repo.UpdateOrganisation(ctx, input)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: organisation not found", ErrNotFound)
+		}
+		return nil, err
+	}
+	return &b2bservicev1.UpdateOrganisationResponse{
+		Organisation: org,
+		Message:      "Organisation updated successfully",
+	}, nil
+}
+
+func (s *B2BService) DeleteOrganisation(
+	ctx context.Context,
+	req *b2bservicev1.DeleteOrganisationRequest,
+) (*b2bservicev1.DeleteOrganisationResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetOrganisationId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id is required", ErrInvalidArgument)
+	}
+	if err := s.repo.DeleteOrganisation(ctx, req.GetOrganisationId()); err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: organisation not found", ErrNotFound)
+		}
+		return nil, err
+	}
+	return &b2bservicev1.DeleteOrganisationResponse{
+		Message: "Organisation deleted successfully",
+	}, nil
+}
+
+func (s *B2BService) ListOrgMembers(
+	ctx context.Context,
+	req *b2bservicev1.ListOrgMembersRequest,
+) (*b2bservicev1.ListOrgMembersResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetOrganisationId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id is required", ErrInvalidArgument)
+	}
+	members, err := s.repo.ListOrgMembers(ctx, req.GetOrganisationId())
+	if err != nil {
+		return nil, err
+	}
+	return &b2bservicev1.ListOrgMembersResponse{Members: members}, nil
+}
+
+func (s *B2BService) AddOrgMember(
+	ctx context.Context,
+	req *b2bservicev1.AddOrgMemberRequest,
+) (*b2bservicev1.AddOrgMemberResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetOrganisationId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetUserId()) == "" {
+		return nil, fmt.Errorf("%w: user_id is required", ErrInvalidArgument)
+	}
+
+	input := domain.OrgMemberCreateInput{
+		MemberID:       uuid.NewString(),
+		OrganisationID: req.GetOrganisationId(),
+		UserID:         req.GetUserId(),
+		Role:           req.GetRole(),
+	}
+	member, err := s.repo.AddOrgMember(ctx, input)
+	if err != nil {
+		return nil, err
+	}
+
+	// Publish event
+	if s.publisher != nil {
+		callerID := resolveCallerID(ctx, "system")
+		_ = s.publisher.PublishOrgMemberAdded(ctx, member.MemberId, member.OrganisationId, member.UserId, member.Role, callerID)
+
+		// If role is BUSINESS_ADMIN, also publish admin assignment event so
+		// the authz consumer assigns the b2b_org_admin Casbin role immediately.
+		if member.Role == b2bv1.OrgMemberRole_ORG_MEMBER_ROLE_BUSINESS_ADMIN {
+			_ = s.publisher.PublishB2BAdminAssigned(ctx, member.OrganisationId, member.UserId, callerID)
+		}
+	}
+
+	return &b2bservicev1.AddOrgMemberResponse{
+		Member:  member,
+		Message: "Member added successfully",
+	}, nil
+}
+
+func (s *B2BService) AssignOrgAdmin(
+	ctx context.Context,
+	req *b2bservicev1.AssignOrgAdminRequest,
+) (*b2bservicev1.AssignOrgAdminResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetOrganisationId()) == "" || strings.TrimSpace(req.GetMemberId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id and member_id are required", ErrInvalidArgument)
+	}
+
+	member, err := s.repo.AssignOrgAdmin(ctx, req.GetOrganisationId(), req.GetMemberId())
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: member not found", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	if s.publisher != nil {
+		callerID := resolveCallerID(ctx, "system")
+		_ = s.publisher.PublishB2BAdminAssigned(ctx, member.OrganisationId, member.UserId, callerID)
+	}
+
+	return &b2bservicev1.AssignOrgAdminResponse{
+		Member:  member,
+		Message: "B2B admin assigned successfully",
+	}, nil
+}
+
+func (s *B2BService) RemoveOrgMember(
+	ctx context.Context,
+	req *b2bservicev1.RemoveOrgMemberRequest,
+) (*b2bservicev1.RemoveOrgMemberResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetOrganisationId()) == "" || strings.TrimSpace(req.GetMemberId()) == "" {
+		return nil, fmt.Errorf("%w: organisation_id and member_id are required", ErrInvalidArgument)
+	}
+	if err := s.repo.RemoveOrgMember(ctx, req.GetOrganisationId(), req.GetMemberId()); err != nil {
+		return nil, err
+	}
+
+	// Publish event
+	if s.publisher != nil {
+		callerID := resolveCallerID(ctx, "system")
+		_ = s.publisher.PublishOrgMemberRemoved(ctx, req.GetMemberId(), req.GetOrganisationId(), "", callerID)
+	}
+
+	return &b2bservicev1.RemoveOrgMemberResponse{Message: "Member removed successfully"}, nil
+}
+
+// ResolveMyOrganisation resolves the organisation_id for the authenticated user.
+// This is the core fix for the hardcoded business_id problem:
+// The REST gateway calls this RPC with the user_id from the validated session,
+// then injects the returned organisation_id as x-business-id gRPC metadata
+// into every subsequent B2B service call.
+func (s *B2BService) ResolveMyOrganisation(
+	ctx context.Context,
+	req *b2bservicev1.ResolveMyOrganisationRequest,
+) (*b2bservicev1.ResolveMyOrganisationResponse, error) {
+	if req == nil || strings.TrimSpace(req.GetUserId()) == "" {
+		return nil, fmt.Errorf("%w: user_id is required", ErrInvalidArgument)
+	}
+
+	orgID, role, orgName, err := s.repo.ResolveOrganisationByUserID(ctx, req.GetUserId())
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: no organisation found for user", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	return &b2bservicev1.ResolveMyOrganisationResponse{
+		OrganisationId:   orgID,
+		OrganisationName: orgName,
+		Role:             role,
+	}, nil
+}
+
+// keepTimeImport prevents the time import from being flagged unused during transition.
+var keepTimeImport = time.RFC3339

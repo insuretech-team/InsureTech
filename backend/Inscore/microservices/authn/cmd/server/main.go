@@ -277,6 +277,10 @@ func main() {
 		appLogger.Warnf("Admin seeder: %v", err)
 	}
 
+	if err := seeder.SeedB2bAdminUser(context.Background(), database); err != nil {
+		appLogger.Warnf("B2B Admin seeder: %v", err)
+	}
+
 	// 8b. Background cleanup jobs (sessions + OTPs)
 	cleanupCtx, cleanupCancel := context.WithCancel(context.Background())
 	defer cleanupCancel()

@@ -1,6 +1,7 @@
 package routes
 
 import (
+	"bytes"
 	"net/http"
 	"net/http/httptest"
 	"testing"
@@ -244,6 +245,7 @@ func TestRegulatorOrSystemMiddleware_RejectsB2C(t *testing.T) {
 
 func TestBuildDomain_WithPortalAndTenant(t *testing.T) {
 	require.Equal(t, "system:root", buildDomain("system", "root"))
+	require.Equal(t, "system:root", buildDomain("system", "tenant-abc"))
 	require.Equal(t, "agent:tenant-abc", buildDomain("agent", "tenant-abc"))
 }
 
@@ -253,6 +255,19 @@ func TestBuildDomain_EmptyPortalDefaultsToB2C(t *testing.T) {
 
 func TestBuildDomain_EmptyTenantDefaultsToRoot(t *testing.T) {
 	require.Equal(t, "system:root", buildDomain("system", ""))
+}
+
+func TestBuildRequestDomain_B2BUsesResolvedBusinessID(t *testing.T) {
+	r := httptest.NewRequest(http.MethodGet, "/v1/b2b/employees?business_id=org-query", nil)
+	require.Equal(t, "b2b:org-query", buildRequestDomain(r, "PORTAL_B2B", "tenant-abc"))
+
+	r = httptest.NewRequest(http.MethodGet, "/v1/b2b/organisations/org-path/members", nil)
+	r.SetPathValue("organisation_id", "org-path")
+	require.Equal(t, "b2b:org-path", buildRequestDomain(r, "PORTAL_B2B", "tenant-abc"))
+
+	r = httptest.NewRequest(http.MethodPost, "/v1/b2b/departments", bytes.NewBufferString(`{"business_id":"org-body"}`))
+	r.Header.Set("Content-Type", "application/json")
+	require.Equal(t, "b2b:org-body", buildRequestDomain(r, "PORTAL_B2B", "tenant-abc"))
 }
 
 // ---------------------------------------------------------------------------

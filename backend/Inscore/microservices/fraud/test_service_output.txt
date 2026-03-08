@@ -1,0 +1,34 @@
+=== RUN   TestFraudService_Live_RuleCRUDLifecycle
+[90m[19:15][0m [32m[INFO][0m dbops [36m[db/manager.go:273][0m
+   database connection {"type": "primary", "success": true, "host": "db-postgresql-sgp1-03392-do-user-30821835-0.i.db.ondigitalocean.com"}
+[90m[19:15][0m [32m[INFO][0m [36m[db/manager.go:274][0m
+   Connected to primary database {"provider": "digitalocean", "host": "db-postgresql-sgp1-03392-do-user-30821835-0.i.db.ondigitalocean.com"}
+[90m[19:15][0m [32m[INFO][0m [36m[db/manager.go:165][0m
+   Service running on primary database (failover disabled)
+[90m[19:15][0m [32m[INFO][0m [36m[db/manager.go:747][0m
+   Database manager initialized for service with automatic failover
+[90m[19:15][0m [32m[INFO][0m [36m[service/fraud_service.go:362][0m
+   Fraud rule deactivated (rule_id=b61ea74f-d83c-49ed-a57b-b9f041ed7d08, reason=live test deactivation, trace=)
+--- PASS: TestFraudService_Live_RuleCRUDLifecycle (1.58s)
+=== RUN   TestFraudService_Live_CheckFraud_WithNoRules
+--- PASS: TestFraudService_Live_CheckFraud_WithNoRules (0.11s)
+=== RUN   TestFraudService_Live_CheckFraud_WithMatchingRule
+[90m[19:15][0m [32m[INFO][0m [36m[events/publisher.go:35][0m
+   fraud: Kafka producer not configured, dropping event (topic=fraud.events)
+--- PASS: TestFraudService_Live_CheckFraud_WithMatchingRule (0.76s)
+=== RUN   TestFraudService_Live_CaseLifecycle
+[90m[19:15][0m [32m[INFO][0m [36m[events/publisher.go:35][0m
+   fraud: Kafka producer not configured, dropping event (topic=fraud.events)
+[90m[19:15][0m [32m[INFO][0m [36m[events/publisher.go:35][0m
+   fraud: Kafka producer not configured, dropping event (topic=fraud.events)
+    fraud_service_live_test.go:270: 
+        	Error Trace:	E:/Projects/InsureTech/backend/inscore/microservices/fraud/internal/service/fraud_service_live_test.go:270
+        	Error:      	Received unexpected error:
+        	            	ERROR: value too long for type character varying(20) (SQLSTATE 22001)
+        	Test:       	TestFraudService_Live_CaseLifecycle
+--- FAIL: TestFraudService_Live_CaseLifecycle (1.41s)
+=== RUN   TestFraudService_Live_ValidationErrors
+--- PASS: TestFraudService_Live_ValidationErrors (0.00s)
+FAIL
+FAIL	github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/service	4.312s
+FAIL

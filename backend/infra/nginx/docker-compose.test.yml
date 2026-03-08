@@ -1,0 +1,83 @@
+# Local nginx config test — validates all site configs with self-signed certs
+# Usage: docker compose -f backend/infra/nginx/docker-compose.test.yml up
+services:
+  nginx-test:
+    # Use Debian-based nginx (not Alpine) — matches baremetal Ubuntu server.
+    # www-data user exists in Debian nginx image, matching nginx.conf user directive.
+    image: nginx:1.25
+    container_name: insuretech_nginx_test
+    ports:
+      - "8880:80"
+      - "8443:443"
+    volumes:
+      - ./nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./conf.d:/etc/nginx/conf.d:ro
+      - ./snippets:/etc/nginx/snippets:ro
+      - ./upstreams:/etc/nginx/upstreams:ro
+      - ./cache:/etc/nginx/cache:ro
+      - ./maps:/etc/nginx/maps:ro
+      - ./sites-available:/etc/nginx/sites-available:ro
+      - ./sites-enabled:/etc/nginx/sites-enabled:ro
+      - ./error-pages:/etc/nginx/error-pages:ro
+      - ./stream.d:/etc/nginx/stream.d:ro
+      - nginx_test_certs:/etc/letsencrypt
+      - nginx_test_certbot:/var/www/certbot
+      - nginx_test_www:/var/www
+      - nginx_test_logs:/var/log/nginx
+    entrypoint: |
+      /bin/sh -c '
+        apt-get update -qq && apt-get install -yq --no-install-recommends openssl 2>/dev/null
+
+        # Generate self-signed certs for every portal domain
+        for domain in \
+          labaidinsuretech.com \
+          api.labaidinsuretech.com \
+          b2b.labaidinsuretech.com \
+          system.labaidinsuretech.com \
+          agents.labaidinsuretech.com \
+          regulator.labaidinsuretech.com \
+          partners.labaidinsuretech.com \
+          business.labaidinsuretech.com; do
+          mkdir -p /etc/letsencrypt/live/$$domain
+          if [ ! -f /etc/letsencrypt/live/$$domain/fullchain.pem ]; then
+            openssl req -x509 -nodes -days 3650 -newkey rsa:2048 \
+              -keyout /etc/letsencrypt/live/$$domain/privkey.pem \
+              -out    /etc/letsencrypt/live/$$domain/fullchain.pem \
+              -subj "/CN=$$domain" 2>/dev/null
+            echo "Generated cert for $$domain"
+          fi
+        done
+
+        # Create required web dirs
+        mkdir -p /var/www/certbot
+        mkdir -p /var/www/labaidinsuretech.com
+        mkdir -p /var/www/b2b.labaidinsuretech.com
+        mkdir -p /var/www/system.labaidinsuretech.com
+        mkdir -p /var/www/coming_soon
+        mkdir -p /var/www/static
+        echo "<h1>Test OK</h1>" > /var/www/labaidinsuretech.com/index.html
+        echo "<h1>Coming Soon</h1>" > /var/www/coming_soon/index.html
+        echo "<h1>System</h1>" > /var/www/system.labaidinsuretech.com/index.html
+
+        # Enable all sites
+        for f in /etc/nginx/sites-available/*.conf; do
+          name=$$(basename $$f)
+          ln -sf $$f /etc/nginx/sites-enabled/$$name 2>/dev/null || true
+        done
+
+        echo "Testing nginx config..."
+        nginx -t
+        echo "Starting nginx..."
+        nginx -g "daemon off;"
+      '
+    healthcheck:
+      test: ["CMD", "wget", "-qO-", "http://localhost/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+
+volumes:
+  nginx_test_certs:
+  nginx_test_certbot:
+  nginx_test_www:
+  nginx_test_logs:

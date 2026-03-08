@@ -1,23 +1,11 @@
-using MediatR;
-
 namespace PoliSync.SharedKernel.Domain;
 
 /// <summary>
-/// Marker interface for domain events. All domain events implement INotification (MediatR).
+/// Base class for domain events - something that happened in the domain
 /// </summary>
-public interface IDomainEvent : INotification
+public abstract record DomainEvent
 {
-    Guid EventId { get; }
-    DateTime OccurredAt { get; }
-    string EventType { get; }
-}
-
-/// <summary>
-/// Base record for domain events.
-/// </summary>
-public abstract record DomainEvent : IDomainEvent
-{
-    public Guid EventId { get; } = Guid.NewGuid();
-    public DateTime OccurredAt { get; } = DateTime.UtcNow;
-    public abstract string EventType { get; }
+    public Guid EventId { get; init; } = Guid.NewGuid();
+    public DateTime OccurredAt { get; init; } = DateTime.UtcNow;
+    public string EventType => GetType().Name;
 }

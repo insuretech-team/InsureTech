@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>502 - Service Temporarily Unavailable | Trendyco</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            display: flex; align-items: center; justify-content: center;
+            min-height: 100vh; color: white; text-align: center;
+        }
+        .container { max-width: 600px; padding: 40px 20px; }
+        h1 { font-size: 120px; margin-bottom: 20px; text-shadow: 2px 2px 4px rgba(0,0,0,0.3); }
+        h2 { font-size: 32px; margin-bottom: 20px; }
+        p { font-size: 18px; margin-bottom: 30px; opacity: 0.9; }
+        .spinner { 
+            border: 4px solid rgba(255,255,255,0.3);
+            border-top: 4px solid white;
+            border-radius: 50%; width: 50px; height: 50px;
+            animation: spin 1s linear infinite; margin: 20px auto;
+        }
+        @keyframes spin { 0% { transform: rotate(0deg); } 100% { transform: rotate(360deg); } }
+        a { 
+            display: inline-block; padding: 15px 40px; 
+            background: white; color: #f5576c;
+            text-decoration: none; border-radius: 50px;
+            font-weight: bold; margin-top: 20px;
+        }
+    </style>
+    <script>
+        // Auto-reload after 5 seconds
+        setTimeout(function(){ location.reload(); }, 5000);
+    </script>
+</head>
+<body>
+    <div class="container">
+        <h1>502</h1>
+        <h2>Service Temporarily Unavailable</h2>
+        <p>We're experiencing technical difficulties. Please wait while we fix this.</p>
+        <div class="spinner"></div>
+        <p style="font-size: 14px; opacity: 0.7;">Retrying automatically in 5 seconds...</p>
+        <a href="javascript:location.reload()">Retry Now</a>
+    </div>
+</body>
+</html>

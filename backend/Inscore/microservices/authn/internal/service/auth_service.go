@@ -110,7 +110,13 @@ func (s *AuthService) Login(ctx context.Context, req *authnservicev1.LoginReques
 	}
 
 	// 1. Verify Credentials
-	user, err := s.userRepo.GetByMobileNumber(ctx, req.MobileNumber)
+	// Normalize mobile: DB stores E.164 with '+' prefix (e.g. +8801347210751).
+	// Frontend may send with or without '+'. Normalize to match DB format.
+	mobileToLookup := req.MobileNumber
+	if !strings.HasPrefix(mobileToLookup, "+") {
+		mobileToLookup = "+" + mobileToLookup
+	}
+	user, err := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
 	if err != nil {
 		appLogger.Warnf("Login failed: user not found for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
 		_ = s.eventPublisher.PublishLoginFailed(ctx, "", req.MobileNumber, "user_not_found", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, 0)
@@ -256,8 +262,12 @@ issueTokens:
 func (s *AuthService) Register(ctx context.Context, req *authnservicev1.RegisterRequest) (*authnservicev1.RegisterResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
 
-	// Check if user exists
-	existing, _ := s.userRepo.GetByMobileNumber(ctx, req.MobileNumber)
+	// Check if user exists — normalize mobile to E.164 with '+' prefix
+	mobileToLookup := req.MobileNumber
+	if !strings.HasPrefix(mobileToLookup, "+") {
+		mobileToLookup = "+" + mobileToLookup
+	}
+	existing, _ := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
 	if existing != nil {
 		appLogger.Warnf("Registration failed: user already exists for mobile %s", req.MobileNumber)
 		return nil, errors.New("user already exists")
@@ -508,8 +518,12 @@ func (s *AuthService) ChangePassword(ctx context.Context, req *authnservicev1.Ch
 func (s *AuthService) ResetPassword(ctx context.Context, req *authnservicev1.ResetPasswordRequest) (*authnservicev1.ResetPasswordResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
 
-	// Get user by mobile number first
-	user, err := s.userRepo.GetByMobileNumber(ctx, req.MobileNumber)
+	// Get user by mobile number first — normalize to E.164 with '+' prefix
+	mobileToLookup := req.MobileNumber
+	if !strings.HasPrefix(mobileToLookup, "+") {
+		mobileToLookup = "+" + mobileToLookup
+	}
+	user, err := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
 	if err != nil {
 		appLogger.Warnf("Password reset failed: user not found for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
 		return nil, errors.New("invalid credentials")
@@ -624,7 +638,11 @@ func (s *AuthService) GetCurrentSession(ctx context.Context, req *authnservicev1
 		if err == nil && resp.Valid {
 			session, err := s.sessionRepo.GetByID(ctx, resp.SessionId)
 			if err == nil {
-				return &authnservicev1.GetCurrentSessionResponse{Session: session}, nil
+				userType := ""
+				if u, uerr := s.userRepo.GetByID(ctx, session.UserId); uerr == nil && u != nil {
+					userType = u.UserType.String()
+				}
+				return &authnservicev1.GetCurrentSessionResponse{Session: session, UserType: userType}, nil
 			}
 		}
 	}
@@ -635,7 +653,11 @@ func (s *AuthService) GetCurrentSession(ctx context.Context, req *authnservicev1
 		if err == nil && resp.Valid {
 			session, err := s.sessionRepo.GetByID(ctx, resp.SessionId)
 			if err == nil {
-				return &authnservicev1.GetCurrentSessionResponse{Session: session}, nil
+				userType := ""
+				if u, uerr := s.userRepo.GetByID(ctx, session.UserId); uerr == nil && u != nil {
+					userType = u.UserType.String()
+				}
+				return &authnservicev1.GetCurrentSessionResponse{Session: session, UserType: userType}, nil
 			}
 		}
 	}

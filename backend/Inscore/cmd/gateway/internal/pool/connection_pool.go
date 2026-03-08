@@ -21,9 +21,10 @@ type ConnectionPool struct {
 	address     string
 	poolSize    int
 
-	connections []*PooledConnection
-	mu          sync.RWMutex
-	nextIdx     uint64
+	connections         []*PooledConnection
+	mu                  sync.RWMutex
+	nextIdx             uint64
+	healthCheckInterval time.Duration
 
 	dialOpts []grpc.DialOption
 	stopCh   chan struct{}
@@ -65,10 +66,11 @@ func NewConnectionPool(serviceName, address string, cfg *PoolConfig) *Connection
 	}
 
 	pool := &ConnectionPool{
-		serviceName: serviceName,
-		address:     address,
-		poolSize:    cfg.PoolSize,
-		connections: make([]*PooledConnection, 0, cfg.PoolSize),
+		serviceName:         serviceName,
+		address:             address,
+		poolSize:            cfg.PoolSize,
+		healthCheckInterval: cfg.HealthCheckInterval,
+		connections:         make([]*PooledConnection, 0, cfg.PoolSize),
 		dialOpts: []grpc.DialOption{
 			grpc.WithTransportCredentials(insecure.NewCredentials()),
 			grpc.WithKeepaliveParams(keepalive.ClientParameters{
@@ -232,7 +234,7 @@ func (p *ConnectionPool) startHealthMonitoring() {
 	p.wg.Add(1)
 	go func() {
 		defer p.wg.Done()
-		ticker := time.NewTicker(10 * time.Second)
+		ticker := time.NewTicker(p.healthCheckInterval)
 		defer ticker.Stop()
 
 		for {
@@ -273,8 +275,8 @@ func (p *ConnectionPool) checkHealth() {
 		}
 	}
 
-	if healthyCount == 0 {
-		logger.Warn("No healthy connections",
+	if healthyCount == 0 && len(connections) > 0 {
+		logger.Debug("No healthy connections — service may not be running",
 			zap.String("service", p.serviceName),
 			zap.Int("total", len(connections)))
 	}

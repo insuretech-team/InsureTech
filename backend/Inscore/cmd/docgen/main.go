@@ -102,6 +102,9 @@ func main() {
 	<-sigChan
 
 	logger.Info("Shutting down docgen service...")
+	if err := docServer.Close(); err != nil {
+		logger.Warn("DocGen server resource shutdown reported errors", zap.Error(err))
+	}
 	grpcServer.GracefulStop()
 	logger.Info("DocGen service stopped")
 }

@@ -8,8 +8,10 @@ import (
 	"encoding/pem"
 	"errors"
 	"os"
+	"strings"
 	"time"
 
+	"github.com/casbin/casbin/v3/util"
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/cache"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/domain"
@@ -68,7 +70,7 @@ func (s *AuthZService) SetPermissionCache(permCache *cache.PermissionCache) {
 // CheckAccess performs a Casbin PERM enforce call and audits the decision.
 // Deny-by-default: no matching rule → DENY.
 // subject = "user:<user_id>", domain = "portal:tenant_id"
-// 
+//
 // API Key Scope Integration:
 // If the request context contains API key scopes (via attributes["api_key_scopes"]),
 // the scopes are validated BEFORE the Casbin check. This ensures API keys are restricted
@@ -76,29 +78,29 @@ func (s *AuthZService) SetPermissionCache(permCache *cache.PermissionCache) {
 func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.CheckAccessRequest) (*authzservicev1.CheckAccessResponse, error) {
 	subject := "user:" + req.UserId
 	start := time.Now()
-	
+
 	// 🔑 API Key Scope Validation (if present)
 	// This check happens BEFORE Casbin to ensure API keys are properly restricted
 	if req.Context != nil && req.Context.Attributes != nil {
 		validator := NewApiKeyScopeValidator()
 		scopes := validator.ParseScopesFromAttributes(req.Context.Attributes)
-		
+
 		if len(scopes) > 0 {
 			// API key is being used - validate scopes first
 			scopeStart := time.Now()
 			allowed, reason := validator.ValidateScope(scopes, req.Object, req.Action)
 			scopeLatencyMs := float64(time.Since(scopeStart).Milliseconds())
-			
+
 			// Record scope validation metrics
 			metrics.RecordAPIScopeValidation(req.Domain, allowed, scopeLatencyMs)
-			
+
 			if !allowed {
 				// Record the denial reason
 				metrics.RecordAPIScopeDenial(reason)
-				
+
 				latencyMs := float64(time.Since(start).Milliseconds())
 				metrics.RecordDecision(req.Domain, false, latencyMs)
-				
+
 				// Audit the denial
 				if s.auditAllDecisions {
 					ipAddr, userAgent, sessionID, _, _ := extractContext(req.Context)
@@ -117,7 +119,7 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 						DecidedAt:   timestamppb.Now(),
 					})
 				}
-				
+
 				return &authzservicev1.CheckAccessResponse{
 					Allowed:     false,
 					Effect:      authzentityv1.PolicyEffect_POLICY_EFFECT_DENY,
@@ -128,19 +130,19 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 			// Scope check passed - continue to Casbin check
 		}
 	}
-	
+
 	// 🚀 Check cache first
 	if s.permCache != nil {
 		if cached, found := s.permCache.Get(ctx, req.UserId, req.Domain, req.Object, req.Action); found {
 			latencyMs := float64(time.Since(start).Milliseconds())
 			metrics.RecordDecision(req.Domain, cached, latencyMs)
 			metrics.RecordCacheHit(true)
-			
+
 			effect := authzentityv1.PolicyEffect_POLICY_EFFECT_DENY
 			if cached {
 				effect = authzentityv1.PolicyEffect_POLICY_EFFECT_ALLOW
 			}
-			
+
 			return &authzservicev1.CheckAccessResponse{
 				Allowed:     cached,
 				Effect:      effect,
@@ -150,12 +152,22 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 		}
 		metrics.RecordCacheHit(false)
 	}
-	
+
 	// Cache miss - query Casbin
 	allowed, matchedRule, err := s.enforcer.Enforce(ctx, subject, req.Domain, req.Object, req.Action)
 	latencyMs := float64(time.Since(start).Milliseconds())
 	if err != nil {
 		return nil, errors.New("enforce error: " + err.Error())
+	}
+	if !allowed && strings.HasPrefix(req.Domain, "b2b:") && req.Domain != "b2b:root" {
+		fallbackAllowed, fallbackRule, fallbackErr := s.checkB2BRootDomainFallback(ctx, subject, req)
+		if fallbackErr != nil {
+			return nil, fallbackErr
+		}
+		if fallbackAllowed {
+			allowed = true
+			matchedRule = fallbackRule
+		}
 	}
 
 	effect := authzentityv1.PolicyEffect_POLICY_EFFECT_DENY
@@ -164,7 +176,7 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 		effect = authzentityv1.PolicyEffect_POLICY_EFFECT_ALLOW
 		reason = ""
 	}
-	
+
 	// Store in cache
 	if s.permCache != nil {
 		_ = s.permCache.Set(ctx, req.UserId, req.Domain, req.Object, req.Action, allowed)
@@ -306,6 +318,9 @@ func (s *AuthZService) AssignRole(ctx context.Context, req *authzservicev1.Assig
 	domain := req.Domain // "portal:tenant_id"
 	subject := "user:" + req.UserId
 	roleName := "role:" + role.Name
+	if err := s.ensureScopedRolePolicies(ctx, role, domain); err != nil {
+		return nil, err
+	}
 
 	// 1. Add g-type rule to Casbin enforcer (in-memory + DB via gorm-adapter)
 	if err := s.enforcer.AddRoleForUserInDomain(subject, roleName, domain); err != nil {
@@ -396,6 +411,138 @@ func (s *AuthZService) GetUserPermissions(ctx context.Context, req *authzservice
 		}
 	}
 	return &authzservicev1.GetUserPermissionsResponse{Permissions: effective}, nil
+}
+
+func (s *AuthZService) checkB2BRootDomainFallback(
+	ctx context.Context,
+	subject string,
+	req *authzservicev1.CheckAccessRequest,
+) (bool, string, error) {
+	roles, err := s.enforcer.GetRolesForUserInDomain(subject, req.Domain)
+	if err != nil {
+		return false, "", errors.New("list domain roles: " + err.Error())
+	}
+	if len(roles) == 0 {
+		return false, "", nil
+	}
+
+	policies, err := s.listPolicyRulesByDomain(ctx, "b2b:root")
+	if err != nil {
+		return false, "", errors.New("list root policies: " + err.Error())
+	}
+
+	roleSet := make(map[string]struct{}, len(roles))
+	for _, role := range roles {
+		roleSet[role] = struct{}{}
+	}
+
+	matchedRule := ""
+	for _, policy := range policies {
+		if policy == nil {
+			continue
+		}
+		if _, ok := roleSet[policy.Subject]; !ok {
+			continue
+		}
+		if !util.KeyMatch2(req.Object, policy.Object) || !domain.ActionMatches(req.Action, policy.Action) {
+			continue
+		}
+		if policy.Effect == authzentityv1.PolicyEffect_POLICY_EFFECT_DENY {
+			return false, "root-fallback-deny", nil
+		}
+		matchedRule = "root-fallback: " + policy.Subject + ", b2b:root, " + policy.Object + ", " + policy.Action
+		return true, matchedRule, nil
+	}
+
+	return false, "", nil
+}
+
+func (s *AuthZService) ensureScopedRolePolicies(ctx context.Context, role *authzentityv1.Role, domain string) error {
+	if role == nil || role.Portal != authzentityv1.Portal_PORTAL_B2B {
+		return nil
+	}
+	if !strings.HasPrefix(domain, "b2b:") || domain == "b2b:root" {
+		return nil
+	}
+
+	roleSubject := "role:" + role.Name
+	rootPolicies, err := s.listPolicyRulesByDomain(ctx, "b2b:root")
+	if err != nil {
+		return errors.New("list root policies: " + err.Error())
+	}
+
+	for _, policy := range rootPolicies {
+		if policy == nil || policy.Subject != roleSubject {
+			continue
+		}
+		effectStr := "allow"
+		if policy.Effect == authzentityv1.PolicyEffect_POLICY_EFFECT_DENY {
+			effectStr = "deny"
+		}
+
+		if err := s.enforcer.AddPolicy(roleSubject, domain, policy.Object, policy.Action, effectStr); err != nil && !isAlreadyExistsErr(err) {
+			return errors.New("copy scoped casbin policy: " + err.Error())
+		}
+
+		_, err := s.policyRepo.Create(ctx, &authzentityv1.PolicyRule{
+			PolicyId:    uuid.New().String(),
+			Subject:     roleSubject,
+			Domain:      domain,
+			Object:      policy.Object,
+			Action:      policy.Action,
+			Effect:      policy.Effect,
+			Condition:   policy.Condition,
+			Description: "copied from b2b:root for scoped role assignment",
+			IsActive:    true,
+			CreatedBy:   nonEmpty(policy.CreatedBy, "system"),
+			CreatedAt:   timestamppb.Now(),
+			UpdatedAt:   timestamppb.Now(),
+		})
+		if err != nil && !isAlreadyExistsErr(err) {
+			return errors.New("persist scoped policy: " + err.Error())
+		}
+	}
+
+	return nil
+}
+
+func (s *AuthZService) listPolicyRulesByDomain(ctx context.Context, domain string) ([]*authzentityv1.PolicyRule, error) {
+	const pageSize = 500
+	offset := 0
+	var policies []*authzentityv1.PolicyRule
+	for {
+		page, err := s.policyRepo.List(ctx, domain, true, pageSize, offset)
+		if err != nil {
+			return nil, err
+		}
+		policies = append(policies, page...)
+		if len(page) < pageSize {
+			break
+		}
+		offset += pageSize
+	}
+	return policies, nil
+}
+
+func isAlreadyExistsErr(err error) bool {
+	if err == nil {
+		return false
+	}
+	msg := strings.ToLower(err.Error())
+	return strings.Contains(msg, "already exists") ||
+		strings.Contains(msg, "duplicate") ||
+		strings.Contains(msg, "unique constraint") ||
+		strings.Contains(msg, "uq_")
+}
+
+func nonEmpty(values ...string) string {
+	for _, value := range values {
+		value = strings.TrimSpace(value)
+		if value != "" {
+			return value
+		}
+	}
+	return ""
 }
 
 // ── Policy Rule Management ────────────────────────────────────────────────────

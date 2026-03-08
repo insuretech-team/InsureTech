@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Policy Document</title>
+  <style>
+    body { font-family: Georgia, 'Times New Roman', serif; margin: 34px; color: #111827; background: #fff; }
+    .frame { border: 2px solid #0f172a; padding: 28px; border-radius: 8px; }
+    .title { text-align: center; margin-bottom: 16px; }
+    .title h1 { margin: 0; font-size: 28px; letter-spacing: .04em; }
+    .title p { margin: 6px 0 0; color: #4b5563; }
+    .meta { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin: 18px 0; }
+    .meta div { background: #f8fafc; border-radius: 6px; padding: 10px; }
+    .meta .k { color: #6b7280; font-size: 12px; text-transform: uppercase; }
+    .meta .v { margin-top: 2px; font-weight: 600; }
+    h2 { margin-top: 22px; margin-bottom: 8px; font-size: 18px; }
+    ul { margin: 8px 0 0 20px; }
+    li { margin: 4px 0; }
+    .signature { margin-top: 28px; display: flex; justify-content: space-between; }
+    .sig-box { width: 42%; border-top: 1px solid #111827; padding-top: 6px; font-size: 12px; }
+    .qr { margin-top: 18px; text-align: right; }
+    .qr img { width: 96px; height: 96px; }
+    .disclaimer { margin-top: 18px; font-size: 12px; color: #4b5563; }
+  </style>
+</head>
+<body>
+  <div class="frame">
+    <div class="title">
+      <h1>{{.policy_title}}</h1>
+      <p>{{.company_name}}</p>
+    </div>
+
+    <div class="meta">
+      <div><div class="k">Policy Number</div><div class="v">{{.policy_number}}</div></div>
+      <div><div class="k">Plan</div><div class="v">{{.plan_name}}</div></div>
+      <div><div class="k">Policy Holder</div><div class="v">{{.policy_holder_name}}</div></div>
+      <div><div class="k">National ID</div><div class="v">{{.policy_holder_id}}</div></div>
+      <div><div class="k">Start Date</div><div class="v">{{.start_date}}</div></div>
+      <div><div class="k">End Date</div><div class="v">{{.end_date}}</div></div>
+      <div><div class="k">Coverage Amount</div><div class="v">{{.coverage_amount}}</div></div>
+      <div><div class="k">Premium</div><div class="v">{{.premium_amount}}</div></div>
+    </div>
+
+    <h2>Covered Benefits</h2>
+    <ul>
+      {{range .benefits}}
+      <li>{{.}}</li>
+      {{end}}
+    </ul>
+
+    <h2>Terms & Conditions</h2>
+    <p>{{.terms}}</p>
+
+    <div class="signature">
+      <div class="sig-box">Authorized Signatory</div>
+      <div class="sig-box">Policy Holder Signature</div>
+    </div>
+
+    {{if .qr_code_data_uri}}
+    <div class="qr">
+      <img src="{{.qr_code_data_uri}}" alt="QR Code" />
+    </div>
+    {{end}}
+
+    <div class="disclaimer">
+      This document is electronically generated and valid without physical signature when verified through the QR code.
+    </div>
+  </div>
+</body>
+</html>

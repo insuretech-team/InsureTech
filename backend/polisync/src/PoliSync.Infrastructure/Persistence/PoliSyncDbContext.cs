@@ -1,52 +1,53 @@
+using Insuretech.Products.Entity.V1;
 using Microsoft.EntityFrameworkCore;
 
 namespace PoliSync.Infrastructure.Persistence;
 
 /// <summary>
-/// Main EF Core DbContext for the InsureTech platform.
-/// Module-specific entity configurations are applied via IEntityTypeConfiguration.
+/// Minimal EF Core context for active proto-based implementation.
 /// </summary>
 public class PoliSyncDbContext : DbContext
 {
-    public PoliSyncDbContext(DbContextOptions<PoliSyncDbContext> options) : base(options) { }
+    public PoliSyncDbContext(DbContextOptions<PoliSyncDbContext> options) : base(options)
+    {
+    }
+
+    public DbSet<Product> Products => Set<Product>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         base.OnModelCreating(modelBuilder);
 
-        // Apply all IEntityTypeConfiguration<T> from all loaded PoliSync assemblies
-        // This allows Vertical Slices (Modules) to stay independent but still contribute to the schema
-        var assemblies = AppDomain.CurrentDomain.GetAssemblies()
-            .Where(a => a.FullName?.StartsWith("PoliSync.") == true);
-        
-        foreach (var assembly in assemblies)
-        {
-            modelBuilder.ApplyConfigurationsFromAssembly(assembly);
-        }
-
-        // Default schema
         modelBuilder.HasDefaultSchema("insurance_schema");
-    }
 
-    public override async Task<int> SaveChangesAsync(CancellationToken ct = default)
-    {
-        // Set audit timestamps
-        foreach (var entry in ChangeTracker.Entries())
+        modelBuilder.Entity<Product>(entity =>
         {
-            if (entry.State == EntityState.Added)
-            {
-                if (entry.Metadata.FindProperty("created_at") != null)
-                    entry.Property("created_at").CurrentValue = DateTime.UtcNow;
-                if (entry.Metadata.FindProperty("updated_at") != null)
-                    entry.Property("updated_at").CurrentValue = DateTime.UtcNow;
-            }
-            else if (entry.State == EntityState.Modified)
-            {
-                if (entry.Metadata.FindProperty("updated_at") != null)
-                    entry.Property("updated_at").CurrentValue = DateTime.UtcNow;
-            }
-        }
+            entity.ToTable("products");
+            entity.HasKey(e => e.ProductId);
 
-        return await base.SaveChangesAsync(ct);
+            entity.Property(e => e.ProductId).HasColumnName("product_id");
+            entity.Property(e => e.ProductCode).HasColumnName("product_code");
+            entity.Property(e => e.ProductName).HasColumnName("product_name");
+            entity.Property(e => e.Category).HasColumnName("category").HasConversion<string>();
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.Status).HasColumnName("status").HasConversion<string>();
+            entity.Property(e => e.MinTenureMonths).HasColumnName("min_tenure_months");
+            entity.Property(e => e.MaxTenureMonths).HasColumnName("max_tenure_months");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.BasePremiumCurrency).HasColumnName("base_premium_currency");
+            entity.Property(e => e.MinSumInsuredCurrency).HasColumnName("min_sum_insured_currency");
+            entity.Property(e => e.MaxSumInsuredCurrency).HasColumnName("max_sum_insured_currency");
+
+            entity.Ignore(e => e.BasePremium);
+            entity.Ignore(e => e.MinSumInsured);
+            entity.Ignore(e => e.MaxSumInsured);
+            entity.Ignore(e => e.CreatedAt);
+            entity.Ignore(e => e.UpdatedAt);
+            entity.Ignore(e => e.DeletedAt);
+            entity.Ignore(e => e.AvailableRiders);
+            entity.Ignore(e => e.PricingConfig);
+            entity.Ignore(e => e.Plans);
+            entity.Ignore(e => e.Exclusions);
+        });
     }
 }

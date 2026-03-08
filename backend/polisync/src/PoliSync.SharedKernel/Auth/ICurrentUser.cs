@@ -1,12 +1,17 @@
 namespace PoliSync.SharedKernel.Auth;
 
 /// <summary>
-/// Represents the currently authenticated user from gRPC metadata.
+/// Current authenticated user context from JWT token
 /// </summary>
 public interface ICurrentUser
 {
-    string UserId { get; }
-    string Role { get; }
-    string? TenantId { get; }
+    Guid UserId { get; }
+    Guid TenantId { get; }
+    Guid? PartnerId { get; }
+    string[] Roles { get; }
+    string Email { get; }
     bool IsAuthenticated { get; }
+    
+    bool IsInRole(string role);
+    bool HasAnyRole(params string[] roles);
 }

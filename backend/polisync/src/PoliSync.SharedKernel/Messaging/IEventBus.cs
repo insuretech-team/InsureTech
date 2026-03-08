@@ -1,17 +1,26 @@
+using PoliSync.SharedKernel.Domain;
+
 namespace PoliSync.SharedKernel.Messaging;
 
 /// <summary>
-/// Abstraction for publishing domain events to Kafka (or in-memory for dev).
+/// Event bus abstraction for publishing domain events to Kafka
 /// </summary>
 public interface IEventBus
 {
-    Task PublishAsync(string topic, object @event, CancellationToken ct = default);
-}
-
-/// <summary>
-/// Dispatches domain events collected from entities after SaveChanges.
-/// </summary>
-public interface IDomainEventDispatcher
-{
-    Task DispatchAsync(IReadOnlyList<MediatR.INotification> events, CancellationToken ct = default);
+    Task PublishAsync<TEvent>(
+        TEvent @event, 
+        string topic, 
+        CancellationToken cancellationToken = default) 
+        where TEvent : DomainEvent;
+    
+    Task PublishAsync<TEvent>(
+        TEvent @event, 
+        CancellationToken cancellationToken = default) 
+        where TEvent : DomainEvent;
+    
+    Task PublishBatchAsync<TEvent>(
+        IEnumerable<TEvent> events, 
+        string topic, 
+        CancellationToken cancellationToken = default) 
+        where TEvent : DomainEvent;
 }

@@ -207,6 +207,9 @@ func main() {
 		"/insuretech.authz.services.v1.AuthZService/CheckPermission",
 		"/insuretech.authz.services.v1.AuthZService/CheckAccess",
 		"/insuretech.authz.services.v1.AuthZService/GetJWKS",
+		"/insuretech.authz.services.v1.AuthZService/ListRoles",
+		"/insuretech.authz.services.v1.AuthZService/AssignRole",
+		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
 		"/grpc.health.v1.Health/Check",
 		"/grpc.health.v1.Health/Watch",
 	}

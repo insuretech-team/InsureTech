@@ -39,6 +39,11 @@ type JWTInterceptor struct {
 	skipMethods map[string]bool
 }
 
+var trustedInternalServices = map[string]struct{}{
+	"gateway":     {},
+	"b2b-service": {},
+}
+
 // NewJWTInterceptor constructs a JWTInterceptor.
 // publicKey may be nil — in that case every request is passed through (no-op mode).
 // skipMethods is a list of full gRPC method paths that bypass auth (e.g. health check).
@@ -69,7 +74,7 @@ func (i *JWTInterceptor) unaryIntercept(
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (interface{}, error) {
-	if i.publicKey == nil || i.skipMethods[info.FullMethod] {
+	if i.publicKey == nil || i.skipMethods[info.FullMethod] || isTrustedInternalCall(ctx) {
 		return handler(ctx, req)
 	}
 	claims, err := i.extractClaims(ctx)
@@ -86,7 +91,7 @@ func (i *JWTInterceptor) streamIntercept(
 	info *grpc.StreamServerInfo,
 	handler grpc.StreamHandler,
 ) error {
-	if i.publicKey == nil || i.skipMethods[info.FullMethod] {
+	if i.publicKey == nil || i.skipMethods[info.FullMethod] || isTrustedInternalCall(ss.Context()) {
 		return handler(srv, ss)
 	}
 	claims, err := i.extractClaims(ss.Context())
@@ -176,6 +181,25 @@ func GetClaims(ctx context.Context) *AuthClaims {
 	}
 	c, _ := v.(*AuthClaims)
 	return c
+}
+
+func isTrustedInternalCall(ctx context.Context) bool {
+	md, ok := metadata.FromIncomingContext(ctx)
+	if !ok {
+		return false
+	}
+
+	for _, value := range md.Get("x-internal-service") {
+		value = strings.ToLower(strings.TrimSpace(value))
+		if value == "" {
+			continue
+		}
+		if _, ok := trustedInternalServices[value]; ok {
+			return true
+		}
+	}
+
+	return false
 }
 
 // ParseRSAPublicKeyFromPEM parses an RSA public key from a PEM-encoded string.

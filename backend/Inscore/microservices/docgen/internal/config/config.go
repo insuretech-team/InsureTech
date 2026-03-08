@@ -2,6 +2,7 @@ package config
 
 import (
 	"errors"
+	"fmt"
 	"os"
 	"strconv"
 	"strings"
@@ -14,19 +15,20 @@ import (
 )
 
 const (
-	defaultDocgenHTTPPort = 50281
+	defaultDocgenHTTPPort    = 50281
+	defaultGotenbergHTTPPort = 50330
 )
 
 // Config holds all configuration for the docgen microservice
 type Config struct {
-	Port                   int
-	GotenbergURL           string
-	StorageServiceAddr     string
-	KafkaBrokers           []string
-	KafkaDocgenTopic       string
-	AsyncGeneration        bool
-	AsyncWorkerCount       int
-	MaxGenerationTimeout   time.Duration
+	Port                 int
+	GotenbergURL         string
+	StorageServiceAddr   string
+	KafkaBrokers         []string
+	KafkaDocgenTopic     string
+	AsyncGeneration      bool
+	AsyncWorkerCount     int
+	MaxGenerationTimeout time.Duration
 }
 
 // Load loads configuration from environment variables and services.yaml
@@ -37,10 +39,11 @@ func Load() (*Config, error) {
 	}
 
 	docgenHTTPPort := loadDocgenServicePort()
+	gotenbergURLDefault := fmt.Sprintf("http://localhost:%d", loadServiceHTTPPort("gotenberg", defaultGotenbergHTTPPort))
 
 	cfg := &Config{
 		Port:                 docgenHTTPPort,
-		GotenbergURL:         getEnv("GOTENBERG_URL", "http://localhost:3000"),
+		GotenbergURL:         getEnv("GOTENBERG_URL", gotenbergURLDefault),
 		StorageServiceAddr:   getEnv("STORAGE_SERVICE_ADDR", ""),
 		KafkaBrokers:         getEnvAsSlice("KAFKA_BROKERS", []string{"localhost:9092"}),
 		KafkaDocgenTopic:     getEnv("KAFKA_DOCGEN_TOPIC", "docgen-events"),
@@ -149,7 +152,11 @@ func getEnvAsSlice(key string, defaultValue []string) []string {
 }
 
 func loadDocgenServicePort() int {
-	port := defaultDocgenHTTPPort
+	return loadServiceHTTPPort("docgen", defaultDocgenHTTPPort)
+}
+
+func loadServiceHTTPPort(serviceName string, defaultPort int) int {
+	port := defaultPort
 
 	type servicesConfig struct {
 		Services map[string]struct {
@@ -174,17 +181,17 @@ func loadDocgenServicePort() int {
 
 	var cfg servicesConfig
 	if err := yaml.Unmarshal(data, &cfg); err != nil {
-		logger.Warnf("Failed to parse services.yaml for docgen port: %v (using default %d)", err, port)
+		logger.Warnf("Failed to parse services.yaml for %s port: %v (using default %d)", serviceName, err, port)
 		return port
 	}
 
-	docgenService, ok := cfg.Services["docgen"]
+	svc, ok := cfg.Services[serviceName]
 	if !ok {
-		logger.Warnf("Docgen service not found in services.yaml (using default %d)", port)
+		logger.Warnf("%s service not found in services.yaml (using default %d)", serviceName, port)
 		return port
 	}
-	if docgenService.Ports.Http > 0 {
-		port = docgenService.Ports.Http
+	if svc.Ports.Http > 0 {
+		port = svc.Ports.Http
 	}
 	return port
 }

@@ -995,6 +995,14 @@ func (umm *UnifiedMigrationManager) recordMigrationTx(tx *sql.Tx, name, migType,
 	query := fmt.Sprintf(`
 		INSERT INTO %s (name, type, schema, checksum, execution_ms, status, error_msg)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)
+		ON CONFLICT (name, type, schema) 
+		DO UPDATE SET 
+			applied_at = now(),
+			checksum = EXCLUDED.checksum,
+			execution_ms = EXCLUDED.execution_ms,
+			status = EXCLUDED.status,
+			error_msg = EXCLUDED.error_msg,
+			updated_at = now()
 	`, fullTableName)
 
 	_, err := tx.Exec(query, name, migType, schema, checksum, executionMS, status, errorMsg)
@@ -1563,10 +1571,32 @@ func (umm *UnifiedMigrationManager) syncTableColumns(md protoreflect.MessageDesc
 	return nil
 }
 
+// isSerialPseudoType returns true for SERIAL/BIGSERIAL/SMALLSERIAL pseudo-types.
+// PostgreSQL does not allow these in ALTER COLUMN ... TYPE statements; they are
+// only valid in CREATE TABLE. The underlying storage type (integer/bigint/smallint)
+// is always what information_schema.columns reports, so a mismatch against these
+// is a false positive — no ALTER is ever needed or valid.
+func isSerialPseudoType(t string) bool {
+	switch strings.ToUpper(strings.TrimSpace(t)) {
+	case "SERIAL", "BIGSERIAL", "SMALLSERIAL":
+		return true
+	}
+	return false
+}
+
 // checkAndAlterColumnType compares Proto type vs DB type and alters if mismatched
 func (umm *UnifiedMigrationManager) checkAndAlterColumnType(schema, table string, desired columnDef, actual existingColumnDetail) error {
 	// Basic compatibility check
 	if umm.isTypeCompatible(desired.typ, actual.DataType) {
+		return nil
+	}
+
+	// Serial pseudo-types (BIGSERIAL, SERIAL, SMALLSERIAL) are stored as their
+	// underlying integer types in Postgres. ALTER COLUMN ... TYPE BIGSERIAL is
+	// invalid SQL (error 42704). Skip silently — the column is already correct.
+	if isSerialPseudoType(desired.typ) {
+		appLogger.Infof("  ✓ Skipping serial pseudo-type: %s.%s (Proto: %s stored as DB: %s — compatible)",
+			table, desired.name, desired.typ, actual.DataType)
 		return nil
 	}
 
@@ -1613,6 +1643,21 @@ func (umm *UnifiedMigrationManager) isTypeCompatible(protoType, dbType string) b
 		}
 	case "INT", "INTEGER":
 		if d == "INTEGER" || d == "INT4" {
+			return true
+		}
+	// SERIAL types: Postgres stores them as their underlying integer type in
+	// information_schema.columns (BIGSERIAL→bigint, SERIAL→integer, SMALLSERIAL→smallint).
+	// They are compatible — no ALTER needed.
+	case "BIGSERIAL":
+		if d == "BIGINT" || d == "INT8" {
+			return true
+		}
+	case "SERIAL":
+		if d == "INTEGER" || d == "INT4" || d == "INT" {
+			return true
+		}
+	case "SMALLSERIAL":
+		if d == "SMALLINT" || d == "INT2" {
 			return true
 		}
 	case "BIGINT":

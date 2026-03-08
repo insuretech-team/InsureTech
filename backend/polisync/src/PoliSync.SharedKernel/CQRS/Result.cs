@@ -1,68 +1,96 @@
 namespace PoliSync.SharedKernel.CQRS;
 
 /// <summary>
-/// Discriminated union result type. No domain exceptions — errors flow as data.
-/// Maps to Grpc.Core.StatusCode in the gRPC interceptor layer.
+/// Result pattern for operations without return value
+/// </summary>
+public sealed class Result
+{
+    public Error? Error { get; }
+    public bool IsSuccess => Error is null;
+    public bool IsFailure => !IsSuccess;
+
+    private Result(Error? error)
+    {
+        Error = error;
+    }
+
+    public static Result Ok() => new(null);
+
+    public static Result Success() => Ok();
+    
+    public static Result Fail(string code, string message) => 
+        new(new Error(code, message));
+
+    public static Result Failure(string message) =>
+        Fail("OPERATION_FAILED", message);
+    
+    public static Result Fail(Error error) => new(error);
+
+    public static Result<T> Ok<T>(T value) => Result<T>.Ok(value);
+    
+    public static Result<T> Fail<T>(string code, string message) => 
+        Result<T>.Fail(code, message);
+}
+
+/// <summary>
+/// Result pattern for operations with return value
 /// </summary>
 public sealed class Result<T>
 {
-    public T? Value { get; private init; }
-    public ResultError? Error { get; private init; }
+    public T? Value { get; }
+    public Error? Error { get; }
     public bool IsSuccess => Error is null;
     public bool IsFailure => !IsSuccess;
 
-    private Result() { }
+    private Result(T? value, Error? error)
+    {
+        Value = value;
+        Error = error;
+    }
 
-    public static Result<T> Ok(T value) => new() { Value = value };
+    public static Result<T> Ok(T value) => new(value, null);
 
-    public static Result<T> Fail(string code, string message, ResultErrorKind kind = ResultErrorKind.DomainError)
-        => new() { Error = new ResultError(code, message, kind) };
+    public static Result<T> Success(T value) => Ok(value);
+    
+    public static Result<T> Fail(string code, string message) => 
+        new(default, new Error(code, message));
 
-    public static Result<T> NotFound(string message)
-        => Fail("NOT_FOUND", message, ResultErrorKind.NotFound);
+    public static Result<T> Failure(string message) =>
+        Fail("OPERATION_FAILED", message);
+    
+    public static Result<T> Fail(Error error) => new(default, error);
 
-    public static Result<T> Unauthorized(string message)
-        => Fail("UNAUTHORIZED", message, ResultErrorKind.Unauthorized);
-
-    public static Result<T> Conflict(string message)
-        => Fail("CONFLICT", message, ResultErrorKind.Conflict);
-
-    public Result<TOut> Map<TOut>(Func<T, TOut> mapper)
-        => IsSuccess ? Result<TOut>.Ok(mapper(Value!)) : Result<TOut>.Fail(Error!.Code, Error.Message, Error.Kind);
-
-    public T GetValueOrThrow()
-        => IsSuccess ? Value! : throw new InvalidOperationException($"[{Error!.Code}] {Error.Message}");
+    public TResult Match<TResult>(
+        Func<T, TResult> onSuccess,
+        Func<Error, TResult> onFailure)
+    {
+        return IsSuccess ? onSuccess(Value!) : onFailure(Error!);
+    }
 }
 
-/// <summary>Unit result for commands with no return value.</summary>
-public sealed class Result
+/// <summary>
+/// Error record for Result pattern
+/// </summary>
+public sealed record Error(string Code, string Message)
 {
-    public ResultError? Error { get; private init; }
-    public bool IsSuccess => Error is null;
-    public bool IsFailure => !IsSuccess;
-
-    private Result() { }
-
-    public static Result Ok() => new();
-
-    public static Result Fail(string code, string message, ResultErrorKind kind = ResultErrorKind.DomainError)
-        => new() { Error = new ResultError(code, message, kind) };
-
-    public static Result NotFound(string message)
-        => Fail("NOT_FOUND", message, ResultErrorKind.NotFound);
-
-    public static Result Unauthorized(string message)
-        => Fail("UNAUTHORIZED", message, ResultErrorKind.Unauthorized);
-}
-
-public sealed record ResultError(string Code, string Message, ResultErrorKind Kind);
-
-public enum ResultErrorKind
-{
-    DomainError,
-    NotFound,
-    Unauthorized,
-    Conflict,
-    Validation,
-    Internal
+    public static readonly Error None = new(string.Empty, string.Empty);
+    
+    // Common error codes
+    public static Error NotFound(string entity, string id) => 
+        new("NOT_FOUND", $"{entity} with id {id} not found");
+    
+    public static Error Validation(string message) => 
+        new("VALIDATION_ERROR", message);
+    
+    public static Error Unauthorized(string message = "Unauthorized") => 
+        new("UNAUTHORIZED", message);
+    
+    public static Error Forbidden(string message = "Forbidden") => 
+        new("FORBIDDEN", message);
+    
+    public static Error Conflict(string message) => 
+        new("CONFLICT", message);
+    
+    public static Error Internal(string message = "Internal server error") => 
+        new("INTERNAL_ERROR", message);
 }

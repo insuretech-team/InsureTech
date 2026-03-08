@@ -1,16 +1,41 @@
-﻿<Project Sdk="Microsoft.NET.Sdk">
+<Project Sdk="Microsoft.NET.Sdk">
+
   <PropertyGroup>
     <TargetFramework>net8.0</TargetFramework>
-    <Nullable>enable</Nullable>
     <ImplicitUsings>enable</ImplicitUsings>
-    <RootNamespace>PoliSync.Products</RootNamespace>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
   </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\PoliSync.SharedKernel\PoliSync.SharedKernel.csproj" />
     <ProjectReference Include="..\PoliSync.Infrastructure\PoliSync.Infrastructure.csproj" />
   </ItemGroup>
+
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="12.4.1" />
-    <PackageReference Include="FluentValidation" Version="11.11.0" />
+    <!-- Exclude incomplete legacy/domain scaffolding from active proto-based implementation -->
+    <Compile Remove="Domain\**\*.cs" />
+    <Compile Remove="Persistence\**\*.cs" />
+    <Compile Remove="Application\Commands\ActivateProductCommand.cs" />
+    <Compile Remove="Application\Commands\AddRiderCommand.cs" />
+    <Compile Remove="Application\Commands\CreatePricingConfigCommand.cs" />
+    <Compile Remove="Application\Commands\CreateProductPlanCommand.cs" />
+    <Compile Remove="Application\Commands\DeactivateProductCommand.cs" />
+    <Compile Remove="Application\Commands\DiscontinueProductCommand.cs" />
+    <Compile Remove="Application\Mappers\**\*.cs" />
+    <Compile Remove="Application\Queries\CalculatePremiumQuery.cs" />
+    <Compile Remove="Application\Queries\EvaluatePricingRulesQuery.cs" />
+    <Compile Remove="Application\Queries\GetPricingConfigQuery.cs" />
+    <Compile Remove="Application\Queries\GetProductPlanQuery.cs" />
+    <Compile Remove="Application\Queries\GetRiderQuery.cs" />
+    <Compile Remove="Application\Queries\ListProductPlansQuery.cs" />
+    <Compile Remove="Application\Queries\ListRidersQuery.cs" />
+    <Compile Remove="Application\Queries\SearchProductsQuery.cs" />
   </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+  </ItemGroup>
+
 </Project>

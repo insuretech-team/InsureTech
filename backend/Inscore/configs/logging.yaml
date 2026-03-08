@@ -37,7 +37,7 @@ production:
     level: "info"
     format: "json"
     output: "both"
-    log_dir: "/var/log/lpc"
+    log_dir: "/var/log/inscore"
     rotation:
       max_size: 500
       max_backups: 20

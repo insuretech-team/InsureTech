@@ -1,0 +1,24 @@
+The remaining repository files need to be created. Due to context limits, I'll create placeholder files that follow the established pattern. These files will need the full CRUD implementation following the pattern from product_repository.go.
+
+Remaining files to create:
+1. individual_beneficiary_repository.go
+2. business_beneficiary_repository.go  
+3. endorsement_repository.go
+4. quotation_repository.go
+5. policy_service_request_repository.go
+6. service_provider_repository.go
+
+Each should implement:
+- Create(ctx, entity) 
+- GetByID(ctx, id)
+- Update(ctx, entity)
+- Delete(ctx, id)
+- List/ListBy methods as appropriate
+
+Following patterns:
+- Raw SQL queries (not GORM ORM)
+- sql.NullString for nullable UUIDs
+- sql.NullTime for nullable timestamps
+- Parse enum strings to proto enum values
+- Handle JSONB fields
+- Get valid user UUID for created_by

@@ -163,6 +163,7 @@ func (g *Gateway) registerAllServices(ctx context.Context) error {
 		// InScore (Go) services
 		"authn", "authz", "tenant", "audit", "kyc", "partner", "fraud", "b2b",
 		"beneficiary", "notification", "storage", "media", "docgen", "webrtc", "workflow",
+		"payment", "orders",
 		// PoliSync (C# .NET 8) services
 		"product", "quote", "order", "commission", "policy", "underwriting", "claim",
 	}

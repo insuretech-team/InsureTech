@@ -1,0 +1,29 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+    <LangVersion>latest</LangVersion>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Google.Protobuf" Version="3.25.1" />
+    <PackageReference Include="Grpc.Core.Api" Version="2.60.0" />
+    <PackageReference Include="Grpc.Net.Client" Version="2.60.0" />
+    <PackageReference Include="Google.Api.CommonProtos" Version="2.12.0" />
+  </ItemGroup>
+
+  <!-- Include all generated proto C# files -->
+  <!-- Note: Some proto files have duplicates between Core.cs and specific event files -->
+  <!-- We include all files and rely on partial class merging -->
+  <ItemGroup>
+    <Compile Include="..\..\..\..\gen\csharp\**\*.cs" LinkBase="Generated" />
+  </ItemGroup>
+
+  <!-- Suppress duplicate member warnings since proto generates partial classes across multiple files -->
+  <PropertyGroup>
+    <NoWarn>$(NoWarn);CS0102;CS0111</NoWarn>
+  </PropertyGroup>
+
+</Project>

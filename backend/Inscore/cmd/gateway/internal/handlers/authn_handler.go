@@ -18,6 +18,7 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
@@ -670,10 +671,18 @@ func (h *AuthnHandler) EndVoiceSession(w http.ResponseWriter, r *http.Request) {
 
 // --- shared helpers ---
 
+// writeJSONError writes a clean JSON error response: {"ok":false,"message":"..."}.
+func writeJSONError(w http.ResponseWriter, httpStatus int, msg string) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(httpStatus)
+	b, _ := json.Marshal(map[string]any{"ok": false, "message": msg})
+	_, _ = w.Write(b)
+}
+
 func callUnary(w http.ResponseWriter, r *http.Request, fn func(ctx context.Context, body []byte) (proto.Message, error)) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		http.Error(w, "failed to read body", http.StatusBadRequest)
+		writeJSONError(w, http.StatusBadRequest, "failed to read request body")
 		return
 	}
 
@@ -692,6 +701,8 @@ func callUnary(w http.ResponseWriter, r *http.Request, fn func(ctx context.Conte
 		"x-portal", r.Header.Get("X-Portal"),
 		"x-session-id", r.Header.Get("X-Session-ID"),
 		"x-user-type", r.Header.Get("X-User-Type"),
+		"x-business-id", r.Header.Get("X-Business-ID"),
+		"x-org-role", r.Header.Get("X-Org-Role"),
 		"authorization", r.Header.Get("Authorization"),
 		"cookie", r.Header.Get("Cookie"),
 	)
@@ -699,15 +710,22 @@ func callUnary(w http.ResponseWriter, r *http.Request, fn func(ctx context.Conte
 
 	msg, err := fn(ctx, body)
 	if err != nil {
-		logger.Warn("AuthnHandler gRPC error", zap.Error(err), zap.String("path", r.URL.Path))
-		http.Error(w, err.Error(), http.StatusBadRequest)
+		st, _ := status.FromError(err)
+		httpStatus := grpcStatusToHTTP(st.Code())
+		logger.Warn("gRPC handler error",
+			zap.String("path", r.URL.Path),
+			zap.String("grpc_code", st.Code().String()),
+			zap.Int("http_status", httpStatus),
+			zap.String("message", st.Message()),
+		)
+		writeJSONError(w, httpStatus, st.Message())
 		return
 	}
 
 	w.Header().Set("Content-Type", "application/json")
 	b, mErr := protojson.MarshalOptions{UseProtoNames: true}.Marshal(msg)
 	if mErr != nil {
-		http.Error(w, "failed to marshal response", http.StatusInternalServerError)
+		writeJSONError(w, http.StatusInternalServerError, "failed to marshal response")
 		return
 	}
 	w.WriteHeader(http.StatusOK)

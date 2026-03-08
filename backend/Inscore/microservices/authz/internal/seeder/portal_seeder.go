@@ -56,7 +56,15 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 	// ── PORTAL_SYSTEM ─────────────────────────────────────────────────────────
 	authzentityv1.Portal_PORTAL_SYSTEM: {
 		{Name: "super_admin", DisplayName: "Super Administrator", IsSystem: true, Policies: []seedPolicy{
+			// Wildcard for all services (keyMatch2: svc:* matches svc:foo/bar via regex fallback)
 			{Object: "svc:*", Action: "*", Effect: "allow"},
+			// Explicit b2b policies — keyMatch2 does NOT glob-expand "svc:*" to "svc:b2b/*"
+			// so we seed explicit rules to guarantee coverage for every HTTP verb.
+			{Object: "svc:b2b/*", Action: "*", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "PATCH", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "DELETE", Effect: "allow"},
 		}},
 		{Name: "admin", DisplayName: "System Administrator", IsSystem: true, Policies: []seedPolicy{
 			{Object: "svc:user/*", Action: "*", Effect: "allow"},
@@ -69,8 +77,11 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 			{Object: "svc:user/*", Action: "GET", Effect: "allow"},
 			{Object: "svc:claim/*", Action: "GET", Effect: "allow"},
 			{Object: "svc:session/*", Action: "DELETE", Effect: "allow"},
+			// B2B full CRUD — support agents manage partner orgs, departments, employees
 			{Object: "svc:b2b/*", Action: "GET", Effect: "allow"},
-			{Object: "svc:b2b/purchase-orders", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "PATCH", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "DELETE", Effect: "allow"},
 		}},
 		{Name: "auditor", DisplayName: "System Auditor", IsSystem: false, Policies: []seedPolicy{
 			{Object: "svc:audit/*", Action: "GET", Effect: "allow"},
@@ -116,11 +127,18 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 			{Object: "svc:user/*", Action: "*", Effect: "allow"},
 		}},
 		{Name: "partner_user", DisplayName: "Partner User", IsSystem: false, Policies: []seedPolicy{
+			// B2B resource management — full CRUD on their own org's data
+			// Wildcard ensures checkB2BRootDomainFallback matches any action.
+			{Object: "svc:b2b/*", Action: "*", Effect: "allow"},
 			{Object: "svc:b2b/*", Action: "GET", Effect: "allow"},
-			{Object: "svc:b2b/purchase-orders", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "PATCH", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "DELETE", Effect: "allow"},
+			// Policy & claims
 			{Object: "svc:policy/*", Action: "GET", Effect: "allow"},
 			{Object: "svc:claim/*", Action: "POST", Effect: "allow"},
 			{Object: "svc:claim/*", Action: "GET", Effect: "allow"},
+			// Storage
 			{Object: "svc:storage/upload", Action: "POST", Effect: "allow"},
 			{Object: "svc:storage/upload-batch", Action: "POST", Effect: "allow"},
 			{Object: "svc:storage/upload-url", Action: "POST", Effect: "allow"},
@@ -130,6 +148,24 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 			{Object: "svc:storage/download-url", Action: "POST", Effect: "allow"},
 			{Object: "svc:storage/update", Action: "PATCH", Effect: "allow"},
 			{Object: "svc:storage/delete", Action: "DELETE", Effect: "allow"},
+		}},
+		{Name: "b2b_org_admin", DisplayName: "B2B Organisation Admin", IsSystem: false, Policies: []seedPolicy{
+			// Full CRUD on all B2B service resources (departments, employees, purchase orders, org members)
+			{Object: "svc:b2b/*", Action: "*", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "PATCH", Effect: "allow"},
+			{Object: "svc:b2b/*", Action: "DELETE", Effect: "allow"},
+			// User, policy, claim management within their org
+			{Object: "svc:user/*", Action: "*", Effect: "allow"},
+			{Object: "svc:policy/*", Action: "*", Effect: "allow"},
+			{Object: "svc:claim/*", Action: "*", Effect: "allow"},
+			{Object: "svc:document/*", Action: "*", Effect: "allow"},
+			{Object: "svc:storage/*", Action: "*", Effect: "allow"},
+			{Object: "svc:invoice/*", Action: "*", Effect: "allow"},
+			{Object: "svc:payment/*", Action: "*", Effect: "allow"},
+			{Object: "svc:employee/*", Action: "*", Effect: "allow"},
+			{Object: "svc:enrollment/*", Action: "*", Effect: "allow"},
 		}},
 		{Name: "api_client", DisplayName: "API Client (Machine)", IsSystem: false, Policies: []seedPolicy{
 			{Object: "svc:policy/quote", Action: "POST", Effect: "allow"},
@@ -297,12 +333,20 @@ func (s *PortalSeeder) SeedDefaultSystemRoleBindings(ctx context.Context) error 
 		return nil
 	}
 
+	// user_type is stored as a PostgreSQL enum or integer depending on migration.
+	// We use a raw WHERE clause with OR to cover all known representations:
+	//   - string enum:   'USER_TYPE_SYSTEM_USER' or 'SYSTEM_USER'
+	//   - integer enum:  4  (proto enum value for SYSTEM_USER)
+	// Using OR-based raw SQL avoids GORM's IN mishandling of mixed types.
 	var users []authnSystemUserRow
 	if err := s.db.WithContext(ctx).
 		Table("authn_schema.users").
 		Select("user_id").
 		Where("deleted_at IS NULL").
-		Where("user_type IN ?", []string{"USER_TYPE_SYSTEM_USER", "SYSTEM_USER", "4"}).
+		Where(
+			"user_type::text IN ?",
+			[]string{"USER_TYPE_SYSTEM_USER", "SYSTEM_USER", "4"},
+		).
 		Find(&users).Error; err != nil {
 		return err
 	}
@@ -317,7 +361,8 @@ func (s *PortalSeeder) SeedDefaultSystemRoleBindings(ctx context.Context) error 
 		if userID == "" {
 			continue
 		}
-		err := s.enforcer.AddRoleForUserInDomain("user:"+userID, "role:support", "system:root")
+		// Give system users the super_admin role (not support) so they have full b2b access.
+		err := s.enforcer.AddRoleForUserInDomain("user:"+userID, "role:super_admin", "system:root")
 		if err != nil {
 			if isLikelyAlreadyExistsErr(err) {
 				continue

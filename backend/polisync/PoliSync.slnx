@@ -1,9 +1,0 @@
-<Solution>
-  <Folder Name="/src/">
-    <Project Path="src/PoliSync.ApiHost/PoliSync.ApiHost.csproj" />
-    <Project Path="src/PoliSync.Beneficiaries/PoliSync.Beneficiaries.csproj" />
-    <Project Path="src/PoliSync.Infrastructure/PoliSync.Infrastructure.csproj" />
-    <Project Path="src/PoliSync.Products/PoliSync.Products.csproj" />
-    <Project Path="src/PoliSync.SharedKernel/PoliSync.SharedKernel.csproj" />
-  </Folder>
-</Solution>

@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>B2C Premium Invoice</title>
+  <style>
+    body { font-family: "Segoe UI", Arial, sans-serif; margin: 20px; color: #0f172a; background: #f8fafc; }
+    .card { max-width: 980px; margin: 0 auto; background: #fff; border: 1px solid #dbe3ef; border-radius: 12px; overflow: hidden; }
+    .top { display: flex; justify-content: space-between; gap: 20px; padding: 18px 20px; background: #f1f5f9; border-bottom: 1px solid #e2e8f0; }
+    .brand { display: flex; align-items: center; gap: 10px; }
+    .logo-wrap { width: auto; height: 21px; display: flex; align-items: center; flex: 0 0 auto; }
+    .logo { height: 21px; width: auto; display: block; }
+    .brand h1 { margin: 0; font-size: 18px; }
+    .brand p { margin: 3px 0 0; font-size: 12px; color: #64748b; }
+    .meta { font-size: 12px; text-align: right; }
+    .meta .row { margin-bottom: 4px; }
+    .meta .k { color: #64748b; text-transform: uppercase; font-size: 10px; }
+    .meta .v { font-weight: 600; }
+    .content { padding: 18px 20px; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; margin-bottom: 14px; }
+    .box { border: 1px solid #e2e8f0; border-radius: 10px; background: #f8fafc; padding: 10px; }
+    .box h3 { margin: 0 0 6px; font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .line { margin: 2px 0; font-size: 13px; }
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; }
+    th, td { border-bottom: 1px solid #e2e8f0; padding: 8px 6px; text-align: left; font-size: 13px; }
+    th { font-size: 11px; text-transform: uppercase; color: #64748b; }
+    .num { text-align: right; }
+    .totals { width: 320px; margin-left: auto; margin-top: 12px; }
+    .totals .row { display: flex; justify-content: space-between; padding: 4px 0; font-size: 13px; }
+    .totals .total { border-top: 2px solid #0f172a; margin-top: 4px; padding-top: 7px; font-weight: 700; }
+    .footer { margin-top: 14px; font-size: 12px; color: #475569; }
+  </style>
+</head>
+<body>
+  <div class="card">
+    <div class="top">
+      <div class="brand">
+        <div class="logo-wrap">
+          <img class="logo" src="../logos/insuretech-brand.png" alt="Labaid InsureTech" />
+        </div>
+        <div>
+          <h1>B2C Premium Invoice</h1>
+          <p>Issued by Labaid InsureTech</p>
+        </div>
+      </div>
+      <div class="meta">
+        <div class="row"><span class="k">Invoice No</span> <span class="v">{{or .invoice_number .transaction_id}}</span></div>
+        <div class="row"><span class="k">Payment Ref</span> <span class="v">{{or .reference_id .payment_id}}</span></div>
+        <div class="row"><span class="k">Initiated</span> <span class="v">{{.issue_date}}</span></div>
+        <div class="row"><span class="k">Paid</span> <span class="v">{{.paid_date}}</span></div>
+        <div class="row"><span class="k">Payment Status</span> <span class="v">{{.payment_status}}</span></div>
+      </div>
+    </div>
+
+    <div class="content">
+      <div class="grid">
+        <div class="box">
+          <h3>Policy Holder</h3>
+          <div class="line">Name: {{or .customer_name .policy_holder_name}}</div>
+          <div class="line">Customer ID: {{or .customer_reference .customer_id}}</div>
+          <div class="line">Email: {{or .customer_email .payer_email}}</div>
+          <div class="line">Phone: {{or .customer_phone .payer_phone}}</div>
+          <div class="line">Address: {{.customer_address}}</div>
+        </div>
+        <div class="box">
+          <h3>Policy & Payment Context</h3>
+          <div class="line">Policy Ref: {{or .policy_reference .policy_id}}</div>
+          <div class="line">Policy Number: {{.policy_number}}</div>
+          <div class="line">Policy Status: {{.policy_status}}</div>
+          <div class="line">Payment Method: {{.payment_method}}</div>
+          <div class="line">Coverage: {{.coverage_start_date}} to {{.coverage_end_date}}</div>
+          <div class="line">Sum Insured: {{.sum_insured_display}}</div>
+        </div>
+      </div>
+
+      <table>
+        <thead>
+          <tr>
+            <th>Description</th>
+            <th class="num">Qty</th>
+            <th class="num">Unit Price</th>
+            <th class="num">Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{range .items}}
+          <tr>
+            <td>{{.description}}</td>
+            <td class="num">{{.quantity}}</td>
+            <td class="num">{{.unit_price}}</td>
+            <td class="num">{{.amount}}</td>
+          </tr>
+          {{end}}
+        </tbody>
+      </table>
+
+      <div class="totals">
+        <div class="row"><span>Subtotal</span><span>{{.subtotal}}</span></div>
+        <div class="row"><span>Tax</span><span>{{.tax}}</span></div>
+        <div class="row total"><span>Total Paid</span><span>{{.total}}</span></div>
+      </div>
+
+      <div class="footer">Terms: {{.terms}}</div>
+    </div>
+  </div>
+</body>
+</html>

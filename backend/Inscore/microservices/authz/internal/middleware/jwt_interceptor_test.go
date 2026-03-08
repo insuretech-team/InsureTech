@@ -110,6 +110,42 @@ func TestJWTInterceptor_SkipNoopAndParsePEM(t *testing.T) {
 	require.Error(t, err)
 }
 
+func TestJWTInterceptor_InternalRoleManagementMethodsCanSkipJWT(t *testing.T) {
+	i := NewJWTInterceptor(newTestPublicKey(t), []string{
+		"/insuretech.authz.services.v1.AuthZService/ListRoles",
+		"/insuretech.authz.services.v1.AuthZService/AssignRole",
+		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
+	})
+
+	skipped := []string{
+		"/insuretech.authz.services.v1.AuthZService/ListRoles",
+		"/insuretech.authz.services.v1.AuthZService/AssignRole",
+		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
+	}
+	for _, method := range skipped {
+		_, err := i.UnaryInterceptor()(context.Background(), "req", &grpc.UnaryServerInfo{FullMethod: method}, func(ctx context.Context, req interface{}) (interface{}, error) {
+			return "ok", nil
+		})
+		require.NoError(t, err, method)
+	}
+}
+
+func TestJWTInterceptor_TrustedInternalServiceCanSkipJWT(t *testing.T) {
+	i := NewJWTInterceptor(newTestPublicKey(t), nil)
+
+	ctx := metadata.NewIncomingContext(context.Background(), metadata.Pairs("x-internal-service", "gateway"))
+	_, err := i.UnaryInterceptor()(ctx, "req", &grpc.UnaryServerInfo{FullMethod: "/insuretech.authz.services.v1.AuthZService/AssignRole"}, func(ctx context.Context, req interface{}) (interface{}, error) {
+		return "ok", nil
+	})
+	require.NoError(t, err)
+
+	unknownCtx := metadata.NewIncomingContext(context.Background(), metadata.Pairs("x-internal-service", "unknown-service"))
+	_, err = i.UnaryInterceptor()(unknownCtx, "req", &grpc.UnaryServerInfo{FullMethod: "/insuretech.authz.services.v1.AuthZService/AssignRole"}, func(ctx context.Context, req interface{}) (interface{}, error) {
+		return "ok", nil
+	})
+	require.Equal(t, codes.Unauthenticated, status.Code(err))
+}
+
 func TestJWTInterceptor_InvalidSigningMethodAndPeerIP(t *testing.T) {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	require.NoError(t, err)
@@ -123,4 +159,11 @@ func TestJWTInterceptor_InvalidSigningMethodAndPeerIP(t *testing.T) {
 	require.Equal(t, "unknown", peerIP(context.Background()))
 	ctxWithPeer := peer.NewContext(context.Background(), &peer.Peer{Addr: &net.TCPAddr{IP: net.ParseIP("127.0.0.1"), Port: 1234}})
 	require.Equal(t, "127.0.0.1", peerIP(ctxWithPeer))
+}
+
+func newTestPublicKey(t *testing.T) *rsa.PublicKey {
+	t.Helper()
+	priv, err := rsa.GenerateKey(rand.Reader, 2048)
+	require.NoError(t, err)
+	return &priv.PublicKey
 }

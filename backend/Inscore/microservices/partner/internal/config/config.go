@@ -93,8 +93,8 @@ func Load() (*Config, error) {
 			DLQTopic:       getEnv("KAFKA_PARTNER_DLQ_TOPIC", "partner.dlq"),
 		},
 		Integration: IntegrationConfig{
-			AuthNAddress: getEnv("AUTHN_SERVICE_ADDRESS", "localhost:50060"),
-			AuthZAddress: getEnv("AUTHZ_SERVICE_ADDRESS", "localhost:50070"),
+			AuthNAddress: getEnv("AUTHN_GRPC_ADDR", getEnv("AUTHN_SERVICE_ADDRESS", "")),
+			AuthZAddress: getEnv("AUTHZ_GRPC_ADDR", getEnv("AUTHZ_SERVICE_ADDRESS", "")),
 		},
 		Security: SecurityConfig{
 			PIIEncryptionKey: getEnv("PII_ENCRYPTION_KEY", "0123456789abcdef0123456789abcdef"), // Default 32-byte key for local dev

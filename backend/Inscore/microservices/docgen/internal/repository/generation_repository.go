@@ -54,7 +54,7 @@ func (r *DocumentGenerationRepository) Create(ctx context.Context, doc *document
 		doc.EntityType,
 		doc.EntityId,
 		doc.Data,
-		doc.Status.String(),
+		generationStatusDBValue(doc.Status),
 		nullString(doc.FileUrl),
 		doc.FileSizeBytes,
 		nullString(doc.QrCodeData),
@@ -63,7 +63,34 @@ func (r *DocumentGenerationRepository) Create(ctx context.Context, doc *document
 		"{}",
 	).Scan(&createdAt, &updatedAt)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create document generation: %w", err)
+		if isUndefinedColumnErr(err) {
+			legacyQuery := `
+				INSERT INTO storage_schema.document_generations (
+					generation_id, document_template_id, entity_type, entity_id, data,
+					status, file_url, file_size_bytes, qr_code_data, generated_by,
+					generated_at, audit_info
+				) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10,$11,$12)
+			`
+			_, legacyErr := r.db.ExecContext(ctx, legacyQuery,
+				doc.Id,
+				doc.DocumentTemplateId,
+				doc.EntityType,
+				doc.EntityId,
+				doc.Data,
+				generationStatusDBValue(doc.Status),
+				nullString(doc.FileUrl),
+				doc.FileSizeBytes,
+				nullString(doc.QrCodeData),
+				nullString(doc.GeneratedBy),
+				generatedAt,
+				"{}",
+			)
+			if legacyErr != nil {
+				return nil, fmt.Errorf("failed to create document generation: %w", legacyErr)
+			}
+		} else {
+			return nil, fmt.Errorf("failed to create document generation: %w", err)
+		}
 	}
 
 	if doc.AuditInfo == nil {
@@ -89,6 +116,18 @@ func (r *DocumentGenerationRepository) GetByID(ctx context.Context, documentID s
 	doc, err := scanDocumentGeneration(func(dest ...any) error {
 		return r.db.QueryRowContext(ctx, query, documentID).Scan(dest...)
 	})
+	if err != nil && isUndefinedColumnErr(err) {
+		legacyQuery := `
+			SELECT generation_id, document_template_id, entity_type, entity_id, data,
+				status, file_url, file_size_bytes, qr_code_data, generated_by,
+				generated_at
+			FROM storage_schema.document_generations
+			WHERE generation_id = $1
+		`
+		doc, err = scanDocumentGenerationLegacy(func(dest ...any) error {
+			return r.db.QueryRowContext(ctx, legacyQuery, documentID).Scan(dest...)
+		})
+	}
 	if err == sql.ErrNoRows {
 		return nil, ErrDocumentNotFound
 	}
@@ -108,7 +147,7 @@ func (r *DocumentGenerationRepository) ListByEntity(
 	args := []any{entityType, entityID}
 	if status != nil {
 		conditions = append(conditions, fmt.Sprintf("status = $%d", len(args)+1))
-		args = append(args, status.String())
+		args = append(args, generationStatusDBValue(*status))
 	}
 	where := strings.Join(conditions, " AND ")
 
@@ -129,14 +168,38 @@ func (r *DocumentGenerationRepository) ListByEntity(
 	`, where, len(args)+1, len(args)+2)
 
 	rows, err := r.db.QueryContext(ctx, query, append(args, limit, offset)...)
+	useLegacyScan := false
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to list documents: %w", err)
+		if isUndefinedColumnErr(err) {
+			legacyQuery := fmt.Sprintf(`
+				SELECT generation_id, document_template_id, entity_type, entity_id, data,
+					status, file_url, file_size_bytes, qr_code_data, generated_by,
+					generated_at
+				FROM storage_schema.document_generations
+				WHERE %s
+				ORDER BY generated_at DESC
+				LIMIT $%d OFFSET $%d
+			`, where, len(args)+1, len(args)+2)
+			rows, err = r.db.QueryContext(ctx, legacyQuery, append(args, limit, offset)...)
+			useLegacyScan = true
+		}
+		if err != nil {
+			return nil, 0, fmt.Errorf("failed to list documents: %w", err)
+		}
 	}
 	defer rows.Close()
 
 	docs := make([]*documentv1.DocumentGeneration, 0)
 	for rows.Next() {
-		doc, scanErr := scanDocumentGeneration(rows.Scan)
+		var (
+			doc     *documentv1.DocumentGeneration
+			scanErr error
+		)
+		if useLegacyScan {
+			doc, scanErr = scanDocumentGenerationLegacy(rows.Scan)
+		} else {
+			doc, scanErr = scanDocumentGeneration(rows.Scan)
+		}
 		if scanErr != nil {
 			return nil, 0, fmt.Errorf("failed to scan document: %w", scanErr)
 		}
@@ -213,6 +276,46 @@ func scanDocumentGeneration(scan func(dest ...any) error) (*documentv1.DocumentG
 	return &doc, nil
 }
 
+func scanDocumentGenerationLegacy(scan func(dest ...any) error) (*documentv1.DocumentGeneration, error) {
+	var doc documentv1.DocumentGeneration
+	var statusDB string
+	var fileURL, qrCodeData, generatedBy sql.NullString
+	var generatedAt sql.NullTime
+
+	err := scan(
+		&doc.Id,
+		&doc.DocumentTemplateId,
+		&doc.EntityType,
+		&doc.EntityId,
+		&doc.Data,
+		&statusDB,
+		&fileURL,
+		&doc.FileSizeBytes,
+		&qrCodeData,
+		&generatedBy,
+		&generatedAt,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	doc.Status = parseGenerationStatus(statusDB)
+	if fileURL.Valid {
+		doc.FileUrl = fileURL.String
+	}
+	if qrCodeData.Valid {
+		doc.QrCodeData = qrCodeData.String
+	}
+	if generatedBy.Valid {
+		doc.GeneratedBy = generatedBy.String
+	}
+	if generatedAt.Valid {
+		doc.GeneratedAt = timestamppb.New(generatedAt.Time)
+	}
+	doc.AuditInfo = &commonv1.AuditInfo{}
+	return &doc, nil
+}
+
 func parseGenerationStatus(v string) documentv1.GenerationStatus {
 	s := strings.TrimSpace(v)
 	if s == "" {
@@ -231,4 +334,19 @@ func parseGenerationStatus(v string) documentv1.GenerationStatus {
 		return documentv1.GenerationStatus(i)
 	}
 	return documentv1.GenerationStatus_GENERATION_STATUS_UNSPECIFIED
+}
+
+func generationStatusDBValue(status documentv1.GenerationStatus) string {
+	switch status {
+	case documentv1.GenerationStatus_GENERATION_STATUS_PENDING:
+		return "PENDING"
+	case documentv1.GenerationStatus_GENERATION_STATUS_PROCESSING:
+		return "PROCESSING"
+	case documentv1.GenerationStatus_GENERATION_STATUS_COMPLETED:
+		return "COMPLETED"
+	case documentv1.GenerationStatus_GENERATION_STATUS_FAILED:
+		return "FAILED"
+	default:
+		return "UNSPECIFIED"
+	}
 }

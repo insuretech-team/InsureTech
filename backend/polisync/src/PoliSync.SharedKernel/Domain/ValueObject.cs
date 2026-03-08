@@ -1,7 +1,7 @@
 namespace PoliSync.SharedKernel.Domain;
 
 /// <summary>
-/// Base for value objects — equality by all component values.
+/// Base class for value objects - immutable objects defined by their attributes
 /// </summary>
 public abstract class ValueObject
 {
@@ -9,17 +9,33 @@ public abstract class ValueObject
 
     public override bool Equals(object? obj)
     {
-        if (obj is null || obj.GetType() != GetType()) return false;
-        return GetEqualityComponents()
-            .SequenceEqual(((ValueObject)obj).GetEqualityComponents());
+        if (obj == null || obj.GetType() != GetType())
+            return false;
+
+        var other = (ValueObject)obj;
+        return GetEqualityComponents().SequenceEqual(other.GetEqualityComponents());
     }
 
     public override int GetHashCode()
-        => GetEqualityComponents()
-            .Aggregate(0, (hash, c) => HashCode.Combine(hash, c));
+    {
+        return GetEqualityComponents()
+            .Select(x => x?.GetHashCode() ?? 0)
+            .Aggregate((x, y) => x ^ y);
+    }
 
-    public static bool operator ==(ValueObject? a, ValueObject? b)
-        => a?.Equals(b) ?? b is null;
+    public static bool operator ==(ValueObject? left, ValueObject? right)
+    {
+        if (left is null && right is null)
+            return true;
 
-    public static bool operator !=(ValueObject? a, ValueObject? b) => !(a == b);
+        if (left is null || right is null)
+            return false;
+
+        return left.Equals(right);
+    }
+
+    public static bool operator !=(ValueObject? left, ValueObject? right)
+    {
+        return !(left == right);
+    }
 }

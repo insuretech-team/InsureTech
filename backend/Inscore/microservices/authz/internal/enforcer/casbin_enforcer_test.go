@@ -15,6 +15,7 @@ func newMemoryEnforcer(t *testing.T) *CasbinEnforcer {
 	require.NoError(t, err)
 	e, err := casbin.NewSyncedEnforcer(m)
 	require.NoError(t, err)
+	registerMatcherFunctions(e)
 	return &CasbinEnforcer{enforcer: e}
 }
 
@@ -78,4 +79,23 @@ func TestCasbinEnforcer_B2BPathPattern(t *testing.T) {
 	allowed, _, err := ce.Enforce(ctx, "user:sys-1", "system:root", "svc:b2b/b2b/employees", "GET")
 	require.NoError(t, err)
 	require.True(t, allowed)
+}
+
+func TestCasbinEnforcer_ActionWildcardAndInvalidRegex(t *testing.T) {
+	ce := newMemoryEnforcer(t)
+	ctx := context.Background()
+
+	require.NoError(t, ce.AddRoleForUserInDomain("user:u2", "role:partner", "b2b:root"))
+	require.NoError(t, ce.AddPolicy("role:partner", "b2b:root", "svc:b2b/*", "*", "allow"))
+
+	allowed, _, err := ce.Enforce(ctx, "user:u2", "b2b:root", "svc:b2b/departments", "POST")
+	require.NoError(t, err)
+	require.True(t, allowed)
+
+	require.NoError(t, ce.AddRoleForUserInDomain("user:u3", "role:broken", "b2b:root"))
+	require.NoError(t, ce.AddPolicy("role:broken", "b2b:root", "svc:b2b/*", "[", "allow"))
+
+	allowed, _, err = ce.Enforce(ctx, "user:u3", "b2b:root", "svc:b2b/departments", "GET")
+	require.NoError(t, err)
+	require.False(t, allowed)
 }

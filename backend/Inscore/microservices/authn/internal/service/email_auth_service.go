@@ -2,7 +2,7 @@ package service
 
 // email_auth_service.go
 // Email-based authentication methods for AuthService.
-// RESTRICTED to: BUSINESS_BENEFICIARY, SYSTEM_USER, and AGENT only.
+// RESTRICTED to: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, and B2B_ORG_ADMIN.
 // Web portal: always produces SERVER_SIDE session (cookie-based).
 //
 // Flows:
@@ -29,11 +29,12 @@ const (
 )
 
 // isEmailAuthUser returns true if the user_type is allowed to use email auth.
-// BUSINESS_BENEFICIARY, SYSTEM_USER, and AGENT are permitted (all portal users).
+// BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, and B2B_ORG_ADMIN are permitted.
 func isEmailAuthUser(userType authnentityv1.UserType) bool {
 	return userType == authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY ||
 		userType == authnentityv1.UserType_USER_TYPE_SYSTEM_USER ||
-		userType == authnentityv1.UserType_USER_TYPE_AGENT
+		userType == authnentityv1.UserType_USER_TYPE_AGENT ||
+		userType == authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN
 }
 
 // maskEmail returns a masked email for safe logging: user@domain.com → u***@domain.com
@@ -49,7 +50,7 @@ func maskEmail(email string) string {
 	return "***"
 }
 
-// RegisterEmailUser registers a new BUSINESS_BENEFICIARY or SYSTEM_USER.
+// RegisterEmailUser registers a new portal user with email login support.
 // - Validates user_type is allowed
 // - Creates user with PENDING_VERIFICATION status
 // - Sends email verification OTP automatically
@@ -60,7 +61,7 @@ func (s *AuthService) RegisterEmailUser(ctx context.Context, req *authnservicev1
 	userType := parseUserType(req.UserType)
 	if !isEmailAuthUser(userType) {
 		appLogger.Warnf("RegisterEmailUser: rejected user_type=%s from IP %s", req.UserType, reqMeta.IPAddress)
-		return nil, errors.New("email registration is only available for BUSINESS_BENEFICIARY, SYSTEM_USER, and AGENT")
+		return nil, errors.New("email registration is only available for BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, and B2B_ORG_ADMIN")
 	}
 
 	// Email is mandatory for email-based users
@@ -462,6 +463,8 @@ func parseUserType(userTypeStr string) authnentityv1.UserType {
 		return authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY
 	case "SYSTEM_USER":
 		return authnentityv1.UserType_USER_TYPE_SYSTEM_USER
+	case "B2B_ORG_ADMIN":
+		return authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN
 	default:
 		return authnentityv1.UserType_USER_TYPE_UNSPECIFIED
 	}

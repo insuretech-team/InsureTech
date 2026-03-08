@@ -2,11 +2,29 @@ package grpc
 
 import (
 	"context"
+	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/sms"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 )
+
+// normalizeMobile normalises and validates an inbound mobile number,
+// returning the canonical +880XXXXXXXXXX form or a gRPC InvalidArgument error.
+func normalizeMobile(raw string) (string, error) {
+	trimmed := strings.TrimSpace(raw)
+	if trimmed == "" {
+		return "", status.Error(codes.InvalidArgument, "mobile_number is required")
+	}
+	normalized, err := sms.NormalizePhoneNumber(trimmed)
+	if err != nil {
+		return "", status.Errorf(codes.InvalidArgument,
+			"invalid mobile_number %q: must be a valid Bangladesh number "+
+				"(e.g. 01712345678, +8801712345678, 008801712345678)", raw)
+	}
+	return "+" + normalized, nil
+}
 
 type AuthServiceHandler struct {
 	authnservicev1.UnimplementedAuthServiceServer
@@ -22,9 +40,11 @@ func NewAuthServiceHandler(authService AuthServiceIface) *AuthServiceHandler {
 // ── Phone/OTP flows ──────────────────────────────────────────────────────────
 
 func (h *AuthServiceHandler) Login(ctx context.Context, req *authnservicev1.LoginRequest) (*authnservicev1.LoginResponse, error) {
-	if req.MobileNumber == "" {
-		return nil, status.Error(codes.InvalidArgument, "mobile_number is required")
+	normalized, err := normalizeMobile(req.MobileNumber)
+	if err != nil {
+		return nil, err
 	}
+	req.MobileNumber = normalized
 	if req.Password == "" {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
@@ -36,9 +56,11 @@ func (h *AuthServiceHandler) Login(ctx context.Context, req *authnservicev1.Logi
 }
 
 func (h *AuthServiceHandler) Register(ctx context.Context, req *authnservicev1.RegisterRequest) (*authnservicev1.RegisterResponse, error) {
-	if req.MobileNumber == "" {
-		return nil, status.Error(codes.InvalidArgument, "mobile_number is required")
+	normalized, err := normalizeMobile(req.MobileNumber)
+	if err != nil {
+		return nil, err
 	}
+	req.MobileNumber = normalized
 	if req.Password == "" {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
@@ -211,9 +233,11 @@ func (h *AuthServiceHandler) ChangePassword(ctx context.Context, req *authnservi
 }
 
 func (h *AuthServiceHandler) ResetPassword(ctx context.Context, req *authnservicev1.ResetPasswordRequest) (*authnservicev1.ResetPasswordResponse, error) {
-	if req.MobileNumber == "" {
-		return nil, status.Error(codes.InvalidArgument, "mobile_number is required")
+	normalized, err := normalizeMobile(req.MobileNumber)
+	if err != nil {
+		return nil, err
 	}
+	req.MobileNumber = normalized
 	if req.OtpCode == "" {
 		return nil, status.Error(codes.InvalidArgument, "otp_code is required")
 	}
@@ -235,6 +259,13 @@ func (h *AuthServiceHandler) RegisterEmailUser(ctx context.Context, req *authnse
 	}
 	if req.Password == "" {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
+	}
+	if strings.TrimSpace(req.MobileNumber) != "" {
+		normalized, err := normalizeMobile(req.MobileNumber)
+		if err != nil {
+			return nil, err
+		}
+		req.MobileNumber = normalized
 	}
 	resp, err := h.authService.RegisterEmailUser(ctx, req)
 	if err != nil {

@@ -9,8 +9,8 @@
 //   - turn: TURN server integration
 //
 // Usage:
-//   import "github.com/fahara02/lifepluscore/lpc/pkg/webrtc"
-//   import "github.com/fahara02/lifepluscore/lpc/pkg/webrtc/core"
+//   import "github.com/fahara02/lifepluscore/inscore/pkg/webrtc"
+//   import "github.com/fahara02/lifepluscore/inscore/pkg/webrtc/core"
 //   
 //   config := core.LoadFromEnv()
 //   manager := webrtc.NewServiceManager(db, config)

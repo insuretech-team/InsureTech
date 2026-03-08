@@ -3,6 +3,7 @@ package repository
 import (
 	"context"
 	"errors"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/lib/pq"
@@ -135,23 +136,63 @@ func (r *PortalRepo) List(ctx context.Context) ([]*entityv1.PortalConfig, error)
 	return cfgs, nil
 }
 
+// tokenConfigRow is a plain Go struct for GORM mapping of token_configs table.
+type tokenConfigRow struct {
+	Kid           string     `gorm:"column:kid;primaryKey"`
+	Algorithm     string     `gorm:"column:algorithm"`
+	PublicKeyPem  string     `gorm:"column:public_key_pem"`
+	PrivateKeyRef string     `gorm:"column:private_key_ref"`
+	IsActive      bool       `gorm:"column:is_active"`
+	CreatedAt     *time.Time `gorm:"column:created_at"`
+	RotatedAt     *time.Time `gorm:"column:rotated_at"`
+}
+
+func (tokenConfigRow) TableName() string {
+	return "authz_schema.token_configs"
+}
+
+// tokenConfigRowToProto converts a tokenConfigRow to a proto TokenConfig.
+func tokenConfigRowToProto(row *tokenConfigRow) *entityv1.TokenConfig {
+	if row == nil {
+		return nil
+	}
+	cfg := &entityv1.TokenConfig{
+		Kid:           row.Kid,
+		Algorithm:     row.Algorithm,
+		PublicKeyPem:  row.PublicKeyPem,
+		PrivateKeyRef: row.PrivateKeyRef,
+		IsActive:      row.IsActive,
+	}
+	if row.CreatedAt != nil {
+		cfg.CreatedAt = timestamppb.New(*row.CreatedAt)
+	}
+	if row.RotatedAt != nil {
+		cfg.RotatedAt = timestamppb.New(*row.RotatedAt)
+	}
+	return cfg
+}
+
 // TokenConfigRepo implements domain.TokenConfigRepository using proto structs directly.
 type TokenConfigRepo struct{ db *gorm.DB }
 
 func NewTokenConfigRepo(db *gorm.DB) *TokenConfigRepo { return &TokenConfigRepo{db: db} }
 
 func (r *TokenConfigRepo) GetActive(ctx context.Context) (*entityv1.TokenConfig, error) {
-	var cfg entityv1.TokenConfig
-	if err := r.db.WithContext(ctx).Table("authz_schema.token_configs").Where("is_active = true").First(&cfg).Error; err != nil {
+	var row tokenConfigRow
+	if err := r.db.WithContext(ctx).Where("is_active = true").First(&row).Error; err != nil {
 		return nil, errors.New("tokenConfig.GetActive: " + err.Error())
 	}
-	return &cfg, nil
+	return tokenConfigRowToProto(&row), nil
 }
 
 func (r *TokenConfigRepo) List(ctx context.Context) ([]*entityv1.TokenConfig, error) {
-	var cfgs []*entityv1.TokenConfig
-	if err := r.db.WithContext(ctx).Table("authz_schema.token_configs").Find(&cfgs).Error; err != nil {
+	var rows []*tokenConfigRow
+	if err := r.db.WithContext(ctx).Find(&rows).Error; err != nil {
 		return nil, errors.New("tokenConfig.List: " + err.Error())
+	}
+	cfgs := make([]*entityv1.TokenConfig, len(rows))
+	for i, row := range rows {
+		cfgs[i] = tokenConfigRowToProto(row)
 	}
 	return cfgs, nil
 }
@@ -167,7 +208,30 @@ func (r *TokenConfigRepo) Create(ctx context.Context, cfg *entityv1.TokenConfig)
 	if cfg.Algorithm == "" {
 		cfg.Algorithm = "RS256"
 	}
-	if err := r.db.WithContext(ctx).Table("authz_schema.token_configs").Create(cfg).Error; err != nil {
+	
+	// Convert proto to map[string]any to avoid GORM reflecting timestamp fields
+	var createdAt *time.Time
+	var rotatedAt *time.Time
+	if cfg.CreatedAt != nil {
+		t := cfg.CreatedAt.AsTime()
+		createdAt = &t
+	}
+	if cfg.RotatedAt != nil {
+		t := cfg.RotatedAt.AsTime()
+		rotatedAt = &t
+	}
+	
+	values := map[string]any{
+		"kid":            cfg.Kid,
+		"algorithm":      cfg.Algorithm,
+		"public_key_pem": cfg.PublicKeyPem,
+		"private_key_ref": cfg.PrivateKeyRef,
+		"is_active":      cfg.IsActive,
+		"created_at":     createdAt,
+		"rotated_at":     rotatedAt,
+	}
+	
+	if err := r.db.WithContext(ctx).Table("authz_schema.token_configs").Create(values).Error; err != nil {
 		return nil, errors.New("tokenConfig.Create: " + err.Error())
 	}
 	return cfg, nil

@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"fmt"
 	"strings"
 	"time"
@@ -9,46 +10,96 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/b2b/internal/domain"
 	b2bv1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
+	"gorm.io/gorm"
 )
 
-type purchaseOrderRow struct {
-	PurchaseOrderID     string    `gorm:"column:purchase_order_id"`
-	PurchaseOrderNumber string    `gorm:"column:purchase_order_number"`
-	BusinessID          string    `gorm:"column:business_id"`
-	DepartmentID        string    `gorm:"column:department_id"`
-	ProductID           string    `gorm:"column:product_id"`
-	PlanID              string    `gorm:"column:plan_id"`
-	InsuranceCategory   string    `gorm:"column:insurance_category"`
-	EmployeeCount       int32     `gorm:"column:employee_count"`
-	NumberOfDependents  int32     `gorm:"column:number_of_dependents"`
-	CoverageAmount      []byte    `gorm:"column:coverage_amount"`
-	EstimatedPremium    []byte    `gorm:"column:estimated_premium"`
-	Status              string    `gorm:"column:status"`
-	RequestedBy         string    `gorm:"column:requested_by"`
-	Notes               string    `gorm:"column:notes"`
-	CreatedAt           time.Time `gorm:"column:created_at"`
-	UpdatedAt           time.Time `gorm:"column:updated_at"`
+// ─── SQL ──────────────────────────────────────────────────────────────────────
+
+const purchaseOrderCols = `
+	purchase_order_id,
+	purchase_order_number,
+	business_id,
+	department_id,
+	product_id,
+	plan_id,
+	insurance_category,
+	COALESCE(employee_count, 0) AS employee_count,
+	COALESCE(number_of_dependents, 0) AS number_of_dependents,
+	COALESCE(coverage_amount::TEXT, 'null') AS coverage_amount,
+	COALESCE(estimated_premium::TEXT, 'null') AS estimated_premium,
+	status,
+	COALESCE(requested_by::TEXT, '') AS requested_by,
+	COALESCE(notes, '') AS notes,
+	created_at,
+	updated_at
+`
+
+// ─── Scanner ──────────────────────────────────────────────────────────────────
+
+func scanPurchaseOrder(row interface{ Scan(...any) error }) (*b2bv1.PurchaseOrder, error) {
+	var (
+		o                    b2bv1.PurchaseOrder
+		insuranceCategoryStr sql.NullString
+		coverageJSON         sql.NullString
+		estimatedPremiumJSON sql.NullString
+		statusStr            sql.NullString
+		createdAt            time.Time
+		updatedAt            time.Time
+	)
+
+	if err := row.Scan(
+		&o.PurchaseOrderId,
+		&o.PurchaseOrderNumber,
+		&o.BusinessId,
+		&o.DepartmentId,
+		&o.ProductId,
+		&o.PlanId,
+		&insuranceCategoryStr,
+		&o.EmployeeCount,
+		&o.NumberOfDependents,
+		&coverageJSON,
+		&estimatedPremiumJSON,
+		&statusStr,
+		&o.RequestedBy,
+		&o.Notes,
+		&createdAt,
+		&updatedAt,
+	); err != nil {
+		if err.Error() == "sql: no rows in result set" {
+			return nil, gorm.ErrRecordNotFound
+		}
+		return nil, err
+	}
+
+	if insuranceCategoryStr.Valid {
+		o.InsuranceCategory = parseInsuranceType(insuranceCategoryStr.String)
+	}
+	o.CoverageAmount = scanMoney(coverageJSON)
+	o.EstimatedPremium = scanMoney(estimatedPremiumJSON)
+
+	if statusStr.Valid {
+		k := strings.ToUpper(statusStr.String)
+		if v, ok := b2bv1.PurchaseOrderStatus_value[k]; ok {
+			o.Status = b2bv1.PurchaseOrderStatus(v)
+		} else if v, ok := b2bv1.PurchaseOrderStatus_value["PURCHASE_ORDER_STATUS_"+k]; ok {
+			o.Status = b2bv1.PurchaseOrderStatus(v)
+		}
+	}
+
+	if !createdAt.IsZero() { o.CreatedAt = timestamppb.New(createdAt) }
+	if !updatedAt.IsZero() { o.UpdatedAt = timestamppb.New(updatedAt) }
+	return &o, nil
 }
 
-func purchaseOrderSelectColumns() string {
-	return strings.Join([]string{
-		"purchase_order_id",
-		"purchase_order_number",
-		"business_id",
-		"department_id",
-		"product_id",
-		"plan_id",
-		"insurance_category",
-		"employee_count",
-		"number_of_dependents",
-		"coverage_amount",
-		"estimated_premium",
-		"status",
-		"requested_by",
-		"notes",
-		"created_at",
-		"updated_at",
-	}, ", ")
+// ─── Queries ──────────────────────────────────────────────────────────────────
+
+func (r *PortalRepository) GetPurchaseOrder(ctx context.Context, purchaseOrderID string) (*b2bv1.PurchaseOrder, error) {
+	query := fmt.Sprintf(
+		`SELECT %s FROM b2b_schema.purchase_orders WHERE purchase_order_id = $1 AND deleted_at IS NULL LIMIT 1`,
+		purchaseOrderCols,
+	)
+	row := r.db.WithContext(ctx).Raw(query, purchaseOrderID).Row()
+	return scanPurchaseOrder(row)
 }
 
 func (r *PortalRepository) ListPurchaseOrders(
@@ -57,125 +108,103 @@ func (r *PortalRepository) ListPurchaseOrders(
 	businessID string,
 	status b2bv1.PurchaseOrderStatus,
 ) ([]*b2bv1.PurchaseOrder, int64, error) {
-	q := r.db.WithContext(ctx).Table("b2b_schema.purchase_orders")
+	where := "deleted_at IS NULL"
+	args := []interface{}{}
+	idx := 1
+
 	if businessID != "" {
-		q = q.Where("business_id = ?", businessID)
+		where += fmt.Sprintf(" AND business_id = $%d", idx)
+		args = append(args, businessID)
+		idx++
 	}
-	if dbStatus := purchaseOrderStatusToDB(status); dbStatus != "" {
-		q = q.Where("status = ?", dbStatus)
+	if status != b2bv1.PurchaseOrderStatus_PURCHASE_ORDER_STATUS_UNSPECIFIED {
+		where += fmt.Sprintf(" AND status = $%d", idx)
+		args = append(args, purchaseOrderStatusStr(status))
+		idx++
 	}
 
 	var total int64
-	if err := q.Count(&total).Error; err != nil {
+	countArgs := make([]interface{}, len(args))
+	copy(countArgs, args)
+	if err := r.db.WithContext(ctx).Raw(
+		fmt.Sprintf("SELECT COUNT(*) FROM b2b_schema.purchase_orders WHERE %s", where),
+		countArgs...,
+	).Scan(&total).Error; err != nil {
 		return nil, 0, err
 	}
 
-	var rows []purchaseOrderRow
-	if err := q.
-		Select(purchaseOrderSelectColumns()).
-		Order("created_at DESC, purchase_order_number DESC").
-		Limit(pageSize).
-		Offset(offset).
-		Find(&rows).Error; err != nil {
+	query := fmt.Sprintf(
+		`SELECT %s FROM b2b_schema.purchase_orders WHERE %s ORDER BY created_at DESC LIMIT $%d OFFSET $%d`,
+		purchaseOrderCols, where, idx, idx+1,
+	)
+	args = append(args, pageSize, offset)
+
+	rows, err := r.db.WithContext(ctx).Raw(query, args...).Rows()
+	if err != nil {
 		return nil, 0, err
 	}
+	defer rows.Close()
 
-	items := make([]*b2bv1.PurchaseOrder, 0, len(rows))
-	for _, row := range rows {
-		item, err := mapPurchaseOrderRow(row)
+	var orders []*b2bv1.PurchaseOrder
+	for rows.Next() {
+		o, err := scanPurchaseOrder(rows)
 		if err != nil {
 			return nil, 0, err
 		}
-		items = append(items, item)
+		orders = append(orders, o)
 	}
-	return items, total, nil
+	return orders, total, rows.Err()
 }
 
-func (r *PortalRepository) GetPurchaseOrder(ctx context.Context, purchaseOrderID string) (*b2bv1.PurchaseOrder, error) {
-	var row purchaseOrderRow
-	err := r.db.WithContext(ctx).
-		Table("b2b_schema.purchase_orders").
-		Select(purchaseOrderSelectColumns()).
-		Where("purchase_order_id = ?", purchaseOrderID).
-		First(&row).Error
-	if err != nil {
-		return nil, err
+func (r *PortalRepository) CreatePurchaseOrder(ctx context.Context, input domain.PurchaseOrderCreateInput) (*b2bv1.PurchaseOrder, error) {
+	id := input.PurchaseOrderID
+	if id == "" {
+		id = newUUID()
 	}
-	return mapPurchaseOrderRow(row)
-}
 
-func (r *PortalRepository) CreatePurchaseOrder(
-	ctx context.Context,
-	input domain.PurchaseOrderCreateInput,
-) (*b2bv1.PurchaseOrder, error) {
-	coverageAmount, err := mustMarshalMoney(input.CoverageAmount)
+	coverageJSONBytes, err := marshalMoney(input.CoverageAmount)
 	if err != nil {
 		return nil, fmt.Errorf("marshal coverage_amount: %w", err)
 	}
-	estimatedPremium, err := mustMarshalMoney(input.EstimatedPremium)
+	premiumJSONBytes, err := marshalMoney(input.EstimatedPremium)
 	if err != nil {
 		return nil, fmt.Errorf("marshal estimated_premium: %w", err)
 	}
+	// Pass as string (not []byte) so PostgreSQL receives valid JSON text for JSONB columns.
+	coverageJSON := string(coverageJSONBytes)
+	premiumJSON := string(premiumJSONBytes)
 
-	values := map[string]any{
-		"purchase_order_id":     input.PurchaseOrderID,
-		"purchase_order_number": input.PurchaseOrderNumber,
-		"business_id":           input.BusinessID,
-		"department_id":         input.DepartmentID,
-		"product_id":            input.ProductID,
-		"plan_id":               input.PlanID,
-		"insurance_category":    input.InsuranceCategory.String(),
-		"employee_count":        input.EmployeeCount,
-		"number_of_dependents":  input.NumberOfDependents,
-		"coverage_amount":       string(coverageAmount),
-		"estimated_premium":     string(estimatedPremium),
-		"status":                purchaseOrderStatusToDB(input.Status),
-		"requested_by":          input.RequestedBy,
-		"notes":                 input.Notes,
+	if err := r.db.WithContext(ctx).Exec(`
+		INSERT INTO b2b_schema.purchase_orders (
+			purchase_order_id, purchase_order_number, business_id, department_id,
+			product_id, plan_id, insurance_category,
+			employee_count, number_of_dependents,
+			coverage_amount, estimated_premium,
+			status, requested_by, notes
+		) VALUES (
+			$1, $2, $3, $4,
+			$5, $6, $7,
+			$8, $9,
+			$10, $11,
+			$12, $13, $14
+		)`,
+		id,
+		input.PurchaseOrderNumber,
+		input.BusinessID,
+		input.DepartmentID,
+		input.ProductID,
+		input.PlanID,
+		input.InsuranceCategory.String(),
+		input.EmployeeCount,
+		input.NumberOfDependents,
+		coverageJSON,
+		premiumJSON,
+		purchaseOrderStatusStr(input.Status),
+		nullableStr(input.RequestedBy),
+		nullableStr(input.Notes),
+	).Error; err != nil {
+		return nil, fmt.Errorf("insert purchase_order: %w", err)
 	}
 
-	if err := r.db.WithContext(ctx).
-		Table("b2b_schema.purchase_orders").
-		Create(values).Error; err != nil {
-		return nil, err
-	}
-
-	return r.GetPurchaseOrder(ctx, input.PurchaseOrderID)
-}
-
-func mapPurchaseOrderRow(row purchaseOrderRow) (*b2bv1.PurchaseOrder, error) {
-	coverageAmount, err := parseMoney(row.CoverageAmount)
-	if err != nil {
-		return nil, fmt.Errorf("parse coverage_amount for purchase order %s: %w", row.PurchaseOrderID, err)
-	}
-	estimatedPremium, err := parseMoney(row.EstimatedPremium)
-	if err != nil {
-		return nil, fmt.Errorf("parse estimated_premium for purchase order %s: %w", row.PurchaseOrderID, err)
-	}
-
-	item := &b2bv1.PurchaseOrder{
-		PurchaseOrderId:     row.PurchaseOrderID,
-		PurchaseOrderNumber: row.PurchaseOrderNumber,
-		BusinessId:          row.BusinessID,
-		DepartmentId:        row.DepartmentID,
-		ProductId:           row.ProductID,
-		PlanId:              row.PlanID,
-		InsuranceCategory:   parseInsuranceType(row.InsuranceCategory),
-		EmployeeCount:       row.EmployeeCount,
-		NumberOfDependents:  row.NumberOfDependents,
-		CoverageAmount:      coverageAmount,
-		EstimatedPremium:    estimatedPremium,
-		Status:              parsePurchaseOrderStatus(row.Status),
-		RequestedBy:         row.RequestedBy,
-		Notes:               row.Notes,
-	}
-
-	if !row.CreatedAt.IsZero() {
-		item.CreatedAt = timestamppb.New(row.CreatedAt)
-	}
-	if !row.UpdatedAt.IsZero() {
-		item.UpdatedAt = timestamppb.New(row.UpdatedAt)
-	}
-
-	return item, nil
+	return r.GetPurchaseOrder(ctx, id)
 }

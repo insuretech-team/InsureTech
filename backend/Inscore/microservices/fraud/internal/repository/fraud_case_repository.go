@@ -43,14 +43,16 @@ func (r *FraudCaseRepository) Create(ctx context.Context, fraudCase *fraudv1.Fra
 		"fraud_alert_id":      fraudCase.FraudAlertId,
 		"priority":            fraudCase.Priority.String(),
 		"investigation_notes": fraudCase.InvestigationNotes,
-		"evidence":            fraudCase.Evidence,
+		"evidence":            "{}",
 		"status":              fraudCase.Status.String(),
 		"outcome":             nil,
 		"investigator_id":     nil,
 		"closed_at":           nil,
-		"audit_info":          fraudCase.AuditInfo,
 		"created_at":          now,
 		"updated_at":          now,
+	}
+	if fraudCase.Evidence != "" {
+		values["evidence"] = fraudCase.Evidence
 	}
 	if fraudCase.Outcome != fraudv1.CaseOutcome_CASE_OUTCOME_UNSPECIFIED {
 		values["outcome"] = fraudCase.Outcome.String()

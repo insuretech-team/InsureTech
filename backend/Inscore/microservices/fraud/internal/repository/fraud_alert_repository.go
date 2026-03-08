@@ -49,7 +49,6 @@ func (r *FraudAlertRepository) Create(ctx context.Context, alert *fraudv1.FraudA
 		"status":        alert.Status.String(),
 		"assigned_to":   nil,
 		"resolved_at":   nil,
-		"audit_info":    alert.AuditInfo,
 		"created_at":    now,
 		"updated_at":    now,
 	}

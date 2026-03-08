@@ -89,8 +89,8 @@ func DefaultProductionConfig() *ProductionConfig {
 		Port: 8443,
 		TLS: TLSConfig{
 			Enabled:      true,
-			CertFile:     "/etc/lpc/certs/server.crt",
-			KeyFile:      "/etc/lpc/certs/server.key",
+			CertFile:     "/etc/inscore/certs/server.crt",
+			KeyFile:      "/etc/inscore/certs/server.key",
 			AutoGenerate: false,
 		},
 		ICEServers: []ICEServerConfig{
@@ -117,7 +117,7 @@ func DefaultProductionConfig() *ProductionConfig {
 			EchoCancellation: true,
 			NoiseSuppression: true,
 			RecordingEnabled: false,
-			RecordingPath:    "/var/lpc/recordings",
+			RecordingPath:    "/var/inscore/recordings",
 		},
 		Telemedicine: TelemedicineConfig{
 			Enabled:                 true,

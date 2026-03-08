@@ -51,6 +51,32 @@ func (r *DocumentTemplateRepository) Create(ctx context.Context, tpl *documentv1
 		"{}",
 	).Scan(&createdAt, &updatedAt)
 	if err != nil {
+		if isUndefinedColumnErr(err) {
+			legacyQuery := `
+				INSERT INTO storage_schema.document_templates (
+					template_id, name, type, description, template_content, output_format,
+					variables, version, is_active, audit_info
+				) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+			`
+			if _, legacyErr := r.db.ExecContext(ctx, legacyQuery,
+				tpl.Id,
+				tpl.Name,
+				tpl.Type.String(),
+				nullString(tpl.Description),
+				tpl.TemplateContent,
+				tpl.OutputFormat.String(),
+				nullString(tpl.Variables),
+				tpl.Version,
+				tpl.IsActive,
+				"{}",
+			); legacyErr != nil {
+				return nil, fmt.Errorf("failed to create template: %w", legacyErr)
+			}
+			if tpl.AuditInfo == nil {
+				tpl.AuditInfo = &commonv1.AuditInfo{}
+			}
+			return tpl, nil
+		}
 		return nil, fmt.Errorf("failed to create template: %w", err)
 	}
 
@@ -101,6 +127,44 @@ func (r *DocumentTemplateRepository) UpsertByName(ctx context.Context, tpl *docu
 		"{}",
 	).Scan(&id, &version, &createdAt, &updatedAt)
 	if err != nil {
+		if isUndefinedColumnErr(err) {
+			legacyQuery := `
+				INSERT INTO storage_schema.document_templates (
+					template_id, name, type, description, template_content, output_format,
+					variables, version, is_active, audit_info
+				) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,$10)
+				ON CONFLICT (name)
+				DO UPDATE SET
+					type = EXCLUDED.type,
+					description = EXCLUDED.description,
+					template_content = EXCLUDED.template_content,
+					output_format = EXCLUDED.output_format,
+					variables = EXCLUDED.variables,
+					is_active = EXCLUDED.is_active,
+					version = storage_schema.document_templates.version + 1
+				RETURNING template_id, version
+			`
+			if legacyScanErr := r.db.QueryRowContext(ctx, legacyQuery,
+				tpl.Id,
+				tpl.Name,
+				tpl.Type.String(),
+				nullString(tpl.Description),
+				tpl.TemplateContent,
+				tpl.OutputFormat.String(),
+				nullString(tpl.Variables),
+				maxInt32(1, tpl.Version),
+				tpl.IsActive,
+				"{}",
+			).Scan(&id, &version); legacyScanErr != nil {
+				return nil, fmt.Errorf("failed to upsert template: %w", legacyScanErr)
+			}
+			tpl.Id = id
+			tpl.Version = version
+			if tpl.AuditInfo == nil {
+				tpl.AuditInfo = &commonv1.AuditInfo{}
+			}
+			return tpl, nil
+		}
 		return nil, fmt.Errorf("failed to upsert template: %w", err)
 	}
 
@@ -166,14 +230,35 @@ func (r *DocumentTemplateRepository) List(ctx context.Context, docType *document
 		LIMIT $%d OFFSET $%d
 	`, where, len(args)+1, len(args)+2)
 	rows, err := r.db.QueryContext(ctx, query, append(args, limit, offset)...)
+	legacyMode := false
 	if err != nil {
-		return nil, 0, fmt.Errorf("failed to list templates: %w", err)
+		if isUndefinedColumnErr(err) {
+			legacyMode = true
+			legacyQuery := fmt.Sprintf(`
+				SELECT template_id, name, type, description, template_content, output_format,
+					variables, version, is_active
+				FROM storage_schema.document_templates
+				WHERE %s
+				ORDER BY name ASC
+				LIMIT $%d OFFSET $%d
+			`, where, len(args)+1, len(args)+2)
+			rows, err = r.db.QueryContext(ctx, legacyQuery, append(args, limit, offset)...)
+		}
+		if err != nil {
+			return nil, 0, fmt.Errorf("failed to list templates: %w", err)
+		}
 	}
 	defer rows.Close()
 
 	templates := make([]*documentv1.DocumentTemplate, 0)
 	for rows.Next() {
-		tpl, scanErr := scanTemplate(rows.Scan)
+		var tpl *documentv1.DocumentTemplate
+		var scanErr error
+		if legacyMode {
+			tpl, scanErr = scanTemplateLegacy(rows.Scan)
+		} else {
+			tpl, scanErr = scanTemplate(rows.Scan)
+		}
 		if scanErr != nil {
 			return nil, 0, fmt.Errorf("failed to scan template: %w", scanErr)
 		}
@@ -211,7 +296,34 @@ func (r *DocumentTemplateRepository) Update(ctx context.Context, templateID stri
 		templateID,
 	)
 	if err != nil {
-		return fmt.Errorf("failed to update template: %w", err)
+		if isUndefinedColumnErr(err) {
+			legacyQuery := `
+				UPDATE storage_schema.document_templates
+				SET name = $1,
+					type = $2,
+					description = $3,
+					template_content = $4,
+					output_format = $5,
+					variables = $6,
+					is_active = $7,
+					version = $8
+				WHERE template_id = $9
+			`
+			res, err = r.db.ExecContext(ctx, legacyQuery,
+				tpl.Name,
+				tpl.Type.String(),
+				nullString(tpl.Description),
+				tpl.TemplateContent,
+				tpl.OutputFormat.String(),
+				nullString(tpl.Variables),
+				tpl.IsActive,
+				maxInt32(1, tpl.Version),
+				templateID,
+			)
+		}
+		if err != nil {
+			return fmt.Errorf("failed to update template: %w", err)
+		}
 	}
 	ra, err := res.RowsAffected()
 	if err != nil {
@@ -227,7 +339,13 @@ func (r *DocumentTemplateRepository) Deactivate(ctx context.Context, templateID 
 	query := `UPDATE storage_schema.document_templates SET is_active = false, updated_at = NOW() WHERE template_id = $1`
 	res, err := r.db.ExecContext(ctx, query, templateID)
 	if err != nil {
-		return fmt.Errorf("failed to deactivate template: %w", err)
+		if isUndefinedColumnErr(err) {
+			legacyQuery := `UPDATE storage_schema.document_templates SET is_active = false WHERE template_id = $1`
+			res, err = r.db.ExecContext(ctx, legacyQuery, templateID)
+		}
+		if err != nil {
+			return fmt.Errorf("failed to deactivate template: %w", err)
+		}
 	}
 	ra, err := res.RowsAffected()
 	if err != nil {
@@ -259,6 +377,21 @@ func (r *DocumentTemplateRepository) scanOne(ctx context.Context, query string, 
 	tpl, err := scanTemplate(func(dest ...any) error {
 		return r.db.QueryRowContext(ctx, query, arg).Scan(dest...)
 	})
+	if err != nil && isUndefinedColumnErr(err) {
+		legacyQuery := `
+			SELECT template_id, name, type, description, template_content, output_format,
+				variables, version, is_active
+			FROM storage_schema.document_templates
+			WHERE `
+		if strings.Contains(strings.ToLower(query), "where name = $1") {
+			legacyQuery += "name = $1"
+		} else {
+			legacyQuery += "template_id = $1"
+		}
+		tpl, err = scanTemplateLegacy(func(dest ...any) error {
+			return r.db.QueryRowContext(ctx, legacyQuery, arg).Scan(dest...)
+		})
+	}
 	if err == sql.ErrNoRows {
 		return nil, ErrTemplateNotFound
 	}
@@ -308,6 +441,47 @@ func scanTemplate(scan func(dest ...any) error) (*documentv1.DocumentTemplate, e
 	}
 
 	return &tpl, nil
+}
+
+func scanTemplateLegacy(scan func(dest ...any) error) (*documentv1.DocumentTemplate, error) {
+	var tpl documentv1.DocumentTemplate
+	var typeDB, formatDB string
+	var description, variables sql.NullString
+
+	err := scan(
+		&tpl.Id,
+		&tpl.Name,
+		&typeDB,
+		&description,
+		&tpl.TemplateContent,
+		&formatDB,
+		&variables,
+		&tpl.Version,
+		&tpl.IsActive,
+	)
+	if err != nil {
+		return nil, err
+	}
+
+	tpl.Type = parseDocumentType(typeDB)
+	tpl.OutputFormat = parseOutputFormat(formatDB)
+	if description.Valid {
+		tpl.Description = description.String
+	}
+	if variables.Valid {
+		tpl.Variables = variables.String
+	}
+	tpl.AuditInfo = &commonv1.AuditInfo{}
+	return &tpl, nil
+}
+
+func isUndefinedColumnErr(err error) bool {
+	if err == nil {
+		return false
+	}
+	msg := strings.ToLower(err.Error())
+	return strings.Contains(msg, "does not exist") ||
+		strings.Contains(msg, "sqlstate 42703")
 }
 
 func parseDocumentType(v string) documentv1.DocumentType {

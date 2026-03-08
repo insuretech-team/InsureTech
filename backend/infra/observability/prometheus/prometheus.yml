@@ -1,0 +1,180 @@
+# Prometheus Configuration for InsureTech Multi-Service Platform
+# Centralized observability configuration
+
+global:
+  scrape_interval: 15s      # Scrape metrics every 15 seconds
+  evaluation_interval: 15s  # Evaluate rules every 15 seconds
+  scrape_timeout: 10s
+  external_labels:
+    cluster: 'insuretech'
+    environment: 'development'
+
+scrape_configs:
+  # Gateway metrics (PRIMARY)
+  - job_name: 'insuretech-gateway'
+    static_configs:
+      - targets: ['gateway:8080']
+    metrics_path: '/metrics/prometheus'
+    scrape_interval: 10s
+    scrape_timeout: 5s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'gateway_.*'
+        action: keep
+
+  # Gateway admin stats
+  - job_name: 'insuretech-gateway-admin'
+    static_configs:
+      - targets: ['gateway:8080']
+    metrics_path: '/admin/stats'
+    scrape_interval: 15s
+    metric_relabel_configs:
+      - source_labels: [__name__]
+        regex: 'admin_.*'
+        action: keep
+
+  # Core Infrastructure
+  - job_name: 'tenant-service'
+    static_configs:
+      - targets: ['tenant-service:50051']
+    scrape_interval: 15s
+  - job_name: 'authn-service'
+    static_configs:
+      - targets: ['authn-service:50061']
+    scrape_interval: 15s
+  - job_name: 'authz-service'
+    static_configs:
+      - targets: ['authz-service:50071']
+    scrape_interval: 15s
+  - job_name: 'audit-service'
+    static_configs:
+      - targets: ['audit-service:50081']
+    scrape_interval: 15s
+
+  # User & Partner Management
+  - job_name: 'kyc-service'
+    static_configs:
+      - targets: ['kyc-service:50091']
+    scrape_interval: 15s
+  - job_name: 'partner-service'
+    static_configs:
+      - targets: ['partner-service:50101']
+    scrape_interval: 15s
+  - job_name: 'beneficiary-service'
+    static_configs:
+      - targets: ['beneficiary-service:50111']
+    scrape_interval: 15s
+  - job_name: 'b2b-service'
+    static_configs:
+      - targets: ['b2b-service:50113']
+    scrape_interval: 15s
+
+  # Commerce & Production
+  - job_name: 'product-service'
+    static_configs:
+      - targets: ['product-service:50121']
+    scrape_interval: 15s
+  - job_name: 'quote-service'
+    static_configs:
+      - targets: ['quote-service:50131']
+    scrape_interval: 15s
+  - job_name: 'order-service'
+    static_configs:
+      - targets: ['order-service:50141']
+    scrape_interval: 15s
+  - job_name: 'commission-service'
+    static_configs:
+      - targets: ['commission-service:50151']
+    scrape_interval: 15s
+
+  # Policy Lifecycle
+  - job_name: 'policy-service'
+    static_configs:
+      - targets: ['policy-service:50161']
+    scrape_interval: 15s
+  - job_name: 'underwriting-service'
+    static_configs:
+      - targets: ['underwriting-service:50171']
+    scrape_interval: 15s
+  - job_name: 'workflow-engine'
+    static_configs:
+      - targets: ['workflow-engine:50181']
+    scrape_interval: 15s
+
+  # Financials
+  - job_name: 'payment-service'
+    static_configs:
+      - targets: ['payment-service:50191']
+    scrape_interval: 15s
+  - job_name: 'ledger-service'
+    static_configs:
+      - targets: ['ledger-service:50201']
+    scrape_interval: 15s
+
+  # Claims & Fraud
+  - job_name: 'claim-service'
+    static_configs:
+      - targets: ['claim-service:50211']
+    scrape_interval: 15s
+  - job_name: 'fraud-engine'
+    static_configs:
+      - targets: ['fraud-engine:50221']
+    scrape_interval: 15s
+
+  # Communications & Media
+  - job_name: 'notification-service'
+    static_configs:
+      - targets: ['notification-service:50231']
+    scrape_interval: 15s
+  - job_name: 'support-service'
+    static_configs:
+      - targets: ['support-service:50241']
+    scrape_interval: 15s
+  - job_name: 'webrtc-service'
+    static_configs:
+      - targets: ['webrtc-service:50251']
+    scrape_interval: 15s
+  - job_name: 'media-processor'
+    static_configs:
+      - targets: ['media-processor:50261']
+    scrape_interval: 15s
+  - job_name: 'ocr-service'
+    static_configs:
+      - targets: ['ocr-service:50271']
+    scrape_interval: 15s
+
+  # Documents & Storage
+  - job_name: 'docgen-service'
+    static_configs:
+      - targets: ['docgen-service:50281']
+    scrape_interval: 15s
+  - job_name: 'storage-service'
+    static_configs:
+      - targets: ['storage-service:50291']
+    scrape_interval: 15s
+
+  # Intelligence
+  - job_name: 'iot-broker'
+    static_configs:
+      - targets: ['iot-broker:50301']
+    scrape_interval: 15s
+  - job_name: 'analytics-engine'
+    static_configs:
+      - targets: ['analytics-engine:50311']
+    scrape_interval: 15s
+  - job_name: 'ai-assistant'
+    static_configs:
+      - targets: ['ai-assistant:50321']
+    scrape_interval: 15s
+
+  # Jaeger metrics
+  - job_name: 'jaeger'
+    static_configs:
+      - targets: ['jaeger:14269']
+    scrape_interval: 15s
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+    scrape_interval: 15s

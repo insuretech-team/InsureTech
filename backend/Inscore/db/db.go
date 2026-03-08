@@ -42,7 +42,12 @@ func InitDB(dsn string) error {
 
 // initLegacyDB initializes a single database connection (legacy mode)
 func initLegacyDB(dsn string) error {
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	// PreferSimpleProtocol disables prepared-statement caching in the pgx driver,
+	// preventing "cached plan must not change result type" (SQLSTATE 0A000) errors.
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent), // Disable SQL query logging to prevent sensitive data exposure
 	})
 	if err != nil {
@@ -79,7 +84,7 @@ func initLegacyDB(dsn string) error {
 
 	// Run SQL migrations/seeders frominsuretech folders recursively
 	// (migrations now handled by ops package and dbmanager CLI)
-	// if err := runSQLMigrationsFromDir(sqlDB, "lpc/db/migrations"); err != nil {
+	// if err := runSQLMigrationsFromDir(sqlDB, "inscore/db/migrations"); err != nil {
 	// 	appLogger.Fatalf("Failed to run SQL migrations: %v", err)
 	// 	return err
 	// }
@@ -91,7 +96,7 @@ func initLegacyDB(dsn string) error {
 	// 	return err
 	// }
 
-	// if err := runSQLSeedersFromDir(sqlDB, "lpc/db/seeders"); err != nil {
+	// if err := runSQLSeedersFromDir(sqlDB, "inscore/db/seeders"); err != nil {
 	// 	appLogger.Warnf("Failed to run seeders: %v", err)
 	// }
 

@@ -2,6 +2,7 @@ package events
 
 import (
 	"context"
+	"errors"
 	"testing"
 	"time"
 
@@ -24,6 +25,25 @@ func (m *mockProducer) Produce(ctx context.Context, topic string, key string, ms
 }
 
 func (m *mockProducer) Close() error { return nil }
+
+type blockingProducer struct{}
+
+func (b *blockingProducer) Produce(ctx context.Context, topic string, key string, msg interface{}) error {
+	<-ctx.Done()
+	return ctx.Err()
+}
+
+func (b *blockingProducer) Close() error { return nil }
+
+func TestPublisher_TypedNilProducer_DropsEvent(t *testing.T) {
+	var nilProducer *mockProducer
+	p := NewPublisher(nilProducer)
+
+	require.NotPanics(t, func() {
+		err := p.PublishUserLoggedIn(context.Background(), "u1", "s1", "SERVER_SIDE", "127.0.0.1", "WEB", "ua")
+		require.NoError(t, err)
+	})
+}
 
 func TestPublisher_AllMethods_Produce(t *testing.T) {
 	ctx := context.Background()
@@ -55,4 +75,16 @@ func TestPublisher_AllMethods_Produce(t *testing.T) {
 	// Spot-check topics
 	require.Equal(t, TopicUserRegistered, mp.calls[0].topic)
 	require.Equal(t, "u1", mp.calls[0].key)
+}
+
+func TestPublisher_Publish_BoundsSlowProducer(t *testing.T) {
+	p := NewPublisher(&blockingProducer{})
+
+	start := time.Now()
+	err := p.publish(context.Background(), TopicUserLoggedIn, "u1", map[string]string{"ok": "true"})
+	elapsed := time.Since(start)
+
+	require.Error(t, err)
+	require.True(t, errors.Is(err, context.DeadlineExceeded))
+	require.Less(t, elapsed, 2*time.Second)
 }

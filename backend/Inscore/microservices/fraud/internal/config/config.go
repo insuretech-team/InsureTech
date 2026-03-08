@@ -44,7 +44,7 @@ func Load() (*Config, error) {
 			DLQTopic:       getEnv("KAFKA_FRAUD_DLQ_TOPIC", "fraud.dlq"),
 		},
 		Integration: IntegrationConfig{
-			AuthZAddress: getEnv("AUTHZ_SERVICE_ADDRESS", "localhost:50070"),
+			AuthZAddress: getEnv("AUTHZ_GRPC_ADDR", getEnv("AUTHZ_SERVICE_ADDRESS", "")),
 		},
 	}
 

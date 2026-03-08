@@ -25,6 +25,7 @@ import (
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/notification/entity/v1"
+	_ "github.com/newage-saint/insuretech/gen/go/insuretech/orders/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/partner/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/payment/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1"

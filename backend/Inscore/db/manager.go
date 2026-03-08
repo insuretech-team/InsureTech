@@ -234,7 +234,13 @@ func (dm *DatabaseManager) connectPrimary() error {
 
 	dbOpLogger := appLogger.GetDatabaseOperationLogger()
 	dsn := dm.config.Database.Primary.GetConnectionDSN(true) // Use pool for application traffic
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	// PreferSimpleProtocol disables prepared-statement caching in the pgx driver,
+	// preventing "cached plan must not change result type" (SQLSTATE 0A000) errors
+	// that occur after schema changes when using connection poolers or gorm-adapter.
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
@@ -276,7 +282,12 @@ func (dm *DatabaseManager) connectBackup() error {
 
 	dbOpLogger := appLogger.GetDatabaseOperationLogger()
 	dsn := dm.config.Database.Backup.BuildDSN()
-	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{
+	// PreferSimpleProtocol disables prepared-statement caching in the pgx driver,
+	// preventing "cached plan must not change result type" (SQLSTATE 0A000) errors.
+	db, err := gorm.Open(postgres.New(postgres.Config{
+		DSN:                  dsn,
+		PreferSimpleProtocol: true,
+	}), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Silent),
 	})
 	if err != nil {
@@ -540,11 +551,11 @@ func (dm *DatabaseManager) runMigrationsOnBackup() error {
 	// 	appLogger.Warnf("Failed to enable uuid-ossp extension: %v", err)
 	// }
 	// // Run SQL migrations
-	// if err := runSQLMigrationsFromRoots(sqlDB, "lpc/db/migrations", "gen/go/lifepluscore/migrations"); err != nil {
+	// if err := runSQLMigrationsFromRoots(sqlDB, "inscore/db/migrations", "gen/go/lifepluscore/migrations"); err != nil {
 	// 	return fmt.Errorf("failed to run migrations on backup: %v", err)
 	// }
 	// // Run SQL seeders
-	// if err := runSQLSeedersFromRoots(sqlDB, "lpc/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
+	// if err := runSQLSeedersFromRoots(sqlDB, "inscore/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
 	// 	appLogger.Warnf("Failed to run seeders on backup: %v", err)
 	// }
 
@@ -574,8 +585,8 @@ func (dm *DatabaseManager) runSeedersOnBackup() error {
 	// }
 
 	// Run seeders using ops package (moved from db package)
-	// Seeder functions are now in lpc/db/ops and called via dbmanager CLI
-	// if err := runSQLSeedersFromRoots(sqlDB, "lpc/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
+	// Seeder functions are now in inscore/db/ops and called via dbmanager CLI
+	// if err := runSQLSeedersFromRoots(sqlDB, "inscore/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
 	// 	return fmt.Errorf("failed to run seeders on backup: %v", err)
 	// }
 
@@ -845,12 +856,12 @@ func runMigrationsAndSeeders(db *gorm.DB) error {
 	// }
 
 	// Run SQL migrations (multi-root) - moved to ops package
-	// if err := runSQLMigrationsFromRoots(sqlDB, "lpc/db/migrations", "gen/go/lifepluscore/migrations"); err != nil {
+	// if err := runSQLMigrationsFromRoots(sqlDB, "inscore/db/migrations", "gen/go/lifepluscore/migrations"); err != nil {
 	// 	return fmt.Errorf("failed to run SQL migrations: %v", err)
 	// }
 
 	// Run SQL seeders (multi-root) - moved to ops package
-	// if err := runSQLSeedersFromRoots(sqlDB, "lpc/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
+	// if err := runSQLSeedersFromRoots(sqlDB, "inscore/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
 	// 	appLogger.WithError(err).Warn("Failed to run SQL seeders")
 	// }
 

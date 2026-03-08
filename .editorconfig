@@ -1,0 +1,57 @@
+root = true
+
+# Default: LF line endings for everything
+[*]
+end_of_line = lf
+charset = utf-8
+trim_trailing_whitespace = true
+insert_final_newline = true
+
+# Shell scripts
+[*.sh]
+end_of_line = lf
+indent_style = space
+indent_size = 4
+
+# Go
+[*.go]
+end_of_line = lf
+indent_style = tab
+
+# TypeScript / JavaScript
+[*.{ts,tsx,js,jsx}]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# YAML / JSON
+[*.{yml,yaml,json}]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# Proto
+[*.proto]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# SQL
+[*.sql]
+end_of_line = lf
+indent_style = space
+indent_size = 2
+
+# Env files — MUST be LF so bash can source them in WSL/Linux
+[.env*]
+end_of_line = lf
+trim_trailing_whitespace = false
+
+# Markdown
+[*.md]
+end_of_line = lf
+trim_trailing_whitespace = false
+
+# Windows-only files (keep CRLF)
+[*.{bat,cmd,ps1}]
+end_of_line = crlf

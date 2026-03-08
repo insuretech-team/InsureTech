@@ -6,7 +6,6 @@ import (
 	"time"
 
 	"github.com/google/uuid"
-	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	fraudv1 "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/entity/v1"
 	"gorm.io/gorm"
 )
@@ -32,9 +31,7 @@ func (r *FraudRuleRepository) Create(ctx context.Context, rule *fraudv1.FraudRul
 	if !rule.IsActive {
 		rule.IsActive = true
 	}
-	if rule.AuditInfo == nil {
-		rule.AuditInfo = &commonv1.AuditInfo{}
-	}
+
 
 	now := time.Now().UTC()
 	values := map[string]any{
@@ -46,7 +43,6 @@ func (r *FraudRuleRepository) Create(ctx context.Context, rule *fraudv1.FraudRul
 		"risk_level":    rule.RiskLevel.String(),
 		"score_weight":  rule.ScoreWeight,
 		"is_active":     rule.IsActive,
-		"audit_info":    rule.AuditInfo,
 		"created_at":    now,
 		"updated_at":    now,
 	}

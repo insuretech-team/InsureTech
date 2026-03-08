@@ -77,15 +77,15 @@ Server configuration via `ServerConfig`:
 
 ```bash
 # Default port 50052
-go run lpc/microservices/conference/main.go
+go run inscore/microservices/conference/main.go
 
 # Custom port
-CONFERENCE_PORT=50053 go run lpc/microservices/conference/main.go
+CONFERENCE_PORT=50053 go run inscore/microservices/conference/main.go
 ```
 
 ### Database Configuration
 
-The service requires a PostgreSQL database. Configure in `lpc/configs/database.yaml`:
+The service requires a PostgreSQL database. Configure in `inscore/configs/database.yaml`:
 
 ```yaml
 database:
@@ -243,7 +243,7 @@ The service uses structured logging:
 ### Running Tests
 
 ```bash
-cd lpc/pkg/webrtc
+cd inscore/pkg/webrtc
 go test -v ./...
 ```
 

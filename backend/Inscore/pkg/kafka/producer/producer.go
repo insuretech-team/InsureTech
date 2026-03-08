@@ -9,6 +9,7 @@ import (
 	"time"
 
 	"github.com/IBM/sarama"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/brokerutil"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -25,6 +26,15 @@ type EventProducer struct {
 // NewEventProducer creates a new Kafka sync producer connected to the given brokers.
 // clientID is used for Kafka client identification (e.g. "authn-service").
 func NewEventProducer(brokers []string, topic string, clientID string) (*EventProducer, error) {
+	effectiveBrokers := brokers
+	reachable, unreachable := brokerutil.ReachableBrokers(brokers, time.Second)
+	if len(reachable) > 0 {
+		effectiveBrokers = reachable
+	}
+	if len(unreachable) > 0 {
+		appLogger.Warnf("Kafka producer skipping unreachable brokers: %v", unreachable)
+	}
+
 	cfg := sarama.NewConfig()
 	cfg.ClientID = clientID
 	cfg.Version = sarama.V2_8_0_0
@@ -53,16 +63,16 @@ func NewEventProducer(brokers []string, topic string, clientID string) (*EventPr
 	// Timeout
 	cfg.Producer.Timeout = 10 * time.Second
 
-	syncProducer, err := sarama.NewSyncProducer(brokers, cfg)
+	syncProducer, err := sarama.NewSyncProducer(effectiveBrokers, cfg)
 	if err != nil {
-		return nil, fmt.Errorf("failed to create kafka sync producer (brokers=%v): %w", brokers, err)
+		return nil, fmt.Errorf("failed to create kafka sync producer (brokers=%v): %w", effectiveBrokers, err)
 	}
 
-	appLogger.Infof("Kafka producer connected to brokers: %v (clientID: %s)", brokers, clientID)
+	appLogger.Infof("Kafka producer connected to brokers: %v (clientID: %s)", effectiveBrokers, clientID)
 
 	return &EventProducer{
 		producer: syncProducer,
-		brokers:  brokers,
+		brokers:  effectiveBrokers,
 		clientID: clientID,
 	}, nil
 }

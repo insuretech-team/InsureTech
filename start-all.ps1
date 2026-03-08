@@ -118,31 +118,31 @@ function Write-Ok($msg)     { Write-Host "  ✓ $msg" -ForegroundColor Green }
 function Write-Info($msg)   { Write-Host "  · $msg" -ForegroundColor Gray }
 function Write-Warn($msg)   { Write-Host "  ⚠ $msg" -ForegroundColor Yellow }
 
-function Stop-ServicePortIfBusy {
-    param($Svc)
+function Stop-PortIfBusy {
+    param([int]$Port, [string]$Label)
 
-    if ($Svc.GrpcPort -le 0) {
-        return
-    }
+    if ($Port -le 0) { return }
 
-    $listeners = Get-NetTCPConnection -LocalPort $Svc.GrpcPort -State Listen -ErrorAction SilentlyContinue
-    if (-not $listeners) {
-        return
-    }
+    $listeners = Get-NetTCPConnection -LocalPort $Port -State Listen -ErrorAction SilentlyContinue
+    if (-not $listeners) { return }
 
     foreach ($listener in $listeners) {
         $ownerPid = $listener.OwningProcess
-        if (-not $ownerPid) {
-            continue
-        }
+        if (-not $ownerPid) { continue }
         try {
             $proc = Get-Process -Id $ownerPid -ErrorAction Stop
             Stop-Process -Id $ownerPid -Force -ErrorAction Stop
-            Write-Warn "[$($Svc.Name)] Port :$($Svc.GrpcPort) already in use by PID $ownerPid ($($proc.ProcessName)). Killed stale process."
+            Write-Warn "[$Label] Port :$Port already in use by PID $ownerPid ($($proc.ProcessName)). Killed stale process."
         } catch {
-            Write-Warn "[$($Svc.Name)] Port :$($Svc.GrpcPort) in use by PID $ownerPid but could not stop process."
+            Write-Warn "[$Label] Port :$Port in use by PID $ownerPid but could not stop process."
         }
     }
+}
+
+function Stop-ServicePortIfBusy {
+    param($Svc)
+    Stop-PortIfBusy -Port $Svc.GrpcPort -Label $Svc.Name
+    Stop-PortIfBusy -Port $Svc.HttpPort -Label $Svc.Name
 }
 
 function Convert-ToWslPath {
@@ -163,43 +163,55 @@ function Escape-ForBashSingleQuote {
     return $Value -replace "'", "'""'""'"
 }
 
+function New-ServiceLogFile {
+    param([string]$ServiceName)
+
+    $stamp = Get-Date -Format "yyyyMMdd-HHmmss-fff"
+    $logFile = Join-Path $LogDir "$ServiceName-$stamp.log"
+    $latestPointer = Join-Path $LogDir "$ServiceName.latest.log.txt"
+
+    Set-Content -Path $latestPointer -Value $logFile -Encoding ASCII
+    return $logFile
+}
+
 # ── Service catalogue ─────────────────────────────────────────────────────────
 # Kind = REAL → own pwsh window with live logs
 # Kind = STUB → silent background job (health-only)
 $AllServices = @(
     # ── Infrastructure ────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="storage";      RelPath="backend/inscore/cmd/storage/main.go";      GrpcPort=50290; Kind="REAL" }
-    [PSCustomObject]@{ Name="tenant";       RelPath="backend/inscore/cmd/tenant/main.go";       GrpcPort=50050; Kind="STUB" }
+    [PSCustomObject]@{ Name="storage";      RelPath="backend/inscore/cmd/storage/main.go";      GrpcPort=50290; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="tenant";       RelPath="backend/inscore/cmd/tenant/main.go";       GrpcPort=50050; HttpPort=0;    Kind="STUB" }
 
     # ── Auth layer ────────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="authn";        RelPath="backend/inscore/cmd/authn/main.go";        GrpcPort=50060; Kind="REAL" }
-    [PSCustomObject]@{ Name="authz";        RelPath="backend/inscore/cmd/authz/main.go";        GrpcPort=50070; Kind="REAL" }
+    [PSCustomObject]@{ Name="authn";        RelPath="backend/inscore/microservices/authn/cmd/server/main.go";  GrpcPort=50060; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="authz";        RelPath="backend/inscore/microservices/authz/cmd/server/main.go";  GrpcPort=50070; HttpPort=0;    Kind="REAL" }
 
     # ── Core services ─────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="fraud";        RelPath="backend/inscore/cmd/fraud/main.go";        GrpcPort=50220; Kind="REAL" }
-    [PSCustomObject]@{ Name="partner";      RelPath="backend/inscore/cmd/partner/main.go";      GrpcPort=50100; Kind="REAL" }
-    [PSCustomObject]@{ Name="kyc";          RelPath="backend/inscore/cmd/kyc/main.go";          GrpcPort=50090; Kind="STUB" }
-    [PSCustomObject]@{ Name="beneficiary";  RelPath="backend/inscore/cmd/beneficiary/main.go";  GrpcPort=50110; Kind="STUB" }
-    [PSCustomObject]@{ Name="b2b";          RelPath="backend/inscore/cmd/b2b/main.go";          GrpcPort=50112; Kind="REAL" }
-    [PSCustomObject]@{ Name="audit";        RelPath="backend/inscore/cmd/audit/main.go";        GrpcPort=50080; Kind="STUB" }
-    [PSCustomObject]@{ Name="workflow";     RelPath="backend/inscore/cmd/workflow/main.go";     GrpcPort=50180; Kind="STUB" }
+    [PSCustomObject]@{ Name="fraud";        RelPath="backend/inscore/cmd/fraud/main.go";        GrpcPort=50220; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="partner";      RelPath="backend/inscore/cmd/partner/main.go";      GrpcPort=50100; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="kyc";          RelPath="backend/inscore/cmd/kyc/main.go";          GrpcPort=50090; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="beneficiary";  RelPath="backend/inscore/cmd/beneficiary/main.go";  GrpcPort=50110; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="b2b";          RelPath="backend/inscore/cmd/b2b/main.go";          GrpcPort=50112; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="audit";        RelPath="backend/inscore/cmd/audit/main.go";        GrpcPort=50080; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="workflow";     RelPath="backend/inscore/cmd/workflow/main.go";     GrpcPort=50180; HttpPort=0;    Kind="STUB" }
 
     # ── Comms / Media ─────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="notification"; RelPath="backend/inscore/cmd/notification/main.go"; GrpcPort=50230; Kind="STUB" }
-    [PSCustomObject]@{ Name="support";      RelPath="backend/inscore/cmd/support/main.go";      GrpcPort=50240; Kind="STUB" }
-    [PSCustomObject]@{ Name="media";        RelPath="backend/inscore/cmd/media/main.go";        GrpcPort=50260; Kind="REAL" }
-    [PSCustomObject]@{ Name="docgen";       RelPath="backend/inscore/cmd/docgen/main.go";       GrpcPort=50280; Kind="REAL" }
-    [PSCustomObject]@{ Name="ocr";          RelPath="backend/inscore/cmd/ocr/main.go";          GrpcPort=50270; Kind="STUB" }
-    [PSCustomObject]@{ Name="webrtc-server";RelPath="backend/inscore/cmd/webrtc-server/main.go";GrpcPort=50250; Kind="REAL" }
-    [PSCustomObject]@{ Name="conference";   RelPath="backend/inscore/cmd/conference/main.go";   GrpcPort=0;     Kind="REAL" }
+    [PSCustomObject]@{ Name="notification"; RelPath="backend/inscore/cmd/notification/main.go"; GrpcPort=50230; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="support";      RelPath="backend/inscore/cmd/support/main.go";      GrpcPort=50240; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="media";        RelPath="backend/inscore/cmd/media/main.go";        GrpcPort=50260; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="docgen";       RelPath="backend/inscore/cmd/docgen/main.go";       GrpcPort=50280; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="ocr";          RelPath="backend/inscore/cmd/ocr/main.go";          GrpcPort=50270; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="webrtc-server";RelPath="backend/inscore/cmd/webrtc-server/main.go";GrpcPort=50250; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="conference";   RelPath="backend/inscore/cmd/conference/main.go";   GrpcPort=0;     HttpPort=0;    Kind="REAL" }
 
     # ── Intelligence ──────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="iot";          RelPath="backend/inscore/cmd/iot/main.go";          GrpcPort=50300; Kind="STUB" }
-    [PSCustomObject]@{ Name="analytics";    RelPath="backend/inscore/cmd/analytics/main.go";    GrpcPort=50310; Kind="STUB" }
-    [PSCustomObject]@{ Name="ai";           RelPath="backend/inscore/cmd/ai/main.go";           GrpcPort=50320; Kind="STUB" }
+    [PSCustomObject]@{ Name="iot";          RelPath="backend/inscore/cmd/iot/main.go";          GrpcPort=50300; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="analytics";    RelPath="backend/inscore/cmd/analytics/main.go";    GrpcPort=50310; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="ai";           RelPath="backend/inscore/cmd/ai/main.go";           GrpcPort=50320; HttpPort=0;    Kind="STUB" }
 
     # ── Gateway (last — depends on all upstream services) ─────────────────────
-    [PSCustomObject]@{ Name="gateway";      RelPath="backend/inscore/cmd/gateway/main.go";      GrpcPort=0;     Kind="REAL" }
+    # GrpcPort=0 (no gRPC), HttpPort=8080 (HTTP entry-point)
+    [PSCustomObject]@{ Name="gateway";      RelPath="backend/inscore/cmd/gateway/main.go";      GrpcPort=0;     HttpPort=8080; Kind="REAL" }
 )
 
 # ── Filter by -Services if provided ──────────────────────────────────────────
@@ -223,6 +235,7 @@ if ($Migrate) {
 # ── Track PIDs of spawned windows (for shutdown) ──────────────────────────────
 $WindowPIDs = [System.Collections.Generic.List[int]]::new()
 $StubJobs   = [System.Collections.Generic.List[object]]::new()
+$ServiceLogFiles = @{}
 
 # ─────────────────────────────────────────────────────────────────────────────
 # Build-ServiceBinary
@@ -261,13 +274,10 @@ function Start-RealService {
 
     $mainGoWin = Join-Path $ProjectRoot ($Svc.RelPath -replace "/", "\")
     $exePath = Build-ServiceBinary -Svc $Svc
-    $logFile = Join-Path $LogDir "$($Svc.Name).log"
+    $logFile = New-ServiceLogFile -ServiceName $Svc.Name
     $portInfo = if ($Svc.GrpcPort -gt 0) { " :$($Svc.GrpcPort)" } else { "" }
     $title   = "inscore | $($Svc.Name)$portInfo"
-    $projectRootWsl = Convert-ToWslPath -WindowsPath $ProjectRoot
-    $mainGoWsl = Convert-ToWslPath -WindowsPath $mainGoWin
-    $projectRootWslEscaped = Escape-ForBashSingleQuote -Value $projectRootWsl
-    $mainGoWslEscaped = Escape-ForBashSingleQuote -Value $mainGoWsl
+    $ServiceLogFiles[$Svc.Name] = $logFile
 
     # The inner script that runs inside the new window:
     #   1. Sets the window title
@@ -276,6 +286,7 @@ function Start-RealService {
     #   4. pauses on exit so you can read any crash output
     $innerScript = @"
 `$host.UI.RawUI.WindowTitle = '$title'
+$EnvOverrideScript
 Set-Location '$ProjectRoot'
 Write-Host '[$($Svc.Name)] Starting — log: $logFile' -ForegroundColor Cyan
 Write-Host '[$($Svc.Name)] Executable: $exePath' -ForegroundColor DarkGray
@@ -285,8 +296,12 @@ try {
 } catch {
     `$errText = `$_.Exception.Message
     if (`$errText -match 'Application Control policy has blocked this file') {
-        Write-Host '[$($Svc.Name)] Windows execution blocked by policy. Falling back to WSL go run...' -ForegroundColor Yellow
-        wsl -e bash -lc "cd '$projectRootWslEscaped' && go run '$mainGoWslEscaped'" 2>&1 | Tee-Object -FilePath '$logFile' -Append
+        Write-Host '[$($Svc.Name)] Windows execution blocked by policy. Falling back to PowerShell go run...' -ForegroundColor Yellow
+        # Run via go run directly in PowerShell (NOT WSL) so Windows network stack is used
+        # and remote DB connections (Neon, DO) work correctly.
+        # Stay in ProjectRoot so relative paths (e.g. ./backend/inscore/secrets/) resolve correctly.
+        Set-Location '$ProjectRoot'
+        & go run (Split-Path '$mainGoWin' -Parent) 2>&1 | Tee-Object -FilePath '$logFile' -Append
     } else {
         throw
     }
@@ -318,12 +333,15 @@ function Start-StubService {
 
     $mainGoWin = Join-Path $ProjectRoot ($Svc.RelPath -replace "/", "\")
     $exePath = Build-ServiceBinary -Svc $Svc
-    $logFile = Join-Path $LogDir "$($Svc.Name).log"
-    $projectRootWsl = Convert-ToWslPath -WindowsPath $ProjectRoot
-    $mainGoWsl = Convert-ToWslPath -WindowsPath $mainGoWin
+    $logFile = New-ServiceLogFile -ServiceName $Svc.Name
+    $ServiceLogFiles[$Svc.Name] = $logFile
 
     $job = Start-Job -Name $Svc.Name -ScriptBlock {
-        param($root, $exe, $log, $rootWsl, $mainWsl, $svcName)
+        param($root, $exe, $log, $mainWin, $svcName, $envScript, $GrpcPort, $HttpPort)
+        $env:GRPC_PORT = $GrpcPort
+        $env:HTTP_PORT = $HttpPort
+        # Apply env overrides (PGHOST, GODEBUG etc) in this job's process
+        if ($envScript) { Invoke-Expression $envScript }
         Set-Location $root
         $ErrorActionPreference = "Stop"
         try {
@@ -331,13 +349,16 @@ function Start-StubService {
         } catch {
             $errText = $_.Exception.Message
             if ($errText -match 'Application Control policy has blocked this file') {
-                "[$svcName] Windows execution blocked by policy. Falling back to WSL go run..." | Out-File -FilePath $log -Append
-                wsl -e bash -lc "cd '$rootWsl' && go run '$mainWsl'" *>&1 | Out-File -FilePath $log -Append
+                "[$svcName] Windows execution blocked by policy. Falling back to PowerShell go run..." | Out-File -FilePath $log -Append
+                # Run via go run in PowerShell (NOT WSL) so Windows network stack reaches remote DBs
+                # Stay in $root (project root) so relative paths resolve correctly.
+                Set-Location $root
+                & go run (Split-Path $mainWin -Parent) *>&1 | Out-File -FilePath $log -Append
             } else {
                 throw
             }
         }
-    } -ArgumentList $ProjectRoot, $exePath, $logFile, $projectRootWsl, $mainGoWsl, $Svc.Name
+    } -ArgumentList $ProjectRoot, $exePath, $logFile, $mainGoWin, $Svc.Name, $EnvOverrideScript, $Svc.GrpcPort, $Svc.HttpPort
 
     Write-Info "[STUB] $($Svc.Name) :$($Svc.GrpcPort)  →  background job #$($job.Id)  log: $logFile"
     $StubJobs.Add($job)
@@ -355,14 +376,28 @@ Write-Info   "STUB services → silent background job (health-only)"
 Write-Host   ""
 
 # ── Print port map ────────────────────────────────────────────────────────────
-Write-Header "Port map  (configs/services.yaml)"
+Write-Header "Port map"
 foreach ($svc in $AllServices) {
-    if ($svc.GrpcPort -gt 0) {
-        $color = if ($svc.Kind -eq "REAL") { "Green" } else { "DarkGray" }
-        Write-Host ("  {0,-16} gRPC :{1}  [{2}]" -f $svc.Name, $svc.GrpcPort, $svc.Kind) -ForegroundColor $color
+    $color = if ($svc.Kind -eq "REAL") { "Green" } else { "DarkGray" }
+    $ports = @()
+    if ($svc.GrpcPort -gt 0) { $ports += "gRPC :$($svc.GrpcPort)" }
+    if ($svc.HttpPort -gt 0) { $ports += "HTTP :$($svc.HttpPort)" }
+    if ($ports.Count -gt 0) {
+        Write-Host ("  {0,-16} {1}  [{2}]" -f $svc.Name, ($ports -join "  "), $svc.Kind) -ForegroundColor $color
     }
 }
 Write-Host ""
+
+# ── Local dev network fixes ───────────────────────────────────────────────────
+# Force Go's pure-Go DNS resolver — avoids IPv6 AAAA lookups that fail on
+# laptops without IPv6 routing. preferIPv4=1 prefers A records over AAAA.
+$env:GODEBUG = "netdns=go,preferIPv4=1"
+
+# Embed GODEBUG into child pwsh windows and stub jobs so they inherit it.
+# DO is the primary DB — no PG overrides needed; .env is loaded by each service.
+$EnvOverrideScript = @"
+`$env:GODEBUG = 'netdns=go,preferIPv4=1'
+"@
 
 # ── Launch all services ───────────────────────────────────────────────────────
 Write-Header "Launching services..."
@@ -399,7 +434,8 @@ try {
     while ($true) {
         foreach ($job in @($StubJobs)) {
             if ($job.State -eq "Failed" -or $job.State -eq "Stopped") {
-                Write-Warn "Stub '$($job.Name)' exited (state: $($job.State)) — check logs\services\$($job.Name).log"
+                $logHint = if ($ServiceLogFiles.ContainsKey($job.Name)) { $ServiceLogFiles[$job.Name] } else { "logs\\services" }
+                Write-Warn "Stub '$($job.Name)' exited (state: $($job.State)) — check $logHint"
                 $StubJobs.Remove($job) | Out-Null
             }
         }

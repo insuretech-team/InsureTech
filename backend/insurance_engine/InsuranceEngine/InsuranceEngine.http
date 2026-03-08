@@ -1,6 +1,0 @@
-@InsuranceEngine_HostAddress = http://localhost:5101
-
-GET {{InsuranceEngine_HostAddress}}/weatherforecast/
-Accept: application/json
-
-###

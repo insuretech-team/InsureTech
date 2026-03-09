@@ -34,7 +34,6 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             MaxSumInsured = request.MaxSumInsured,
             MinAge = request.MinAge,
             MaxAge = request.MaxAge,
-            InsurerId = request.InsurerId,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -46,3 +45,4 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
         return id;
     }
 }
+

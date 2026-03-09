@@ -54,5 +54,6 @@ public class ProductRepository : IProductRepository
         return await dbQuery.ToListAsync();
     }
     
-    public async Task<List<Insurer>> ListInsurersAsync() => await _context.Insurers.ToListAsync();
+    
 }
+

@@ -25,9 +25,6 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddDbContext<ProductsDbContext>(options =>
     options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention());
 
-builder.Services.AddDbContext<InsurersDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("DefaultConnection")).UseSnakeCaseNamingConvention());
-
 // HealthChecks
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
@@ -42,7 +39,7 @@ builder.Services.AddSingleton<IEventBus, KafkaEventBus>();
 // MediatR
 builder.Services.AddMediatR(cfg => {
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Products.Application.DTOs.ProductDto).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Products.Application.Features.Queries.ListInsurers.ListInsurersQuery).Assembly);
+    
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
@@ -76,6 +73,7 @@ await DbInitializer.Initialize(app.Services);
 app.MapGrpcService<InsuranceEngine.Products.GrpcServices.InsuranceGrpcService>();
 
 app.Run();
+
 
 
 

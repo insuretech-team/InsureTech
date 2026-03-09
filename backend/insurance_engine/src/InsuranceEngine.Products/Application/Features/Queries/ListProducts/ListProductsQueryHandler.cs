@@ -22,7 +22,8 @@ public class ListProductsQueryHandler : IRequestHandler<ListProductsQuery, List<
         var products = await _productRepository.ListAsync();
         return products.Select(p => new ProductDto(
             p.Id, p.ProductCode, p.ProductName, p.ProductNameBn, p.Description, 
-            p.Category, p.Status, p.MinSumInsured, p.MaxSumInsured, p.MinAge, p.MaxAge, p.InsurerId
+            p.Category, p.Status, p.MinSumInsured, p.MaxSumInsured, p.MinAge, p.MaxAge
         )).ToList();
     }
 }
+

@@ -21,8 +21,6 @@ public class Product
     public int MinTenureMonths { get; set; }
     public int MaxTenureMonths { get; set; }
     
-    public Guid InsurerId { get; set; }
-    
     
     public List<ProductPlan> Plans { get; set; } = new();
     public List<RiskAssessmentQuestion> Questions { get; set; } = new();

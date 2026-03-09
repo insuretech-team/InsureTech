@@ -17,17 +17,9 @@ public static class DbInitializer
 
         try
         {
-            if (await productsContext.Insurers.AnyAsync() || await productsContext.Products.AnyAsync()) return;
+            if (await productsContext.Products.AnyAsync()) return;
 
             var tenantId = Guid.Parse("11111111-1111-1111-1111-111111111111");
-
-            var insurer = new Insurer
-            {
-                Id = Guid.NewGuid(),
-                Name = "LifePlus Insurance Ltd",
-                Code = "LP-001",
-                TenantId = tenantId
-            };
 
             var product = new Product
             {
@@ -41,13 +33,13 @@ public static class DbInitializer
                 MaxSumInsured = 1000000,
                 MinAge = 18,
                 MaxAge = 65,
-                InsurerId = insurer.Id,
+                
                 TenantId = tenantId,
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
             };
 
-            await productsContext.Insurers.AddAsync(insurer);
+            
             await productsContext.Products.AddAsync(product);
             
             await productsContext.SaveChangesAsync();
@@ -59,5 +51,6 @@ public static class DbInitializer
         }
     }
 }
+
 
 

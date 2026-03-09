@@ -22,7 +22,8 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDt
 
         return new ProductDto(
             p.Id, p.ProductCode, p.ProductName, p.ProductNameBn, p.Description, 
-            p.Category, p.Status, p.MinSumInsured, p.MaxSumInsured, p.MinAge, p.MaxAge, p.InsurerId
+            p.Category, p.Status, p.MinSumInsured, p.MaxSumInsured, p.MinAge, p.MaxAge
         );
     }
 }
+

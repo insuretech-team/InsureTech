@@ -13,6 +13,7 @@ public interface IProductRepository
     Task UpdateAsync(Product product);
     Task DeleteAsync(Guid id);
     Task<List<Product>> SearchAsync(string? query, decimal? minPremium, decimal? maxPremium);
-    Task<List<Insurer>> ListInsurersAsync();
+    
 }
+
 

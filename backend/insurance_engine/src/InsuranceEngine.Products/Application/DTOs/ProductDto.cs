@@ -14,6 +14,5 @@ public record ProductDto(
     decimal MinSumInsured,
     decimal MaxSumInsured,
     int MinAge,
-    int MaxAge,
-    Guid InsurerId
+    int MaxAge
 );

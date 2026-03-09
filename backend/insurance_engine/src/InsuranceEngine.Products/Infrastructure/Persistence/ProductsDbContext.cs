@@ -17,19 +17,13 @@ public class ProductsDbContext : DbContext
     }
 
     public DbSet<Product> Products { get; set; } = null!;
-    public DbSet<Insurer> Insurers { get; set; } = null!;
+    
     public DbSet<ProductPlan> ProductPlans { get; set; } = null!;
     public DbSet<PricingRule> PricingRules { get; set; } = null!;
     public DbSet<RiskAssessmentQuestion> RiskAssessmentQuestions { get; set; } = null!;
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.Entity<Insurer>(entity =>
-        {
-            entity.HasKey(e => e.Id);
-            entity.HasQueryFilter(e => e.TenantId == _tenantId);
-            entity.HasIndex(e => e.Code).IsUnique();
-        });
         modelBuilder.Entity<Product>(entity =>
         {
             entity.HasKey(e => e.Id);
@@ -55,4 +49,5 @@ public class ProductsDbContext : DbContext
         });
     }
 }
+
 

@@ -13,6 +13,6 @@ public record CreateProductCommand(
     decimal MinSumInsured,
     decimal MaxSumInsured,
     int MinAge,
-    int MaxAge,
-    Guid InsurerId
+    int MaxAge
 ) : IRequest<Guid>;
+

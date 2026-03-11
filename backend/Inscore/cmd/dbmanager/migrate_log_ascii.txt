@@ -1,0 +1,137 @@
+Error: failed to load database config: config validation failed: backup database host is required
+
+go : Usage:
+At line:1 char:1
++ go run . migrate --target primary > 
+migrate_log.txt 2>&1
++ ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+~~~~~~~~~~~~~~~~~~~
+    + CategoryInfo          : NotSpeci 
+   fied: (Usage::String) [], RemoteEx  
+  ception
+    + FullyQualifiedErrorId : NativeCo 
+   mmandError
+ 
+  dbmanager migrate [flags]
+
+Examples:
+  dbmanager migrate --target=primary
+  dbmanager migrate --target=backup
+
+Flags:
+  -h, --help            help for 
+migrate
+      --prune           Delete rows 
+(sync) or columns (migrate) that do 
+not exist in source/proto
+      --strict          Fail on schema 
+drift (zombie columns, type mismatches)
+      --target string   Target 
+database (primary/backup) (default 
+"primary")
+
+Global Flags:
+      --config string   Path to 
+database configuration file (default 
+"database.yaml")
+      --source string   Source 
+database (primary/backup) (default 
+"primary")
+
+Usage:
+  dbmanager [command]
+
+Examples:
+  dbmanager status
+  dbmanager sync --commit --prune 
+--report-format=table
+  dbmanager sync --table=styles 
+--commit
+  dbmanager schema-discovery
+  dbmanager sql --sql="SELECT 1" 
+--target=primary
+  dbmanager csv-backup 
+--table=enquiries --source=primary
+
+Available Commands:
+  backup            Create database 
+backup (NYI)
+  compare           Compare schemas 
+between databases (NYI)
+  completion        Generate the 
+autocompletion script for the 
+specified shell
+  copy              Copy data between 
+databases
+  csv-backup        Export table(s) to 
+CSV files
+  csv-seed          Import data from 
+CSV files
+  failover          Switch to backup 
+database
+  help              Help about any 
+command
+  list-backups      List available 
+backups
+  migrate           Run database 
+migrations on a specific target 
+(primary|backup)
+  print-all         Print all database 
+schemas and tables
+  print-schema      Print detailed 
+schema information
+  print-table       Print detailed 
+table information
+  print-table-data  Print actual table 
+data/entries
+  print-tables      Print detailed 
+information for all tables in schema(s)
+  rebuild-backup    Rebuild backup 
+database schema to match primary
+  restore           Restore from 
+backup (NYI)
+  schema-check      Validate schema 
+consistency between DBs
+  schema-discovery  List public base 
+tables on primary DB
+  sizes             Show database sizes
+  sql               Execute direct SQL 
+query on target DB
+  status            Show database 
+status and metrics
+  switchback        Switch back to 
+primary database (NYI)
+  sync              Synchronize 
+databases (authoritative upsert + 
+optional prune)
+  sync-health-check Show per-table 
+counts and sync status
+  sync-repair       Repair FK gaps for 
+critical tables
+  sync-users        Synchronize 
+user-related tables
+  view-tables       Interactive table 
+viewer with CSV export integration
+
+Flags:
+      --config string   Path to 
+database configuration file (default 
+"database.yaml")
+      --source string   Source 
+database (primary/backup) (default 
+"primary")
+      --target string   Target 
+database (primary/backup) (default 
+"primary")
+
+Use "dbmanager [command] --help" for 
+more information about a command.
+
+Examples:
+  dbmanager status
+  dbmanager sync --commit --prune --report-format=table
+  dbmanager sync --table=styles --commit
+  dbmanager schema-discovery
+  dbmanager sql --sql="SELECT 1" --target=primary
+  dbmanager csv-backup --table=enquiries --source=primary
+exit status 2

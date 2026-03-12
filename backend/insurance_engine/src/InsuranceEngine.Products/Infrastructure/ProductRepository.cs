@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using InsuranceEngine.Products.Application.Interfaces;
 using InsuranceEngine.Products.Domain;
+using InsuranceEngine.Products.Domain.Enums;
 using InsuranceEngine.Products.Infrastructure.Persistence;
 
 namespace InsuranceEngine.Products.Infrastructure;
@@ -18,42 +19,93 @@ public class ProductRepository : IProductRepository
         _context = context;
     }
 
-    public async Task<Product?> GetByIdAsync(Guid id) => await _context.Products.Include(p => p.Plans).Include(p => p.Questions).FirstOrDefaultAsync(p => p.Id == id);
-    
-    public async Task<List<Product>> ListAsync() => await _context.Products.ToListAsync();
-    
+    public async Task<Product?> GetByIdAsync(Guid id) =>
+        await _context.Products
+            .Include(p => p.Plans)
+            .Include(p => p.Questions)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+    public async Task<Product?> GetByIdWithRidersAsync(Guid id) =>
+        await _context.Products
+            .Include(p => p.Plans)
+            .Include(p => p.AvailableRiders)
+            .Include(p => p.PricingConfig)
+            .Include(p => p.Questions)
+            .FirstOrDefaultAsync(p => p.Id == id);
+
+    public async Task<Product?> GetByCodeAsync(string productCode) =>
+        await _context.Products.FirstOrDefaultAsync(p => p.ProductCode == productCode);
+
+    public async Task<List<Product>> ListAsync() =>
+        await _context.Products.ToListAsync();
+
+    public async Task<(List<Product> Items, int TotalCount)> ListActiveAsync(
+        ProductCategory? category, int page, int pageSize)
+    {
+        var query = _context.Products
+            .Where(p => p.Status == ProductStatus.Active);
+
+        if (category.HasValue && category.Value != ProductCategory.Unspecified)
+            query = query.Where(p => p.Category == category.Value);
+
+        var totalCount = await query.CountAsync();
+
+        var items = await query
+            .OrderBy(p => p.ProductName)
+            .Skip((page - 1) * pageSize)
+            .Take(pageSize)
+            .ToListAsync();
+
+        return (items, totalCount);
+    }
+
     public async Task<Guid> AddAsync(Product product)
     {
         _context.Products.Add(product);
         await _context.SaveChangesAsync();
         return product.Id;
     }
-    
+
     public async Task UpdateAsync(Product product)
     {
         _context.Products.Update(product);
         await _context.SaveChangesAsync();
     }
-    
+
     public async Task DeleteAsync(Guid id)
     {
         var product = await _context.Products.FindAsync(id);
         if (product != null)
         {
-            _context.Products.Remove(product);
+            product.IsDeleted = true;
+            product.DeletedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
     }
-    
+
     public async Task<List<Product>> SearchAsync(string? query, decimal? minPremium, decimal? maxPremium)
     {
-        var dbQuery = _context.Products.AsQueryable();
+        var dbQuery = _context.Products
+            .Where(p => p.Status == ProductStatus.Active)
+            .AsQueryable();
+
         if (!string.IsNullOrEmpty(query))
-            dbQuery = dbQuery.Where(p => p.ProductName.Contains(query) || p.ProductCode.Contains(query));
-        
+            dbQuery = dbQuery.Where(p =>
+                p.ProductName.Contains(query) ||
+                p.ProductCode.Contains(query) ||
+                (p.Description != null && p.Description.Contains(query)));
+
+        if (minPremium.HasValue)
+            dbQuery = dbQuery.Where(p => p.BasePremiumAmount >= (long)(minPremium.Value * 100));
+
+        if (maxPremium.HasValue)
+            dbQuery = dbQuery.Where(p => p.BasePremiumAmount <= (long)(maxPremium.Value * 100));
+
         return await dbQuery.ToListAsync();
     }
-    
-    
-}
 
+    public async Task<List<Rider>> GetRidersByIdsAsync(List<Guid> riderIds) =>
+        await _context.Riders
+            .Where(r => riderIds.Contains(r.Id))
+            .ToListAsync();
+}

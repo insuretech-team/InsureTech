@@ -1,8 +1,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using InsuranceEngine.Products.Application.Interfaces;
 using InsuranceEngine.Products.Application.DTOs;
+using InsuranceEngine.Products.Application.Interfaces;
 
 namespace InsuranceEngine.Products.Application.Features.Queries.GetProduct;
 
@@ -17,13 +17,7 @@ public class GetProductQueryHandler : IRequestHandler<GetProductQuery, ProductDt
 
     public async Task<ProductDto?> Handle(GetProductQuery request, CancellationToken cancellationToken)
     {
-        var p = await _productRepository.GetByIdAsync(request.Id);
-        if (p == null) return null;
-
-        return new ProductDto(
-            p.Id, p.ProductCode, p.ProductName, p.ProductNameBn, p.Description, 
-            p.Category, p.Status, p.MinSumInsured, p.MaxSumInsured, p.MinAge, p.MaxAge
-        );
+        var product = await _productRepository.GetByIdWithRidersAsync(request.Id);
+        return product?.ToDto();
     }
 }
-

@@ -1,6 +1,8 @@
 using System;
+using System.Collections.Generic;
 using MediatR;
 using InsuranceEngine.Products.Domain.Enums;
+using InsuranceEngine.SharedKernel.CQRS;
 
 namespace InsuranceEngine.Products.Application.Features.Commands.CreateProduct;
 
@@ -10,9 +12,13 @@ public record CreateProductCommand(
     string? ProductNameBn,
     string? Description,
     ProductCategory Category,
-    decimal MinSumInsured,
-    decimal MaxSumInsured,
+    long BasePremiumAmount,
+    long MinSumInsuredAmount,
+    long MaxSumInsuredAmount,
     int MinAge,
-    int MaxAge
-) : IRequest<Guid>;
-
+    int MaxAge,
+    int MinTenureMonths,
+    int MaxTenureMonths,
+    List<string>? Exclusions,
+    Guid CreatedBy
+) : IRequest<Result<Guid>>;

@@ -15,6 +15,10 @@ using InsuranceEngine.SharedKernel.Behaviors;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Serilog;
+using InsuranceEngine.Claims;
+using InsuranceEngine.Underwriting;
+using InsuranceEngine.Claims.GrpcServices;
+using InsuranceEngine.Underwriting.GrpcServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -39,12 +43,12 @@ builder.Services.AddDbContext<PolicyDbContext>(options =>
 builder.Services.AddHealthChecks()
     .AddNpgSql(builder.Configuration.GetConnectionString("DefaultConnection") ?? string.Empty);
 
-// Repositories
+// Modular Slices Registration
+builder.Services.AddClaimsModule(builder.Configuration);
+builder.Services.AddUnderwritingModule(builder.Configuration);
+
+// Repositories (Remaining for Products/Policy until they are sliced)
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
-builder.Services.AddScoped<IUnderwritingRepository, UnderwritingRepository>();
-builder.Services.AddScoped<IClaimsRepository, ClaimsRepository>();
-builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
-builder.Services.AddScoped<QuoteNumberGenerator>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 builder.Services.AddSingleton<PolicyNumberGenerator>();
 builder.Services.AddSingleton<PricingEngine>();
@@ -93,5 +97,8 @@ if (app.Environment.IsDevelopment())
 await DbInitializer.Initialize(app.Services);
 
 app.MapGrpcService<InsuranceEngine.ApiHost.GrpcServices.InsuranceGrpcService>();
+app.MapGrpcService<ClaimsGrpcService>();
+app.MapGrpcService<UnderwritingGrpcService>();
+app.MapGrpcService<BeneficiaryGrpcService>();
 
 app.Run();

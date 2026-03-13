@@ -29,6 +29,8 @@
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Policy\InsuranceEngine.Policy.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Claims\InsuranceEngine.Claims.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Underwriting\InsuranceEngine.Underwriting.csproj" />
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
   </ItemGroup>
 

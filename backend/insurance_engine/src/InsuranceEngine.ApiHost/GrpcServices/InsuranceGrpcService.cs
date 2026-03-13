@@ -19,6 +19,9 @@ using InsuranceEngine.SharedKernel.CQRS;
 using System.Collections.Generic;
 using System;
 using Google.Protobuf.WellKnownTypes;
+using InsuranceEngine.Policy.Application.Features.Queries.GetQuote;
+using InsuranceEngine.Policy.Application.Features.Queries.ListQuotes;
+using Insuretech.Underwriting.Entity.V1;
 
 namespace InsuranceEngine.ApiHost.GrpcServices;
 
@@ -75,6 +78,134 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
     // ===================== POLICY CRUD =====================
 
+    public override async Task<GetPolicyResponse> GetPolicy(GetPolicyRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation($"Standardized GetPolicy called for {request.PolicyId}");
+
+        if (!Guid.TryParse(request.PolicyId, out var policyId))
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Policy ID format"));
+
+        var policyDto = await _mediator.Send(new GetPolicyQuery(policyId));
+        if (policyDto == null)
+            throw new RpcException(new Status(StatusCode.NotFound, "Policy not found"));
+
+        return new GetPolicyResponse { Policy = MapToProtoPolicy(policyDto) };
+    }
+
+    public override async Task<ListPoliciesResponse> ListPolicies(ListPoliciesRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("Standardized ListPolicies called");
+
+        Guid? customerId = string.IsNullOrEmpty(request.CustomerId) ? null : Guid.Parse(request.CustomerId);
+        Guid? productId = string.IsNullOrEmpty(request.ProductId) ? null : Guid.Parse(request.ProductId);
+        
+        var query = new ListPoliciesQuery(
+            customerId,
+            null, // Status mapping could be added if needed
+            productId,
+            request.Page > 0 ? (int)request.Page : 1,
+            request.PageSize > 0 ? (int)request.PageSize : 20
+        );
+
+        var result = await _mediator.Send(query);
+
+        var response = new ListPoliciesResponse
+        {
+            TotalCount = (uint)result.TotalCount,
+            Page = (uint)result.Page,
+            PageSize = (uint)result.PageSize
+        };
+
+        foreach (var p in result.Items)
+        {
+            response.Policies.Add(new Policy
+            {
+                PolicyId = p.Id.ToString(),
+                PolicyNumber = p.PolicyNumber,
+                ProductId = p.ProductId.ToString(),
+                CustomerId = p.CustomerId.ToString(),
+                Status = (PolicyStatus)p.Status,
+                PremiumAmount = new Money { Amount = p.PremiumAmount.Amount, Currency = p.PremiumAmount.CurrencyCode },
+                SumInsured = new Money { Amount = p.SumInsured.Amount, Currency = p.SumInsured.CurrencyCode },
+                StartDate = p.StartDate.ToTimestamp(),
+                EndDate = p.EndDate.ToTimestamp(),
+                IssuedAt = p.IssuedAt?.ToTimestamp()
+            });
+        }
+
+        return response;
+    }
+
+    private static Policy MapToProtoPolicy(PolicyDto dto)
+    {
+        var policy = new Policy
+        {
+            PolicyId = dto.Id.ToString(),
+            PolicyNumber = dto.PolicyNumber,
+            ProductId = dto.ProductId.ToString(),
+            CustomerId = dto.CustomerId.ToString(),
+            PartnerId = dto.PartnerId?.ToString() ?? "",
+            AgentId = dto.AgentId?.ToString() ?? "",
+            Status = (PolicyStatus)dto.Status,
+            PremiumAmount = new Money { Amount = dto.PremiumAmount.Amount, Currency = dto.PremiumAmount.CurrencyCode },
+            SumInsured = new Money { Amount = dto.SumInsured.Amount, Currency = dto.SumInsured.CurrencyCode },
+            TenureMonths = dto.TenureMonths,
+            StartDate = dto.StartDate.ToTimestamp(),
+            EndDate = dto.EndDate.ToTimestamp(),
+            IssuedAt = dto.IssuedAt?.ToTimestamp(),
+            CreatedAt = dto.CreatedAt.ToTimestamp(),
+            UpdatedAt = dto.UpdatedAt.ToTimestamp(),
+            PaymentFrequency = dto.PaymentFrequency ?? "",
+            ProviderName = dto.ProviderName ?? ""
+        };
+
+        if (dto.VatTax != null) policy.VatTax = new Money { Amount = dto.VatTax.Amount, Currency = dto.VatTax.CurrencyCode };
+        if (dto.ServiceFee != null) policy.ServiceFee = new Money { Amount = dto.ServiceFee.Amount, Currency = dto.ServiceFee.CurrencyCode };
+        if (dto.TotalPayable != null) policy.TotalPayable = new Money { Amount = dto.TotalPayable.Amount, Currency = dto.TotalPayable.CurrencyCode };
+
+        if (dto.ProposerDetails != null)
+        {
+            policy.ProposerDetails = new Applicant
+            {
+                FullName = dto.ProposerDetails.FullName,
+                DateOfBirth = dto.ProposerDetails.DateOfBirth?.ToTimestamp(),
+                NidNumber = dto.ProposerDetails.NidNumber ?? "",
+                Occupation = dto.ProposerDetails.Occupation ?? "",
+                Address = dto.ProposerDetails.Address ?? ""
+            };
+        }
+
+        if (dto.Nominees != null)
+        {
+            foreach (var n in dto.Nominees)
+            {
+                policy.Nominees.Add(new Nominee
+                {
+                    NomineeId = n.Id?.ToString() ?? "",
+                    BeneficiaryId = n.BeneficiaryId.ToString(),
+                    Relationship = n.Relationship,
+                    SharePercentage = n.SharePercentage
+                });
+            }
+        }
+
+        if (dto.Riders != null)
+        {
+            foreach (var r in dto.Riders)
+            {
+                policy.Riders.Add(new Rider
+                {
+                    RiderId = r.Id.ToString(),
+                    RiderName = r.RiderName,
+                    PremiumAmount = new Money { Amount = r.PremiumAmount.Amount, Currency = r.PremiumAmount.CurrencyCode },
+                    CoverageAmount = new Money { Amount = r.CoverageAmount.Amount, Currency = r.CoverageAmount.CurrencyCode }
+                });
+            }
+        }
+
+        return policy;
+    }
+
     public override async Task<CreatePolicyResponse> CreatePolicy(CreatePolicyRequest request, ServerCallContext context)
     {
         _logger.LogInformation("Standardized CreatePolicy called via gRPC");
@@ -96,15 +227,10 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         if (!result.IsSuccess)
             throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Failed to create policy"));
 
-        // Map back to proto response
-        var protoPolicy = new Policy
-        {
-            PolicyId = result.Value.PolicyId.ToString(),
-            PolicyNumber = result.Value.PolicyNumber,
-            Status = PolicyStatus.PolicyStatusActive // Assuming active on creation if logic allows
-        };
-
-        return new CreatePolicyResponse { Policy = protoPolicy };
+        // Fetch the created policy to return full entity
+        var policyDto = await _mediator.Send(new GetPolicyQuery(result.Value.PolicyId));
+        
+        return new CreatePolicyResponse { Policy = MapToProtoPolicy(policyDto) };
     }
 
     public override async Task<UpdatePolicyResponse> UpdatePolicy(UpdatePolicyRequest request, ServerCallContext context)
@@ -127,6 +253,89 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
     }
 
     // ===================== CLAIM CRUD =====================
+    
+    public override async Task<GetClaimResponse> GetClaim(GetClaimRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation($"Standardized GetClaim called for {request.ClaimId}");
+
+        if (!Guid.TryParse(request.ClaimId, out var claimId))
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Claim ID format"));
+
+        var result = await _mediator.Send(new GetClaimByIdQuery(claimId));
+        if (!result.IsSuccess)
+            throw new RpcException(new Status(StatusCode.NotFound, result.Error?.Message ?? "Claim not found"));
+
+        return new GetClaimResponse { Claim = MapToProtoClaim(result.Value) };
+    }
+
+    public override async Task<ListClaimsResponse> ListClaims(ListClaimsRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("Standardized ListClaims called");
+
+        if (!Guid.TryParse(request.CustomerId, out var customerId))
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Customer ID format"));
+
+        var result = await _mediator.Send(new ListClaimsByCustomerQuery(
+            customerId, 
+            request.Page > 0 ? (int)request.Page : 1, 
+            request.PageSize > 0 ? (int)request.PageSize : 10
+        ));
+
+        if (!result.IsSuccess)
+            throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Failed to list claims"));
+
+        var response = new ListClaimsResponse();
+        foreach (var c in result.Value)
+        {
+            response.Claims.Add(MapToProtoClaim(c));
+        }
+
+        return response;
+    }
+
+    private static Claim MapToProtoClaim(ClaimResponseDto dto)
+    {
+        var claim = new Claim
+        {
+            ClaimId = dto.Id.ToString(),
+            ClaimNumber = dto.ClaimNumber,
+            PolicyId = dto.PolicyId.ToString(),
+            CustomerId = dto.CustomerId.ToString(),
+            Status = Enum.TryParse<ClaimStatus>($"ClaimStatus{dto.Status}", out var status) ? status : ClaimStatus.ClaimStatusUnspecified,
+            Type = Enum.TryParse<ClaimType>($"ClaimType{dto.ClaimType}", out var type) ? type : ClaimType.ClaimTypeUnspecified,
+            ClaimedAmount = new Money { Amount = dto.ClaimedAmount, Currency = dto.Currency },
+            IncidentDate = dto.IncidentDate.ToTimestamp(),
+            IncidentDescription = dto.IncidentDescription,
+            PlaceOfIncident = dto.PlaceOfIncident ?? "",
+            SubmittedAt = dto.SubmittedAt.ToTimestamp()
+        };
+
+        foreach (var a in dto.Approvals)
+        {
+            claim.Approvals.Add(new ClaimApproval
+            {
+                ApprovalId = a.Id.ToString(),
+                Decision = Enum.TryParse<ClaimApprovalDecision>($"ClaimApprovalDecision{a.Decision}", out var decision) ? decision : ClaimApprovalDecision.ClaimApprovalDecisionUnspecified,
+                ApprovalLevel = (uint)a.Level,
+                Notes = a.Notes ?? "",
+                DecidedAt = a.DecidedAt?.ToTimestamp()
+            });
+        }
+
+        foreach (var d in dto.Documents)
+        {
+            claim.Documents.Add(new ClaimDocument
+            {
+                DocumentId = d.Id.ToString(),
+                DocumentType = d.DocumentType,
+                FileUrl = d.FileUrl,
+                IsVerified = d.IsVerified,
+                UploadedAt = d.UploadedAt.ToTimestamp()
+            });
+        }
+
+        return claim;
+    }
 
     public override async Task<CreateClaimResponse> CreateClaim(CreateClaimRequest request, ServerCallContext context)
     {
@@ -151,9 +360,77 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         if (!result.IsSuccess)
             throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Claim submission failed"));
 
-        request.Claim.ClaimId = result.Value.ToString();
-        request.Claim.Status = ClaimStatus.ClaimStatusSubmitted;
+        // Fetch the created claim to return full entity
+        var claimResult = await _mediator.Send(new GetClaimByIdQuery(result.Value));
+        
+        return new CreateClaimResponse { Claim = MapToProtoClaim(claimResult.Value) };
+    }
 
-        return new CreateClaimResponse { Claim = request.Claim };
+    // ===================== QUOTE CRUD =====================
+
+    public override async Task<GetQuoteResponse> GetQuote(GetQuoteRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation($"Standardized GetQuote called for {request.QuoteId}");
+
+        if (!Guid.TryParse(request.QuoteId, out var quoteId))
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Invalid Quote ID format"));
+
+        var result = await _mediator.Send(new GetQuoteQuery(quoteId));
+        if (!result.IsSuccess)
+            throw new RpcException(new Status(StatusCode.NotFound, result.Error?.Message ?? "Quote not found"));
+
+        return new GetQuoteResponse { Quote = MapToProtoQuote(result.Value) };
+    }
+
+    public override async Task<ListQuotesResponse> ListQuotes(ListQuotesRequest request, ServerCallContext context)
+    {
+        _logger.LogInformation("Standardized ListQuotes called");
+
+        Guid? beneficiaryId = string.IsNullOrEmpty(request.BeneficiaryId) ? null : Guid.Parse(request.BeneficiaryId);
+        
+        var query = new ListQuotesQuery(
+            beneficiaryId,
+            null, // Status mapping could be added
+            request.Page > 0 ? (int)request.Page : 1,
+            request.PageSize > 0 ? (int)request.PageSize : 20
+        );
+
+        var result = await _mediator.Send(query);
+
+        var response = new ListQuotesResponse
+        {
+            TotalCount = (uint)result.TotalCount,
+            Page = (uint)result.Page,
+            PageSize = (uint)result.PageSize
+        };
+
+        foreach (var q in result.Items)
+        {
+            response.Quotes.Add(MapToProtoQuote(q));
+        }
+
+        return response;
+    }
+
+    private static Quote MapToProtoQuote(QuoteDto dto)
+    {
+        return new Quote
+        {
+            Id = dto.Id.ToString(),
+            QuoteNumber = dto.QuoteNumber,
+            BeneficiaryId = dto.BeneficiaryId.ToString(),
+            InsurerProductId = dto.InsurerProductId.ToString(),
+            Status = (Insuretech.Underwriting.Entity.V1.QuoteStatus)dto.Status,
+            SumAssured = new Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.CurrencyCode },
+            TermYears = dto.TermYears,
+            PremiumPaymentMode = dto.PremiumPaymentMode,
+            BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode },
+            RiderPremium = new Money { Amount = dto.RiderPremium.Amount, Currency = dto.RiderPremium.CurrencyCode },
+            TotalPremium = new Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.CurrencyCode },
+            ApplicantAge = dto.ApplicantAge,
+            ApplicantOccupation = dto.ApplicantOccupation ?? "",
+            Smoker = dto.IsSmoker,
+            ValidUntil = dto.ValidUntil.ToTimestamp()
+        };
     }
 }

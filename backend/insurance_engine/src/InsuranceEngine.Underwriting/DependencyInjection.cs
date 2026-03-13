@@ -21,7 +21,6 @@ public static class UnderwritingModule
         services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
         services.AddSingleton<QuoteNumberGenerator>();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(UnderwritingModule).Assembly));
 
         return services;
     }

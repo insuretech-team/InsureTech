@@ -45,19 +45,17 @@ public class Claim
     public DateTime UpdatedAt { get; set; }
     public bool IsDeleted { get; set; }
 
-    // Constants for approval matrix
-    private const long ZHTC_THRESHOLD = 1_000_000;      // 10,000 BDT
-    private const long L1_THRESHOLD = 5_000_000;        // 50,000 BDT
-    private const long L2_THRESHOLD = 20_000_000;       // 200,000 BDT
-    private const long L3_THRESHOLD = 50_000_000;       // 500,000 BDT
+    // Constants for approval matrix based on BDT amounts (converted to paisa)
+    private const long L1_THRESHOLD = 1_000_000;      // 10,000 BDT (Threshold for L2)
+    private const long L2_THRESHOLD = 5_000_000;      // 50,000 BDT (Threshold for L3)
+    private const long L3_THRESHOLD = 20_000_000;     // 200,000 BDT (Threshold for Board)
 
     public int GetRequiredApprovalLevel()
     {
-        if (ClaimedAmount <= ZHTC_THRESHOLD) return 0;
-        if (ClaimedAmount <= L1_THRESHOLD) return 1;
-        if (ClaimedAmount <= L2_THRESHOLD) return 2;
-        if (ClaimedAmount <= L3_THRESHOLD) return 3;
-        return 4;
+        if (ClaimedAmount <= L1_THRESHOLD) return 1;  // L1 (Officer/Auto)
+        if (ClaimedAmount <= L2_THRESHOLD) return 2;  // L2 (Manager)
+        if (ClaimedAmount <= L3_THRESHOLD) return 3;  // L3 (Head/Joint)
+        return 4;                                     // L4 (Board/Insurer)
     }
 
     public Result AddApproval(Guid approverId, string role, int level, ApprovalDecision decision, long approvedAmount, string notes)

@@ -28,7 +28,7 @@ public class PolicyNumberGenerator
             sequenceNumber = ++_counter;
         }
 
-        return $"LBT-{suffix}-{year}-{sequenceNumber:D4}";
+        return $"LBT-{year}-{suffix}-{sequenceNumber:D6}";
     }
 
     /// <summary>
@@ -38,7 +38,7 @@ public class PolicyNumberGenerator
     {
         var year = DateTime.UtcNow.Year;
         var suffix = ExtractSuffix(productCode);
-        return $"LBT-{suffix}-{year}-{sequenceNumber:D4}";
+        return $"LBT-{year}-{suffix}-{sequenceNumber:D6}";
     }
 
     private static string ExtractSuffix(string productCode)

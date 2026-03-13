@@ -18,7 +18,6 @@ public static class ClaimsModule
 
         services.AddScoped<IClaimsRepository, ClaimsRepository>();
 
-        services.AddMediatR(cfg => cfg.RegisterServicesFromAssembly(typeof(ClaimsModule).Assembly));
 
         return services;
     }

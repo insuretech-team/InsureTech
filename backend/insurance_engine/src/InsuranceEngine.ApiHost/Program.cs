@@ -46,6 +46,7 @@ builder.Services.AddHealthChecks()
 // Modular Slices Registration
 builder.Services.AddClaimsModule(builder.Configuration);
 builder.Services.AddUnderwritingModule(builder.Configuration);
+builder.Services.AddFraudModule(builder.Configuration);
 
 // Repositories (Remaining for Products/Policy until they are sliced)
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
@@ -58,11 +59,14 @@ builder.Services.AddSingleton<IEncryptionService, AesEncryptionService>();
 builder.Services.Configure<InsuranceKafkaOptions>(builder.Configuration.GetSection("Kafka"));
 builder.Services.AddSingleton<IEventBus, KafkaEventBus>();
 
-// MediatR — register from both modules
+// MediatR — register from all modular slices
 builder.Services.AddMediatR(cfg =>
 {
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Products.Application.DTOs.ProductDto).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Policy.Application.DTOs.PolicyDto).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Claims.ClaimsModule).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Underwriting.UnderwritingModule).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Fraud.DependencyInjection).Assembly);
 
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));

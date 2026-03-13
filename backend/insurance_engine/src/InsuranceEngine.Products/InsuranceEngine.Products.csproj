@@ -1,11 +1,22 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
+  <PropertyGroup>
+    <TargetFramework>net8.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <Protobuf Include="..\..\..\..\proto\insuretech\insurance\services\v1\insurance_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
+    <Protobuf Include="..\..\..\..\proto\insuretech\underwriting\services\v1\underwriting_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
+    <Protobuf Include="..\..\..\..\proto\insuretech\claims\services\v1\claim_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
+    <Protobuf Include="..\..\..\..\proto\insuretech\beneficiary\services\v1\beneficiary_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
+    
+    <Protobuf Include="..\..\..\..\proto\**\*.proto" GrpcServices="None" ProtoRoot="..\..\..\..\proto" />
   </ItemGroup>
 
   <ItemGroup>
@@ -17,14 +28,8 @@
       <PrivateAssets>all</PrivateAssets>
     </PackageReference>
     <PackageReference Include="MediatR" Version="12.2.0" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>
-
-  <PropertyGroup>
-    <TargetFramework>net8.0</TargetFramework>
-    <ImplicitUsings>enable</ImplicitUsings>
-    <Nullable>enable</Nullable>
-  </PropertyGroup>
 
   <ItemGroup>
     <FrameworkReference Include="Microsoft.AspNetCore.App" />

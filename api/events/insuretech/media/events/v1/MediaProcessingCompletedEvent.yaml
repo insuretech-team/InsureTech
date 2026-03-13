@@ -1,0 +1,20 @@
+MediaProcessingCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    job_id:
+      type: string
+    media_id:
+      type: string
+    processing_type:
+      type: string
+    result_file_id:
+      type: string
+      description: ID of optimized/thumbnail file
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Media processing completed'

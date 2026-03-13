@@ -1,0 +1,10 @@
+OrderFulfillmentStatus:
+  type: string
+  enum:
+  - ORDER_FULFILLMENT_STATUS_UNSPECIFIED
+  - ORDER_FULFILLMENT_STATUS_NOT_STARTED
+  - ORDER_FULFILLMENT_STATUS_FULFILLMENT_IN_PROGRESS
+  - ORDER_FULFILLMENT_STATUS_FULFILLED
+  - ORDER_FULFILLMENT_STATUS_FULFILLMENT_FAILED
+  description: OrderFulfillmentStatus is the policy issuance dimension of the order
+    lifecycle.

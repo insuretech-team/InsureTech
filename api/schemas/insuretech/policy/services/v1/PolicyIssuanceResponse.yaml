@@ -1,0 +1,11 @@
+PolicyIssuanceResponse:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/Policy'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for policy issuance operation. Returns operation results
+    and status.

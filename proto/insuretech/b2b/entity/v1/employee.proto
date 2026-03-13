@@ -1,0 +1,182 @@
+syntax = "proto3";
+
+package insuretech.b2b.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1;b2bv1";
+option csharp_namespace = "Insuretech.B2b.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Employee represents a corporate employee in the B2B portal.
+// business_id is the organisation_id from b2b_schema.organisations — the tenant
+// isolation key. user_id links to authn_schema.users when portal access is
+// granted (B2C bridge).
+message Employee {
+  option (insuretech.common.v1.table) = {
+    table_name : "employees"
+    schema_name : "b2b_schema"
+    migration_order : 92
+    is_table : true
+    comment : "B2B Employees"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string employee_uuid = 1 [ (insuretech.common.v1.column) = {
+    column_name : "employee_uuid"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:employee_uuid;not null"
+
+  string name = 2
+      [ (insuretech.common.v1.column) =
+            {column_name : "name" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:name;not null"
+
+  string employee_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "employee_id"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    comment : "Company issued employee ID"
+  } ];
+  // @inject_tag: gorm:"column:employee_id;not null"
+
+  string department_id = 4
+      [ (insuretech.common.v1.column) =
+            {column_name : "department_id" sql_type : "UUID" not_null : true} ];
+  // @inject_tag: gorm:"column:department_id;not null"
+
+  // FK to b2b_schema.organisations.organisation_id — tenant isolation key
+  string business_id = 5 [ (insuretech.common.v1.column) = {
+    column_name : "business_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "FK to b2b_schema.organisations.organisation_id"
+  } ];
+  // @inject_tag: gorm:"column:business_id;not null;index"
+
+  insuretech.common.v1.InsuranceType insurance_category = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "insurance_category"
+        sql_type : "VARCHAR(50)"
+      } ];
+  // @inject_tag: gorm:"column:insurance_category"
+
+  string assigned_plan_id = 7 [ (insuretech.common.v1.column) = {
+    column_name : "assigned_plan_id"
+    sql_type : "UUID"
+    comment : "Mapped to product plan"
+  } ];
+  // @inject_tag: gorm:"column:assigned_plan_id"
+
+  insuretech.common.v1.Money coverage_amount = 8;
+  insuretech.common.v1.Money premium_amount = 9;
+
+  EmployeeStatus status = 10 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'EMPLOYEE_STATUS_ACTIVE'"
+  } ];
+  // @inject_tag: gorm:"column:status;not null"
+
+  google.protobuf.Timestamp created_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  int32 number_of_dependent = 13 [ (insuretech.common.v1.column) = {
+    column_name : "number_of_dependent"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Total dependents enrolled under employee policy"
+  } ];
+  // @inject_tag: gorm:"column:number_of_dependent;not null"
+
+  // --- NEW FIELDS (additive, no breaking change) ---
+
+  // Work email address
+  string email = 14 [ (insuretech.common.v1.column) = {
+    column_name : "email"
+    sql_type : "VARCHAR(255)"
+    comment : "Work email address"
+  } ];
+  // @inject_tag: gorm:"column:email"
+
+  // Mobile number (BD format: +8801XXXXXXXXX)
+  string mobile_number = 15 [ (insuretech.common.v1.column) = {
+    column_name : "mobile_number"
+    sql_type : "VARCHAR(20)"
+  } ];
+  // @inject_tag: gorm:"column:mobile_number"
+
+  // Date of birth (ISO 8601 string: YYYY-MM-DD)
+  string date_of_birth = 16 [ (insuretech.common.v1.column) = {
+    column_name : "date_of_birth"
+    sql_type : "DATE"
+  } ];
+  // @inject_tag: gorm:"column:date_of_birth"
+
+  // Date of joining (ISO 8601 string: YYYY-MM-DD)
+  string date_of_joining = 17 [ (insuretech.common.v1.column) = {
+    column_name : "date_of_joining"
+    sql_type : "DATE"
+  } ];
+  // @inject_tag: gorm:"column:date_of_joining"
+
+  EmployeeGender gender = 18 [ (insuretech.common.v1.column) = {
+    column_name : "gender"
+    sql_type : "VARCHAR(20)"
+  } ];
+  // @inject_tag: gorm:"column:gender"
+
+  // B2C portal bridge: set when portal access is granted via GrantPortalAccess
+  // RPC. Links to authn_schema.users.user_id.
+  string user_id = 19 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    comment : "FK to authn_schema.users — set when B2C portal access is granted"
+  } ];
+  // @inject_tag: gorm:"column:user_id"
+
+  google.protobuf.Timestamp deleted_at = 20 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum EmployeeStatus {
+  EMPLOYEE_STATUS_UNSPECIFIED = 0;
+  EMPLOYEE_STATUS_ACTIVE = 1;
+  EMPLOYEE_STATUS_INACTIVE = 2;
+}
+
+enum EmployeeGender {
+  EMPLOYEE_GENDER_UNSPECIFIED = 0;
+  EMPLOYEE_GENDER_MALE = 1;
+  EMPLOYEE_GENDER_FEMALE = 2;
+  EMPLOYEE_GENDER_OTHER = 3;
+}

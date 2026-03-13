@@ -1,0 +1,41 @@
+<resources>
+    <string name="app_name">LabAid InsureTech</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="phone_no">Phone No.<font color="#FF601C">*</font></string>
+    <string name="corporate_id">Corporate ID<font color="#FF601C">*</font></string>
+    <string name="login_as_corporate"><u>Login as Corporate</u></string>
+    <string name="are_you_a_corporate_person">Are you a corporate person?</string>
+    <string name="bd_code">+88</string>
+    <string name="get_verification_code">Get Verification Code</string>
+    <string name="we_ll_send_a_4_digit_code_to_your_phone_no">We\'ll send a 4 digit code to your phone no.</string>
+    <string name="enter_your_phone_no">Enter your phone no.</string>
+    <string name="search">Search</string>
+    <string name="search_for_policy">Search for "Policy"</string>
+    <string name="coverage">Coverage:</string>
+    <string name="continue_text">Continue</string>
+    <string name="powered_by">Powered by</string>
+    <string name="charmed_life_insurance">Charmed Life Insurance</string>
+    <string name="plan_image">Plan Image</string>
+    <string name="emergency_medical">Emergency medical expenses</string>
+    <string name="adventure_sports">Adventure/Sports coverage</string>
+    <string name="declaration_text">
+By continuing, I confirm that:
+
+• I and all family members covered under this policy are currently in good physical and mental health.
+
+• None of us has any serious, chronic, or long-term illness (such as cancer, HIV/AIDS, heart disease, diabetes, kidney/liver disease, neurological or lung disorders, autoimmune diseases, congenital conditions, etc.).
+
+• None of us is currently receiving medical treatment, has been advised to undergo treatment or surgery, or has a condition that needs ongoing or future medical care.
+
+• There are no physical disabilities or mental health conditions affecting any insured member.
+
+• I understand that pre-existing conditions are not covered, even if they were not diagnosed before buying this policy.
+
+• I accept that if a pre-existing condition is found later, related insurance claims may be rejected.
+
+• I confirm that all information I’ve provided is true and accurate to the best of my knowledge at the time of purchase.
+</string>
+    <string name="declaration_consent_health_insurance"><![CDATA[Declaration & Consent (Health Insurance)]]></string>
+
+</resources>

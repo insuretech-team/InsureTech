@@ -1,0 +1,17 @@
+TicketsListingRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    status:
+      type: string
+    assigned_to:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing tickets listing items. Supports filtering,
+    sorting, and pagination.

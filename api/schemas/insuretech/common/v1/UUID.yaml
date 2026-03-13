@@ -1,0 +1,8 @@
+UUID:
+  type: object
+  properties:
+    value:
+      type: string
+      description: Use plain string fields instead
+  description: "DEPRECATED: UUID wrapper removed - use string with ULID format directly\n\
+    \ Kept for backward compatibility only"

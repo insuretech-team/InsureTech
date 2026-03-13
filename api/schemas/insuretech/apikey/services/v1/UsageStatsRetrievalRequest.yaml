@@ -1,0 +1,11 @@
+UsageStatsRetrievalRequest:
+  type: object
+  properties:
+    api_key_id:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+  description: Request payload for retrieving usage stats retrieval information. May
+    include filters and pagination parameters.

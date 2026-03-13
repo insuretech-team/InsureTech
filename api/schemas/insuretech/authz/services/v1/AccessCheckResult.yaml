@@ -1,0 +1,13 @@
+AccessCheckResult:
+  type: object
+  properties:
+    object:
+      type: string
+    action:
+      type: string
+    allowed:
+      type: boolean
+    reason:
+      type: string
+  description: Domain entity representing access check result. Core business object
+    in the system.

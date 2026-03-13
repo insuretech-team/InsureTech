@@ -1,0 +1,31 @@
+WorkflowConfig:
+  type: object
+  properties:
+    config_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:config_id;not null"'
+    business_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_id;not null"'
+    config_type:
+      $ref: '#/components/schemas/WorkflowConfigType'
+      description: '@inject_tag: gorm:"column:config_type;not null;serializer:proto_enum"'
+    title:
+      type: string
+      description: '@inject_tag: gorm:"column:title;not null"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    is_enabled:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_enabled;not null"'
+    rules:
+      type: string
+      description: "Workflow rules (stored as JSONB)\n @inject_tag: gorm:\"column:rules\""
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+  description: WorkflowConfig represents approval workflow configuration for B2B portal

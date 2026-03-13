@@ -1,0 +1,235 @@
+syntax = "proto3";
+
+package insuretech.fraud.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/fraud/entity/v1/fraud_rule.proto";
+import "insuretech/fraud/entity/v1/fraud_alert.proto";
+import "insuretech/fraud/entity/v1/fraud_case.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/services/v1;fraudservicev1";
+option csharp_namespace = "Insuretech.Fraud.Services.V1";
+
+service FraudService {
+  // Check for fraud
+  rpc CheckFraud(CheckFraudRequest) returns (CheckFraudResponse) {
+    option (google.api.http) = {
+      post: "/v1/fraud-checks"
+      body: "*"
+    };
+  }
+  
+  // Get fraud alert
+  rpc GetFraudAlert(GetFraudAlertRequest) returns (GetFraudAlertResponse) {
+    option (google.api.http) = {
+      get: "/v1/fraud-alerts/{fraud_alert_id}"
+    };
+  }
+  
+  // List fraud alerts
+  rpc ListFraudAlerts(ListFraudAlertsRequest) returns (ListFraudAlertsResponse) {
+    option (google.api.http) = {
+      get: "/v1/fraud-alerts"
+    };
+  }
+  
+  // Create fraud case
+  rpc CreateFraudCase(CreateFraudCaseRequest) returns (CreateFraudCaseResponse) {
+    option (google.api.http) = {
+      post: "/v1/fraud-cases"
+      body: "*"
+    };
+  }
+  
+  // Get fraud case
+  rpc GetFraudCase(GetFraudCaseRequest) returns (GetFraudCaseResponse) {
+    option (google.api.http) = {
+      get: "/v1/fraud-cases/{fraud_case_id}"
+    };
+  }
+  
+  // Update fraud case
+  rpc UpdateFraudCase(UpdateFraudCaseRequest) returns (UpdateFraudCaseResponse) {
+    option (google.api.http) = {
+      patch: "/v1/fraud-cases/{fraud_case_id}"
+      body: "*"
+    };
+  }
+  
+  // List fraud rules
+  rpc ListFraudRules(ListFraudRulesRequest) returns (ListFraudRulesResponse) {
+    option (google.api.http) = {
+      get: "/v1/fraud-rules"
+    };
+  }
+  
+  // Create fraud rule
+  rpc CreateFraudRule(CreateFraudRuleRequest) returns (CreateFraudRuleResponse) {
+    option (google.api.http) = {
+      post: "/v1/fraud-rules"
+      body: "*"
+    };
+  }
+  
+  // Update fraud rule
+  rpc UpdateFraudRule(UpdateFraudRuleRequest) returns (UpdateFraudRuleResponse) {
+    option (google.api.http) = {
+      patch: "/v1/fraud-rules/{rule_id}"
+      body: "*"
+    };
+  }
+  
+  // Activate fraud rule
+  rpc ActivateFraudRule(ActivateFraudRuleRequest) returns (ActivateFraudRuleResponse) {
+    option (google.api.http) = {
+      post: "/v1/fraud-rules/{rule_id}:activate"
+      body: "*"
+    };
+  }
+  
+  // Deactivate fraud rule
+  rpc DeactivateFraudRule(DeactivateFraudRuleRequest) returns (DeactivateFraudRuleResponse) {
+    option (google.api.http) = {
+      post: "/v1/fraud-rules/{rule_id}:deactivate"
+      body: "*"
+    };
+  }
+}
+
+message CheckFraudRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  google.protobuf.Struct data = 3; // CG-7: Typed structured data instead of JSON string
+}
+
+message CheckFraudResponse {
+  bool is_fraud_detected = 1;
+  int32 fraud_score = 2;
+  string risk_level = 3;
+  repeated string triggered_rules = 4;
+  string fraud_alert_id = 5;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+}
+
+message GetFraudAlertRequest {
+  string fraud_alert_id = 1;
+}
+
+message GetFraudAlertResponse {
+  entity.v1.FraudAlert fraud_alert = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListFraudAlertsRequest {
+  string status = 1;
+  string risk_level = 2;
+  string start_date = 3;
+  string end_date = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message ListFraudAlertsResponse {
+  repeated entity.v1.FraudAlert fraud_alerts = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message CreateFraudCaseRequest {
+  string fraud_alert_id = 1;
+  string priority = 2;
+  string investigator_id = 3;
+  string investigation_notes = 4;
+}
+
+message CreateFraudCaseResponse {
+  string fraud_case_id = 1;
+  string case_number = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetFraudCaseRequest {
+  string fraud_case_id = 1;
+}
+
+message GetFraudCaseResponse {
+  entity.v1.FraudCase fraud_case = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message UpdateFraudCaseRequest {
+  string fraud_case_id = 1;
+  string status = 2;
+  string outcome = 3;
+  string investigation_notes = 4;
+  google.protobuf.Struct evidence = 5; // CG-7: Typed structured data instead of JSON string
+}
+
+message UpdateFraudCaseResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListFraudRulesRequest {
+  string category = 1;
+  bool active_only = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListFraudRulesResponse {
+  repeated entity.v1.FraudRule fraud_rules = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message CreateFraudRuleRequest {
+  entity.v1.FraudRule fraud_rule = 1;
+}
+
+message CreateFraudRuleResponse {
+  string rule_id = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateFraudRuleRequest {
+  string rule_id = 1;
+  entity.v1.FraudRule fraud_rule = 2;
+}
+
+message UpdateFraudRuleResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message ActivateFraudRuleRequest {
+  string rule_id = 1;
+}
+
+message ActivateFraudRuleResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeactivateFraudRuleRequest {
+  string rule_id = 1;
+  string reason = 2;
+}
+
+message DeactivateFraudRuleResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+

@@ -1,0 +1,14 @@
+EffectivePermission:
+  type: object
+  properties:
+    object:
+      type: string
+      description: '"svc:policy/create"'
+    action:
+      type: string
+      description: '"POST"'
+    via_role:
+      type: string
+      description: which role granted this (empty = direct user policy)
+  description: Domain entity representing effective permission. Core business object
+    in the system.

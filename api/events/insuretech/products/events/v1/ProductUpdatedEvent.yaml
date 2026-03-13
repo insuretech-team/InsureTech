@@ -1,0 +1,22 @@
+ProductUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    product_name:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: Field name -> new value
+    timestamp:
+      type: string
+      format: date-time
+    updated_by:
+      type: string
+  description: 'Event: Product updated'

@@ -1,0 +1,80 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// DocumentType represents a catalog of required/allowed document types
+message DocumentType {
+  option (insuretech.common.v1.table) = {
+    table_name : "document_types"
+    schema_name : "authn_schema"
+    migration_order : 95
+    is_table : true
+    comment : "Catalog of allowed document types (NID, Passport, etc). Seeded "
+              "via migrations."
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string document_type_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "document_type_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:document_type_id;not null"
+
+  string code = 2 [ (insuretech.common.v1.column) = {
+    column_name : "code"
+    sql_type : "VARCHAR(50)"
+    unique : true
+    not_null : true
+    comment : "e.g., NID, PASSPORT, BIRTH_CERTIFICATE"
+  } ];
+  // @inject_tag: gorm:"column:code;not null"
+
+  string name = 3
+      [ (insuretech.common.v1.column) =
+            {column_name : "name" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:name;not null"
+
+  string description = 4 [ (insuretech.common.v1.column) = {
+    column_name : "description"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:description"
+
+  bool is_active = 5 [ (insuretech.common.v1.column) = {
+    column_name : "is_active"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "true"
+  } ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  google.protobuf.Timestamp created_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}

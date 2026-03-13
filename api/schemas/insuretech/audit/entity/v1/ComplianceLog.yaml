@@ -1,0 +1,47 @@
+ComplianceLog:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:log_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    type:
+      $ref: '#/components/schemas/ComplianceType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    regulation:
+      type: string
+      description: '@inject_tag: gorm:"column:regulation;not null"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    status:
+      $ref: '#/components/schemas/ComplianceStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description;not null"'
+    evidence:
+      type: string
+      description: '@inject_tag: gorm:"column:evidence"'
+    performed_by:
+      type: string
+      description: '@inject_tag: gorm:"column:performed_by"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+  description: Compliance log (regulatory compliance)
+  required:
+  - id
+  - type
+  - regulation
+  - entity_type
+  - entity_id
+  - status
+  - description
+  - timestamp

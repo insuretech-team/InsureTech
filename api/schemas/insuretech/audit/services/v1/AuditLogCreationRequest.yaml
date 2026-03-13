@@ -1,0 +1,21 @@
+AuditLogCreationRequest:
+  type: object
+  properties:
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    action:
+      type: string
+    old_values:
+      type: string
+      description: JSON
+    new_values:
+      type: string
+      description: JSON
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+  description: Request payload for creating a new audit log creation. Contains all
+    required fields and optional parameters for initialization.

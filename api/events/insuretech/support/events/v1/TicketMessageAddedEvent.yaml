@@ -1,0 +1,19 @@
+TicketMessageAddedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    message_id:
+      type: string
+    ticket_id:
+      type: string
+    sender_id:
+      type: string
+    is_internal:
+      type: boolean
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Ticket message added'

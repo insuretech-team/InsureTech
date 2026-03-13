@@ -1,0 +1,14 @@
+BeneficiaryBeneficiaryRetrievalResponse:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+    individual_details:
+      $ref: '#/components/schemas/IndividualBeneficiary'
+    business_details:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for beneficiary retrieval operation. Returns operation
+    results and status.

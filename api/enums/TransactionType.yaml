@@ -1,0 +1,8 @@
+TransactionType:
+  type: string
+  enum:
+  - TRANSACTION_TYPE_UNSPECIFIED
+  - TRANSACTION_TYPE_PAYMENT
+  - TRANSACTION_TYPE_REFUND
+  description: 'Type categorization for transaction. Options: TRANSACTION_TYPE_UNSPECIFIED,
+    TRANSACTION_TYPE_PAYMENT, TRANSACTION_TYPE_REFUND.'

@@ -1,0 +1,7 @@
+InsuranceInsurerRetrievalResponse:
+  type: object
+  properties:
+    insurer:
+      $ref: '#/components/schemas/Insurer'
+  description: Response payload for insurer retrieval operation. Returns operation
+    results and status.

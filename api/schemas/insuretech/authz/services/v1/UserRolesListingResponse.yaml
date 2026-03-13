@@ -1,0 +1,17 @@
+UserRolesListingResponse:
+  type: object
+  properties:
+    user_roles:
+      type: array
+      items:
+        $ref: '#/components/schemas/UserRole'
+    roles:
+      type: array
+      items:
+        $ref: '#/components/schemas/Role'
+    next_page_token:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for user roles listing operation. Returns operation
+    results and status.

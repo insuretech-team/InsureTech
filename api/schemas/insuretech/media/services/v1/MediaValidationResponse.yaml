@@ -1,0 +1,13 @@
+MediaValidationResponse:
+  type: object
+  properties:
+    validation_status:
+      type: string
+    validation_errors:
+      type: array
+      items:
+        type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for media validation operation. Returns operation
+    results and status.

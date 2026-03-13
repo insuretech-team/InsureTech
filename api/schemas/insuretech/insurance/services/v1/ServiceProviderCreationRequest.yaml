@@ -1,0 +1,6 @@
+ServiceProviderCreationRequest:
+  type: object
+  properties:
+    provider:
+      $ref: '#/components/schemas/ServiceProvider'
+  description: ========== SERVICE PROVIDER MESSAGES ==========

@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package insuretech.document.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/document/events/v1;documenteventsv1";
+
+// Kafka event: Document generation requested
+message DocumentGenerationRequestedEvent {
+  string event_id = 1;
+  string document_generation_id = 2;
+  string document_template_id = 3;
+  string entity_type = 4;
+  string entity_id = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Document generated
+message DocumentGeneratedEvent {
+  string event_id = 1;
+  string document_generation_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string file_url = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Document generation failed
+message DocumentGenerationFailedEvent {
+  string event_id = 1;
+  string document_generation_id = 2;
+  string error_message = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

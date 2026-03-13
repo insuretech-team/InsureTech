@@ -1,0 +1,68 @@
+IoTDevice:
+  type: object
+  properties:
+    device_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:device_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    device_serial:
+      type: string
+      description: '@inject_tag: gorm:"column:device_serial;not null"'
+      x-unique: true
+    type:
+      $ref: '#/components/schemas/IotDeviceType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    manufacturer:
+      type: string
+      description: '@inject_tag: gorm:"column:manufacturer;not null"'
+    model:
+      type: string
+      description: '@inject_tag: gorm:"column:model;not null"'
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id"'
+    owner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:owner_id;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/DeviceStatus'
+      x-database-default: PENDING_ACTIVATION
+    registered_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:registered_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    last_seen_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "IoTDevice represents a connected device (GPS tracker, health monitor,\
+    \ etc.)\n Maps to 'devices' table in iot_schema"
+  required:
+  - device_id
+  - device_serial
+  - type
+  - manufacturer
+  - model
+  - owner_id
+  - status
+  - registered_at
+  - created_at
+  - updated_at

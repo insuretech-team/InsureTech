@@ -1,0 +1,1102 @@
+/v1/b2b/organisations:
+  post:
+    summary: Create a new organisation (SuperAdmin only)
+    operationId: B2BService_CreateOrganisation
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create a new organisation (SuperAdmin only).
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganisationCreationRequest'
+      required: true
+  get:
+    summary: 'List all organisations (SuperAdmin: all; BizAdmin: own only)'
+    operationId: B2BService_ListOrganisations
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationsListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: 'List all organisations (SuperAdmin: all; BizAdmin: own only).'
+/v1/b2b/organisations/{organisation_id}:
+  get:
+    summary: Get a single organisation by ID
+    operationId: B2BService_GetOrganisation
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get a single organisation by ID.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    summary: Update an organisation's profile
+    operationId: B2BService_UpdateOrganisation
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrganisationUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update an organisation's profile.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrganisationUpdateRequest'
+      required: true
+  delete:
+    summary: Soft-delete an organisation and revoke its memberships
+    operationId: B2BService_DeleteOrganisation
+    responses:
+      '204':
+        description: No content
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Soft-delete an organisation and revoke its memberships.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/b2b/organisations/{organisation_id}/members:
+  get:
+    summary: List members for an organisation
+    operationId: B2BService_ListOrgMembers
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgMembersListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List members for an organisation.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    summary: Add a platform user as an OrgMember
+    operationId: B2BService_AddOrgMember
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddOrgMemberResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Add a platform user as an OrgMember.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddOrgMemberRequest'
+      required: true
+/v1/b2b/organisations/{organisation_id}/admins:
+  post:
+    summary: Assign a platform user as an OrgAdmin
+    operationId: B2BService_AssignOrgAdmin
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/OrgAdminAssignmentResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Assign a platform user as an OrgAdmin.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/OrgAdminAssignmentRequest'
+      required: true
+/v1/b2b/organisations/{organisation_id}/members/{member_id}:
+  delete:
+    summary: Remove an OrgMember from the organisation
+    operationId: B2BService_RemoveOrgMember
+    responses:
+      '204':
+        description: No content
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Remove an OrgMember from the organisation.
+    parameters:
+    - name: organisation_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: member_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/b2b/departments:
+  get:
+    summary: List departments for the authenticated organisation
+    operationId: B2BService_ListDepartments
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentsListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List departments for the authenticated organisation.
+  post:
+    summary: Create a new department
+    operationId: B2BService_CreateDepartment
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create a new department.
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DepartmentCreationRequest'
+      required: true
+/v1/b2b/departments/{department_id}:
+  get:
+    summary: Get a single department
+    operationId: B2BService_GetDepartment
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get a single department.
+    parameters:
+    - name: department_id
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    summary: Update a department's name
+    operationId: B2BService_UpdateDepartment
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/DepartmentUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update a department's name.
+    parameters:
+    - name: department_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/DepartmentUpdateRequest'
+      required: true
+  delete:
+    summary: Soft-delete a department (only if no active employees)
+    operationId: B2BService_DeleteDepartment
+    responses:
+      '204':
+        description: No content
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Soft-delete a department (only if no active employees).
+    parameters:
+    - name: department_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/b2b/employees:
+  get:
+    summary: List employees for the authenticated organisation
+    operationId: B2BService_ListEmployees
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeesListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List employees for the authenticated organisation.
+  post:
+    summary: Create a new employee
+    operationId: B2BService_CreateEmployee
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create a new employee.
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmployeeCreationRequest'
+      required: true
+/v1/b2b/employees/{employee_uuid}:
+  get:
+    summary: Get a single employee by employee_uuid
+    operationId: B2BService_GetEmployee
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get a single employee by employee_uuid.
+    parameters:
+    - name: employee_uuid
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    summary: Update an existing employee's details
+    operationId: B2BService_UpdateEmployee
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/EmployeeUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update an existing employee's details.
+    parameters:
+    - name: employee_uuid
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/EmployeeUpdateRequest'
+      required: true
+  delete:
+    summary: Soft-delete an employee record
+    operationId: B2BService_DeleteEmployee
+    responses:
+      '204':
+        description: No content
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Soft-delete an employee record.
+    parameters:
+    - name: employee_uuid
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/b2b/purchase-orders/catalog:
+  get:
+    summary: List purchasable product plans for purchase orders
+    operationId: B2BService_ListPurchaseOrderCatalog
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCatalogListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List purchasable product plans for purchase orders.
+/v1/b2b/purchase-orders:
+  get:
+    summary: List purchase orders for the authenticated organisation
+    operationId: B2BService_ListPurchaseOrders
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrdersListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List purchase orders for the authenticated organisation.
+  post:
+    summary: Create a purchase order for a product plan
+    operationId: B2BService_CreatePurchaseOrder
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create a purchase order for a product plan.
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PurchaseOrderCreationRequest'
+      required: true
+/v1/b2b/purchase-orders/{purchase_order_id}:
+  get:
+    summary: Get a single purchase order
+    operationId: B2BService_GetPurchaseOrder
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PurchaseOrderRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get a single purchase order.
+    parameters:
+    - name: purchase_order_id
+      in: path
+      required: true
+      schema:
+        type: string

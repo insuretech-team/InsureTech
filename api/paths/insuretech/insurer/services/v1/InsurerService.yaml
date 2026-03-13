@@ -1,0 +1,451 @@
+/v1/insurers:
+  post:
+    summary: Create insurer
+    operationId: InsurerService_CreateInsurer
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create insurer
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InsurerInsurerCreationRequest'
+      required: true
+  get:
+    summary: List insurers
+    operationId: InsurerService_ListInsurers
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurersListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List insurers
+/v1/insurers/{insurer_id}:
+  get:
+    summary: Get insurer details
+    operationId: InsurerService_GetInsurer
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get insurer details
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    summary: Update insurer
+    operationId: InsurerService_UpdateInsurer
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update insurer
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InsurerInsurerUpdateRequest'
+      required: true
+/v1/insurers/{insurer_id}/config:
+  put:
+    summary: Update insurer config
+    operationId: InsurerService_UpdateInsurerConfig
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerConfigUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update insurer config
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InsurerInsurerConfigUpdateRequest'
+      required: true
+/v1/insurers/{insurer_id}/products:
+  post:
+    summary: Add insurer product
+    operationId: InsurerService_AddInsurerProduct
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AddInsurerProductResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Add insurer product
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/AddInsurerProductRequest'
+      required: true
+  get:
+    summary: List insurer products
+    operationId: InsurerService_ListInsurerProducts
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerProductsListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List insurer products
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/insurer-products/{insurer_product_id}:
+  get:
+    summary: Get insurer product
+    operationId: InsurerService_GetInsurerProduct
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerProductRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get insurer product
+    parameters:
+    - name: insurer_product_id
+      in: path
+      required: true
+      schema:
+        type: string
+  patch:
+    summary: Update insurer product
+    operationId: InsurerService_UpdateInsurerProduct
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/InsurerInsurerProductUpdateResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Update insurer product
+    parameters:
+    - name: insurer_product_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/InsurerInsurerProductUpdateRequest'
+      required: true

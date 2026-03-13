@@ -1,0 +1,19 @@
+PageResponse:
+  type: object
+  properties:
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+    total_pages:
+      type: integer
+      format: int32
+    total_items:
+      type: string
+      format: int64
+    next_page_token:
+      type: string
+  description: Response payload for page operation. Returns operation results and
+    status.

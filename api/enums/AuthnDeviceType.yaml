@@ -1,0 +1,10 @@
+AuthnDeviceType:
+  type: string
+  enum:
+  - DEVICE_TYPE_UNSPECIFIED
+  - DEVICE_TYPE_WEB
+  - DEVICE_TYPE_MOBILE_ANDROID
+  - DEVICE_TYPE_MOBILE_IOS
+  - DEVICE_TYPE_API
+  - DEVICE_TYPE_DESKTOP
+  description: Device type enum - auto-maps to session type

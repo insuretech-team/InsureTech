@@ -1,0 +1,32 @@
+OTPSentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    otp_id:
+      type: string
+    recipient:
+      type: string
+      description: 'Masked: +880 1XXX ***789'
+    type:
+      type: string
+      description: registration, login, reset
+    timestamp:
+      type: string
+      format: date-time
+    channel:
+      type: string
+      description: sms, email
+    provider:
+      type: string
+      description: sslwireless, smtp
+    sender_id:
+      type: string
+      description: LABAIDINS (masking) or numeric (non-masking)
+    provider_message_id:
+      type: string
+      description: For DLR correlation
+    masking_used:
+      type: boolean
+      description: BTRC masking flag
+  description: 'Event: OTP sent'

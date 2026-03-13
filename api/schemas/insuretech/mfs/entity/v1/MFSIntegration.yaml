@@ -1,0 +1,38 @@
+MFSIntegration:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:integration_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    provider:
+      allOf:
+      - $ref: '#/components/schemas/MFSProvider'
+      x-unique: true
+    api_base_url:
+      type: string
+      description: '@inject_tag: gorm:"column:api_base_url;not null"'
+    merchant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:merchant_id"'
+    api_credentials:
+      type: string
+      description: '@inject_tag: gorm:"column:api_credentials"'
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active"'
+      default: true
+    config:
+      type: string
+      description: '@inject_tag: gorm:"column:config"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: MFS integration config (FR-073 to FR-075)
+  required:
+  - id
+  - provider
+  - api_base_url
+  - audit_info

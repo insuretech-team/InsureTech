@@ -1,0 +1,15 @@
+PurchaseOrderApprovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    purchase_order_id:
+      type: string
+    organisation_id:
+      type: string
+    approved_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: PurchaseOrderApprovedEvent is published when a purchase order is approved

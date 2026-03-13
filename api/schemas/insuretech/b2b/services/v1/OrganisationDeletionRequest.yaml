@@ -1,0 +1,7 @@
+OrganisationDeletionRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+  description: Request payload for organisation deletion operation. Contains parameters
+    required to execute the operation.

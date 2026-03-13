@@ -1,0 +1,9 @@
+EmployeeGender:
+  type: string
+  enum:
+  - EMPLOYEE_GENDER_UNSPECIFIED
+  - EMPLOYEE_GENDER_MALE
+  - EMPLOYEE_GENDER_FEMALE
+  - EMPLOYEE_GENDER_OTHER
+  description: 'Enumeration of employee gender values. Valid options: EMPLOYEE_GENDER_UNSPECIFIED,
+    EMPLOYEE_GENDER_MALE, EMPLOYEE_GENDER_FEMALE, EMPLOYEE_GENDER_OTHER.'

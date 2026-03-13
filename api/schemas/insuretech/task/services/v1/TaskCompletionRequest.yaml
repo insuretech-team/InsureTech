@@ -1,0 +1,9 @@
+TaskTaskCompletionRequest:
+  type: object
+  properties:
+    task_id:
+      type: string
+    comments:
+      type: string
+  description: Request payload for task completion operation. Contains parameters
+    required to execute the operation.

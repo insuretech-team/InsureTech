@@ -1,0 +1,19 @@
+PortalConfigUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    portal:
+      $ref: '#/components/schemas/Portal'
+    updated_by:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when portal config is updated. Published to event stream
+    for downstream processing and audit trail.

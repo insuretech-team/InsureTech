@@ -1,0 +1,8 @@
+BeneficiaryType:
+  type: string
+  enum:
+  - BENEFICIARY_TYPE_UNSPECIFIED
+  - BENEFICIARY_TYPE_INDIVIDUAL
+  - BENEFICIARY_TYPE_BUSINESS
+  description: 'Type categorization for beneficiary. Options: BENEFICIARY_TYPE_UNSPECIFIED,
+    BENEFICIARY_TYPE_INDIVIDUAL, BENEFICIARY_TYPE_BUSINESS.'

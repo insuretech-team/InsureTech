@@ -1,0 +1,71 @@
+InsurerConfig:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:config_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    insurer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_id;not null"'
+      x-unique: true
+    api_base_url:
+      type: string
+      description: "API Integration\n @inject_tag: gorm:\"column:api_base_url\""
+    api_version:
+      type: string
+      description: '@inject_tag: gorm:"column:api_version"'
+    auth_type:
+      $ref: '#/components/schemas/AuthenticationType'
+      description: '@inject_tag: gorm:"column:auth_type;serializer:proto_enum"'
+    auth_credentials:
+      type: string
+      description: '@inject_tag: gorm:"column:auth_credentials"'
+      x-sensitive: true
+      writeOnly: true
+      x-encrypted: true
+      x-log-masked: true
+      x-data-purpose: Insurer API authentication
+    webhook_url:
+      type: string
+      description: "Webhook configuration\n @inject_tag: gorm:\"column:webhook_url\""
+    webhook_secret:
+      type: string
+      description: '@inject_tag: gorm:"column:webhook_secret"'
+      x-sensitive: true
+      writeOnly: true
+      x-encrypted: true
+      x-log-masked: true
+      x-data-purpose: Webhook signature validation
+    business_model:
+      type: string
+      description: "Business rules\n @inject_tag: gorm:\"column:business_model\""
+    auto_underwriting_enabled:
+      type: boolean
+      description: '@inject_tag: gorm:"column:auto_underwriting_enabled"'
+      default: false
+    underwriting_threshold:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:underwriting_threshold"'
+    real_time_claim_notification:
+      type: boolean
+      description: '@inject_tag: gorm:"column:real_time_claim_notification"'
+      default: false
+    claim_settlement_days:
+      type: integer
+      format: int32
+      description: "Settlement configuration\n @inject_tag: gorm:\"column:claim_settlement_days\""
+    payment_terms:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_terms"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Insurer integration and API configuration
+  required:
+  - id
+  - insurer_id
+  - audit_info

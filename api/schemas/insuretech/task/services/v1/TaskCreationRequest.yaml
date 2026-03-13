@@ -1,0 +1,21 @@
+TaskCreationRequest:
+  type: object
+  properties:
+    title:
+      type: string
+    description:
+      type: string
+    type:
+      type: string
+    priority:
+      type: string
+    assigned_to:
+      type: string
+    related_entity_type:
+      type: string
+    related_entity_id:
+      type: string
+    due_date:
+      type: string
+  description: Request payload for creating a new task creation. Contains all required
+    fields and optional parameters for initialization.

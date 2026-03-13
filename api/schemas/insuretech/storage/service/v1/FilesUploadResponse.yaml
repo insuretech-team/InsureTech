@@ -1,0 +1,9 @@
+FilesUploadResponse:
+  type: object
+  properties:
+    files:
+      type: array
+      items:
+        $ref: '#/components/schemas/StoredFile'
+  description: Response payload for files upload operation. Returns operation results
+    and status.

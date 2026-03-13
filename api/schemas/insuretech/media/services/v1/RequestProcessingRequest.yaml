@@ -1,0 +1,16 @@
+RequestProcessingRequest:
+  type: object
+  properties:
+    media_id:
+      type: string
+    processing_type:
+      type: string
+      description: OPTIMIZATION, THUMBNAIL, OCR, VIRUS_SCAN
+    priority:
+      type: integer
+      format: int32
+      description: 1-10
+    options:
+      type: object
+      description: Processing-specific options
+  description: Request Processing

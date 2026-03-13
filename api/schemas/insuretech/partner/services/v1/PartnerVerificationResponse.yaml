@@ -1,0 +1,17 @@
+PartnerVerificationResponse:
+  type: object
+  properties:
+    verified:
+      type: boolean
+    verification_status:
+      type: string
+    verified_at:
+      type: string
+      format: date-time
+    verified_by:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for partner verification operation. Returns operation
+    results and status.

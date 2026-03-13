@@ -1,0 +1,10 @@
+TokenValidationRequest:
+  type: object
+  properties:
+    access_token:
+      type: string
+      description: For JWT validation (mobile)
+    session_id:
+      type: string
+      description: For server-side session validation (web, extracted from cookie)
+  description: Validate Token Request (supports both JWT and server-side sessions)

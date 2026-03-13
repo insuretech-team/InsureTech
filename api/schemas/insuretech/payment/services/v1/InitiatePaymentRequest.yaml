@@ -1,0 +1,57 @@
+PaymentInitiatePaymentRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+      description: Core identity
+    policy_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    currency:
+      type: string
+    payment_method:
+      type: string
+      description: BKASH, NAGAD, ROCKET, CARD, BANK_TRANSFER, SSLCOMMERZ
+    callback_url:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Non-core extension values only
+    idempotency_key:
+      type: string
+      description: Idempotency key to prevent duplicate payment initiation (CG-3)
+    order_id:
+      type: string
+      description: "\u2500\u2500 Typed linkage fields (Phase 2 \u2014 replaces metadata\
+        \ map for core fields) \u2500\u2500"
+    invoice_id:
+      type: string
+    tenant_id:
+      type: string
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+    purchase_order_id:
+      type: string
+    customer_name:
+      type: string
+      description: "\u2500\u2500 Customer details for SSLCommerz session creation\
+        \ \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500"
+    customer_email:
+      type: string
+    customer_phone:
+      type: string
+    customer_address_line1:
+      type: string
+    customer_city:
+      type: string
+    customer_postcode:
+      type: string
+    customer_country:
+      type: string
+  description: Request/Response Messages

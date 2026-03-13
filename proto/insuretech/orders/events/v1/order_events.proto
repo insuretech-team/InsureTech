@@ -1,0 +1,130 @@
+syntax = "proto3";
+
+package insuretech.orders.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/orders/events/v1;ordereventsv1";
+option csharp_namespace = "Insuretech.Orders.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Order created from an approved quotation
+message OrderCreatedEvent {
+  string event_id        = 1;
+  string order_id        = 2;
+  string order_number    = 3;
+  string quotation_id    = 4;
+  string customer_id     = 5;
+  string product_id      = 6;
+  string plan_id         = 7;
+  insuretech.common.v1.Money total_payable = 8;
+  google.protobuf.Timestamp timestamp      = 9;
+  string correlation_id  = 10;
+  // Extended context fields (Phase 2)
+  string tenant_id        = 11;
+  string organisation_id  = 12;
+  string portal           = 13;
+  string actor_user_id    = 14;
+  string session_id       = 15;
+  string session_type     = 16;
+  string causation_id     = 17;
+  string idempotency_key  = 18;
+  string purchase_order_id = 19;
+  google.protobuf.Timestamp occurred_at = 20;
+}
+
+// Event: Payment initiated for an order
+message OrderPaymentInitiatedEvent {
+  string event_id            = 1;
+  string order_id            = 2;
+  string payment_id          = 3;
+  string payment_gateway_ref = 4;
+  insuretech.common.v1.Money amount = 5;
+  string payment_method      = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id      = 8;
+  // Extended context fields (Phase 2)
+  string tenant_id           = 9;
+  string organisation_id     = 10;
+  string portal              = 11;
+  string actor_user_id       = 12;
+  string session_id          = 13;
+  string causation_id        = 14;
+  string idempotency_key     = 15;
+  google.protobuf.Timestamp occurred_at = 16;
+}
+
+// Event: Payment confirmed — triggers downstream policy issuance
+message OrderPaymentConfirmedEvent {
+  string event_id        = 1;
+  string order_id        = 2;
+  string payment_id      = 3;
+  string quotation_id    = 4;
+  string customer_id     = 5;
+  string product_id      = 6;
+  string plan_id         = 7;
+  insuretech.common.v1.Money total_payable = 8;
+  google.protobuf.Timestamp timestamp      = 9;
+  string correlation_id  = 10;
+  // Extended context fields (Phase 2)
+  string tenant_id        = 11;
+  string organisation_id  = 12;
+  string portal           = 13;
+  string actor_user_id    = 14;
+  string session_id       = 15;
+  string causation_id     = 16;
+  string invoice_id       = 17;
+  google.protobuf.Timestamp occurred_at = 18;
+}
+
+// Event: Order cancelled
+message OrderCancelledEvent {
+  string event_id        = 1;
+  string order_id        = 2;
+  string customer_id     = 3;
+  string reason          = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string correlation_id  = 6;
+  // Extended context fields (Phase 2)
+  string tenant_id       = 7;
+  string organisation_id = 8;
+  string portal          = 9;
+  string actor_user_id   = 10;
+  string session_id      = 11;
+  string causation_id    = 12;
+  google.protobuf.Timestamp occurred_at = 13;
+}
+
+// Event: Order failed (payment timeout or gateway error)
+message OrderFailedEvent {
+  string event_id       = 1;
+  string order_id       = 2;
+  string payment_id     = 3;
+  string error_code     = 4;
+  string error_message  = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7;
+  // Extended context fields (Phase 2)
+  string tenant_id      = 8;
+  string organisation_id = 9;
+  string portal         = 10;
+  string actor_user_id  = 11;
+  string session_id     = 12;
+  string causation_id   = 13;
+  google.protobuf.Timestamp occurred_at = 14;
+}
+
+// Event: Order fully fulfilled — policy issued, receipt generated
+message OrderFulfillmentCompletedEvent {
+  string event_id        = 1;
+  string order_id        = 2;
+  string policy_id       = 3;
+  string invoice_id      = 4;
+  string payment_id      = 5;
+  string customer_id     = 6;
+  string tenant_id       = 7;
+  string organisation_id = 8;
+  string correlation_id  = 9;
+  string causation_id    = 10;
+  google.protobuf.Timestamp occurred_at = 11;
+}

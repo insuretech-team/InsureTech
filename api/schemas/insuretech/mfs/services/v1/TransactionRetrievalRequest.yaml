@@ -1,0 +1,7 @@
+TransactionRetrievalRequest:
+  type: object
+  properties:
+    mfs_transaction_id:
+      type: string
+  description: Request payload for retrieving transaction retrieval information. May
+    include filters and pagination parameters.

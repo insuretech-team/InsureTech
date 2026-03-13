@@ -1,0 +1,12 @@
+DashboardCreationResponse:
+  type: object
+  properties:
+    dashboard_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for dashboard creation operation. Returns operation
+    results and status.

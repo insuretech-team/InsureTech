@@ -1,0 +1,10 @@
+RiskAssessmentRetrievalResponse:
+  type: object
+  properties:
+    assessment:
+      $ref: '#/components/schemas/RiskAssessment'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for risk assessment retrieval operation. Returns operation
+    results and status.

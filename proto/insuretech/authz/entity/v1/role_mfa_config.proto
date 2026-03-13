@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 8. RoleMFAConfig — per-role MFA override (overrides portal-level default)
+// ---------------------------------------------------------------------------
+message RoleMFAConfig {
+  option (insuretech.common.v1.table) = {
+    table_name     : "role_mfa_configs"
+    schema_name    : "authz_schema"
+    migration_order: 8
+    is_table       : true
+    comment        : "Per-role MFA requirements that override portal-level defaults"
+    soft_delete    : false
+    audit_fields   : true
+    enable_rls     : false
+  };
+
+  string role_id        = 1 [(insuretech.common.v1.column) = {
+    column_name: "role_id"  sql_type: "UUID"  primary_key: true  not_null: true
+    foreign_key: { references_table: "roles" references_column: "role_id"
+      references_schema: "authz_schema" on_delete: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_role_mfa_configs_role_id" }
+  }];
+  bool   mfa_required   = 2 [(insuretech.common.v1.column) = {
+    column_name: "mfa_required"  sql_type: "BOOLEAN"  not_null: true  default_value: "false"
+  }];
+  repeated string mfa_methods = 3; // JSONB: ["totp","sms"]
+  string updated_by     = 4 [(insuretech.common.v1.column) = { column_name: "updated_by"  sql_type: "UUID" }];
+  google.protobuf.Timestamp updated_at = 5 [(insuretech.common.v1.column) = {
+    column_name: "updated_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"
+  }];
+}

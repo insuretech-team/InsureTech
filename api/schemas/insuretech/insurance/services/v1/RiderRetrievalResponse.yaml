@@ -1,0 +1,7 @@
+RiderRetrievalResponse:
+  type: object
+  properties:
+    rider:
+      $ref: '#/components/schemas/ProductsRider'
+  description: Response payload for rider retrieval operation. Returns operation results
+    and status.

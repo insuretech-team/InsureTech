@@ -1,0 +1,6 @@
+HealthDeclarationCreationRequest:
+  type: object
+  properties:
+    declaration:
+      $ref: '#/components/schemas/UnderwritingHealthDeclaration'
+  description: ========== HEALTH DECLARATION MESSAGES ==========

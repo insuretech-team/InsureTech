@@ -1,0 +1,60 @@
+StoredFile:
+  type: object
+  properties:
+    file_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:file_id;not null"'
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id"'
+    filename:
+      type: string
+      description: '@inject_tag: gorm:"column:filename;not null"'
+    content_type:
+      type: string
+      description: '@inject_tag: gorm:"column:content_type;not null"'
+    size_bytes:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:size_bytes;not null"'
+    storage_key:
+      type: string
+      description: '@inject_tag: gorm:"column:storage_key;not null"'
+    bucket:
+      type: string
+      description: '@inject_tag: gorm:"column:bucket;not null"'
+    url:
+      type: string
+      description: '@inject_tag: gorm:"column:url;not null"'
+    cdn_url:
+      type: string
+      description: '@inject_tag: gorm:"column:cdn_url"'
+    file_type:
+      $ref: '#/components/schemas/FileType'
+      description: '@inject_tag: gorm:"column:file_type;not null;serializer:proto_enum"'
+    reference_id:
+      type: string
+      description: '@inject_tag: gorm:"column:reference_id"'
+    reference_type:
+      type: string
+      description: '@inject_tag: gorm:"column:reference_type"'
+    is_public:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_public;not null"'
+    expires_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    uploaded_by:
+      type: string
+      description: '@inject_tag: gorm:"column:uploaded_by;not null"'
+  description: "StoredFile represents a file stored in object storage (S3/Spaces/etc.)\n\
+    \ Maps to 'files' table in storage_schema"

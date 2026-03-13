@@ -1,0 +1,11 @@
+APIKeyRotationRequest:
+  type: object
+  properties:
+    key_id:
+      type: string
+    grace_period_hours:
+      type: integer
+      format: int32
+      description: 'Default: 24 hours'
+  description: Request payload for api key rotation operation. Contains parameters
+    required to execute the operation.

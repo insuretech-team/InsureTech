@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package insuretech.support.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/support/entity/v1;supportv1";
+
+// Ticket message/reply
+message TicketMessage {
+  option (insuretech.common.v1.table) = {
+    table_name: "ticket_messages"
+    schema_name: "support_schema"
+    migration_order: 88
+    is_table: true
+    audit_fields: true
+    comment: "Ticket conversation messages"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "message_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:message_id;not null"
+  
+  string ticket_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "ticket_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "tickets"
+      references_column: "ticket_id"
+      references_schema: "support_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_ticket_messages_ticket_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:ticket_id;not null"
+  
+  string sender_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "sender_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+  }];
+  // @inject_tag: gorm:"column:sender_id;not null"
+  
+  MessageType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string content = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "content"
+      sql_type: "TEXT"
+      not_null: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Support ticket communication and issue resolution"
+  ];
+  // @inject_tag: gorm:"column:content;not null"
+  
+  string attachments = 6 [(insuretech.common.v1.column) = {
+    column_name: "attachments"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "File attachments"
+  }];
+  // @inject_tag: gorm:"column:attachments"
+  
+  bool is_internal = 7 [(insuretech.common.v1.column) = {
+    column_name: "is_internal"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+    comment: "Internal note (not visible to customer)"
+  }];
+  // @inject_tag: gorm:"column:is_internal"
+  
+  insuretech.common.v1.AuditInfo audit_info = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum MessageType {
+  MESSAGE_TYPE_UNSPECIFIED = 0;
+  MESSAGE_TYPE_REPLY = 1;
+  MESSAGE_TYPE_NOTE = 2;
+  MESSAGE_TYPE_STATUS_CHANGE = 3;
+  MESSAGE_TYPE_ASSIGNMENT = 4;
+}
+

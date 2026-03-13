@@ -1,0 +1,868 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentication DTOs - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .domain-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .domain-icon {
+            font-size: 2.5em;
+        }
+        
+        .domain-name {
+            font-size: 2em;
+            font-weight: 600;
+        }
+        
+        .domain-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: white;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #999;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 15px 20px;
+        }
+        
+        .name-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .schema-name {
+            font-size: 1.05em;
+        }
+        
+        .desc-cell {
+            color: #666;
+        }
+        
+        .props-cell {
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        
+        .badge-request {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .badge-response {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-type {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / DTOs
+            </div>
+            <div class="domain-title">
+                <span class="domain-icon">🔐</span>
+                <div>
+                    <div class="domain-name">Authentication DTOs</div>
+                    <div class="domain-description">Hybrid authentication: Server-side (web) + JWT (mobile)</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">64</div>
+                    <div class="stat-label">DTOs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search schemas..." onkeyup="filterTable()">
+            <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="table-container">
+            <table id="schemaTable">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Schema Name</th>
+                        <th style="width: 50%;">Description</th>
+                        <th style="width: 15%;">Properties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr onclick="window.location.href='schema_authnendvoicesessionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnEndVoiceSessionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for end voice session operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnendvoicesessionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnEndVoiceSessionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for end voice session operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnjwksretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnJWKSRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving jwks retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">0 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnjwksretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnJWKSRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for jwks retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnkycrejectionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnKYCRejectionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for kyc rejection operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnkycrejectionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnKYCRejectionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for kyc rejection operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnvoicesessionretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnVoiceSessionRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving voice session retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authnvoicesessionretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthnVoiceSessionRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for voice session retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authzjwksretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthzJWKSRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving jwks retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">0 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_authzjwksretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuthzJWKSRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for jwks retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_biometricauthenticaterequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BiometricAuthenticateRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">BiometricAuthenticate Request
+ The biometric_token is the raw 64-hex-char token issued at user creation.
+ It must be stored securely on-device (Keystore/Secure Enclave).
+ device_id must match the device_id used at registration.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_biometricauthenticateresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BiometricAuthenticateResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for biometric authenticate operation. Returns operation results and status.</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_currentsessionretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CurrentSessionRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Get Current Session Request
+ Session extracted from cookie (web) or Authorization header (mobile)</td>
+                <td class="props-cell">0 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_currentsessionretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CurrentSessionRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for current session retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailuserregistrationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailUserRegistrationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Register Email User Request
+ Only for user_type: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or
+ B2B_ORG_ADMIN
+ Email is REQUIRED. Triggers an email verification OTP automatically.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailuserregistrationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailUserRegistrationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for email user registration operation. Returns operation results and status.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_initiatevoicesessionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InitiateVoiceSessionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for initiate voice session operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_initiatevoicesessionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InitiateVoiceSessionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for initiate voice session operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycsessioncompletionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCSessionCompletionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for kyc session completion operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycsessioncompletionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCSessionCompletionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for kyc session completion operation. Returns operation results and status.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revokeallsessionsrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevokeAllSessionsRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Revoke All Sessions Request</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revokeallsessionsresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevokeAllSessionsResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for revoke all sessions operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revokesessionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevokeSessionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Revoke Session Request</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revokesessionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevokeSessionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for revoke session operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sessionretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SessionRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Get Session Request</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sessionretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SessionRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for session retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sessionslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SessionsListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">List Sessions Request</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sessionslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SessionsListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for sessions listing operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userclaimslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserClaimsListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing user claims listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userclaimslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserClaimsListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user claims listing operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentdeletionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentDeletionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for user document deletion operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentdeletionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentDeletionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user document deletion operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving user document retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user document retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentupdaterequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentUpdateRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for updating an existing user document update. Contains fields to be modified.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentupdateresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentUpdateResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user document update operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentuploadrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentUploadRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for user document upload operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentuploadresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentUploadResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user document upload operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentsListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing user documents listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userdocumentslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserDocumentsListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user documents listing operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_usernotificationsretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserNotificationsRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving user notifications retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_usernotificationsretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserNotificationsRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user notifications retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userpermissionsretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserPermissionsRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving user permissions retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userpermissionsretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserPermissionsRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user permissions retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userpolicieslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserPoliciesListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing user policies listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userpolicieslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserPoliciesListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user policies listing operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofilecreationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileCreationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for creating a new user profile creation. Contains all required fields and optional parameters for initialization.</td>
+                <td class="props-cell">22 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofilecreationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileCreationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user profile creation operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofileretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving user profile retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofileretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user profile retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofileupdaterequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileUpdateRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for updating an existing user profile update. Contains fields to be modified.</td>
+                <td class="props-cell">23 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userprofileupdateresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserProfileUpdateResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user profile update operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userroleslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserRolesListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing user roles listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_userroleslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UserRolesListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for user roles listing operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voiceendvoicesessionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceEndVoiceSessionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for end voice session operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voiceendvoicesessionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceEndVoiceSessionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for end voice session operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessioncreationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionCreationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for creating a new voice session creation. Contains all required fields and optional parameters for initialization.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessioncreationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionCreationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for voice session creation operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessionstartrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionStartRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for voice session start operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessionstartresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionStartResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for voice session start operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessionverificationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionVerificationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for voice session verification operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicesessionverificationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceSessionVerificationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for voice session verification operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicevoicesessionretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceVoiceSessionRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving voice session retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicevoicesessionretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceVoiceSessionRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for voice session retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('schemaTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

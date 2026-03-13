@@ -1,0 +1,287 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authn/entity/v1/enums.proto";
+
+// Session represents user authentication session (HYBRID: Server-side + JWT)
+// Maps to 'sessions' table in authn_schema
+message Session {
+  option (insuretech.common.v1.table) = {
+    table_name : "sessions"
+    schema_name : "authn_schema"
+    migration_order : 3
+    is_table : true
+    comment : "Hybrid authentication sessions supporting both server-side "
+              "(web) and JWT (mobile/API)"
+    soft_delete : false
+    audit_fields : false
+    enable_rls : true
+  };
+
+  string session_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "session_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Session UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:session_id;not null"
+
+  string user_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to users table"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_sessions_user_id"
+    }
+    index : {index_name : "idx_sessions_user_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:user_id;not null"
+
+  // Session type determines authentication method (SERVER_SIDE for web, JWT for
+  // mobile)
+  SessionType session_type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "session_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Authentication type: SERVER_SIDE (web portals) or JWT "
+              "(mobile/API)"
+    index : {
+      index_name : "idx_sessions_session_type"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:session_type;not null;serializer:proto_enum"
+
+  // ========================================
+  // SERVER-SIDE SESSION FIELDS (Web Portals)
+  // ========================================
+
+  // Bcrypt hash of session token for server-side sessions (web portals)
+  // Only populated when session_type = SERVER_SIDE
+  string session_token_hash = 4 [
+    (insuretech.common.v1.column) = {
+      column_name : "session_token_hash"
+      sql_type : "VARCHAR(128)"
+      comment : "Bcrypt hash of session token (for server-side sessions only)"
+      index : {
+        index_name : "idx_sessions_token_hash"
+        index_type : INDEX_TYPE_HASH
+        where_clause : "session_type = 'SERVER_SIDE'"
+      }
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true
+  ];
+  // @inject_tag: gorm:"column:session_token_hash"
+
+  // Deterministic lookup hash (sha256 hex) of the plain session token.
+  // Used to find the session row quickly, then the plain token is verified against
+  // bcrypt session_token_hash.
+  // Only populated when session_type = SERVER_SIDE.
+  string session_token_lookup = 19 [
+    (insuretech.common.v1.column) = {
+      column_name : "session_token_lookup"
+      sql_type : "VARCHAR(64)"
+      comment : "SHA-256 hex of session token for deterministic lookup (server-side sessions only)"
+      index : {
+        index_name : "idx_sessions_token_lookup"
+        index_type : INDEX_TYPE_HASH
+        where_clause : "session_type = 'SERVER_SIDE'"
+      }
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true
+  ];
+  // @inject_tag: gorm:"column:session_token_lookup"
+  // ========================================
+  // JWT SESSION FIELDS (Mobile/API)
+  // ========================================
+
+  // JWT ID for access token (only for JWT sessions)
+  string access_token_jti = 5 [ (insuretech.common.v1.column) = {
+    column_name : "access_token_jti"
+    sql_type : "VARCHAR(36)"
+    comment : "JWT ID (jti claim) for access token revocation tracking (JWT "
+              "sessions only)"
+    index : {
+      index_name : "idx_sessions_access_token_jti"
+      index_type : INDEX_TYPE_HASH
+      where_clause : "session_type = 'JWT'"
+    }
+  } ];
+  // @inject_tag: gorm:"column:access_token_jti"
+
+  // JWT ID for refresh token (only for JWT sessions)
+  string refresh_token_jti = 6 [ (insuretech.common.v1.column) = {
+    column_name : "refresh_token_jti"
+    sql_type : "VARCHAR(36)"
+    comment : "JWT ID (jti claim) for refresh token revocation tracking (JWT "
+              "sessions only)"
+    index : {
+      index_name : "idx_sessions_refresh_token_jti"
+      index_type : INDEX_TYPE_HASH
+      where_clause : "session_type = 'JWT'"
+    }
+  } ];
+  // @inject_tag: gorm:"column:refresh_token_jti"
+
+  google.protobuf.Timestamp access_token_expires_at = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "access_token_expires_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Access token expiry (15 minutes for JWT sessions)"
+        index : {
+          index_name : "idx_sessions_access_token_expires"
+          index_type : INDEX_TYPE_BTREE
+          where_clause : "session_type = 'JWT'"
+        }
+      } ];
+  // @inject_tag: gorm:"column:access_token_expires_at;serializer:proto_timestamp"
+  // gorm:"column:access_token_expires_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp refresh_token_expires_at = 8
+      [ (insuretech.common.v1.column) = {
+        column_name : "refresh_token_expires_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Refresh token expiry (7 days for JWT sessions)"
+        index : {
+          index_name : "idx_sessions_refresh_token_expires"
+          index_type : INDEX_TYPE_BTREE
+          where_clause : "session_type = 'JWT'"
+        }
+      } ];
+  // @inject_tag: gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"
+  // gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"
+
+  // ========================================
+  // COMMON FIELDS (Both Session Types)
+  // ========================================
+
+  // Session expiry: 12 hours for SERVER_SIDE, 7 days for JWT
+  google.protobuf.Timestamp expires_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "expires_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    comment : "Session expiry time (12 hours for SERVER_SIDE, 7 days for JWT)"
+    index : {
+      index_name : "idx_sessions_expires_at"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"
+
+  string ip_address = 10 [
+    (insuretech.common.v1.column) = {
+      column_name : "ip_address"
+      sql_type : "INET"
+      comment : "Client IP address"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Security and fraud detection"
+  ];
+  // @inject_tag: gorm:"column:ip_address"
+
+  string user_agent = 11 [ (insuretech.common.v1.column) = {
+    column_name : "user_agent"
+    sql_type : "TEXT"
+    comment : "Browser/app user agent string"
+  } ];
+  // @inject_tag: gorm:"column:user_agent"
+
+  string device_id = 12 [ (insuretech.common.v1.column) = {
+    column_name : "device_id"
+    sql_type : "VARCHAR(255)"
+    comment : "Unique device identifier"
+    index : {
+      index_name : "idx_sessions_device_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:device_id"
+
+  string device_name = 13 [ (insuretech.common.v1.column) = {
+    column_name : "device_name"
+    sql_type : "VARCHAR(255)"
+    comment : "Human-readable device name (e.g., 'iPhone 13', 'Chrome on "
+              "Windows')"
+  } ];
+  // @inject_tag: gorm:"column:device_name"
+
+  DeviceType device_type = 14 [ (insuretech.common.v1.column) = {
+    column_name : "device_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Device type determines authentication method"
+    index : {
+      index_name : "idx_sessions_device_type"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:device_type;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp created_at = 15 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp
+      last_activity_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "last_activity_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "Last API request timestamp (sliding expiration for SERVER_SIDE)"
+    index : {
+      index_name : "idx_sessions_last_activity"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:last_activity_at;not null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp"
+
+  bool is_active = 17 [ (insuretech.common.v1.column) = {
+    column_name : "is_active"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "true"
+    comment : "Session active status (false = revoked/logged out)"
+    index : {
+      index_name : "idx_sessions_is_active"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  // CSRF token for server-side sessions (web portals only)
+  string csrf_token = 18 [
+    (insuretech.common.v1.column) = {
+      column_name : "csrf_token"
+      sql_type : "VARCHAR(64)"
+      comment : "CSRF token for server-side sessions (web only, for form "
+                "protection)"
+    },
+    (insuretech.common.v1.sensitive) = true
+  ];
+  // @inject_tag: gorm:"column:csrf_token"
+}

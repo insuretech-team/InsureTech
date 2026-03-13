@@ -1,0 +1,7 @@
+InsuranceBeneficiaryUpdateResponse:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+  description: Response payload for beneficiary update operation. Returns operation
+    results and status.

@@ -1,0 +1,6 @@
+GracePeriodCreationRequest:
+  type: object
+  properties:
+    grace_period:
+      $ref: '#/components/schemas/GracePeriod'
+  description: ========== GRACE PERIOD MESSAGES ==========

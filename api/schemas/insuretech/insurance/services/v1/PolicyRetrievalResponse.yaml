@@ -1,0 +1,7 @@
+InsurancePolicyRetrievalResponse:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/Policy'
+  description: Response payload for policy retrieval operation. Returns operation
+    results and status.

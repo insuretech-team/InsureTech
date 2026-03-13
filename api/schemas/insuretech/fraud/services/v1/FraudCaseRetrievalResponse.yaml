@@ -1,0 +1,10 @@
+FraudFraudCaseRetrievalResponse:
+  type: object
+  properties:
+    fraud_case:
+      $ref: '#/components/schemas/FraudCase'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for fraud case retrieval operation. Returns operation
+    results and status.

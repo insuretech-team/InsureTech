@@ -1,0 +1,23 @@
+GatewayWebhookHandlingRequest:
+  type: object
+  properties:
+    provider:
+      type: string
+      description: sslcommerz, bkash, nagad
+    headers:
+      type: object
+      additionalProperties:
+        type: string
+      description: Raw HTTP headers
+    raw_payload:
+      type: string
+      format: byte
+      description: Raw callback body
+    remote_addr:
+      type: string
+      description: Source IP for verification
+    received_at:
+      type: string
+      format: date-time
+  description: Request payload for gateway webhook handling operation. Contains parameters
+    required to execute the operation.

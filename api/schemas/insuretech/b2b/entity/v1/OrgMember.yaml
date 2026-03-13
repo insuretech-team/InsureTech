@@ -1,0 +1,41 @@
+OrgMember:
+  type: object
+  properties:
+    member_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:member_id;not null"'
+    organisation_id:
+      type: string
+      description: "The organisation this member belongs to\r\n @inject_tag: gorm:\"\
+        column:organisation_id;not null;index\""
+    user_id:
+      type: string
+      description: "The platform user ID (from authn_schema.users.user_id)\r\n @inject_tag:\
+        \ gorm:\"column:user_id;not null;index\""
+    role:
+      $ref: '#/components/schemas/OrgMemberRole'
+      description: "Role within the organisation (BUSINESS_ADMIN, HR_MANAGER, VIEWER)\r\
+        \n @inject_tag: gorm:\"column:role;not null\""
+    status:
+      $ref: '#/components/schemas/OrgMemberStatus'
+      description: '@inject_tag: gorm:"column:status;not null"'
+    joined_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "OrgMember links a platform user (authn_schema.users) to an Organisation\
+    \ with\r\n a role. This is how we know which organisation a logged-in admin/HR\
+    \ belongs\r\n to. The business_id stored in every JWT-derived session maps to\r\
+    \n organisation_id here."

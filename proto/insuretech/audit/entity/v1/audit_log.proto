@@ -1,0 +1,169 @@
+syntax = "proto3";
+
+package insuretech.audit.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/audit/entity/v1;auditv1";
+
+// Audit log (FR-153 to FR-158)
+message AuditLog {
+  option (insuretech.common.v1.table) = {
+    table_name : "audit_logs"
+    schema_name : "compliance_schema"
+    migration_order : 97
+    is_table : true
+    audit_fields : false
+    comment : "System audit trail for compliance"
+  };
+
+  string audit_log_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "audit_log_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:audit_log_id;not null"
+
+  string entity_type = 2 [ (insuretech.common.v1.column) = {
+    column_name : "entity_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    index : {
+      index_name : "idx_audit_logs_entity_type"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:entity_type;not null"
+
+  string entity_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "entity_id"
+    sql_type : "UUID"
+    not_null : true
+    index : {
+      index_name : "idx_audit_logs_entity_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:entity_id;not null"
+
+  AuditAction action = 4 [ (insuretech.common.v1.column) = {
+    column_name : "action"
+    sql_type : "VARCHAR(20)"
+    not_null : true
+    index : {index_name : "idx_audit_logs_action" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:action;not null;serializer:proto_enum"
+
+  string user_id = 5 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+    }
+    index : {
+      index_name : "idx_audit_logs_user_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:user_id"
+
+  string user_email = 6 [
+    (insuretech.common.v1.column) = {
+      column_name : "user_email"
+      sql_type : "VARCHAR(255)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Audit trail"
+  ];
+  // @inject_tag: gorm:"column:user_email"
+
+  string user_role = 7 [ (insuretech.common.v1.column) = {
+    column_name : "user_role"
+    sql_type : "VARCHAR(50)"
+  } ];
+  // @inject_tag: gorm:"column:user_role"
+
+  string old_values = 8 [ (insuretech.common.v1.column) = {
+    column_name : "old_values"
+    sql_type : "JSONB"
+    is_json : true
+    comment : "State before change"
+  } ];
+  // @inject_tag: gorm:"column:old_values"
+
+  string new_values = 9 [ (insuretech.common.v1.column) = {
+    column_name : "new_values"
+    sql_type : "JSONB"
+    is_json : true
+    comment : "State after change"
+  } ];
+  // @inject_tag: gorm:"column:new_values"
+
+  string changes = 10 [ (insuretech.common.v1.column) = {
+    column_name : "changes"
+    sql_type : "JSONB"
+    is_json : true
+    comment : "Field-level changes"
+  } ];
+  // @inject_tag: gorm:"column:changes"
+
+  string ip_address = 11 [
+    (insuretech.common.v1.column) = {
+      column_name : "ip_address"
+      sql_type : "INET"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Security audit"
+  ];
+  // @inject_tag: gorm:"column:ip_address"
+
+  string user_agent = 12 [ (insuretech.common.v1.column) = {
+    column_name : "user_agent"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:user_agent"
+
+  string trace_id = 13 [ (insuretech.common.v1.column) = {
+    column_name : "trace_id"
+    sql_type : "VARCHAR(64)"
+    index : {
+      index_name : "idx_audit_logs_trace_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:trace_id"
+
+  google.protobuf.Timestamp timestamp = 14 [ (insuretech.common.v1.column) = {
+    column_name : "timestamp"
+    sql_type : "TIMESTAMPTZ"
+    not_null : true
+    default_value : "now()"
+    index : {
+      index_name : "idx_audit_logs_timestamp"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+}
+
+enum AuditAction {
+  AUDIT_ACTION_UNSPECIFIED = 0;
+  AUDIT_ACTION_CREATE = 1;
+  AUDIT_ACTION_READ = 2;
+  AUDIT_ACTION_UPDATE = 3;
+  AUDIT_ACTION_DELETE = 4;
+  AUDIT_ACTION_LOGIN = 5;
+  AUDIT_ACTION_LOGOUT = 6;
+  AUDIT_ACTION_APPROVE = 7;
+  AUDIT_ACTION_REJECT = 8;
+  AUDIT_ACTION_EXPORT = 9;
+}

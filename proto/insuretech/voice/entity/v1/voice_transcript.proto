@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package insuretech.voice.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/voice/entity/v1;voicev1";
+
+// Voice interaction transcript
+message VoiceTranscript {
+  option (insuretech.common.v1.table) = {
+    table_name: "voice_transcripts"
+    schema_name: "ai_schema"
+    migration_order: 69
+    is_table: true
+    audit_fields: true
+    comment: "Transcripts of voice interactions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "transcript_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:transcript_id;not null"
+  
+  string voice_session_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "voice_session_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "voice_sessions"
+      references_column: "session_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_voice_transcripts_session_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:voice_session_id;not null"
+  
+  SpeakerType speaker = 3 [(insuretech.common.v1.column) = {
+    column_name: "speaker"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:speaker;not null;serializer:proto_enum"
+  
+  string text = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "text"
+      sql_type: "TEXT"
+      not_null: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Voice interaction transcript for service improvement",
+    (insuretech.common.v1.retention_days) = 365
+  ];
+  // @inject_tag: gorm:"column:text;not null"
+  
+  string language = 5 [(insuretech.common.v1.column) = {
+    column_name: "language"
+    sql_type: "VARCHAR(10)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:language;not null"
+  
+  float confidence = 6 [(insuretech.common.v1.column) = {
+    column_name: "confidence"
+    sql_type: "REAL"
+  }];
+  // @inject_tag: gorm:"column:confidence"
+  
+  int32 sequence_number = 7 [(insuretech.common.v1.column) = {
+    column_name: "sequence_number"
+    sql_type: "INTEGER"
+    not_null: true
+    comment: "Order in conversation"
+  }];
+  // @inject_tag: gorm:"column:sequence_number;not null"
+  
+  google.protobuf.Timestamp timestamp = 8 [(insuretech.common.v1.column) = {
+    column_name: "timestamp"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum SpeakerType {
+  SPEAKER_TYPE_UNSPECIFIED = 0;
+  SPEAKER_TYPE_USER = 1;
+  SPEAKER_TYPE_SYSTEM = 2;
+  SPEAKER_TYPE_AGENT = 3;
+}
+
+

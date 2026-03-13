@@ -1,0 +1,36 @@
+TokenConfig:
+  type: object
+  properties:
+    kid:
+      type: string
+      x-primary-key: true
+    algorithm:
+      type: string
+      default: RS256
+    public_key_pem:
+      type: string
+      description: 'public_key_pem: stored in DB for JWKS endpoint serving'
+    private_key_ref:
+      type: string
+      description: 'private_key_ref: reference to secret in Vault / KMS (NEVER stored
+        in DB)'
+    is_active:
+      type: boolean
+      default: true
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    rotated_at:
+      type: string
+      format: date-time
+  description: "---------------------------------------------------------------------------\r\
+    \n 6. TokenConfig \u2014 RS256 signing key configuration (per environment)\r\n\
+    \ ---------------------------------------------------------------------------"
+  required:
+  - kid
+  - algorithm
+  - public_key_pem
+  - private_key_ref
+  - is_active
+  - created_at

@@ -1,0 +1,16 @@
+OTPSendingRequest:
+  type: object
+  properties:
+    recipient:
+      type: string
+      description: 'Phone: 8801XXXXXXXXX or email'
+    type:
+      type: string
+      description: registration, login, reset_password
+    channel:
+      type: string
+      description: sms (default), email
+    use_masking:
+      type: boolean
+      description: true = alphanumeric sender ID (BTRC masking)
+  description: Send OTP Request

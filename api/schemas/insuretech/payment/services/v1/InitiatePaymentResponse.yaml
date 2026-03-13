@@ -1,0 +1,37 @@
+PaymentInitiatePaymentResponse:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    transaction_id:
+      type: string
+      description: Internal transaction reference
+    payment_url:
+      type: string
+      description: Redirect URL for user (gateway page URL)
+    status:
+      type: string
+      description: PENDING, INITIATED
+    expires_at:
+      type: string
+      format: date-time
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+    provider:
+      type: string
+      description: "\u2500\u2500 Provider-specific response fields \u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n sslcommerz, bkash, manual"
+    gateway_page_url:
+      type: string
+      description: Full redirect URL (SSLCommerz GW page)
+    tran_id:
+      type: string
+      description: Merchant tran_id sent to SSLCommerz
+    session_key:
+      type: string
+      description: SSLCommerz session_key
+  description: Response payload for initiate payment operation. Returns operation
+    results and status.

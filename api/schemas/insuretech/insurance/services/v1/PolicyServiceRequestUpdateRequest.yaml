@@ -1,0 +1,7 @@
+PolicyServiceRequestUpdateRequest:
+  type: object
+  properties:
+    request:
+      $ref: '#/components/schemas/PolicyServiceRequest'
+  description: Request payload for updating an existing policy service update. Contains
+    fields to be modified.

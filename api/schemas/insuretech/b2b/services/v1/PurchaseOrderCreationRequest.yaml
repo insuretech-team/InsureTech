@@ -1,0 +1,21 @@
+PurchaseOrderCreationRequest:
+  type: object
+  properties:
+    department_id:
+      type: string
+    plan_id:
+      type: string
+    employee_count:
+      type: integer
+      format: int32
+    number_of_dependents:
+      type: integer
+      format: int32
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+    requested_by:
+      type: string
+    notes:
+      type: string
+  description: Request payload for creating a new purchase order creation. Contains
+    all required fields and optional parameters for initialization.

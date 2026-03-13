@@ -1,0 +1,20 @@
+InsurerInsurerConfigUpdateRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+    api_base_url:
+      type: string
+    auth_type:
+      type: string
+    auth_credentials:
+      type: string
+    business_model:
+      type: string
+      description: JSON
+    auto_underwriting_enabled:
+      type: boolean
+    real_time_claim_notification:
+      type: boolean
+  description: Request payload for updating an existing insurer config update. Contains
+    fields to be modified.

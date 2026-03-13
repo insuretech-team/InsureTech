@@ -1,0 +1,348 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Tasks Schemas - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .domain-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .domain-icon {
+            font-size: 2.5em;
+        }
+        
+        .domain-name {
+            font-size: 2em;
+            font-weight: 600;
+        }
+        
+        .domain-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: white;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #999;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 15px 20px;
+        }
+        
+        .name-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .schema-name {
+            font-size: 1.05em;
+        }
+        
+        .desc-cell {
+            color: #666;
+        }
+        
+        .props-cell {
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        
+        .badge-request {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .badge-response {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-type {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / Schemas
+            </div>
+            <div class="domain-title">
+                <span class="domain-icon">✓</span>
+                <div>
+                    <div class="domain-name">Tasks Schemas</div>
+                    <div class="domain-description">Task management and workflow</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">7</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search schemas..." onkeyup="filterTable()">
+            <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="table-container">
+            <table id="schemaTable">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Schema Name</th>
+                        <th style="width: 50%;">Description</th>
+                        <th style="width: 15%;">Properties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr onclick="window.location.href='schema_task.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Task</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Task (FR-136)</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_taskassignedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TaskAssignedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Task assigned</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_taskcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TaskCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Task completed</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_taskcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TaskCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Task created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_workflowtask.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WorkflowTask</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Workflow task (step execution)</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_workflowtaskassignedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WorkflowTaskAssignedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Workflow task assigned</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_workflowtaskcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WorkflowTaskCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Workflow task completed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('schemaTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

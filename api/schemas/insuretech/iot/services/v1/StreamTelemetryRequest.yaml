@@ -1,0 +1,7 @@
+StreamTelemetryRequest:
+  type: object
+  properties:
+    telemetry:
+      $ref: '#/components/schemas/Telemetry'
+  description: Request payload for stream telemetry operation. Contains parameters
+    required to execute the operation.

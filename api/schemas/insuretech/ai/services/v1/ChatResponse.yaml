@@ -1,0 +1,18 @@
+ChatResponse:
+  type: object
+  properties:
+    conversation_id:
+      type: string
+    message:
+      type: string
+    suggested_actions:
+      type: array
+      items:
+        type: string
+    conversation_ended:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for chat operation. Returns operation results and
+    status.

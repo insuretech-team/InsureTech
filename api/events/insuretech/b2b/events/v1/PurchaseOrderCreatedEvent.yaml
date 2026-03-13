@@ -1,0 +1,23 @@
+PurchaseOrderCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    purchase_order_id:
+      type: string
+    organisation_id:
+      type: string
+    department_id:
+      type: string
+    plan_id:
+      type: string
+    employee_count:
+      type: integer
+      format: int32
+    created_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: PurchaseOrderCreatedEvent is published when a new purchase order is
+    created

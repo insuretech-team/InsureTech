@@ -1,0 +1,16 @@
+package models
+
+// Operator represents a operator
+type Operator string
+
+// Operator values
+const (
+	OperatorOPERATORUNSPECIFIED Operator = "OPERATOR_UNSPECIFIED"
+	OperatorOPERATOREQUALS  = "OPERATOR_EQUALS"
+	OperatorOPERATORNOTEQUALS  = "OPERATOR_NOT_EQUALS"
+	OperatorOPERATORIN  = "OPERATOR_IN"
+	OperatorOPERATORNOTIN  = "OPERATOR_NOT_IN"
+	OperatorOPERATORGREATERTHAN  = "OPERATOR_GREATER_THAN"
+	OperatorOPERATORLESSTHAN  = "OPERATOR_LESS_THAN"
+	OperatorOPERATORCONTAINS  = "OPERATOR_CONTAINS"
+)

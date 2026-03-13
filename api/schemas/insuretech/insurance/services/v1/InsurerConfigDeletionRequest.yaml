@@ -1,0 +1,7 @@
+InsurerConfigDeletionRequest:
+  type: object
+  properties:
+    config_id:
+      type: string
+  description: Request payload for insurer config deletion operation. Contains parameters
+    required to execute the operation.

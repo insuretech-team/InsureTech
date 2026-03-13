@@ -1,0 +1,10 @@
+ReceiptGenerationRequest:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    requested_by:
+      type: string
+      description: user_id
+  description: Request payload for receipt generation operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,20 @@
+APIKeyRotationResponse:
+  type: object
+  properties:
+    new_key_id:
+      type: string
+    raw_key:
+      type: string
+      description: New key - shown ONCE
+    old_key_id:
+      type: string
+    old_key_expires_at:
+      type: string
+      format: date-time
+      description: When old key will be revoked
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for api key rotation operation. Returns operation
+    results and status.

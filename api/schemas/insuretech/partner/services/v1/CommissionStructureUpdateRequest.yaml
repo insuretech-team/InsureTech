@@ -1,0 +1,12 @@
+CommissionStructureUpdateRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+    commission_rates:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing commission structure update.
+    Contains fields to be modified.

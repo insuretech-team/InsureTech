@@ -1,0 +1,34 @@
+PolicyRider:
+  type: object
+  properties:
+    rider_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:rider_id;not null"'
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    rider_name:
+      type: string
+      description: '@inject_tag: gorm:"column:rider_name;not null"'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:premium_amount;not null"'
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:coverage_amount;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    premium_currency:
+      type: string
+      description: "Currency companion fields for Money types (flattened storage)\n\
+        \ @inject_tag: gorm:\"column:premium_currency;not null\""
+    coverage_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:coverage_currency;not null"'
+  description: "Rider/Add-on coverage\n Maps to 'policy_riders' table in insurance_schema"

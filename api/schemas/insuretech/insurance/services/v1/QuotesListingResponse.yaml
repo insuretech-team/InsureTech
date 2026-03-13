@@ -1,0 +1,12 @@
+InsuranceQuotesListingResponse:
+  type: object
+  properties:
+    quotes:
+      type: array
+      items:
+        $ref: '#/components/schemas/Quote'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for quotes listing operation. Returns operation results
+    and status.

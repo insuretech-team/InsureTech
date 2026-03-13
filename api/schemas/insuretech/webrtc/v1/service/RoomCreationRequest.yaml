@@ -1,0 +1,16 @@
+RoomCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    config:
+      $ref: '#/components/schemas/RoomConfig'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    creator_id:
+      type: string
+  description: Request payload for creating a new room creation. Contains all required
+    fields and optional parameters for initialization.

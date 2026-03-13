@@ -1,0 +1,9 @@
+TaskAssignmentRequest:
+  type: object
+  properties:
+    task_id:
+      type: string
+    assigned_to:
+      type: string
+  description: Request payload for task assignment operation. Contains parameters
+    required to execute the operation.

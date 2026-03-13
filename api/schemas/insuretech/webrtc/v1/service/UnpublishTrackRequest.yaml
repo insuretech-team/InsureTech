@@ -1,0 +1,11 @@
+UnpublishTrackRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    track_id:
+      type: string
+  description: Request payload for unpublish track operation. Contains parameters
+    required to execute the operation.

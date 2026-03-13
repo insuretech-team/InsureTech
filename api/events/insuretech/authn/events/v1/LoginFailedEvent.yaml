@@ -1,0 +1,24 @@
+LoginFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    mobile_number:
+      type: string
+    failure_reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    device_type:
+      type: string
+    user_agent:
+      type: string
+    failed_attempts_count:
+      type: integer
+      format: int32
+  description: 'Event: Login failed (security monitoring)'

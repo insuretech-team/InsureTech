@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.service;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/webrtc/v1/service;webrtcservicev1";
+option csharp_namespace = "Insuretech.Webrtc.V1.Service";
+
+service StatsService {
+  rpc GetConnectionStats(GetConnectionStatsRequest) returns (GetConnectionStatsResponse);
+  rpc StreamStats(StreamStatsRequest) returns (stream StreamStatsResponse);
+  rpc GetRoomAnalytics(GetRoomAnalyticsRequest) returns (GetRoomAnalyticsResponse);
+  rpc GetPeerAnalytics(GetPeerAnalyticsRequest) returns (GetPeerAnalyticsResponse);
+}
+
+message GetConnectionStatsRequest {
+  string room_id = 1;
+  string peer_id = 2;
+}
+
+message GetConnectionStatsResponse { ConnectionStats stats = 1; }
+
+message StreamStatsRequest {
+  string room_id = 1;
+  string peer_id = 2;
+  int32 interval_seconds = 3;
+}
+
+message StreamStatsResponse { ConnectionStats stats = 1; }
+
+message GetRoomAnalyticsRequest { string room_id = 1; }
+message GetRoomAnalyticsResponse { RoomAnalytics analytics = 1; }
+
+message GetPeerAnalyticsRequest { string peer_id = 1; }
+message GetPeerAnalyticsResponse { ParticipantAnalytics analytics = 1; }
+
+message ConnectionStats {
+  string peer_id = 1;
+  double bitrate_kbps = 2;
+  double packet_loss_percent = 3;
+  double rtt_ms = 4;
+  int64 bytes_sent = 5;
+  int64 bytes_received = 6;
+}
+
+message RoomAnalytics {
+  string room_id = 1;
+  int32 peak_participants = 2;
+  int64 total_sessions = 3;
+}
+
+message ParticipantAnalytics {
+  string peer_id = 1;
+  int64 total_time_seconds = 2;
+}
+

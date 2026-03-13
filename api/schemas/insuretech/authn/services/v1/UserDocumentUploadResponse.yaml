@@ -1,0 +1,11 @@
+UserDocumentUploadResponse:
+  type: object
+  properties:
+    document:
+      $ref: '#/components/schemas/UserDocument'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for user document upload operation. Returns operation
+    results and status.

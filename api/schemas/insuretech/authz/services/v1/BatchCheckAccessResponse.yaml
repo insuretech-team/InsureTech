@@ -1,0 +1,11 @@
+BatchCheckAccessResponse:
+  type: object
+  properties:
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/AccessCheckResult'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for batch check access operation. Returns operation
+    results and status.

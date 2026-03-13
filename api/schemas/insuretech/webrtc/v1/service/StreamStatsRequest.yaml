@@ -1,0 +1,12 @@
+StreamStatsRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    interval_seconds:
+      type: integer
+      format: int32
+  description: Request payload for stream stats operation. Contains parameters required
+    to execute the operation.

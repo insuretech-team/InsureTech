@@ -1,0 +1,7 @@
+QuotationDeletionRequest:
+  type: object
+  properties:
+    quotation_id:
+      type: string
+  description: Request payload for quotation deletion operation. Contains parameters
+    required to execute the operation.

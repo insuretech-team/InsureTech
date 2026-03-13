@@ -1,0 +1,55 @@
+PaymentRefund:
+  type: object
+  properties:
+    refund_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:refund_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    payment_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_id;not null"'
+    refund_payment_id:
+      type: string
+      description: '@inject_tag: gorm:"column:refund_payment_id"'
+    refund_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:refund_amount;not null"'
+    reason:
+      type: string
+      description: '@inject_tag: gorm:"column:reason;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/PaymentRefundStatus'
+      x-database-default: PENDING
+    approved_by:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_by"'
+    approved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"'
+    processed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "PaymentRefund for cancelled policies or overpayments (payment transaction\
+    \ record)\r\n Maps to 'refunds' table in payment_schema"
+  required:
+  - refund_id
+  - payment_id
+  - refund_amount
+  - reason
+  - status
+  - created_at
+  - updated_at

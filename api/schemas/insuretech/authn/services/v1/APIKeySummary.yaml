@@ -1,0 +1,24 @@
+APIKeySummary:
+  type: object
+  properties:
+    key_id:
+      type: string
+    name:
+      type: string
+    scopes:
+      type: array
+      items:
+        type: string
+    status:
+      type: string
+    expires_at:
+      type: string
+      format: date-time
+    last_used_at:
+      type: string
+      format: date-time
+    rate_limit_per_minute:
+      type: integer
+      format: int32
+  description: Domain entity representing api key summary. Core business object in
+    the system.

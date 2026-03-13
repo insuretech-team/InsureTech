@@ -1,0 +1,9 @@
+AccessCheckTuple:
+  type: object
+  properties:
+    object:
+      type: string
+    action:
+      type: string
+  description: Domain entity representing access check tuple. Core business object
+    in the system.

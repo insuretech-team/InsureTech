@@ -1,0 +1,7 @@
+PeerUpdateResponse:
+  type: object
+  properties:
+    peer:
+      $ref: '#/components/schemas/Peer'
+  description: Response payload for peer update operation. Returns operation results
+    and status.

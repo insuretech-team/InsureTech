@@ -1,0 +1,12 @@
+PeerJoinedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer:
+      $ref: '#/components/schemas/Peer'
+    joined_at:
+      type: string
+      format: date-time
+  description: Event emitted when peer undergoes joined. Published to event stream
+    for downstream processing and audit trail.

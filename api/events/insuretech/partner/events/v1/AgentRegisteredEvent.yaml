@@ -1,0 +1,15 @@
+AgentRegisteredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    partner_id:
+      type: string
+    agent_name:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Agent registered'

@@ -1,0 +1,16 @@
+FraudFraudCaseUpdateRequest:
+  type: object
+  properties:
+    fraud_case_id:
+      type: string
+    status:
+      type: string
+    outcome:
+      type: string
+    investigation_notes:
+      type: string
+    evidence:
+      type: object
+      description: 'CG-7: Typed structured data instead of JSON string'
+  description: Request payload for updating an existing fraud case update. Contains
+    fields to be modified.

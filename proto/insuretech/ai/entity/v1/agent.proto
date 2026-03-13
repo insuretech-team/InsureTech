@@ -1,0 +1,329 @@
+syntax = "proto3";
+
+package insuretech.ai.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/ai/entity/v1;aiv1";
+option csharp_namespace = "Insuretech.Ai.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// AIAgent represents an AI agent in the multi-agent system
+// Maps to 'ai_agents' table in ai_schema
+message AIAgent {
+  option (insuretech.common.v1.table) = {
+    table_name: "ai_agents"
+    schema_name: "ai_schema"
+    migration_order: 78
+    is_table: true
+    comment: "AI agents for underwriting, claims, fraud detection, customer support"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string agent_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "agent_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Agent UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:agent_id;not null"
+
+  string agent_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "agent_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      unique: true
+      comment: "Unique agent name"
+      index: {
+        index_name: "idx_ai_agents_agent_name"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:agent_name;not null"
+
+  AgentType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Agent type (UNDERWRITING, CLAIMS_ASSESSOR, FRAUD_DETECTOR, etc.)"
+      index: {
+        index_name: "idx_ai_agents_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  string model_name = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "model_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "LLM model name (e.g., gpt-4, claude-3, gemini-pro)"
+    }
+  ];
+  // @inject_tag: gorm:"column:model_name;not null"
+
+  AgentStatus status = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'IDLE'"
+      comment: "Agent status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  map<string, string> capabilities = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "capabilities"
+      sql_type: "JSONB"
+      comment: "Agent capabilities as JSON"
+      is_json: true
+    }
+  ];
+
+  google.protobuf.Timestamp created_at = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp last_active_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_active_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Last activity timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:last_active_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum AgentType {
+  AGENT_TYPE_UNSPECIFIED = 0;
+  AGENT_TYPE_UNDERWRITING = 1; // Underwriting assistant
+  AGENT_TYPE_CLAIMS_ASSESSOR = 2; // Claims evaluation
+  AGENT_TYPE_FRAUD_DETECTOR = 3; // Fraud detection
+  AGENT_TYPE_CUSTOMER_SUPPORT = 4; // Customer service chatbot
+  AGENT_TYPE_POLICY_ADVISOR = 5; // Policy recommendations
+  AGENT_TYPE_DOCUMENT_ANALYZER = 6; // OCR and document processing
+}
+
+enum AgentStatus {
+  AGENT_STATUS_UNSPECIFIED = 0;
+  AGENT_STATUS_IDLE = 1;
+  AGENT_STATUS_PROCESSING = 2;
+  AGENT_STATUS_OFFLINE = 3;
+}
+
+// Conversation with AI agent (for customer support, chatbots)
+// Maps to 'ai_conversations' table in ai_schema  
+message Conversation {
+  option (insuretech.common.v1.table) = {
+    table_name: "ai_conversations"
+    schema_name: "ai_schema"
+    migration_order: 79
+    is_table: true
+    comment: "AI agent conversations with users"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: true
+  };
+
+  string conversation_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "conversation_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Conversation UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:conversation_id;not null"
+
+  string user_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "user_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to users table"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_ai_conversations_user_id"
+      }
+      index: {
+        index_name: "idx_ai_conversations_user_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:user_id;not null"
+
+  string agent_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "agent_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to ai_agents table"
+      foreign_key: {
+        references_table: "ai_agents"
+        references_column: "agent_id"
+        references_schema: "ai_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_ai_conversations_agent_id"
+      }
+      index: {
+        index_name: "idx_ai_conversations_agent_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:agent_id;not null"
+
+  repeated Message messages = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "messages"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Conversation messages as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:messages;not null;serializer:proto_enum"
+
+  ConversationStatus status = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ACTIVE'"
+      comment: "Conversation status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp started_at = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "started_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Conversation start timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp ended_at = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "ended_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Conversation end timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"
+
+  map<string, string> context = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "context"
+      sql_type: "JSONB"
+      comment: "Conversation context as JSON"
+      is_json: true
+    }
+  ];
+}
+
+message Message {
+  string message_id = 1;
+  MessageRole role = 2;
+  string content = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  map<string, string> metadata = 5;
+}
+
+enum MessageRole {
+  MESSAGE_ROLE_UNSPECIFIED = 0;
+  MESSAGE_ROLE_USER = 1;
+  MESSAGE_ROLE_ASSISTANT = 2;
+  MESSAGE_ROLE_SYSTEM = 3;
+}
+
+enum ConversationStatus {
+  CONVERSATION_STATUS_UNSPECIFIED = 0;
+  CONVERSATION_STATUS_ACTIVE = 1;
+  CONVERSATION_STATUS_RESOLVED = 2;
+  CONVERSATION_STATUS_ESCALATED = 3;
+  CONVERSATION_STATUS_CLOSED = 4;
+}
+
+// AI Prediction/Analysis result
+message AIAnalysis {
+  string analysis_id = 1; // UUID
+  string agent_id = 2;
+  AnalysisType type = 3;
+  string subject_id = 4; // Policy, claim, or document ID
+  double confidence_score = 5; // 0-1
+  string result = 6; // JSON result
+  repeated string recommendations = 7;
+  google.protobuf.Timestamp analyzed_at = 8;
+}
+
+enum AnalysisType {
+  ANALYSIS_TYPE_UNSPECIFIED = 0;
+  ANALYSIS_TYPE_FRAUD_DETECTION = 1;
+  ANALYSIS_TYPE_RISK_ASSESSMENT = 2;
+  ANALYSIS_TYPE_DOCUMENT_VERIFICATION = 3;
+  ANALYSIS_TYPE_CLAIM_EVALUATION = 4;
+  ANALYSIS_TYPE_UNDERWRITING = 5;
+}
+
+// MCP Server connection
+message MCPServer {
+  string server_id = 1; // UUID
+  string server_name = 2;
+  string endpoint = 3; // URL or connection string
+  repeated string capabilities = 4; // What tools this server provides
+  ServerStatus status = 5;
+  google.protobuf.Timestamp last_ping_at = 6;
+}
+
+enum ServerStatus {
+  SERVER_STATUS_UNSPECIFIED = 0;
+  SERVER_STATUS_ONLINE = 1;
+  SERVER_STATUS_OFFLINE = 2;
+  SERVER_STATUS_DEGRADED = 3;
+}
+

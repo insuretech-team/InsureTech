@@ -1,0 +1,9 @@
+DepartmentView:
+  type: object
+  properties:
+    department:
+      $ref: '#/components/schemas/Department'
+    organisation_name:
+      type: string
+  description: Domain entity representing department view. Core business object in
+    the system.

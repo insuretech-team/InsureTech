@@ -1,0 +1,59 @@
+DocumentVerification:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:doc_verification_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    kyc_verification_id:
+      type: string
+      description: '@inject_tag: gorm:"column:kyc_verification_id;not null"'
+    document_type:
+      $ref: '#/components/schemas/KycDocumentType'
+      description: '@inject_tag: gorm:"column:document_type;not null;serializer:proto_enum"'
+    document_number:
+      type: string
+      description: '@inject_tag: gorm:"column:document_number;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Document verification and KYC compliance
+      x-retention-days: 2555
+    document_url:
+      type: string
+      description: '@inject_tag: gorm:"column:document_url"'
+    extracted_data:
+      type: string
+      description: '@inject_tag: gorm:"column:extracted_data"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Document data extraction for verification
+      x-retention-days: 2555
+    status:
+      allOf:
+      - $ref: '#/components/schemas/DocumentStatus'
+      x-database-default: PENDING
+    confidence_score:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:confidence_score"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Document verification
+  required:
+  - id
+  - kyc_verification_id
+  - document_type
+  - document_number
+  - status
+  - audit_info

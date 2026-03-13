@@ -1,0 +1,24 @@
+FraudAlertTriggeredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    fraud_alert_id:
+      type: string
+    alert_number:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    risk_level:
+      type: string
+    fraud_score:
+      type: integer
+      format: int32
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Fraud alert triggered'

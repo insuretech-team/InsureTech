@@ -1,0 +1,28 @@
+ApiKeyGenerationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    owner_type:
+      type: string
+      description: INSURER, PARTNER
+    owner_id:
+      type: string
+    scopes:
+      type: array
+      items:
+        type: string
+    rate_limit_per_minute:
+      type: integer
+      format: int32
+    expires_in_days:
+      type: string
+      description: Optional
+    ip_whitelist:
+      type: array
+      items:
+        type: string
+        description: Optional
+      description: Optional
+  description: Request payload for api key generation operation. Contains parameters
+    required to execute the operation.

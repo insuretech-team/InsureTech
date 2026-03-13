@@ -1,0 +1,12 @@
+VoiceSessionStartRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    phone_number:
+      type: string
+    language:
+      type: string
+      description: bn, en
+  description: Request payload for voice session start operation. Contains parameters
+    required to execute the operation.

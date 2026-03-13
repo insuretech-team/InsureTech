@@ -1,0 +1,7 @@
+QuoteUpdateResponse:
+  type: object
+  properties:
+    quote:
+      $ref: '#/components/schemas/Quote'
+  description: Response payload for quote update operation. Returns operation results
+    and status.

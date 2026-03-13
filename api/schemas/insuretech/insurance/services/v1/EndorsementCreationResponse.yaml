@@ -1,0 +1,7 @@
+EndorsementCreationResponse:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+  description: Response payload for endorsement creation operation. Returns operation
+    results and status.

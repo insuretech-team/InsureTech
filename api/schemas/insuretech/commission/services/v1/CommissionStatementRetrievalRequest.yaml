@@ -1,0 +1,11 @@
+CommissionStatementRetrievalRequest:
+  type: object
+  properties:
+    recipient_id:
+      type: string
+    period_start:
+      type: string
+    period_end:
+      type: string
+  description: Request payload for retrieving commission statement retrieval information.
+    May include filters and pagination parameters.

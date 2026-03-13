@@ -1,0 +1,7 @@
+InsuranceFraudRuleUpdateRequest:
+  type: object
+  properties:
+    rule:
+      $ref: '#/components/schemas/FraudRule'
+  description: Request payload for updating an existing fraud rule update. Contains
+    fields to be modified.

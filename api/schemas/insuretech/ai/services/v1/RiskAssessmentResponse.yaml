@@ -1,0 +1,23 @@
+RiskAssessmentResponse:
+  type: object
+  properties:
+    analysis_id:
+      type: string
+    risk_score:
+      type: number
+      format: double
+      description: 0-100
+    risk_category:
+      type: string
+      description: LOW, MEDIUM, HIGH
+    risk_factors:
+      type: array
+      items:
+        type: string
+    recommended_premium:
+      $ref: '#/components/schemas/Money'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for risk assessment operation. Returns operation results
+    and status.

@@ -1,0 +1,7 @@
+DocumentTemplateDeletionRequest:
+  type: object
+  properties:
+    template_id:
+      type: string
+  description: Request payload for document template deletion operation. Contains
+    parameters required to execute the operation.

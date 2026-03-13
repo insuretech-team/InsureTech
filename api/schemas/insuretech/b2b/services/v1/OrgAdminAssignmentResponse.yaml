@@ -1,0 +1,11 @@
+OrgAdminAssignmentResponse:
+  type: object
+  properties:
+    member:
+      $ref: '#/components/schemas/OrgMember'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for org admin assignment operation. Returns operation
+    results and status.

@@ -1,0 +1,7 @@
+RiderCreationResponse:
+  type: object
+  properties:
+    rider:
+      $ref: '#/components/schemas/ProductsRider'
+  description: Response payload for rider creation operation. Returns operation results
+    and status.

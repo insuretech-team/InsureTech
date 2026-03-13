@@ -1,0 +1,11 @@
+EmailOTPSendingRequest:
+  type: object
+  properties:
+    email:
+      type: string
+    type:
+      type: string
+      description: email_verification, email_login, password_reset_email
+  description: "Send Email OTP Request\r\n Sends OTP to email for: email_verification,\
+    \ email_login, password_reset_email\r\n Restricted: only BUSINESS_BENEFICIARY\
+    \ and SYSTEM_USER can use email OTP login"

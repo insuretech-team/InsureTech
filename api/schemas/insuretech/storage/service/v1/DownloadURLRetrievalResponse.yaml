@@ -1,0 +1,10 @@
+DownloadURLRetrievalResponse:
+  type: object
+  properties:
+    download_url:
+      type: string
+    expires_at:
+      type: string
+      format: date-time
+  description: Response payload for download url retrieval operation. Returns operation
+    results and status.

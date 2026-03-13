@@ -1,0 +1,19 @@
+KYCRejectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    kyc_verification_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    reason:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: KYC rejected'

@@ -1,0 +1,43 @@
+Role:
+  type: object
+  properties:
+    role_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    name:
+      type: string
+      x-unique: true
+    portal:
+      $ref: '#/components/schemas/Portal'
+    description:
+      type: string
+    is_system:
+      type: boolean
+      default: false
+    is_active:
+      type: boolean
+      default: true
+    created_by:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "---------------------------------------------------------------------------\r\
+    \n 2. Role \u2014 named role definition scoped to a portal\r\n ---------------------------------------------------------------------------"
+  required:
+  - role_id
+  - name
+  - portal
+  - is_system
+  - is_active
+  - created_at
+  - updated_at

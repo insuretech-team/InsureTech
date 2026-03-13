@@ -1,0 +1,156 @@
+syntax = "proto3";
+
+package insuretech.common.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1;commonv1";
+option csharp_namespace = "Insuretech.Common.V1";
+
+// Standard error response message for all services
+// Provides consistent error handling across the entire API
+message Error {
+  // Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+  // Use UPPER_SNAKE_CASE format
+  string code = 1;
+  
+  // Human-readable error message in user's language
+  // Should be clear and actionable
+  string message = 2;
+  
+  // Additional error details as key-value pairs
+  // Examples: {"field": "email", "reason": "invalid format"}
+  map<string, string> details = 3;
+  
+  // List of field-specific validation errors
+  // Used for form validation errors
+  repeated FieldViolation field_violations = 4;
+  
+  // Whether the operation can be retried
+  // true: Temporary error, client should retry
+  // false: Permanent error, don't retry
+  bool retryable = 5;
+  
+  // Suggested delay before retry (in seconds)
+  // Only set if retryable = true
+  int32 retry_after_seconds = 6;
+  
+  // HTTP status code equivalent
+  // 400 = Bad Request, 404 = Not Found, 500 = Internal Error
+  int32 http_status_code = 7;
+  
+  // Unique error instance ID for tracking and debugging
+  // Can be used to look up error in logs
+  string error_id = 8;
+  
+  // Link to documentation for this error
+  string documentation_url = 9;
+}
+
+// Field-level validation error
+message FieldViolation {
+  // Field path (e.g., "applicant.date_of_birth")
+  string field = 1;
+  
+  // Error code specific to this field
+  string code = 2;
+  
+  // Human-readable description of the violation
+  string description = 3;
+  
+  // The invalid value that was provided (if safe to return)
+  string rejected_value = 4;
+}
+
+// Standard error codes used across all services
+enum ErrorCode {
+  ERROR_CODE_UNSPECIFIED = 0;
+  
+  // Generic errors (1000-1099)
+  ERROR_CODE_INTERNAL_ERROR = 1000;
+  ERROR_CODE_INVALID_REQUEST = 1001;
+  ERROR_CODE_UNAUTHORIZED = 1002;
+  ERROR_CODE_FORBIDDEN = 1003;
+  ERROR_CODE_NOT_FOUND = 1004;
+  ERROR_CODE_ALREADY_EXISTS = 1005;
+  ERROR_CODE_PRECONDITION_FAILED = 1006;
+  ERROR_CODE_RATE_LIMIT_EXCEEDED = 1007;
+  ERROR_CODE_SERVICE_UNAVAILABLE = 1008;
+  ERROR_CODE_TIMEOUT = 1009;
+  
+  // Validation errors (1100-1199)
+  ERROR_CODE_VALIDATION_ERROR = 1100;
+  ERROR_CODE_MISSING_REQUIRED_FIELD = 1101;
+  ERROR_CODE_INVALID_FIELD_VALUE = 1102;
+  ERROR_CODE_INVALID_FIELD_FORMAT = 1103;
+  ERROR_CODE_FIELD_OUT_OF_RANGE = 1104;
+  ERROR_CODE_INVALID_ENUM_VALUE = 1105;
+  
+  // Authentication errors (1200-1299)
+  ERROR_CODE_AUTHENTICATION_FAILED = 1200;
+  ERROR_CODE_INVALID_CREDENTIALS = 1201;
+  ERROR_CODE_EXPIRED_TOKEN = 1202;
+  ERROR_CODE_INVALID_TOKEN = 1203;
+  ERROR_CODE_SESSION_EXPIRED = 1204;
+  ERROR_CODE_OTP_EXPIRED = 1205;
+  ERROR_CODE_OTP_INVALID = 1206;
+  
+  // Authorization errors (1300-1399)
+  ERROR_CODE_PERMISSION_DENIED = 1300;
+  ERROR_CODE_INSUFFICIENT_PRIVILEGES = 1301;
+  ERROR_CODE_RESOURCE_ACCESS_DENIED = 1302;
+  
+  // Business logic errors (1400-1499)
+  ERROR_CODE_BUSINESS_RULE_VIOLATION = 1400;
+  ERROR_CODE_INVALID_STATE_TRANSITION = 1401;
+  ERROR_CODE_OPERATION_NOT_ALLOWED = 1402;
+  ERROR_CODE_QUOTA_EXCEEDED = 1403;
+  ERROR_CODE_DUPLICATE_OPERATION = 1404;
+  
+  // Policy-specific errors (2000-2099)
+  ERROR_CODE_POLICY_NOT_FOUND = 2000;
+  ERROR_CODE_POLICY_ALREADY_CANCELLED = 2001;
+  ERROR_CODE_POLICY_ALREADY_LAPSED = 2002;
+  ERROR_CODE_POLICY_NOT_ACTIVE = 2003;
+  ERROR_CODE_INVALID_POLICY_STATUS = 2004;
+  
+  // Claim-specific errors (2100-2199)
+  ERROR_CODE_CLAIM_NOT_FOUND = 2100;
+  ERROR_CODE_CLAIM_ALREADY_SETTLED = 2101;
+  ERROR_CODE_CLAIM_AMOUNT_EXCEEDS_COVERAGE = 2102;
+  ERROR_CODE_CLAIM_OUTSIDE_COVERAGE_PERIOD = 2103;
+  
+  // Payment-specific errors (2200-2299)
+  ERROR_CODE_PAYMENT_NOT_FOUND = 2200;
+  ERROR_CODE_PAYMENT_ALREADY_COMPLETED = 2201;
+  ERROR_CODE_PAYMENT_FAILED = 2202;
+  ERROR_CODE_INSUFFICIENT_FUNDS = 2203;
+  ERROR_CODE_PAYMENT_GATEWAY_ERROR = 2204;
+  ERROR_CODE_INVALID_PAYMENT_METHOD = 2205;
+  
+  // Underwriting-specific errors (2300-2399)
+  ERROR_CODE_QUOTE_NOT_FOUND = 2300;
+  ERROR_CODE_QUOTE_EXPIRED = 2301;
+  ERROR_CODE_UNDERWRITING_DECLINED = 2302;
+  ERROR_CODE_MEDICAL_EXAM_REQUIRED = 2303;
+  
+  // KYC/Verification errors (2400-2499)
+  ERROR_CODE_KYC_VERIFICATION_FAILED = 2400;
+  ERROR_CODE_INVALID_NID = 2401;
+  ERROR_CODE_DOCUMENT_VERIFICATION_FAILED = 2402;
+  ERROR_CODE_BIOMETRIC_VERIFICATION_FAILED = 2403;
+  
+  // Third-party integration errors (2500-2599)
+  ERROR_CODE_EXTERNAL_SERVICE_ERROR = 2500;
+  ERROR_CODE_MFS_PROVIDER_ERROR = 2501;
+  ERROR_CODE_SMS_GATEWAY_ERROR = 2502;
+  ERROR_CODE_EMAIL_SERVICE_ERROR = 2503;
+}
+
+// Error severity levels
+enum ErrorSeverity {
+  ERROR_SEVERITY_UNSPECIFIED = 0;
+  ERROR_SEVERITY_INFO = 1; // Informational, no action needed
+  ERROR_SEVERITY_WARNING = 2; // Warning, operation succeeded with issues
+  ERROR_SEVERITY_ERROR = 3; // Error, operation failed
+  ERROR_SEVERITY_CRITICAL = 4; // Critical error, system-level issue
+}
+

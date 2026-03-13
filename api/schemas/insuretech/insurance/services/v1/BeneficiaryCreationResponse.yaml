@@ -1,0 +1,7 @@
+BeneficiaryCreationResponse:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+  description: Response payload for beneficiary creation operation. Returns operation
+    results and status.

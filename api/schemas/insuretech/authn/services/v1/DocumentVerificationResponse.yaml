@@ -1,0 +1,11 @@
+DocumentVerificationResponse:
+  type: object
+  properties:
+    document:
+      $ref: '#/components/schemas/UserDocument'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for document verification operation. Returns operation
+    results and status.

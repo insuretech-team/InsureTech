@@ -1,0 +1,26 @@
+CommissionEarnedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    commission_id:
+      type: string
+    commission_number:
+      type: string
+    type:
+      type: string
+      description: ACQUISITION, RENEWAL, CLAIMS_ASSISTANCE
+    recipient_type:
+      type: string
+    recipient_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    policy_id:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Commission earned'

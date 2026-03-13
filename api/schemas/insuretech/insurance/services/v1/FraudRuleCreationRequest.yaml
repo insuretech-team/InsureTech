@@ -1,0 +1,6 @@
+InsuranceFraudRuleCreationRequest:
+  type: object
+  properties:
+    rule:
+      $ref: '#/components/schemas/FraudRule'
+  description: ========== FRAUD RULE MESSAGES ==========

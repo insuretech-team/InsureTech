@@ -1,0 +1,14 @@
+PeerUpdateRequest:
+  type: object
+  properties:
+    peer_id:
+      type: string
+    display_name:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing peer update. Contains fields
+    to be modified.

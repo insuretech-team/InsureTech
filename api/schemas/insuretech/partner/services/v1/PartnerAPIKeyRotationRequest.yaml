@@ -1,0 +1,7 @@
+PartnerAPIKeyRotationRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+  description: Request payload for partner api key rotation operation. Contains parameters
+    required to execute the operation.

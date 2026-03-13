@@ -1,0 +1,11 @@
+DepartmentCreationResponse:
+  type: object
+  properties:
+    department:
+      $ref: '#/components/schemas/Department'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for department creation operation. Returns operation
+    results and status.

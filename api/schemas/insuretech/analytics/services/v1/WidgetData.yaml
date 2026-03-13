@@ -1,0 +1,13 @@
+WidgetData:
+  type: object
+  properties:
+    rows:
+      type: array
+      items:
+        $ref: '#/components/schemas/Row'
+    columns:
+      type: array
+      items:
+        type: string
+  description: Domain entity representing widget data. Core business object in the
+    system.

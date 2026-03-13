@@ -1,0 +1,24 @@
+RevenueShareReportRetrievalResponse:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+    total_gross_premium:
+      $ref: '#/components/schemas/Money'
+    total_platform_share:
+      $ref: '#/components/schemas/Money'
+    total_insurer_share:
+      $ref: '#/components/schemas/Money'
+    policy_count:
+      type: integer
+      format: int32
+    by_revenue_model:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for revenue share report retrieval operation. Returns
+    operation results and status.

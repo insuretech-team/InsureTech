@@ -1,0 +1,174 @@
+syntax = "proto3";
+
+package insuretech.insurer.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/entity/v1;insurerv1";
+
+// Insurer integration and API configuration
+message InsurerConfig {
+  option (insuretech.common.v1.table) = {
+    table_name: "insurer_configs"
+    schema_name: "insurance_schema"
+    migration_order: 18
+    is_table: true
+    audit_fields: true
+    comment: "Insurer integration and API configuration"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "config_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+  
+  string insurer_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "insurer_id"
+    sql_type: "UUID"
+    not_null: true
+    unique: true
+    foreign_key: {
+      references_table: "insurers"
+      references_column: "insurer_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_insurer_configs_insurer_id"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_id;not null"
+  
+  // API Integration
+  string api_base_url = 3 [(insuretech.common.v1.column) = {
+    column_name: "api_base_url"
+    sql_type: "VARCHAR(255)"
+    comment: "Base URL for insurer API"
+  }];
+  // @inject_tag: gorm:"column:api_base_url"
+  
+  string api_version = 4 [(insuretech.common.v1.column) = {
+    column_name: "api_version"
+    sql_type: "VARCHAR(20)"
+  }];
+  // @inject_tag: gorm:"column:api_version"
+  
+  AuthenticationType auth_type = 5 [(insuretech.common.v1.column) = {
+    column_name: "auth_type"
+    sql_type: "VARCHAR(20)"
+    comment: "API_KEY, OAUTH2, BASIC_AUTH"
+  }];
+  // @inject_tag: gorm:"column:auth_type;serializer:proto_enum"
+  
+  string auth_credentials = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "auth_credentials"
+      sql_type: "TEXT"
+      comment: "Encrypted credentials"
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Insurer API authentication"
+  ];
+  // @inject_tag: gorm:"column:auth_credentials"
+  
+  // Webhook configuration
+  string webhook_url = 7 [(insuretech.common.v1.column) = {
+    column_name: "webhook_url"
+    sql_type: "VARCHAR(255)"
+    comment: "URL for insurer to send webhooks to"
+  }];
+  // @inject_tag: gorm:"column:webhook_url"
+  
+  string webhook_secret = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "webhook_secret"
+      sql_type: "VARCHAR(255)"
+      comment: "Secret for webhook signature validation"
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Webhook signature validation"
+  ];
+  // @inject_tag: gorm:"column:webhook_secret"
+  
+  // Business rules
+  string business_model = 9 [(insuretech.common.v1.column) = {
+    column_name: "business_model"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Revenue model per segment (commission, flat-fee, hybrid, reinsurance)"
+  }];
+  // @inject_tag: gorm:"column:business_model"
+  
+  bool auto_underwriting_enabled = 10 [(insuretech.common.v1.column) = {
+    column_name: "auto_underwriting_enabled"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:auto_underwriting_enabled"
+  
+  int32 underwriting_threshold = 11 [(insuretech.common.v1.column) = {
+    column_name: "underwriting_threshold"
+    sql_type: "INTEGER"
+    comment: "Sum assured threshold for auto-approval"
+  }];
+  // @inject_tag: gorm:"column:underwriting_threshold"
+  
+  bool real_time_claim_notification = 12 [(insuretech.common.v1.column) = {
+    column_name: "real_time_claim_notification"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+    comment: "FR-044: Auto-notify insurer on claim submission"
+  }];
+  // @inject_tag: gorm:"column:real_time_claim_notification"
+  
+  // Settlement configuration
+  int32 claim_settlement_days = 13 [(insuretech.common.v1.column) = {
+    column_name: "claim_settlement_days"
+    sql_type: "INTEGER"
+    comment: "Expected claim settlement turnaround time"
+  }];
+  // @inject_tag: gorm:"column:claim_settlement_days"
+  
+  string payment_terms = 14 [(insuretech.common.v1.column) = {
+    column_name: "payment_terms"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Payment cycle, settlement method, etc."
+  }];
+  // @inject_tag: gorm:"column:payment_terms"
+  
+  insuretech.common.v1.AuditInfo audit_info = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum AuthenticationType {
+  AUTHENTICATION_TYPE_UNSPECIFIED = 0;
+  AUTHENTICATION_TYPE_API_KEY = 1;
+  AUTHENTICATION_TYPE_OAUTH2 = 2;
+  AUTHENTICATION_TYPE_BASIC_AUTH = 3;
+  AUTHENTICATION_TYPE_MUTUAL_TLS = 4;
+}
+
+

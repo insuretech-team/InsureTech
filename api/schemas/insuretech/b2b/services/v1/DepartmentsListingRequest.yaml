@@ -1,0 +1,14 @@
+DepartmentsListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    business_id:
+      type: string
+      description: business_id is injected server-side from session; do NOT set from
+        client.
+  description: Request payload for listing departments listing items. Supports filtering,
+    sorting, and pagination.

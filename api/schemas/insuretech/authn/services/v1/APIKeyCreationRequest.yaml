@@ -1,0 +1,28 @@
+APIKeyCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+      description: Human-readable name
+    owner_id:
+      type: string
+      description: User or service ID
+    owner_type:
+      type: string
+      description: USER, SERVICE
+    scopes:
+      type: array
+      items:
+        type: string
+        description: e.g. ["auth:read", "session:write"]
+      description: e.g. ["auth:read", "session:write"]
+    rate_limit_per_minute:
+      type: integer
+      format: int32
+      description: 0 = unlimited
+    expires_at:
+      type: string
+      format: date-time
+      description: null = never expires
+  description: Request payload for creating a new api key creation. Contains all required
+    fields and optional parameters for initialization.

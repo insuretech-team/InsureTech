@@ -1,0 +1,30 @@
+MediaFileUploadedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    media_id:
+      type: string
+    file_id:
+      type: string
+    tenant_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    media_type:
+      type: string
+    mime_type:
+      type: string
+    file_size_bytes:
+      type: string
+      format: int64
+    uploaded_by:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Media file uploaded'

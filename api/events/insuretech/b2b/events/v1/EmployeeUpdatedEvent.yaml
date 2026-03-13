@@ -1,0 +1,20 @@
+EmployeeUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    employee_uuid:
+      type: string
+    organisation_id:
+      type: string
+    updated_by:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    timestamp:
+      type: string
+      format: date-time
+  description: EmployeeUpdatedEvent is published when an employee is updated

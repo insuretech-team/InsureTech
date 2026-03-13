@@ -1,0 +1,12 @@
+CommissionSummary:
+  type: object
+  properties:
+    type:
+      type: string
+    count:
+      type: integer
+      format: int32
+    total_amount:
+      $ref: '#/components/schemas/Money'
+  description: Domain entity representing commission summary. Core business object
+    in the system.

@@ -1,0 +1,29 @@
+AggregationJobCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    job_id:
+      type: string
+    job_type:
+      type: string
+      description: DAILY_AGGREGATION, MONTHLY_ROLLUP
+    period_start:
+      type: string
+      format: date-time
+    period_end:
+      type: string
+      format: date-time
+    records_processed:
+      type: string
+      format: int64
+    execution_time_seconds:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Aggregation job completed'

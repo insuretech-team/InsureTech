@@ -1,0 +1,16 @@
+LoginRequest:
+  type: object
+  properties:
+    mobile_number:
+      type: string
+    password:
+      type: string
+    device_id:
+      type: string
+    device_type:
+      type: string
+      description: "AUTO-DETECTS: WEB\u2192Server-side, MOBILE\u2192JWT"
+    device_name:
+      type: string
+      description: Human-readable device name
+  description: Login Request

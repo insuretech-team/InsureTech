@@ -1,0 +1,13 @@
+KYCVerificationStartRequest:
+  type: object
+  properties:
+    type:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    method:
+      type: string
+  description: Request payload for kyc verification start operation. Contains parameters
+    required to execute the operation.

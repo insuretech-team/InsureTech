@@ -1,0 +1,11 @@
+EmailVerificationRequest:
+  type: object
+  properties:
+    otp_id:
+      type: string
+      description: From SendEmailOTP / RegisterEmailUser
+    code:
+      type: string
+      description: 6-digit OTP code
+  description: "Verify Email Request\r\n Verifies an email address using an OTP sent\
+    \ to that email.\r\n After verification, email_login is allowed."

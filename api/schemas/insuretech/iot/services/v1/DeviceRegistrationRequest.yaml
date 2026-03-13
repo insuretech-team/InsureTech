@@ -1,0 +1,17 @@
+DeviceRegistrationRequest:
+  type: object
+  properties:
+    device_serial:
+      type: string
+    type:
+      $ref: '#/components/schemas/IotDeviceType'
+    manufacturer:
+      type: string
+    model:
+      type: string
+    policy_id:
+      type: string
+    owner_id:
+      type: string
+  description: Request payload for device registration operation. Contains parameters
+    required to execute the operation.

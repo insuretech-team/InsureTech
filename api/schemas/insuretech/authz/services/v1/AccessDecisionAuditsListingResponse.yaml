@@ -1,0 +1,16 @@
+AccessDecisionAuditsListingResponse:
+  type: object
+  properties:
+    audits:
+      type: array
+      items:
+        $ref: '#/components/schemas/AccessDecisionAudit'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for access decision audits listing operation. Returns
+    operation results and status.

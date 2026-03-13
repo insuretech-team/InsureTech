@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.entity;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/entity;entity";
+option csharp_namespace = "Insuretech.Webrtc.V1.Entity";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+// WebRTC conference room
+message Room {
+  option (insuretech.common.v1.table) = {
+    table_name: "rooms"
+    schema_name: "webrtc"
+    migration_order: 100
+    is_table: true
+    comment: "WebRTC conference rooms"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string room_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "room_id"
+      sql_type: "VARCHAR(26)"
+      primary_key: true
+      not_null: true
+      comment: "ULID format identifier"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:room_id;not null"
+
+  string name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "name"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Room name"
+    }
+  ];
+  // @inject_tag: gorm:"column:name;not null"
+
+  RoomConfig config = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "config"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Room configuration (max_participants, require_token, video/audio settings)"
+    }
+  ];
+  // @inject_tag: gorm:"column:config;not null;serializer:proto_enum"
+
+  int32 participant_count = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "participant_count"
+      sql_type: "INT"
+      not_null: true
+      default_value: "0"
+      comment: "Current number of participants"
+    }
+  ];
+  // @inject_tag: gorm:"column:participant_count;not null"
+
+  int32 max_participants = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "max_participants"
+      sql_type: "INT"
+      not_null: true
+      default_value: "10"
+      comment: "Maximum allowed participants"
+    }
+  ];
+  // @inject_tag: gorm:"column:max_participants;not null"
+
+  google.protobuf.Timestamp created_at = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMPTZ"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+      comment: "Room creation timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  map<string, string> metadata = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Flexible key-value storage for extensions"
+    }
+  ];
+
+  RoomState state = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "state"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ROOM_STATE_ACTIVE'"
+      comment: "Room state (ACTIVE, IDLE, CLOSED)"
+      index: {
+        index_name: "idx_rooms_state"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:state;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp closed_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "closed_at"
+      sql_type: "TIMESTAMPTZ"
+      comment: "Room closure timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"
+
+  string creator_id = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "creator_id"
+      sql_type: "VARCHAR(26)"
+      comment: "ULID format - User/tenant who created the room"
+      index: {
+        index_name: "idx_rooms_creator_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:creator_id"
+}
+
+message RoomConfig {
+  int32 max_participants = 1;
+  bool require_token = 2;
+  bool enable_recording = 3;
+  bool enable_transcription = 4;
+  VideoConfig video_config = 5;
+  AudioConfig audio_config = 6;
+  int32 session_timeout_seconds = 7;
+}
+
+message VideoConfig {
+  repeated VideoQuality allowed_qualities = 1;
+  VideoQuality default_quality = 2;
+  bool enable_simulcast = 3;
+  int32 max_bitrate_kbps = 4;
+  int32 min_bitrate_kbps = 5;
+}
+
+message AudioConfig {
+  repeated AudioCodec allowed_codecs = 1;
+  AudioCodec default_codec = 2;
+  int32 max_bitrate_kbps = 3;
+  bool enable_noise_suppression = 4;
+  bool enable_echo_cancellation = 5;
+  bool enable_auto_gain_control = 6;
+}
+
+enum RoomState {
+  ROOM_STATE_UNSPECIFIED = 0;
+  ROOM_STATE_ACTIVE = 1;
+  ROOM_STATE_IDLE = 2;
+  ROOM_STATE_CLOSED = 3;
+}
+
+enum VideoQuality {
+  VIDEO_QUALITY_UNSPECIFIED = 0;
+  VIDEO_QUALITY_LOW = 1;
+  VIDEO_QUALITY_MEDIUM = 2;
+  VIDEO_QUALITY_HIGH = 3;
+  VIDEO_QUALITY_HD = 4;
+  VIDEO_QUALITY_4K = 5;
+}
+
+enum AudioCodec {
+  AUDIO_CODEC_UNSPECIFIED = 0;
+  AUDIO_CODEC_OPUS = 1;
+  AUDIO_CODEC_PCMU = 2;
+  AUDIO_CODEC_PCMA = 3;
+  AUDIO_CODEC_ISAC = 4;
+}
+

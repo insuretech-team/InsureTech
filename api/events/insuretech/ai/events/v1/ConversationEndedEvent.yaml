@@ -1,0 +1,27 @@
+ConversationEndedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    conversation_id:
+      type: string
+    user_id:
+      type: string
+    agent_id:
+      type: string
+    message_count:
+      type: integer
+      format: int32
+    duration_seconds:
+      type: integer
+      format: int32
+    resolution_status:
+      type: string
+      description: RESOLVED, ESCALATED, ABANDONED
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Conversation ended'

@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package insuretech.audit.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/audit/entity/v1;auditv1";
+
+// Compliance log (regulatory compliance)
+message ComplianceLog {
+  option (insuretech.common.v1.table) = {
+    table_name: "compliance_logs"
+    schema_name: "compliance_schema"
+    migration_order: 11
+    is_table: true
+    audit_fields: false
+    comment: "Regulatory compliance audit trail"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "log_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:log_id;not null"
+  
+  ComplianceType type = 2 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_compliance_logs_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string regulation = 3 [(insuretech.common.v1.column) = {
+    column_name: "regulation"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+    comment: "IDRA, AML, CFT, KYC, GDPR"
+  }];
+  // @inject_tag: gorm:"column:regulation;not null"
+  
+  string entity_type = 4 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:entity_type;not null"
+  
+  string entity_id = 5 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+    not_null: true
+    index: {
+      index_name: "idx_compliance_logs_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:entity_id;not null"
+  
+  ComplianceStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    index: {
+      index_name: "idx_compliance_logs_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string description = 7 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:description;not null"
+  
+  string evidence = 8 [(insuretech.common.v1.column) = {
+    column_name: "evidence"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Supporting documentation/data"
+  }];
+  // @inject_tag: gorm:"column:evidence"
+  
+  string performed_by = 9 [(insuretech.common.v1.column) = {
+    column_name: "performed_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:performed_by"
+  
+  google.protobuf.Timestamp timestamp = 10 [(insuretech.common.v1.column) = {
+    column_name: "timestamp"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+    index: {
+      index_name: "idx_compliance_logs_timestamp"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+}
+
+enum ComplianceType {
+  COMPLIANCE_TYPE_UNSPECIFIED = 0;
+  COMPLIANCE_TYPE_KYC_VERIFICATION = 1;
+  COMPLIANCE_TYPE_AML_CHECK = 2;
+  COMPLIANCE_TYPE_CFT_SCREENING = 3;
+  COMPLIANCE_TYPE_DATA_PRIVACY = 4;
+  COMPLIANCE_TYPE_IDRA_REPORTING = 5;
+  COMPLIANCE_TYPE_TAX_COMPLIANCE = 6;
+}
+
+enum ComplianceStatus {
+  COMPLIANCE_STATUS_UNSPECIFIED = 0;
+  COMPLIANCE_STATUS_COMPLIANT = 1;
+  COMPLIANCE_STATUS_NON_COMPLIANT = 2;
+  COMPLIANCE_STATUS_PENDING_REVIEW = 3;
+  COMPLIANCE_STATUS_EXCEPTION_GRANTED = 4;
+}
+
+

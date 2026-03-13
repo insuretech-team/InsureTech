@@ -1,0 +1,16 @@
+CommissionStructure:
+  type: object
+  properties:
+    acquisition_rate:
+      type: number
+      format: double
+      description: 15-25%
+    renewal_rate:
+      type: number
+      format: double
+      description: Renewal commission
+    claims_assistance_rate:
+      type: number
+      format: double
+      description: Claims assistance fee
+  description: Commission structure (embedded in Partner table)

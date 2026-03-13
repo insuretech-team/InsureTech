@@ -1,0 +1,29 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+// ---------------------------------------------------------------------------
+// Enums
+// ---------------------------------------------------------------------------
+
+// Portal identifies which portal context the request comes from.
+// Domain format in Casbin: "portal:tenant_id"
+enum Portal {
+  PORTAL_UNSPECIFIED = 0;
+  PORTAL_SYSTEM      = 1; // Internal admin portal (SYSTEM_USER)
+  PORTAL_BUSINESS    = 2; // Business/corporate portal (BUSINESS_BENEFICIARY)
+  PORTAL_B2B         = 3; // Partner portal (PARTNER — insurers, brokers, TPAs)
+  PORTAL_AGENT       = 4; // Agent/field-staff portal (AGENT)
+  PORTAL_REGULATOR   = 5; // Regulatory/auditor portal (REGULATOR — read-only)
+  PORTAL_B2C         = 6; // Customer mobile portal (B2C_CUSTOMER)
+}
+
+// PolicyEffect mirrors Casbin allow/deny semantics.
+enum PolicyEffect {
+  POLICY_EFFECT_UNSPECIFIED = 0;
+  POLICY_EFFECT_ALLOW       = 1;
+  POLICY_EFFECT_DENY        = 2;
+}

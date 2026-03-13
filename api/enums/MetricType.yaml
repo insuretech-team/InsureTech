@@ -1,0 +1,8 @@
+MetricType:
+  type: string
+  enum:
+  - METRIC_TYPE_UNSPECIFIED
+  - METRIC_TYPE_COUNTER
+  - METRIC_TYPE_GAUGE
+  - METRIC_TYPE_HISTOGRAM
+  description: MetricType enum

@@ -1,0 +1,21 @@
+WorkflowStartedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    workflow_instance_id:
+      type: string
+    workflow_definition_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    initiated_by:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Workflow started'

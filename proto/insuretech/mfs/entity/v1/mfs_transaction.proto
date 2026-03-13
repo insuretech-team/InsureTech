@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package insuretech.mfs.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/entity/v1;mfsv1";
+
+// MFS transaction
+message MFSTransaction {
+  option (insuretech.common.v1.table) = {
+    table_name: "mfs_transactions"
+    schema_name: "payment_schema"
+    migration_order: 51
+    is_table: true
+    audit_fields: true
+    comment: "MFS payment transactions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "transaction_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:transaction_id;not null"
+  
+  string transaction_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "external_transaction_id"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_mfs_transactions_txn_id"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:external_transaction_id;not null"
+  
+  string mfs_integration_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "mfs_integration_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "mfs_integrations"
+      references_column: "integration_id"
+      references_schema: "payment_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_mfs_transactions_integration_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:mfs_integration_id;not null"
+  
+  string provider = 4 [(insuretech.common.v1.column) = {
+    column_name: "provider"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_mfs_transactions_provider"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:provider;not null"
+  
+  string payment_id = 5 [(insuretech.common.v1.column) = {
+    column_name: "payment_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "payments"
+      references_column: "payment_id"
+      references_schema: "payment_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_mfs_transactions_payment_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:payment_id"
+  
+  TransactionType type = 6 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  insuretech.common.v1.Money amount = 7;
+  
+  string customer_msisdn = 8 [(insuretech.common.v1.column) = {
+    column_name: "customer_msisdn"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:customer_msisdn;not null"
+  
+  string provider_transaction_id = 9 [(insuretech.common.v1.column) = {
+    column_name: "provider_transaction_id"
+    sql_type: "VARCHAR(100)"
+    index: {
+      index_name: "idx_mfs_transactions_provider_txn_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:provider_transaction_id"
+  
+  TransactionStatus status = 10 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_mfs_transactions_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string request_payload = 11 [(insuretech.common.v1.column) = {
+    column_name: "request_payload"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:request_payload"
+  
+  string response_payload = 12 [(insuretech.common.v1.column) = {
+    column_name: "response_payload"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:response_payload"
+  
+  string error_message = 13 [(insuretech.common.v1.column) = {
+    column_name: "error_message"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:error_message"
+  
+  google.protobuf.Timestamp completed_at = 14 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum TransactionType {
+  TRANSACTION_TYPE_UNSPECIFIED = 0;
+  TRANSACTION_TYPE_PAYMENT = 1;
+  TRANSACTION_TYPE_REFUND = 2;
+}
+
+enum TransactionStatus {
+  TRANSACTION_STATUS_UNSPECIFIED = 0;
+  TRANSACTION_STATUS_PENDING = 1;
+  TRANSACTION_STATUS_PROCESSING = 2;
+  TRANSACTION_STATUS_COMPLETED = 3;
+  TRANSACTION_STATUS_FAILED = 4;
+  TRANSACTION_STATUS_CANCELLED = 5;
+}
+
+

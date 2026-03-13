@@ -1,0 +1,11 @@
+LeaveRoomRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    reason:
+      type: string
+  description: Request payload for leave room operation. Contains parameters required
+    to execute the operation.

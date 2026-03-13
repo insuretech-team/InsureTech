@@ -1,0 +1,7 @@
+BusinessBeneficiaryRetrievalRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+  description: Request payload for retrieving business beneficiary retrieval information.
+    May include filters and pagination parameters.

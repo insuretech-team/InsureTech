@@ -1,0 +1,44 @@
+app/api/auth/login/route.ts(270,49): error TS2345: Argument of type '{ baseUrl: string; }' is not assignable to parameter of type 'InsureTechClientConfig'.
+  Property 'apiKey' is missing in type '{ baseUrl: string; }' but required in type 'InsureTechClientConfig'.
+app/api/auth/totp/route.ts(29,69): error TS2741: Property 'user_id' is missing in type '{ totp_code: string; }' but required in type 'TotpDisablementRequest'.
+src/lib/auth/resolve-user-id.ts(38,9): error TS2503: Cannot find namespace 'data'.
+src/lib/index.ts(1,15): error TS2307: Cannot find module './clients' or its corresponding type declarations.
+src/lib/proto-generated/insuretech/document/services/v1/document_service_pb.ts(7,45): error TS2307: Cannot find module '../../../../google/api/annotations_pb' or its corresponding type declarations.
+src/lib/sdk/b2b-sdk-client.ts(125,25): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: LogoutRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceLogoutData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: LogoutRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceLogoutData, "url">'.
+    Types of property 'body' are incompatible.
+      Type 'LogoutRequest | undefined' is not assignable to type 'LogoutRequest'.
+        Type 'undefined' is not assignable to type 'LogoutRequest'.
+src/lib/sdk/b2b-sdk-client.ts(137,31): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: RefreshTokenRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceRefreshTokenData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: RefreshTokenRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceRefreshTokenData, "url">'.
+    Types of property 'body' are incompatible.
+      Type 'RefreshTokenRequest | undefined' is not assignable to type 'RefreshTokenRequest'.
+        Type 'undefined' is not assignable to type 'RefreshTokenRequest'.
+src/lib/sdk/b2b-sdk-client.ts(143,33): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: never; meta?: Record<string, unknown>; path?: { user_id: string; } | undefined; ... 29 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceGetUserProfileData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: never; meta?: Record<string, unknown>; path?: { user_id: string; } | undefined; ... 29 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceGetUserProfileData, "url">'.
+    Types of property 'path' are incompatible.
+      Type '{ user_id: string; } | undefined' is not assignable to type '{ user_id: string; }'.
+        Type 'undefined' is not assignable to type '{ user_id: string; }'.
+src/lib/sdk/b2b-sdk-client.ts(149,43): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: ProfilePhotoUploadUrlRetrievalRequest | undefined; ... 31 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceGetProfilePhotoUploadUrlData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: ProfilePhotoUploadUrlRetrievalRequest | undefined; ... 31 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceGetProfilePhotoUploadUrlData, "url">'.
+    Types of property 'body' are incompatible.
+      Type 'ProfilePhotoUploadUrlRetrievalRequest | undefined' is not assignable to type 'ProfilePhotoUploadUrlRetrievalRequest'.
+        Type 'undefined' is not assignable to type 'ProfilePhotoUploadUrlRetrievalRequest'.
+src/lib/sdk/b2b-sdk-client.ts(152,31): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: never; meta?: Record<string, unknown>; path?: { user_id: string; } | undefined; ... 29 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceListSessionsData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: never; meta?: Record<string, unknown>; path?: { user_id: string; } | undefined; ... 29 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceListSessionsData, "url">'.
+    Types of property 'path' are incompatible.
+      Type '{ user_id: string; } | undefined' is not assignable to type '{ user_id: string; }'.
+        Type 'undefined' is not assignable to type '{ user_id: string; }'.
+src/lib/sdk/b2b-sdk-client.ts(158,36): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: RevokeAllSessionsRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceRevokeAllSessionsData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: RevokeAllSessionsRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceRevokeAllSessionsData, "url">'.
+    Types of property 'body' are incompatible.
+      Type 'RevokeAllSessionsRequest | undefined' is not assignable to type 'RevokeAllSessionsRequest'.
+        Type 'undefined' is not assignable to type 'RevokeAllSessionsRequest'.
+src/lib/sdk/b2b-sdk-client.ts(161,29): error TS2345: Argument of type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: TotpEnablementRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to parameter of type 'Options<AuthServiceEnableTotpData, boolean>'.
+  Type '{ cache?: RequestCache; mode?: RequestMode; method?: Uppercase<HttpMethod>; body?: TotpEnablementRequest | undefined; meta?: Record<string, unknown>; ... 30 more ...; client: Client; }' is not assignable to type 'Omit<AuthServiceEnableTotpData, "url">'.
+    Types of property 'body' are incompatible.
+      Type 'TotpEnablementRequest | undefined' is not assignable to type 'TotpEnablementRequest'.
+        Type 'undefined' is not assignable to type 'TotpEnablementRequest'.
+src/lib/sdk/dashboard-config.ts(423,24): error TS2304: Cannot find name 'statsCards'.
+src/lib/sdk/dashboard-config.ts(424,34): error TS2304: Cannot find name 'purchaseOrderSummary'.
+src/lib/sdk/dashboard-config.ts(425,28): error TS2304: Cannot find name 'purchaseOrders'.

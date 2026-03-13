@@ -1,0 +1,10 @@
+RefundRetrievalResponse:
+  type: object
+  properties:
+    refund:
+      $ref: '#/components/schemas/Refund'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for refund retrieval operation. Returns operation
+    results and status.

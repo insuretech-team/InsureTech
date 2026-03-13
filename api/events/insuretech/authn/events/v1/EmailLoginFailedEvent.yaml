@@ -1,0 +1,21 @@
+EmailLoginFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    email_masked:
+      type: string
+    failure_reason:
+      type: string
+      description: invalid_otp, email_not_verified, user_type_not_allowed, account_locked
+    failed_attempts_count:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+  description: 'Event: Email OTP login failed'

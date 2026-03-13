@@ -1,0 +1,9 @@
+NotificationTemplateDeactivationRequest:
+  type: object
+  properties:
+    template_id:
+      type: string
+    reason:
+      type: string
+  description: Request payload for notification template deactivation operation. Contains
+    parameters required to execute the operation.

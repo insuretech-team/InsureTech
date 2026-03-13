@@ -1,0 +1,21 @@
+ApiKeyCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    api_key_id:
+      type: string
+    owner_type:
+      type: string
+    owner_id:
+      type: string
+    scopes:
+      type: array
+      items:
+        type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: API key created'

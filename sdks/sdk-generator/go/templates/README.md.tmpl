@@ -1,0 +1,245 @@
+# InsureTech Go SDK
+
+Official Go SDK for the InsureTech Platform API
+
+[![Go Version](https://img.shields.io/badge/go-%3E%3D1.19-blue)](https://golang.org/dl/)
+[![License](https://img.shields.io/badge/license-MIT-green)](LICENSE)
+[![Documentation](https://img.shields.io/badge/docs-latest-brightgreen)](https://docs.insuretech.com)
+
+## Features
+
+- 🔐 Secure authentication (API Key & OAuth2)
+- 📦 Complete API coverage for all InsureTech services
+- 🔄 Automatic retry with exponential backoff
+- ⚡ Context-aware with timeout support
+- 📄 Pagination support for list operations
+- 🛡️ Type-safe request/response models
+- 🐛 Detailed error handling
+- 📚 Comprehensive documentation
+
+## Installation
+
+```bash
+go get github.com/insuretech/go-sdk
+```
+
+## Quick Start
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    
+    "github.com/insuretech/go-sdk/pkg/client"
+    "github.com/insuretech/go-sdk/pkg/models"
+)
+
+func main() {
+    // Initialize client
+    c := client.NewClient(
+        client.WithAPIKey("your-api-key"),
+    )
+    
+    ctx := context.Background()
+    
+    // Create a policy
+    policy, err := c.Policies.Create(ctx, &models.PolicyCreationRequest{
+        ProductID:  "prod_123",
+        CustomerID: "cust_456",
+        Premium:    1200.00,
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    fmt.Printf("Created policy: %s\n", policy.PolicyID)
+}
+```
+
+## Available Services
+
+The SDK provides access to all InsureTech platform services:
+
+### Core Services
+- **Policies** - Policy management and lifecycle
+- **Claims** - Claims submission and processing
+- **Quotes** - Quote generation and conversion
+- **Payments** - Payment processing and reconciliation
+- **Refunds** - Refund management
+
+### Customer Services
+- **Authentication** - User authentication and sessions
+- **Authorization** - Role-based access control
+- **KYC Verification** - Know Your Customer verification
+- **Beneficiaries** - Beneficiary management
+
+### Partner Services
+- **Partners** - Partner onboarding and management
+- **Commission** - Commission calculation and payouts
+- **API Keys** - API key management
+
+### Product Services
+- **Products** - Product catalog management
+- **Insurers** - Insurer configuration
+- **Underwriting** - Underwriting decisions
+
+### Document Services
+- **Documents** - Document generation and storage
+- **Templates** - Document template management
+
+### Support Services
+- **Tickets** - Support ticket management
+- **FAQs** - FAQ management
+- **Knowledge Base** - Knowledge base articles
+
+### Operations Services
+- **Tasks** - Task assignment and tracking
+- **Workflows** - Workflow automation
+- **Notifications** - Multi-channel notifications
+- **Audit** - Audit logging and compliance
+
+### Advanced Services
+- **Analytics** - Business intelligence and metrics
+- **Reports** - Report generation and scheduling
+- **Fraud Detection** - Fraud detection and prevention
+- **IoT** - IoT device management
+- **AI Services** - AI-powered features
+- **Voice** - Voice command processing
+
+## Documentation
+
+- [Quick Start Guide](docs/QUICKSTART.md) - Get started in minutes
+- [API Reference](docs/API_REFERENCE.md) - Complete API documentation
+- [Integration Guide](docs/INTEGRATION_GUIDE.md) - Production integration best practices
+- [Examples](examples/) - Code samples for common use cases
+- [Migration Guide](docs/MIGRATION.md) - Upgrading from previous versions
+
+## Configuration
+
+### Environment Variables
+
+```bash
+export INSURETECH_API_KEY="your-api-key"
+export INSURETECH_BASE_URL="https://api.insuretech.com"
+```
+
+### Client Options
+
+```go
+client := client.NewClient(
+    client.WithAPIKey("api-key"),              // API key authentication
+    client.WithBaseURL("https://api.insuretech.com"), // Custom base URL
+    client.WithTimeout(30 * time.Second),      // Request timeout
+    client.WithRetry(3, 1*time.Second),        // Retry configuration
+    client.WithOAuth2("oauth-token"),          // OAuth2 authentication
+)
+```
+
+## Error Handling
+
+```go
+policy, err := c.Policies.Get(ctx, "policy_123")
+if err != nil {
+    if apiErr, ok := err.(*errors.APIError); ok {
+        // Handle API errors
+        if apiErr.IsNotFound() {
+            fmt.Println("Policy not found")
+        } else if apiErr.IsUnauthorized() {
+            fmt.Println("Authentication failed")
+        } else if apiErr.IsRateLimited() {
+            fmt.Println("Rate limit exceeded")
+        }
+    }
+    return err
+}
+```
+
+## Examples
+
+### Creating a Policy
+
+```go
+policy, err := c.Policies.Create(ctx, &models.PolicyCreationRequest{
+    ProductID:     "prod_health_001",
+    CustomerID:    "cust_123",
+    Premium:       150.00,
+    CoverageAmount: 100000.00,
+    StartDate:     time.Now(),
+    EndDate:       time.Now().AddDate(1, 0, 0),
+})
+```
+
+### Processing a Claim
+
+```go
+claim, err := c.Claims.Create(ctx, &models.ClaimSubmissionRequest{
+    PolicyID:    "policy_789",
+    ClaimType:   "medical",
+    Amount:      5000.00,
+    Description: "Hospital treatment",
+})
+```
+
+### Generating a Quote
+
+```go
+quote, err := c.Quotes.Create(ctx, &models.RequestQuoteRequest{
+    ProductID:    "prod_auto_001",
+    VehicleYear:  2022,
+    VehicleValue: 25000.00,
+    DriverAge:    30,
+})
+```
+
+See the [examples directory](examples/) for more detailed samples.
+
+## Testing
+
+```bash
+# Run tests
+go test ./...
+
+# Run tests with coverage
+go test -cover ./...
+
+# Run tests with race detection
+go test -race ./...
+```
+
+## Contributing
+
+We welcome contributions! Please see [CONTRIBUTING.md](CONTRIBUTING.md) for details.
+
+## Security
+
+For security issues, please email security@insuretech.com instead of using the issue tracker.
+
+## Changelog
+
+See [CHANGELOG.md](CHANGELOG.md) for version history.
+
+## License
+
+This SDK is licensed under the MIT License - see [LICENSE](LICENSE) for details.
+
+## Support
+
+- 📧 Email: support@insuretech.com
+- 📖 Documentation: https://docs.insuretech.com
+- 💬 Community: https://community.insuretech.com
+- 🐛 Issue Tracker: https://github.com/insuretech/go-sdk/issues
+- 📊 API Status: https://status.insuretech.com
+
+## Related SDKs
+
+- [Python SDK](https://github.com/insuretech/python-sdk)
+- [Node.js SDK](https://github.com/insuretech/node-sdk)
+- [Java SDK](https://github.com/insuretech/java-sdk)
+- [PHP SDK](https://github.com/insuretech/php-sdk)
+
+---
+
+Made with ❤️ by the InsureTech Team

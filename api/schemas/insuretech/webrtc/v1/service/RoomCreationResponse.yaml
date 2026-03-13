@@ -1,0 +1,9 @@
+RoomCreationResponse:
+  type: object
+  properties:
+    room:
+      $ref: '#/components/schemas/Room'
+    join_token:
+      type: string
+  description: Response payload for room creation operation. Returns operation results
+    and status.

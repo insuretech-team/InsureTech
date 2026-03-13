@@ -1,0 +1,7 @@
+RenewalScheduleDeletionRequest:
+  type: object
+  properties:
+    schedule_id:
+      type: string
+  description: Request payload for renewal schedule deletion operation. Contains parameters
+    required to execute the operation.

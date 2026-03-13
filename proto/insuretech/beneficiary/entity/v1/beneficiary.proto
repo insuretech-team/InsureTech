@@ -1,0 +1,195 @@
+syntax = "proto3";
+
+package insuretech.beneficiary.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/beneficiary/entity/v1;beneficiaryv1";
+
+// Base Beneficiary entity (primary customer record)
+message Beneficiary {
+  option (insuretech.common.v1.table) = {
+    table_name: "beneficiaries"
+    schema_name: "insurance_schema"
+    migration_order: 25
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    enable_rls: true
+    comment: "Beneficiaries - primary customer record (individual or business)"
+  };
+  
+  string beneficiary_id = 1 [(insuretech.common.v1.column) = {
+    column_name: "beneficiary_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+    comment: "Primary key - Beneficiary UUID"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
+  
+  string user_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "user_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+      on_update: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_beneficiaries_user_id_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+    comment: "Link to authentication user account"
+  }];
+  // @inject_tag: gorm:"column:user_id;not null"
+  
+  BeneficiaryType type = 3 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    check_constraint: "type IN ('INDIVIDUAL', 'BUSINESS')"
+    index: {
+      index_name: "idx_beneficiaries_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "Individual (B2C) or Business (B2B)"
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string code = 4 [(insuretech.common.v1.column) = {
+    column_name: "code"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_beneficiaries_code_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+    comment: "Human-readable beneficiary code (BEN-XXXXXX)"
+  }];
+  // @inject_tag: gorm:"column:code;not null"
+  
+  BeneficiaryStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING_KYC'"
+    index: {
+      index_name: "idx_beneficiaries_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  KYCStatus kyc_status = 6 [(insuretech.common.v1.column) = {
+    column_name: "kyc_status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'NOT_STARTED'"
+  }];
+  // @inject_tag: gorm:"column:kyc_status;not null;serializer:proto_enum"
+  
+  google.protobuf.Timestamp kyc_completed_at = 7 [(insuretech.common.v1.column) = {
+    column_name: "kyc_completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:kyc_completed_at;serializer:proto_timestamp"
+  
+  string risk_score = 8 [(insuretech.common.v1.column) = {
+    column_name: "risk_score"
+    sql_type: "VARCHAR(10)"
+    comment: "LOW, MEDIUM, HIGH - for AML/CFT"
+  }];
+  // @inject_tag: gorm:"column:risk_score"
+  
+  string referral_code = 9 [(insuretech.common.v1.column) = {
+    column_name: "referral_code"
+    sql_type: "VARCHAR(20)"
+    unique: true
+    index: {
+      index_name: "idx_beneficiaries_referral_code"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:referral_code"
+  
+  string referred_by = 10 [(insuretech.common.v1.column) = {
+    column_name: "referred_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "beneficiaries"
+      references_column: "beneficiary_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_beneficiaries_referred_by"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:referred_by"
+  
+  string partner_id = 11 [(insuretech.common.v1.column) = {
+    column_name: "partner_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "partners"
+      references_column: "partner_id"
+      references_schema: "partner_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_beneficiaries_partner_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "Acquiring partner/agent"
+  }];
+  // @inject_tag: gorm:"column:partner_id"
+  
+  insuretech.common.v1.AuditInfo audit_info = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum BeneficiaryType {
+  BENEFICIARY_TYPE_UNSPECIFIED = 0;
+  BENEFICIARY_TYPE_INDIVIDUAL = 1; // B2C retail customer
+  BENEFICIARY_TYPE_BUSINESS = 2; // B2B corporate entity
+}
+
+enum BeneficiaryStatus {
+  BENEFICIARY_STATUS_UNSPECIFIED = 0;
+  BENEFICIARY_STATUS_PENDING_KYC = 1;
+  BENEFICIARY_STATUS_ACTIVE = 2;
+  BENEFICIARY_STATUS_SUSPENDED = 3;
+  BENEFICIARY_STATUS_BLOCKED = 4;
+  BENEFICIARY_STATUS_CLOSED = 5;
+}
+
+enum KYCStatus {
+  KYC_STATUS_UNSPECIFIED = 0;
+  KYC_STATUS_NOT_STARTED = 1;
+  KYC_STATUS_IN_PROGRESS = 2;
+  KYC_STATUS_COMPLETED = 3;
+  KYC_STATUS_FAILED = 4;
+  KYC_STATUS_EXPIRED = 5;
+  KYC_STATUS_REJECTED = 6;
+}
+
+

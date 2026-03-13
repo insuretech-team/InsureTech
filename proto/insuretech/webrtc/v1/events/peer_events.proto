@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.events;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/webrtc/v1/events;webrtceventsv1";
+option csharp_namespace = "Insuretech.Webrtc.V1.Events";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/peer.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Peer Events
+// ═══════════════════════════════════════════════════════════════════════════
+
+message PeerJoinedEvent {
+ string room_id = 1;
+ insuretech.webrtc.v1.entity.Peer peer = 2;
+  google.protobuf.Timestamp joined_at = 3;
+}
+
+message PeerLeftEvent {
+ string room_id = 1;
+ string peer_id = 2;
+  string reason = 3;
+  google.protobuf.Timestamp left_at = 4;
+}
+
+message PeerStateChangedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+ insuretech.webrtc.v1.entity.PeerConnectionState old_state = 3;
+ insuretech.webrtc.v1.entity.PeerConnectionState new_state = 4;
+  google.protobuf.Timestamp changed_at = 5;
+}
+
+message PeerMetadataUpdatedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+  map<string, string> metadata = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+

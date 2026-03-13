@@ -1,0 +1,10 @@
+ManualReviewStatus:
+  type: string
+  enum:
+  - MANUAL_REVIEW_STATUS_UNSPECIFIED
+  - MANUAL_REVIEW_STATUS_NOT_REQUIRED
+  - MANUAL_REVIEW_STATUS_PENDING
+  - MANUAL_REVIEW_STATUS_APPROVED
+  - MANUAL_REVIEW_STATUS_REJECTED
+  description: ManualReviewStatus tracks the manual review workflow for bank transfer
+    payments.

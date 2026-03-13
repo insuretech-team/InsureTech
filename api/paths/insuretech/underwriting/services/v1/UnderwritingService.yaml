@@ -1,0 +1,353 @@
+/v1/quotes:
+  post:
+    summary: Request premium quote
+    operationId: UnderwritingService_RequestQuote
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RequestQuoteResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Request premium quote
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RequestQuoteRequest'
+      required: true
+/v1/quotes/{quote_id}:
+  get:
+    summary: Get quote details
+    operationId: UnderwritingService_GetQuote
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnderwritingQuoteRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get quote details
+    parameters:
+    - name: quote_id
+      in: path
+      required: true
+      schema:
+        type: string
+  post:
+    summary: Approve underwriting (manual)
+    operationId: UnderwritingService_ApproveUnderwriting
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnderwritingApprovalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Approve underwriting (manual)
+    parameters:
+    - name: quote_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: action
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - approve
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/UnderwritingApprovalRequest'
+      required: true
+/v1/beneficiaries/{beneficiary_id}/quotes:
+  get:
+    summary: List quotes for beneficiary
+    operationId: UnderwritingService_ListQuotes
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnderwritingQuotesListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List quotes for beneficiary
+    parameters:
+    - name: beneficiary_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/quotes/{quote_id}/health-declaration:
+  post:
+    summary: Submit health declaration
+    operationId: UnderwritingService_SubmitHealthDeclaration
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/HealthDeclarationSubmissionResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Submit health declaration
+    parameters:
+    - name: quote_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/HealthDeclarationSubmissionRequest'
+      required: true
+  get:
+    summary: Get health declaration
+    operationId: UnderwritingService_GetHealthDeclaration
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnderwritingHealthDeclarationRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get health declaration
+    parameters:
+    - name: quote_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/quotes/{quote_id}/decision:
+  get:
+    summary: Get underwriting decision
+    operationId: UnderwritingService_GetUnderwritingDecision
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UnderwritingUnderwritingDecisionRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get underwriting decision
+    parameters:
+    - name: quote_id
+      in: path
+      required: true
+      schema:
+        type: string

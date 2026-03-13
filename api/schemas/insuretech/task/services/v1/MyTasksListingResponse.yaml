@@ -1,0 +1,15 @@
+MyTasksListingResponse:
+  type: object
+  properties:
+    tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Task'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for my tasks listing operation. Returns operation
+    results and status.

@@ -1,0 +1,17 @@
+PurchaseOrderCatalogItem:
+  type: object
+  properties:
+    product_id:
+      type: string
+    product_name:
+      type: string
+    plan_id:
+      type: string
+    plan_name:
+      type: string
+    insurance_category:
+      $ref: '#/components/schemas/InsuranceType'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+  description: Domain entity representing purchase order catalog item. Core business
+    object in the system.

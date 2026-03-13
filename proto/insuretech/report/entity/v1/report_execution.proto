@@ -1,0 +1,160 @@
+syntax = "proto3";
+
+package insuretech.report.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/report/entity/v1;reportv1";
+
+// Report execution instance
+message ReportExecution {
+  option (insuretech.common.v1.table) = {
+    table_name: "report_executions"
+    schema_name: "analytics_schema"
+    migration_order: 75
+    is_table: true
+    audit_fields: true
+    comment: "Report execution history"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "execution_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:execution_id;not null"
+  
+  string report_definition_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "report_definition_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "report_definitions"
+      references_column: "report_id"
+      references_schema: "analytics_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_report_executions_definition_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:report_definition_id;not null"
+  
+  string report_schedule_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "report_schedule_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "report_schedules"
+      references_column: "schedule_id"
+      references_schema: "analytics_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:report_schedule_id"
+  
+  string parameters = 4 [(insuretech.common.v1.column) = {
+    column_name: "parameters"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Parameters used for this execution"
+  }];
+  // @inject_tag: gorm:"column:parameters"
+  
+  ExecutionStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_report_executions_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string file_url = 6 [(insuretech.common.v1.column) = {
+    column_name: "file_url"
+    sql_type: "VARCHAR(500)"
+    comment: "Generated report file URL"
+  }];
+  // @inject_tag: gorm:"column:file_url"
+  
+  string file_format = 7 [(insuretech.common.v1.column) = {
+    column_name: "file_format"
+    sql_type: "VARCHAR(20)"
+    comment: "PDF, XLSX, CSV"
+  }];
+  // @inject_tag: gorm:"column:file_format"
+  
+  int64 file_size_bytes = 8 [(insuretech.common.v1.column) = {
+    column_name: "file_size_bytes"
+    sql_type: "BIGINT"
+  }];
+  // @inject_tag: gorm:"column:file_size_bytes"
+  
+  int32 row_count = 9 [(insuretech.common.v1.column) = {
+    column_name: "row_count"
+    sql_type: "INTEGER"
+    comment: "Number of rows in report"
+  }];
+  // @inject_tag: gorm:"column:row_count"
+  
+  string error_message = 10 [(insuretech.common.v1.column) = {
+    column_name: "error_message"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:error_message"
+  
+  string executed_by = 11 [(insuretech.common.v1.column) = {
+    column_name: "executed_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:executed_by"
+  
+  google.protobuf.Timestamp started_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "started_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp completed_at = 13 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ExecutionStatus {
+  EXECUTION_STATUS_UNSPECIFIED = 0;
+  EXECUTION_STATUS_PENDING = 1;
+  EXECUTION_STATUS_RUNNING = 2;
+  EXECUTION_STATUS_COMPLETED = 3;
+  EXECUTION_STATUS_FAILED = 4;
+}
+

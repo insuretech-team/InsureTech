@@ -1,0 +1,17 @@
+CheckAccessResponse:
+  type: object
+  properties:
+    allowed:
+      type: boolean
+    effect:
+      $ref: '#/components/schemas/PolicyEffect'
+    matched_rule:
+      type: string
+      description: which casbin rule matched
+    reason:
+      type: string
+      description: human-readable deny reason
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for check access operation. Returns operation results
+    and status.

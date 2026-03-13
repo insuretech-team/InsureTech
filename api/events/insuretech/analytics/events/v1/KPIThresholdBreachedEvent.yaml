@@ -1,0 +1,29 @@
+KPIThresholdBreachedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    metric_name:
+      type: string
+    current_value:
+      type: number
+      format: double
+    threshold_value:
+      type: number
+      format: double
+    threshold_type:
+      type: string
+      description: ABOVE, BELOW
+    severity:
+      type: string
+      description: WARNING, CRITICAL
+    notification_sent_to:
+      type: string
+      description: User IDs or role names
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: KPI threshold breached'

@@ -1,0 +1,429 @@
+{
+  "proto_only": [
+    "peer_sessions",
+    "tracks",
+    "rooms",
+    "peers",
+    "room_sessions"
+  ],
+  "db_only": [
+    "schema_migrations"
+  ],
+  "matched": [
+    {
+      "table_name": "user_profiles",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "revenue_shares",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "workflow_definitions",
+      "schema": "workflow_schema"
+    },
+    {
+      "table_name": "document_verifications",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "payment_refunds",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "beneficiaries",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "products",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "portal_configs",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "insurer_products",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "org_members",
+      "schema": "b2b_schema"
+    },
+    {
+      "table_name": "claim_documents",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "endorsements",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "processing_jobs",
+      "schema": "media_schema"
+    },
+    {
+      "table_name": "quotes",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "service_providers",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "users_documents",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "telemetry",
+      "schema": "iot_schema"
+    },
+    {
+      "table_name": "devices",
+      "schema": "iot_schema"
+    },
+    {
+      "table_name": "fraud_checks",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "renewal_schedules",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "tenants",
+      "schema": "tenant_schema"
+    },
+    {
+      "table_name": "business_metrics",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "voice_transcripts",
+      "schema": "ai_schema"
+    },
+    {
+      "table_name": "product_riders",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "notifications",
+      "schema": "notification_schema"
+    },
+    {
+      "table_name": "report_schedules",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "health_declarations",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "partners",
+      "schema": "partner_schema"
+    },
+    {
+      "table_name": "report_executions",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "organisations",
+      "schema": "b2b_schema"
+    },
+    {
+      "table_name": "underwriting_decisions",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "media_files",
+      "schema": "media_schema"
+    },
+    {
+      "table_name": "token_configs",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "renewal_reminders",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "commission_payouts",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "user_roles",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "document_templates",
+      "schema": "storage_schema"
+    },
+    {
+      "table_name": "audit_logs",
+      "schema": "compliance_schema"
+    },
+    {
+      "table_name": "tickets",
+      "schema": "support_schema"
+    },
+    {
+      "table_name": "commission_configs",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "otps",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "knowledge_base_articles",
+      "schema": "support_schema"
+    },
+    {
+      "table_name": "tenant_configs",
+      "schema": "tenant_schema"
+    },
+    {
+      "table_name": "document_generations",
+      "schema": "storage_schema"
+    },
+    {
+      "table_name": "policy_riders",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "document_types",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "compliance_logs",
+      "schema": "compliance_schema"
+    },
+    {
+      "table_name": "aggregated_metrics",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "mfs_integrations",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "ai_conversations",
+      "schema": "ai_schema"
+    },
+    {
+      "table_name": "departments",
+      "schema": "b2b_schema"
+    },
+    {
+      "table_name": "insurer_configs",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "policy_rules",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "voice_commands",
+      "schema": "ai_schema"
+    },
+    {
+      "table_name": "insurers",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "fraud_cases",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "role_mfa_configs",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "tasks",
+      "schema": "workflow_schema"
+    },
+    {
+      "table_name": "agents",
+      "schema": "partner_schema"
+    },
+    {
+      "table_name": "voice_sessions",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "policy_service_requests",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "faqs",
+      "schema": "support_schema"
+    },
+    {
+      "table_name": "mfs_transactions",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "payments",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "kyc_verifications",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "individual_beneficiaries",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "api_keys",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "quotations",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "tigerbeetle_accounts",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "refunds",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "purchase_orders",
+      "schema": "b2b_schema"
+    },
+    {
+      "table_name": "product_plans",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "pricing_configs",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "api_key_usage",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "claim_approvals",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "audit_events",
+      "schema": "compliance_schema"
+    },
+    {
+      "table_name": "grace_periods",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "policies",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "policy_nominees",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "reports",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "roles",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "ai_agents",
+      "schema": "ai_schema"
+    },
+    {
+      "table_name": "invoices",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "report_definitions",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "metric_definitions",
+      "schema": "analytics_schema"
+    },
+    {
+      "table_name": "ticket_messages",
+      "schema": "support_schema"
+    },
+    {
+      "table_name": "employees",
+      "schema": "b2b_schema"
+    },
+    {
+      "table_name": "users",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "fraud_alerts",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "commissions",
+      "schema": "partner_schema"
+    },
+    {
+      "table_name": "workflow_instances",
+      "schema": "workflow_schema"
+    },
+    {
+      "table_name": "workflow_tasks",
+      "schema": "workflow_schema"
+    },
+    {
+      "table_name": "business_beneficiaries",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "claims",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "mfs_webhooks",
+      "schema": "payment_schema"
+    },
+    {
+      "table_name": "fraud_rules",
+      "schema": "insurance_schema"
+    },
+    {
+      "table_name": "workflow_configs",
+      "schema": "workflow_schema"
+    },
+    {
+      "table_name": "access_decision_audits",
+      "schema": "authz_schema"
+    },
+    {
+      "table_name": "files",
+      "schema": "storage_schema"
+    },
+    {
+      "table_name": "sessions",
+      "schema": "authn_schema"
+    },
+    {
+      "table_name": "alerts",
+      "schema": "notification_schema"
+    },
+    {
+      "table_name": "notification_templates",
+      "schema": "notification_schema"
+    }
+  ],
+  "schema_mismatches": [
+    {
+      "table_name": "casbin_rules",
+      "proto_schema": "authz_schema",
+      "db_schema": "public"
+    }
+  ]
+}

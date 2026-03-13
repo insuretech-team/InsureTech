@@ -1,0 +1,6 @@
+RenewalScheduleCreationRequest:
+  type: object
+  properties:
+    schedule:
+      $ref: '#/components/schemas/RenewalSchedule'
+  description: ========== RENEWAL SCHEDULE MESSAGES ==========

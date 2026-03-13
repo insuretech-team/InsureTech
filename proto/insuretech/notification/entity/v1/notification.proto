@@ -1,0 +1,416 @@
+syntax = "proto3";
+
+package insuretech.notification.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/notification/entity/v1;notificationv1";
+option csharp_namespace = "Insuretech.Notification.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+
+// Notification represents a notification to be sent
+// Maps to 'notifications' table in notification_schema
+message Notification {
+  option (insuretech.common.v1.table) = {
+    table_name: "notifications"
+    schema_name: "notification_schema"
+    migration_order: 63
+    is_table: true
+    comment: "User notifications (SMS, Email, Push, WhatsApp, In-App)"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: true
+    partition_strategy: PARTITION_STRATEGY_RANGE_MONTH
+    partition_column: "created_at"
+  };
+
+  string notification_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "notification_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Notification UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:notification_id;not null"
+
+  string recipient_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "recipient_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to users table"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_notifications_recipient_id"
+      }
+      index: {
+        index_name: "idx_notifications_recipient_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:recipient_id;not null"
+
+  NotificationType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Notification type"
+      index: {
+        index_name: "idx_notifications_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  NotificationChannel channel = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "channel"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Notification channel (SMS, EMAIL, PUSH, WHATSAPP, IN_APP)"
+      index: {
+        index_name: "idx_notifications_channel"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+
+  string subject = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "subject"
+      sql_type: "VARCHAR(500)"
+      comment: "Subject line (for email)"
+    }
+  ];
+  // @inject_tag: gorm:"column:subject"
+
+  string message = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "message"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Notification message body"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Customer notification and communication"
+  ];
+  // @inject_tag: gorm:"column:message;not null"
+
+  map<string, string> template_data = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "template_data"
+      sql_type: "JSONB"
+      comment: "Template variables as JSON"
+      is_json: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Template personalization data"
+  ];
+
+  NotificationPriority priority = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "priority"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      default_value: "'NORMAL'"
+      comment: "Notification priority"
+    }
+  ];
+  // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+
+  NotificationStatus status = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      default_value: "'QUEUED'"
+      comment: "Notification status"
+      index: {
+        index_name: "idx_notifications_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp scheduled_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "scheduled_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Scheduled send time (NULL = send immediately)"
+      index: {
+        index_name: "idx_notifications_scheduled_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp sent_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "sent_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Notification sent timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp delivered_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "delivered_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Notification delivered timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:delivered_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp read_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "read_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "User read timestamp (in-app notifications)"
+    }
+  ];
+  // @inject_tag: gorm:"column:read_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  int32 retry_count = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "retry_count"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "0"
+      check_constraint: "retry_count >= 0 AND retry_count <= 3"
+      comment: "Retry attempt counter (max 3)"
+    }
+  ];
+  // @inject_tag: gorm:"column:retry_count;not null"
+
+  string error_message = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "error_message"
+      sql_type: "TEXT"
+      comment: "Error message if failed"
+    }
+  ];
+  // @inject_tag: gorm:"column:error_message"
+}
+
+enum NotificationType {
+  NOTIFICATION_TYPE_UNSPECIFIED = 0;
+  NOTIFICATION_TYPE_OTP = 1;
+  NOTIFICATION_TYPE_POLICY_ISSUED = 2;
+  NOTIFICATION_TYPE_PAYMENT_CONFIRMATION = 3;
+  NOTIFICATION_TYPE_CLAIM_SUBMITTED = 4;
+  NOTIFICATION_TYPE_CLAIM_APPROVED = 5;
+  NOTIFICATION_TYPE_CLAIM_REJECTED = 6;
+  NOTIFICATION_TYPE_RENEWAL_REMINDER = 7;
+  NOTIFICATION_TYPE_GRACE_PERIOD = 8;
+  NOTIFICATION_TYPE_POLICY_LAPSED = 9;
+  NOTIFICATION_TYPE_MARKETING = 10;
+}
+
+enum NotificationChannel {
+  NOTIFICATION_CHANNEL_UNSPECIFIED = 0;
+  NOTIFICATION_CHANNEL_SMS = 1;
+  NOTIFICATION_CHANNEL_EMAIL = 2;
+  NOTIFICATION_CHANNEL_PUSH = 3;
+  NOTIFICATION_CHANNEL_WHATSAPP = 4;
+  NOTIFICATION_CHANNEL_IN_APP = 5;
+}
+
+enum NotificationPriority {
+  NOTIFICATION_PRIORITY_UNSPECIFIED = 0;
+  NOTIFICATION_PRIORITY_LOW = 1;
+  NOTIFICATION_PRIORITY_NORMAL = 2;
+  NOTIFICATION_PRIORITY_HIGH = 3;
+  NOTIFICATION_PRIORITY_URGENT = 4;
+}
+
+enum NotificationStatus {
+  NOTIFICATION_STATUS_UNSPECIFIED = 0;
+  NOTIFICATION_STATUS_QUEUED = 1;
+  NOTIFICATION_STATUS_SENDING = 2;
+  NOTIFICATION_STATUS_SENT = 3;
+  NOTIFICATION_STATUS_DELIVERED = 4;
+  NOTIFICATION_STATUS_READ = 5;
+  NOTIFICATION_STATUS_FAILED = 6;
+  NOTIFICATION_STATUS_BOUNCED = 7;
+}
+
+// NotificationTemplate for reusable templates
+// Maps to 'notification_templates' table in notification_schema
+message NotificationTemplate {
+  option (insuretech.common.v1.table) = {
+    table_name: "notification_templates"
+    schema_name: "notification_schema"
+    migration_order: 64
+    is_table: true
+    comment: "Reusable notification templates with placeholders"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string template_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "template_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Template UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:template_id;not null"
+
+  string template_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "template_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      unique: true
+      comment: "Unique template name"
+      index: {
+        index_name: "idx_notification_templates_template_name"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:template_name;not null"
+
+  NotificationType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Notification type"
+      index: {
+        index_name: "idx_notification_templates_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  NotificationChannel channel = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "channel"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Notification channel"
+      index: {
+        index_name: "idx_notification_templates_channel"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+
+  string subject_template = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "subject_template"
+      sql_type: "VARCHAR(500)"
+      comment: "Subject template with {{placeholders}}"
+    }
+  ];
+  // @inject_tag: gorm:"column:subject_template"
+
+  string body_template = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "body_template"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Body template with {{placeholders}}"
+    }
+  ];
+  // @inject_tag: gorm:"column:body_template;not null"
+
+  string language = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "language"
+      sql_type: "VARCHAR(5)"
+      not_null: true
+      default_value: "'en'"
+      check_constraint: "language IN ('en', 'bn')"
+      comment: "Template language (en = English, bn = Bengali)"
+    }
+  ];
+  // @inject_tag: gorm:"column:language;not null"
+
+  google.protobuf.Timestamp created_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  bool is_active = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+      comment: "Template active status"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+}
+
+// NotificationPreference for user preferences (stored in users table as JSONB or separate table)
+message NotificationPreference {
+  string user_id = 1;
+  repeated ChannelPreference channel_preferences = 2;
+  bool marketing_opt_in = 3;
+  bool transactional_opt_in = 4; // Always true for critical notifications
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+message ChannelPreference {
+  NotificationChannel channel = 1;
+  bool enabled = 2;
+  repeated NotificationType excluded_types = 3; // Types to not receive on this channel
+}
+

@@ -1,0 +1,7 @@
+UnderwritingDecisionDeletionRequest:
+  type: object
+  properties:
+    decision_id:
+      type: string
+  description: Request payload for underwriting decision deletion operation. Contains
+    parameters required to execute the operation.

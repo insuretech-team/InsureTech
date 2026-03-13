@@ -1,0 +1,8 @@
+OTPVerificationRequest:
+  type: object
+  properties:
+    otp_id:
+      type: string
+    code:
+      type: string
+  description: Verify OTP Request

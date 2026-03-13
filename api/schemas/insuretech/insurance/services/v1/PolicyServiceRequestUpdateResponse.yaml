@@ -1,0 +1,7 @@
+PolicyServiceRequestUpdateResponse:
+  type: object
+  properties:
+    request:
+      $ref: '#/components/schemas/PolicyServiceRequest'
+  description: Response payload for policy service request update operation. Returns
+    operation results and status.

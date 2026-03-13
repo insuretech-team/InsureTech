@@ -1,0 +1,19 @@
+FirmwareUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    old_version:
+      type: string
+    new_version:
+      type: string
+    update_successful:
+      type: boolean
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Firmware updated'

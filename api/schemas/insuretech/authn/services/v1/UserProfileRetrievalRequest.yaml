@@ -1,0 +1,7 @@
+UserProfileRetrievalRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+  description: Request payload for retrieving user profile retrieval information.
+    May include filters and pagination parameters.

@@ -1,0 +1,14 @@
+AddTicketMessageRequest:
+  type: object
+  properties:
+    ticket_id:
+      type: string
+    content:
+      type: string
+    is_internal:
+      type: boolean
+    attachments:
+      type: string
+      description: JSON
+  description: Request payload for add ticket message operation. Contains parameters
+    required to execute the operation.

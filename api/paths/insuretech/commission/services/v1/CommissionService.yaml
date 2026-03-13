@@ -1,0 +1,355 @@
+/v1/commissions:
+  post:
+    summary: Calculate and record commission for policy
+    operationId: CommissionService_CalculateCommission
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionCalculationResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Calculate and record commission for policy
+    parameters:
+    - name: action
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - calculate
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/CommissionCalculationRequest'
+      required: true
+  get:
+    summary: List commissions for recipient
+    operationId: CommissionService_ListCommissions
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionsListingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: List commissions for recipient
+/v1/commissions/{commission_id}:
+  get:
+    summary: Get commission details
+    operationId: CommissionService_GetCommission
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get commission details
+    parameters:
+    - name: commission_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/commission-payouts:
+  post:
+    summary: Create payout batch
+    operationId: CommissionService_CreatePayout
+    responses:
+      '201':
+        description: Resource created successfully
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutCreationResponse'
+        headers:
+          Location:
+            description: URL of the created resource
+            schema:
+              type: string
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Create payout batch
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayoutCreationRequest'
+      required: true
+/v1/commission-payouts/{payout_id}:
+  post:
+    summary: Process payout
+    operationId: CommissionService_ProcessPayout
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PayoutProcessingResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Process payout
+    parameters:
+    - name: payout_id
+      in: path
+      required: true
+      schema:
+        type: string
+    - name: action
+      in: query
+      required: true
+      schema:
+        type: string
+        enum:
+        - process
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/PayoutProcessingRequest'
+      required: true
+/v1/recipients/{recipient_id}/commission-statement:
+  get:
+    summary: Get commission statement
+    operationId: CommissionService_GetCommissionStatement
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CommissionStatementRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get commission statement
+    parameters:
+    - name: recipient_id
+      in: path
+      required: true
+      schema:
+        type: string
+/v1/insurers/{insurer_id}/revenue-share:
+  get:
+    summary: Get revenue share report
+    operationId: CommissionService_GetRevenueShareReport
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/RevenueShareReportRetrievalResponse'
+      '400':
+        description: Bad request - Invalid input parameters
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '401':
+        description: Unauthorized - Authentication required
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '403':
+        description: Forbidden - Insufficient permissions
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '404':
+        description: Not found - Resource does not exist
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+      '500':
+        description: Internal server error
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Error'
+    description: Get revenue share report
+    parameters:
+    - name: insurer_id
+      in: path
+      required: true
+      schema:
+        type: string

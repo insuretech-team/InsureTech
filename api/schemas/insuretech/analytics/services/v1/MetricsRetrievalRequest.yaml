@@ -1,0 +1,19 @@
+MetricsRetrievalRequest:
+  type: object
+  properties:
+    metric_types:
+      type: array
+      items:
+        $ref: '#/components/schemas/MetricType'
+    start_date:
+      type: string
+      description: ISO 8601
+    end_date:
+      type: string
+    filters:
+      type: object
+      additionalProperties:
+        type: string
+      description: Dimension filters
+  description: Request payload for retrieving metrics retrieval information. May include
+    filters and pagination parameters.

@@ -1,0 +1,9 @@
+FraudRuleDeactivationRequest:
+  type: object
+  properties:
+    rule_id:
+      type: string
+    reason:
+      type: string
+  description: Request payload for fraud rule deactivation operation. Contains parameters
+    required to execute the operation.

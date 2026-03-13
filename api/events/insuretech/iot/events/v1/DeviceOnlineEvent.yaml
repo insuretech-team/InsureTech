@@ -1,0 +1,16 @@
+DeviceOnlineEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    offline_duration_minutes:
+      type: integer
+      format: int32
+  description: 'Event: Device back online'

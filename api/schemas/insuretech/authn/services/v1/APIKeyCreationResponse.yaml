@@ -1,0 +1,22 @@
+APIKeyCreationResponse:
+  type: object
+  properties:
+    key_id:
+      type: string
+      description: UUID
+    raw_key:
+      type: string
+      description: "Plain key \u2014 shown ONCE, never stored"
+    name:
+      type: string
+    scopes:
+      type: array
+      items:
+        type: string
+    expires_at:
+      type: string
+      format: date-time
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for api key creation operation. Returns operation
+    results and status.

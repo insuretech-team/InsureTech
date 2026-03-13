@@ -1,0 +1,27 @@
+ModelRetrainedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    model_name:
+      type: string
+    model_version:
+      type: string
+    old_accuracy:
+      type: number
+      format: double
+    new_accuracy:
+      type: number
+      format: double
+    training_samples:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Model retrained'

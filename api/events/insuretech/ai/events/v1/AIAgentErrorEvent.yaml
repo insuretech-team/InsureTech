@@ -1,0 +1,22 @@
+AIAgentErrorEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    error_type:
+      type: string
+      description: MODEL_ERROR, TIMEOUT, API_ERROR
+    error_message:
+      type: string
+    context:
+      type: string
+      description: What was being processed
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: AI agent error'

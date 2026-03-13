@@ -1,0 +1,7 @@
+NotificationStatusRetrievalRequest:
+  type: object
+  properties:
+    notification_id:
+      type: string
+  description: Request payload for retrieving notification status retrieval information.
+    May include filters and pagination parameters.

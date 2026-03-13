@@ -1,0 +1,180 @@
+syntax = "proto3";
+
+package insuretech.task.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/task/entity/v1;taskv1";
+
+// Task (FR-136)
+message Task {
+  option (insuretech.common.v1.table) = {
+    table_name: "tasks"
+    schema_name: "workflow_schema"
+    migration_order: 62
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Task management system"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "task_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:task_id;not null"
+  
+  string title = 2 [(insuretech.common.v1.column) = {
+    column_name: "title"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:title;not null"
+  
+  string description = 3 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:description"
+  
+  TaskType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_tasks_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  TaskPriority priority = 5 [(insuretech.common.v1.column) = {
+    column_name: "priority"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'MEDIUM'"
+    index: {
+      index_name: "idx_tasks_priority"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+  
+  TaskStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_tasks_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string assigned_to = 7 [(insuretech.common.v1.column) = {
+    column_name: "assigned_to"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_tasks_assigned_to"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:assigned_to"
+  
+  string created_by = 8 [(insuretech.common.v1.column) = {
+    column_name: "created_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:created_by"
+  
+  string related_entity_type = 9 [(insuretech.common.v1.column) = {
+    column_name: "related_entity_type"
+    sql_type: "VARCHAR(50)"
+    comment: "POLICY, CLAIM, TICKET"
+  }];
+  // @inject_tag: gorm:"column:related_entity_type"
+  
+  string related_entity_id = 10 [(insuretech.common.v1.column) = {
+    column_name: "related_entity_id"
+    sql_type: "UUID"
+    index: {
+      index_name: "idx_tasks_related_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:related_entity_id"
+  
+  google.protobuf.Timestamp due_date = 11 [(insuretech.common.v1.column) = {
+    column_name: "due_date"
+    sql_type: "TIMESTAMPTZ"
+    index: {
+      index_name: "idx_tasks_due_date"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:due_date;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp completed_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum TaskType {
+  TASK_TYPE_UNSPECIFIED = 0;
+  TASK_TYPE_FOLLOW_UP = 1;
+  TASK_TYPE_REVIEW = 2;
+  TASK_TYPE_APPROVAL = 3;
+  TASK_TYPE_DOCUMENT = 4;
+  TASK_TYPE_REMINDER = 5;
+}
+
+enum TaskPriority {
+  TASK_PRIORITY_UNSPECIFIED = 0;
+  TASK_PRIORITY_LOW = 1;
+  TASK_PRIORITY_MEDIUM = 2;
+  TASK_PRIORITY_HIGH = 3;
+  TASK_PRIORITY_URGENT = 4;
+}
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_PENDING = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_COMPLETED = 3;
+  TASK_STATUS_CANCELLED = 4;
+}
+
+

@@ -1,0 +1,57 @@
+PolicyRule:
+  type: object
+  properties:
+    policy_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    subject:
+      type: string
+      description: 'Subject: "role:<name>" or "user:<uuid>"'
+    domain:
+      type: string
+      description: 'Domain: "portal:tenant_id"'
+    object:
+      type: string
+      description: 'Object: "svc:<service>/<resource>"'
+    action:
+      type: string
+      description: 'Action: HTTP verb or domain verb'
+    effect:
+      allOf:
+      - $ref: '#/components/schemas/PolicyEffect'
+      x-database-default: allow
+    condition:
+      type: string
+      description: Optional ABAC condition expression (evaluated by custom matcher)
+    description:
+      type: string
+    is_active:
+      type: boolean
+      default: true
+    created_by:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "---------------------------------------------------------------------------\r\
+    \n 4. PolicyRule \u2014 human-readable view of a Casbin policy line.\r\n    Writes\
+    \ sync to casbin_rules via the authz service.\r\n ---------------------------------------------------------------------------"
+  required:
+  - policy_id
+  - subject
+  - domain
+  - object
+  - action
+  - effect
+  - is_active
+  - created_at
+  - updated_at

@@ -1,0 +1,13 @@
+PolicyPolicyUpdateRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    nominees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nominee'
+    address:
+      type: string
+  description: Request payload for updating an existing policy update. Contains fields
+    to be modified.

@@ -1,0 +1,463 @@
+syntax = "proto3";
+
+package insuretech.authn.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1;authnservicev1";
+option csharp_namespace = "Insuretech.Authn.Services.V1";
+
+import "google/api/annotations.proto";
+import "insuretech/authn/services/v1/core.proto";
+
+// Authentication Service
+service AuthService {
+  // Register new user
+  rpc Register(RegisterRequest) returns (RegisterResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/register"
+      body : "*"
+    };
+  }
+
+  // Send OTP for verification
+  rpc SendOTP(SendOTPRequest) returns (SendOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/otp:send"
+      body : "*"
+    };
+  }
+
+  // Verify OTP
+  rpc VerifyOTP(VerifyOTPRequest) returns (VerifyOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/otp:verify"
+      body : "*"
+    };
+  }
+
+  // Resend OTP (invalidates previous OTP, generates fresh one)
+  // Used for delivery failure retry loops and user-initiated resend
+  rpc ResendOTP(ResendOTPRequest) returns (ResendOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/otp:resend"
+      body : "*"
+    };
+  }
+
+  // Login with credentials
+  rpc Login(LoginRequest) returns (LoginResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/login"
+      body : "*"
+    };
+  }
+
+  // Refresh access token
+  rpc RefreshToken(RefreshTokenRequest) returns (RefreshTokenResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/token:refresh"
+      body : "*"
+    };
+  }
+
+  // Logout
+  rpc Logout(LogoutRequest) returns (LogoutResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/logout"
+      body : "*"
+    };
+  }
+
+  // Change password
+  rpc ChangePassword(ChangePasswordRequest) returns (ChangePasswordResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/password:change"
+      body : "*"
+    };
+  }
+
+  // Reset password
+  rpc ResetPassword(ResetPasswordRequest) returns (ResetPasswordResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/password:reset"
+      body : "*"
+    };
+  }
+
+  // Validate token
+  rpc ValidateToken(ValidateTokenRequest) returns (ValidateTokenResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/token:validate"
+      body : "*"
+    };
+  }
+
+  // Get session details
+  rpc GetSession(GetSessionRequest) returns (GetSessionResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/sessions/{session_id}"
+    };
+  }
+
+  // List all sessions for a user
+  rpc ListSessions(ListSessionsRequest) returns (ListSessionsResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/users/{user_id}/sessions"
+    };
+  }
+
+  // Revoke a specific session
+  rpc RevokeSession(RevokeSessionRequest) returns (RevokeSessionResponse) {
+    option (google.api.http) = {
+      delete : "/v1/auth/sessions/{session_id}"
+    };
+  }
+
+  // Validate CSRF token (server-side sessions only)
+  rpc ValidateCSRF(ValidateCSRFRequest) returns (ValidateCSRFResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/csrf:validate"
+      body : "*"
+    };
+  }
+
+  // Get current user's active session
+  rpc GetCurrentSession(GetCurrentSessionRequest)
+      returns (GetCurrentSessionResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/session/current"
+    };
+  }
+
+  // Revoke all sessions for a user (logout from all devices)
+  rpc RevokeAllSessions(RevokeAllSessionsRequest)
+      returns (RevokeAllSessionsResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/sessions:revokeAll"
+      body : "*"
+    };
+  }
+
+  // ================================================================
+  // EMAIL-BASED AUTH (Business Beneficiary + System Users ONLY)
+  // Web portal: server-side session. Restricted by user_type check.
+  // ================================================================
+
+  // Register a portal user with email (requires email, triggers email
+  // verification OTP)
+  rpc RegisterEmailUser(RegisterEmailUserRequest)
+      returns (RegisterEmailUserResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/register"
+      body : "*"
+    };
+  }
+
+  // Send email OTP (verification or login)
+  rpc SendEmailOTP(SendEmailOTPRequest) returns (SendEmailOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/otp:send"
+      body : "*"
+    };
+  }
+
+  // Verify email address using OTP (must call before email login is allowed)
+  rpc VerifyEmail(VerifyEmailRequest) returns (VerifyEmailResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/verify"
+      body : "*"
+    };
+  }
+
+  // Login via email + OTP (Business Beneficiary / System User only →
+  // SERVER_SIDE session)
+  rpc EmailLogin(EmailLoginRequest) returns (EmailLoginResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/login"
+      body : "*"
+    };
+  }
+
+  // Request password reset via email OTP
+  rpc RequestPasswordResetByEmail(RequestPasswordResetByEmailRequest)
+      returns (RequestPasswordResetByEmailResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/password:reset-request"
+      body : "*"
+    };
+  }
+
+  // Complete password reset using email OTP
+  rpc ResetPasswordByEmail(ResetPasswordByEmailRequest)
+      returns (ResetPasswordByEmailResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email/password:reset"
+      body : "*"
+    };
+  }
+
+  // ================================================================
+  // BIOMETRIC AUTHENTICATION
+  // Mobile devices only. Token is issued once at user creation and
+  // stored encrypted on-device. Never re-transmitted after issuance.
+  // ================================================================
+
+  // Authenticate using a device-bound biometric token (mobile only)
+  rpc BiometricAuthenticate(BiometricAuthenticateRequest)
+      returns (BiometricAuthenticateResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/biometric:authenticate"
+      body : "*"
+    };
+  }
+
+  // ================================================================
+  // INTERNAL RPCs (no public HTTP annotation — gateway-internal only)
+  // ================================================================
+
+  // Update SMS delivery report status (called by DLR webhook handler)
+  rpc UpdateDLRStatus(UpdateDLRStatusRequest)
+      returns (UpdateDLRStatusResponse) {}
+
+  // ================================================================
+  // API KEY MANAGEMENT
+  // ================================================================
+
+  // Create a new API key for a user or service
+  rpc CreateAPIKey(CreateAPIKeyRequest) returns (CreateAPIKeyResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/api-keys"
+      body : "*"
+    };
+  }
+
+  // List API keys for an owner
+  rpc ListAPIKeys(ListAPIKeysRequest) returns (ListAPIKeysResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/api-keys"
+    };
+  }
+
+  // Revoke an API key
+  rpc RevokeAPIKey(RevokeAPIKeyRequest) returns (RevokeAPIKeyResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/api-keys/{key_id}:revoke"
+      body : "*"
+    };
+  }
+
+  // Rotate an API key (generates new key, marks old one for graceful expiry)
+  rpc RotateAPIKey(RotateAPIKeyRequest) returns (RotateAPIKeyResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/api-keys/{key_id}:rotate"
+      body : "*"
+    };
+  }
+
+  // ── User Profile ───────────────────────────────────────────────────────────
+
+  rpc CreateUserProfile(CreateUserProfileRequest)
+      returns (CreateUserProfileResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/profile"
+      body : "*"
+    };
+  }
+
+  rpc GetUserProfile(GetUserProfileRequest) returns (GetUserProfileResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/users/{user_id}/profile"
+    };
+  }
+
+  rpc UpdateUserProfile(UpdateUserProfileRequest)
+      returns (UpdateUserProfileResponse) {
+    option (google.api.http) = {
+      patch : "/v1/auth/users/{user_id}/profile"
+      body : "*"
+    };
+  }
+
+  // ── User Documents ─────────────────────────────────────────────────────────
+
+  rpc UploadUserDocument(UploadUserDocumentRequest)
+      returns (UploadUserDocumentResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/documents"
+      body : "*"
+    };
+  }
+
+  rpc ListUserDocuments(ListUserDocumentsRequest)
+      returns (ListUserDocumentsResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/users/{user_id}/documents"
+    };
+  }
+
+  rpc GetUserDocument(GetUserDocumentRequest)
+      returns (GetUserDocumentResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/documents/{user_document_id}"
+    };
+  }
+
+  rpc UpdateUserDocument(UpdateUserDocumentRequest)
+      returns (UpdateUserDocumentResponse) {
+    option (google.api.http) = {
+      patch : "/v1/auth/documents/{user_document_id}"
+      body : "*"
+    };
+  }
+
+  rpc DeleteUserDocument(DeleteUserDocumentRequest)
+      returns (DeleteUserDocumentResponse) {
+    option (google.api.http) = {
+      delete : "/v1/auth/documents/{user_document_id}"
+    };
+  }
+
+  // ── Document Types ─────────────────────────────────────────────────────────
+
+  rpc ListDocumentTypes(ListDocumentTypesRequest)
+      returns (ListDocumentTypesResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/document-types"
+    };
+  }
+
+  // ── KYC Verification ──
+  rpc InitiateKYC(InitiateKYCRequest) returns (InitiateKYCResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/kyc"
+      body : "*"
+    };
+  }
+  rpc GetKYCStatus(GetKYCStatusRequest) returns (GetKYCStatusResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/users/{user_id}/kyc"
+    };
+  }
+  rpc SubmitKYCFrame(SubmitKYCFrameRequest) returns (SubmitKYCFrameResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/kyc:submit-frame"
+      body : "*"
+    };
+  }
+  rpc CompleteKYCSession(CompleteKYCSessionRequest)
+      returns (CompleteKYCSessionResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/kyc:complete"
+      body : "*"
+    };
+  }
+  rpc ApproveKYC(ApproveKYCRequest) returns (ApproveKYCResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/kyc/{kyc_id}:approve"
+      body : "*"
+    };
+  }
+  rpc RejectKYC(RejectKYCRequest) returns (RejectKYCResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/kyc/{kyc_id}:reject"
+      body : "*"
+    };
+  }
+
+  // ── Document Verification (Admin) ──
+  rpc VerifyDocument(VerifyDocumentRequest) returns (VerifyDocumentResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/documents/{user_document_id}:verify"
+      body : "*"
+    };
+  }
+
+  // ── Voice Sessions ──
+  rpc CreateVoiceSession(CreateVoiceSessionRequest)
+      returns (CreateVoiceSessionResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/voice-sessions"
+      body : "*"
+    };
+  }
+  rpc GetVoiceSession(GetVoiceSessionRequest)
+      returns (GetVoiceSessionResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/voice-sessions/{voice_session_id}"
+    };
+  }
+  rpc EndVoiceSession(EndVoiceSessionRequest)
+      returns (EndVoiceSessionResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/voice-sessions/{voice_session_id}:end"
+      body : "*"
+    };
+  }
+
+  // ── Profile Photo Upload URL ──
+  rpc GetProfilePhotoUploadURL(GetProfilePhotoUploadURLRequest)
+      returns (GetProfilePhotoUploadURLResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/profile/photo:upload-url"
+      body : "*"
+    };
+  }
+
+  // ── Notification Preferences ──
+  rpc UpdateNotificationPreferences(UpdateNotificationPreferencesRequest)
+      returns (UpdateNotificationPreferencesResponse) {
+    option (google.api.http) = {
+      patch : "/v1/auth/users/{user_id}/notification-preferences"
+      body : "*"
+    };
+  }
+
+  // 🔐 TOTP / 2FA 🔐
+  rpc EnableTOTP(EnableTOTPRequest) returns (EnableTOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/totp:enable"
+      body : "*"
+    };
+  }
+  rpc VerifyTOTP(VerifyTOTPRequest) returns (VerifyTOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/totp:verify"
+      body : "*"
+    };
+  }
+  rpc DisableTOTP(DisableTOTPRequest) returns (DisableTOTPResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/totp:disable"
+      body : "*"
+    };
+  }
+
+  // 🎤 Voice Biometric Auth (Sprint 1.10) 🎤
+  rpc InitiateVoiceSession(InitiateVoiceSessionRequest)
+      returns (InitiateVoiceSessionResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/voice-biometric:initiate"
+      body : "*"
+    };
+  }
+  rpc SubmitVoiceSample(SubmitVoiceSampleRequest)
+      returns (SubmitVoiceSampleResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/voice-biometric:submit"
+      body : "*"
+    };
+  }
+  rpc VerifyVoiceSession(VerifyVoiceSessionRequest)
+      returns (VerifyVoiceSessionResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/voice-biometric:verify"
+      body : "*"
+    };
+  }
+
+  // 🔑 JWKS 🔑
+  rpc GetJWKS(GetJWKSRequest) returns (GetJWKSResponse) {
+    option (google.api.http) = {
+      get : "/v1/auth/.well-known/jwks.json"
+    };
+  }
+}

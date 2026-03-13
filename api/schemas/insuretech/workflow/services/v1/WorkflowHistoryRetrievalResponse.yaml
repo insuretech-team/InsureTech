@@ -1,0 +1,12 @@
+WorkflowHistoryRetrievalResponse:
+  type: object
+  properties:
+    workflow_instances:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkflowInstance'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for workflow history retrieval operation. Returns
+    operation results and status.

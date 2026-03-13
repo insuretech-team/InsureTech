@@ -1,0 +1,12 @@
+IndexType:
+  type: string
+  enum:
+  - INDEX_TYPE_UNSPECIFIED
+  - INDEX_TYPE_NONE
+  - INDEX_TYPE_BTREE
+  - INDEX_TYPE_HASH
+  - INDEX_TYPE_GIN
+  - INDEX_TYPE_GIST
+  - INDEX_TYPE_BRIN
+  description: 'Type categorization for index. Options: INDEX_TYPE_UNSPECIFIED, INDEX_TYPE_NONE,
+    INDEX_TYPE_BTREE, INDEX_TYPE_HASH, INDEX_TYPE_GIN (and 2 more).'

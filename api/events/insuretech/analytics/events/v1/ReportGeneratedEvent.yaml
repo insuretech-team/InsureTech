@@ -1,0 +1,33 @@
+ReportGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    report_id:
+      type: string
+    report_name:
+      type: string
+    report_type:
+      type: string
+      description: DAILY_SALES, MONTHLY_REVENUE, etc.
+    period_start:
+      type: string
+      format: date-time
+    period_end:
+      type: string
+      format: date-time
+    report_url:
+      type: string
+      description: S3 URL
+    generation_time_seconds:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    generated_by:
+      type: string
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Report generated'

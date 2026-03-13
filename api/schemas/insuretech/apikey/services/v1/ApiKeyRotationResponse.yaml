@@ -1,0 +1,13 @@
+ApiKeyRotationResponse:
+  type: object
+  properties:
+    new_api_key:
+      type: string
+      description: Plain text - show only once!
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for api key rotation operation. Returns operation
+    results and status.

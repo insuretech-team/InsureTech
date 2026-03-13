@@ -1,0 +1,17 @@
+PayoutCreationResponse:
+  type: object
+  properties:
+    payout_id:
+      type: string
+    payout_number:
+      type: string
+    total_amount:
+      $ref: '#/components/schemas/Money'
+    commission_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for payout creation operation. Returns operation results
+    and status.

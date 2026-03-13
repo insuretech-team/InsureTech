@@ -1,0 +1,11 @@
+OrganisationUpdateResponse:
+  type: object
+  properties:
+    organisation:
+      $ref: '#/components/schemas/Organisation'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for organisation update operation. Returns operation
+    results and status.

@@ -1,0 +1,51 @@
+AIAgent:
+  type: object
+  properties:
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:agent_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    agent_name:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_name;not null"'
+      x-unique: true
+    type:
+      $ref: '#/components/schemas/AgentType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    model_name:
+      type: string
+      description: '@inject_tag: gorm:"column:model_name;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/AiAgentStatus'
+      x-database-default: IDLE
+    capabilities:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    last_active_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_active_at;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "AIAgent represents an AI agent in the multi-agent system\n Maps to\
+    \ 'ai_agents' table in ai_schema"
+  required:
+  - agent_id
+  - agent_name
+  - type
+  - model_name
+  - status
+  - created_at
+  - updated_at

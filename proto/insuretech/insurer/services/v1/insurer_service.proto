@@ -1,0 +1,214 @@
+syntax = "proto3";
+
+package insuretech.insurer.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/insurer/entity/v1/insurer.proto";
+import "insuretech/insurer/entity/v1/insurer_config.proto";
+import "insuretech/insurer/entity/v1/insurer_product.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/services/v1;insurerservicev1";
+option csharp_namespace = "Insuretech.Insurer.Services.V1";
+
+service InsurerService {
+  // Create insurer
+  rpc CreateInsurer(CreateInsurerRequest) returns (CreateInsurerResponse) {
+    option (google.api.http) = {
+      post: "/v1/insurers"
+      body: "*"
+    };
+  }
+  
+  // Get insurer details
+  rpc GetInsurer(GetInsurerRequest) returns (GetInsurerResponse) {
+    option (google.api.http) = {
+      get: "/v1/insurers/{insurer_id}"
+    };
+  }
+  
+  // List insurers
+  rpc ListInsurers(ListInsurersRequest) returns (ListInsurersResponse) {
+    option (google.api.http) = {
+      get: "/v1/insurers"
+    };
+  }
+  
+  // Update insurer
+  rpc UpdateInsurer(UpdateInsurerRequest) returns (UpdateInsurerResponse) {
+    option (google.api.http) = {
+      patch: "/v1/insurers/{insurer_id}"
+      body: "*"
+    };
+  }
+  
+  // Update insurer config
+  rpc UpdateInsurerConfig(UpdateInsurerConfigRequest) returns (UpdateInsurerConfigResponse) {
+    option (google.api.http) = {
+      put: "/v1/insurers/{insurer_id}/config"
+      body: "*"
+    };
+  }
+  
+  // Add insurer product
+  rpc AddInsurerProduct(AddInsurerProductRequest) returns (AddInsurerProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/insurers/{insurer_id}/products"
+      body: "*"
+    };
+  }
+  
+  // Get insurer product
+  rpc GetInsurerProduct(GetInsurerProductRequest) returns (GetInsurerProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/insurer-products/{insurer_product_id}"
+    };
+  }
+  
+  // List insurer products
+  rpc ListInsurerProducts(ListInsurerProductsRequest) returns (ListInsurerProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/insurers/{insurer_id}/products"
+    };
+  }
+  
+  // Update insurer product
+  rpc UpdateInsurerProduct(UpdateInsurerProductRequest) returns (UpdateInsurerProductResponse) {
+    option (google.api.http) = {
+      patch: "/v1/insurer-products/{insurer_product_id}"
+      body: "*"
+    };
+  }
+}
+
+message CreateInsurerRequest {
+  string code = 1;
+  string name = 2;
+  string name_bn = 3;
+  string type = 4; // LIFE, NON_LIFE, COMPOSITE
+  string trade_license_number = 5;
+  string tin_number = 6;
+  string email = 7;
+  string phone = 8;
+  string address = 9;
+}
+
+message CreateInsurerResponse {
+  string insurer_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetInsurerRequest {
+  string insurer_id = 1;
+}
+
+message GetInsurerResponse {
+  entity.v1.Insurer insurer = 1;
+  entity.v1.InsurerConfig config = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ListInsurersRequest {
+  string type = 1;
+  string status = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListInsurersResponse {
+  repeated entity.v1.Insurer insurers = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateInsurerRequest {
+  string insurer_id = 1;
+  string name = 2;
+  string email = 3;
+  string phone = 4;
+  string status = 5;
+}
+
+message UpdateInsurerResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message UpdateInsurerConfigRequest {
+  string insurer_id = 1;
+  string api_base_url = 2;
+  string auth_type = 3;
+  string auth_credentials = 4;
+  string business_model = 5; // JSON
+  bool auto_underwriting_enabled = 6;
+  bool real_time_claim_notification = 7;
+}
+
+message UpdateInsurerConfigResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message AddInsurerProductRequest {
+  string insurer_id = 1;
+  string product_id = 2;
+  string code = 3;
+  string name = 4;
+  insuretech.common.v1.Money min_sum_assured = 5;
+  insuretech.common.v1.Money max_sum_assured = 6;
+  int32 min_entry_age = 7;
+  int32 max_entry_age = 8;
+  string effective_from = 9;
+}
+
+message AddInsurerProductResponse {
+  string insurer_product_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetInsurerProductRequest {
+  string insurer_product_id = 1;
+}
+
+message GetInsurerProductResponse {
+  entity.v1.InsurerProduct insurer_product = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListInsurerProductsRequest {
+  string insurer_id = 1;
+  string status = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListInsurerProductsResponse {
+  repeated entity.v1.InsurerProduct insurer_products = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateInsurerProductRequest {
+  string insurer_product_id = 1;
+  string status = 2;
+  string effective_to = 3;
+  string features = 4; // JSON
+}
+
+message UpdateInsurerProductResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

@@ -1,0 +1,14 @@
+InvoiceCancellationResponse:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/InvoiceStatus'
+    credit_note_id:
+      type: string
+      description: Populated when issue_credit_note=true
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invoice cancellation operation. Returns operation
+    results and status.

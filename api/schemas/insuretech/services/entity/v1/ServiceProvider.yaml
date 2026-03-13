@@ -1,0 +1,54 @@
+ServiceProvider:
+  type: object
+  properties:
+    provider_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:provider_id;not null"'
+    provider_name:
+      type: string
+      description: '@inject_tag: gorm:"column:provider_name;not null"'
+    provider_type:
+      $ref: '#/components/schemas/ServiceProviderType'
+      description: '@inject_tag: gorm:"column:provider_type;not null;serializer:proto_enum"'
+    address:
+      type: string
+      description: '@inject_tag: gorm:"column:address"'
+    city:
+      type: string
+      description: '@inject_tag: gorm:"column:city"'
+    district:
+      type: string
+      description: '@inject_tag: gorm:"column:district"'
+    phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:phone_number"'
+    email:
+      type: string
+      description: '@inject_tag: gorm:"column:email"'
+    latitude:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:latitude"'
+    longitude:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:longitude"'
+    services_offered:
+      type: array
+      items:
+        type: string
+    is_network_provider:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_network_provider;not null"'
+    supported_product_categories:
+      type: array
+      items:
+        type: string
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+  description: Domain entity representing service provider. Core business object in
+    the system.

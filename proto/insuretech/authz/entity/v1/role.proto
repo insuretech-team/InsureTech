@@ -1,0 +1,62 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 2. Role — named role definition scoped to a portal
+// ---------------------------------------------------------------------------
+message Role {
+  option (insuretech.common.v1.table) = {
+    table_name     : "roles"
+    schema_name    : "authz_schema"
+    migration_order: 2
+    is_table       : true
+    comment        : "Named roles per portal (system, business, b2b, agent, regulator, b2c)"
+    soft_delete    : true
+    audit_fields   : true
+    enable_rls     : true
+  };
+
+  string role_id    = 1 [(insuretech.common.v1.column) = {
+    column_name : "role_id"   sql_type: "UUID"  primary_key: true  not_null: true
+    default_value: "gen_random_uuid()"  comment: "UUID primary key"
+  }];
+  string name       = 2 [(insuretech.common.v1.column) = {
+    column_name : "name"  sql_type: "VARCHAR(100)"  not_null: true
+    comment: "e.g. super_admin, underwriter, claims_officer, agent_supervisor"
+    index: { index_name: "idx_roles_name_portal" index_type: INDEX_TYPE_BTREE unique: true }
+  }];
+  Portal portal     = 3 [(insuretech.common.v1.column) = {
+    column_name : "portal"  sql_type: "VARCHAR(50)"  not_null: true
+    comment: "Portal this role belongs to"
+  }];
+  string description = 4 [(insuretech.common.v1.column) = {
+    column_name : "description"  sql_type: "TEXT"
+  }];
+  bool   is_system  = 5 [(insuretech.common.v1.column) = {
+    column_name : "is_system"  sql_type: "BOOLEAN"  not_null: true  default_value: "false"
+    comment: "true = built-in immutable role"
+  }];
+  bool   is_active  = 6 [(insuretech.common.v1.column) = {
+    column_name : "is_active"  sql_type: "BOOLEAN"  not_null: true  default_value: "true"
+  }];
+  string created_by = 7 [(insuretech.common.v1.column) = { column_name: "created_by" sql_type: "UUID" }];
+  google.protobuf.Timestamp created_at = 8 [(insuretech.common.v1.column) = {
+    column_name: "created_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"  exclude_from_insert: true  exclude_from_update: true
+  }];
+  google.protobuf.Timestamp updated_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "updated_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"  exclude_from_insert: true
+  }];
+  google.protobuf.Timestamp deleted_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "deleted_at"  sql_type: "TIMESTAMP WITH TIME ZONE"  comment: "Soft delete"
+  }];
+}

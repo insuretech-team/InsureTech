@@ -1,0 +1,17 @@
+RoleAssignmentRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    role_id:
+      type: string
+    domain:
+      type: string
+      description: domain = "portal:tenant_id"
+    assigned_by:
+      type: string
+    expires_at:
+      type: string
+      format: date-time
+  description: Request payload for role assignment operation. Contains parameters
+    required to execute the operation.

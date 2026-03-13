@@ -1,0 +1,14 @@
+SettleClaimResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    settled_amount:
+      $ref: '#/components/schemas/Money'
+    payment_id:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for settle claim operation. Returns operation results
+    and status.

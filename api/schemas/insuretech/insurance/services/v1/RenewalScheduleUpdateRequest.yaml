@@ -1,0 +1,7 @@
+RenewalScheduleUpdateRequest:
+  type: object
+  properties:
+    schedule:
+      $ref: '#/components/schemas/RenewalSchedule'
+  description: Request payload for updating an existing renewal schedule update. Contains
+    fields to be modified.

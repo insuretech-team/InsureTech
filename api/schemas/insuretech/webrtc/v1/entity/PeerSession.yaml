@@ -1,0 +1,33 @@
+PeerSession:
+  type: object
+  properties:
+    peer_session_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:peer_session_id;not null"'
+      x-primary-key: true
+    session_id:
+      type: string
+      description: '@inject_tag: gorm:"column:session_id;not null"'
+    peer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:peer_id;not null"'
+    joined_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    left_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:left_at;serializer:proto_timestamp"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Peer participation in a session
+  required:
+  - peer_session_id
+  - session_id
+  - peer_id
+  - joined_at

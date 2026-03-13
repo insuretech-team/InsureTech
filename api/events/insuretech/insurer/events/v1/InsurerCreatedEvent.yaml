@@ -1,0 +1,20 @@
+InsurerCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    insurer_id:
+      type: string
+    insurer_code:
+      type: string
+    insurer_name:
+      type: string
+    type:
+      type: string
+      description: LIFE, NON_LIFE, COMPOSITE
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Insurer created'

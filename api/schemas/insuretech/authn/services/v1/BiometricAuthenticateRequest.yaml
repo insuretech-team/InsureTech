@@ -1,0 +1,18 @@
+BiometricAuthenticateRequest:
+  type: object
+  properties:
+    biometric_token:
+      type: string
+      description: Raw token from device secure storage
+    device_id:
+      type: string
+      description: Must match registered device
+    device_type:
+      type: string
+      description: MOBILE_ANDROID, MOBILE_IOS
+    device_name:
+      type: string
+      description: e.g. "iPhone 15 Pro"
+  description: "BiometricAuthenticate Request\r\n The biometric_token is the raw 64-hex-char\
+    \ token issued at user creation.\r\n It must be stored securely on-device (Keystore/Secure\
+    \ Enclave).\r\n device_id must match the device_id used at registration."

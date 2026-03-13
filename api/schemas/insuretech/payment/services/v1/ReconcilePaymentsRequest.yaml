@@ -1,0 +1,16 @@
+ReconcilePaymentsRequest:
+  type: object
+  properties:
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+    payment_method:
+      type: string
+    provider:
+      type: string
+      description: Filter by provider
+  description: Request payload for reconcile payments operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,39 @@
+FileUploadedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    file_id:
+      type: string
+    tenant_id:
+      type: string
+    filename:
+      type: string
+    content_type:
+      type: string
+    size_bytes:
+      type: string
+      format: int64
+    storage_key:
+      type: string
+    bucket:
+      type: string
+    url:
+      type: string
+    cdn_url:
+      type: string
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+    uploaded_by:
+      type: string
+    source:
+      type: string
+      description: DIRECT | BATCH | FINALIZE
+    timestamp:
+      type: string
+      format: date-time
+  description: Emitted when a file upload is completed and persisted.

@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.service;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/webrtc/v1/service;webrtcservicev1";
+option csharp_namespace = "Insuretech.Webrtc.V1.Service";
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/room.proto";
+import "insuretech/webrtc/v1/entity/peer.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Room Service - Room Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+service RoomService {
+  rpc CreateRoom(CreateRoomRequest) returns (CreateRoomResponse);
+  rpc GetRoom(GetRoomRequest) returns (GetRoomResponse);
+  rpc UpdateRoom(UpdateRoomRequest) returns (UpdateRoomResponse);
+  rpc CloseRoom(CloseRoomRequest) returns (CloseRoomResponse);
+  rpc ListRooms(ListRoomsRequest) returns (ListRoomsResponse);
+}
+
+message CreateRoomRequest {
+  string name = 1;
+ insuretech.webrtc.v1.entity.RoomConfig config = 2;
+  map<string, string> metadata = 3;
+ string creator_id = 4;
+}
+
+message CreateRoomResponse {
+ insuretech.webrtc.v1.entity.Room room = 1;
+  string join_token = 2;
+}
+
+message GetRoomRequest {
+ string room_id = 1;
+}
+
+message GetRoomResponse {
+ insuretech.webrtc.v1.entity.Room room = 1;
+  repeated insuretech.webrtc.v1.entity.Peer peers = 2;
+}
+
+message UpdateRoomRequest {
+ string room_id = 1;
+ insuretech.webrtc.v1.entity.RoomConfig config = 2;
+  map<string, string> metadata = 3;
+}
+
+message UpdateRoomResponse {
+ insuretech.webrtc.v1.entity.Room room = 1;
+}
+
+message CloseRoomRequest {
+ string room_id = 1;
+  string reason = 2;
+}
+
+message CloseRoomResponse {
+  bool success = 1;
+}
+
+message ListRoomsRequest {
+  int32 page_size = 1;
+  string page_token = 2;
+ insuretech.webrtc.v1.entity.RoomState state_filter = 3;
+}
+
+message ListRoomsResponse {
+  repeated insuretech.webrtc.v1.entity.Room rooms = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+}
+

@@ -1,0 +1,14 @@
+ClaimsDocumentUploadResponse:
+  type: object
+  properties:
+    document_id:
+      type: string
+    document_url:
+      type: string
+    file_hash:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document upload operation. Returns operation results
+    and status.

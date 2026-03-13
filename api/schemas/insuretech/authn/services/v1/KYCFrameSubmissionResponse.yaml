@@ -1,0 +1,24 @@
+KYCFrameSubmissionResponse:
+  type: object
+  properties:
+    accepted:
+      type: boolean
+    guidance:
+      type: string
+    current_step:
+      type: string
+    completed_steps:
+      type: integer
+      format: int32
+    total_steps:
+      type: integer
+      format: int32
+    liveness_confidence:
+      type: number
+      format: double
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for kyc frame submission operation. Returns operation
+    results and status.

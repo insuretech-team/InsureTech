@@ -1,0 +1,15 @@
+ServiceProvidersListingRequest:
+  type: object
+  properties:
+    provider_type:
+      type: string
+    city:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing service providers listing items. Supports
+    filtering, sorting, and pagination.

@@ -1,0 +1,158 @@
+syntax = "proto3";
+
+package insuretech.ai.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/ai/events/v1;aieventsv1";
+option csharp_namespace = "Insuretech.Ai.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: AI agent created
+message AIAgentCreatedEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string agent_name = 3;
+  string agent_type = 4; // UNDERWRITING, CLAIMS_ASSESSOR, FRAUD_DETECTOR
+  string model_name = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string created_by = 7;
+  string correlation_id = 8; // CG-6: trace across services
+}
+
+// Event: AI agent activated
+message AIAgentActivatedEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string agent_name = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string correlation_id = 5; // CG-6: trace across services
+}
+
+// Event: AI agent deactivated
+message AIAgentDeactivatedEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string agent_name = 3;
+  string reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string correlation_id = 6; // CG-6: trace across services
+}
+
+// Event: Conversation started
+message ConversationStartedEvent {
+  string event_id = 1;
+  string conversation_id = 2;
+  string user_id = 3;
+  string agent_id = 4;
+  string agent_name = 5;
+  string channel = 6; // web, mobile, whatsapp
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8; // CG-6: trace across services
+}
+
+// Event: Conversation ended
+message ConversationEndedEvent {
+  string event_id = 1;
+  string conversation_id = 2;
+  string user_id = 3;
+  string agent_id = 4;
+  int32 message_count = 5;
+  int32 duration_seconds = 6;
+  string resolution_status = 7; // RESOLVED, ESCALATED, ABANDONED
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: AI decision made
+message AIDecisionMadeEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string agent_name = 3;
+  string decision_type = 4; // UNDERWRITING_APPROVAL, CLAIM_ASSESSMENT, FRAUD_FLAG
+  string entity_type = 5; // policy, claim
+  string entity_id = 6;
+  string decision = 7; // APPROVED, REJECTED, FLAGGED
+  double confidence_score = 8; // 0-100
+  repeated string reasoning = 9; // Explanation of decision
+  google.protobuf.Timestamp timestamp = 10;
+  string correlation_id = 11; // CG-6: trace across services
+}
+
+// Event: Fraud detected
+message FraudDetectedEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string entity_type = 3; // claim, policy, user
+  string entity_id = 4;
+  double fraud_score = 5; // 0-100
+  repeated string risk_factors = 6;
+  string severity = 7; // LOW, MEDIUM, HIGH
+  bool requires_manual_review = 8;
+  google.protobuf.Timestamp timestamp = 9;
+  string correlation_id = 10; // CG-6: trace across services
+}
+
+// Event: Model retrained
+message ModelRetrainedEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string model_name = 3;
+  string model_version = 4;
+  double old_accuracy = 5;
+  double new_accuracy = 6;
+  int32 training_samples = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: Underwriting decision made
+message UnderwritingDecisionEvent {
+  string event_id = 1;
+  string policy_id = 2;
+  string agent_id = 3;
+  string decision = 4; // APPROVED, REJECTED, MANUAL_REVIEW
+  double risk_score = 5;
+  insuretech.common.v1.Money recommended_premium = 6;
+  repeated string risk_factors = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: Claims assessment completed
+message ClaimsAssessmentEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string agent_id = 3;
+  string assessment_result = 4; // APPROVE, REJECT, NEEDS_INFO
+  insuretech.common.v1.Money recommended_amount = 5;
+  double confidence_score = 6;
+  repeated string reasons = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: Customer query handled
+message CustomerQueryHandledEvent {
+  string event_id = 1;
+  string conversation_id = 2;
+  string user_id = 3;
+  string agent_id = 4;
+  string query_type = 5; // POLICY_INFO, CLAIM_STATUS, PREMIUM_QUOTE
+  bool resolved_by_ai = 6;
+  bool escalated_to_human = 7;
+  int32 response_time_seconds = 8;
+  google.protobuf.Timestamp timestamp = 9;
+  string correlation_id = 10; // CG-6: trace across services
+}
+
+// Event: AI agent error
+message AIAgentErrorEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string error_type = 3; // MODEL_ERROR, TIMEOUT, API_ERROR
+  string error_message = 4;
+  string context = 5; // What was being processed
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7; // CG-6: trace across services
+}

@@ -1,0 +1,13 @@
+MfsInitiatePaymentRequest:
+  type: object
+  properties:
+    provider:
+      type: string
+    payment_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    customer_msisdn:
+      type: string
+  description: Request payload for initiate payment operation. Contains parameters
+    required to execute the operation.

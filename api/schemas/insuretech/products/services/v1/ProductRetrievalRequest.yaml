@@ -1,0 +1,7 @@
+ProductsProductRetrievalRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+  description: Request payload for retrieving product retrieval information. May include
+    filters and pagination parameters.

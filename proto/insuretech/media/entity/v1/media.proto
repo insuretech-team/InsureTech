@@ -1,0 +1,196 @@
+syntax = "proto3";
+
+package insuretech.media.entity.v1;
+
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1;mediav1";
+
+// MediaFile entity - stores media file metadata with processing status
+message MediaFile {
+  option (insuretech.common.v1.table) = {
+    table_name: "media_files"
+    schema_name: "media_schema"
+    migration_order: 20
+    is_table: true
+    audit_fields: true
+    comment: "Media file metadata with processing status"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "media_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:media_id;not null"
+  
+  string file_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "file_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "files"
+      references_column: "file_id"
+      references_schema: "storage_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_media_files_file_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:file_id;not null"
+  
+  string tenant_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "tenant_id"
+    sql_type: "UUID"
+    index: {
+      index_name: "idx_media_files_tenant_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:tenant_id"
+  
+  MediaType media_type = 4 [(insuretech.common.v1.column) = {
+    column_name: "media_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:media_type;not null;serializer:proto_enum"
+  
+  string mime_type = 5 [(insuretech.common.v1.column) = {
+    column_name: "mime_type"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:mime_type;not null"
+  
+  int64 file_size_bytes = 6 [(insuretech.common.v1.column) = {
+    column_name: "file_size_bytes"
+    sql_type: "BIGINT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:file_size_bytes;not null"
+  
+  int32 width = 7 [(insuretech.common.v1.column) = {
+    column_name: "width"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:width"
+  
+  int32 height = 8 [(insuretech.common.v1.column) = {
+    column_name: "height"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:height"
+  
+  int32 dpi = 9 [(insuretech.common.v1.column) = {
+    column_name: "dpi"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:dpi"
+  
+  string optimized_file_id = 10 [(insuretech.common.v1.column) = {
+    column_name: "optimized_file_id"
+    sql_type: "UUID"
+    comment: "Reference to optimized version"
+  }];
+  // @inject_tag: gorm:"column:optimized_file_id"
+  
+  string thumbnail_file_id = 11 [(insuretech.common.v1.column) = {
+    column_name: "thumbnail_file_id"
+    sql_type: "UUID"
+    comment: "Reference to thumbnail"
+  }];
+  // @inject_tag: gorm:"column:thumbnail_file_id"
+  
+  string entity_type = 12 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+    index: {
+      index_name: "idx_media_files_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:entity_type"
+  
+  string entity_id = 13 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+  }];
+  // @inject_tag: gorm:"column:entity_id"
+  
+  string ocr_text = 14 [(insuretech.common.v1.column) = {
+    column_name: "ocr_text"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:ocr_text"
+  
+  ValidationStatus validation_status = 15 [(insuretech.common.v1.column) = {
+    column_name: "validation_status"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_media_files_validation_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:validation_status;not null;serializer:proto_enum"
+  
+  string validation_errors = 16 [(insuretech.common.v1.column) = {
+    column_name: "validation_errors"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:validation_errors"
+  
+  VirusScanStatus virus_scan_status = 17 [(insuretech.common.v1.column) = {
+    column_name: "virus_scan_status"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:virus_scan_status;not null;serializer:proto_enum"
+  
+  string uploaded_by = 18 [(insuretech.common.v1.column) = {
+    column_name: "uploaded_by"
+    sql_type: "UUID"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:uploaded_by;not null"
+  
+  insuretech.common.v1.AuditInfo audit_info = 19 [(insuretech.common.v1.column) = {
+    column_name: "audit_info"
+    sql_type: "JSONB"
+    not_null: true
+    default_value: "'{}'::jsonb"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum MediaType {
+  MEDIA_TYPE_UNSPECIFIED = 0;
+  MEDIA_TYPE_IMAGE = 1;
+  MEDIA_TYPE_DOCUMENT = 2;
+  MEDIA_TYPE_VIDEO = 3;
+}
+
+enum ValidationStatus {
+  VALIDATION_STATUS_UNSPECIFIED = 0;
+  VALIDATION_STATUS_PENDING = 1;
+  VALIDATION_STATUS_VALIDATED = 2;
+  VALIDATION_STATUS_REJECTED = 3;
+}
+
+enum VirusScanStatus {
+  VIRUS_SCAN_STATUS_UNSPECIFIED = 0;
+  VIRUS_SCAN_STATUS_PENDING = 1;
+  VIRUS_SCAN_STATUS_CLEAN = 2;
+  VIRUS_SCAN_STATUS_INFECTED = 3;
+}

@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package insuretech.partner.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/partner/events/v1;partnereventsv1";
+option csharp_namespace = "Insuretech.Partner.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Partner onboarded
+message PartnerOnboardedEvent {
+  string event_id = 1;
+  string partner_id = 2;
+  string organization_name = 3;
+  string partner_type = 4;
+  string focal_person_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Event: Partner verified
+message PartnerVerifiedEvent {
+  string event_id = 1;
+  string partner_id = 2;
+  string verified_by = 3; // Focal person ID
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+// Event: Agent registered
+message AgentRegisteredEvent {
+  string event_id = 1;
+  string agent_id = 2;
+  string partner_id = 3;
+  string agent_name = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Event: Commission calculated
+message CommissionCalculatedEvent {
+  string event_id = 1;
+  string commission_id = 2;
+  string partner_id = 3;
+  string agent_id = 4; // Optional
+  string policy_id = 5;
+  insuretech.common.v1.Money commission_amount = 6;
+  string commission_type = 7; // acquisition, renewal
+  google.protobuf.Timestamp timestamp = 8;
+}
+

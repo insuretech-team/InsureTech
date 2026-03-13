@@ -1,0 +1,125 @@
+syntax = "proto3";
+
+package insuretech.report.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/report/entity/v1;reportv1";
+
+// Report schedule
+message ReportSchedule {
+  option (insuretech.common.v1.table) = {
+    table_name: "report_schedules"
+    schema_name: "analytics_schema"
+    migration_order: 74
+    is_table: true
+    audit_fields: true
+    comment: "Scheduled report executions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "schedule_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:schedule_id;not null"
+  
+  string report_definition_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "report_definition_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "report_definitions"
+      references_column: "report_id"
+      references_schema: "analytics_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_report_schedules_definition_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:report_definition_id;not null"
+  
+  string name = 3 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  ScheduleFrequency frequency = 4 [(insuretech.common.v1.column) = {
+    column_name: "frequency"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:frequency;not null;serializer:proto_enum"
+  
+  string cron_expression = 5 [(insuretech.common.v1.column) = {
+    column_name: "cron_expression"
+    sql_type: "VARCHAR(100)"
+    comment: "Cron expression for scheduling"
+  }];
+  // @inject_tag: gorm:"column:cron_expression"
+  
+  string parameters = 6 [(insuretech.common.v1.column) = {
+    column_name: "parameters"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Default parameters for scheduled runs"
+  }];
+  // @inject_tag: gorm:"column:parameters"
+  
+  repeated string recipients = 7 [(insuretech.common.v1.column) = {
+    column_name: "recipients"
+    sql_type: "TEXT[]"
+  // @inject_tag: gorm:"column:recipients"
+    comment: "Email recipients"
+  }];
+  
+  bool is_active = 8 [(insuretech.common.v1.column) = {
+    column_name: "is_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_active"
+  
+  google.protobuf.Timestamp next_run_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "next_run_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:next_run_at;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp last_run_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "last_run_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:last_run_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ScheduleFrequency {
+  SCHEDULE_FREQUENCY_UNSPECIFIED = 0;
+  SCHEDULE_FREQUENCY_HOURLY = 1;
+  SCHEDULE_FREQUENCY_DAILY = 2;
+  SCHEDULE_FREQUENCY_WEEKLY = 3;
+  SCHEDULE_FREQUENCY_MONTHLY = 4;
+  SCHEDULE_FREQUENCY_CUSTOM = 5;
+}
+

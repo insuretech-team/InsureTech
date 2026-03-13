@@ -1,0 +1,11 @@
+EmployeeUpdateResponse:
+  type: object
+  properties:
+    employee:
+      $ref: '#/components/schemas/EmployeeView'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for employee update operation. Returns operation results
+    and status.

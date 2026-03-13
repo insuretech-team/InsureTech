@@ -1,0 +1,48 @@
+FAQ:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:faq_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    category:
+      type: string
+      description: '@inject_tag: gorm:"column:category;not null"'
+    question:
+      type: string
+      description: '@inject_tag: gorm:"column:question;not null"'
+    question_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:question_bn"'
+    answer:
+      type: string
+      description: '@inject_tag: gorm:"column:answer;not null"'
+    answer_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:answer_bn"'
+    display_order:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:display_order"'
+      default: 0
+    is_published:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_published"'
+      default: true
+    view_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:view_count"'
+      default: 0
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: FAQ (FR-110)
+  required:
+  - id
+  - category
+  - question
+  - answer
+  - audit_info

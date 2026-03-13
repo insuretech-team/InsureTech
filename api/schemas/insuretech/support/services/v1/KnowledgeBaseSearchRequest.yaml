@@ -1,0 +1,12 @@
+KnowledgeBaseSearchRequest:
+  type: object
+  properties:
+    query:
+      type: string
+    category:
+      type: string
+    language:
+      type: string
+      description: en, bn
+  description: Request payload for knowledge base search operation. Contains parameters
+    required to execute the operation.

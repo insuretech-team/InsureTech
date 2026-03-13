@@ -1,0 +1,42 @@
+ClaimApproval:
+  type: object
+  properties:
+    approval_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:approval_id;not null"'
+    claim_id:
+      type: string
+      description: '@inject_tag: gorm:"column:claim_id;not null"'
+    approver_id:
+      type: string
+      description: '@inject_tag: gorm:"column:approver_id;not null"'
+    approver_role:
+      type: string
+      description: '@inject_tag: gorm:"column:approver_role;not null"'
+    approval_level:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:approval_level;not null"'
+    decision:
+      $ref: '#/components/schemas/ApprovalDecision'
+      description: '@inject_tag: gorm:"column:decision;not null;serializer:proto_enum"'
+    approved_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:approved_amount"'
+    notes:
+      type: string
+      description: '@inject_tag: gorm:"column:notes"'
+    approved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    approved_currency:
+      type: string
+      description: "Currency companion field for Money type (flattened storage)\n\
+        \ @inject_tag: gorm:\"column:approved_currency;not null\""
+  description: "Claim approval workflow (multi-level approval)\n Maps to 'claim_approvals'\
+    \ table in claims_schema"

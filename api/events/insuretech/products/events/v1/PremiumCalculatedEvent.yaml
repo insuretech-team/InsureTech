@@ -1,0 +1,28 @@
+PremiumCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    base_premium:
+      $ref: '#/components/schemas/Money'
+    final_premium:
+      $ref: '#/components/schemas/Money'
+    applied_rules:
+      type: array
+      items:
+        type: string
+        description: Rule IDs applied
+      description: Rule IDs applied
+    input_factors:
+      type: object
+      additionalProperties:
+        type: string
+      description: age, location, etc.
+    timestamp:
+      type: string
+      format: date-time
+    calculated_for_user:
+      type: string
+  description: 'Event: Premium calculated (for analytics)'

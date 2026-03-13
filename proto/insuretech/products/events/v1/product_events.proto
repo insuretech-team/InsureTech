@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package insuretech.products.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/products/events/v1;producteventsv1";
+option csharp_namespace = "Insuretech.Products.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Product created
+message ProductCreatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string product_name = 4;
+  string category = 5; // MOTOR, HEALTH, TRAVEL, etc.
+  insuretech.common.v1.Money base_premium = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string created_by = 8;
+}
+
+// Event: Product updated
+message ProductUpdatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string product_name = 4;
+  map<string, string> changed_fields = 5; // Field name -> new value
+  google.protobuf.Timestamp timestamp = 6;
+  string updated_by = 7;
+}
+
+// Event: Product activated (made available for sale)
+message ProductActivatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string product_name = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string activated_by = 6;
+}
+
+// Event: Product deactivated (temporarily disabled)
+message ProductDeactivatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string deactivated_by = 6;
+}
+
+// Event: Product discontinued (permanently)
+message ProductDiscontinuedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string discontinued_by = 6;
+}
+
+// Event: Pricing rule created
+message PricingRuleCreatedEvent {
+  string event_id = 1;
+  string pricing_config_id = 2;
+  string product_id = 3;
+  string rule_type = 4; // AGE_BASED, LOCATION_BASED, etc.
+  google.protobuf.Timestamp effective_from = 5;
+  google.protobuf.Timestamp effective_to = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string created_by = 8;
+}
+
+// Event: Pricing rule updated
+message PricingRuleUpdatedEvent {
+  string event_id = 1;
+  string pricing_config_id = 2;
+  string product_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string updated_by = 5;
+}
+
+// Event: Product rider added
+message ProductRiderAddedEvent {
+  string event_id = 1;
+  string rider_id = 2;
+  string product_id = 3;
+  string rider_name = 4;
+  insuretech.common.v1.Money premium_amount = 5;
+  insuretech.common.v1.Money coverage_amount = 6;
+  bool is_mandatory = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string created_by = 9;
+}
+
+// Event: Product rider removed
+message ProductRiderRemovedEvent {
+  string event_id = 1;
+  string rider_id = 2;
+  string product_id = 3;
+  string reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string removed_by = 6;
+}
+
+// Event: Premium calculated (for analytics)
+message PremiumCalculatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  insuretech.common.v1.Money base_premium = 3;
+  insuretech.common.v1.Money final_premium = 4;
+  repeated string applied_rules = 5; // Rule IDs applied
+  map<string, string> input_factors = 6; // age, location, etc.
+  google.protobuf.Timestamp timestamp = 7;
+  string calculated_for_user = 8;
+}
+

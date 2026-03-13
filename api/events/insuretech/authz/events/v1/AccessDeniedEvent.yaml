@@ -1,0 +1,33 @@
+AccessDeniedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    domain:
+      type: string
+      description: '"portal:tenant_id"'
+    subject:
+      type: string
+      description: '"user:<uuid>"'
+    object:
+      type: string
+      description: '"svc:policy/create"'
+    action:
+      type: string
+      description: '"POST"'
+    reason:
+      type: string
+      description: '"no matching policy" | "explicit deny"'
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: "AccessDeniedEvent \u2014 emitted every time Casbin returns DENY\r\n\
+    \ Consumed by: security monitoring, anomaly detection, SIEM"

@@ -1,0 +1,55 @@
+PaymentInitiatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    payment_id:
+      type: string
+    payer_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    payment_method:
+      type: string
+    reference_type:
+      type: string
+      description: order, policy, claim, commission
+    reference_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+    order_id:
+      type: string
+      description: "\u2500\u2500 Extended context fields \u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500"
+    invoice_id:
+      type: string
+    tenant_id:
+      type: string
+    organisation_id:
+      type: string
+    portal:
+      type: string
+    actor_user_id:
+      type: string
+    session_id:
+      type: string
+    causation_id:
+      type: string
+    provider:
+      type: string
+      description: sslcommerz, bkash, nagad, manual
+    tran_id:
+      type: string
+      description: merchant tran_id sent to provider
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Payment initiated \u2014 published when payment-service creates\
+    \ a session with the provider"

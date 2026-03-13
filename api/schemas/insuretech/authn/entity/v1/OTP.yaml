@@ -1,0 +1,73 @@
+OTP:
+  type: object
+  properties:
+    otp_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:otp_id;not null"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id;not null"'
+    otp_hash:
+      type: string
+      description: '@inject_tag: gorm:"column:otp_hash;not null"'
+    purpose:
+      type: string
+      description: '@inject_tag: gorm:"column:purpose;not null"'
+    device_type:
+      type: string
+      description: '@inject_tag: gorm:"column:device_type"'
+    ip_address:
+      type: string
+      description: '@inject_tag: gorm:"column:ip_address"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    expires_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"'
+    attempts:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:attempts;not null"'
+    verified:
+      type: boolean
+      description: '@inject_tag: gorm:"column:verified;not null"'
+    verified_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"'
+    provider_message_id:
+      type: string
+      description: "BTRC Compliance Fields - SMS Delivery Tracking\r\n @inject_tag:\
+        \ gorm:\"column:provider_message_id\""
+    dlr_status:
+      type: string
+      description: '@inject_tag: gorm:"column:dlr_status"'
+    sender_id:
+      type: string
+      description: '@inject_tag: gorm:"column:sender_id"'
+    carrier:
+      type: string
+      description: '@inject_tag: gorm:"column:carrier"'
+    channel:
+      type: string
+      description: '@inject_tag: gorm:"column:channel;not null"'
+    recipient:
+      type: string
+      description: '@inject_tag: gorm:"column:recipient;not null"'
+    dlr_received_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:dlr_received_at;serializer:proto_timestamp"'
+    dlr_error_code:
+      type: string
+      description: "dlr_error_code: Error code returned by SSLWireless for failed\
+        \ deliveries\r\n @inject_tag: gorm:\"column:dlr_error_code\""
+    dlr_updated_at:
+      type: string
+      format: date-time
+      description: "dlr_updated_at: Timestamp of last DLR status update\r\n @inject_tag:\
+        \ gorm:\"column:dlr_updated_at;serializer:proto_timestamp\""
+  description: One-Time Password for verification

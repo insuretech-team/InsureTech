@@ -1,0 +1,9 @@
+MediaRetrievalResponse:
+  type: object
+  properties:
+    media:
+      $ref: '#/components/schemas/MediaFile'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for media retrieval operation. Returns operation results
+    and status.

@@ -1,0 +1,9 @@
+ProductDeactivationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    reason:
+      type: string
+  description: Request payload for product deactivation operation. Contains parameters
+    required to execute the operation.

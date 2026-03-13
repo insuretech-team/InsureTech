@@ -1,0 +1,22 @@
+EmailLoginResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    session_id:
+      type: string
+    session_token:
+      type: string
+      description: "Server-side session fields (web portal)\r\n Set as HttpOnly cookie"
+    csrf_token:
+      type: string
+      description: For CSRF protection
+    user:
+      $ref: '#/components/schemas/User'
+    session_type:
+      type: string
+      description: Always SERVER_SIDE
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for email login operation. Returns operation results
+    and status.

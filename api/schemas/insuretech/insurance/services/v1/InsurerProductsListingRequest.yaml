@@ -1,0 +1,7 @@
+InsuranceInsurerProductsListingRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+  description: Request payload for listing insurer products listing items. Supports
+    filtering, sorting, and pagination.

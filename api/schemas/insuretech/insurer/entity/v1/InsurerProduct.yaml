@@ -1,0 +1,103 @@
+InsurerProduct:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:product_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    insurer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_id;not null"'
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:base_product_id;not null"'
+    code:
+      type: string
+      description: '@inject_tag: gorm:"column:code;not null"'
+      x-unique: true
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/InsurerProductStatus'
+      x-database-default: ACTIVE
+    min_sum_assured:
+      $ref: '#/components/schemas/Money'
+      description: Pricing
+    max_sum_assured:
+      $ref: '#/components/schemas/Money'
+    min_premium:
+      $ref: '#/components/schemas/Money'
+    max_premium:
+      $ref: '#/components/schemas/Money'
+    min_entry_age:
+      type: integer
+      format: int32
+      description: "Age limits\n @inject_tag: gorm:\"column:min_entry_age\""
+    max_entry_age:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_entry_age"'
+    max_maturity_age:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_maturity_age"'
+    min_term_years:
+      type: integer
+      format: int32
+      description: "Term\n @inject_tag: gorm:\"column:min_term_years\""
+    max_term_years:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_term_years"'
+    premium_payment_modes:
+      type: array
+      items:
+        type: string
+        description: Premium payment
+      description: Premium payment
+    medical_required:
+      type: boolean
+      description: "Underwriting\n @inject_tag: gorm:\"column:medical_required\""
+      default: false
+    medical_threshold:
+      $ref: '#/components/schemas/Money'
+    free_look_period_days:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:free_look_period_days"'
+      default: 15
+    commission_config_id:
+      type: string
+      description: "Commission structure (links to commission_configs)\n @inject_tag:\
+        \ gorm:\"column:commission_config_id\""
+    features:
+      type: string
+      description: "Product features\n @inject_tag: gorm:\"column:features\""
+    exclusions:
+      type: string
+      description: '@inject_tag: gorm:"column:exclusions"'
+    effective_from:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"'
+    effective_to:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Insurer-specific product configuration
+  required:
+  - id
+  - insurer_id
+  - product_id
+  - code
+  - name
+  - status
+  - effective_from
+  - audit_info

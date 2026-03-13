@@ -1,0 +1,16 @@
+PeerStateChangedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    old_state:
+      $ref: '#/components/schemas/PeerConnectionState'
+    new_state:
+      $ref: '#/components/schemas/PeerConnectionState'
+    changed_at:
+      type: string
+      format: date-time
+  description: Event emitted when peer state undergoes changed. Published to event
+    stream for downstream processing and audit trail.

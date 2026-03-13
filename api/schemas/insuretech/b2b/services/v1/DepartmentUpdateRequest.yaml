@@ -1,0 +1,9 @@
+DepartmentUpdateRequest:
+  type: object
+  properties:
+    department_id:
+      type: string
+    name:
+      type: string
+  description: Request payload for updating an existing department update. Contains
+    fields to be modified.

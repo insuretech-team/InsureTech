@@ -1,0 +1,11 @@
+RuleAction:
+  type: object
+  properties:
+    type:
+      $ref: '#/components/schemas/ActionType'
+    value:
+      type: number
+      format: double
+      description: Percentage or fixed amount
+  description: Domain entity representing rule action. Core business object in the
+    system.

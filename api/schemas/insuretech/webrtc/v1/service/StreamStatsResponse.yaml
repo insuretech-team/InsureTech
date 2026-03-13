@@ -1,0 +1,7 @@
+StreamStatsResponse:
+  type: object
+  properties:
+    stats:
+      $ref: '#/components/schemas/ConnectionStats'
+  description: Response payload for stream stats operation. Returns operation results
+    and status.

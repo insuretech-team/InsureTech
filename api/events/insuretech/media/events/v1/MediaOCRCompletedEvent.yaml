@@ -1,0 +1,18 @@
+MediaOCRCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    media_id:
+      type: string
+    ocr_text:
+      type: string
+    confidence_score:
+      type: number
+      format: double
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: OCR extraction completed'

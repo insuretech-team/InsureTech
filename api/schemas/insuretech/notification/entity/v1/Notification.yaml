@@ -1,0 +1,80 @@
+Notification:
+  type: object
+  properties:
+    notification_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:notification_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    recipient_id:
+      type: string
+      description: '@inject_tag: gorm:"column:recipient_id;not null"'
+    type:
+      $ref: '#/components/schemas/NotificationType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    channel:
+      $ref: '#/components/schemas/NotificationChannel'
+      description: '@inject_tag: gorm:"column:channel;not null;serializer:proto_enum"'
+    subject:
+      type: string
+      description: '@inject_tag: gorm:"column:subject"'
+    message:
+      type: string
+      description: '@inject_tag: gorm:"column:message;not null"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Customer notification and communication
+    template_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    priority:
+      allOf:
+      - $ref: '#/components/schemas/NotificationPriority'
+      x-database-default: NORMAL
+    status:
+      allOf:
+      - $ref: '#/components/schemas/NotificationStatus'
+      x-database-default: QUEUED
+    scheduled_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"'
+    sent_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"'
+    delivered_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:delivered_at;serializer:proto_timestamp"'
+    read_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:read_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    retry_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:retry_count;not null"'
+      default: 0
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+  description: "Notification represents a notification to be sent\n Maps to 'notifications'\
+    \ table in notification_schema"
+  required:
+  - notification_id
+  - recipient_id
+  - type
+  - channel
+  - message
+  - priority
+  - status
+  - created_at
+  - retry_count

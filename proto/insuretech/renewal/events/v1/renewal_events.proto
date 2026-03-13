@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package insuretech.renewal.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/renewal/events/v1;renewaleventsv1";
+
+// Kafka event: Renewal due
+message RenewalDueEvent {
+  string event_id = 1;
+  string renewal_schedule_id = 2;
+  string policy_id = 3;
+  string renewal_due_date = 4;
+  insuretech.common.v1.Money renewal_premium = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Renewal reminder sent
+message RenewalReminderSentEvent {
+  string event_id = 1;
+  string reminder_id = 2;
+  string policy_id = 3;
+  int32 days_before_renewal = 4;
+  string channel = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Policy renewed
+message PolicyRenewedEvent {
+  string event_id = 1;
+  string old_policy_id = 2;
+  string new_policy_id = 3;
+  string renewal_schedule_id = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Grace period started
+message GracePeriodStartedEvent {
+  string event_id = 1;
+  string grace_period_id = 2;
+  string policy_id = 3;
+  string end_date = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Policy lapsed
+message PolicyLapsedEvent {
+  string event_id = 1;
+  string policy_id = 2;
+  string grace_period_id = 3;
+  string reason = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Policy revived
+message PolicyRevivedEvent {
+  string event_id = 1;
+  string policy_id = 2;
+  string grace_period_id = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

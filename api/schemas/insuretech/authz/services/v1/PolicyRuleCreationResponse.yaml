@@ -1,0 +1,9 @@
+PolicyRuleCreationResponse:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/PolicyRule'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for policy rule creation operation. Returns operation
+    results and status.

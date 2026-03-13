@@ -1,0 +1,20 @@
+JoinRoomRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    join_token:
+      type: string
+    display_name:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    capabilities:
+      type: array
+      items:
+        $ref: '#/components/schemas/MediaCapability'
+  description: Request payload for join room operation. Contains parameters required
+    to execute the operation.

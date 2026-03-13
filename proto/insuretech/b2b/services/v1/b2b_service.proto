@@ -1,0 +1,626 @@
+syntax = "proto3";
+
+package insuretech.b2b.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1;b2bservicev1";
+option csharp_namespace = "Insuretech.B2b.Services.V1";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/b2b/entity/v1/department.proto";
+import "insuretech/b2b/entity/v1/employee.proto";
+import "insuretech/b2b/entity/v1/organisation.proto";
+import "insuretech/b2b/entity/v1/purchase_order.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+
+// B2BService manages all B2B portal domain operations.
+// business_id in all requests is the organisation_id from
+// b2b_schema.organisations. It is NEVER passed from the frontend — it is
+// resolved server-side from the authenticated session (x-business-id gRPC
+// metadata set by the REST gateway after reading the session cookie and looking
+// up the OrgMember record).
+service B2BService {
+
+  // ─── ORGANISATION ────────────────────────────────────────────────────────
+
+  // Create a new organisation (SuperAdmin only).
+  rpc CreateOrganisation(CreateOrganisationRequest)
+      returns (CreateOrganisationResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/organisations"
+      body : "*"
+    };
+  }
+
+  // Get a single organisation by ID.
+  rpc GetOrganisation(GetOrganisationRequest)
+      returns (GetOrganisationResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/organisations/{organisation_id}"
+    };
+  }
+
+  // List all organisations (SuperAdmin: all; BizAdmin: own only).
+  rpc ListOrganisations(ListOrganisationsRequest)
+      returns (ListOrganisationsResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/organisations"
+    };
+  }
+
+  // Update an organisation's profile.
+  rpc UpdateOrganisation(UpdateOrganisationRequest)
+      returns (UpdateOrganisationResponse) {
+    option (google.api.http) = {
+      patch : "/v1/b2b/organisations/{organisation_id}"
+      body : "*"
+    };
+  }
+
+  // Soft-delete an organisation and revoke its memberships.
+  rpc DeleteOrganisation(DeleteOrganisationRequest)
+      returns (DeleteOrganisationResponse) {
+    option (google.api.http) = {
+      delete : "/v1/b2b/organisations/{organisation_id}"
+    };
+  }
+
+  // List members for an organisation.
+  rpc ListOrgMembers(ListOrgMembersRequest) returns (ListOrgMembersResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/organisations/{organisation_id}/members"
+    };
+  }
+
+  // Add a platform user as an OrgMember.
+  rpc AddOrgMember(AddOrgMemberRequest) returns (AddOrgMemberResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/organisations/{organisation_id}/members"
+      body : "*"
+    };
+  }
+
+  // Assign a platform user as an OrgAdmin.
+  rpc AssignOrgAdmin(AssignOrgAdminRequest) returns (AssignOrgAdminResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/organisations/{organisation_id}/admins"
+      body : "*"
+    };
+  }
+
+  // Remove an OrgMember from the organisation.
+  rpc RemoveOrgMember(RemoveOrgMemberRequest)
+      returns (RemoveOrgMemberResponse) {
+    option (google.api.http) = {
+      delete : "/v1/b2b/organisations/{organisation_id}/members/{member_id}"
+    };
+  }
+
+  // ResolveMyOrganisation — called server-side (gateway) to resolve business_id
+  rpc ResolveMyOrganisation(ResolveMyOrganisationRequest)
+      returns (ResolveMyOrganisationResponse) {}
+
+  // ─── DEPARTMENTS ─────────────────────────────────────────────────────────
+
+  // List departments for the authenticated organisation.
+  rpc ListDepartments(ListDepartmentsRequest)
+      returns (ListDepartmentsResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/departments"
+    };
+  }
+
+  // Get a single department.
+  rpc GetDepartment(GetDepartmentRequest) returns (GetDepartmentResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/departments/{department_id}"
+    };
+  }
+
+  // Create a new department.
+  rpc CreateDepartment(CreateDepartmentRequest)
+      returns (CreateDepartmentResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/departments"
+      body : "*"
+    };
+  }
+
+  // Update a department's name.
+  rpc UpdateDepartment(UpdateDepartmentRequest)
+      returns (UpdateDepartmentResponse) {
+    option (google.api.http) = {
+      patch : "/v1/b2b/departments/{department_id}"
+      body : "*"
+    };
+  }
+
+  // Soft-delete a department (only if no active employees).
+  rpc DeleteDepartment(DeleteDepartmentRequest)
+      returns (DeleteDepartmentResponse) {
+    option (google.api.http) = {
+      delete : "/v1/b2b/departments/{department_id}"
+    };
+  }
+
+  // ─── EMPLOYEES ───────────────────────────────────────────────────────────
+
+  // List employees for the authenticated organisation.
+  rpc ListEmployees(ListEmployeesRequest) returns (ListEmployeesResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/employees"
+    };
+  }
+
+  // Get a single employee by employee_uuid.
+  rpc GetEmployee(GetEmployeeRequest) returns (GetEmployeeResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/employees/{employee_uuid}"
+    };
+  }
+
+  // Create a new employee.
+  rpc CreateEmployee(CreateEmployeeRequest) returns (CreateEmployeeResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/employees"
+      body : "*"
+    };
+  }
+
+  // Update an existing employee's details.
+  rpc UpdateEmployee(UpdateEmployeeRequest) returns (UpdateEmployeeResponse) {
+    option (google.api.http) = {
+      patch : "/v1/b2b/employees/{employee_uuid}"
+      body : "*"
+    };
+  }
+
+  // Soft-delete an employee record.
+  rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse) {
+    option (google.api.http) = {
+      delete : "/v1/b2b/employees/{employee_uuid}"
+    };
+  }
+
+  // ─── PURCHASE ORDERS ─────────────────────────────────────────────────────
+
+  // List purchasable product plans for purchase orders.
+  rpc ListPurchaseOrderCatalog(ListPurchaseOrderCatalogRequest)
+      returns (ListPurchaseOrderCatalogResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/purchase-orders/catalog"
+    };
+  }
+
+  // List purchase orders for the authenticated organisation.
+  rpc ListPurchaseOrders(ListPurchaseOrdersRequest)
+      returns (ListPurchaseOrdersResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/purchase-orders"
+    };
+  }
+
+  // Get a single purchase order.
+  rpc GetPurchaseOrder(GetPurchaseOrderRequest)
+      returns (GetPurchaseOrderResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/purchase-orders/{purchase_order_id}"
+    };
+  }
+
+  // Create a purchase order for a product plan.
+  rpc CreatePurchaseOrder(CreatePurchaseOrderRequest)
+      returns (CreatePurchaseOrderResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/purchase-orders"
+      body : "*"
+    };
+  }
+}
+
+// ─── VIEW TYPES ──────────────────────────────────────────────────────────────
+
+message EmployeeView {
+  insuretech.b2b.entity.v1.Employee employee = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string department_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string assigned_plan_name = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message DepartmentView {
+  insuretech.b2b.entity.v1.Department department = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string organisation_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message PurchaseOrderView {
+  insuretech.b2b.entity.v1.PurchaseOrder purchase_order = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string department_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string product_name = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string plan_name = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message PurchaseOrderCatalogItem {
+  string product_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string product_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string plan_id = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string plan_name = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.InsuranceType insurance_category = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Money premium_amount = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ─── ORGANISATION MESSAGES ───────────────────────────────────────────────────
+
+message CreateOrganisationRequest {
+  string tenant_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string name = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string code = 3 [ (google.api.field_behavior) = REQUIRED ];
+  string industry = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string contact_email = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string contact_phone = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  string address = 7 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message CreateOrganisationResponse {
+  insuretech.b2b.entity.v1.Organisation organisation = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetOrganisationRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetOrganisationResponse {
+  insuretech.b2b.entity.v1.Organisation organisation = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ListOrganisationsRequest {
+  int32 page_size = 1 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string tenant_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.OrganisationStatus status = 4
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListOrganisationsResponse {
+  repeated insuretech.b2b.entity.v1.Organisation organisations = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message UpdateOrganisationRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string name = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string industry = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string contact_email = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string contact_phone = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string address = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.OrganisationStatus status = 7
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UpdateOrganisationResponse {
+  insuretech.b2b.entity.v1.Organisation organisation = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message DeleteOrganisationRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message DeleteOrganisationResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ListOrgMembersRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ListOrgMembersResponse {
+  repeated insuretech.b2b.entity.v1.OrgMember members = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message AddOrgMemberRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string user_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  insuretech.b2b.entity.v1.OrgMemberRole role = 3
+      [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message AddOrgMemberResponse {
+  insuretech.b2b.entity.v1.OrgMember member = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message RemoveOrgMemberRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string member_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message RemoveOrgMemberResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message AssignOrgAdminRequest {
+  string organisation_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string member_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message AssignOrgAdminResponse {
+  insuretech.b2b.entity.v1.OrgMember member = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ResolveMyOrganisation — called server-side (gateway) to resolve business_id
+// from user_id. Returns the organisation_id for the authenticated user (via
+// OrgMember lookup).
+message ResolveMyOrganisationRequest {
+  // user_id extracted from the validated session token (set by gateway, NOT
+  // from client)
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ResolveMyOrganisationResponse {
+  string organisation_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string organisation_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.b2b.entity.v1.OrgMemberRole role = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ─── DEPARTMENT MESSAGES ─────────────────────────────────────────────────────
+
+message ListDepartmentsRequest {
+  int32 page_size = 1 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  // business_id is injected server-side from session; do NOT set from client.
+  string business_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListDepartmentsResponse {
+  repeated insuretech.b2b.entity.v1.Department departments = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetDepartmentRequest {
+  string department_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetDepartmentResponse {
+  insuretech.b2b.entity.v1.Department department = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message CreateDepartmentRequest {
+  string name = 1 [ (google.api.field_behavior) = REQUIRED ];
+  // business_id injected server-side from session.
+  string business_id = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message CreateDepartmentResponse {
+  insuretech.b2b.entity.v1.Department department = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message UpdateDepartmentRequest {
+  string department_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string name = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UpdateDepartmentResponse {
+  insuretech.b2b.entity.v1.Department department = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message DeleteDepartmentRequest {
+  string department_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message DeleteDepartmentResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ─── EMPLOYEE MESSAGES ───────────────────────────────────────────────────────
+
+message ListEmployeesRequest {
+  int32 page_size = 1 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string department_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  // business_id injected server-side from session; do NOT set from client.
+  string business_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.EmployeeStatus status = 5
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListEmployeesResponse {
+  repeated EmployeeView employees = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetEmployeeRequest {
+  string employee_uuid = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetEmployeeResponse {
+  EmployeeView employee = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message CreateEmployeeRequest {
+  string name = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string employee_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string department_id = 3 [ (google.api.field_behavior) = REQUIRED ];
+  // business_id injected server-side; do NOT pass from frontend.
+  string business_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+
+  insuretech.common.v1.InsuranceType insurance_category = 5
+      [ (google.api.field_behavior) = OPTIONAL ];
+  string assigned_plan_id = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.common.v1.Money coverage_amount = 7
+      [ (google.api.field_behavior) = OPTIONAL ];
+  int32 number_of_dependent = 8 [ (google.api.field_behavior) = OPTIONAL ];
+
+  // New PII fields
+  string email = 9 [ (google.api.field_behavior) = OPTIONAL ];
+  string mobile_number = 10 [ (google.api.field_behavior) = OPTIONAL ];
+  string date_of_birth = 11 [ (google.api.field_behavior) = OPTIONAL ];
+  string date_of_joining = 12 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.EmployeeGender gender = 13
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message CreateEmployeeResponse {
+  EmployeeView employee = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message UpdateEmployeeRequest {
+  string employee_uuid = 1 [ (google.api.field_behavior) = REQUIRED ];
+
+  // All fields are optional — only non-empty values are applied (partial
+  // update).
+  string name = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string department_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string email = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string mobile_number = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string date_of_birth = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  string date_of_joining = 7 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.EmployeeGender gender = 8
+      [ (google.api.field_behavior) = OPTIONAL ];
+
+  insuretech.common.v1.InsuranceType insurance_category = 9
+      [ (google.api.field_behavior) = OPTIONAL ];
+  string assigned_plan_id = 10 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.common.v1.Money coverage_amount = 11
+      [ (google.api.field_behavior) = OPTIONAL ];
+  int32 number_of_dependent = 12 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.EmployeeStatus status = 13
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UpdateEmployeeResponse {
+  EmployeeView employee = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message DeleteEmployeeRequest {
+  string employee_uuid = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message DeleteEmployeeResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ─── PURCHASE ORDER MESSAGES ─────────────────────────────────────────────────
+
+message ListPurchaseOrderCatalogRequest {}
+
+message ListPurchaseOrderCatalogResponse {
+  repeated PurchaseOrderCatalogItem items = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ListPurchaseOrdersRequest {
+  int32 page_size = 1 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  // business_id injected server-side from session.
+  string business_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.b2b.entity.v1.PurchaseOrderStatus status = 4
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListPurchaseOrdersResponse {
+  repeated PurchaseOrderView purchase_orders = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetPurchaseOrderRequest {
+  string purchase_order_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetPurchaseOrderResponse {
+  PurchaseOrderView purchase_order = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message CreatePurchaseOrderRequest {
+  string department_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string plan_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  int32 employee_count = 3 [ (google.api.field_behavior) = REQUIRED ];
+  int32 number_of_dependents = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  insuretech.common.v1.Money coverage_amount = 5
+      [ (google.api.field_behavior) = REQUIRED ];
+  string requested_by = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  string notes = 7 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message CreatePurchaseOrderResponse {
+  PurchaseOrderView purchase_order = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}

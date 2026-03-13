@@ -1,0 +1,22 @@
+AuditInfo:
+  type: object
+  properties:
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+      description: user_id
+    updated_by:
+      type: string
+      description: user_id
+    deleted_at:
+      type: string
+      format: date-time
+      description: for soft delete
+    deleted_by:
+      type: string
+  description: Audit information

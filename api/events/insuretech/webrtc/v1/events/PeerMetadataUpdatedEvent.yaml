@@ -1,0 +1,17 @@
+PeerMetadataUpdatedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    updated_at:
+      type: string
+      format: date-time
+  description: Event emitted when peer metadata is updated. Published to event stream
+    for downstream processing and audit trail.

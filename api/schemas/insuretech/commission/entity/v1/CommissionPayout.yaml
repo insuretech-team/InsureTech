@@ -1,0 +1,64 @@
+CommissionPayout:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:payout_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    payout_number:
+      type: string
+      description: '@inject_tag: gorm:"column:payout_number;not null"'
+      x-unique: true
+    recipient_type:
+      type: string
+      description: '@inject_tag: gorm:"column:recipient_type;not null"'
+    recipient_id:
+      type: string
+      description: '@inject_tag: gorm:"column:recipient_id;not null"'
+    period_start:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"'
+    period_end:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"'
+    total_amount:
+      $ref: '#/components/schemas/Money'
+    commission_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:commission_count;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/PayoutStatus'
+      x-database-default: PENDING
+    payment_method:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_method"'
+    payment_reference:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_reference"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Payment tracking and reconciliation
+    paid_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Commission payout batch (FR-063)
+  required:
+  - id
+  - payout_number
+  - recipient_type
+  - recipient_id
+  - period_start
+  - period_end
+  - commission_count
+  - status
+  - audit_info

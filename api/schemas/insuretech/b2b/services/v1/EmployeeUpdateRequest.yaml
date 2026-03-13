@@ -1,0 +1,34 @@
+EmployeeUpdateRequest:
+  type: object
+  properties:
+    employee_uuid:
+      type: string
+    name:
+      type: string
+      description: "All fields are optional \u2014 only non-empty values are applied\
+        \ (partial\r\n update)."
+    department_id:
+      type: string
+    email:
+      type: string
+    mobile_number:
+      type: string
+    date_of_birth:
+      type: string
+    date_of_joining:
+      type: string
+    gender:
+      $ref: '#/components/schemas/EmployeeGender'
+    insurance_category:
+      $ref: '#/components/schemas/InsuranceType'
+    assigned_plan_id:
+      type: string
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+    number_of_dependent:
+      type: integer
+      format: int32
+    status:
+      $ref: '#/components/schemas/EmployeeStatus'
+  description: Request payload for updating an existing employee update. Contains
+    fields to be modified.

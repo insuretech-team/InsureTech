@@ -1,0 +1,208 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+
+package insuretech.claims.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/claims/services/v1;claimsservicev1";
+option csharp_namespace = "Insuretech.Claims.Services.V1";
+
+import "insuretech/claims/entity/v1/claim.proto";
+
+// Claims Service
+service ClaimService {
+  // Submit claim
+  rpc SubmitClaim(SubmitClaimRequest) returns (SubmitClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims"
+      body: "*"
+    };
+  }
+  
+  // Get claim details
+  rpc GetClaim(GetClaimRequest) returns (GetClaimResponse) {
+    option (google.api.http) = {
+      get: "/v1/claims/{claim_id}"
+    };
+  }
+  
+  // List user claims
+  rpc ListUserClaims(ListUserClaimsRequest) returns (ListUserClaimsResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{customer_id}/claims"
+    };
+  }
+  
+  // Upload claim document
+  rpc UploadDocument(UploadDocumentRequest) returns (UploadDocumentResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}/documents"
+      body: "*"
+    };
+  }
+  
+  // Approve claim
+  rpc ApproveClaim(ApproveClaimRequest) returns (ApproveClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}:approve"
+      body: "*"
+    };
+  }
+  
+  // Reject claim
+  rpc RejectClaim(RejectClaimRequest) returns (RejectClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}:reject"
+      body: "*"
+    };
+  }
+  
+  // Settle claim
+  rpc SettleClaim(SettleClaimRequest) returns (SettleClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}:settle"
+      body: "*"
+    };
+  }
+  
+  // Request more documents from claimant
+  rpc RequestMoreDocuments(RequestMoreDocumentsRequest) returns (RequestMoreDocumentsResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}:requestDocuments"
+      body: "*"
+    };
+  }
+  
+  // Dispute claim (by customer)
+  rpc DisputeClaim(DisputeClaimRequest) returns (DisputeClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/claims/{claim_id}:dispute"
+      body: "*"
+    };
+  }
+}
+
+message SubmitClaimRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string customer_id = 2 [(google.api.field_behavior) = REQUIRED];
+  entity.v1.ClaimType type = 3 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money claimed_amount = 4 [(google.api.field_behavior) = REQUIRED];
+  string incident_date = 5 [(google.api.field_behavior) = REQUIRED];
+  string incident_description = 6 [(google.api.field_behavior) = REQUIRED];
+  repeated string document_urls = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SubmitClaimResponse {
+  string claim_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string claim_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetClaimRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetClaimResponse {
+  entity.v1.Claim claim = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListUserClaimsRequest {
+  string customer_id = 1 [(google.api.field_behavior) = REQUIRED];
+  entity.v1.ClaimStatus status = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListUserClaimsResponse {
+  repeated entity.v1.Claim claims = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UploadDocumentRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string document_type = 2 [(google.api.field_behavior) = REQUIRED];
+  bytes file_data = 3 [(google.api.field_behavior) = REQUIRED];
+  string file_name = 4 [(google.api.field_behavior) = REQUIRED];
+  string mime_type = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message UploadDocumentResponse {
+  string document_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string document_url = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string file_hash = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ApproveClaimRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string approver_id = 2 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money approved_amount = 3 [(google.api.field_behavior) = REQUIRED];
+  string notes = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ApproveClaimResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RejectClaimRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string approver_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RejectClaimResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message SettleClaimRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string payment_method = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_reference = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SettleClaimResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money settled_amount = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string payment_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RequestMoreDocumentsRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated string required_document_types = 2 [(google.api.field_behavior) = REQUIRED];
+  string message = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message RequestMoreDocumentsResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message DisputeClaimRequest {
+  string claim_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string customer_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string dispute_reason = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated string supporting_document_urls = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message DisputeClaimResponse {
+  string dispute_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

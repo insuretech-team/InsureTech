@@ -1,0 +1,28 @@
+RiskAssessment:
+  type: object
+  properties:
+    assessment_id:
+      type: string
+      description: UUID
+    device_id:
+      type: string
+    policy_id:
+      type: string
+    assessed_at:
+      type: string
+      format: date-time
+    risk_score:
+      type: number
+      format: double
+      description: 0-100
+    risk_level:
+      $ref: '#/components/schemas/IotRiskLevel'
+    factors:
+      type: array
+      items:
+        $ref: '#/components/schemas/RiskFactor'
+    recommendations:
+      type: array
+      items:
+        type: string
+  description: Risk assessment based on telemetry

@@ -1,0 +1,15 @@
+RefundCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    refund_id:
+      type: string
+    refundable_amount:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Refund calculated'

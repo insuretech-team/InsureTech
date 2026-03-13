@@ -1,0 +1,7 @@
+EndorsementUpdateResponse:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+  description: Response payload for endorsement update operation. Returns operation
+    results and status.

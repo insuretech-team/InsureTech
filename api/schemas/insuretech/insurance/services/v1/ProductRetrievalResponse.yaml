@@ -1,0 +1,7 @@
+InsuranceProductRetrievalResponse:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/Product'
+  description: Response payload for product retrieval operation. Returns operation
+    results and status.

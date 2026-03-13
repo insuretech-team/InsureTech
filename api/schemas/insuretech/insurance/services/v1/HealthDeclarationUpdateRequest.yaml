@@ -1,0 +1,7 @@
+HealthDeclarationUpdateRequest:
+  type: object
+  properties:
+    declaration:
+      $ref: '#/components/schemas/UnderwritingHealthDeclaration'
+  description: Request payload for updating an existing health declaration update.
+    Contains fields to be modified.

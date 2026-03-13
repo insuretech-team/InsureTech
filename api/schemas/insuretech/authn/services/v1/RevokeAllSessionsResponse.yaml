@@ -1,0 +1,12 @@
+RevokeAllSessionsResponse:
+  type: object
+  properties:
+    revoked_count:
+      type: integer
+      format: int32
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for revoke all sessions operation. Returns operation
+    results and status.

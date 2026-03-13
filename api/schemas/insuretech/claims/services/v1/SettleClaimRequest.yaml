@@ -1,0 +1,11 @@
+SettleClaimRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    payment_method:
+      type: string
+    payment_reference:
+      type: string
+  description: Request payload for settle claim operation. Contains parameters required
+    to execute the operation.

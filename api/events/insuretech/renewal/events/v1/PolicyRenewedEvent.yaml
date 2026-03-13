@@ -1,0 +1,17 @@
+RenewalPolicyRenewedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    old_policy_id:
+      type: string
+    new_policy_id:
+      type: string
+    renewal_schedule_id:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Policy renewed'

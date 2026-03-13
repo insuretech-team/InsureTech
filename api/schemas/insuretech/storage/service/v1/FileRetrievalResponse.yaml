@@ -1,0 +1,7 @@
+FileRetrievalResponse:
+  type: object
+  properties:
+    file:
+      $ref: '#/components/schemas/StoredFile'
+  description: Response payload for file retrieval operation. Returns operation results
+    and status.

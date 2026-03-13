@@ -1,0 +1,12 @@
+WebhookProcessingResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    success:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for webhook processing operation. Returns operation
+    results and status.

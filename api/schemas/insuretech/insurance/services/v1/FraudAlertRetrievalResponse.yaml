@@ -1,0 +1,7 @@
+InsuranceFraudAlertRetrievalResponse:
+  type: object
+  properties:
+    alert:
+      $ref: '#/components/schemas/FraudAlert'
+  description: Response payload for fraud alert retrieval operation. Returns operation
+    results and status.

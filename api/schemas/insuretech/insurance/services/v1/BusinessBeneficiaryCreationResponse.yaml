@@ -1,0 +1,7 @@
+InsuranceBusinessBeneficiaryCreationResponse:
+  type: object
+  properties:
+    business:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+  description: Response payload for business beneficiary creation operation. Returns
+    operation results and status.

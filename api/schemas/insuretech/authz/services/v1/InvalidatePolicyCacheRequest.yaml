@@ -1,0 +1,8 @@
+InvalidatePolicyCacheRequest:
+  type: object
+  properties:
+    domain:
+      type: string
+      description: invalidate for specific domain, empty = all
+  description: Request payload for invalidate policy cache operation. Contains parameters
+    required to execute the operation.

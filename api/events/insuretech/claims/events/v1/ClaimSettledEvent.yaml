@@ -1,0 +1,24 @@
+ClaimSettledEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    claim_id:
+      type: string
+    claim_number:
+      type: string
+    customer_id:
+      type: string
+    settled_amount:
+      $ref: '#/components/schemas/Money'
+    payment_method:
+      type: string
+    payment_reference:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Claim settled'

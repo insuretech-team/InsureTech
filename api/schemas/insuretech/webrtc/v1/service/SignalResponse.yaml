@@ -1,0 +1,36 @@
+SignalResponse:
+  type: object
+  properties:
+    peer_id:
+      type: string
+    room_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    offer_received:
+      $ref: '#/components/schemas/OfferReceivedEvent'
+    answer_received:
+      $ref: '#/components/schemas/AnswerReceivedEvent'
+    ice_candidate_received:
+      $ref: '#/components/schemas/ICECandidateReceivedEvent'
+    renegotiation_required:
+      $ref: '#/components/schemas/RenegotiationRequiredEvent'
+    peer_joined:
+      $ref: '#/components/schemas/PeerJoinedEvent'
+    peer_left:
+      $ref: '#/components/schemas/PeerLeftEvent'
+    peer_state_changed:
+      $ref: '#/components/schemas/PeerStateChangedEvent'
+    track_published:
+      $ref: '#/components/schemas/TrackPublishedEvent'
+    track_unpublished:
+      $ref: '#/components/schemas/TrackUnpublishedEvent'
+    track_muted:
+      $ref: '#/components/schemas/TrackMutedEvent'
+    error:
+      $ref: '#/components/schemas/ErrorResponse'
+    pong:
+      $ref: '#/components/schemas/PongResponse'
+  description: Response payload for signal operation. Returns operation results and
+    status.

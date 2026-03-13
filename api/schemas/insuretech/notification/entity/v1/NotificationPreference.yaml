@@ -1,0 +1,19 @@
+NotificationPreference:
+  type: object
+  properties:
+    user_id:
+      type: string
+    channel_preferences:
+      type: array
+      items:
+        $ref: '#/components/schemas/ChannelPreference'
+    marketing_opt_in:
+      type: boolean
+    transactional_opt_in:
+      type: boolean
+      description: Always true for critical notifications
+    updated_at:
+      type: string
+      format: date-time
+  description: NotificationPreference for user preferences (stored in users table
+    as JSONB or separate table)

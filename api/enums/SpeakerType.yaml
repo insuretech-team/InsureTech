@@ -1,0 +1,9 @@
+SpeakerType:
+  type: string
+  enum:
+  - SPEAKER_TYPE_UNSPECIFIED
+  - SPEAKER_TYPE_USER
+  - SPEAKER_TYPE_SYSTEM
+  - SPEAKER_TYPE_AGENT
+  description: 'Type categorization for speaker. Options: SPEAKER_TYPE_UNSPECIFIED,
+    SPEAKER_TYPE_USER, SPEAKER_TYPE_SYSTEM, SPEAKER_TYPE_AGENT.'

@@ -1,0 +1,25 @@
+TrackSettings:
+  type: object
+  properties:
+    width:
+      type: integer
+      format: int32
+    height:
+      type: integer
+      format: int32
+    frame_rate:
+      type: number
+      format: double
+    sample_rate:
+      type: integer
+      format: int32
+    channel_count:
+      type: integer
+      format: int32
+    bitrate:
+      type: integer
+      format: int32
+    codec:
+      type: string
+  description: Domain entity representing track settings. Core business object in
+    the system.

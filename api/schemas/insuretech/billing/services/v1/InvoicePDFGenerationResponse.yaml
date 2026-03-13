@@ -1,0 +1,12 @@
+InvoicePDFGenerationResponse:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    job_id:
+      type: string
+      description: Async generation job ID
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invoice pdf generation operation. Returns operation
+    results and status.

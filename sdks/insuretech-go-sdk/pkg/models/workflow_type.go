@@ -1,0 +1,13 @@
+package models
+
+// WorkflowType represents a workflow_type
+type WorkflowType string
+
+// WorkflowType values
+const (
+	WorkflowTypeWORKFLOWTYPEUNSPECIFIED WorkflowType = "WORKFLOW_TYPE_UNSPECIFIED"
+	WorkflowTypeWORKFLOWTYPEAPPROVAL  = "WORKFLOW_TYPE_APPROVAL"
+	WorkflowTypeWORKFLOWTYPEREVIEW  = "WORKFLOW_TYPE_REVIEW"
+	WorkflowTypeWORKFLOWTYPEESCALATION  = "WORKFLOW_TYPE_ESCALATION"
+	WorkflowTypeWORKFLOWTYPENOTIFICATION  = "WORKFLOW_TYPE_NOTIFICATION"
+)

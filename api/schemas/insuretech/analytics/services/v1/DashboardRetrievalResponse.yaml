@@ -1,0 +1,15 @@
+DashboardRetrievalResponse:
+  type: object
+  properties:
+    dashboard:
+      $ref: '#/components/schemas/Dashboard'
+    widget_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: widget_id -> data
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for dashboard retrieval operation. Returns operation
+    results and status.

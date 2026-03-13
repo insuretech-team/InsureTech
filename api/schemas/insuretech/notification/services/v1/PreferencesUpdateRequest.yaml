@@ -1,0 +1,9 @@
+PreferencesUpdateRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    preferences:
+      $ref: '#/components/schemas/NotificationPreference'
+  description: Request payload for updating an existing preferences update. Contains
+    fields to be modified.

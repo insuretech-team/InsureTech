@@ -1,0 +1,33 @@
+SecurityEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    event_type:
+      type: string
+      description: ACCESS, MODIFICATION, DELETION, EXPORT
+    user_id:
+      type: string
+    resource_type:
+      type: string
+      description: USER, POLICY, CLAIM
+    resource_id:
+      type: string
+    action:
+      type: string
+      description: READ, UPDATE, DELETE
+    authorized:
+      type: boolean
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Security event for audit logging

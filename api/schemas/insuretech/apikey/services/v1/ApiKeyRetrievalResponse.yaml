@@ -1,0 +1,10 @@
+ApiKeyRetrievalResponse:
+  type: object
+  properties:
+    api_key:
+      $ref: '#/components/schemas/ApiKey'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for api key retrieval operation. Returns operation
+    results and status.

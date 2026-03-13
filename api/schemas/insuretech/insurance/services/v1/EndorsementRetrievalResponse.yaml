@@ -1,0 +1,7 @@
+InsuranceEndorsementRetrievalResponse:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+  description: Response payload for endorsement retrieval operation. Returns operation
+    results and status.

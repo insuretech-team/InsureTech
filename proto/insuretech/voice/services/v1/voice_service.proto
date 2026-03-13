@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package insuretech.voice.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/voice/entity/v1/voice_session.proto";
+import "insuretech/voice/entity/v1/voice_command.proto";
+import "insuretech/voice/entity/v1/voice_transcript.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/voice/services/v1;voiceservicev1";
+option csharp_namespace = "Insuretech.Voice.Services.V1";
+
+service VoiceService {
+  // Start voice session
+  rpc StartVoiceSession(StartVoiceSessionRequest) returns (StartVoiceSessionResponse) {
+    option (google.api.http) = {
+      post: "/v1/voice-sessions"
+      body: "*"
+    };
+  }
+  
+  // Process voice command
+  rpc ProcessVoiceCommand(ProcessVoiceCommandRequest) returns (ProcessVoiceCommandResponse) {
+    option (google.api.http) = {
+      post: "/v1/voice-sessions/{voice_session_id}/commands"
+      body: "*"
+    };
+  }
+  
+  // Get voice session
+  rpc GetVoiceSession(GetVoiceSessionRequest) returns (GetVoiceSessionResponse) {
+    option (google.api.http) = {
+      get: "/v1/voice-sessions/{voice_session_id}"
+    };
+  }
+  
+  // End voice session
+  rpc EndVoiceSession(EndVoiceSessionRequest) returns (EndVoiceSessionResponse) {
+    option (google.api.http) = {
+      post: "/v1/voice-sessions/{voice_session_id}?action=end"
+      body: "*"
+    };
+  }
+  
+  // Get transcript
+  rpc GetTranscript(GetTranscriptRequest) returns (GetTranscriptResponse) {
+    option (google.api.http) = {
+      get: "/v1/voice-sessions/{voice_session_id}/transcript"
+    };
+  }
+}
+
+message StartVoiceSessionRequest {
+  string user_id = 1;
+  string phone_number = 2;
+  string language = 3; // bn, en
+}
+
+message StartVoiceSessionResponse {
+  string voice_session_id = 1;
+  string session_id = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ProcessVoiceCommandRequest {
+  string voice_session_id = 1;
+  string audio_url = 2;
+  string command_text = 3;
+  string language = 4;
+}
+
+message ProcessVoiceCommandResponse {
+  string voice_command_id = 1;
+  string command_type = 2;
+  string response_text = 3;
+  string response_audio_url = 4;
+  float confidence_score = 5;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+}
+
+message GetVoiceSessionRequest {
+  string voice_session_id = 1;
+}
+
+message GetVoiceSessionResponse {
+  entity.v1.VoiceSession voice_session = 1;
+  repeated entity.v1.VoiceCommand commands = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message EndVoiceSessionRequest {
+  string voice_session_id = 1;
+}
+
+message EndVoiceSessionResponse {
+  string message = 1;
+  int32 duration_seconds = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetTranscriptRequest {
+  string voice_session_id = 1;
+}
+
+message GetTranscriptResponse {
+  repeated entity.v1.VoiceTranscript transcripts = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

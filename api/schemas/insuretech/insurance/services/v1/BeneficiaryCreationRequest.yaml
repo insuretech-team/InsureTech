@@ -1,0 +1,6 @@
+BeneficiaryCreationRequest:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+  description: ========== BENEFICIARY MESSAGES ==========

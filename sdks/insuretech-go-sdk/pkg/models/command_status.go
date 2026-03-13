@@ -1,0 +1,13 @@
+package models
+
+// CommandStatus represents a command_status
+type CommandStatus string
+
+// CommandStatus values
+const (
+	CommandStatusCOMMANDSTATUSUNSPECIFIED CommandStatus = "COMMAND_STATUS_UNSPECIFIED"
+	CommandStatusCOMMANDSTATUSPENDING  = "COMMAND_STATUS_PENDING"
+	CommandStatusCOMMANDSTATUSPROCESSING  = "COMMAND_STATUS_PROCESSING"
+	CommandStatusCOMMANDSTATUSCOMPLETED  = "COMMAND_STATUS_COMPLETED"
+	CommandStatusCOMMANDSTATUSFAILED  = "COMMAND_STATUS_FAILED"
+)

@@ -1,0 +1,13 @@
+NotificationPreferencesUpdateRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    notification_preference:
+      type: string
+      description: SMS, EMAIL, PUSH, ALL, NONE
+    preferred_language:
+      type: string
+      description: en or bn
+  description: Request payload for updating an existing notification preferences update.
+    Contains fields to be modified.

@@ -1,0 +1,7 @@
+BusinessBeneficiaryUpdateRequest:
+  type: object
+  properties:
+    business:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+  description: Request payload for updating an existing business beneficiary update.
+    Contains fields to be modified.

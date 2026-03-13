@@ -1,0 +1,8 @@
+OrgMemberStatus:
+  type: string
+  enum:
+  - ORG_MEMBER_STATUS_UNSPECIFIED
+  - ORG_MEMBER_STATUS_ACTIVE
+  - ORG_MEMBER_STATUS_INACTIVE
+  description: 'Status values for org member. Defines lifecycle states: ORG_MEMBER_STATUS_UNSPECIFIED,
+    ORG_MEMBER_STATUS_ACTIVE, ORG_MEMBER_STATUS_INACTIVE.'

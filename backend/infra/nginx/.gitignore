@@ -1,0 +1,26 @@
+# SSL Certificates (do not commit private keys)
+ssl/certs/*.key
+ssl/certs/*.pem
+ssl/certs/*.crt
+*.key
+*.pem
+
+# Cache directories - Keep config files, ignore runtime cache
+!cache/
+!cache/*.conf
+
+# Runtime cache directories (generated at runtime)
+proxy_temp/
+
+# Log files
+*.log
+logs/
+
+# Temporary files
+*.tmp
+*.bak
+*~
+
+# OS files
+.DS_Store
+Thumbs.db

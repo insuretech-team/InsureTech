@@ -1,0 +1,19 @@
+RenewalDueEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    renewal_schedule_id:
+      type: string
+    policy_id:
+      type: string
+    renewal_due_date:
+      type: string
+    renewal_premium:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Renewal due'

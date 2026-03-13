@@ -1,0 +1,64 @@
+FraudAlert:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:alert_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    alert_number:
+      type: string
+      description: '@inject_tag: gorm:"column:alert_number;not null"'
+      x-unique: true
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    fraud_rule_id:
+      type: string
+      description: '@inject_tag: gorm:"column:fraud_rule_id;not null"'
+    risk_level:
+      type: string
+      description: '@inject_tag: gorm:"column:risk_level;not null"'
+    fraud_score:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:fraud_score;not null"'
+    details:
+      type: string
+      description: '@inject_tag: gorm:"column:details"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/AlertStatus'
+      x-database-default: OPEN
+    assigned_to:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_to"'
+    resolved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:resolved_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: Fraud alert
+  required:
+  - id
+  - alert_number
+  - entity_type
+  - entity_id
+  - fraud_rule_id
+  - risk_level
+  - fraud_score
+  - status

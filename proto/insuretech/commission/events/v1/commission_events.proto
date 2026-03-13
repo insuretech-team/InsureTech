@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package insuretech.commission.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/commission/events/v1;commissioneventsv1";
+
+// Kafka event: Commission earned
+message CommissionEarnedEvent {
+  string event_id = 1;
+  string commission_id = 2;
+  string commission_number = 3;
+  string type = 4; // ACQUISITION, RENEWAL, CLAIMS_ASSISTANCE
+  string recipient_type = 5;
+  string recipient_id = 6;
+  insuretech.common.v1.Money amount = 7;
+  string policy_id = 8;
+  string correlation_id = 9;
+  google.protobuf.Timestamp timestamp = 10;
+}
+
+// Kafka event: Commission payout created
+message CommissionPayoutCreatedEvent {
+  string event_id = 1;
+  string payout_id = 2;
+  string payout_number = 3;
+  string recipient_id = 4;
+  insuretech.common.v1.Money total_amount = 5;
+  int32 commission_count = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Commission paid
+message CommissionPaidEvent {
+  string event_id = 1;
+  string payout_id = 2;
+  string recipient_id = 3;
+  insuretech.common.v1.Money amount = 4;
+  string payment_method = 5;
+  string payment_reference = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Revenue share recorded
+message RevenueShareRecordedEvent {
+  string event_id = 1;
+  string revenue_share_id = 2;
+  string policy_id = 3;
+  string insurer_id = 4;
+  insuretech.common.v1.Money platform_share = 5;
+  insuretech.common.v1.Money insurer_share = 6;
+  string revenue_model = 7;
+  string correlation_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+

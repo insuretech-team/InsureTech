@@ -1,0 +1,7 @@
+PolicyServiceRequestCreationResponse:
+  type: object
+  properties:
+    request:
+      $ref: '#/components/schemas/PolicyServiceRequest'
+  description: Response payload for policy service request creation operation. Returns
+    operation results and status.

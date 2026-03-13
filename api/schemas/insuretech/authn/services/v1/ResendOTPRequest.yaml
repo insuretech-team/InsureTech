@@ -1,0 +1,12 @@
+ResendOTPRequest:
+  type: object
+  properties:
+    original_otp_id:
+      type: string
+      description: Original OTP ID to invalidate
+    reason:
+      type: string
+      description: "Reason for resend (client hint: \"not_received\", \"expired\"\
+        ,\r\n \"delivery_failed\")"
+  description: "Resend OTP Request \u2014 invalidates previous OTP and sends a new\
+    \ one\r\n Used for delivery failure retry loops and user-initiated resend"

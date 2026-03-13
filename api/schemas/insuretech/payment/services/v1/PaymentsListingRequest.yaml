@@ -1,0 +1,22 @@
+PaymentsListingRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    policy_id:
+      type: string
+    status:
+      type: string
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+  description: Request payload for listing payments listing items. Supports filtering,
+    sorting, and pagination.

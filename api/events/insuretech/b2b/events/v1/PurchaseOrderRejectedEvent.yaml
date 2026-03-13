@@ -1,0 +1,17 @@
+PurchaseOrderRejectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    purchase_order_id:
+      type: string
+    organisation_id:
+      type: string
+    rejected_by:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: PurchaseOrderRejectedEvent is published when a purchase order is rejected

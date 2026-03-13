@@ -1,0 +1,3045 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Common Types Schemas - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .domain-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .domain-icon {
+            font-size: 2.5em;
+        }
+        
+        .domain-name {
+            font-size: 2em;
+            font-weight: 600;
+        }
+        
+        .domain-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: white;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #999;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 15px 20px;
+        }
+        
+        .name-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .schema-name {
+            font-size: 1.05em;
+        }
+        
+        .desc-cell {
+            color: #666;
+        }
+        
+        .props-cell {
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        
+        .badge-request {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .badge-response {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-type {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / Schemas
+            </div>
+            <div class="domain-title">
+                <span class="domain-icon">🔧</span>
+                <div>
+                    <div class="domain-name">Common Types Schemas</div>
+                    <div class="domain-description">Shared types, enums, and utilities</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">302</div>
+                    <div class="stat-label">Schemas</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search schemas..." onkeyup="filterTable()">
+            <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="table-container">
+            <table id="schemaTable">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Schema Name</th>
+                        <th style="width: 50%;">Description</th>
+                        <th style="width: 15%;">Properties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr onclick="window.location.href='schema_aiagent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAgent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">AIAgent represents an AI agent in the multi-agent system
+ Maps to 'ai_agents' table in ai_schema</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aiagentactivatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAgentActivatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: AI agent activated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aiagentcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAgentCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: AI agent created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aiagentdeactivatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAgentDeactivatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: AI agent deactivated</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aiagenterrorevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAgentErrorEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: AI agent error</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aianalysis.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIAnalysis</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">AI Prediction/Analysis result</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aidecisionmadeevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AIDecisionMadeEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: AI decision made</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeysummary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">APIKeySummary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing api key summary. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accesscheckresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessCheckResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing access check result. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accesschecktuple.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessCheckTuple</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing access check tuple. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accesscontext.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessContext</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing access context. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accessdecisionaudit.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessDecisionAudit</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 7. AccessDecisionAudit — immutable audit log of every Casbin enforcement call
+ ---------------------------------------------------------------------------</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accessdeniedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessDeniedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">AccessDeniedEvent — emitted every time Casbin returns DENY
+ Consumed by: security monitoring, anomaly detection, SIEM</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accessgrantedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccessGrantedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">AccessGrantedEvent — emitted for allowed decisions (optional, configurable)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_accountlockedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AccountLockedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Account locked</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_address.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Address</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Address information</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_agent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Agent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Agent working under a partner
+ Maps to 'agents' table in partner_schema</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_agentregisteredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AgentRegisteredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Agent registered</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aggregatedmetric.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AggregatedMetric</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Aggregated metric values
+ Maps to 'aggregated_metrics' table in analytics_schema</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aggregationjobcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AggregationJobCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Aggregation job completed</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_aifrauddetectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AiFraudDetectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Fraud detected</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_alert.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Alert</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Alert represents system-generated alerts and reminders</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_anomalydetectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AnomalyDetectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Anomaly detected in telemetry</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_answerreceivedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AnswerReceivedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when answer undergoes received. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikey.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKey</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">API Key entity for insurer/partner authentication</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeycreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKeyCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: API key created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeyexpiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKeyExpiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: API key expired</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeyratelimitexceededevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKeyRateLimitExceededEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Rate limit exceeded</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeyrevokedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKeyRevokedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: API key revoked</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_apikeyusage.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApiKeyUsage</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">API usage tracking (FR-207)</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_applicant.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Applicant</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Applicant information (stored as JSONB in policies table or separate table)</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_approvalinfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ApprovalInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Approval workflow</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_audioconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AudioConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing audio config. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_auditevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuditEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Audit event (business events)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_auditinfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuditInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Audit information</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_auditlog.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuditLog</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Audit log (FR-153 to FR-158)</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_auditlogcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AuditLogCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Audit log created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_b2badminassignedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">B2BAdminAssignedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">B2BAdminAssignedEvent is published when a B2B admin is assigned to an organisation</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_beneficiary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Beneficiary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Base Beneficiary entity (primary customer record)</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_beneficiarycreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BeneficiaryCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Beneficiary created</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_beneficiarykyccompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BeneficiaryKYCCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: KYC completed</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_beneficiaryriskscoreupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BeneficiaryRiskScoreUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Risk score updated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_beneficiarystatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BeneficiaryStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Status changed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businessbeneficiary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessBeneficiary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Business (B2B) beneficiary details</td>
+                <td class="props-cell">28 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businessmetrics.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessMetrics</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">BusinessMetrics for KPIs and dashboards
+ Maps to 'business_metrics' table in analytics_schema</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businesstargetachievedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessTargetAchievedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Business target achieved</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_csrfvalidationfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CSRFValidationFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: CSRF validation failed (server-side sessions only)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_casbinrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CasbinRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+    Casbin gorm-adapter reads/writes this table directly.
+    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+    g-type rows: ptype="g"  → role assignment: sub, dom, role
+ ---------------------------------------------------------------------------</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_channelpreference.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ChannelPreference</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing channel preference. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_columnoptions.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ColumnOptions</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Field/Column options - applied at field level</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commission.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Commission</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Commission payment records
+ Maps to 'commissions' table in partner_schema</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissioncalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Commission calculated</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Commission configuration per insurer product (FR-063)</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissiondetail.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionDetail</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing commission detail. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionearnedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionEarnedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Commission earned</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionpaidevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionPaidEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Commission paid</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionpayout.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionPayout</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Commission payout batch (FR-063)</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionpayoutcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionPayoutCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Commission payout created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionstructure.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionStructure</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Commission structure (embedded in Partner table)</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_commissionsummary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CommissionSummary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing commission summary. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_compliancecheckperformedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ComplianceCheckPerformedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Compliance check performed</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_compliancelog.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ComplianceLog</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Compliance log (regulatory compliance)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_connectionstats.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ConnectionStats</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing connection stats. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contactinfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ContactInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Contact information</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_conversation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Conversation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Conversation with AI agent (for customer support, chatbots)
+ Maps to 'ai_conversations' table in ai_schema</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_conversationendedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ConversationEndedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Conversation ended</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_conversationstartedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ConversationStartedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Conversation started</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_customerqueryhandledevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CustomerQueryHandledEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Customer query handled</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_dashboard.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Dashboard</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Dashboard definition</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_dashboardaccessedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DashboardAccessedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Dashboard accessed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_dataexportcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DataExportCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Data export completed</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_dataexportrequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DataExportRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Data export requested</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_department.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Department</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Department represents a corporate department in the B2B portal</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_departmentcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DepartmentCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">DepartmentCreatedEvent is published when a new department is created</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_departmentdeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DepartmentDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">DepartmentDeletedEvent is published when a department is deleted</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_departmentupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DepartmentUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">DepartmentUpdatedEvent is published when a department is updated</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_departmentview.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DepartmentView</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing department view. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_deviceactivatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DeviceActivatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device activated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_devicedeactivatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DeviceDeactivatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device deactivated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_deviceofflineevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DeviceOfflineEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device offline (no data for X minutes)</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_deviceonlineevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DeviceOnlineEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device back online</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_deviceregisteredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DeviceRegisteredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device registered</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailloginfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailLoginFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Email OTP login failed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailloginsucceededevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailLoginSucceededEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Email OTP login succeeded (Business Beneficiary / System User)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailverificationsentevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailVerificationSentEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Email verification OTP sent</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_emailverifiedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmailVerifiedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Email verified</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employee.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Employee</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Employee represents a corporate employee in the B2B portal.
+ business_id is the organisation_id from b2b_schema.organisations — the tenant
+ isolation key. user_id links to authn_schema.users when portal access is
+ granted (B2C bridge).</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeecreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">EmployeeCreatedEvent is published when a new employee is created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeedeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">EmployeeDeletedEvent is published when an employee is deleted</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeestatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">EmployeeStatusChangedEvent is published when employee status changes</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeeupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">EmployeeUpdatedEvent is published when an employee is updated</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeeview.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeView</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing employee view. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_endorsement.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Endorsement</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Policy endorsement/amendment (FR-098 to FR-102)</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_endorsementappliedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EndorsementAppliedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Endorsement applied to policy</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_endorsementapprovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EndorsementApprovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Endorsement approved</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_endorsementrejectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EndorsementRejectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Endorsement rejected</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_endorsementrequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EndorsementRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Endorsement requested</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_error.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Error</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Standard error response message for all services
+ Provides consistent error handling across the entire API</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_errorinfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ErrorInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Standard error info when embedding inline</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_faq.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FAQ</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">FAQ (FR-110)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fieldsorting.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FieldSorting</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing field sorting. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fieldviolation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FieldViolation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Field-level validation error</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_filedeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Emitted when a file/object is deleted.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_filemetadataupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileMetadataUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Emitted when metadata is updated on a stored file.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fileupload.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileUpload</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing file upload. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fileuploadfinalizedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileUploadFinalizedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Emitted after finalize/upload verification completes.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fileuploadurlissuedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileUploadURLIssuedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Emitted when a presigned upload URL is issued.</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fileuploadedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FileUploadedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Emitted when a file upload is completed and persisted.</td>
+                <td class="props-cell">16 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_firmwareupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FirmwareUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Firmware updated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_foreignkey.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ForeignKey</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Foreign key constraint definition</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudalert.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudAlert</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Fraud alert</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudalerttriggeredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudAlertTriggeredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Fraud alert triggered</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudcase.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudCase</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Fraud investigation case</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudcasecreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudCaseCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Fraud case created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudcheckresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudCheckResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Fraud detection results
+ Maps to 'fraud_checks' table in claims_schema</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudconfirmedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudConfirmedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Fraud confirmed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_fraudrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FraudRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Fraud detection rule (FR-186 to FR-192)</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_geofencebreachevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">GeofenceBreachEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Geofence breach (for vehicle tracking)</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_graceperiod.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">GracePeriod</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Grace period tracking (FR-089, FR-090)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_graceperiodstartedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">GracePeriodStartedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Grace period started</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_healthdeclarationsubmittedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">HealthDeclarationSubmittedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Health declaration submitted</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_icecandidate.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ICECandidate</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing ice candidate. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_icecandidatereceivedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ICECandidateReceivedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when ice candidate undergoes received. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_indexoptions.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">IndexOptions</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Index options</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_individualbeneficiary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">IndividualBeneficiary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Individual (B2C) beneficiary details</td>
+                <td class="props-cell">17 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insurer.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Insurer</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Insurer/Underwriter entity</td>
+                <td class="props-cell">18 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insurerconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsurerConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Insurer integration and API configuration</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insurerconfigupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsurerConfigUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Insurer config updated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insurercreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsurerCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Insurer created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insurerstatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsurerStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Insurer status changed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoice.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Invoice</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Invoice represents a billing invoice covering one or more insurance orders/policies.
+ Supports both B2C (single order) and B2B (group purchase order) scenarios.</td>
+                <td class="props-cell">27 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoicecancelledevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoiceCancelledEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice cancelled — published when invoice is cancelled before payment</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoicecreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoiceCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice created — published when billing-service creates a new invoice</td>
+                <td class="props-cell">18 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoiceissuedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoiceIssuedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice issued — published when invoice transitions DRAFT → ISSUED</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoiceoverdueevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoiceOverdueEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice overdue — published by a scheduler when due date passes without payment</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoicepdfgeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoicePDFGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice PDF generated — published when document generation completes</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_invoicepaidevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InvoicePaidEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Invoice paid — published when payment is confirmed and invoice marked PAID</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_iotdevice.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">IoTDevice</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">IoTDevice represents a connected device (GPS tracker, health monitor, etc.)
+ Maps to 'devices' table in iot_schema</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kpithresholdbreachedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KPIThresholdBreachedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: KPI threshold breached</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycrejectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCRejectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: KYC rejected</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycverification.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCVerification</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">KYC verification (FR-061, FR-169)</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycverificationstartedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCVerificationStartedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: KYC verification started</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycverifiedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCVerifiedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: KYC verified</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_knowledgebasearticle.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KnowledgeBaseArticle</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Knowledge base article</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_location.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Location</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing location. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_loginfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LoginFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Login failed (security monitoring)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mcpserver.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MCPServer</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MCP Server connection</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfsintegration.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSIntegration</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MFS integration config (FR-073 to FR-075)</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfstransaction.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSTransaction</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MFS transaction</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfstransactioncompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSTransactionCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: MFS transaction completed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfstransactionfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSTransactionFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: MFS transaction failed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfstransactioninitiatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSTransactionInitiatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: MFS transaction initiated</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mfswebhook.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MFSWebhook</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MFS webhook log</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_maintenancedueevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MaintenanceDueEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Device maintenance due</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediacapability.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaCapability</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MediaCapability - runtime only.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediafile.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaFile</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">MediaFile entity - stores media file metadata with processing status</td>
+                <td class="props-cell">19 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediafileuploadedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaFileUploadedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media file uploaded</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediaocrcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaOCRCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: OCR extraction completed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediaprocessingcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaProcessingCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media processing completed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediaprocessingfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaProcessingFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media processing failed</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediaprocessingjobcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaProcessingJobCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media processing job created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediavalidationcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaValidationCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media validation completed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_mediavirusscancompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MediaVirusScanCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Media virus scan completed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_message.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Message</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing message. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_metricanomalydetectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MetricAnomalyDetectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Anomaly detected in metrics</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_metricdefinition.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MetricDefinition</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Metric definition catalog
+ Maps to 'metric_definitions' table in analytics_schema</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_metricrecordedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">MetricRecordedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Metric recorded</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_modelretrainedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ModelRetrainedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Model retrained</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_money.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Money</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Money representation with currency</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_nidinfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">NIDInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Bangladesh-specific types</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_nominee.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Nominee</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Nominee/Beneficiary information
+ Maps to 'policy_nominees' table in insurance_schema</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_otp.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OTP</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">One-Time Password for verification</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_otpsentevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OTPSentEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: OTP sent</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_otpverifiedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OTPVerifiedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: OTP verified</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_offerreceivedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OfferReceivedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when offer undergoes received. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_order.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Order</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Order represents a purchase order for an insurance policy.
+ Created from an approved quotation → payment → policy issuance flow.
+ Maps to 'orders' table in insurance_schema.</td>
+                <td class="props-cell">32 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ordercancelledevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrderCancelledEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Order cancelled</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ordercreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrderCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Order created from an approved quotation</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orderfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrderFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Order failed (payment timeout or gateway error)</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orderfulfillmentcompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrderFulfillmentCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Order fully fulfilled — policy issued, receipt generated</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orderview.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrderView</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing order view. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orgmember.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrgMember</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrgMember links a platform user (authn_schema.users) to an Organisation with
+ a role. This is how we know which organisation a logged-in admin/HR belongs
+ to. The business_id stored in every JWT-derived session maps to
+ organisation_id here.</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orgmemberaddedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrgMemberAddedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrgMemberAddedEvent is published when a user is added to an organisation</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_orgmemberremovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrgMemberRemovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrgMemberRemovedEvent is published when a user is removed from an organisation</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Organisation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Organisation represents a corporate client (B2B tenant) enrolled in the
+ platform. Each organisation belongs to a parent InsureTech tenant
+ (tenant_id). An organisation has one or more OrgMembers (admins, HR staff)
+ and many employees.</td>
+                <td class="props-cell">13 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisationapprovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrganisationApprovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrganisationApprovedEvent is published when SuperAdmin approves an organisation</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisationcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrganisationCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrganisationCreatedEvent is published when a new organisation is created by SuperAdmin</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisationstatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrganisationStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrganisationStatusChangedEvent is published when organisation status changes</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisationsuspendedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrganisationSuspendedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrganisationSuspendedEvent is published when an organisation is suspended</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_organisationupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OrganisationUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">OrganisationUpdatedEvent is published when an organisation is updated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_participantanalytics.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ParticipantAnalytics</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing participant analytics. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_passwordchangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PasswordChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Password changed</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_passwordresetbyemailrequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PasswordResetByEmailRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Password reset requested via email</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_passwordresetrequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PasswordResetRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Password reset requested</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_peer.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Peer</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Peer represents a WebRTC conference participant</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_peerjoinedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PeerJoinedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when peer undergoes joined. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_peerleftevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PeerLeftEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when peer undergoes left. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_peermetadataupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PeerMetadataUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when peer metadata is updated. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_peerstatechangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PeerStateChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when peer state undergoes changed. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_portalconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PortalConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 5. PortalConfig — per-portal MFA and session configuration
+ ---------------------------------------------------------------------------</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_portalconfigupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PortalConfigUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when portal config is updated. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_premiumbreakdown.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PremiumBreakdown</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing premium breakdown. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_premiumcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PremiumCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Premium calculated (for analytics)</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_pricingconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PricingConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Product pricing configuration
+ Maps to 'pricing_configs' table in product_schema</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_pricingrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PricingRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Pricing rule (stored as JSONB in pricing_configs table)</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_pricingrulecreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PricingRuleCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Pricing rule created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_pricingruleupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PricingRuleUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Pricing rule updated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_primarycontact.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PrimaryContact</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Primary Contact Information</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseorder.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrder</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PurchaseOrder represents a business purchase request for an insurance product
+ plan.</td>
+                <td class="props-cell">17 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseorderapprovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderApprovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PurchaseOrderApprovedEvent is published when a purchase order is approved</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseordercatalogitem.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderCatalogItem</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing purchase order catalog item. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseordercreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PurchaseOrderCreatedEvent is published when a new purchase order is created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseorderrejectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderRejectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PurchaseOrderRejectedEvent is published when a purchase order is rejected</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseorderstatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PurchaseOrderStatusChangedEvent is published when purchase order status changes</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_purchaseorderview.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PurchaseOrderView</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing purchase order view. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Quotation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Quotation represents a B2B or B2C insurance quote request</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quote.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Quote</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Quote entity - premium quote before policy issuance</td>
+                <td class="props-cell">21 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoteconvertedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteConvertedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote converted to policy</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoteexpiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteExpiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote expired</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotegeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote generated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoterequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote requested</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_receiptgeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReceiptGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Payment receipt PDF generated and stored</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_refund.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Refund</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Refund for policy cancellation (FR-093 to FR-097)</td>
+                <td class="props-cell">18 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_refundapprovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RefundApprovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Refund approved</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_refundcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RefundCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Refund calculated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_refundrefundprocessedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RefundRefundProcessedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Refund processed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_refundrequestedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RefundRequestedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Refund requested</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_renegotiationrequiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RenegotiationRequiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when renegotiation undergoes required. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_renewaldueevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RenewalDueEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Renewal due</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_renewalreminder.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RenewalReminder</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Renewal reminder tracking (FR-085)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_renewalremindersentevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RenewalReminderSentEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Renewal reminder sent</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_renewalschedule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RenewalSchedule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Renewal schedule for policy (FR-084 to FR-092)</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_report.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Report</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Report templates and generated reports
+ Maps to 'reports' table in analytics_schema</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportdefinition.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportDefinition</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Report definition (FR-137 to FR-139)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportexecution.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportExecution</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Report execution instance</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportexecutioncompletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportExecutionCompletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Report execution completed</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportexecutionfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportExecutionFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Report execution failed</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportexecutionstartedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportExecutionStartedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Report execution started</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportgeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Report generated</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportgenerationfailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportGenerationFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Report failed to generate</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reportschedule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReportSchedule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Report schedule</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_requestcontext.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RequestContext</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing request context. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revenuemodelamount.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevenueModelAmount</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing revenue model amount. Core business object in the system.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revenueshare.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevenueShare</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Insurer revenue share tracking (BRD revenue models)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_revenuesharerecordedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RevenueShareRecordedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Revenue share recorded</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_riskassessment.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RiskAssessment</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Risk assessment based on telemetry</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_riskfactor.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RiskFactor</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing risk factor. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_room.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Room</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">WebRTC conference room</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomanalytics.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomAnalytics</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing room analytics. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomclosedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomClosedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when room undergoes closed. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing room config. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomconfigupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomConfigUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when room config is updated. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when room is created. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_roomstatechangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RoomStateChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when room state undergoes changed. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_row.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Row</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing row. Core business object in the system.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ruleaction.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RuleAction</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing rule action. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_rulecondition.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RuleCondition</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing rule condition. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sdpanswer.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SDPAnswer</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing sdp answer. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_sdpoffer.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SDPOffer</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing sdp offer. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_smsdeliveryreportevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SMSDeliveryReportEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: SMS Delivery Report received (BTRC compliance)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_securityevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SecurityEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Security event for audit logging</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_securityeventdetectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">SecurityEventDetectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Security event detected</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_serviceprovider.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ServiceProvider</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing service provider. Core business object in the system.</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_storedfile.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">StoredFile</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">StoredFile represents a file stored in object storage (S3/Spaces/etc.)
+ Maps to 'files' table in storage_schema</td>
+                <td class="props-cell">17 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tininfo.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TINInfo</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing tin info. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tableoptions.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TableOptions</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Database table options - applied at message level</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_telemetry.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Telemetry</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Telemetry data from device (TimescaleDB hypertable for time-series data)
+ Maps to 'telemetry' table in iot_schema</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_telemetryreceivedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TelemetryReceivedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Telemetry data received</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tenant.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Tenant</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Tenant (FR-016)</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tenantconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TenantConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Tenant configuration</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tenantcontext.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TenantContext</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Standard tenant and request-scoped metadata</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tenantcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TenantCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Tenant created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tenantstatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TenantStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Tenant status changed</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticket.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Ticket</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Support ticket (FR-106 to FR-113)</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketassignedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketAssignedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Ticket assigned</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketclosedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketClosedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Ticket closed</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Ticket created</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketmessage.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketMessage</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Ticket message/reply</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketmessageaddedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketMessageAddedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Ticket message added</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ticketresolvedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TicketResolvedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Ticket resolved</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tigerbeetleaccount.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TigerBeetleAccount</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">TigerBeetle Account Ledger (not stored in PostgreSQL - managed by TigerBeetle)
+ This is for documentation purposes only</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_timestamps.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Timestamps</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Common time fields</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tokenconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TokenConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 6. TokenConfig — RS256 signing key configuration (per environment)
+ ---------------------------------------------------------------------------</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tokenrefreshedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TokenRefreshedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Access token refreshed (JWT sessions only)</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_track.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Track</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Media track published by a peer</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_trackmutedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TrackMutedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when track undergoes muted. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_trackpublishedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TrackPublishedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when track undergoes published. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_tracksettings.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TrackSettings</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing track settings. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_trackstatechangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TrackStateChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when track state undergoes changed. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_trackunpublishedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">TrackUnpublishedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event emitted when track undergoes unpublished. Published to event stream for downstream processing and audit trail.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_uuid.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UUID</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">DEPRECATED: UUID wrapper removed - use string with ULID format directly
+ Kept for backward compatibility only</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingapprovedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingApprovedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Underwriting approved</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingdecision.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingDecision</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Underwriting decision for quote approval/rejection</td>
+                <td class="props-cell">17 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingdecisionevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingDecisionEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Underwriting decision made</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritinghealthdeclaration.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingHealthDeclaration</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Health declaration for underwriting</td>
+                <td class="props-cell">19 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingrejectedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingRejectedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Underwriting rejected</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_videoconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VideoConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing video config. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicecommand.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceCommand</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Voice command execution</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicecommandexecutedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceCommandExecutedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Voice command executed</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_voicetranscript.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VoiceTranscript</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Voice interaction transcript</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_widgetdata.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WidgetData</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing widget data. Core business object in the system.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ingjobprocessing.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ingJobProcessing</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ProcessingJob entity - tracks async media processing tasks</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('schemaTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

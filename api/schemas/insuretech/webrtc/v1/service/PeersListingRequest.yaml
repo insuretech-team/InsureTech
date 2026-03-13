@@ -1,0 +1,9 @@
+PeersListingRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    state_filter:
+      $ref: '#/components/schemas/PeerConnectionState'
+  description: Request payload for listing peers listing items. Supports filtering,
+    sorting, and pagination.

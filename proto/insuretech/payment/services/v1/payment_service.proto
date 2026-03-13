@@ -1,0 +1,386 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.payment.services.v1;
+
+import "insuretech/payment/entity/v1/payment.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/payment/services/v1;paymentservicev1";
+option csharp_namespace = "LabAid.InsureTech.Payment.Services.V1";
+
+// PaymentService handles all payment processing operations
+service PaymentService {
+  // Payment Processing
+  rpc InitiatePayment(InitiatePaymentRequest) returns (InitiatePaymentResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments"
+      body: "*"
+    };
+  }
+  rpc VerifyPayment(VerifyPaymentRequest) returns (VerifyPaymentResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/{payment_id}:verify"
+      body: "*"
+    };
+  }
+  rpc GetPayment(GetPaymentRequest) returns (GetPaymentResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments/{payment_id}"
+    };
+  }
+  rpc ListPayments(ListPaymentsRequest) returns (ListPaymentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments"
+    };
+  }
+  
+  // Refund Management
+  rpc InitiateRefund(InitiateRefundRequest) returns (InitiateRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/{payment_id}/refunds"
+      body: "*"
+    };
+  }
+  rpc GetRefundStatus(GetRefundStatusRequest) returns (GetRefundStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/refunds/{refund_id}"
+    };
+  }
+  
+  // Payment Methods
+  rpc ListPaymentMethods(ListPaymentMethodsRequest) returns (ListPaymentMethodsResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/payment-methods"
+    };
+  }
+  rpc AddPaymentMethod(AddPaymentMethodRequest) returns (AddPaymentMethodResponse) {
+    option (google.api.http) = {
+      post: "/v1/users/{user_id}/payment-methods"
+      body: "*"
+    };
+  }
+  
+  // Reconciliation
+  rpc ReconcilePayments(ReconcilePaymentsRequest) returns (ReconcilePaymentsResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments:reconcile"
+      body: "*"
+    };
+  }
+
+  // Gateway webhook — called by API gateway when SSLCommerz/bKash/Nagad posts callback
+  rpc HandleGatewayWebhook(HandleGatewayWebhookRequest) returns (HandleGatewayWebhookResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/webhook/{provider}"
+      body: "*"
+    };
+  }
+
+  // Lookup by provider-specific reference (e.g. SSLCommerz tran_id or val_id)
+  rpc GetPaymentByProviderReference(GetPaymentByProviderReferenceRequest) returns (GetPaymentByProviderReferenceResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments/provider/{provider}/references/{provider_reference}"
+    };
+  }
+
+  // Manual bank transfer: customer submits payment proof (scanned deposit slip / screenshot)
+  rpc SubmitManualPaymentProof(SubmitManualPaymentProofRequest) returns (SubmitManualPaymentProofResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/{payment_id}:submit-proof"
+      body: "*"
+    };
+  }
+
+  // Admin/agent reviews and approves or rejects a manual payment proof
+  rpc ReviewManualPayment(ReviewManualPaymentRequest) returns (ReviewManualPaymentResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/{payment_id}:review"
+      body: "*"
+    };
+  }
+
+  // Trigger async receipt PDF generation after payment is verified
+  rpc GenerateReceipt(GenerateReceiptRequest) returns (GenerateReceiptResponse) {
+    option (google.api.http) = {
+      post: "/v1/payments/{payment_id}:generate-receipt"
+      body: "*"
+    };
+  }
+
+  // Retrieve generated receipt (pre-signed URL or file ID)
+  rpc GetPaymentReceipt(GetPaymentReceiptRequest) returns (GetPaymentReceiptResponse) {
+    option (google.api.http) = {
+      get: "/v1/payments/{payment_id}/receipt"
+    };
+  }
+}
+
+// Request/Response Messages
+message InitiatePaymentRequest {
+  // Core identity
+  string user_id = 1;
+  string policy_id = 2;
+  insuretech.common.v1.Money amount = 3;
+  string currency = 4;
+  string payment_method = 5; // BKASH, NAGAD, ROCKET, CARD, BANK_TRANSFER, SSLCOMMERZ
+  string callback_url = 6;
+  map<string, string> metadata = 7; // Non-core extension values only
+  // Idempotency key to prevent duplicate payment initiation (CG-3)
+  string idempotency_key = 8 [(google.api.field_behavior) = REQUIRED];
+
+  // ── Typed linkage fields (Phase 2 — replaces metadata map for core fields) ──
+  string order_id = 9 [(google.api.field_behavior) = OPTIONAL];
+  string invoice_id = 10 [(google.api.field_behavior) = OPTIONAL];
+  string tenant_id = 11 [(google.api.field_behavior) = OPTIONAL];
+  string customer_id = 12 [(google.api.field_behavior) = OPTIONAL];
+  string organisation_id = 13 [(google.api.field_behavior) = OPTIONAL];
+  string purchase_order_id = 14 [(google.api.field_behavior) = OPTIONAL];
+
+  // ── Customer details for SSLCommerz session creation ──────────────────────
+  string customer_name = 15 [(google.api.field_behavior) = OPTIONAL];
+  string customer_email = 16 [(google.api.field_behavior) = OPTIONAL];
+  string customer_phone = 17 [(google.api.field_behavior) = OPTIONAL];
+  string customer_address_line1 = 18 [(google.api.field_behavior) = OPTIONAL];
+  string customer_city = 19 [(google.api.field_behavior) = OPTIONAL];
+  string customer_postcode = 20 [(google.api.field_behavior) = OPTIONAL];
+  string customer_country = 21 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message InitiatePaymentResponse {
+  string payment_id = 1;
+  string transaction_id = 2;   // Internal transaction reference
+  string payment_url = 3;      // Redirect URL for user (gateway page URL)
+  string status = 4;           // PENDING, INITIATED
+  google.protobuf.Timestamp expires_at = 5;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+
+  // ── Provider-specific response fields ─────────────────────────────────────
+  string provider = 7 [(google.api.field_behavior) = OUTPUT_ONLY];          // sslcommerz, bkash, manual
+  string gateway_page_url = 8 [(google.api.field_behavior) = OUTPUT_ONLY];  // Full redirect URL (SSLCommerz GW page)
+  string tran_id = 9 [(google.api.field_behavior) = OUTPUT_ONLY];           // Merchant tran_id sent to SSLCommerz
+  string session_key = 10 [(google.api.field_behavior) = OUTPUT_ONLY];      // SSLCommerz session_key
+}
+
+message VerifyPaymentRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string transaction_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_method = 3 [(google.api.field_behavior) = REQUIRED];
+  // Idempotency key to prevent duplicate verification (CG-3)
+  string idempotency_key = 4;
+
+  // ── Provider-specific verification fields ─────────────────────────────────
+  string provider = 5 [(google.api.field_behavior) = OPTIONAL];             // sslcommerz, bkash, etc.
+  string val_id = 6 [(google.api.field_behavior) = OPTIONAL];               // SSLCommerz val_id for server-side validate
+  string tran_id = 7 [(google.api.field_behavior) = OPTIONAL];              // SSLCommerz tran_id
+  string session_key = 8 [(google.api.field_behavior) = OPTIONAL];          // SSLCommerz session_key
+  bool force_provider_requery = 9 [(google.api.field_behavior) = OPTIONAL]; // Force re-query even if already verified
+}
+
+message VerifyPaymentResponse {
+  string payment_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.payment.entity.v1.Payment payment = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  bool verified = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPaymentRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPaymentResponse {
+  insuretech.payment.entity.v1.Payment payment = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListPaymentsRequest {
+  string user_id = 1 [(google.api.field_behavior) = OPTIONAL];
+  string policy_id = 2 [(google.api.field_behavior) = OPTIONAL];
+  string status = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 5 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp start_date = 6 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp end_date = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListPaymentsResponse {
+  repeated insuretech.payment.entity.v1.Payment payments = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string next_page_token = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message InitiateRefundRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money refund_amount = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason = 3 [(google.api.field_behavior) = REQUIRED];
+  string initiated_by = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message InitiateRefundResponse {
+  string refund_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp initiated_at = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetRefundStatusRequest {
+  string refund_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetRefundStatusResponse {
+  string refund_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money refund_amount = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp completed_at = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListPaymentMethodsRequest {
+  string user_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message ListPaymentMethodsResponse {
+  repeated PaymentMethod payment_methods = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message PaymentMethod {
+  string method_id = 1;
+  string method_type = 2; // BKASH, NAGAD, ROCKET, CARD
+  string display_name = 3;
+  bool is_default = 4;
+  map<string, string> metadata = 5;
+}
+
+message AddPaymentMethodRequest {
+  string user_id = 1;
+  PaymentMethod payment_method = 2;
+}
+
+message AddPaymentMethodResponse {
+  string method_id = 1;
+  bool success = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ReconcilePaymentsRequest {
+  google.protobuf.Timestamp start_date = 1;
+  google.protobuf.Timestamp end_date = 2;
+  string payment_method = 3;
+  string provider = 4 [(google.api.field_behavior) = OPTIONAL]; // Filter by provider
+}
+
+message ReconcilePaymentsResponse {
+  int32 total_payments = 1;
+  int32 reconciled_count = 2;
+  int32 mismatch_count = 3;
+  repeated string mismatch_payment_ids = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+// ─── GATEWAY WEBHOOK ─────────────────────────────────────────────────────────
+
+message HandleGatewayWebhookRequest {
+  string provider = 1 [(google.api.field_behavior) = REQUIRED];         // sslcommerz, bkash, nagad
+  map<string, string> headers = 2 [(google.api.field_behavior) = OPTIONAL]; // Raw HTTP headers
+  bytes raw_payload = 3 [(google.api.field_behavior) = REQUIRED];       // Raw callback body
+  string remote_addr = 4 [(google.api.field_behavior) = OPTIONAL];      // Source IP for verification
+  google.protobuf.Timestamp received_at = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message HandleGatewayWebhookResponse {
+  bool accepted = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string payment_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── GET PAYMENT BY PROVIDER REFERENCE ───────────────────────────────────────
+
+message GetPaymentByProviderReferenceRequest {
+  string provider = 1 [(google.api.field_behavior) = REQUIRED];
+  string provider_reference = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPaymentByProviderReferenceResponse {
+  insuretech.payment.entity.v1.Payment payment = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── MANUAL PAYMENT PROOF ────────────────────────────────────────────────────
+
+message SubmitManualPaymentProofRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string manual_proof_file_id = 2 [(google.api.field_behavior) = REQUIRED]; // Media service file ID
+  string submitted_by = 3 [(google.api.field_behavior) = OPTIONAL];         // user_id (from gateway metadata)
+  string notes = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SubmitManualPaymentProofResponse {
+  string payment_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── REVIEW MANUAL PAYMENT ────────────────────────────────────────────────────
+
+message ReviewManualPaymentRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+  bool approved = 2 [(google.api.field_behavior) = REQUIRED];          // true = approve, false = reject
+  string reviewed_by = 3 [(google.api.field_behavior) = REQUIRED];     // admin/agent user_id
+  string review_notes = 4 [(google.api.field_behavior) = OPTIONAL];
+  string rejection_reason = 5 [(google.api.field_behavior) = OPTIONAL]; // Required when approved=false
+}
+
+message ReviewManualPaymentResponse {
+  string payment_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── RECEIPT ─────────────────────────────────────────────────────────────────
+
+message GenerateReceiptRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string requested_by = 2 [(google.api.field_behavior) = OPTIONAL]; // user_id
+}
+
+message GenerateReceiptResponse {
+  string payment_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string receipt_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string receipt_file_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPaymentReceiptRequest {
+  string payment_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPaymentReceiptResponse {
+  string payment_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string receipt_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string receipt_file_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string receipt_url = 4 [(google.api.field_behavior) = OUTPUT_ONLY];   // Pre-signed download URL
+  google.protobuf.Timestamp generated_at = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

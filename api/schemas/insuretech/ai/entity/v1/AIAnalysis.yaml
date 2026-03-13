@@ -1,0 +1,28 @@
+AIAnalysis:
+  type: object
+  properties:
+    analysis_id:
+      type: string
+      description: UUID
+    agent_id:
+      type: string
+    type:
+      $ref: '#/components/schemas/AnalysisType'
+    subject_id:
+      type: string
+      description: Policy, claim, or document ID
+    confidence_score:
+      type: number
+      format: double
+      description: 0-1
+    result:
+      type: string
+      description: JSON result
+    recommendations:
+      type: array
+      items:
+        type: string
+    analyzed_at:
+      type: string
+      format: date-time
+  description: AI Prediction/Analysis result

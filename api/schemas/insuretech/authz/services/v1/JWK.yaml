@@ -1,0 +1,22 @@
+AuthzJWK:
+  type: object
+  properties:
+    kty:
+      type: string
+      description: '"RSA"'
+    use:
+      type: string
+      description: '"sig"'
+    alg:
+      type: string
+      description: '"RS256"'
+    kid:
+      type: string
+      description: key ID
+    n:
+      type: string
+      description: RSA modulus (base64url)
+    e:
+      type: string
+      description: RSA exponent (base64url)
+  description: Domain entity representing jwk. Core business object in the system.

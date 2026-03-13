@@ -1,0 +1,13 @@
+RequestProcessingResponse:
+  type: object
+  properties:
+    job_id:
+      type: string
+    status:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for request processing operation. Returns operation
+    results and status.

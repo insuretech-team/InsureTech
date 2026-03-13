@@ -1,0 +1,58 @@
+Organisation:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+      description: "UUID primary key \u2014 used as business_id across all B2B tables\r\
+        \n @inject_tag: gorm:\"primaryKey;column:organisation_id;not null\""
+    tenant_id:
+      type: string
+      description: "Parent InsureTech tenant (top-level partner/reseller)\r\n @inject_tag:\
+        \ gorm:\"column:tenant_id;not null\""
+    name:
+      type: string
+      description: "Human-readable display name (e.g. \"Labaid Group\")\r\n @inject_tag:\
+        \ gorm:\"column:name;not null\""
+    code:
+      type: string
+      description: "Short code for display and lookup (e.g. \"LABAID\")\r\n @inject_tag:\
+        \ gorm:\"column:code;not null;uniqueIndex\""
+    industry:
+      type: string
+      description: "Industry / sector (e.g. \"Healthcare\", \"Finance\", \"Manufacturing\"\
+        )\r\n @inject_tag: gorm:\"column:industry\""
+    contact_email:
+      type: string
+      description: "Primary contact email for the organisation\r\n @inject_tag: gorm:\"\
+        column:contact_email\""
+    contact_phone:
+      type: string
+      description: "Primary contact phone\r\n @inject_tag: gorm:\"column:contact_phone\""
+    address:
+      type: string
+      description: "Physical address (free-text for now)\r\n @inject_tag: gorm:\"\
+        column:address\""
+    status:
+      $ref: '#/components/schemas/OrganisationStatus'
+      description: '@inject_tag: gorm:"column:status;not null"'
+    total_employees:
+      type: integer
+      format: int32
+      description: "Total number of enrolled employees (denormalised for fast reads)\r\
+        \n @inject_tag: gorm:\"column:total_employees;not null\""
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Organisation represents a corporate client (B2B tenant) enrolled in\
+    \ the\r\n platform. Each organisation belongs to a parent InsureTech tenant\r\n\
+    \ (tenant_id). An organisation has one or more OrgMembers (admins, HR staff)\r\
+    \n and many employees."

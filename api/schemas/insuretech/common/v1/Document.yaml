@@ -1,0 +1,31 @@
+Document:
+  type: object
+  properties:
+    document_id:
+      type: string
+      description: UUID
+    document_type:
+      type: string
+      description: NID, TIN, TradeLicense, etc.
+    file_name:
+      type: string
+    file_url:
+      type: string
+      description: S3 URL
+    mime_type:
+      type: string
+      description: image/jpeg, application/pdf
+    file_size:
+      type: string
+      format: int64
+      description: bytes
+    hash:
+      type: string
+      description: SHA-256 hash
+    uploaded_at:
+      type: string
+      format: date-time
+    uploaded_by:
+      type: string
+      description: user_id
+  description: Document/File reference

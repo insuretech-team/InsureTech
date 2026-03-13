@@ -1,0 +1,9 @@
+PaymentByProviderReferenceRetrievalRequest:
+  type: object
+  properties:
+    provider:
+      type: string
+    provider_reference:
+      type: string
+  description: Request payload for retrieving payment by provider reference retrieval
+    information. May include filters and pagination parameters.

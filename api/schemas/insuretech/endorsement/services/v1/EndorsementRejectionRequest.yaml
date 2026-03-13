@@ -1,0 +1,9 @@
+EndorsementRejectionRequest:
+  type: object
+  properties:
+    endorsement_id:
+      type: string
+    reason:
+      type: string
+  description: Request payload for endorsement rejection operation. Contains parameters
+    required to execute the operation.

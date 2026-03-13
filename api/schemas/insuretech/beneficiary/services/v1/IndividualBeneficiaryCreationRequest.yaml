@@ -1,0 +1,21 @@
+BeneficiaryIndividualBeneficiaryCreationRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    full_name:
+      type: string
+    date_of_birth:
+      type: string
+    gender:
+      type: string
+    nid_number:
+      type: string
+    mobile_number:
+      type: string
+    email:
+      type: string
+    partner_id:
+      type: string
+  description: Request payload for creating a new individual beneficiary creation.
+    Contains all required fields and optional parameters for initialization.

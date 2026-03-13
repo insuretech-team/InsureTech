@@ -1,0 +1,9 @@
+RidersListingResponse:
+  type: object
+  properties:
+    riders:
+      type: array
+      items:
+        $ref: '#/components/schemas/ProductsRider'
+  description: Response payload for riders listing operation. Returns operation results
+    and status.

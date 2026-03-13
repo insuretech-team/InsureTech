@@ -1,0 +1,13 @@
+EmailVerificationResponse:
+  type: object
+  properties:
+    verified:
+      type: boolean
+    user_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for email verification operation. Returns operation
+    results and status.

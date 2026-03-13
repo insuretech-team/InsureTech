@@ -1,0 +1,5 @@
+ActiveGracePeriodsListingRequest:
+  type: object
+  properties: {}
+  description: Request payload for listing active grace periods listing items. Supports
+    filtering, sorting, and pagination.

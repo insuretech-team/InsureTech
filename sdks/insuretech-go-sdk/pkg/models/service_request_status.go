@@ -1,0 +1,13 @@
+package models
+
+// ServiceRequestStatus represents a service_request_status
+type ServiceRequestStatus string
+
+// ServiceRequestStatus values
+const (
+	ServiceRequestStatusSERVICEREQUESTSTATUSUNSPECIFIED ServiceRequestStatus = "SERVICE_REQUEST_STATUS_UNSPECIFIED"
+	ServiceRequestStatusSERVICEREQUESTSTATUSPENDING  = "SERVICE_REQUEST_STATUS_PENDING"
+	ServiceRequestStatusSERVICEREQUESTSTATUSPROCESSING  = "SERVICE_REQUEST_STATUS_PROCESSING"
+	ServiceRequestStatusSERVICEREQUESTSTATUSCOMPLETED  = "SERVICE_REQUEST_STATUS_COMPLETED"
+	ServiceRequestStatusSERVICEREQUESTSTATUSREJECTED  = "SERVICE_REQUEST_STATUS_REJECTED"
+)

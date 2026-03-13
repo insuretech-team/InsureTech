@@ -1,0 +1,8 @@
+SortOrder:
+  type: string
+  enum:
+  - SORT_ORDER_UNSPECIFIED
+  - SORT_ORDER_ASC
+  - SORT_ORDER_DESC
+  description: 'Enumeration of sort order values. Valid options: SORT_ORDER_UNSPECIFIED,
+    SORT_ORDER_ASC, SORT_ORDER_DESC.'

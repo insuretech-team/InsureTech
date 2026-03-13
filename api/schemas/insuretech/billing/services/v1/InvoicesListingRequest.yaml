@@ -1,0 +1,26 @@
+InvoicesListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+    order_id:
+      type: string
+    purchase_order_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/InvoiceStatus'
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+  description: Request payload for listing invoices listing items. Supports filtering,
+    sorting, and pagination.

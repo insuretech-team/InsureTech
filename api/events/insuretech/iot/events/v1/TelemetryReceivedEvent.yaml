@@ -1,0 +1,26 @@
+TelemetryReceivedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    telemetry_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    telemetry_type:
+      type: string
+      description: GPS, HEALTH, TEMPERATURE, etc.
+    device_timestamp:
+      type: string
+      format: date-time
+      description: Timestamp from device
+    received_at:
+      type: string
+      format: date-time
+      description: Server receipt timestamp
+    data_size_bytes:
+      type: string
+      format: int64
+  description: 'Event: Telemetry data received'

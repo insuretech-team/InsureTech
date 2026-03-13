@@ -1,0 +1,7 @@
+EmployeeDeletionRequest:
+  type: object
+  properties:
+    employee_uuid:
+      type: string
+  description: Request payload for employee deletion operation. Contains parameters
+    required to execute the operation.

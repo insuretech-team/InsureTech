@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.ai.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/ai/services/v1;aiservicev1";
+option csharp_namespace = "Insuretech.Ai.Services.V1";
+
+import "insuretech/ai/entity/v1/agent.proto";
+import "insuretech/common/v1/types.proto";
+
+// AI Service
+service AIService {
+  // Chat with AI agent
+  rpc Chat(ChatRequest) returns (ChatResponse) {
+    option (google.api.http) = {
+      post: "/v1/ai/chat"
+      body: "*"
+    };
+  }
+  
+  // Stream chat (bidirectional)
+  rpc StreamChat(stream StreamChatRequest) returns (stream StreamChatResponse);
+  
+  // Analyze document
+  rpc AnalyzeDocument(AnalyzeDocumentRequest) returns (AnalyzeDocumentResponse) {
+    option (google.api.http) = {
+      post: "/v1/ai/documents:analyze"
+      body: "*"
+    };
+  }
+  
+  // Detect fraud
+  rpc DetectFraud(DetectFraudRequest) returns (DetectFraudResponse) {
+    option (google.api.http) = {
+      post: "/v1/ai/fraud:detect"
+      body: "*"
+    };
+  }
+  
+  // Assess risk
+  rpc AssessRisk(AssessRiskRequest) returns (AssessRiskResponse) {
+    option (google.api.http) = {
+      post: "/v1/ai/risk:assess"
+      body: "*"
+    };
+  }
+  
+  // Evaluate claim
+  rpc EvaluateClaim(EvaluateClaimRequest) returns (EvaluateClaimResponse) {
+    option (google.api.http) = {
+      post: "/v1/ai/claims:evaluate"
+      body: "*"
+    };
+  }
+}
+
+message ChatRequest {
+  string conversation_id = 1; // Resume existing or create new
+  string user_id = 2;
+  string agent_id = 3; // Optional: specific agent
+  string message = 4;
+  map<string, string> context = 5; // Additional context
+}
+
+message ChatResponse {
+  string conversation_id = 1;
+  string message = 2;
+  repeated string suggested_actions = 3;
+  bool conversation_ended = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+message AnalyzeDocumentRequest {
+  string document_url = 1;
+  string document_type = 2; // bill, prescription, id_card, etc.
+  bytes document_data = 3; // Alternative to URL
+}
+
+message AnalyzeDocumentResponse {
+  string analysis_id = 1;
+  map<string, string> extracted_data = 2; // Key-value pairs extracted
+  double confidence_score = 3;
+  repeated string warnings = 4;
+  bool verification_passed = 5;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+}
+
+message DetectFraudRequest {
+  string claim_id = 1;
+  string policy_id = 2;
+  map<string, string> claim_data = 3;
+}
+
+message DetectFraudResponse {
+  string analysis_id = 1;
+  bool is_suspicious = 2;
+  double fraud_score = 3; // 0-100
+  repeated string risk_indicators = 4;
+  string recommendation = 5; // APPROVE, REVIEW, REJECT
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+}
+
+message AssessRiskRequest {
+  string applicant_id = 1;
+  string product_id = 2;
+  map<string, string> applicant_data = 3;
+}
+
+message AssessRiskResponse {
+  string analysis_id = 1;
+  double risk_score = 2; // 0-100
+  string risk_category = 3; // LOW, MEDIUM, HIGH
+  repeated string risk_factors = 4;
+  insuretech.common.v1.Money recommended_premium = 5;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6;
+}
+
+message EvaluateClaimRequest {
+  string claim_id = 1;
+  string policy_id = 2;
+  repeated string document_urls = 3;
+}
+
+message EvaluateClaimResponse {
+  string analysis_id = 1;
+  string recommendation = 2; // APPROVE, REJECT, NEEDS_REVIEW
+  insuretech.common.v1.Money suggested_amount = 3;
+  double confidence = 4;
+  repeated string findings = 5;
+  repeated string required_documents = 6; // Missing documents
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}
+
+message StreamChatRequest {
+  entity.v1.Message message = 1;
+}
+
+message StreamChatResponse {
+  entity.v1.Message message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

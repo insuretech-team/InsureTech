@@ -1,0 +1,80 @@
+MediaFile:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:media_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    file_id:
+      type: string
+      description: '@inject_tag: gorm:"column:file_id;not null"'
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id"'
+    media_type:
+      $ref: '#/components/schemas/MediaType'
+      description: '@inject_tag: gorm:"column:media_type;not null;serializer:proto_enum"'
+    mime_type:
+      type: string
+      description: '@inject_tag: gorm:"column:mime_type;not null"'
+    file_size_bytes:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:file_size_bytes;not null"'
+    width:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:width"'
+    height:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:height"'
+    dpi:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:dpi"'
+    optimized_file_id:
+      type: string
+      description: '@inject_tag: gorm:"column:optimized_file_id"'
+    thumbnail_file_id:
+      type: string
+      description: '@inject_tag: gorm:"column:thumbnail_file_id"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id"'
+    ocr_text:
+      type: string
+      description: '@inject_tag: gorm:"column:ocr_text"'
+    validation_status:
+      allOf:
+      - $ref: '#/components/schemas/ValidationStatus'
+      x-database-default: PENDING
+    validation_errors:
+      type: string
+      description: '@inject_tag: gorm:"column:validation_errors"'
+    virus_scan_status:
+      allOf:
+      - $ref: '#/components/schemas/VirusScanStatus'
+      x-database-default: PENDING
+    uploaded_by:
+      type: string
+      description: '@inject_tag: gorm:"column:uploaded_by;not null"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: MediaFile entity - stores media file metadata with processing status
+  required:
+  - id
+  - file_id
+  - media_type
+  - mime_type
+  - file_size_bytes
+  - validation_status
+  - virus_scan_status
+  - uploaded_by
+  - audit_info

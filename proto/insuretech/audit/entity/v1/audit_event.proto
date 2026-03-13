@@ -1,0 +1,128 @@
+syntax = "proto3";
+
+package insuretech.audit.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/audit/entity/v1;auditv1";
+
+// Audit event (business events)
+message AuditEvent {
+  option (insuretech.common.v1.table) = {
+    table_name: "audit_events"
+    schema_name: "compliance_schema"
+    migration_order: 10
+    is_table: true
+    audit_fields: false
+    comment: "Business event audit trail"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "event_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:event_id;not null"
+  
+  EventCategory category = 2 [(insuretech.common.v1.column) = {
+    column_name: "category"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_audit_events_category"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+  
+  string event_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "event_type"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+    index: {
+      index_name: "idx_audit_events_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:event_type;not null"
+  
+  EventSeverity severity = 4 [(insuretech.common.v1.column) = {
+    column_name: "severity"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:severity;not null;serializer:proto_enum"
+  
+  string description = 5 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:description;not null"
+  
+  string user_id = 6 [(insuretech.common.v1.column) = {
+    column_name: "user_id"
+    sql_type: "UUID"
+    index: {
+      index_name: "idx_audit_events_user_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:user_id"
+  
+  string entity_type = 7 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+  }];
+  // @inject_tag: gorm:"column:entity_type"
+  
+  string entity_id = 8 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+    index: {
+      index_name: "idx_audit_events_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:entity_id"
+  
+  string metadata = 9 [(insuretech.common.v1.column) = {
+    column_name: "metadata"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:metadata"
+  
+  google.protobuf.Timestamp timestamp = 10 [(insuretech.common.v1.column) = {
+    column_name: "timestamp"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+    index: {
+      index_name: "idx_audit_events_timestamp"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+}
+
+enum EventCategory {
+  EVENT_CATEGORY_UNSPECIFIED = 0;
+  EVENT_CATEGORY_SECURITY = 1;
+  EVENT_CATEGORY_COMPLIANCE = 2;
+  EVENT_CATEGORY_BUSINESS = 3;
+  EVENT_CATEGORY_TECHNICAL = 4;
+}
+
+enum EventSeverity {
+  EVENT_SEVERITY_UNSPECIFIED = 0;
+  EVENT_SEVERITY_INFO = 1;
+  EVENT_SEVERITY_WARNING = 2;
+  EVENT_SEVERITY_ERROR = 3;
+  EVENT_SEVERITY_CRITICAL = 4;
+}
+
+

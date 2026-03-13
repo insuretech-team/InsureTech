@@ -1,0 +1,11 @@
+PublishTrackRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    track:
+      $ref: '#/components/schemas/Track'
+  description: Request payload for publish track operation. Contains parameters required
+    to execute the operation.

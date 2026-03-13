@@ -1,0 +1,14 @@
+ScheduleReportResponse:
+  type: object
+  properties:
+    report_id:
+      type: string
+    message:
+      type: string
+    next_run_at:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for schedule report operation. Returns operation results
+    and status.

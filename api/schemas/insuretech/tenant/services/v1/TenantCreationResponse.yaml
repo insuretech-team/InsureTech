@@ -1,0 +1,12 @@
+TenantCreationResponse:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for tenant creation operation. Returns operation results
+    and status.

@@ -1,0 +1,78 @@
+Insurer:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:insurer_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    code:
+      type: string
+      description: '@inject_tag: gorm:"column:code;not null"'
+      x-unique: true
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    name_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:name_bn"'
+    type:
+      $ref: '#/components/schemas/InsurerType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/InsurerStatus'
+      x-database-default: ACTIVE
+    trade_license_number:
+      type: string
+      description: '@inject_tag: gorm:"column:trade_license_number"'
+      x-unique: true
+    tin_number:
+      type: string
+      description: '@inject_tag: gorm:"column:tin_number"'
+      x-unique: true
+    idra_license_number:
+      type: string
+      description: '@inject_tag: gorm:"column:idra_license_number"'
+    idra_license_expiry:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:idra_license_expiry;serializer:proto_timestamp"'
+    contact_info:
+      allOf:
+      - $ref: '#/components/schemas/ContactInfo'
+      x-database-default: '{}''::jsonb'
+    registered_address:
+      allOf:
+      - $ref: '#/components/schemas/Address'
+      x-database-default: '{}''::jsonb'
+    head_office_address:
+      allOf:
+      - $ref: '#/components/schemas/Address'
+      x-database-default: '{}''::jsonb'
+    logo_url:
+      type: string
+      description: '@inject_tag: gorm:"column:logo_url"'
+    website_url:
+      type: string
+      description: '@inject_tag: gorm:"column:website_url"'
+    financial_rating:
+      type: string
+      description: "Financial strength\n @inject_tag: gorm:\"column:financial_rating\""
+    paid_up_capital:
+      $ref: '#/components/schemas/Money'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Insurer/Underwriter entity
+  required:
+  - id
+  - code
+  - name
+  - type
+  - status
+  - contact_info
+  - registered_address
+  - head_office_address
+  - audit_info

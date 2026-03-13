@@ -1,0 +1,14 @@
+PeerLeftEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    reason:
+      type: string
+    left_at:
+      type: string
+      format: date-time
+  description: Event emitted when peer undergoes left. Published to event stream for
+    downstream processing and audit trail.

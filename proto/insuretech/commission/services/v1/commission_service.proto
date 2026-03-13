@@ -1,0 +1,184 @@
+syntax = "proto3";
+
+package insuretech.commission.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/partner/entity/v1/partner.proto";
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/commission/services/v1;commissionservicev1";
+option csharp_namespace = "Insuretech.Commission.Services.V1";
+
+service CommissionService {
+  // Calculate and record commission for policy
+  rpc CalculateCommission(CalculateCommissionRequest) returns (CalculateCommissionResponse) {
+    option (google.api.http) = {
+      post: "/v1/commissions?action=calculate"
+      body: "*"
+    };
+  }
+  
+  // Get commission details
+  rpc GetCommission(GetCommissionRequest) returns (GetCommissionResponse) {
+    option (google.api.http) = {
+      get: "/v1/commissions/{commission_id}"
+    };
+  }
+  
+  // List commissions for recipient
+  rpc ListCommissions(ListCommissionsRequest) returns (ListCommissionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/commissions"
+    };
+  }
+  
+  // Create payout batch
+  rpc CreatePayout(CreatePayoutRequest) returns (CreatePayoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/commission-payouts"
+      body: "*"
+    };
+  }
+  
+  // Process payout
+  rpc ProcessPayout(ProcessPayoutRequest) returns (ProcessPayoutResponse) {
+    option (google.api.http) = {
+      post: "/v1/commission-payouts/{payout_id}?action=process"
+      body: "*"
+    };
+  }
+  
+  // Get commission statement
+  rpc GetCommissionStatement(GetCommissionStatementRequest) returns (GetCommissionStatementResponse) {
+    option (google.api.http) = {
+      get: "/v1/recipients/{recipient_id}/commission-statement"
+    };
+  }
+  
+  // Get revenue share report
+  rpc GetRevenueShareReport(GetRevenueShareReportRequest) returns (GetRevenueShareReportResponse) {
+    option (google.api.http) = {
+      get: "/v1/insurers/{insurer_id}/revenue-share"
+    };
+  }
+}
+
+message CalculateCommissionRequest {
+  string policy_id = 1;
+  string commission_type = 2; // ACQUISITION, RENEWAL
+  string recipient_type = 3;
+  string recipient_id = 4;
+}
+
+message CalculateCommissionResponse {
+  string commission_id = 1;
+  string commission_number = 2;
+  insuretech.common.v1.Money amount = 3;
+  string calculation_breakdown = 4; // JSON
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+message GetCommissionRequest {
+  string commission_id = 1;
+}
+
+message GetCommissionResponse {
+  insuretech.partner.entity.v1.Commission commission = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListCommissionsRequest {
+  string recipient_type = 1;
+  string recipient_id = 2;
+  string status = 3;
+  string start_date = 4;
+  string end_date = 5;
+  int32 page = 6;
+  int32 page_size = 7;
+}
+
+message ListCommissionsResponse {
+  repeated insuretech.partner.entity.v1.Commission commissions = 1;
+  int32 total_count = 2;
+  insuretech.common.v1.Money total_amount = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message CreatePayoutRequest {
+  string recipient_type = 1;
+  string recipient_id = 2;
+  string period_start = 3;
+  string period_end = 4;
+  repeated string commission_ids = 5;
+}
+
+message CreatePayoutResponse {
+  string payout_id = 1;
+  string payout_number = 2;
+  insuretech.common.v1.Money total_amount = 3;
+  int32 commission_count = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+message ProcessPayoutRequest {
+  string payout_id = 1;
+  string payment_method = 2;
+  string payment_reference = 3;
+}
+
+message ProcessPayoutResponse {
+  string message = 1;
+  string paid_at = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetCommissionStatementRequest {
+  string recipient_id = 1;
+  string period_start = 2;
+  string period_end = 3;
+}
+
+message GetCommissionStatementResponse {
+  string recipient_id = 1;
+  string period_start = 2;
+  string period_end = 3;
+  insuretech.common.v1.Money total_earned = 4;
+  insuretech.common.v1.Money total_paid = 5;
+  insuretech.common.v1.Money pending_amount = 6;
+  repeated CommissionSummary by_type = 7;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 8;
+}
+
+message CommissionSummary {
+  string type = 1;
+  int32 count = 2;
+  insuretech.common.v1.Money total_amount = 3;
+}
+
+message GetRevenueShareReportRequest {
+  string insurer_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GetRevenueShareReportResponse {
+  string insurer_id = 1;
+  insuretech.common.v1.Money total_gross_premium = 2;
+  insuretech.common.v1.Money total_platform_share = 3;
+  insuretech.common.v1.Money total_insurer_share = 4;
+  int32 policy_count = 5;
+  map<string, RevenueModelAmount> by_revenue_model = 6;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}
+
+message RevenueModelAmount {
+  insuretech.common.v1.Money amount = 1;
+}
+

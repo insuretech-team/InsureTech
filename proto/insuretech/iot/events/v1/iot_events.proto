@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package insuretech.iot.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/iot/events/v1;ioteventsv1";
+option csharp_namespace = "Insuretech.Iot.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Event: Device registered
+message DeviceRegisteredEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string device_type = 4; // VEHICLE_TRACKER, HEALTH_MONITOR, etc.
+  string manufacturer = 5;
+  string model = 6;
+  string owner_id = 7;
+  string policy_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// Event: Device activated
+message DeviceActivatedEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string policy_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Event: Device deactivated
+message DeviceDeactivatedEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string reason = 4; // "policy_expired", "user_request", "malfunction"
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Event: Telemetry data received
+message TelemetryReceivedEvent {
+  string event_id = 1;
+  string telemetry_id = 2;
+  string device_id = 3;
+  string device_serial = 4;
+  string telemetry_type = 5; // GPS, HEALTH, TEMPERATURE, etc.
+  google.protobuf.Timestamp device_timestamp = 6; // Timestamp from device
+  google.protobuf.Timestamp received_at = 7; // Server receipt timestamp
+  int64 data_size_bytes = 8;
+}
+
+// Event: Device offline (no data for X minutes)
+message DeviceOfflineEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  google.protobuf.Timestamp last_seen_at = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  int32 offline_duration_minutes = 6;
+}
+
+// Event: Device back online
+message DeviceOnlineEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  int32 offline_duration_minutes = 5;
+}
+
+// Event: Anomaly detected in telemetry
+message AnomalyDetectedEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string anomaly_type = 4; // "speed_violation", "harsh_braking", "geo_fence_breach"
+  string severity = 5; // LOW, MEDIUM, HIGH, CRITICAL
+  map<string, string> anomaly_details = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  double latitude = 8;
+  double longitude = 9;
+}
+
+// Event: Geofence breach (for vehicle tracking)
+message GeofenceBreachEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string policy_id = 4;
+  string geofence_name = 5;
+  double latitude = 6;
+  double longitude = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Event: Device maintenance due
+message MaintenanceDueEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string maintenance_type = 4; // "battery_low", "calibration_needed"
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Event: Firmware updated
+message FirmwareUpdatedEvent {
+  string event_id = 1;
+  string device_id = 2;
+  string device_serial = 3;
+  string old_version = 4;
+  string new_version = 5;
+  bool update_successful = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+

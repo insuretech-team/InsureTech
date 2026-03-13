@@ -1,0 +1,20 @@
+AuditEventCreationRequest:
+  type: object
+  properties:
+    category:
+      type: string
+    event_type:
+      type: string
+    severity:
+      type: string
+    description:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    metadata:
+      type: string
+      description: JSON
+  description: Request payload for creating a new audit event creation. Contains all
+    required fields and optional parameters for initialization.

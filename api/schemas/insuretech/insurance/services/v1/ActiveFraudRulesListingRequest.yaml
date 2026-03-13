@@ -1,0 +1,5 @@
+ActiveFraudRulesListingRequest:
+  type: object
+  properties: {}
+  description: Request payload for listing active fraud rules listing items. Supports
+    filtering, sorting, and pagination.

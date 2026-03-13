@@ -1,0 +1,32 @@
+FraudCheckResult:
+  type: object
+  properties:
+    fraud_check_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:fraud_check_id;not null"'
+    claim_id:
+      type: string
+      description: '@inject_tag: gorm:"column:claim_id;not null"'
+    fraud_score:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:fraud_score;not null"'
+    risk_factors:
+      type: array
+      items:
+        type: string
+    flagged:
+      type: boolean
+      description: '@inject_tag: gorm:"column:flagged;not null"'
+    reviewed_by:
+      type: string
+      description: '@inject_tag: gorm:"column:reviewed_by"'
+    reviewed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:reviewed_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+  description: "Fraud detection results\n Maps to 'fraud_checks' table in claims_schema"

@@ -1,0 +1,14 @@
+RuleCondition:
+  type: object
+  properties:
+    field:
+      type: string
+      description: e.g., "age", "district", "vehicle_type"
+    operator:
+      type: string
+      description: e.g., ">=", "<=", "in", "not_in"
+    value:
+      type: string
+      description: Comparison value
+  description: Domain entity representing rule condition. Core business object in
+    the system.

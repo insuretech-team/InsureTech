@@ -1,0 +1,7 @@
+MuteTrackResponse:
+  type: object
+  properties:
+    track:
+      $ref: '#/components/schemas/Track'
+  description: Response payload for mute track operation. Returns operation results
+    and status.

@@ -1,0 +1,15 @@
+InsurerInsurersListingRequest:
+  type: object
+  properties:
+    type:
+      type: string
+    status:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing insurers listing items. Supports filtering,
+    sorting, and pagination.

@@ -1,0 +1,14 @@
+RequestRefundResponse:
+  type: object
+  properties:
+    refund_id:
+      type: string
+    refund_number:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for request refund operation. Returns operation results
+    and status.

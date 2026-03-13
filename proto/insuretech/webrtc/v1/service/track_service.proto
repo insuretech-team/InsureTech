@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.service;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/webrtc/v1/service;service";
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/track.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Track Service - Track Management
+// ═══════════════════════════════════════════════════════════════════════════
+
+service TrackService {
+  rpc PublishTrack(PublishTrackRequest) returns (PublishTrackResponse);
+  rpc UnpublishTrack(UnpublishTrackRequest) returns (UnpublishTrackResponse);
+  rpc MuteTrack(MuteTrackRequest) returns (MuteTrackResponse);
+  rpc GetTrack(GetTrackRequest) returns (GetTrackResponse);
+  rpc ListTracks(ListTracksRequest) returns (ListTracksResponse);
+  rpc UpdateTrack(UpdateTrackRequest) returns (UpdateTrackResponse);
+}
+
+message PublishTrackRequest {
+ string room_id = 1;
+ string peer_id = 2;
+ insuretech.webrtc.v1.entity.Track track = 3;
+}
+
+message PublishTrackResponse {
+ insuretech.webrtc.v1.entity.Track track = 1;
+}
+
+message UnpublishTrackRequest {
+ string room_id = 1;
+ string peer_id = 2;
+  string track_id = 3;
+}
+
+message UnpublishTrackResponse {
+  bool success = 1;
+}
+
+message MuteTrackRequest {
+ string room_id = 1;
+ string peer_id = 2;
+  string track_id = 3;
+  bool muted = 4;
+}
+
+message MuteTrackResponse {
+ insuretech.webrtc.v1.entity.Track track = 1;
+}
+
+message GetTrackRequest {
+  string track_id = 1;
+}
+
+message GetTrackResponse {
+ insuretech.webrtc.v1.entity.Track track = 1;
+}
+
+message ListTracksRequest {
+ string room_id = 1;
+ string peer_id = 2;
+ insuretech.webrtc.v1.entity.TrackType type_filter = 3;
+}
+
+message ListTracksResponse {
+  repeated insuretech.webrtc.v1.entity.Track tracks = 1;
+  int32 total_count = 2;
+}
+
+message UpdateTrackRequest {
+  string track_id = 1;
+ insuretech.webrtc.v1.entity.TrackSettings settings = 2;
+  map<string, string> metadata = 3;
+}
+
+message UpdateTrackResponse {
+ insuretech.webrtc.v1.entity.Track track = 1;
+}
+

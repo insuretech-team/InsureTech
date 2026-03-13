@@ -1,0 +1,43 @@
+RevenueShare:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:share_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    insurer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_id;not null"'
+    gross_premium:
+      $ref: '#/components/schemas/Money'
+    platform_share:
+      $ref: '#/components/schemas/Money'
+    insurer_share:
+      $ref: '#/components/schemas/Money'
+    split_config:
+      type: string
+      description: '@inject_tag: gorm:"column:split_config"'
+    revenue_model:
+      type: string
+      description: '@inject_tag: gorm:"column:revenue_model;not null"'
+    recorded_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:recorded_at;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Insurer revenue share tracking (BRD revenue models)
+  required:
+  - id
+  - policy_id
+  - insurer_id
+  - revenue_model
+  - recorded_at
+  - audit_info

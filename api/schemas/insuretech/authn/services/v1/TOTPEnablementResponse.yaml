@@ -1,0 +1,13 @@
+TOTPEnablementResponse:
+  type: object
+  properties:
+    totp_secret:
+      type: string
+      description: base32 secret for app setup
+    provisioning_uri:
+      type: string
+      description: otpauth:// URI for QR code
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for totp enablement operation. Returns operation results
+    and status.

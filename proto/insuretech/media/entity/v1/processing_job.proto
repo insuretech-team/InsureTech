@@ -1,0 +1,148 @@
+syntax = "proto3";
+
+package insuretech.media.entity.v1;
+
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1;mediav1";
+
+// ProcessingJob entity - tracks async media processing tasks
+message ProcessingJob {
+  option (insuretech.common.v1.table) = {
+    table_name: "processing_jobs"
+    schema_name: "media_schema"
+    migration_order: 21
+    is_table: true
+    audit_fields: true
+    comment: "Async media processing job tracking"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "job_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:job_id;not null"
+  
+  string media_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "media_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "media_files"
+      references_column: "media_id"
+      references_schema: "media_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_processing_jobs_media_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:media_id;not null"
+  
+  ProcessingType processing_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "processing_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_processing_jobs_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"
+  
+  ProcessingStatus status = 4 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_processing_jobs_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  int32 priority = 5 [(insuretech.common.v1.column) = {
+    column_name: "priority"
+    sql_type: "INTEGER"
+    not_null: true
+    default_value: "5"
+    comment: "1-10, higher = more urgent"
+  }];
+  // @inject_tag: gorm:"column:priority;not null"
+  
+  int32 retry_count = 6 [(insuretech.common.v1.column) = {
+    column_name: "retry_count"
+    sql_type: "INTEGER"
+    not_null: true
+    default_value: "0"
+  }];
+  // @inject_tag: gorm:"column:retry_count;not null"
+  
+  int32 max_retries = 7 [(insuretech.common.v1.column) = {
+    column_name: "max_retries"
+    sql_type: "INTEGER"
+    not_null: true
+    default_value: "3"
+  }];
+  // @inject_tag: gorm:"column:max_retries;not null"
+  
+  google.protobuf.Timestamp started_at = 8 [(insuretech.common.v1.column) = {
+    column_name: "started_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:started_at"
+  
+  google.protobuf.Timestamp completed_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at"
+  
+  string error_message = 10 [(insuretech.common.v1.column) = {
+    column_name: "error_message"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:error_message"
+  
+  string result_data = 11 [(insuretech.common.v1.column) = {
+    column_name: "result_data"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Processing results as JSON"
+  }];
+  // @inject_tag: gorm:"column:result_data"
+  
+  insuretech.common.v1.AuditInfo audit_info = 12 [(insuretech.common.v1.column) = {
+    column_name: "audit_info"
+    sql_type: "JSONB"
+    not_null: true
+    default_value: "'{}'::jsonb"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ProcessingType {
+  PROCESSING_TYPE_UNSPECIFIED = 0;
+  PROCESSING_TYPE_OPTIMIZATION = 1;
+  PROCESSING_TYPE_THUMBNAIL = 2;
+  PROCESSING_TYPE_OCR = 3;
+  PROCESSING_TYPE_VIRUS_SCAN = 4;
+  PROCESSING_TYPE_VALIDATION = 5;
+}
+
+enum ProcessingStatus {
+  PROCESSING_STATUS_UNSPECIFIED = 0;
+  PROCESSING_STATUS_PENDING = 1;
+  PROCESSING_STATUS_IN_PROGRESS = 2;
+  PROCESSING_STATUS_COMPLETED = 3;
+  PROCESSING_STATUS_FAILED = 4;
+  PROCESSING_STATUS_CANCELLED = 5;
+}

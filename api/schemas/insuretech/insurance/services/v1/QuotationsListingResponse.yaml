@@ -1,0 +1,12 @@
+QuotationsListingResponse:
+  type: object
+  properties:
+    quotations:
+      type: array
+      items:
+        $ref: '#/components/schemas/Quotation'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for quotations listing operation. Returns operation
+    results and status.

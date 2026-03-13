@@ -1,0 +1,271 @@
+syntax = "proto3";
+
+package insuretech.analytics.entity.v1;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/analytics/entity/v1;analyticsv1";
+option csharp_namespace = "Insuretech.Analytics.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/analytics/entity/v1/metric.proto";
+
+// BusinessMetrics for KPIs and dashboards
+// Maps to 'business_metrics' table in analytics_schema
+message BusinessMetrics {
+  option (insuretech.common.v1.table) = {
+    table_name: "business_metrics"
+    schema_name: "analytics_schema"
+    migration_order: 80
+    is_table: true
+    comment: "Business KPIs and metrics (policies sold, claims ratio, revenue)"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+    partition_strategy: PARTITION_STRATEGY_RANGE_MONTH
+    partition_column: "recorded_at"
+  };
+
+  string metric_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Metric UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:metric_id;not null"
+
+  string metric_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Metric name (e.g., policies_sold, claims_ratio, revenue)"
+      index: {
+        index_name: "idx_business_metrics_metric_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:metric_name;not null"
+
+  MetricType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Metric type (COUNTER, GAUGE, HISTOGRAM)"
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  double value = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "value"
+      sql_type: "DOUBLE PRECISION"
+      not_null: true
+      comment: "Metric value"
+    }
+  ];
+  // @inject_tag: gorm:"column:value;not null"
+
+  map<string, string> dimensions = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "dimensions"
+      sql_type: "JSONB"
+      comment: "Metric dimensions (product_id, partner_id, region, etc.)"
+      is_json: true
+      index: {
+        index_name: "idx_business_metrics_dimensions"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+
+  google.protobuf.Timestamp recorded_at = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "recorded_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Metric recording timestamp"
+      index: {
+        index_name: "idx_business_metrics_recorded_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:recorded_at;not null;serializer:proto_timestamp"
+}
+
+// Dashboard definition
+message Dashboard {
+  string dashboard_id = 1;
+  string dashboard_name = 2;
+  string description = 3;
+  string layout = 4; // JSON layout configuration
+  google.protobuf.Timestamp created_at = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// Report templates and generated reports
+// Maps to 'reports' table in analytics_schema
+message Report {
+  option (insuretech.common.v1.table) = {
+    table_name: "reports"
+    schema_name: "analytics_schema"
+    migration_order: 83
+    is_table: true
+    comment: "Generated business reports (daily, weekly, monthly)"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string report_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "report_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Report UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:report_id;not null"
+
+  string report_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "report_name"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Report name"
+    }
+  ];
+  // @inject_tag: gorm:"column:report_name;not null"
+
+  ReportType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Report type"
+      index: {
+        index_name: "idx_reports_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp period_start = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "period_start"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Report period start"
+    }
+  ];
+  // @inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp period_end = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "period_end"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Report period end"
+    }
+  ];
+  // @inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"
+
+  string report_data = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "report_data"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Report data as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:report_data;not null"
+
+  string report_url = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "report_url"
+      sql_type: "TEXT"
+      comment: "S3 URL of generated report PDF"
+    }
+  ];
+  // @inject_tag: gorm:"column:report_url"
+
+  ReportStatus status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'GENERATING'"
+      comment: "Report generation status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string generated_by = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "generated_by"
+      sql_type: "UUID"
+      comment: "User ID who requested the report"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_reports_generated_by"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:generated_by"
+
+  google.protobuf.Timestamp created_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum ReportType {
+  REPORT_TYPE_UNSPECIFIED = 0;
+  REPORT_TYPE_DAILY_SALES = 1;
+  REPORT_TYPE_WEEKLY_CLAIMS = 2;
+  REPORT_TYPE_MONTHLY_REVENUE = 3;
+  REPORT_TYPE_PARTNER_PERFORMANCE = 4;
+  REPORT_TYPE_PRODUCT_PERFORMANCE = 5;
+  REPORT_TYPE_COMPLIANCE = 6;
+}
+
+enum ReportStatus {
+  REPORT_STATUS_UNSPECIFIED = 0;
+  REPORT_STATUS_GENERATING = 1;
+  REPORT_STATUS_COMPLETED = 2;
+  REPORT_STATUS_FAILED = 3;
+}
+

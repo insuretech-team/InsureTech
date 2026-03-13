@@ -1,0 +1,12 @@
+CheckFraudRequest:
+  type: object
+  properties:
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    data:
+      type: object
+      description: 'CG-7: Typed structured data instead of JSON string'
+  description: Request payload for check fraud operation. Contains parameters required
+    to execute the operation.

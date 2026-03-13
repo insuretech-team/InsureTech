@@ -1,0 +1,77 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+enum UserStatus {
+  USER_STATUS_UNSPECIFIED = 0;
+  USER_STATUS_PENDING_VERIFICATION = 1; // Awaiting OTP verification
+  USER_STATUS_ACTIVE = 2;               // Active account
+  USER_STATUS_SUSPENDED = 3;            // Temporarily suspended by admin
+  USER_STATUS_LOCKED = 4;               // Locked due to failed login attempts
+  USER_STATUS_DELETED = 5;              // Soft deleted
+}
+
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE = 1;
+  GENDER_FEMALE = 2;
+  GENDER_OTHER = 3;
+}
+
+// UserType controls authentication method routing
+// BUSINESS_BENEFICIARY + SYSTEM_USER → email OTP + web portal (server-side
+// session) B2C_CUSTOMER + AGENT → mobile OTP + JWT (mobile app)
+// UserType controls authentication method routing and portal assignment.
+// portal mapping:
+//   B2C_CUSTOMER          → portal: "b2c"        (mobile SMS OTP + JWT)
+//   AGENT                 → portal: "agent"      (mobile SMS OTP + JWT)
+//   BUSINESS_BENEFICIARY  → portal: "business"   (email OTP + web server-side
+//   session) SYSTEM_USER           → portal: "system"     (email OTP + web
+//   server-side session) PARTNER               → portal: "b2b"        (email
+//   OTP + web server-side session) REGULATOR             → portal: "regulator"
+//   (email OTP + web server-side session, read-only)
+enum UserType {
+  USER_TYPE_UNSPECIFIED = 0;
+  USER_TYPE_B2C_CUSTOMER = 1;         // Regular retail customer
+  USER_TYPE_AGENT = 2;                // Insurance agent / field staff
+  USER_TYPE_BUSINESS_BENEFICIARY = 3; // Corporate/business client
+  USER_TYPE_SYSTEM_USER = 4;          // Internal staff / admin
+  USER_TYPE_PARTNER = 5;              // B2B partner (insurers, brokers, TPAs)
+  USER_TYPE_REGULATOR = 6; // Regulatory body / auditor (read-only portal)
+  USER_TYPE_BUSINESS_ADMIN = 7;
+  USER_TYPE_B2B_ORG_ADMIN = 8;
+}
+
+// Session type enum - determines authentication method
+enum SessionType {
+  SESSION_TYPE_UNSPECIFIED = 0;
+  SESSION_TYPE_SERVER_SIDE = 1; // Web portals: Cookie-based with session token
+  SESSION_TYPE_JWT = 2;         // Mobile/API: JWT-based authentication
+}
+
+// Device type enum - auto-maps to session type
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0;
+  DEVICE_TYPE_WEB = 1;            // Web browser → SESSION_TYPE_SERVER_SIDE
+  DEVICE_TYPE_MOBILE_ANDROID = 2; // Android app → SESSION_TYPE_JWT
+  DEVICE_TYPE_MOBILE_IOS = 3;     // iOS app → SESSION_TYPE_JWT
+  DEVICE_TYPE_API = 4;            // API client → SESSION_TYPE_JWT
+  DEVICE_TYPE_DESKTOP = 5;        // Desktop app → SESSION_TYPE_JWT
+}
+
+// OTP type enum
+enum OTPType {
+  OTP_TYPE_UNSPECIFIED = 0;
+  OTP_TYPE_REGISTRATION = 1;
+  OTP_TYPE_LOGIN = 2; // SMS OTP login (B2C/Agent mobile)
+  OTP_TYPE_PASSWORD_RESET = 3;
+  OTP_TYPE_TRANSACTION = 4;
+  OTP_TYPE_EMAIL_VERIFICATION =
+      5; // Email address verification (Business/System users)
+  OTP_TYPE_EMAIL_LOGIN =
+      6; // Email OTP login (Business Beneficiary / System User web portal)
+  OTP_TYPE_PASSWORD_RESET_EMAIL = 7; // Password reset via email OTP
+}

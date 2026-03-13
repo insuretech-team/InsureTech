@@ -1,0 +1,9 @@
+DepartmentRetrievalResponse:
+  type: object
+  properties:
+    department:
+      $ref: '#/components/schemas/Department'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for department retrieval operation. Returns operation
+    results and status.

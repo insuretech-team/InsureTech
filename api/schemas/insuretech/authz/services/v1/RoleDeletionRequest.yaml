@@ -1,0 +1,9 @@
+RoleDeletionRequest:
+  type: object
+  properties:
+    role_id:
+      type: string
+    deleted_by:
+      type: string
+  description: Request payload for role deletion operation. Contains parameters required
+    to execute the operation.

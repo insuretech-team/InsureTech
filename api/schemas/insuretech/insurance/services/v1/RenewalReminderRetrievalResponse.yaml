@@ -1,0 +1,7 @@
+RenewalReminderRetrievalResponse:
+  type: object
+  properties:
+    reminder:
+      $ref: '#/components/schemas/RenewalReminder'
+  description: Response payload for renewal reminder retrieval operation. Returns
+    operation results and status.

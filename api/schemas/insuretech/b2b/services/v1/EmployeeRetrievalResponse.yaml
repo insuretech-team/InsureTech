@@ -1,0 +1,9 @@
+EmployeeRetrievalResponse:
+  type: object
+  properties:
+    employee:
+      $ref: '#/components/schemas/EmployeeView'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for employee retrieval operation. Returns operation
+    results and status.

@@ -1,0 +1,17 @@
+HealthDeclarationSubmittedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    has_pre_existing_conditions:
+      type: boolean
+    medical_exam_required:
+      type: boolean
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Health declaration submitted'

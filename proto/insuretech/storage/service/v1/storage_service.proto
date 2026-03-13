@@ -1,0 +1,147 @@
+syntax = "proto3";
+
+package insuretech.storage.service.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/storage/service/v1;storageservicev1";
+option csharp_namespace = "Insuretech.Storage.Service.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/storage/entity/v1/storage.proto";
+
+// StorageService manages file uploads and storage.
+service StorageService {
+  rpc UploadFile(UploadFileRequest) returns (UploadFileResponse);
+  rpc UploadFiles(UploadFilesRequest) returns (UploadFilesResponse);
+  rpc GetFile(GetFileRequest) returns (GetFileResponse);
+  rpc UpdateFile(UpdateFileRequest) returns (UpdateFileResponse);
+  rpc GetUploadURL(GetUploadURLRequest) returns (GetUploadURLResponse);
+  rpc FinalizeUpload(FinalizeUploadRequest) returns (FinalizeUploadResponse);
+  rpc GetDownloadURL(GetDownloadURLRequest) returns (GetDownloadURLResponse);
+  rpc DeleteFile(DeleteFileRequest) returns (DeleteFileResponse);
+  rpc ListFiles(ListFilesRequest) returns (ListFilesResponse);
+}
+
+message UploadFileRequest {
+  string tenant_id = 1;
+
+  bytes content = 2;
+  string filename = 3;
+  string content_type = 4;
+
+  insuretech.storage.entity.v1.FileType file_type = 5;
+  string reference_id = 6;
+  string reference_type = 7;
+
+  bool is_public = 8;
+  google.protobuf.Timestamp expires_at = 9;
+}
+
+message UploadFileResponse { insuretech.storage.entity.v1.StoredFile file = 1; }
+
+message UploadFilesRequest {
+  string tenant_id = 1;
+  repeated FileUpload files = 2;
+}
+
+message FileUpload {
+  bytes content = 1;
+  string filename = 2;
+  string content_type = 3;
+  insuretech.storage.entity.v1.FileType file_type = 4;
+  string reference_id = 5;
+  string reference_type = 6;
+  bool is_public = 7;
+}
+
+message UploadFilesResponse { repeated insuretech.storage.entity.v1.StoredFile files = 1; }
+
+message GetFileRequest {
+  string tenant_id = 1;
+  string file_id = 2;
+}
+
+message GetFileResponse { insuretech.storage.entity.v1.StoredFile file = 1; }
+
+message UpdateFileRequest {
+  string tenant_id = 1;
+  string file_id = 2;
+  optional string filename = 3;
+  optional string content_type = 4;
+  optional insuretech.storage.entity.v1.FileType file_type = 5;
+  optional string reference_id = 6;
+  optional string reference_type = 7;
+  optional bool is_public = 8;
+  google.protobuf.Timestamp expires_at = 9;
+  bool clear_expires_at = 10;
+}
+
+message UpdateFileResponse { insuretech.storage.entity.v1.StoredFile file = 1; }
+
+message GetUploadURLRequest {
+  string tenant_id = 1;
+
+  string filename = 2;
+  string content_type = 3;
+  insuretech.storage.entity.v1.FileType file_type = 4;
+
+  int32 expires_in_minutes = 5; // default 15
+  string reference_id = 6;
+  string reference_type = 7;
+  bool is_public = 8;
+}
+
+message GetUploadURLResponse {
+  string upload_url = 1;
+  string file_id = 2;
+  string storage_key = 3;
+}
+
+message FinalizeUploadRequest {
+  string tenant_id = 1;
+  string file_id = 2;
+  string filename = 3;
+  string content_type = 4;
+  insuretech.storage.entity.v1.FileType file_type = 5;
+  string reference_id = 6;
+  string reference_type = 7;
+  bool is_public = 8;
+  google.protobuf.Timestamp expires_at = 9;
+}
+
+message FinalizeUploadResponse { insuretech.storage.entity.v1.StoredFile file = 1; }
+
+message GetDownloadURLRequest {
+  string tenant_id = 1;
+  string file_id = 2;
+  int32 expires_in_minutes = 3; // default 60
+}
+
+message GetDownloadURLResponse {
+  string download_url = 1;
+  google.protobuf.Timestamp expires_at = 2;
+}
+
+message DeleteFileRequest {
+  string tenant_id = 1;
+  string file_id = 2;
+}
+
+message DeleteFileResponse { bool success = 1; }
+
+message ListFilesRequest {
+  string tenant_id = 1;
+
+  insuretech.common.v1.PaginationRequest page = 2;
+
+  insuretech.storage.entity.v1.FileType file_type = 3;
+  string reference_id = 4;
+  string reference_type = 5;
+  string uploaded_by = 6; // user-centric indexed listing path
+}
+
+message ListFilesResponse {
+  repeated insuretech.storage.entity.v1.StoredFile files = 1;
+  insuretech.common.v1.PaginationResponse page = 2;
+}
+

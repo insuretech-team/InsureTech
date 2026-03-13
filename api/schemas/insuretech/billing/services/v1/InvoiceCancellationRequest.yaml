@@ -1,0 +1,13 @@
+InvoiceCancellationRequest:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    reason:
+      type: string
+    cancelled_by:
+      type: string
+    issue_credit_note:
+      type: boolean
+  description: Request payload for invoice cancellation operation. Contains parameters
+    required to execute the operation.

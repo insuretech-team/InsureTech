@@ -1,0 +1,16 @@
+FieldViolation:
+  type: object
+  properties:
+    field:
+      type: string
+      description: Field path (e.g., "applicant.date_of_birth")
+    code:
+      type: string
+      description: Error code specific to this field
+    description:
+      type: string
+      description: Human-readable description of the violation
+    rejected_value:
+      type: string
+      description: The invalid value that was provided (if safe to return)
+  description: Field-level validation error

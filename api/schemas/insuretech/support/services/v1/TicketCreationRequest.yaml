@@ -1,0 +1,21 @@
+TicketCreationRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    type:
+      type: string
+    category:
+      type: string
+    priority:
+      type: string
+    subject:
+      type: string
+    description:
+      type: string
+    related_entity_type:
+      type: string
+    related_entity_id:
+      type: string
+  description: Request payload for creating a new ticket creation. Contains all required
+    fields and optional parameters for initialization.

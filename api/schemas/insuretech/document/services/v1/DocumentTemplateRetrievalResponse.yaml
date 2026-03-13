@@ -1,0 +1,10 @@
+DocumentTemplateRetrievalResponse:
+  type: object
+  properties:
+    template:
+      $ref: '#/components/schemas/DocumentTemplate'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document template retrieval operation. Returns
+    operation results and status.

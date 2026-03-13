@@ -1,0 +1,212 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.entity;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/entity;entity";
+option csharp_namespace = "Insuretech.Webrtc.V1.Entity";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// Room session for analytics tracking
+message RoomSession {
+  option (insuretech.common.v1.table) = {
+    table_name: "room_sessions"
+    schema_name: "webrtc"
+    migration_order: 103
+    is_table: true
+    comment: "Room session tracking for analytics"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string session_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "session_id"
+      sql_type: "VARCHAR(26)"
+      primary_key: true
+      not_null: true
+      comment: "ULID format identifier"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:session_id;not null"
+
+  string room_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "room_id"
+      sql_type: "VARCHAR(26)"
+      not_null: true
+      comment: "ULID format - Foreign key to rooms table"
+      foreign_key: {
+        references_table: "rooms"
+        references_column: "room_id"
+        references_schema: "webrtc"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_session_room"
+      }
+      index: {
+        index_name: "idx_room_sessions_room_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:room_id;not null"
+
+  google.protobuf.Timestamp started_at = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "started_at"
+      sql_type: "TIMESTAMPTZ"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Session start timestamp"
+      index: {
+        index_name: "idx_room_sessions_started_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp ended_at = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "ended_at"
+      sql_type: "TIMESTAMPTZ"
+      comment: "Session end timestamp (NULL if active)"
+      index: {
+        index_name: "idx_room_sessions_ended_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"
+
+  int32 participant_count = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "participant_count"
+      sql_type: "INT"
+      not_null: true
+      default_value: "0"
+      comment: "Current participant count"
+    }
+  ];
+  // @inject_tag: gorm:"column:participant_count;not null"
+
+  map<string, string> metadata = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Flexible storage (recording_enabled, quality_level, etc.)"
+    }
+  ];
+}
+
+// Peer participation in a session
+message PeerSession {
+  option (insuretech.common.v1.table) = {
+    table_name: "peer_sessions"
+    schema_name: "webrtc"
+    migration_order: 104
+    is_table: true
+    comment: "Peer participation tracking for analytics"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string peer_session_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "peer_session_id"
+      sql_type: "VARCHAR(26)"
+      primary_key: true
+      not_null: true
+      comment: "ULID format identifier"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:peer_session_id;not null"
+
+  string session_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "session_id"
+      sql_type: "VARCHAR(26)"
+      not_null: true
+      comment: "ULID format - Foreign key to room_sessions table"
+      foreign_key: {
+        references_table: "room_sessions"
+        references_column: "session_id"
+        references_schema: "webrtc"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_peer_session_session"
+      }
+      index: {
+        index_name: "idx_peer_sessions_session_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:session_id;not null"
+
+  string peer_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "peer_id"
+      sql_type: "VARCHAR(26)"
+      not_null: true
+      comment: "ULID format - Foreign key to peers table"
+      foreign_key: {
+        references_table: "peers"
+        references_column: "peer_id"
+        references_schema: "webrtc"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_peer_session_peer"
+      }
+      index: {
+        index_name: "idx_peer_sessions_peer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:peer_id;not null"
+
+  google.protobuf.Timestamp joined_at = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "joined_at"
+      sql_type: "TIMESTAMPTZ"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "When peer joined the session"
+      index: {
+        index_name: "idx_peer_sessions_joined_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp left_at = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "left_at"
+      sql_type: "TIMESTAMPTZ"
+      comment: "When peer left the session (NULL if still connected)"
+      index: {
+        index_name: "idx_peer_sessions_left_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:left_at;serializer:proto_timestamp"
+
+  map<string, string> metadata = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Flexible storage (display_name, user_agent, quality metrics, reconnection_count, etc.)"
+    }
+  ];
+}
+

@@ -1,0 +1,8 @@
+OrderBillingStatus:
+  type: string
+  enum:
+  - ORDER_BILLING_STATUS_UNSPECIFIED
+  - ORDER_BILLING_STATUS_NOT_INVOICED
+  - ORDER_BILLING_STATUS_INVOICED
+  - ORDER_BILLING_STATUS_INVOICE_CANCELLED
+  description: OrderBillingStatus is the billing/invoice dimension of the order lifecycle.

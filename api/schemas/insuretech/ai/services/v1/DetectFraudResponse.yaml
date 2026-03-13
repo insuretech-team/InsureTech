@@ -1,0 +1,23 @@
+DetectFraudResponse:
+  type: object
+  properties:
+    analysis_id:
+      type: string
+    is_suspicious:
+      type: boolean
+    fraud_score:
+      type: number
+      format: double
+      description: 0-100
+    risk_indicators:
+      type: array
+      items:
+        type: string
+    recommendation:
+      type: string
+      description: APPROVE, REVIEW, REJECT
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for detect fraud operation. Returns operation results
+    and status.

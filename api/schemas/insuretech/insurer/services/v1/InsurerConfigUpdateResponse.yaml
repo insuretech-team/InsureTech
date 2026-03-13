@@ -1,0 +1,10 @@
+InsurerInsurerConfigUpdateResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for insurer config update operation. Returns operation
+    results and status.

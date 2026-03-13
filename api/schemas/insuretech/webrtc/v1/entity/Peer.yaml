@@ -1,0 +1,53 @@
+Peer:
+  type: object
+  properties:
+    peer_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:peer_id;not null"'
+      x-primary-key: true
+    room_id:
+      type: string
+      description: '@inject_tag: gorm:"column:room_id;not null"'
+    display_name:
+      type: string
+      description: '@inject_tag: gorm:"column:display_name;not null"'
+    state:
+      allOf:
+      - $ref: '#/components/schemas/PeerConnectionState'
+      x-database-default: PEER_CONNECTION_STATE_NEW
+    tracks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Track'
+        description: Runtime only - not stored in peers table
+      description: Runtime only - not stored in peers table
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    joined_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    last_seen_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_seen_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    user_agent:
+      type: string
+      description: '@inject_tag: gorm:"column:user_agent"'
+    left_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:left_at;serializer:proto_timestamp"'
+  description: Peer represents a WebRTC conference participant
+  required:
+  - peer_id
+  - room_id
+  - display_name
+  - state
+  - joined_at
+  - last_seen_at

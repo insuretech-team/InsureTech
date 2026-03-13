@@ -1,0 +1,16 @@
+B2BAdminAssignedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    organisation_id:
+      type: string
+    user_id:
+      type: string
+    assigned_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: B2BAdminAssignedEvent is published when a B2B admin is assigned to
+    an organisation

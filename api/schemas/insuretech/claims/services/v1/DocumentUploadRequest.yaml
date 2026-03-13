@@ -1,0 +1,16 @@
+ClaimsDocumentUploadRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    document_type:
+      type: string
+    file_data:
+      type: string
+      format: byte
+    file_name:
+      type: string
+    mime_type:
+      type: string
+  description: Request payload for document upload operation. Contains parameters
+    required to execute the operation.

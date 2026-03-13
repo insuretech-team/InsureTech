@@ -1,0 +1,7 @@
+InsuranceInsurerProductRetrievalResponse:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/InsurerProduct'
+  description: Response payload for insurer product retrieval operation. Returns operation
+    results and status.

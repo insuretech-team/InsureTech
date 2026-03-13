@@ -1,0 +1,7 @@
+PricingConfigRetrievalResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/PricingConfig'
+  description: Response payload for pricing config retrieval operation. Returns operation
+    results and status.

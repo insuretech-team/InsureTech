@@ -1,0 +1,200 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authn/entity/v1/enums.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+// One-Time Password for verification
+message OTP {
+  option (insuretech.common.v1.table) = {
+    table_name : "otps"
+    schema_name : "authn_schema"
+    migration_order : 4
+    is_table : true
+    comment : "One-time passwords for verification (5 min validity)"
+    soft_delete : false
+    audit_fields : false
+  };
+
+  string otp_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "otp_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - OTP UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:otp_id;not null"
+
+  string user_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Associated user UUID"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+    }
+    index : {index_name : "idx_otps_user_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:user_id;not null"
+
+  string otp_hash = 3 [ (insuretech.common.v1.column) = {
+    column_name : "otp_hash"
+    sql_type : "VARCHAR(128)"
+    not_null : true
+    comment : "Hashed OTP (bcrypt/argon2) - security best practice"
+  } ];
+  // @inject_tag: gorm:"column:otp_hash;not null"
+
+  string purpose = 4 [ (insuretech.common.v1.column) = {
+    column_name : "purpose"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "OTP purpose (login, reset_password, verify_email, etc.)"
+    index : {index_name : "idx_otps_purpose" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:purpose;not null"
+
+  string device_type = 5 [ (insuretech.common.v1.column) = {
+    column_name : "device_type"
+    sql_type : "VARCHAR(50)"
+    comment : "Device type that requested OTP"
+  } ];
+  // @inject_tag: gorm:"column:device_type"
+
+  string ip_address = 6 [ (insuretech.common.v1.column) = {
+    column_name : "ip_address"
+    sql_type : "INET"
+    comment : "IP address that requested OTP"
+  } ];
+  // @inject_tag: gorm:"column:ip_address"
+
+  google.protobuf.Timestamp created_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "OTP creation timestamp"
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp expires_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "expires_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    comment : "OTP expiration timestamp (5 min from creation)"
+  } ];
+  // @inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"
+
+  int32 attempts = 9 [ (insuretech.common.v1.column) = {
+    column_name : "attempts"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    check_constraint : "attempts >= 0 AND attempts <= 3"
+    comment : "Verification attempt counter (max 3)"
+  } ];
+  // @inject_tag: gorm:"column:attempts;not null"
+
+  bool verified = 10 [ (insuretech.common.v1.column) = {
+    column_name : "verified"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "OTP verification status"
+  } ];
+  // @inject_tag: gorm:"column:verified;not null"
+
+  google.protobuf.Timestamp verified_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "verified_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "OTP verification timestamp"
+  } ];
+  // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+
+  // BTRC Compliance Fields - SMS Delivery Tracking
+  string provider_message_id = 12 [ (insuretech.common.v1.column) = {
+    column_name : "provider_message_id"
+    sql_type : "VARCHAR(128)"
+    comment : "SSL Wireless message_id for DLR tracking"
+    index : {
+      index_name : "idx_otps_provider_msg_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:provider_message_id"
+
+  string dlr_status = 13 [ (insuretech.common.v1.column) = {
+    column_name : "dlr_status"
+    sql_type : "VARCHAR(32)"
+    comment : "Delivery status: PENDING, DELIVERED, FAILED, EXPIRED"
+    index : {index_name : "idx_otps_dlr_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:dlr_status"
+
+  string sender_id = 14 [ (insuretech.common.v1.column) = {
+    column_name : "sender_id"
+    sql_type : "VARCHAR(11)"
+    comment : "Alphanumeric sender ID (masking) e.g. LABAIDINS"
+  } ];
+  // @inject_tag: gorm:"column:sender_id"
+
+  string carrier = 15 [ (insuretech.common.v1.column) = {
+    column_name : "carrier"
+    sql_type : "VARCHAR(32)"
+    comment : "Carrier: GP, ROBI, BANGLALINK, TELETALK"
+    index : {index_name : "idx_otps_carrier" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:carrier"
+
+  string channel = 16 [ (insuretech.common.v1.column) = {
+    column_name : "channel"
+    sql_type : "VARCHAR(16)"
+    not_null : true
+    default_value : "'sms'"
+    comment : "Delivery channel: sms, email"
+  } ];
+  // @inject_tag: gorm:"column:channel;not null"
+
+  string recipient = 17 [ (insuretech.common.v1.column) = {
+    column_name : "recipient"
+    sql_type : "VARCHAR(128)"
+    not_null : true
+    comment : "Phone number (8801XXXXXXXXX) or email address"
+    index : {index_name : "idx_otps_recipient" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:recipient;not null"
+
+  google.protobuf.Timestamp dlr_received_at = 18
+      [ (insuretech.common.v1.column) = {
+        column_name : "dlr_received_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "DLR webhook received timestamp"
+      } ];
+  // @inject_tag: gorm:"column:dlr_received_at;serializer:proto_timestamp"
+
+  // dlr_error_code: Error code returned by SSLWireless for failed deliveries
+  string dlr_error_code = 19 [ (insuretech.common.v1.column) = {
+    column_name : "dlr_error_code"
+    sql_type : "VARCHAR(32)"
+    comment : "SSLWireless DLR error code (e.g. 'ERR_INVALID_MSISDN')"
+  } ];
+  // @inject_tag: gorm:"column:dlr_error_code"
+
+  // dlr_updated_at: Timestamp of last DLR status update
+  google.protobuf.Timestamp dlr_updated_at = 20
+      [ (insuretech.common.v1.column) = {
+        column_name : "dlr_updated_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Timestamp of last DLR status update from webhook"
+      } ];
+  // @inject_tag: gorm:"column:dlr_updated_at;serializer:proto_timestamp"
+}

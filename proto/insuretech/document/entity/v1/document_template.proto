@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+package insuretech.document.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/document/entity/v1;documentv1";
+
+// Document template (FR-035, FR-091)
+message DocumentTemplate {
+  option (insuretech.common.v1.table) = {
+    table_name: "document_templates"
+    schema_name: "storage_schema"
+    migration_order: 14
+    is_table: true
+    audit_fields: true
+    comment: "Document generation templates (policy certificates, claim forms, etc.)"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "template_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:template_id;not null"
+  
+  string name = 2 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_document_templates_name"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  DocumentType type = 3 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_document_templates_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string description = 4 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:description"
+  
+  string template_content = 5 [(insuretech.common.v1.column) = {
+    column_name: "template_content"
+    sql_type: "TEXT"
+    not_null: true
+    comment: "HTML/LaTeX template with placeholders"
+  }];
+  // @inject_tag: gorm:"column:template_content;not null"
+  
+  OutputFormat output_format = 6 [(insuretech.common.v1.column) = {
+    column_name: "output_format"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:output_format;not null;serializer:proto_enum"
+  
+  string variables = 7 [(insuretech.common.v1.column) = {
+    column_name: "variables"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Template variable definitions"
+  }];
+  // @inject_tag: gorm:"column:variables"
+  
+  int32 version = 8 [(insuretech.common.v1.column) = {
+    column_name: "version"
+    sql_type: "INTEGER"
+    not_null: true
+    default_value: "1"
+  }];
+  // @inject_tag: gorm:"column:version;not null"
+  
+  bool is_active = 9 [(insuretech.common.v1.column) = {
+    column_name: "is_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_active"
+  
+  insuretech.common.v1.AuditInfo audit_info = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum DocumentType {
+  DOCUMENT_TYPE_UNSPECIFIED = 0;
+  DOCUMENT_TYPE_POLICY_CERTIFICATE = 1;
+  DOCUMENT_TYPE_POLICY_SCHEDULE = 2;
+  DOCUMENT_TYPE_CLAIM_FORM = 3;
+  DOCUMENT_TYPE_ENDORSEMENT_NOTICE = 4;
+  DOCUMENT_TYPE_RENEWAL_NOTICE = 5;
+  DOCUMENT_TYPE_CANCELLATION_NOTICE = 6;
+  DOCUMENT_TYPE_RECEIPT = 7;
+  DOCUMENT_TYPE_INVOICE = 8;
+}
+
+enum OutputFormat {
+  OUTPUT_FORMAT_UNSPECIFIED = 0;
+  OUTPUT_FORMAT_PDF = 1;
+  OUTPUT_FORMAT_HTML = 2;
+  OUTPUT_FORMAT_DOCX = 3;
+}
+
+

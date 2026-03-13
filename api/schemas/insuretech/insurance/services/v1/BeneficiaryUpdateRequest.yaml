@@ -1,0 +1,7 @@
+InsuranceBeneficiaryUpdateRequest:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+  description: Request payload for updating an existing beneficiary update. Contains
+    fields to be modified.

@@ -1,0 +1,29 @@
+InvoiceOverdueEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    invoice_id:
+      type: string
+    invoice_number:
+      type: string
+    order_id:
+      type: string
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+    tenant_id:
+      type: string
+    total_amount:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    due_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Invoice overdue \u2014 published by a scheduler when due date\
+    \ passes without payment"

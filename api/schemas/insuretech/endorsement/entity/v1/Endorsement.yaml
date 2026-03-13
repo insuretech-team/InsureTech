@@ -1,0 +1,64 @@
+Endorsement:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:endorsement_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    endorsement_number:
+      type: string
+      description: '@inject_tag: gorm:"column:endorsement_number;not null"'
+      x-unique: true
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    type:
+      $ref: '#/components/schemas/EndorsementType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    reason:
+      type: string
+      description: '@inject_tag: gorm:"column:reason;not null"'
+    changes:
+      type: string
+      description: '@inject_tag: gorm:"column:changes;not null"'
+    premium_adjustment:
+      $ref: '#/components/schemas/Money'
+    premium_refund_required:
+      type: boolean
+      description: '@inject_tag: gorm:"column:premium_refund_required"'
+      default: false
+    status:
+      allOf:
+      - $ref: '#/components/schemas/EndorsementStatus'
+      x-database-default: PENDING
+    requested_by:
+      type: string
+      description: '@inject_tag: gorm:"column:requested_by;not null"'
+    approved_by:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_by"'
+    effective_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:effective_date;not null;serializer:proto_timestamp"'
+    approved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Policy endorsement/amendment (FR-098 to FR-102)
+  required:
+  - id
+  - endorsement_number
+  - policy_id
+  - type
+  - reason
+  - changes
+  - status
+  - requested_by
+  - effective_date
+  - audit_info

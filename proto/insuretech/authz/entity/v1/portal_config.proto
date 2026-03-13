@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 5. PortalConfig — per-portal MFA and session configuration
+// ---------------------------------------------------------------------------
+message PortalConfig {
+  option (insuretech.common.v1.table) = {
+    table_name     : "portal_configs"
+    schema_name    : "authz_schema"
+    migration_order: 5
+    is_table       : true
+    comment        : "Per-portal MFA requirements and session policies"
+    soft_delete    : false
+    audit_fields   : true
+    enable_rls     : false
+  };
+
+  string portal_config_id   = 1 [(insuretech.common.v1.column) = {
+    column_name: "portal_config_id"  sql_type: "UUID"  primary_key: true
+    not_null: true  default_value: "gen_random_uuid()"
+  }];
+  Portal portal             = 2 [(insuretech.common.v1.column) = {
+    column_name: "portal"  sql_type: "VARCHAR(50)"  not_null: true  unique: true
+    comment: "One config row per portal"
+  }];
+  bool   mfa_required       = 3 [(insuretech.common.v1.column) = {
+    column_name: "mfa_required"  sql_type: "BOOLEAN"  not_null: true  default_value: "false"
+    comment: "Portal-level MFA requirement (overridden by role-level)"
+  }];
+  repeated string mfa_methods = 4; // stored as JSONB: ["totp","sms","email"]
+  // Token expiry in seconds — configurable, default 900 (15 min)
+  int32  access_token_ttl_seconds  = 5 [(insuretech.common.v1.column) = {
+    column_name: "access_token_ttl_seconds"  sql_type: "INTEGER"  not_null: true
+    default_value: "900"  comment: "Access token TTL in seconds (default 15 min)"
+  }];
+  int32  refresh_token_ttl_seconds = 6 [(insuretech.common.v1.column) = {
+    column_name: "refresh_token_ttl_seconds"  sql_type: "INTEGER"  not_null: true
+    default_value: "604800"  comment: "Refresh token TTL in seconds (default 7 days)"
+  }];
+  int32  session_ttl_seconds       = 7 [(insuretech.common.v1.column) = {
+    column_name: "session_ttl_seconds"  sql_type: "INTEGER"  not_null: true
+    default_value: "28800"  comment: "Server-side session TTL (default 8 hrs)"
+  }];
+  int32  idle_timeout_seconds      = 8 [(insuretech.common.v1.column) = {
+    column_name: "idle_timeout_seconds"  sql_type: "INTEGER"  not_null: true
+    default_value: "1800"  comment: "Idle timeout before session invalidation (default 30 min)"
+  }];
+  bool   allow_concurrent_sessions = 9 [(insuretech.common.v1.column) = {
+    column_name: "allow_concurrent_sessions"  sql_type: "BOOLEAN"  not_null: true
+    default_value: "true"
+  }];
+  int32  max_concurrent_sessions   = 10 [(insuretech.common.v1.column) = {
+    column_name: "max_concurrent_sessions"  sql_type: "INTEGER"  not_null: true
+    default_value: "5"
+  }];
+  string updated_by                = 11 [(insuretech.common.v1.column) = { column_name: "updated_by"  sql_type: "UUID" }];
+  google.protobuf.Timestamp updated_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "updated_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"
+  }];
+}

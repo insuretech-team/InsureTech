@@ -1,0 +1,19 @@
+UnderwritingRejectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    decision_id:
+      type: string
+    reason:
+      type: string
+    risk_level:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Underwriting rejected'

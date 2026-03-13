@@ -1,0 +1,13 @@
+InitiateRefundRequest:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    refund_amount:
+      $ref: '#/components/schemas/Money'
+    reason:
+      type: string
+    initiated_by:
+      type: string
+  description: Request payload for initiate refund operation. Contains parameters
+    required to execute the operation.

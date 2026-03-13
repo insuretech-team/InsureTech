@@ -1,0 +1,122 @@
+syntax = "proto3";
+
+package insuretech.renewal.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/renewal/entity/v1;renewalv1";
+
+// Renewal reminder tracking (FR-085)
+message RenewalReminder {
+  option (insuretech.common.v1.table) = {
+    table_name: "renewal_reminders"
+    schema_name: "insurance_schema"
+    migration_order: 36
+    is_table: true
+    audit_fields: true
+    comment: "Renewal reminder notifications"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "reminder_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:reminder_id;not null"
+  
+  string renewal_schedule_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "renewal_schedule_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "renewal_schedules"
+      references_column: "schedule_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_renewal_reminders_schedule_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:renewal_schedule_id;not null"
+  
+  int32 days_before_renewal = 3 [(insuretech.common.v1.column) = {
+    column_name: "days_before_renewal"
+    sql_type: "INTEGER"
+    not_null: true
+    comment: "FR-085: 30, 15, 7, 1 days"
+  }];
+  // @inject_tag: gorm:"column:days_before_renewal;not null"
+  
+  ReminderChannel channel = 4 [(insuretech.common.v1.column) = {
+    column_name: "channel"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "EMAIL, SMS, PUSH, VOICE"
+  }];
+  // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+  
+  ReminderStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  google.protobuf.Timestamp scheduled_at = 6 [(insuretech.common.v1.column) = {
+    column_name: "scheduled_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:scheduled_at;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp sent_at = 7 [(insuretech.common.v1.column) = {
+    column_name: "sent_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"
+  
+  string notification_id = 8 [(insuretech.common.v1.column) = {
+    column_name: "notification_id"
+    sql_type: "UUID"
+    comment: "Link to notification service"
+  }];
+  // @inject_tag: gorm:"column:notification_id"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ReminderChannel {
+  REMINDER_CHANNEL_UNSPECIFIED = 0;
+  REMINDER_CHANNEL_EMAIL = 1;
+  REMINDER_CHANNEL_SMS = 2;
+  REMINDER_CHANNEL_PUSH = 3;
+  REMINDER_CHANNEL_VOICE = 4;
+}
+
+enum ReminderStatus {
+  REMINDER_STATUS_UNSPECIFIED = 0;
+  REMINDER_STATUS_PENDING = 1;
+  REMINDER_STATUS_SENT = 2;
+  REMINDER_STATUS_FAILED = 3;
+  REMINDER_STATUS_CANCELLED = 4;
+}
+
+

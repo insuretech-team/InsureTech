@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.events;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/events;events";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/signal.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Signal Events
+// ═══════════════════════════════════════════════════════════════════════════
+
+message OfferReceivedEvent {
+  string room_id = 1;  // ULID format
+  insuretech.webrtc.v1.entity.SDPOffer offer = 2;
+  google.protobuf.Timestamp received_at = 3;
+}
+
+message AnswerReceivedEvent {
+  string room_id = 1;  // ULID format
+  insuretech.webrtc.v1.entity.SDPAnswer answer = 2;
+  google.protobuf.Timestamp received_at = 3;
+}
+
+message ICECandidateReceivedEvent {
+  string room_id = 1;  // ULID format
+  insuretech.webrtc.v1.entity.ICECandidate candidate = 2;
+  google.protobuf.Timestamp received_at = 3;
+}
+
+message RenegotiationRequiredEvent {
+  string room_id = 1;  // ULID format
+  string peer_id = 2;  // ULID format
+  string reason = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}

@@ -1,0 +1,21 @@
+NotificationSentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    notification_id:
+      type: string
+    recipient_id:
+      type: string
+    channel:
+      type: string
+      description: SMS, EMAIL, PUSH
+    type:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Notification sent'

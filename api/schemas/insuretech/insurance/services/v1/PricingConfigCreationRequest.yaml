@@ -1,0 +1,6 @@
+PricingConfigCreationRequest:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/PricingConfig'
+  description: ========== PRICING CONFIG MESSAGES ==========

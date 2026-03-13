@@ -1,0 +1,185 @@
+syntax = "proto3";
+
+package insuretech.payment.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/payment/events/v1;paymenteventsv1";
+option csharp_namespace = "Insuretech.Payment.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Payment initiated — published when payment-service creates a session with the provider
+message PaymentInitiatedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string payer_id = 3;
+  insuretech.common.v1.Money amount = 4;
+  string payment_method = 5;
+  string reference_type = 6; // order, policy, claim, commission
+  string reference_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9;
+  // ── Extended context fields ───────────────────────────────────────────────
+  string order_id = 10;
+  string invoice_id = 11;
+  string tenant_id = 12;
+  string organisation_id = 13;
+  string portal = 14;
+  string actor_user_id = 15;
+  string session_id = 16;
+  string causation_id = 17;
+  string provider = 18;          // sslcommerz, bkash, nagad, manual
+  string tran_id = 19;           // merchant tran_id sent to provider
+  google.protobuf.Timestamp occurred_at = 20;
+}
+
+// Event: Payment completed — published after provider validation confirms SUCCESS
+message PaymentCompletedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string transaction_id = 3;
+  insuretech.common.v1.Money amount = 4;
+  string payment_method = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7;
+  // ── Extended context fields ───────────────────────────────────────────────
+  string order_id = 8;
+  string invoice_id = 9;
+  string tenant_id = 10;
+  string organisation_id = 11;
+  string portal = 12;
+  string actor_user_id = 13;
+  string session_id = 14;
+  string causation_id = 15;
+  string provider = 16;
+  string val_id = 17;            // SSLCommerz val_id from validation API
+  string receipt_number = 18;
+  google.protobuf.Timestamp occurred_at = 19;
+}
+
+// Event: Payment failed — published when provider returns failure or validation fails
+message PaymentFailedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string payer_id = 3;
+  insuretech.common.v1.Money amount = 4;
+  string payment_method = 5;
+  string error_code = 6;
+  string error_message = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9;
+  // ── Extended context fields ───────────────────────────────────────────────
+  string order_id = 10;
+  string invoice_id = 11;
+  string tenant_id = 12;
+  string organisation_id = 13;
+  string portal = 14;
+  string actor_user_id = 15;
+  string session_id = 16;
+  string causation_id = 17;
+  string provider = 18;
+  google.protobuf.Timestamp occurred_at = 19;
+}
+
+// Event: Refund processed
+message RefundProcessedEvent {
+  string event_id = 1;
+  string refund_id = 2;
+  string original_payment_id = 3;
+  string recipient_id = 4;
+  insuretech.common.v1.Money amount = 5;
+  string reason = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8;
+  // ── Extended context fields ───────────────────────────────────────────────
+  string order_id = 9;
+  string invoice_id = 10;
+  string tenant_id = 11;
+  string organisation_id = 12;
+  string portal = 13;
+  string actor_user_id = 14;
+  string session_id = 15;
+  string causation_id = 16;
+  google.protobuf.Timestamp occurred_at = 17;
+}
+
+// ─── NEW EVENTS ───────────────────────────────────────────────────────────────
+
+// Event: Payment verified by server-side provider validation API call
+message PaymentVerifiedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string order_id = 3;
+  string invoice_id = 4;
+  string verified_by = 5;       // user_id or "system" for automated verification
+  string tenant_id = 6;
+  string organisation_id = 7;
+  string correlation_id = 8;
+  string causation_id = 9;
+  string provider = 10;
+  string val_id = 11;
+  insuretech.common.v1.Money amount = 12;
+  google.protobuf.Timestamp verified_at = 13;
+  google.protobuf.Timestamp occurred_at = 14;
+}
+
+// Event: Customer submitted manual bank transfer proof for admin review
+message ManualPaymentProofSubmittedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string order_id = 3;
+  string manual_proof_file_id = 4; // Media service file ID
+  string submitted_by = 5;         // customer user_id
+  string tenant_id = 6;
+  string organisation_id = 7;
+  string correlation_id = 8;
+  string causation_id = 9;
+  google.protobuf.Timestamp occurred_at = 10;
+}
+
+// Event: Admin approved or rejected a manual payment proof
+message ManualPaymentReviewedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string order_id = 3;
+  bool approved = 4;
+  string reviewed_by = 5;          // admin/agent user_id
+  string review_notes = 6;
+  string rejection_reason = 7;     // populated when approved=false
+  string tenant_id = 8;
+  string organisation_id = 9;
+  string correlation_id = 10;
+  string causation_id = 11;
+  google.protobuf.Timestamp occurred_at = 12;
+}
+
+// Event: Payment receipt PDF generated and stored
+message ReceiptGeneratedEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string order_id = 3;
+  string receipt_number = 4;
+  string receipt_file_id = 5;      // Media/storage service file ID
+  string receipt_document_id = 6;  // Document-service document ID
+  string tenant_id = 7;
+  string organisation_id = 8;
+  string correlation_id = 9;
+  string causation_id = 10;
+  google.protobuf.Timestamp occurred_at = 11;
+}
+
+// Event: Reconciliation mismatch found between internal records and provider report
+message PaymentReconciliationMismatchEvent {
+  string event_id = 1;
+  string payment_id = 2;
+  string order_id = 3;
+  string expected_amount = 4;   // Internal amount (paisa as string)
+  string actual_amount = 5;     // Provider-reported amount (paisa as string)
+  string provider = 6;
+  string gateway_ref = 7;       // Provider's transaction reference
+  string tenant_id = 8;
+  string reconciliation_id = 9; // Batch reconciliation run ID
+  string mismatch_reason = 10;  // Human-readable description of the mismatch
+  google.protobuf.Timestamp occurred_at = 11;
+}
+

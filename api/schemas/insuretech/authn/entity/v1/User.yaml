@@ -1,0 +1,139 @@
+User:
+  type: object
+  properties:
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:user_id;not null"'
+    mobile_number:
+      type: string
+      description: '@inject_tag: gorm:"column:mobile_number;not null"'
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: User authentication and communication
+    email:
+      type: string
+      description: '@inject_tag: gorm:"column:email"'
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: User communication and account recovery
+    password_hash:
+      type: string
+      description: '@inject_tag: gorm:"column:password_hash;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-log-redacted: true
+      x-data-purpose: User authentication
+    status:
+      $ref: '#/components/schemas/UserStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    last_login_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_login_at;serializer:proto_timestamp"'
+    last_login_session_type:
+      type: string
+      description: '@inject_tag: gorm:"column:last_login_session_type"'
+    preferred_auth_method:
+      type: string
+      description: '@inject_tag: gorm:"column:preferred_auth_method"'
+    created_by:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by"'
+    updated_by:
+      type: string
+      description: '@inject_tag: gorm:"column:updated_by"'
+    login_attempts:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:login_attempts;not null"'
+    locked_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:locked_until;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+    username:
+      type: string
+      description: '@inject_tag: gorm:"column:username"'
+    preferred_language:
+      type: string
+      description: '@inject_tag: gorm:"column:preferred_language"'
+    notification_preference:
+      type: string
+      description: '@inject_tag: gorm:"column:notification_preference"'
+    wallet_payment_method:
+      type: string
+      description: '@inject_tag: gorm:"column:wallet_payment_method"'
+    user_type:
+      $ref: '#/components/schemas/UserType'
+      description: "UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER\
+        \ use\r\n email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth\r\
+        \n @inject_tag: gorm:\"column:user_type;not null;serializer:proto_enum\""
+    email_verified:
+      type: boolean
+      description: '@inject_tag: gorm:"column:email_verified;not null"'
+    email_verified_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:email_verified_at;serializer:proto_timestamp"'
+    email_login_attempts:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:email_login_attempts;not null"'
+    email_locked_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:email_locked_until;serializer:proto_timestamp"'
+    biometric_token_enc:
+      type: string
+      description: "biometric_token_enc: AES-256-GCM encrypted biometric token (device-side\
+        \ public key / FIDO attestation)\r\n @inject_tag: gorm:\"column:biometric_token_enc\""
+      x-sensitive: true
+      writeOnly: true
+      x-log-redacted: true
+      x-data-purpose: Biometric device authentication
+    biometric_token_idx:
+      type: string
+      description: "biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc\
+        \ equality lookup\r\n @inject_tag: gorm:\"column:biometric_token_idx\""
+    mobile_number_idx:
+      type: string
+      description: "mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number\
+        \ equality lookup\r\n @inject_tag: gorm:\"column:mobile_number_idx\""
+    email_idx:
+      type: string
+      description: "email_idx: HMAC-SHA256 blind index for encrypted email equality\
+        \ lookup\r\n @inject_tag: gorm:\"column:email_idx\""
+    totp_enabled:
+      type: boolean
+      description: '@inject_tag: gorm:"column:totp_enabled;not null"'
+    totp_secret_enc:
+      type: string
+      description: '@inject_tag: gorm:"column:totp_secret_enc"'
+    active_policies_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:active_policies_count;not null"'
+    pending_claims_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:pending_claims_count;not null"'
+    wallet_balance:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:wallet_balance;not null"'
+  description: "User represents a registered user in the system\r\n Maps to 'users'\
+    \ table in public schema"

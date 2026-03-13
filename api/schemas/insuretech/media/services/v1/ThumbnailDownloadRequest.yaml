@@ -1,0 +1,6 @@
+ThumbnailDownloadRequest:
+  type: object
+  properties:
+    media_id:
+      type: string
+  description: Download Thumbnail

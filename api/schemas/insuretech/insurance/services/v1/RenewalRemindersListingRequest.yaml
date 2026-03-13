@@ -1,0 +1,7 @@
+RenewalRemindersListingRequest:
+  type: object
+  properties:
+    schedule_id:
+      type: string
+  description: Request payload for listing renewal reminders listing items. Supports
+    filtering, sorting, and pagination.

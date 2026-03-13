@@ -1,0 +1,224 @@
+syntax = "proto3";
+
+package insuretech.authn.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/events/v1;authneventsv1";
+option csharp_namespace = "Insuretech.Authn.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Event: User registered
+message UserRegisteredEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string mobile_number = 3;
+  string email = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+  string device_type = 7;
+}
+
+// Event: User logged in
+message UserLoggedInEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string session_type = 4; // SERVER_SIDE (web) or JWT (mobile/API)
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+  string device_type = 7;
+  string user_agent = 8;
+}
+
+// Event: User logged out
+message UserLoggedOutEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string session_type = 4; // SERVER_SIDE (web) or JWT (mobile/API)
+  string logout_reason = 5; // user_initiated, expired, revoked, admin, security
+  google.protobuf.Timestamp timestamp = 6;
+  string ip_address = 7;
+  string device_type = 8;
+}
+
+// Event: Access token refreshed (JWT sessions only)
+message TokenRefreshedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string old_access_token_jti = 4; // Previous access token JTI
+  string new_access_token_jti = 5; // New access token JTI
+  string new_refresh_token_jti = 6; // New refresh token JTI (rotation)
+  google.protobuf.Timestamp timestamp = 7;
+  string ip_address = 8;
+  string device_type = 9;
+  string user_agent = 10;
+}
+
+// Event: Session revoked (admin or security action)
+message SessionRevokedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string session_type = 4; // SERVER_SIDE or JWT
+  string revoked_by = 5; // user_id of admin or "system"
+  string reason = 6; // security, admin_action, suspicious_activity, etc.
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Event: Password changed
+message PasswordChangedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  google.protobuf.Timestamp timestamp = 3;
+  string ip_address = 4;
+  string changed_by = 5; // user_id or "admin"
+}
+
+// Event: Account locked
+message AccountLockedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string reason = 3; // "failed_login" | "fraud" | "manual"
+  google.protobuf.Timestamp timestamp = 4;
+  google.protobuf.Timestamp locked_until = 5;
+}
+
+// Event: OTP sent
+message OTPSentEvent {
+  string event_id = 1;
+  string otp_id = 2;
+  string recipient = 3; // Masked: +880 1XXX ***789
+  string type = 4; // registration, login, reset
+  google.protobuf.Timestamp timestamp = 5;
+  string channel = 6; // sms, email
+  string provider = 7; // sslwireless, smtp
+  string sender_id = 8; // LABAIDINS (masking) or numeric (non-masking)
+  string provider_message_id = 9; // For DLR correlation
+  bool masking_used = 10; // BTRC masking flag
+}
+
+// Event: OTP verified
+message OTPVerifiedEvent {
+  string event_id = 1;
+  string otp_id = 2;
+  string user_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  int32 attempts = 5;
+}
+
+// Event: SMS Delivery Report received (BTRC compliance)
+message SMSDeliveryReportEvent {
+  string event_id = 1;
+  string otp_id = 2;
+  string provider_message_id = 3;
+  string msisdn = 4; // Masked: 8801XXX***789
+  string status = 5; // DELIVERED, FAILED, EXPIRED
+  string error_code = 6; // Provider-specific error code
+  google.protobuf.Timestamp delivered_at = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string carrier = 9; // GP, ROBI, BANGLALINK, TELETALK
+}
+
+// Event: CSRF validation failed (server-side sessions only)
+message CSRFValidationFailedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string expected_csrf_token_hash = 4; // Hashed for security
+  string received_csrf_token_hash = 5; // Hashed for security
+  google.protobuf.Timestamp timestamp = 6;
+  string ip_address = 7;
+  string user_agent = 8;
+  string request_path = 9;
+  string request_method = 10; // POST, PUT, DELETE, PATCH
+}
+
+// Event: Session expired (auto-cleanup event)
+message SessionExpiredEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string session_type = 4; // SERVER_SIDE or JWT
+  google.protobuf.Timestamp timestamp = 5;
+  google.protobuf.Timestamp expired_at = 6;
+  int32 inactivity_seconds = 7; // Seconds since last activity
+}
+
+// Event: Login failed (security monitoring)
+message LoginFailedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string mobile_number = 3;
+  string failure_reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+  string device_type = 7;
+  string user_agent = 8;
+  int32 failed_attempts_count = 9;
+}
+
+// Event: Password reset requested
+message PasswordResetRequestedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string mobile_number = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string ip_address = 5;
+  string device_type = 6;
+}
+
+// Event: Email verified
+message EmailVerifiedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string email = 3;
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+// Event: Email verification OTP sent
+message EmailVerificationSentEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string email_masked = 3;   // Masked: u***@domain.com
+  string otp_id = 4;
+  string type = 5;           // email_verification, email_login, password_reset_email
+  google.protobuf.Timestamp timestamp = 6;
+  string ip_address = 7;
+}
+
+// Event: Email OTP login succeeded (Business Beneficiary / System User)
+message EmailLoginSucceededEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string session_id = 3;
+  string email_masked = 4;   // Masked for audit logs
+  string user_type = 5;      // BUSINESS_BENEFICIARY or SYSTEM_USER
+  google.protobuf.Timestamp timestamp = 6;
+  string ip_address = 7;
+  string user_agent = 8;
+  string device_name = 9;
+}
+
+// Event: Email OTP login failed
+message EmailLoginFailedEvent {
+  string event_id = 1;
+  string email_masked = 2;
+  string failure_reason = 3; // invalid_otp, email_not_verified, user_type_not_allowed, account_locked
+  int32 failed_attempts_count = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+  string user_agent = 7;
+}
+
+// Event: Password reset requested via email
+message PasswordResetByEmailRequestedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string email_masked = 3;
+  string otp_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+}
+

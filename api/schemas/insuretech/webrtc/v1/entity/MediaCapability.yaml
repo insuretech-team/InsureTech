@@ -1,0 +1,19 @@
+MediaCapability:
+  type: object
+  properties:
+    mime_type:
+      type: string
+    clock_rate:
+      type: integer
+      format: int32
+    channels:
+      type: integer
+      format: int32
+    sdp_fmtp_line:
+      type: string
+    parameters:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: MediaCapability - runtime only.

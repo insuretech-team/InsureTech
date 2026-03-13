@@ -1,0 +1,8 @@
+PongResponse:
+  type: object
+  properties:
+    timestamp:
+      type: string
+      format: date-time
+  description: Response payload for pong operation. Returns operation results and
+    status.

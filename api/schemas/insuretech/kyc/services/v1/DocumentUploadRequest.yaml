@@ -1,0 +1,13 @@
+KycDocumentUploadRequest:
+  type: object
+  properties:
+    kyc_verification_id:
+      type: string
+    document_type:
+      type: string
+    document_number:
+      type: string
+    document_url:
+      type: string
+  description: Request payload for document upload operation. Contains parameters
+    required to execute the operation.

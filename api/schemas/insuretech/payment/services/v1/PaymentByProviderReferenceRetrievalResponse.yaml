@@ -1,0 +1,9 @@
+PaymentByProviderReferenceRetrievalResponse:
+  type: object
+  properties:
+    payment:
+      $ref: '#/components/schemas/Payment'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for payment by provider reference retrieval operation.
+    Returns operation results and status.

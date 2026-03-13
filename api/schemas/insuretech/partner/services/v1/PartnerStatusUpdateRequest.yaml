@@ -1,0 +1,11 @@
+PartnerStatusUpdateRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+    status:
+      type: string
+    reason:
+      type: string
+  description: Request payload for updating an existing partner status update. Contains
+    fields to be modified.

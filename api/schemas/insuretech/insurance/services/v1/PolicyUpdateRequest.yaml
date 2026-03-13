@@ -1,0 +1,7 @@
+InsurancePolicyUpdateRequest:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/Policy'
+  description: Request payload for updating an existing policy update. Contains fields
+    to be modified.

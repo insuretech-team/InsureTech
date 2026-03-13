@@ -1,0 +1,7 @@
+DepartmentDeletionRequest:
+  type: object
+  properties:
+    department_id:
+      type: string
+  description: Request payload for department deletion operation. Contains parameters
+    required to execute the operation.

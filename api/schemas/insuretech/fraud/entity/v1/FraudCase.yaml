@@ -1,0 +1,58 @@
+FraudCase:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:case_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    case_number:
+      type: string
+      description: '@inject_tag: gorm:"column:case_number;not null"'
+      x-unique: true
+    fraud_alert_id:
+      type: string
+      description: '@inject_tag: gorm:"column:fraud_alert_id;not null"'
+    priority:
+      allOf:
+      - $ref: '#/components/schemas/CasePriority'
+      x-database-default: MEDIUM
+    investigation_notes:
+      type: string
+      description: '@inject_tag: gorm:"column:investigation_notes"'
+    evidence:
+      type: string
+      description: '@inject_tag: gorm:"column:evidence"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/CaseStatus'
+      x-database-default: OPEN
+    outcome:
+      $ref: '#/components/schemas/CaseOutcome'
+      description: '@inject_tag: gorm:"column:outcome;serializer:proto_enum"'
+    investigator_id:
+      type: string
+      description: '@inject_tag: gorm:"column:investigator_id"'
+    closed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: Fraud investigation case
+  required:
+  - id
+  - case_number
+  - fraud_alert_id
+  - priority
+  - status

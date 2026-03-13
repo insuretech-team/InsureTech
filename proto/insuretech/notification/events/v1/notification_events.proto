@@ -1,0 +1,39 @@
+syntax = "proto3";
+
+package insuretech.notification.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/notification/events/v1;notificationeventsv1";
+option csharp_namespace = "Insuretech.Notification.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Event: Notification sent
+message NotificationSentEvent {
+  string event_id = 1;
+  string notification_id = 2;
+  string recipient_id = 3;
+  string channel = 4; // SMS, EMAIL, PUSH
+  string type = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7; // CG-6: trace across services
+}
+
+// Event: Notification delivered
+message NotificationDeliveredEvent {
+  string event_id = 1;
+  string notification_id = 2;
+  string recipient_id = 3;
+  google.protobuf.Timestamp timestamp = 4;
+  string correlation_id = 5; // CG-6: trace across services
+}
+
+// Event: Notification failed
+message NotificationFailedEvent {
+  string event_id = 1;
+  string notification_id = 2;
+  string recipient_id = 3;
+  string error_message = 4;
+  google.protobuf.Timestamp timestamp = 5;
+  string correlation_id = 6; // CG-6: trace across services
+}
+

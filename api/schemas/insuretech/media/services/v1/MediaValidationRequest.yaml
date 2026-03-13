@@ -1,0 +1,12 @@
+MediaValidationRequest:
+  type: object
+  properties:
+    media_id:
+      type: string
+    validation_rules:
+      type: array
+      items:
+        type: string
+        description: Custom validation rules
+      description: Custom validation rules
+  description: Validate Media

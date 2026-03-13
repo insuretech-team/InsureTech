@@ -1,0 +1,19 @@
+BeneficiaryBusinessBeneficiaryCreationRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    business_name:
+      type: string
+    trade_license_number:
+      type: string
+    tin_number:
+      type: string
+    focal_person_name:
+      type: string
+    focal_person_mobile:
+      type: string
+    partner_id:
+      type: string
+  description: Request payload for creating a new business beneficiary creation. Contains
+    all required fields and optional parameters for initialization.

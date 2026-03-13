@@ -1,0 +1,12 @@
+AddPaymentMethodResponse:
+  type: object
+  properties:
+    method_id:
+      type: string
+    success:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for add payment method operation. Returns operation
+    results and status.

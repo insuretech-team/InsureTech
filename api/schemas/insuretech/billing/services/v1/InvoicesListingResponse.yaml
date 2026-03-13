@@ -1,0 +1,16 @@
+InvoicesListingResponse:
+  type: object
+  properties:
+    invoices:
+      type: array
+      items:
+        $ref: '#/components/schemas/Invoice'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invoices listing operation. Returns operation
+    results and status.

@@ -1,0 +1,96 @@
+syntax = "proto3";
+
+package insuretech.tenant.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/tenant/entity/v1;tenantv1";
+
+// Tenant configuration
+message TenantConfig {
+  option (insuretech.common.v1.table) = {
+    table_name: "tenant_configs"
+    schema_name: "tenant_schema"
+    migration_order: 72
+    is_table: true
+    audit_fields: true
+    comment: "Tenant-specific configurations"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "config_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+  
+  string tenant_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "tenant_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "tenants"
+      references_column: "tenant_id"
+      references_schema: "tenant_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_tenant_configs_tenant_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:tenant_id;not null"
+  
+  string config_key = 3 [(insuretech.common.v1.column) = {
+    column_name: "config_key"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:config_key;not null"
+  
+  string config_value = 4 [(insuretech.common.v1.column) = {
+    column_name: "config_value"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:config_value;not null"
+  
+  ConfigType type = 5 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "STRING, NUMBER, BOOLEAN, JSON"
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string description = 6 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:description"
+  
+  insuretech.common.v1.AuditInfo audit_info = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ConfigType {
+  CONFIG_TYPE_UNSPECIFIED = 0;
+  CONFIG_TYPE_STRING = 1;
+  CONFIG_TYPE_NUMBER = 2;
+  CONFIG_TYPE_BOOLEAN = 3;
+  CONFIG_TYPE_JSON = 4;
+}
+

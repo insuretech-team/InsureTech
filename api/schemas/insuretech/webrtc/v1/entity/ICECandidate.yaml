@@ -1,0 +1,20 @@
+ICECandidate:
+  type: object
+  properties:
+    from_peer_id:
+      type: string
+      description: ULID format
+    to_peer_id:
+      type: string
+      description: ULID format
+    candidate:
+      type: string
+    sdp_mid:
+      type: string
+    sdp_m_line_index:
+      type: integer
+      format: int32
+    username_fragment:
+      type: string
+  description: Domain entity representing ice candidate. Core business object in the
+    system.

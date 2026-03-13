@@ -1,0 +1,9 @@
+InvalidatePolicyCacheResponse:
+  type: object
+  properties:
+    invalidated:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invalidate policy cache operation. Returns operation
+    results and status.

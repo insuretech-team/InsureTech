@@ -1,0 +1,44 @@
+TicketMessage:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:message_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    ticket_id:
+      type: string
+      description: '@inject_tag: gorm:"column:ticket_id;not null"'
+    sender_id:
+      type: string
+      description: '@inject_tag: gorm:"column:sender_id;not null"'
+    type:
+      $ref: '#/components/schemas/MessageType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    content:
+      type: string
+      description: '@inject_tag: gorm:"column:content;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Support ticket communication and issue resolution
+    attachments:
+      type: string
+      description: '@inject_tag: gorm:"column:attachments"'
+    is_internal:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_internal"'
+      default: false
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Ticket message/reply
+  required:
+  - id
+  - ticket_id
+  - sender_id
+  - type
+  - content
+  - audit_info

@@ -1,0 +1,16 @@
+PaymentVerificationResponse:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    status:
+      type: string
+    payment:
+      $ref: '#/components/schemas/Payment'
+    verified:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for payment verification operation. Returns operation
+    results and status.

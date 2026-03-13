@@ -1,0 +1,7 @@
+QuoteCreationResponse:
+  type: object
+  properties:
+    quote:
+      $ref: '#/components/schemas/Quote'
+  description: Response payload for quote creation operation. Returns operation results
+    and status.

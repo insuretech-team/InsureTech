@@ -1,0 +1,57 @@
+Task:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:task_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    title:
+      type: string
+      description: '@inject_tag: gorm:"column:title;not null"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    type:
+      $ref: '#/components/schemas/TaskTaskType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    priority:
+      allOf:
+      - $ref: '#/components/schemas/TaskPriority'
+      x-database-default: MEDIUM
+    status:
+      allOf:
+      - $ref: '#/components/schemas/TaskTaskStatus'
+      x-database-default: PENDING
+    assigned_to:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_to"'
+    created_by:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by"'
+    related_entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:related_entity_type"'
+    related_entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:related_entity_id"'
+    due_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:due_date;serializer:proto_timestamp"'
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Task (FR-136)
+  required:
+  - id
+  - title
+  - type
+  - priority
+  - status
+  - audit_info

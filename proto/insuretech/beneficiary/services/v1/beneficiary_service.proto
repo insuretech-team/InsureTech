@@ -1,0 +1,173 @@
+syntax = "proto3";
+
+package insuretech.beneficiary.services.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/beneficiary/entity/v1/beneficiary.proto";
+import "insuretech/beneficiary/entity/v1/individual.proto";
+import "insuretech/beneficiary/entity/v1/business.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/beneficiary/services/v1;beneficiaryservicev1";
+option csharp_namespace = "Insuretech.Beneficiary.Services.V1";
+
+service BeneficiaryService {
+  // Create individual beneficiary
+  rpc CreateIndividualBeneficiary(CreateIndividualBeneficiaryRequest) returns (CreateIndividualBeneficiaryResponse) {
+    option (google.api.http) = {
+      post: "/v1/beneficiaries/individual"
+      body: "*"
+    };
+  }
+  
+  // Create business beneficiary
+  rpc CreateBusinessBeneficiary(CreateBusinessBeneficiaryRequest) returns (CreateBusinessBeneficiaryResponse) {
+    option (google.api.http) = {
+      post: "/v1/beneficiaries/business"
+      body: "*"
+    };
+  }
+  
+  // Get beneficiary details
+  rpc GetBeneficiary(GetBeneficiaryRequest) returns (GetBeneficiaryResponse) {
+    option (google.api.http) = {
+      get: "/v1/beneficiaries/{beneficiary_id}"
+    };
+  }
+  
+  // Update beneficiary
+  rpc UpdateBeneficiary(UpdateBeneficiaryRequest) returns (UpdateBeneficiaryResponse) {
+    option (google.api.http) = {
+      patch: "/v1/beneficiaries/{beneficiary_id}"
+      body: "*"
+    };
+  }
+  
+  // Complete KYC
+  rpc CompleteKYC(CompleteKYCRequest) returns (CompleteKYCResponse) {
+    option (google.api.http) = {
+      post: "/v1/beneficiaries/{beneficiary_id}/kyc"
+      body: "*"
+    };
+  }
+  
+  // Update risk score
+  rpc UpdateRiskScore(UpdateRiskScoreRequest) returns (UpdateRiskScoreResponse) {
+    option (google.api.http) = {
+      post: "/v1/beneficiaries/{beneficiary_id}/risk-score"
+      body: "*"
+    };
+  }
+  
+  // List beneficiaries (admin)
+  rpc ListBeneficiaries(ListBeneficiariesRequest) returns (ListBeneficiariesResponse) {
+    option (google.api.http) = {
+      get: "/v1/beneficiaries"
+    };
+  }
+}
+
+message CreateIndividualBeneficiaryRequest {
+  string user_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string full_name = 2 [(google.api.field_behavior) = REQUIRED];
+  string date_of_birth = 3 [(google.api.field_behavior) = REQUIRED];
+  string gender = 4 [(google.api.field_behavior) = REQUIRED];
+  string nid_number = 5 [(google.api.field_behavior) = REQUIRED];
+  string mobile_number = 6 [(google.api.field_behavior) = REQUIRED];
+  string email = 7 [(google.api.field_behavior) = OPTIONAL];
+  string partner_id = 8 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CreateIndividualBeneficiaryResponse {
+  string beneficiary_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string beneficiary_code = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CreateBusinessBeneficiaryRequest {
+  string user_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string business_name = 2 [(google.api.field_behavior) = REQUIRED];
+  string trade_license_number = 3 [(google.api.field_behavior) = REQUIRED];
+  string tin_number = 4 [(google.api.field_behavior) = REQUIRED];
+  string focal_person_name = 5 [(google.api.field_behavior) = REQUIRED];
+  string focal_person_mobile = 6 [(google.api.field_behavior) = REQUIRED];
+  string partner_id = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CreateBusinessBeneficiaryResponse {
+  string beneficiary_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string beneficiary_code = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetBeneficiaryRequest {
+  string beneficiary_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetBeneficiaryResponse {
+  entity.v1.Beneficiary beneficiary = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  entity.v1.IndividualBeneficiary individual_details = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  entity.v1.BusinessBeneficiary business_details = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdateBeneficiaryRequest {
+  string beneficiary_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string mobile_number = 2 [(google.api.field_behavior) = OPTIONAL];
+  string email = 3 [(google.api.field_behavior) = OPTIONAL];
+  string address = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message UpdateBeneficiaryResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CompleteKYCRequest {
+  string beneficiary_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string nid_front_url = 2 [(google.api.field_behavior) = REQUIRED];
+  string nid_back_url = 3 [(google.api.field_behavior) = REQUIRED];
+  string selfie_url = 4 [(google.api.field_behavior) = REQUIRED];
+  string porichoy_verification_id = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CompleteKYCResponse {
+  string kyc_status = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdateRiskScoreRequest {
+  string beneficiary_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string risk_score = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateRiskScoreResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListBeneficiariesRequest {
+  string type = 1 [(google.api.field_behavior) = OPTIONAL];
+  string status = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListBeneficiariesResponse {
+  repeated entity.v1.Beneficiary beneficiaries = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

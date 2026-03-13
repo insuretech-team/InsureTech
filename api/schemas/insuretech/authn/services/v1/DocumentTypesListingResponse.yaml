@@ -1,0 +1,11 @@
+DocumentTypesListingResponse:
+  type: object
+  properties:
+    types:
+      type: array
+      items:
+        $ref: '#/components/schemas/AuthnDocumentType'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for document types listing operation. Returns operation
+    results and status.

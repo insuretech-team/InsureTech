@@ -1,0 +1,22 @@
+SessionRevokedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    session_type:
+      type: string
+      description: SERVER_SIDE or JWT
+    revoked_by:
+      type: string
+      description: user_id of admin or "system"
+    reason:
+      type: string
+      description: security, admin_action, suspicious_activity, etc.
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Session revoked (admin or security action)'

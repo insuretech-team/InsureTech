@@ -1,0 +1,789 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
+    <meta name="description" content="" />
+    <meta name="keywords" content="" />
+    <meta name="author" content="Sujon Ahmed" />
+
+    <title>Labaid Insuretech Company Ltd.</title>
+
+    <link rel="shortcut icon" type="image/x-icon" href="https://labaidinsuretech.com/frontend-assets/images/logos/favicon.svg" />
+
+    <link rel="preconnect" href="https://fonts.googleapis.com/" />
+    <link rel="preconnect" href="https://fonts.gstatic.com/" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Golos+Text:wght@400..900&amp;display=swap" rel="stylesheet" />
+
+    <link href="https://labaidinsuretech.com/frontend-assets/css/bootstrap.min.css" rel="stylesheet" media="screen" />
+
+    <link href="https://labaidinsuretech.com/frontend-assets/css/slicknav.min.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://labaidinsuretech.com/frontend-assets/css/swiper-bundle.min.css" />
+
+    <link href="https://labaidinsuretech.com/frontend-assets/css/all.css" rel="stylesheet" media="screen" />
+
+    <link href="https://labaidinsuretech.com/frontend-assets/css/animate.css" rel="stylesheet" />
+
+    <link rel="stylesheet" href="https://labaidinsuretech.com/frontend-assets/css/mousecursor.css" />
+
+    <link href="https://labaidinsuretech.com/frontend-assets/css/custom.css" rel="stylesheet" media="screen" />
+
+    </head>
+
+<body>
+    <div class="preloader">
+        <div class="loading-container">
+            <div class="loading"></div>
+            <div id="loading-icon">
+                <img src="images/logos/favicon.svg" alt="" />
+            </div>
+        </div>
+    </div>
+
+    <div class="topbar">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-12 col-md-12 text-center">
+                    <div class="topbar-info-content text-center">
+                        <p>
+                            Our website is currently undergoing maintenance. We apologize
+                            for the inconvenience and will be back shortly.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <header class="main-header">
+      <div class="header-sticky">
+          <nav class="navbar navbar-expand-lg">
+              <div class="container">
+                  <a class="navbar-brand" href="https://labaidinsuretech.com">
+                      <img src="https://labaidinsuretech.com/frontend-assets/images/logos/logo-header.svg" alt="Logo" />
+                  </a>
+
+                  <div class="collapse navbar-collapse main-menu">
+                      <div class="nav-menu-wrapper">
+                          <ul class="navbar-nav mr-auto" id="menu">
+                              <li class="nav-item">
+                                  <a class="nav-link" href="https://labaidinsuretech.com">Home</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" href="https://labaidinsuretech.com/about">About Us</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" href="https://labaidinsuretech.com/services">Services</a>
+                              </li>
+                              <li class="nav-item">
+                                  <a class="nav-link" href="https://labaidinsuretech.com/contact">Contact Us</a>
+                              </li>
+                          </ul>
+                      </div>
+                  </div>
+
+                  <div class="navbar-toggle"></div>
+              </div>
+          </nav>
+          <div class="responsive-menu"></div>
+      </div>
+  </header>
+
+        <div class="hero parallaxie">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="hero-content">
+                        <div class="section-title">
+                            <h1 class="text-anime-style-2" data-cursor="-opaque">
+                                Redefining <span>the Future</span> of Protection
+                            </h1>
+                        </div>
+
+                        <div class="hero-content-body">
+                            <div class="company-support-item wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/icon-company-support-1.svg"
+                                        alt="" />
+                                </div>
+                                <div class="company-support-content">
+                                    <p>AI-powered fraud detection for secure claims</p>
+                                </div>
+                            </div>
+
+                            <div class="company-support-item wow fadeInUp" data-wow-delay="0.75s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/icon-company-support-2.svg"
+                                        alt="" />
+                                </div>
+                                <div class="company-support-content">
+                                    <p>Online claim submission and Real-time claim tracking</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="about-us">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="about-image">
+                        <div class="about-img">
+                            <figure class="image-anime">
+                                <img src="https://labaidinsuretech.com/frontend-assets/images/Gemini_Generated_Image_cuqnoocuqnoocuqn.png"
+                                    alt="" />
+                            </figure>
+                        </div>
+
+                        <div class="company-processing-box">
+                            <div class="icon-box">
+                                <img src="https://labaidinsuretech.com/frontend-assets/images/icon-company-processing.svg"
+                                    alt="" />
+                            </div>
+                            <div class="company-processing-content">
+                                <p>Fast claim settlement in 1–3 days</p>
+                            </div>
+                        </div>
+
+                        <div class="about-company-testimonial">
+                            <div class="about-testimonial-slider">
+                                <div class="swiper">
+                                    <div class="swiper-wrapper" data-cursor-text="Drag">
+                                        <div class="swiper-slide">
+                                            <div class="about-testimonial-item">
+                                                <p>Access anytime via mobile app or web</p>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="about-content">
+                        <div class="section-title">
+                            <h3 class="wow fadeInUp">about us</h3>
+
+                            <p class="wow fadeInUp" data-wow-delay="0.25s">
+                                Labaid InsureTech Company Limited is a digital-first insurance
+                                provider that builds simple, affordable insurance products and
+                                seamless tech-enabled buying, servicing and claims experiences
+                                — working with partners like Pragati Insurance, Chartered Life
+                                Insurance, InsureTech Life Insurance to reach individuals and
+                                microbusinesses.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="our-services">
+        <div class="container">
+            <div class="row section-row">
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">services</h3>
+                    <h2 class="text-anime-style-2" data-cursor="-opaque">
+                        Comprehensive <span>Insuretech</span> services.
+                    </h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.25s">
+                        Our comprehensive insurance services are designed to provide you
+                        with peace of mind, no matter your needs
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-3 col-md-6">
+                    <div class="service-item wow fadeInUp" data-wow-delay="0.2s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/service-icons/DeviceInsurance.svg"
+                                alt="" />
+                        </div>
+                        <div class="service-content">
+                            <h3>Device Insurance</h3>
+                            <p>
+                                Labaid InsureTech provides reliable insurance for smartphones,
+                                laptops, tablets, and other gadgets. The coverage includes...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="service-item wow fadeInUp" data-wow-delay="0.4s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/service-icons/PropertyWealthInsurance.svg"
+                                alt="" />
+                        </div>
+                        <div class="service-content">
+                            <h3>Property / Wealth Insurance</h3>
+                            <p>
+                                Property Insurance safeguards homes, commercial properties,
+                                and valuables against fire, theft, burglary, and natural...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="service-item wow fadeInUp" data-wow-delay="0.6s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/service-icons/CropsInsurance.svg"
+                                alt="" />
+                        </div>
+                        <div class="service-content">
+                            <h3>Crops Insurance</h3>
+                            <p>
+                                Crop Insurance supports farmers and agribusinesses by
+                                protecting crops against flood, drought, pests, disease, hail,
+                                and fire...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="service-item wow fadeInUp" data-wow-delay="0.8s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/service-icons/MotorVehicleInsurance.svg"
+                                alt="" />
+                        </div>
+                        <div class="service-content">
+                            <h3>Motor/Vehicle Insurance</h3>
+                            <p>
+                                Labaid InsureTech offers complete motor insurance for cars,
+                                motorcycles, and commercial vehicles...
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="why-choose-us">
+        <div class="container">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <div class="why-choose-content">
+                        <div class="section-title">
+                            <h3 class="wow fadeInUp">why choose us</h3>
+                            <h2 class="text-anime-style-2" data-cursor="-opaque">
+                                Why you should choose our <span>Insuretech</span> policy's
+                            </h2>
+                        </div>
+
+                        <div class="why-choose-body">
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.25s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/icon-why-choose-1.svg"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Submit claims online anytime</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/IPDTreatment.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Cashless ambulance & IPD treatment</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.75s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/icon-why-choose-3.svg"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Fast claim settlement in 1–3 days</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="1s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/DoctorConsultation.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>24/7 doctor consultation & priority appointments</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.25s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/AIChatbot.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>AI chatbot for instant support</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.5s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/FraudDetection.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>AI-powered fraud detection for secure claims</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.75s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/PolicyRecommendation.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Personalized policy recommendations</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="1s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/ClaimTracking.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Real-time claim tracking</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="0.75s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/WellnessPreventiveCare.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Wellness & preventive care reminders</h3>
+                                </div>
+                            </div>
+
+                            <div class="why-choose-item wow fadeInUp" data-wow-delay="1s">
+                                <div class="icon-box">
+                                    <img src="https://labaidinsuretech.com/frontend-assets/images/why-choose-icons/AccessMobileApp.png"
+                                        alt="" />
+                                </div>
+                                <div class="why-choose-item-content">
+                                    <h3>Access anytime via mobile app or web</h3>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-6">
+                    <div class="why-choose-images">
+                        <div class="why-choose-img">
+                            <figure class="image-anime">
+                                <img src="https://labaidinsuretech.com/frontend-assets/images/Gemini_Generated_Image_usuhpcusuhpcusuh.png"
+                                    alt="" />
+                            </figure>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="how-it-work">
+        <div class="container">
+            <div class="row section-row">
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">how it work</h3>
+                    <h2 class="text-anime-style-2" data-cursor="-opaque">
+                        Our <span>Insuretech</span> process easy steps to get covered
+                    </h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.25s">
+                        Our Insuretech process are designed to provide you with peace of
+                        mind, no matter your needs
+                    </p>
+                </div>
+            </div>
+
+            <div class="row align-items-start">
+                <div class="col-lg-3 col-md-6">
+                    <div class="how-work-item">
+                        <div class="how-work-no">
+                            <h3>01</h3>
+                        </div>
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-how-work-1.svg" alt="" />
+                        </div>
+                        <div class="how-work-content">
+                            <h3>tailored solutions</h3>
+                            <p>
+                                Our experts craft a personalized insurance plan that fits your
+                                lifestyle.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="how-work-item">
+                        <div class="how-work-no">
+                            <h3>02</h3>
+                        </div>
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-how-work-2.svg" alt="" />
+                        </div>
+                        <div class="how-work-content">
+                            <h3>easy enrollment</h3>
+                            <p>
+                                We guide you through the simple, hassle-free process of
+                                securing your coverage.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="how-work-item">
+                        <div class="how-work-no">
+                            <h3>03</h3>
+                        </div>
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-how-work-3.svg" alt="" />
+                        </div>
+                        <div class="how-work-content">
+                            <h3>ongoing support</h3>
+                            <p>
+                                Enjoy peace of mind with our 24/7 support and assistance
+                                whenever you need it.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-6">
+                    <div class="how-work-item">
+                        <div class="how-work-no">
+                            <h3>04</h3>
+                        </div>
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-how-work-4.svg" alt="" />
+                        </div>
+                        <div class="how-work-content">
+                            <h3>claims & adjustments</h3>
+                            <p>
+                                Quick, efficient claims handling and flexible policy
+                                adjustments to ensure.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="our-features">
+        <div class="container">
+            <div class="row section-row">
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">our feature</h3>
+                    <h2 class="text-anime-style-2" data-cursor="-opaque">
+                        Discover our key <span>InsureTech features</span>
+                    </h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.25s">
+                        Explore the standout features of our insuretech plans, designed to
+                        offer you comprehensive protection, flexible options, and
+                        exceptional service
+                    </p>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-4 col-md-6">
+                    <div class="features-item wow fadeInUp">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-features-1.svg" alt="" />
+                        </div>
+                        <div class="features-content">
+                            <h3>Life</h3>
+                            <p>
+                                Tailor your insurance coverage to match your lifestyle,
+                                priorities, and budget with complete flexibility.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="features-item wow fadeInUp" data-wow-delay="0.25s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-features-2.svg" alt="" />
+                        </div>
+                        <div class="features-content">
+                            <h3>Non-Life</h3>
+                            <p>
+                                Save more by combining multiple policies under one plan while
+                                enjoying comprehensive protection.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-lg-4 col-md-6">
+                    <div class="features-item wow fadeInUp" data-wow-delay="0.5s">
+                        <div class="icon-box">
+                            <img src="https://labaidinsuretech.com/frontend-assets/images/icon-features-3.svg" alt="" />
+                        </div>
+                        <div class="features-content">
+                            <h3>General</h3>
+                            <p>
+                                One accident won’t define your future—maintain your rates and
+                                peace of mind when mistakes happen.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="support-team">
+        <div class="container">
+            <div class="row section-row">
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">our support team</h3>
+                    <h2 class="text-anime-style-2" data-cursor="-opaque">
+                        We're <span>here to help,</span> 24/7.
+                    </h2>
+                    <p class="wow fadeInUp" data-wow-delay="0.25s">
+                        Explore the standout features of our insuretech plans, designed to
+                        offer you comprehensive protection, flexible options, and
+                        exceptional service
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="our-partners mt-5">
+        <div class="container">
+            <div class="row section-row">
+                <div class="section-title">
+                    <h3 class="wow fadeInUp">our pertners</h3>
+                    <h2 class="text-anime-style-2" data-cursor="-opaque">
+                        Our Pertners
+                    </h2>
+                </div>
+            </div>
+
+            <div class="row mb-5">
+                <div class="col-lg-3 col-6 mb-4 mb-md-0">
+                    <div class="card shadow border-0 wow fadeInUp d-flex align-items-center justify-content-center"
+                        style="min-height: 200px; max-height: 200px">
+                        <img src="https://labaidinsuretech.com/frontend-assets/images/partners/progoti.jpg" alt="" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6 mb-4 mb-md-0">
+                    <div class="card shadow border-0 wow fadeInUp d-flex align-items-center justify-content-center"
+                        data-wow-delay="0.25s" style="min-height: 200px; max-height: 200px">
+                        <img src="https://labaidinsuretech.com/frontend-assets/images/partners/chatered.png " alt="" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6 mb-4 mb-md-0">
+                    <div class="card shadow border-0 wow fadeInUp d-flex align-items-center justify-content-center"
+                        style="min-height: 200px; max-height: 200px">
+                        <img src="https://labaidinsuretech.com/frontend-assets/images/partners/megna.jpg" alt="" />
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-6 mb-4 mb-md-0">
+                    <div class="card shadow border-0 wow fadeInUp d-flex align-items-center justify-content-center"
+                        data-wow-delay="0.25s" style="min-height: 200px; max-height: 200px">
+                        <img src="https://labaidinsuretech.com/frontend-assets/images/partners/meetlife.webp" alt="" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer class="main-footer">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="footer-newsletter-box">
+                    <div class="row align-items-center">
+                        <div class="col-lg-6">
+                            <div class="footer-newsletter-item">
+                                <div class="icon-box">
+                                    <img src="images/icon-newsletter-mail.svg" alt="" />
+                                </div>
+                                <div class="footer-newsletter-item-content">
+                                    <h3>Stay informed with our newsletter</h3>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6">
+                            <div class="footer-newsletter-form">
+                                <form id="newslettersForm" action="#" method="POST">
+                                    <div class="form-group">
+                                        <input type="email" name="mail" class="form-control" id="mail"
+                                            placeholder="Enter your email" required />
+                                        <button type="submit" class="btn-default btn-highlighted">
+                                            subscribe
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-12">
+                <div class="about-footer">
+                    <div class="footer-logo">
+                        <img src="https://labaidinsuretech.com/frontend-assets/images/logos/logo-footer.svg" alt="" />
+                    </div>
+
+                    <div class="about-footer-content">
+                        <p>
+                            We are committed to providing personalized insurance
+                            solutions.
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-12">
+                <div class="footer-links">
+                    <h3>Quick Links</h3>
+                    <ul>
+                        <li><a href="https://labaidinsuretech.com">Home</a></li>
+                        <li><a href="https://labaidinsuretech.com/about">About us</a></li>
+                        <li><a href="https://labaidinsuretech.com/services">Services</a></li>
+                        <li><a href="https://labaidinsuretech.com/contact">Contact</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-12">
+                <div class="footer-links">
+                    <h3>Usefull Links</h3>
+                    <ul>
+                        <li><a href="#">Support</a></li>
+                        <li><a href="#">Services</a></li>
+                        <li><a href="#">Terms & Conditions </a></li>
+                        <li><a href="#">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-6 col-12">
+                <div class="footer-links">
+                    <h3>Our Services</h3>
+                    <ul>
+                        <li><a href="#"> Device Insurance</a></li>
+                        <li><a href="#"> Property / Wealth Insurance</a></li>
+                        <li><a href="#"> Crops Insurance</a></li>
+                        <li><a href="#"> Motor/Vehicle Insurance</a></li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-6 col-12">
+                <div class="footer-links">
+                    <h3>Get in touch</h3>
+                    <ul>
+                        <li><a href="#">01766662772</a></li>
+                        <li><a href="#"><span class="__cf_email__" data-cfemail="e38f8281828a878a8d909691869786808ba3848e828a8fcd808c8e">[email&#160;protected]</span></a></li>
+                        <li>
+                            <a href="#">House-66, Mirpur Road, 67 Kalabagan 2nd Ln, Dhaka 1205</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer-copyright">
+            <div class="row align-items-center">
+                <div class="col-lg-6 col-md-6">
+                    <div class="footer-copyright-text">
+                        <p>Copyright © 2024 All Rights Reserved.</p>
+                    </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6">
+                    <div class="footer-social-links">
+                        <ul>
+                            <li>
+                                <a href="https://www.facebook.com/LabaidInsuretech" target="_blank"><i
+                                        class="fa-brands fa-facebook-f"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.youtube.com/@LabaidInsuretech" target="_blank"><i
+                                        class="fa-brands fa-youtube"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.instagram.com/labaidinsuretech" target="_blank"><i
+                                        class="fa-brands fa-instagram"></i></a>
+                            </li>
+                            <li>
+                                <a href="https://www.linkedin.com/company/labaidinsuretech" target="_blank"><i
+                                        class="fa-brands fa-linkedin-in"></i></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</footer>
+
+    <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script src="https://labaidinsuretech.com/frontend-assets/js/jquery-3.7.1.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/bootstrap.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/validator.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/jquery.slicknav.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/swiper-bundle.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/jquery.waypoints.min.js"></script>
+    <script src="https://labaidinsuretech.com/frontend-assets/js/jquery.counterup.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/SmoothScroll.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/parallaxie.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/gsap.min.js"></script>
+    <script src="https://labaidinsuretech.com/frontend-assets/js/magiccursor.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/SplitText.js"></script>
+    <script src="https://labaidinsuretech.com/frontend-assets/js/ScrollTrigger.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/jquery.mb.YTPlayer.min.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/wow.js"></script>
+
+    <script src="https://labaidinsuretech.com/frontend-assets/js/function.js"></script>
+
+    <script defer src="https://static.cloudflareinsights.com/beacon.min.js/vcd15cbe7772f49c399c6a5babf22c1241717689176015" integrity="sha512-ZpsOmlRQV6y907TI0dKBHq9Md29nnaEIPlkf84rnaERnq6zvWvPUqr2ft8M1aS28oN72PdrCzSjY4U6VaAw1EQ==" data-cf-beacon='{"version":"2024.11.0","token":"bbf60096308d4e54816895c37bc9df43","r":1,"server_timing":{"name":{"cfCacheStatus":true,"cfEdge":true,"cfExtPri":true,"cfL4":true,"cfOrigin":true,"cfSpeedBrain":true},"location_startswith":null}}' crossorigin="anonymous"></script>
+</body>
+
+</html>
+

@@ -1,0 +1,49 @@
+MFSWebhook:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:webhook_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    provider:
+      type: string
+      description: '@inject_tag: gorm:"column:provider;not null"'
+    event_type:
+      type: string
+      description: '@inject_tag: gorm:"column:event_type;not null"'
+    payload:
+      type: string
+      description: '@inject_tag: gorm:"column:payload;not null"'
+    headers:
+      type: string
+      description: '@inject_tag: gorm:"column:headers"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/WebhookStatus'
+      x-database-default: PENDING
+    signature_valid:
+      type: boolean
+      description: '@inject_tag: gorm:"column:signature_valid"'
+    mfs_transaction_id:
+      type: string
+      description: '@inject_tag: gorm:"column:mfs_transaction_id"'
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+    processed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: MFS webhook log
+  required:
+  - id
+  - provider
+  - event_type
+  - payload
+  - status
+  - audit_info

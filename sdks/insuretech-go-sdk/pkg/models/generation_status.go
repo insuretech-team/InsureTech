@@ -1,0 +1,13 @@
+package models
+
+// GenerationStatus represents a generation_status
+type GenerationStatus string
+
+// GenerationStatus values
+const (
+	GenerationStatusGENERATIONSTATUSUNSPECIFIED GenerationStatus = "GENERATION_STATUS_UNSPECIFIED"
+	GenerationStatusGENERATIONSTATUSPENDING  = "GENERATION_STATUS_PENDING"
+	GenerationStatusGENERATIONSTATUSPROCESSING  = "GENERATION_STATUS_PROCESSING"
+	GenerationStatusGENERATIONSTATUSCOMPLETED  = "GENERATION_STATUS_COMPLETED"
+	GenerationStatusGENERATIONSTATUSFAILED  = "GENERATION_STATUS_FAILED"
+)

@@ -1,0 +1,6 @@
+InsuranceIndividualBeneficiaryCreationRequest:
+  type: object
+  properties:
+    individual:
+      $ref: '#/components/schemas/IndividualBeneficiary'
+  description: ========== INDIVIDUAL BENEFICIARY MESSAGES ==========

@@ -1,0 +1,117 @@
+BusinessBeneficiary:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"'
+    beneficiary_id:
+      type: string
+      description: '@inject_tag: gorm:"column:parent_beneficiary_id;not null"'
+    business_name:
+      type: string
+      description: '@inject_tag: gorm:"column:business_name;not null"'
+    business_name_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:business_name_bn"'
+    trade_license_number:
+      type: string
+      description: '@inject_tag: gorm:"column:trade_license_number;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-log-masked: true
+    trade_license_issue_date:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:trade_license_issue_date;serializer:proto_timestamp\"\
+        \n gorm:\"column:trade_license_issue_date;serializer:proto_timestamp\""
+    trade_license_expiry_date:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:trade_license_expiry_date;serializer:proto_timestamp\"\
+        \n gorm:\"column:trade_license_expiry_date;serializer:proto_timestamp\""
+    tin_number:
+      type: string
+      description: '@inject_tag: gorm:"column:tin_number;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-log-masked: true
+    bin_number:
+      type: string
+      description: '@inject_tag: gorm:"column:bin_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-log-masked: true
+    business_type:
+      $ref: '#/components/schemas/BusinessType'
+      description: '@inject_tag: gorm:"column:business_type;not null;serializer:proto_enum"'
+    industry_sector:
+      type: string
+      description: '@inject_tag: gorm:"column:industry_sector"'
+    employee_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:employee_count"'
+    incorporation_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:incorporation_date;serializer:proto_timestamp"'
+    contact_info:
+      $ref: '#/components/schemas/ContactInfo'
+    registered_address:
+      $ref: '#/components/schemas/Address'
+      description: '@inject_tag: gorm:"column:contact_info;not null"'
+    business_address:
+      $ref: '#/components/schemas/Address'
+      description: "@inject_tag: gorm:\"column:registered_address;not null\"\n @inject_tag:\
+        \ gorm:\"column:business_address;not null\""
+    focal_person_name:
+      type: string
+      description: "Focal person (authorized signatory)\n @inject_tag: gorm:\"column:focal_person_name;not\
+        \ null\""
+    focal_person_designation:
+      type: string
+      description: '@inject_tag: gorm:"column:focal_person_designation"'
+    focal_person_nid:
+      type: string
+      description: '@inject_tag: gorm:"column:focal_person_nid"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification for authorized signatory
+      x-retention-days: 2555
+    focal_person_contact:
+      $ref: '#/components/schemas/ContactInfo'
+      description: '@inject_tag: gorm:"column:focal_person_contact;not null"'
+    audit_info:
+      $ref: '#/components/schemas/AuditInfo'
+      description: '@inject_tag: gorm:"column:audit_info;not null"'
+    registration_number:
+      type: string
+      description: '@inject_tag: gorm:"column:registration_number"'
+    tax_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tax_id"'
+    primary_contact:
+      $ref: '#/components/schemas/PrimaryContact'
+      description: '@inject_tag: gorm:"column:primary_contact;serializer:proto_enum"'
+    total_employees_covered:
+      type: integer
+      format: int32
+      description: "Dashboard metrics (cached)\n @inject_tag: gorm:\"column:total_employees_covered;not\
+        \ null\""
+    active_policies_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:active_policies_count;not null"'
+    total_premium_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:total_premium_amount;not null"'
+    pending_actions_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:pending_actions_count;not null"'
+  description: Business (B2B) beneficiary details

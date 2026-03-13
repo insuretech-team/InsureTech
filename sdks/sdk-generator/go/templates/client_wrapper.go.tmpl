@@ -1,0 +1,272 @@
+package client
+
+import (
+	"context"
+	"fmt"
+	"time"
+)
+
+// ClientWrapper provides high-level convenience methods
+type ClientWrapper struct {
+	client *Client
+}
+
+// NewClientWrapper creates a new client wrapper
+func NewClientWrapper(client *Client) *ClientWrapper {
+	return &ClientWrapper{
+		client: client,
+	}
+}
+
+// WithRetry executes a function with automatic retry logic
+func (cw *ClientWrapper) WithRetry(ctx context.Context, maxRetries int, fn func() error) error {
+	var lastErr error
+	backoff := time.Second
+
+	for attempt := 0; attempt <= maxRetries; attempt++ {
+		// Check if context is cancelled
+		select {
+		case <-ctx.Done():
+			return ctx.Err()
+		default:
+		}
+
+		// Execute the function
+		err := fn()
+		if err == nil {
+			return nil
+		}
+
+		lastErr = err
+
+		// Check if error is retryable
+		if apiErr, ok := err.(*APIError); ok {
+			if !isRetryableError(apiErr) {
+				return err
+			}
+		}
+
+		// Don't sleep on last attempt
+		if attempt < maxRetries {
+			time.Sleep(backoff)
+			backoff *= 2 // Exponential backoff
+		}
+	}
+
+	return fmt.Errorf("max retries exceeded: %w", lastErr)
+}
+
+// isRetryableError determines if an error should be retried
+func isRetryableError(err *APIError) bool {
+	// Retry on rate limiting
+	if err.IsRateLimited() {
+		return true
+	}
+
+	// Retry on server errors
+	if err.IsServerError() {
+		return true
+	}
+
+	// Retry on specific status codes
+	switch err.StatusCode {
+	case 408, 429, 502, 503, 504:
+		return true
+	default:
+		return false
+	}
+}
+
+// WithTimeout executes a function with a timeout
+func (cw *ClientWrapper) WithTimeout(timeout time.Duration, fn func(ctx context.Context) error) error {
+	ctx, cancel := context.WithTimeout(context.Background(), timeout)
+	defer cancel()
+	return fn(ctx)
+}
+
+// BatchRequest executes multiple requests in parallel
+type BatchRequest struct {
+	Name string
+	Fn   func() error
+}
+
+// BatchResult contains the result of a batch request
+type BatchResult struct {
+	Name  string
+	Error error
+}
+
+// ExecuteBatch executes multiple requests in parallel
+func (cw *ClientWrapper) ExecuteBatch(ctx context.Context, requests []BatchRequest) []BatchResult {
+	results := make([]BatchResult, len(requests))
+	done := make(chan int, len(requests))
+
+	for i, req := range requests {
+		go func(index int, request BatchRequest) {
+			results[index] = BatchResult{
+				Name:  request.Name,
+				Error: request.Fn(),
+			}
+			done <- index
+		}(i, req)
+	}
+
+	// Wait for all requests to complete or context to be cancelled
+	for i := 0; i < len(requests); i++ {
+		select {
+		case <-done:
+		case <-ctx.Done():
+			// Context cancelled, return partial results
+			return results
+		}
+	}
+
+	return results
+}
+
+// RateLimiter provides client-side rate limiting
+type RateLimiter struct {
+	tokens   chan struct{}
+	interval time.Duration
+}
+
+// NewRateLimiter creates a new rate limiter
+func NewRateLimiter(requestsPerSecond int) *RateLimiter {
+	rl := &RateLimiter{
+		tokens:   make(chan struct{}, requestsPerSecond),
+		interval: time.Second / time.Duration(requestsPerSecond),
+	}
+
+	// Fill initial tokens
+	for i := 0; i < requestsPerSecond; i++ {
+		rl.tokens <- struct{}{}
+	}
+
+	// Refill tokens
+	go func() {
+		ticker := time.NewTicker(rl.interval)
+		defer ticker.Stop()
+		for range ticker.C {
+			select {
+			case rl.tokens <- struct{}{}:
+			default:
+			}
+		}
+	}()
+
+	return rl
+}
+
+// Wait blocks until a token is available
+func (rl *RateLimiter) Wait(ctx context.Context) error {
+	select {
+	case <-rl.tokens:
+		return nil
+	case <-ctx.Done():
+		return ctx.Err()
+	}
+}
+
+// Execute executes a function with rate limiting
+func (rl *RateLimiter) Execute(ctx context.Context, fn func() error) error {
+	if err := rl.Wait(ctx); err != nil {
+		return err
+	}
+	return fn()
+}
+
+// Cache provides a simple in-memory cache for API responses
+type Cache struct {
+	items map[string]cacheItem
+}
+
+type cacheItem struct {
+	data      interface{}
+	expiresAt time.Time
+}
+
+// NewCache creates a new cache
+func NewCache() *Cache {
+	return &Cache{
+		items: make(map[string]cacheItem),
+	}
+}
+
+// Get retrieves an item from the cache
+func (c *Cache) Get(key string) (interface{}, bool) {
+	item, ok := c.items[key]
+	if !ok {
+		return nil, false
+	}
+
+	if time.Now().After(item.expiresAt) {
+		delete(c.items, key)
+		return nil, false
+	}
+
+	return item.data, true
+}
+
+// Set stores an item in the cache
+func (c *Cache) Set(key string, data interface{}, ttl time.Duration) {
+	c.items[key] = cacheItem{
+		data:      data,
+		expiresAt: time.Now().Add(ttl),
+	}
+}
+
+// Delete removes an item from the cache
+func (c *Cache) Delete(key string) {
+	delete(c.items, key)
+}
+
+// Clear removes all items from the cache
+func (c *Cache) Clear() {
+	c.items = make(map[string]cacheItem)
+}
+
+// GetOrFetch retrieves from cache or fetches if not present
+func (c *Cache) GetOrFetch(key string, ttl time.Duration, fetchFn func() (interface{}, error)) (interface{}, error) {
+	// Try cache first
+	if data, ok := c.Get(key); ok {
+		return data, nil
+	}
+
+	// Fetch from source
+	data, err := fetchFn()
+	if err != nil {
+		return nil, err
+	}
+
+	// Store in cache
+	c.Set(key, data, ttl)
+	return data, nil
+}
+
+// Cleanup removes expired items from the cache
+func (c *Cache) Cleanup() {
+	now := time.Now()
+	for key, item := range c.items {
+		if now.After(item.expiresAt) {
+			delete(c.items, key)
+		}
+	}
+}
+
+// StartAutoCleanup starts automatic cache cleanup
+func (c *Cache) StartAutoCleanup(interval time.Duration) chan struct{} {
+	done := make(chan struct{})
+	go func() {
+		ticker := time.NewTicker(interval)
+		defer ticker.Stop()
+		for {
+			select {
+			case <-ticker.C:
+				c.Cleanup()
+			case <-done:
+				return
+			}
+		}
+	}()
+	return done
+}

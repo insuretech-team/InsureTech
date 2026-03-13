@@ -1,0 +1,11 @@
+AuthzJWKSRetrievalResponse:
+  type: object
+  properties:
+    keys:
+      type: array
+      items:
+        $ref: '#/components/schemas/AuthzJWK'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for jwks retrieval operation. Returns operation results
+    and status.

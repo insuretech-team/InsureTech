@@ -1,0 +1,9 @@
+DiscontinueProductResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for discontinue product operation. Returns operation
+    results and status.

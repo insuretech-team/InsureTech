@@ -1,0 +1,52 @@
+RenewalSchedule:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:schedule_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    renewal_due_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:renewal_due_date;not null;serializer:proto_timestamp"'
+    renewal_premium:
+      $ref: '#/components/schemas/Money'
+    renewal_type:
+      $ref: '#/components/schemas/RenewalType'
+      description: '@inject_tag: gorm:"column:renewal_type;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/RenewalStatus'
+      x-database-default: PENDING
+    grace_period_days:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:grace_period_days"'
+      default: 30
+    grace_period_end:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:grace_period_end;serializer:proto_timestamp"'
+    renewed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:renewed_at;serializer:proto_timestamp"'
+    renewed_policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:renewed_policy_id"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Renewal schedule for policy (FR-084 to FR-092)
+  required:
+  - id
+  - policy_id
+  - renewal_due_date
+  - renewal_type
+  - status
+  - audit_info

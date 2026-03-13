@@ -1,0 +1,28 @@
+ClaimsAssessmentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    claim_id:
+      type: string
+    agent_id:
+      type: string
+    assessment_result:
+      type: string
+      description: APPROVE, REJECT, NEEDS_INFO
+    recommended_amount:
+      $ref: '#/components/schemas/Money'
+    confidence_score:
+      type: number
+      format: double
+    reasons:
+      type: array
+      items:
+        type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Claims assessment completed'

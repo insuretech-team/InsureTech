@@ -1,0 +1,20 @@
+FileUploadFinalizedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    file_id:
+      type: string
+    tenant_id:
+      type: string
+    size_bytes:
+      type: string
+      format: int64
+    content_type:
+      type: string
+    finalized_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: Emitted after finalize/upload verification completes.

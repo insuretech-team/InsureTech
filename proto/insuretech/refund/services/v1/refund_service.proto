@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package insuretech.refund.services.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/refund/entity/v1/refund.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/refund/services/v1;refundservicev1";
+option csharp_namespace = "Insuretech.Refund.Services.V1";
+
+service RefundService {
+  // Request refund
+  rpc RequestRefund(RequestRefundRequest) returns (RequestRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}/refund"
+      body: "*"
+    };
+  }
+  
+  // Calculate refund amount
+  rpc CalculateRefund(CalculateRefundRequest) returns (CalculateRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}/refunds?action=calculate"
+      body: "*"
+    };
+  }
+  
+  // Get refund
+  rpc GetRefund(GetRefundRequest) returns (GetRefundResponse) {
+    option (google.api.http) = {
+      get: "/v1/refunds/{refund_id}"
+    };
+  }
+  
+  // Approve refund
+  rpc ApproveRefund(ApproveRefundRequest) returns (ApproveRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/refunds/{refund_id}?action=approve"
+      body: "*"
+    };
+  }
+  
+  // Process refund payment
+  rpc ProcessRefund(ProcessRefundRequest) returns (ProcessRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/refunds/{refund_id}?action=process"
+      body: "*"
+    };
+  }
+  
+  // List refunds
+  rpc ListRefunds(ListRefundsRequest) returns (ListRefundsResponse) {
+    option (google.api.http) = {
+      get: "/v1/refunds"
+    };
+  }
+}
+
+message RequestRefundRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason_details = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message RequestRefundResponse {
+  string refund_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string refund_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CalculateRefundRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CalculateRefundResponse {
+  string total_premium_paid = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string premium_used = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string cancellation_charge = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money refundable_amount = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string calculation_details = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetRefundRequest {
+  string refund_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetRefundResponse {
+  entity.v1.Refund refund = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ApproveRefundRequest {
+  string refund_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string approved_by = 2 [(google.api.field_behavior) = REQUIRED];
+  string comments = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ApproveRefundResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ProcessRefundRequest {
+  string refund_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string payment_method = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_reference = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ProcessRefundResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string processed_at = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListRefundsRequest {
+  string status = 1 [(google.api.field_behavior) = OPTIONAL];
+  string beneficiary_id = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListRefundsResponse {
+  repeated entity.v1.Refund refunds = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

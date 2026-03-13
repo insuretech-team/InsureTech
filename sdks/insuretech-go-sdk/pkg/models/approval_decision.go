@@ -1,0 +1,13 @@
+package models
+
+// ApprovalDecision represents a approval_decision
+type ApprovalDecision string
+
+// ApprovalDecision values
+const (
+	ApprovalDecisionAPPROVALDECISIONUNSPECIFIED ApprovalDecision = "APPROVAL_DECISION_UNSPECIFIED"
+	ApprovalDecisionAPPROVALDECISIONPENDING  = "APPROVAL_DECISION_PENDING"
+	ApprovalDecisionAPPROVALDECISIONAPPROVED  = "APPROVAL_DECISION_APPROVED"
+	ApprovalDecisionAPPROVALDECISIONREJECTED  = "APPROVAL_DECISION_REJECTED"
+	ApprovalDecisionAPPROVALDECISIONNEEDSMOREINFO  = "APPROVAL_DECISION_NEEDS_MORE_INFO"
+)

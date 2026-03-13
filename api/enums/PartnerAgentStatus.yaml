@@ -1,0 +1,9 @@
+PartnerAgentStatus:
+  type: string
+  enum:
+  - AGENT_STATUS_UNSPECIFIED
+  - AGENT_STATUS_ACTIVE
+  - AGENT_STATUS_INACTIVE
+  - AGENT_STATUS_SUSPENDED
+  description: 'Status values for agent. Defines lifecycle states: AGENT_STATUS_UNSPECIFIED,
+    AGENT_STATUS_ACTIVE, AGENT_STATUS_INACTIVE, AGENT_STATUS_SUSPENDED.'

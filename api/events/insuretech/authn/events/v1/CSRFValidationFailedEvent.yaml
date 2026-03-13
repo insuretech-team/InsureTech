@@ -1,0 +1,28 @@
+CSRFValidationFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    expected_csrf_token_hash:
+      type: string
+      description: Hashed for security
+    received_csrf_token_hash:
+      type: string
+      description: Hashed for security
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    request_path:
+      type: string
+    request_method:
+      type: string
+      description: POST, PUT, DELETE, PATCH
+  description: 'Event: CSRF validation failed (server-side sessions only)'

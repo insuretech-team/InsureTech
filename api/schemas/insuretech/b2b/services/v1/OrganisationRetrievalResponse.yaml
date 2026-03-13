@@ -1,0 +1,9 @@
+OrganisationRetrievalResponse:
+  type: object
+  properties:
+    organisation:
+      $ref: '#/components/schemas/Organisation'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for organisation retrieval operation. Returns operation
+    results and status.

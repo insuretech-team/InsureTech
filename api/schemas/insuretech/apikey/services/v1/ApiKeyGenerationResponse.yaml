@@ -1,0 +1,15 @@
+ApiKeyGenerationResponse:
+  type: object
+  properties:
+    api_key_id:
+      type: string
+    api_key:
+      type: string
+      description: Plain text - show only once!
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for api key generation operation. Returns operation
+    results and status.

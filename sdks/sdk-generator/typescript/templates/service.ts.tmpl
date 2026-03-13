@@ -1,0 +1,54 @@
+// Auto-generated Service: {{.ServiceName}}
+// DO NOT EDIT - This file is generated
+
+import { HttpClient } from '../http-client';
+import {
+  {{range .Models}}
+  {{.}},
+  {{end}}
+} from '../models';
+
+/**
+ * {{.ServiceName}} Service
+ * {{.Description}}
+ */
+export class {{.ClassName}} {
+  constructor(private http: HttpClient) {}
+  
+  {{range .Methods}}
+  /**
+   * {{.Description}}
+   {{if .PathParams}}{{range .PathParams}}
+   * @param {{.value}} - Path parameter
+   {{end}}{{end}}
+   {{if .hasBody}}
+   * @param request - Request body
+   {{end}}
+   {{if .hasQuery}}
+   * @param query - Query parameters
+   {{end}}
+   * @returns Promise<{{.ReturnType}}>
+   * @throws {ApiError} If the request fails
+   * 
+   * @example
+   * ```typescript
+   * {{.exampleCode}}
+   * ```
+   */
+  async {{.methodName}}({{.signature}}): Promise<{{.ReturnType}}> {
+    {{if .PathParams}}
+    const path = '{{.path}}'{{range .PathParams}}.replace('{{.placeholder}}', {{.value}}){{end}};
+    {{else}}
+    const path = '{{.path}}';
+    {{end}}
+    
+    return this.http.request<{{.ReturnType}}>({
+      method: '{{.httpMethod}}',
+      path,
+      {{if .hasBody}}body: {{.bodyParam}},{{end}}
+      {{if .hasQuery}}query: {{.queryParam}},{{end}}
+    });
+  }
+  
+  {{end}}
+}

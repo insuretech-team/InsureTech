@@ -1,0 +1,22 @@
+ProductCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    product_name:
+      type: string
+    category:
+      type: string
+      description: MOTOR, HEALTH, TRAVEL, etc.
+    base_premium:
+      $ref: '#/components/schemas/Money'
+    timestamp:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+  description: 'Event: Product created'

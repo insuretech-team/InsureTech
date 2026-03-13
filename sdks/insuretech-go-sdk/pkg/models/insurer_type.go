@@ -1,0 +1,14 @@
+package models
+
+// InsurerType represents a insurer_type
+type InsurerType string
+
+// InsurerType values
+const (
+	InsurerTypeINSURERTYPEUNSPECIFIED InsurerType = "INSURER_TYPE_UNSPECIFIED"
+	InsurerTypeINSURERTYPELIFE  = "INSURER_TYPE_LIFE"
+	InsurerTypeINSURERTYPENONLIFE  = "INSURER_TYPE_NON_LIFE"
+	InsurerTypeINSURERTYPECOMPOSITE  = "INSURER_TYPE_COMPOSITE"
+	InsurerTypeINSURERTYPEREINSURER  = "INSURER_TYPE_REINSURER"
+	InsurerTypeINSURERTYPETAKAFUL  = "INSURER_TYPE_TAKAFUL"
+)

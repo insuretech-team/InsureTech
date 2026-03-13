@@ -1,0 +1,14 @@
+DLRStatusUpdateRequest:
+  type: object
+  properties:
+    provider_message_id:
+      type: string
+      description: SSLWireless message_id
+    status:
+      type: string
+      description: DELIVERED, FAILED, PENDING, etc.
+    error_code:
+      type: string
+      description: Provider error code on failure
+  description: Request payload for updating an existing dlr status update. Contains
+    fields to be modified.

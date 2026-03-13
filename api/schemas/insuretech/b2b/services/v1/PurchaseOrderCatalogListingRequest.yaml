@@ -1,0 +1,5 @@
+PurchaseOrderCatalogListingRequest:
+  type: object
+  properties: {}
+  description: Request payload for listing purchase order catalog listing items. Supports
+    filtering, sorting, and pagination.

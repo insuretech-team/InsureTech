@@ -1,0 +1,11 @@
+TracksListingRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    type_filter:
+      $ref: '#/components/schemas/TrackType'
+  description: Request payload for listing tracks listing items. Supports filtering,
+    sorting, and pagination.

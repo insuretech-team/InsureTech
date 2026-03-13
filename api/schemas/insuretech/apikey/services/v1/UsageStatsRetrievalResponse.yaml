@@ -1,0 +1,30 @@
+UsageStatsRetrievalResponse:
+  type: object
+  properties:
+    total_requests:
+      type: string
+      format: int64
+    successful_requests:
+      type: string
+      format: int64
+    failed_requests:
+      type: string
+      format: int64
+    avg_response_time_ms:
+      type: number
+      format: double
+    requests_by_endpoint:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    requests_by_status_code:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for usage stats retrieval operation. Returns operation
+    results and status.

@@ -1,0 +1,11 @@
+KYCVerificationRequest:
+  type: object
+  properties:
+    kyc_verification_id:
+      type: string
+    verified_by:
+      type: string
+    verification_result:
+      type: string
+  description: Request payload for kyc verification operation. Contains parameters
+    required to execute the operation.

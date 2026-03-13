@@ -1,0 +1,30 @@
+PolicyPolicyCreationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    customer_id:
+      type: string
+    partner_id:
+      type: string
+    agent_id:
+      type: string
+    applicant:
+      $ref: '#/components/schemas/Applicant'
+    nominees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nominee'
+    riders:
+      type: array
+      items:
+        $ref: '#/components/schemas/PolicyRider'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    sum_insured:
+      $ref: '#/components/schemas/Money'
+    tenure_months:
+      type: integer
+      format: int32
+  description: Request payload for creating a new policy creation. Contains all required
+    fields and optional parameters for initialization.

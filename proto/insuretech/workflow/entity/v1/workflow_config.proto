@@ -1,0 +1,85 @@
+syntax = "proto3";
+
+package insuretech.workflow.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/entity/v1;workflowv1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// WorkflowConfig represents approval workflow configuration for B2B portal
+message WorkflowConfig {
+  option (insuretech.common.v1.table) = {
+    table_name : "workflow_configs"
+    schema_name : "workflow_schema"
+    migration_order : 96
+    is_table : true
+    comment : "Workflow approval configurations for B2B operations"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string config_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "config_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+
+  string business_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "business_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to business table"
+  } ];
+  // @inject_tag: gorm:"column:business_id;not null"
+
+  WorkflowConfigType config_type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "config_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:config_type;not null;serializer:proto_enum"
+
+  string title = 4
+      [ (insuretech.common.v1.column) =
+            {column_name : "title" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:title;not null"
+
+  string description = 5 [ (insuretech.common.v1.column) = {
+    column_name : "description"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:description"
+
+  bool is_enabled = 6 [ (insuretech.common.v1.column) = {
+    column_name : "is_enabled"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:is_enabled;not null"
+
+  // Workflow rules (stored as JSONB)
+  string rules = 7 [ (insuretech.common.v1.column) = {
+    column_name : "rules"
+    sql_type : "JSONB"
+    comment : "Workflow rules configuration"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:rules"
+
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp updated_at = 9;
+}
+
+enum WorkflowConfigType {
+  WORKFLOW_CONFIG_TYPE_UNSPECIFIED = 0;
+  WORKFLOW_CONFIG_TYPE_QUOTATION_APPROVAL = 1;
+  WORKFLOW_CONFIG_TYPE_PLAN_CHANGES = 2;
+  WORKFLOW_CONFIG_TYPE_PAYMENT_AUTHORIZATION = 3;
+  WORKFLOW_CONFIG_TYPE_POLICY_RENEWALS = 4;
+}

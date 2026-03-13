@@ -1,0 +1,9 @@
+MarkAsReadRequest:
+  type: object
+  properties:
+    notification_ids:
+      type: array
+      items:
+        type: string
+  description: Request payload for mark as read operation. Contains parameters required
+    to execute the operation.

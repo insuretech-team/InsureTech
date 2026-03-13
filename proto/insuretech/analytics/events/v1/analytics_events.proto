@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package insuretech.analytics.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/analytics/events/v1;analyticseventsv1";
+option csharp_namespace = "Insuretech.Analytics.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Event: Metric recorded
+message MetricRecordedEvent {
+  string event_id = 1;
+  string metric_id = 2;
+  string metric_name = 3;
+  string metric_type = 4;                          // COUNTER, GAUGE, HISTOGRAM
+  double value = 5;
+  map<string, string> dimensions = 6;              // product_id, partner_id, region
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8;                       // CG-6: trace across services
+}
+
+// Event: Report generated
+message ReportGeneratedEvent {
+  string event_id = 1;
+  string report_id = 2;
+  string report_name = 3;
+  string report_type = 4;                          // DAILY_SALES, MONTHLY_REVENUE, etc.
+  google.protobuf.Timestamp period_start = 5;
+  google.protobuf.Timestamp period_end = 6;
+  string report_url = 7;                           // S3 URL
+  int32 generation_time_seconds = 8;
+  google.protobuf.Timestamp timestamp = 9;
+  string generated_by = 10;
+  string correlation_id = 11;                      // CG-6: trace across services
+}
+
+// Event: Report failed to generate
+message ReportGenerationFailedEvent {
+  string event_id = 1;
+  string report_id = 2;
+  string report_name = 3;
+  string report_type = 4;
+  string error_message = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string requested_by = 7;
+  string correlation_id = 8;                       // CG-6: trace across services
+}
+
+// Event: Dashboard accessed
+message DashboardAccessedEvent {
+  string event_id = 1;
+  string user_id = 2;
+  string dashboard_name = 3;
+  string dashboard_type = 4;                       // EXECUTIVE, OPERATIONS, PARTNER
+  google.protobuf.Timestamp timestamp = 5;
+  string ip_address = 6;
+  string correlation_id = 7;                       // CG-6: trace across services
+}
+
+// Event: KPI threshold breached
+message KPIThresholdBreachedEvent {
+  string event_id = 1;
+  string metric_name = 2;
+  double current_value = 3;
+  double threshold_value = 4;
+  string threshold_type = 5;                       // ABOVE, BELOW
+  string severity = 6;                             // WARNING, CRITICAL
+  string notification_sent_to = 7;                 // User IDs or role names
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9;                       // CG-6: trace across services
+}
+
+// Event: Data export requested
+message DataExportRequestedEvent {
+  string event_id = 1;
+  string export_id = 2;
+  string user_id = 3;
+  string export_type = 4;                          // POLICIES, CLAIMS, PAYMENTS
+  string format = 5;                               // CSV, EXCEL, JSON
+  map<string, string> filters = 6;
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8;                       // CG-6: trace across services
+}
+
+// Event: Data export completed
+message DataExportCompletedEvent {
+  string event_id = 1;
+  string export_id = 2;
+  string user_id = 3;
+  string export_url = 4;                           // S3 URL
+  int64 record_count = 5;
+  int64 file_size_bytes = 6;
+  int32 generation_time_seconds = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9;                       // CG-6: trace across services
+}
+
+// Event: Anomaly detected in metrics
+message MetricAnomalyDetectedEvent {
+  string event_id = 1;
+  string metric_name = 2;
+  double current_value = 3;
+  double expected_value = 4;
+  double deviation_percentage = 5;
+  string anomaly_type = 6;                         // SPIKE, DROP, TREND_CHANGE
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8;                       // CG-6: trace across services
+}
+
+// Event: Business target achieved
+message BusinessTargetAchievedEvent {
+  string event_id = 1;
+  string target_name = 2;
+  string target_type = 3;                          // REVENUE, POLICIES_SOLD, CLAIMS_RATIO
+  double target_value = 4;
+  double achieved_value = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7;                       // CG-6: trace across services
+}
+
+// Event: Aggregation job completed
+message AggregationJobCompletedEvent {
+  string event_id = 1;
+  string job_id = 2;
+  string job_type = 3;                             // DAILY_AGGREGATION, MONTHLY_ROLLUP
+  google.protobuf.Timestamp period_start = 4;
+  google.protobuf.Timestamp period_end = 5;
+  int64 records_processed = 6;
+  int32 execution_time_seconds = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9;                       // CG-6: trace across services
+}
+

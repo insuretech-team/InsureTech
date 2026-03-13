@@ -1,0 +1,23 @@
+UserLoggedOutEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    session_type:
+      type: string
+      description: SERVER_SIDE (web) or JWT (mobile/API)
+    logout_reason:
+      type: string
+      description: user_initiated, expired, revoked, admin, security
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    device_type:
+      type: string
+  description: 'Event: User logged out'

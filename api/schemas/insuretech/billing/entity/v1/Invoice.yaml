@@ -1,0 +1,105 @@
+Invoice:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:invoice_id;not null"'
+    invoice_number:
+      type: string
+      description: '@inject_tag: gorm:"column:invoice_number;not null;uniqueIndex"'
+      x-unique: true
+    business_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_id;index:idx_invoices_business_id"'
+    amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:amount;not null"'
+    due_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:due_date;not null;serializer:proto_timestamp"'
+    status:
+      $ref: '#/components/schemas/InvoiceStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    issued_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:issued_at;serializer:proto_timestamp"'
+    paid_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"'
+    payment_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_id;index:idx_invoices_payment_id"'
+    invoice_pdf_url:
+      type: string
+      description: '@inject_tag: gorm:"column:invoice_pdf_url"'
+    policy_ids:
+      type: array
+      items:
+        type: string
+        description: '@inject_tag: gorm:"column:policy_ids;serializer:json"'
+      description: '@inject_tag: gorm:"column:policy_ids;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:order_id;index:idx_invoices_order_id"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;index:idx_invoices_customer_id"'
+    organisation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:organisation_id;index:idx_invoices_organisation_id"'
+    purchase_order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:purchase_order_id;index:idx_invoices_purchase_order_id"'
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id;not null;index:idx_invoices_tenant_id"'
+    tax_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:tax_amount;not null;default:0"'
+    total_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:total_amount;not null"'
+    currency:
+      type: string
+      description: '@inject_tag: gorm:"column:currency;not null"'
+    notes:
+      type: string
+      description: '@inject_tag: gorm:"column:notes"'
+    issued_by:
+      type: string
+      description: '@inject_tag: gorm:"column:issued_by"'
+    cancelled_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:cancelled_at;serializer:proto_timestamp"'
+    overdue_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:overdue_at;serializer:proto_timestamp"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    credit_note_id:
+      type: string
+      description: '@inject_tag: gorm:"column:credit_note_id"'
+  description: "Invoice represents a billing invoice covering one or more insurance\
+    \ orders/policies.\r\n Supports both B2C (single order) and B2B (group purchase\
+    \ order) scenarios."
+  required:
+  - created_at
+  - updated_at

@@ -1,0 +1,9 @@
+UnderwritingDecisionsListingResponse:
+  type: object
+  properties:
+    decisions:
+      type: array
+      items:
+        $ref: '#/components/schemas/UnderwritingDecision'
+  description: Response payload for underwriting decisions listing operation. Returns
+    operation results and status.

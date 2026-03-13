@@ -1,0 +1,110 @@
+UnderwritingHealthDeclaration:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:declaration_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    quote_id:
+      type: string
+      description: '@inject_tag: gorm:"column:quote_id;not null"'
+      x-unique: true
+    height_cm:
+      type: integer
+      format: int32
+      description: "Physical measurements\n @inject_tag: gorm:\"column:height_cm\""
+    weight_kg:
+      type: string
+      description: '@inject_tag: gorm:"column:weight_kg"'
+    bmi:
+      type: string
+      description: '@inject_tag: gorm:"column:bmi"'
+    has_pre_existing_conditions:
+      type: boolean
+      description: "Medical history\n @inject_tag: gorm:\"column:has_pre_existing_conditions\""
+      default: false
+    pre_existing_conditions:
+      type: string
+      description: '@inject_tag: gorm:"column:pre_existing_conditions"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Underwriting risk assessment
+      x-retention-days: 2555
+    is_currently_hospitalized:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_currently_hospitalized"'
+      default: false
+    has_family_history:
+      type: boolean
+      description: '@inject_tag: gorm:"column:has_family_history"'
+      default: false
+    family_history:
+      type: string
+      description: '@inject_tag: gorm:"column:family_history"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Underwriting risk assessment
+      x-retention-days: 2555
+    smoker:
+      type: boolean
+      description: "Lifestyle\n @inject_tag: gorm:\"column:smoker\""
+      default: false
+    alcohol_consumer:
+      type: boolean
+      description: '@inject_tag: gorm:"column:alcohol_consumer"'
+      default: false
+    occupation_risk_level:
+      type: string
+      description: '@inject_tag: gorm:"column:occupation_risk_level"'
+    medical_exam_required:
+      type: boolean
+      description: "Medical examination\n @inject_tag: gorm:\"column:medical_exam_required\""
+      default: false
+    medical_exam_completed:
+      type: boolean
+      description: '@inject_tag: gorm:"column:medical_exam_completed"'
+      default: false
+    medical_exam_results:
+      type: string
+      description: '@inject_tag: gorm:"column:medical_exam_results"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Medical underwriting
+      x-retention-days: 2555
+    medical_exam_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:medical_exam_date;serializer:proto_timestamp"'
+    medical_documents:
+      type: string
+      description: "Documents\n @inject_tag: gorm:\"column:medical_documents\""
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Medical underwriting and claim processing
+      x-retention-days: 2555
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Health declaration for underwriting
+  required:
+  - id
+  - quote_id
+  - audit_info

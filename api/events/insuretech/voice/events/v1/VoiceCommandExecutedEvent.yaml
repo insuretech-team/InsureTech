@@ -1,0 +1,22 @@
+VoiceCommandExecutedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    voice_command_id:
+      type: string
+    voice_session_id:
+      type: string
+    command_type:
+      type: string
+    status:
+      type: string
+    confidence_score:
+      type: number
+      format: float
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Voice command executed'

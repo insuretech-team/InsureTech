@@ -1,0 +1,7 @@
+FileDeletionResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for file deletion operation. Returns operation results
+    and status.

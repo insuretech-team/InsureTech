@@ -1,0 +1,7 @@
+UnderwritingDecisionUpdateRequest:
+  type: object
+  properties:
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+  description: Request payload for updating an existing underwriting decision update.
+    Contains fields to be modified.

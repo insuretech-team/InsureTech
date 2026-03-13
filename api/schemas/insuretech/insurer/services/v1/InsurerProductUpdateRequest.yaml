@@ -1,0 +1,14 @@
+InsurerInsurerProductUpdateRequest:
+  type: object
+  properties:
+    insurer_product_id:
+      type: string
+    status:
+      type: string
+    effective_to:
+      type: string
+    features:
+      type: string
+      description: JSON
+  description: Request payload for updating an existing insurer product update. Contains
+    fields to be modified.

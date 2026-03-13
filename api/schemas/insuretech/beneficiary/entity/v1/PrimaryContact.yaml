@@ -1,0 +1,12 @@
+PrimaryContact:
+  type: object
+  properties:
+    name:
+      type: string
+    email:
+      type: string
+    phone:
+      type: string
+    department:
+      type: string
+  description: Primary Contact Information

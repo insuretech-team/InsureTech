@@ -1,0 +1,15 @@
+Money:
+  type: object
+  properties:
+    amount:
+      type: string
+      format: int64
+      description: Amount in smallest currency unit (paisa for BDT)
+    currency:
+      type: string
+      description: "Currency code (ISO 4217)\n Default: BDT"
+    decimal_amount:
+      type: number
+      format: double
+      description: Decimal amount for display (amount / 100)
+  description: Money representation with currency

@@ -1,0 +1,12 @@
+RoomClosedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    reason:
+      type: string
+    closed_at:
+      type: string
+      format: date-time
+  description: Event emitted when room undergoes closed. Published to event stream
+    for downstream processing and audit trail.

@@ -1,0 +1,211 @@
+syntax = "proto3";
+
+package insuretech.beneficiary.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/beneficiary/entity/v1;beneficiaryv1";
+
+// Individual (B2C) beneficiary details
+message IndividualBeneficiary {
+  option (insuretech.common.v1.table) = {
+    table_name : "individual_beneficiaries"
+    schema_name : "insurance_schema"
+    migration_order : 26
+    is_table : true
+    audit_fields : true
+    comment : "Retail customer details"
+  };
+
+  string beneficiary_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "beneficiary_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    foreign_key : {
+      references_table : "beneficiaries"
+      references_column : "beneficiary_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+    }
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
+
+  string full_name = 2 [ (insuretech.common.v1.column) = {
+    column_name : "full_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:full_name;not null"
+
+  string full_name_bn = 3 [ (insuretech.common.v1.column) = {
+    column_name : "full_name_bn"
+    sql_type : "VARCHAR(255)"
+    comment : "Bengali name"
+  } ];
+  // @inject_tag: gorm:"column:full_name_bn"
+
+  google.protobuf.Timestamp date_of_birth = 4
+      [ (insuretech.common.v1.column) =
+            {column_name : "date_of_birth" sql_type : "DATE" not_null : true} ];
+  // @inject_tag: gorm:"column:date_of_birth;not null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp"
+
+  Gender gender = 5
+      [ (insuretech.common.v1.column) =
+            {column_name : "gender" sql_type : "VARCHAR(10)" not_null : true} ];
+  // @inject_tag: gorm:"column:gender;not null;serializer:proto_enum"
+
+  string nid_number = 6 [
+    (insuretech.common.v1.column) = {
+      column_name : "nid_number"
+      sql_type : "VARCHAR(17)"
+      unique : true
+      index : {
+        index_name : "idx_individual_beneficiaries_nid"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+      comment : "National ID (10/13/17 digits)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification and KYC compliance",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:nid_number"
+
+  string passport_number = 7 [
+    (insuretech.common.v1.column) = {
+      column_name : "passport_number"
+      sql_type : "VARCHAR(20)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification for international customers"
+  ];
+  // @inject_tag: gorm:"column:passport_number"
+
+  string birth_certificate_number = 8 [
+    (insuretech.common.v1.column) = {
+      column_name : "birth_certificate_number"
+      sql_type : "VARCHAR(20)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Age verification and identity confirmation"
+  ];
+  // @inject_tag: gorm:"column:birth_certificate_number"
+
+  string tin_number = 9 [
+    (insuretech.common.v1.column) = {
+      column_name : "tin_number"
+      sql_type : "VARCHAR(12)"
+      index : {
+        index_name : "idx_individual_beneficiaries_tin"
+        index_type : INDEX_TYPE_BTREE
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true
+  ];
+  // @inject_tag: gorm:"column:tin_number"
+
+  MaritalStatus marital_status = 10 [ (insuretech.common.v1.column) = {
+    column_name : "marital_status"
+    sql_type : "VARCHAR(20)"
+  } ];
+  // @inject_tag: gorm:"column:marital_status;serializer:proto_enum"
+
+  string occupation = 11 [ (insuretech.common.v1.column) = {
+    column_name : "occupation"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:occupation"
+
+  insuretech.common.v1.ContactInfo contact_info = 12
+      [ (insuretech.common.v1.column) = {
+        column_name : "contact_info"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Contact information (phone, email, etc.) stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:contact_info;not null"
+
+  insuretech.common.v1.Address permanent_address = 13
+      [ (insuretech.common.v1.column) = {
+        column_name : "permanent_address"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Permanent address details stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:permanent_address;not null"
+
+  insuretech.common.v1.Address present_address = 14
+      [ (insuretech.common.v1.column) = {
+        column_name : "present_address"
+        sql_type : "JSONB"
+        is_json : true
+        comment : "Present/mailing address stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:present_address"
+
+  string nominee_name = 15 [ (insuretech.common.v1.column) = {
+    column_name : "nominee_name"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:nominee_name"
+
+  string nominee_relationship = 16 [ (insuretech.common.v1.column) = {
+    column_name : "nominee_relationship"
+    sql_type : "VARCHAR(50)"
+  } ];
+  // @inject_tag: gorm:"column:nominee_relationship"
+
+  insuretech.common.v1.AuditInfo
+      audit_info = 17 [ (insuretech.common.v1.column) = {
+    column_name : "audit_info"
+    sql_type : "JSONB"
+    not_null : true
+    default_value : "'{}'::jsonb"
+    is_json : true
+    comment : "Audit trail (created_by, updated_by, timestamps) stored as JSON"
+  } ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum Gender {
+  GENDER_UNSPECIFIED = 0;
+  GENDER_MALE = 1;
+  GENDER_FEMALE = 2;
+  GENDER_OTHER = 3;
+}
+
+enum MaritalStatus {
+  MARITAL_STATUS_UNSPECIFIED = 0;
+  MARITAL_STATUS_SINGLE = 1;
+  MARITAL_STATUS_MARRIED = 2;
+  MARITAL_STATUS_DIVORCED = 3;
+  MARITAL_STATUS_WIDOWED = 4;
+}

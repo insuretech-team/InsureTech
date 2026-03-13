@@ -1,0 +1,19 @@
+OrganisationCreationRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    name:
+      type: string
+    code:
+      type: string
+    industry:
+      type: string
+    contact_email:
+      type: string
+    contact_phone:
+      type: string
+    address:
+      type: string
+  description: Request payload for creating a new organisation creation. Contains
+    all required fields and optional parameters for initialization.

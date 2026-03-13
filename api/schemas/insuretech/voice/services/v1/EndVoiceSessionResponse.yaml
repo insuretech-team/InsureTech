@@ -1,0 +1,13 @@
+VoiceEndVoiceSessionResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    duration_seconds:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for end voice session operation. Returns operation
+    results and status.

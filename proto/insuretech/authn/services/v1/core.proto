@@ -1,0 +1,1024 @@
+syntax = "proto3";
+
+package insuretech.authn.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1;authnservicev1";
+option csharp_namespace = "Insuretech.Authn.Services.V1";
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+
+import "insuretech/authn/entity/v1/user.proto";
+import "insuretech/authn/entity/v1/session.proto";
+import "insuretech/authn/entity/v1/document_type.proto";
+import "insuretech/authn/entity/v1/user_document.proto";
+import "insuretech/authn/entity/v1/user_profile.proto";
+import "insuretech/authn/entity/v1/enums.proto";
+
+// Register Request
+message RegisterRequest {
+  string mobile_number = 1; // Required: +880 1XXX XXXXXX
+  string email = 2;         // Optional
+  string password = 3;      // Min 8 chars, 1 upper, 1 number, 1 special
+  string device_id = 4;
+  string device_type = 5;
+}
+
+message RegisterResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool otp_sent = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string otp_id = 4 [ (google.api.field_behavior) =
+                          OUTPUT_ONLY ]; // OTP identifier for verification
+  int32 otp_expires_in_seconds = 5
+      [ (google.api.field_behavior) =
+            OUTPUT_ONLY ]; // Time until OTP expires (300 seconds = 5 min)
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Send OTP Request
+message SendOTPRequest {
+  string recipient = 1 [ (google.api.field_behavior) =
+                             REQUIRED ]; // Phone: 8801XXXXXXXXX or email
+  string type = 2 [ (google.api.field_behavior) =
+                        REQUIRED ]; // registration, login, reset_password
+  string channel = 3
+      [ (google.api.field_behavior) = OPTIONAL ]; // sms (default), email
+  bool use_masking = 4
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // true = alphanumeric sender ID (BTRC masking)
+}
+
+message SendOTPResponse {
+  string otp_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 expires_in_seconds = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string sender_id = 4
+      [ (google.api.field_behavior) =
+            OUTPUT_ONLY ]; // Actual sender used (LABAIDINS or numeric)
+  int32 cooldown_seconds = 5 [ (google.api.field_behavior) =
+                                   OUTPUT_ONLY ]; // Time before resend allowed
+  insuretech.common.v1.Error error = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Verify OTP Request
+message VerifyOTPRequest {
+  string otp_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string code = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message VerifyOTPResponse {
+  bool verified = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string user_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Resend OTP Request — invalidates previous OTP and sends a new one
+// Used for delivery failure retry loops and user-initiated resend
+message ResendOTPRequest {
+  // Original OTP ID to invalidate
+  string original_otp_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  // Reason for resend (client hint: "not_received", "expired",
+  // "delivery_failed")
+  string reason = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ResendOTPResponse {
+  // New OTP ID (replaces the original)
+  string otp_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 expires_in_seconds = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Cooldown before next resend is allowed
+  int32 cooldown_seconds = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // How many resend attempts remain before lockout
+  int32 attempts_remaining = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Earliest timestamp when another resend is allowed
+  google.protobuf.Timestamp can_retry_at = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Sender ID used (for display to user)
+  string sender_id = 7 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 8
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Login Request
+message LoginRequest {
+  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string password = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string device_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string device_type = 4
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // AUTO-DETECTS: WEB→Server-side, MOBILE→JWT
+  string device_name = 5
+      [ (google.api.field_behavior) = OPTIONAL ]; // Human-readable device name
+}
+
+message LoginResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // JWT fields (populated only for mobile/API clients)
+  string access_token = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string refresh_token = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 access_token_expires_in = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 refresh_token_expires_in = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+
+  // Server-side session fields (populated only for web clients)
+  // Note: For web, session_id is also set in HTTP-Only cookie
+  string session_token = 7
+      [ (google.api.field_behavior) =
+            OUTPUT_ONLY ]; // Not sent to client, just for logging
+  string csrf_token = 8
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // For web CSRF protection
+
+  entity.v1.User user = 9 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_type = 10
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // SERVER_SIDE or JWT
+
+  // MFA fields — set when mfa_required=true; client must call VerifyTOTP before getting tokens
+  bool   mfa_required      = 12 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string mfa_method        = 13 [(google.api.field_behavior) = OUTPUT_ONLY]; // "TOTP", "SMS", "EMAIL"
+  // mfa_session_token: opaque 5-min token; pass back in VerifyTOTPRequest to get real session tokens.
+  string mfa_session_token = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 11
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Refresh Token Request
+message RefreshTokenRequest {
+  string refresh_token = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string device_id = 2 [ (google.api.field_behavior) =
+                             OPTIONAL ]; // For device binding validation
+  string ip_address = 3
+      [ (google.api.field_behavior) = OPTIONAL ]; // For anomaly detection
+  string user_agent = 4
+      [ (google.api.field_behavior) = OPTIONAL ]; // For device fingerprinting
+}
+
+message RefreshTokenResponse {
+  string access_token = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string refresh_token = 2 [ (google.api.field_behavior) =
+                                 OUTPUT_ONLY ]; // New refresh token (rotation)
+  int32 access_token_expires_in = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 refresh_token_expires_in = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_id = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // Session identifier
+  google.protobuf.Timestamp session_expires_at = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // When session expires
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Logout Request
+// Note: For web clients, session_id is extracted from HTTP-Only cookie
+// For mobile clients, provide access_token to identify session
+message LogoutRequest {
+  string session_id = 1
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // Optional: extracted from cookie for web
+  string access_token = 2
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // Optional: for JWT logout (mobile/API)
+  string logout_reason = 3
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // Optional: user_initiated, security, etc.
+}
+
+message LogoutResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool session_revoked = 2
+      [ (google.api.field_behavior) =
+            OUTPUT_ONLY ]; // Indicates if session was successfully revoked
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Change Password Request
+message ChangePasswordRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string old_password = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string new_password = 3 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ChangePasswordResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Reset Password Request
+message ResetPasswordRequest {
+  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string otp_code = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string new_password = 3 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ResetPasswordResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Validate Token Request (supports both JWT and server-side sessions)
+message ValidateTokenRequest {
+  string access_token = 1
+      [ (google.api.field_behavior) = OPTIONAL ]; // For JWT validation (mobile)
+  string session_id = 2 [
+    (google.api.field_behavior) = OPTIONAL
+  ]; // For server-side session validation (web, extracted from cookie)
+}
+
+// ValidateTokenResponse — AuthN only. No roles/permissions here.
+// Fine-grained AuthZ (PERM model, Casbin) is handled by the AuthZ service.
+// The gateway calls AuthZ.CheckAccess after receiving this response.
+message ValidateTokenResponse {
+  bool                      valid         = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string                    user_id       = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string                    session_id    = 3 [(google.api.field_behavior) = OUTPUT_ONLY]; // validated session ID
+  string                    session_type  = 4 [(google.api.field_behavior) = OUTPUT_ONLY]; // SERVER_SIDE | JWT | API_KEY
+  string                    user_type     = 5 [(google.api.field_behavior) = OUTPUT_ONLY]; // B2C_CUSTOMER | AGENT | BUSINESS_BENEFICIARY | SYSTEM_USER | PARTNER | REGULATOR
+  string                    portal        = 6 [(google.api.field_behavior) = OUTPUT_ONLY]; // system | business | b2b | partner | agent | regulator
+  string                    tenant_id     = 7 [(google.api.field_behavior) = OUTPUT_ONLY]; // tenant UUID
+  string                    token_id      = 8 [(google.api.field_behavior) = OUTPUT_ONLY]; // jti — for token revocation lookup
+  string                    device_id     = 9 [(google.api.field_behavior) = OUTPUT_ONLY]; // device binding fingerprint
+  google.protobuf.Timestamp expires_at    = 10 [(google.api.field_behavior) = OUTPUT_ONLY]; // token/session expiry
+  insuretech.common.v1.Error error        = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated string           api_key_scopes = 12 [(google.api.field_behavior) = OUTPUT_ONLY]; // API key scopes (if session_type == API_KEY)
+}
+
+// Get Session Request
+message GetSessionRequest {
+  string session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetSessionResponse {
+  entity.v1.Session session = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// List Sessions Request
+message ListSessionsRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  int32 page_size = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string session_type = 4
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // Filter by: SERVER_SIDE, JWT, or empty for all
+  bool active_only = 5
+      [ (google.api.field_behavior) =
+            OPTIONAL ]; // Show only active sessions (default: false)
+  string device_type = 6 [
+    (google.api.field_behavior) = OPTIONAL
+  ]; // Filter by device type: WEB, MOBILE_ANDROID, MOBILE_IOS, etc.
+}
+
+message ListSessionsResponse {
+  repeated entity.v1.Session sessions = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Revoke Session Request
+message RevokeSessionRequest {
+  string session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string reason = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message RevokeSessionResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Validate CSRF Token Request (server-side sessions only)
+message ValidateCSRFRequest {
+  string session_id = 1 [ (google.api.field_behavior) =
+                              OPTIONAL ]; // Optional: extracted from cookie
+  string csrf_token = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // CSRF token from client
+}
+
+message ValidateCSRFResponse {
+  bool valid = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Get Current Session Request
+message GetCurrentSessionRequest {
+  // Session extracted from cookie (web) or Authorization header (mobile)
+}
+
+message GetCurrentSessionResponse {
+  entity.v1.Session session = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // user_type lets callers determine the role without an extra user lookup.
+  // Same format as ValidateTokenResponse.user_type: e.g. "SYSTEM_USER"
+  string user_type = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Revoke All Sessions Request
+message RevokeAllSessionsRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string reason = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  bool exclude_current_session = 3
+      [ (google.api.field_behavior) = OPTIONAL ]; // Keep current session active
+}
+
+message RevokeAllSessionsResponse {
+  int32 revoked_count = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// EMAIL AUTH MESSAGES (Portal users with email login)
+// ================================================================
+
+// Register Email User Request
+// Only for user_type: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or
+// B2B_ORG_ADMIN
+// Email is REQUIRED. Triggers an email verification OTP automatically.
+message RegisterEmailUserRequest {
+  string email = 1 [ (google.api.field_behavior) =
+                         REQUIRED ]; // Required: valid email address
+  string password = 2
+      [ (google.api.field_behavior) =
+            REQUIRED ]; // Min 8 chars, 1 upper, 1 number, 1 special
+  string user_type = 3 [ (google.api.field_behavior) =
+                             REQUIRED ]; // BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
+  string full_name = 4
+      [ (google.api.field_behavior) = REQUIRED ]; // Full name for account
+  string device_id = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string mobile_number = 6
+      [ (google.api.field_behavior) = OPTIONAL ]; // Optional for business users
+}
+
+message RegisterEmailUserResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool verification_email_sent = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string otp_id = 4 [ (google.api.field_behavior) =
+                          OUTPUT_ONLY ]; // OTP ID for verification step
+  int32 otp_expires_in_seconds = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Send Email OTP Request
+// Sends OTP to email for: email_verification, email_login, password_reset_email
+// Restricted: only BUSINESS_BENEFICIARY and SYSTEM_USER can use email OTP login
+message SendEmailOTPRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string type = 2
+      [ (google.api.field_behavior) =
+            REQUIRED ]; // email_verification, email_login, password_reset_email
+}
+
+message SendEmailOTPResponse {
+  string otp_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 expires_in_seconds = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 cooldown_seconds = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Verify Email Request
+// Verifies an email address using an OTP sent to that email.
+// After verification, email_login is allowed.
+message VerifyEmailRequest {
+  string otp_id = 1 [ (google.api.field_behavior) =
+                          REQUIRED ]; // From SendEmailOTP / RegisterEmailUser
+  string code = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // 6-digit OTP code
+}
+
+message VerifyEmailResponse {
+  bool verified = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string user_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Email Login Request
+// RESTRICTED: Only BUSINESS_BENEFICIARY and SYSTEM_USER can use this flow.
+// Email must be verified before login is allowed.
+// Always produces a SERVER_SIDE session (web portal cookie-based).
+// Flow: 1) Call SendEmailOTP(type=email_login) → 2) Call EmailLogin with
+// otp_id+code
+message EmailLoginRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string otp_id = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // From SendEmailOTP
+  string code = 3
+      [ (google.api.field_behavior) = REQUIRED ]; // 6-digit OTP code
+  string device_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string device_name = 5
+      [ (google.api.field_behavior) = OPTIONAL ]; // e.g. "Chrome on Windows"
+}
+
+message EmailLoginResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // Server-side session fields (web portal)
+  string session_token = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // Set as HttpOnly cookie
+  string csrf_token = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // For CSRF protection
+  entity.v1.User user = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_type = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // Always SERVER_SIDE
+  insuretech.common.v1.Error error = 7
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Request Password Reset By Email
+// Sends a password reset OTP to the registered email.
+// Restricted to users with verified email addresses.
+message RequestPasswordResetByEmailRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message RequestPasswordResetByEmailResponse {
+  string otp_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 expires_in_seconds = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// BIOMETRIC AUTH MESSAGES
+// ================================================================
+
+// BiometricAuthenticate Request
+// The biometric_token is the raw 64-hex-char token issued at user creation.
+// It must be stored securely on-device (Keystore/Secure Enclave).
+// device_id must match the device_id used at registration.
+message BiometricAuthenticateRequest {
+  string biometric_token = 1
+      [ (google.api.field_behavior) = REQUIRED ]; // Raw token from device secure storage
+  string device_id = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // Must match registered device
+  string device_type = 3
+      [ (google.api.field_behavior) = OPTIONAL ]; // MOBILE_ANDROID, MOBILE_IOS
+  string device_name = 4
+      [ (google.api.field_behavior) = OPTIONAL ]; // e.g. "iPhone 15 Pro"
+}
+
+message BiometricAuthenticateResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string access_token = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string refresh_token = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 access_token_expires_in = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 refresh_token_expires_in = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_type = 7
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // Always JWT for biometric
+  entity.v1.User user = 8 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 9
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// DLR (Delivery Report) MESSAGES — internal only
+// ================================================================
+
+message UpdateDLRStatusRequest {
+  string provider_message_id = 1
+      [ (google.api.field_behavior) = REQUIRED ]; // SSLWireless message_id
+  string status = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // DELIVERED, FAILED, PENDING, etc.
+  string error_code = 3
+      [ (google.api.field_behavior) = OPTIONAL ]; // Provider error code on failure
+}
+
+message UpdateDLRStatusResponse {
+  bool updated = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// API KEY MANAGEMENT MESSAGES
+// ================================================================
+
+message CreateAPIKeyRequest {
+  string name = 1
+      [ (google.api.field_behavior) = REQUIRED ]; // Human-readable name
+  string owner_id = 2
+      [ (google.api.field_behavior) = REQUIRED ]; // User or service ID
+  string owner_type = 3
+      [ (google.api.field_behavior) = REQUIRED ]; // USER, SERVICE
+  repeated string scopes = 4
+      [ (google.api.field_behavior) = REQUIRED ]; // e.g. ["auth:read", "session:write"]
+  int32 rate_limit_per_minute = 5
+      [ (google.api.field_behavior) = OPTIONAL ]; // 0 = unlimited
+  google.protobuf.Timestamp expires_at = 6
+      [ (google.api.field_behavior) = OPTIONAL ]; // null = never expires
+}
+
+message CreateAPIKeyResponse {
+  string key_id = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // UUID
+  string raw_key = 2
+      [ (google.api.field_behavior) =
+            OUTPUT_ONLY ]; // Plain key — shown ONCE, never stored
+  string name = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  repeated string scopes = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  google.protobuf.Timestamp expires_at = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ListAPIKeysRequest {
+  string owner_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string owner_type = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  bool active_only = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  int32 page_size = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 5 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message APIKeySummary {
+  string key_id = 1;
+  string name = 2;
+  repeated string scopes = 3;
+  string status = 4;
+  google.protobuf.Timestamp expires_at = 5;
+  google.protobuf.Timestamp last_used_at = 6;
+  int32 rate_limit_per_minute = 7;
+}
+
+message ListAPIKeysResponse {
+  repeated APIKeySummary keys = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message RevokeAPIKeyRequest {
+  string key_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string reason = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message RevokeAPIKeyResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message RotateAPIKeyRequest {
+  string key_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  int32 grace_period_hours = 2
+      [ (google.api.field_behavior) = OPTIONAL ]; // Default: 24 hours
+}
+
+message RotateAPIKeyResponse {
+  string new_key_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string raw_key = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // New key - shown ONCE
+  string old_key_id = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  google.protobuf.Timestamp old_key_expires_at = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ]; // When old key will be revoked
+  string message = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 6
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// Reset Password By Email Request
+// Completes password reset using email OTP.
+message ResetPasswordByEmailRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string otp_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string otp_code = 3 [ (google.api.field_behavior) = REQUIRED ];
+  string new_password = 4 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ResetPasswordByEmailResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// USER PROFILE MESSAGES
+// ================================================================
+
+message CreateUserProfileRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string full_name = 2 [ (google.api.field_behavior) = REQUIRED ];
+  google.protobuf.Timestamp date_of_birth = 3 [ (google.api.field_behavior) = REQUIRED ];
+  string gender = 4 [ (google.api.field_behavior) = REQUIRED ]; // MALE, FEMALE, OTHER
+  string address_line1 = 5 [ (google.api.field_behavior) = REQUIRED ];
+  string city = 6 [ (google.api.field_behavior) = REQUIRED ];
+  string district = 7 [ (google.api.field_behavior) = REQUIRED ];
+  string division = 8 [ (google.api.field_behavior) = REQUIRED ];
+  string nid_number = 9 [ (google.api.field_behavior) = REQUIRED ];
+  string occupation = 10 [ (google.api.field_behavior) = OPTIONAL ];
+  string employer = 11 [ (google.api.field_behavior) = OPTIONAL ];
+  string address_line2 = 12 [ (google.api.field_behavior) = OPTIONAL ];
+  string country = 13 [ (google.api.field_behavior) = OPTIONAL ];
+  string postal_code = 14 [ (google.api.field_behavior) = OPTIONAL ];
+  string permanent_address = 15 [ (google.api.field_behavior) = OPTIONAL ];
+  string marital_status = 16 [ (google.api.field_behavior) = OPTIONAL ]; // SINGLE, MARRIED, DIVORCED, WIDOWED
+  string emergency_contact_name = 17 [ (google.api.field_behavior) = OPTIONAL ];
+  string emergency_contact_number = 18 [ (google.api.field_behavior) = OPTIONAL ];
+  string nationality = 19 [ (google.api.field_behavior) = OPTIONAL ];
+  string blood_group = 20 [ (google.api.field_behavior) = OPTIONAL ];
+  string income_range = 21 [ (google.api.field_behavior) = OPTIONAL ];
+  string passport_number = 22 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message CreateUserProfileResponse {
+  entity.v1.UserProfile profile = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetUserProfileRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetUserProfileResponse {
+  entity.v1.UserProfile profile = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message UpdateUserProfileRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string full_name = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  google.protobuf.Timestamp date_of_birth = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string gender = 4 [ (google.api.field_behavior) = OPTIONAL ];
+  string occupation = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string employer = 6 [ (google.api.field_behavior) = OPTIONAL ];
+  string address_line1 = 7 [ (google.api.field_behavior) = OPTIONAL ];
+  string address_line2 = 8 [ (google.api.field_behavior) = OPTIONAL ];
+  string city = 9 [ (google.api.field_behavior) = OPTIONAL ];
+  string district = 10 [ (google.api.field_behavior) = OPTIONAL ];
+  string division = 11 [ (google.api.field_behavior) = OPTIONAL ];
+  string country = 12 [ (google.api.field_behavior) = OPTIONAL ];
+  string postal_code = 13 [ (google.api.field_behavior) = OPTIONAL ];
+  string permanent_address = 14 [ (google.api.field_behavior) = OPTIONAL ];
+  string nid_number = 15 [ (google.api.field_behavior) = OPTIONAL ];
+  string marital_status = 16 [ (google.api.field_behavior) = OPTIONAL ];
+  string emergency_contact_name = 17 [ (google.api.field_behavior) = OPTIONAL ];
+  string emergency_contact_number = 18 [ (google.api.field_behavior) = OPTIONAL ];
+  string profile_photo_url = 19 [ (google.api.field_behavior) = OPTIONAL ];
+  string income_range = 20 [ (google.api.field_behavior) = OPTIONAL ];
+  string nationality = 21 [ (google.api.field_behavior) = OPTIONAL ];
+  string blood_group = 22 [ (google.api.field_behavior) = OPTIONAL ];
+  string passport_number = 23 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UpdateUserProfileResponse {
+  entity.v1.UserProfile profile = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// USER DOCUMENT MESSAGES
+// ================================================================
+
+message UploadUserDocumentRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string document_type_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string file_url = 3 [ (google.api.field_behavior) = REQUIRED ]; // S3 URL after client upload
+  string policy_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UploadUserDocumentResponse {
+  entity.v1.UserDocument document = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ListUserDocumentsRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string document_type_id = 2 [ (google.api.field_behavior) = OPTIONAL ]; // filter
+  int32 page_size = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string page_token = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListUserDocumentsResponse {
+  repeated entity.v1.UserDocument documents = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string next_page_token = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 total_count = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetUserDocumentRequest {
+  string user_document_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message GetUserDocumentResponse {
+  entity.v1.UserDocument document = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message UpdateUserDocumentRequest {
+  string user_document_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string document_type_id = 2 [ (google.api.field_behavior) = OPTIONAL ];
+  string file_url = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string policy_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message UpdateUserDocumentResponse {
+  entity.v1.UserDocument document = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message DeleteUserDocumentRequest {
+  string user_document_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message DeleteUserDocumentResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ================================================================
+// DOCUMENT TYPE MESSAGES
+// ================================================================
+
+message ListDocumentTypesRequest {
+  bool active_only = 1 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListDocumentTypesResponse {
+  repeated entity.v1.DocumentType types = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+// ── KYC Messages ──
+
+message InitiateKYCRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message InitiateKYCResponse {
+  string kyc_id = 1;
+  string status = 2;
+  string message = 3;
+  insuretech.common.v1.Error error = 4;
+}
+message GetKYCStatusRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message GetKYCStatusResponse {
+  string kyc_id = 1;
+  string status = 2;
+  string rejection_reason = 3;
+  google.protobuf.Timestamp submitted_at = 4;
+  google.protobuf.Timestamp reviewed_at = 5;
+  insuretech.common.v1.Error error = 6;
+}
+message SubmitKYCFrameRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string session_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  bytes image_data = 3 [ (google.api.field_behavior) = REQUIRED ];
+  int32 frame_sequence = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+message SubmitKYCFrameResponse {
+  bool accepted = 1;
+  string guidance = 2;
+  string current_step = 3;
+  int32 completed_steps = 4;
+  int32 total_steps = 5;
+  double liveness_confidence = 6;
+  string message = 7;
+  insuretech.common.v1.Error error = 8;
+}
+message CompleteKYCSessionRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string session_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+message CompleteKYCSessionResponse {
+  string kyc_id = 1;
+  string status = 2;
+  bool success = 3;
+  double liveness_confidence = 4;
+  string profile_image_url = 5;
+  string message = 6;
+  insuretech.common.v1.Error error = 7;
+}
+message ApproveKYCRequest {
+  string kyc_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string reviewer_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+}
+message ApproveKYCResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+message RejectKYCRequest {
+  string kyc_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string reviewer_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string rejection_reason = 3 [ (google.api.field_behavior) = REQUIRED ];
+}
+message RejectKYCResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// ── Document Verification Messages ──
+
+message VerifyDocumentRequest {
+  string user_document_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string verification_status = 2 [ (google.api.field_behavior) = REQUIRED ]; // VERIFIED or REJECTED
+  string verified_by = 3 [ (google.api.field_behavior) = REQUIRED ];
+  string rejection_reason = 4;
+}
+message VerifyDocumentResponse {
+  insuretech.authn.entity.v1.UserDocument document = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// ── Voice Session Messages ──
+
+message CreateVoiceSessionRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string language = 2; // bn or en
+  string session_type = 3; // POLICY_PURCHASE, CLAIMS, STATUS_CHECK
+  string phone_number = 4;
+}
+message CreateVoiceSessionResponse {
+  string voice_session_id = 1;
+  string status = 2;
+  string message = 3;
+  insuretech.common.v1.Error error = 4;
+}
+message GetVoiceSessionRequest {
+  string voice_session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message GetVoiceSessionResponse {
+  string voice_session_id = 1;
+  string user_id = 2;
+  string status = 3;
+  string language = 4;
+  string session_type = 5;
+  google.protobuf.Timestamp started_at = 6;
+  google.protobuf.Timestamp ended_at = 7;
+  insuretech.common.v1.Error error = 8;
+}
+message EndVoiceSessionRequest {
+  string voice_session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string status = 2; // ENDED or FAILED
+  int32 duration_seconds = 3;
+}
+message EndVoiceSessionResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// ── RBAC Messages ──
+
+
+// ── Profile Photo Upload URL Messages ──
+
+message GetProfilePhotoUploadURLRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string content_type = 2; // image/jpeg or image/png
+  int64 file_size_bytes = 3;
+}
+message GetProfilePhotoUploadURLResponse {
+  string upload_url = 1;
+  string file_url = 2;
+  int32 expires_in_seconds = 3;
+  insuretech.common.v1.Error error = 4;
+}
+
+// ── Notification Preferences Messages ──
+
+message UpdateNotificationPreferencesRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string notification_preference = 2; // SMS, EMAIL, PUSH, ALL, NONE
+  string preferred_language = 3;       // en or bn
+}
+message UpdateNotificationPreferencesResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// ── TOTP / 2FA Messages ──
+
+message EnableTOTPRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message EnableTOTPResponse {
+  string totp_secret = 1;        // base32 secret for app setup
+  string provisioning_uri = 2;   // otpauth:// URI for QR code
+  insuretech.common.v1.Error error = 3;
+}
+message VerifyTOTPRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string totp_code = 2 [ (google.api.field_behavior) = REQUIRED ]; // 6-digit code
+  // mfa_session_token: returned by Login when mfa_required=true.
+  // If provided, VerifyTOTP will issue full session tokens after TOTP validation.
+  string mfa_session_token = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+message VerifyTOTPResponse {
+  bool verified = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+  // Session tokens — only populated when mfa_session_token was provided in request.
+  // After MFA verification the client receives full session tokens identical to LoginResponse.
+  string access_token            = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string refresh_token           = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string session_token           = 6 [(google.api.field_behavior) = OUTPUT_ONLY]; // server-side web session cookie
+  string csrf_token              = 7 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string session_id              = 8 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string session_type            = 9 [(google.api.field_behavior) = OUTPUT_ONLY]; // JWT | SERVER_SIDE
+  int32  access_token_expires_in = 10 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32  refresh_token_expires_in = 11 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+message DisableTOTPRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string totp_code = 2 [ (google.api.field_behavior) = REQUIRED ]; // confirm before disabling
+}
+message DisableTOTPResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// 🎤 Voice Biometric Auth Messages (Sprint 1.10) 🎤
+
+message InitiateVoiceSessionRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string portal_id = 2;
+}
+message InitiateVoiceSessionResponse {
+  string session_id = 1;
+  string challenge = 2;
+  string message = 3;
+  insuretech.common.v1.Error error = 4;
+}
+
+message SubmitVoiceSampleRequest {
+  string session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string transcript = 2 [ (google.api.field_behavior) = REQUIRED ];
+  double confidence_score = 3;
+  string audio_url = 4;
+}
+message SubmitVoiceSampleResponse {
+  bool verified = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+message VerifyVoiceSessionRequest {
+  string session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message VerifyVoiceSessionResponse {
+  bool authenticated = 1;
+  string user_id = 2;
+  string message = 3;
+  insuretech.common.v1.Error error = 4;
+}
+
+// 🔑 JWKS Messages 🔑
+
+message JWK {
+  string kty = 1;
+  string use = 2;
+  string alg = 3;
+  string kid = 4;
+  string n = 5;
+  string e = 6;
+}
+message GetJWKSRequest {}
+message GetJWKSResponse {
+  repeated JWK keys = 1;
+}

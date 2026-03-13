@@ -1,0 +1,7 @@
+FileUpdateResponse:
+  type: object
+  properties:
+    file:
+      $ref: '#/components/schemas/StoredFile'
+  description: Response payload for file update operation. Returns operation results
+    and status.

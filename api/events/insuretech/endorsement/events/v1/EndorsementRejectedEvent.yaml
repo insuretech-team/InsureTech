@@ -1,0 +1,17 @@
+EndorsementRejectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    endorsement_id:
+      type: string
+    policy_id:
+      type: string
+    reason:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Endorsement rejected'

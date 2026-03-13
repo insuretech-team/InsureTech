@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package insuretech.support.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/support/events/v1;supporteventsv1";
+
+// Kafka event: Ticket created
+message TicketCreatedEvent {
+  string event_id = 1;
+  string ticket_id = 2;
+  string ticket_number = 3;
+  string beneficiary_id = 4;
+  string type = 5;
+  string category = 6;
+  string priority = 7;
+  string correlation_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// Kafka event: Ticket assigned
+message TicketAssignedEvent {
+  string event_id = 1;
+  string ticket_id = 2;
+  string ticket_number = 3;
+  string assigned_to = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Ticket message added
+message TicketMessageAddedEvent {
+  string event_id = 1;
+  string message_id = 2;
+  string ticket_id = 3;
+  string sender_id = 4;
+  bool is_internal = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Ticket resolved
+message TicketResolvedEvent {
+  string event_id = 1;
+  string ticket_id = 2;
+  string ticket_number = 3;
+  string resolved_by = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Ticket closed
+message TicketClosedEvent {
+  string event_id = 1;
+  string ticket_id = 2;
+  string ticket_number = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

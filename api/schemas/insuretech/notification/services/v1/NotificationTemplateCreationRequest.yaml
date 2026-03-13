@@ -1,0 +1,17 @@
+NotificationTemplateCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    type:
+      $ref: '#/components/schemas/NotificationType'
+    subject:
+      type: string
+    body:
+      type: string
+    variables:
+      type: array
+      items:
+        type: string
+  description: Request payload for creating a new notification template creation.
+    Contains all required fields and optional parameters for initialization.

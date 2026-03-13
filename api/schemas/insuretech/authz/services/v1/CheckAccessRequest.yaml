@@ -1,0 +1,20 @@
+CheckAccessRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+      description: "Subject: \"user:<uuid>\" \u2014 populated from ValidateToken response"
+    domain:
+      type: string
+      description: "Domain: \"portal:tenant_id\" \u2014 e.g. \"system:root\", \"agent:tenant-abc\""
+    object:
+      type: string
+      description: "Object: \"svc:<service>/<resource>\" \u2014 e.g. \"svc:policy/create\""
+    action:
+      type: string
+      description: "Action: HTTP verb or domain verb \u2014 e.g. \"POST\", \"approve\""
+    context:
+      $ref: '#/components/schemas/AccessContext'
+      description: Optional context for ABAC conditions
+  description: Request payload for check access operation. Contains parameters required
+    to execute the operation.

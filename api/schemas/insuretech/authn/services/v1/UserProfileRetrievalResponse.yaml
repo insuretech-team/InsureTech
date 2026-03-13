@@ -1,0 +1,9 @@
+UserProfileRetrievalResponse:
+  type: object
+  properties:
+    profile:
+      $ref: '#/components/schemas/UserProfile'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for user profile retrieval operation. Returns operation
+    results and status.

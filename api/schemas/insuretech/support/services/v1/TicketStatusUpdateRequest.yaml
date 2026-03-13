@@ -1,0 +1,11 @@
+TicketStatusUpdateRequest:
+  type: object
+  properties:
+    ticket_id:
+      type: string
+    status:
+      type: string
+    comments:
+      type: string
+  description: Request payload for updating an existing ticket status update. Contains
+    fields to be modified.

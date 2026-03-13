@@ -1,0 +1,119 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// UserDocument represents documents uploaded by a user for KYC or Policies
+message UserDocument {
+  option (insuretech.common.v1.table) = {
+    table_name : "users_documents"
+    schema_name : "authn_schema"
+    migration_order : 96
+    is_table : true
+    comment : "Link table for user uploaded documents"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string user_document_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "user_document_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:user_document_id;not null"
+
+  string user_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to authn_schema.users"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_users_documents_user_id"
+    }
+  } ];
+  // @inject_tag: gorm:"column:user_id;not null"
+
+  string document_type_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "document_type_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to document_types"
+    foreign_key : {
+      references_table : "document_types"
+      references_column : "document_type_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_users_documents_type_id"
+    }
+  } ];
+  // @inject_tag: gorm:"column:document_type_id;not null"
+
+  string policy_id = 4 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    comment : "Optional foreign key to insurance_schema.policies"
+  } ];
+  // @inject_tag: gorm:"column:policy_id"
+
+  string file_url = 5 [ (insuretech.common.v1.column) = {
+    column_name : "file_url"
+    sql_type : "TEXT"
+    not_null : true
+    comment : "S3 URL of document"
+  } ];
+  // @inject_tag: gorm:"column:file_url;not null"
+
+  string verification_status = 6 [ (insuretech.common.v1.column) = {
+    column_name : "verification_status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING'"
+  } ];
+  // @inject_tag: gorm:"column:verification_status;not null"
+
+  string verified_by = 7 [ (insuretech.common.v1.column) = {
+    column_name : "verified_by"
+    sql_type : "UUID"
+    comment : "Foreign key to authn_schema.users (admin)"
+  } ];
+  // @inject_tag: gorm:"column:verified_by"
+
+  google.protobuf.Timestamp verified_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "verified_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+  } ];
+  // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}

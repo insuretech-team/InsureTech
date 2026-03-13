@@ -1,0 +1,7 @@
+PortalConfigRetrievalRequest:
+  type: object
+  properties:
+    portal:
+      $ref: '#/components/schemas/Portal'
+  description: Request payload for retrieving portal config retrieval information.
+    May include filters and pagination parameters.

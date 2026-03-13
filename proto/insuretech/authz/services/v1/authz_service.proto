@@ -1,0 +1,118 @@
+syntax = "proto3";
+
+package insuretech.authz.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1;authzservicev1";
+option csharp_namespace = "Insuretech.Authz.Services.V1";
+
+import "google/api/annotations.proto";
+import "insuretech/authz/services/v1/core.proto";
+
+// ============================================================================
+// AuthZ Service — Fine-grained access control via Casbin PERM model
+//
+// Domain format: "portal:tenant_id"   e.g. "system:root", "agent:tenant-abc"
+// Subject:       "user:<uuid>"        e.g. "user:550e8400-e29b-41d4-a716-446655440000"
+// Object:        "svc:<svc>/<res>"   e.g. "svc:policy/create", "svc:claim/*"
+// Action:        HTTP verb or domain action: GET|POST|PUT|PATCH|DELETE|*
+// Effect:        allow | deny  (deny-by-default — missing rule = deny)
+//
+// Gateway call order:
+//   1. AuthN.ValidateToken  → get user_id, portal, tenant_id, token_id
+//   2. AuthZ.CheckAccess    → enforce Casbin rule → allow or deny
+//   3. Per-service gRPC interceptor → AuthZ.CheckAccess (defense-in-depth)
+// ============================================================================
+service AuthZService {
+
+  // ── Core Enforcement ─────────────────────────────────────────────────────
+
+  // CheckAccess — single authorization check (gateway + per-service interceptor)
+  // Deny-by-default: returns DENY if no matching policy found.
+  rpc CheckAccess(CheckAccessRequest) returns (CheckAccessResponse) {
+    option (google.api.http) = { post: "/v1/authz/check" body: "*" };
+  }
+
+  // BatchCheckAccess — check multiple (sub, dom, obj, act) tuples in one call
+  // Used by UIs to pre-filter menu items / buttons.
+  rpc BatchCheckAccess(BatchCheckAccessRequest) returns (BatchCheckAccessResponse) {
+    option (google.api.http) = { post: "/v1/authz/check:batch" body: "*" };
+  }
+
+  // ── Role Management ───────────────────────────────────────────────────────
+
+  rpc CreateRole(CreateRoleRequest) returns (CreateRoleResponse) {
+    option (google.api.http) = { post: "/v1/authz/roles" body: "*" };
+  }
+  rpc GetRole(GetRoleRequest) returns (GetRoleResponse) {
+    option (google.api.http) = { get: "/v1/authz/roles/{role_id}" };
+  }
+  rpc UpdateRole(UpdateRoleRequest) returns (UpdateRoleResponse) {
+    option (google.api.http) = { patch: "/v1/authz/roles/{role_id}" body: "*" };
+  }
+  rpc DeleteRole(DeleteRoleRequest) returns (DeleteRoleResponse) {
+    option (google.api.http) = { delete: "/v1/authz/roles/{role_id}" };
+  }
+  rpc ListRoles(ListRolesRequest) returns (ListRolesResponse) {
+    option (google.api.http) = { get: "/v1/authz/roles" };
+  }
+
+  // ── User-Role Assignment ──────────────────────────────────────────────────
+
+  // AssignRole — assign a role to a user within domain (portal:tenant_id)
+  rpc AssignRole(AssignRoleRequest) returns (AssignRoleResponse) {
+    option (google.api.http) = { post: "/v1/authz/users/{user_id}/roles" body: "*" };
+  }
+  rpc RemoveRole(RemoveRoleRequest) returns (RemoveRoleResponse) {
+    option (google.api.http) = { delete: "/v1/authz/users/{user_id}/roles/{role_id}" };
+  }
+  rpc ListUserRoles(ListUserRolesRequest) returns (ListUserRolesResponse) {
+    option (google.api.http) = { get: "/v1/authz/users/{user_id}/roles" };
+  }
+  // GetUserPermissions — resolves all effective permissions for a user in a domain
+  rpc GetUserPermissions(GetUserPermissionsRequest) returns (GetUserPermissionsResponse) {
+    option (google.api.http) = { get: "/v1/authz/users/{user_id}/permissions" };
+  }
+
+  // ── Policy Rule Management ────────────────────────────────────────────────
+
+  rpc CreatePolicyRule(CreatePolicyRuleRequest) returns (CreatePolicyRuleResponse) {
+    option (google.api.http) = { post: "/v1/authz/policies" body: "*" };
+  }
+  rpc UpdatePolicyRule(UpdatePolicyRuleRequest) returns (UpdatePolicyRuleResponse) {
+    option (google.api.http) = { patch: "/v1/authz/policies/{policy_id}" body: "*" };
+  }
+  rpc DeletePolicyRule(DeletePolicyRuleRequest) returns (DeletePolicyRuleResponse) {
+    option (google.api.http) = { delete: "/v1/authz/policies/{policy_id}" };
+  }
+  rpc ListPolicyRules(ListPolicyRulesRequest) returns (ListPolicyRulesResponse) {
+    option (google.api.http) = { get: "/v1/authz/policies" };
+  }
+
+  // ── Portal Configuration ──────────────────────────────────────────────────
+
+  rpc GetPortalConfig(GetPortalConfigRequest) returns (GetPortalConfigResponse) {
+    option (google.api.http) = { get: "/v1/authz/portals/{portal}/config" };
+  }
+  rpc UpdatePortalConfig(UpdatePortalConfigRequest) returns (UpdatePortalConfigResponse) {
+    option (google.api.http) = { patch: "/v1/authz/portals/{portal}/config" body: "*" };
+  }
+
+  // ── Token / JWKS ──────────────────────────────────────────────────────────
+
+  // GetJWKS — serves the RS256 public key set for JWT verification
+  // Exposed publicly at /.well-known/jwks.json via gateway passthrough
+  rpc GetJWKS(GetJWKSRequest) returns (GetJWKSResponse) {
+    option (google.api.http) = { get: "/.well-known/jwks.json" };
+  }
+
+  // ── Audit ─────────────────────────────────────────────────────────────────
+
+  rpc ListAccessDecisionAudits(ListAccessDecisionAuditsRequest) returns (ListAccessDecisionAuditsResponse) {
+    option (google.api.http) = { get: "/v1/authz/audits" };
+  }
+
+  // ── Casbin Cache Management (internal) ───────────────────────────────────
+
+  // InvalidatePolicyCache — force Casbin enforcer reload (called after policy mutations)
+  rpc InvalidatePolicyCache(InvalidatePolicyCacheRequest) returns (InvalidatePolicyCacheResponse) {}
+}

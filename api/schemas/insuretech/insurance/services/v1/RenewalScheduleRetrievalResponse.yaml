@@ -1,0 +1,7 @@
+InsuranceRenewalScheduleRetrievalResponse:
+  type: object
+  properties:
+    schedule:
+      $ref: '#/components/schemas/RenewalSchedule'
+  description: Response payload for renewal schedule retrieval operation. Returns
+    operation results and status.

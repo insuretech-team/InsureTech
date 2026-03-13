@@ -1,0 +1,8 @@
+EmployeeStatus:
+  type: string
+  enum:
+  - EMPLOYEE_STATUS_UNSPECIFIED
+  - EMPLOYEE_STATUS_ACTIVE
+  - EMPLOYEE_STATUS_INACTIVE
+  description: 'Status values for employee. Defines lifecycle states: EMPLOYEE_STATUS_UNSPECIFIED,
+    EMPLOYEE_STATUS_ACTIVE, EMPLOYEE_STATUS_INACTIVE.'

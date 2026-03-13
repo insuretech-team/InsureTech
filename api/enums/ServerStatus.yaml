@@ -1,0 +1,9 @@
+ServerStatus:
+  type: string
+  enum:
+  - SERVER_STATUS_UNSPECIFIED
+  - SERVER_STATUS_ONLINE
+  - SERVER_STATUS_OFFLINE
+  - SERVER_STATUS_DEGRADED
+  description: 'Status values for server. Defines lifecycle states: SERVER_STATUS_UNSPECIFIED,
+    SERVER_STATUS_ONLINE, SERVER_STATUS_OFFLINE, SERVER_STATUS_DEGRADED.'

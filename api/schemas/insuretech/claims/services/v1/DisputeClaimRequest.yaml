@@ -1,0 +1,15 @@
+DisputeClaimRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    customer_id:
+      type: string
+    dispute_reason:
+      type: string
+    supporting_document_urls:
+      type: array
+      items:
+        type: string
+  description: Request payload for dispute claim operation. Contains parameters required
+    to execute the operation.

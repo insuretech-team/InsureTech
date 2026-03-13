@@ -1,0 +1,10 @@
+AuditLogCreationResponse:
+  type: object
+  properties:
+    audit_log_id:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for audit log creation operation. Returns operation
+    results and status.

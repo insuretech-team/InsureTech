@@ -1,0 +1,54 @@
+DocumentGeneration:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:generation_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    document_template_id:
+      type: string
+      description: '@inject_tag: gorm:"column:document_template_id;not null"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    data:
+      type: string
+      description: '@inject_tag: gorm:"column:data;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/GenerationStatus'
+      x-database-default: PENDING
+    file_url:
+      type: string
+      description: '@inject_tag: gorm:"column:file_url"'
+    file_size_bytes:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:file_size_bytes"'
+    qr_code_data:
+      type: string
+      description: '@inject_tag: gorm:"column:qr_code_data"'
+    generated_by:
+      type: string
+      description: '@inject_tag: gorm:"column:generated_by"'
+    generated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:generated_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Document generation record
+  required:
+  - id
+  - document_template_id
+  - entity_type
+  - entity_id
+  - data
+  - status
+  - audit_info

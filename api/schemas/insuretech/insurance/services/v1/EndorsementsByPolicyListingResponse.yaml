@@ -1,0 +1,9 @@
+EndorsementsByPolicyListingResponse:
+  type: object
+  properties:
+    endorsements:
+      type: array
+      items:
+        $ref: '#/components/schemas/Endorsement'
+  description: Response payload for endorsements by policy listing operation. Returns
+    operation results and status.

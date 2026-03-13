@@ -1,0 +1,7 @@
+FraudFraudRuleCreationRequest:
+  type: object
+  properties:
+    fraud_rule:
+      $ref: '#/components/schemas/FraudRule'
+  description: Request payload for creating a new fraud rule creation. Contains all
+    required fields and optional parameters for initialization.

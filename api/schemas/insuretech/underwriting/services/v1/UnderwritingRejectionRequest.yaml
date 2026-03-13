@@ -1,0 +1,15 @@
+UnderwritingRejectionRequest:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    underwriter_id:
+      type: string
+    reason:
+      type: string
+    risk_level:
+      type: string
+    comments:
+      type: string
+  description: Request payload for underwriting rejection operation. Contains parameters
+    required to execute the operation.

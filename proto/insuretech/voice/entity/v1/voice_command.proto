@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package insuretech.voice.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/voice/entity/v1;voicev1";
+
+// Voice command execution
+message VoiceCommand {
+  option (insuretech.common.v1.table) = {
+    table_name: "voice_commands"
+    schema_name: "ai_schema"
+    migration_order: 68
+    is_table: true
+    audit_fields: true
+    comment: "Voice commands executed in sessions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "command_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:command_id;not null"
+  
+  string voice_session_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "voice_session_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "voice_sessions"
+      references_column: "session_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_voice_commands_session_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:voice_session_id;not null"
+  
+  CommandType type = 3 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_voice_commands_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string command_text = 4 [(insuretech.common.v1.column) = {
+    column_name: "command_text"
+    sql_type: "TEXT"
+    comment: "Recognized command text"
+  }];
+  // @inject_tag: gorm:"column:command_text"
+  
+  string audio_url = 5 [(insuretech.common.v1.column) = {
+    column_name: "audio_url"
+    sql_type: "VARCHAR(500)"
+    comment: "Audio recording URL"
+  }];
+  // @inject_tag: gorm:"column:audio_url"
+  
+  string parameters = 6 [(insuretech.common.v1.column) = {
+    column_name: "parameters"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Extracted parameters from command"
+  }];
+  // @inject_tag: gorm:"column:parameters"
+  
+  CommandStatus status = 7 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string response_text = 8 [(insuretech.common.v1.column) = {
+    column_name: "response_text"
+    sql_type: "TEXT"
+    comment: "System response text"
+  }];
+  // @inject_tag: gorm:"column:response_text"
+  
+  string response_audio_url = 9 [(insuretech.common.v1.column) = {
+    column_name: "response_audio_url"
+    sql_type: "VARCHAR(500)"
+    comment: "Generated response audio URL"
+  }];
+  // @inject_tag: gorm:"column:response_audio_url"
+  
+  float confidence_score = 10 [(insuretech.common.v1.column) = {
+    column_name: "confidence_score"
+    sql_type: "REAL"
+    comment: "Recognition confidence (0-1)"
+  }];
+  // @inject_tag: gorm:"column:confidence_score"
+  
+  google.protobuf.Timestamp executed_at = 11 [(insuretech.common.v1.column) = {
+    column_name: "executed_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:executed_at;not null;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum CommandType {
+  COMMAND_TYPE_UNSPECIFIED = 0;
+  COMMAND_TYPE_POLICY_INQUIRY = 1;
+  COMMAND_TYPE_CLAIM_STATUS = 2;
+  COMMAND_TYPE_PREMIUM_PAYMENT = 3;
+  COMMAND_TYPE_RENEWAL_INFO = 4;
+  COMMAND_TYPE_AGENT_LOCATOR = 5;
+  COMMAND_TYPE_FAQ = 6;
+  COMMAND_TYPE_SUPPORT_TICKET = 7;
+}
+
+enum CommandStatus {
+  COMMAND_STATUS_UNSPECIFIED = 0;
+  COMMAND_STATUS_PENDING = 1;
+  COMMAND_STATUS_PROCESSING = 2;
+  COMMAND_STATUS_COMPLETED = 3;
+  COMMAND_STATUS_FAILED = 4;
+}
+
+

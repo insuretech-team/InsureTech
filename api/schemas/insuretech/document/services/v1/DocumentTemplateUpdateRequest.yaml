@@ -1,0 +1,9 @@
+DocumentTemplateUpdateRequest:
+  type: object
+  properties:
+    template_id:
+      type: string
+    template:
+      $ref: '#/components/schemas/DocumentTemplate'
+  description: Request payload for updating an existing document template update.
+    Contains fields to be modified.

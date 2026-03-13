@@ -1,0 +1,13 @@
+MuteTrackRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    track_id:
+      type: string
+    muted:
+      type: boolean
+  description: Request payload for mute track operation. Contains parameters required
+    to execute the operation.

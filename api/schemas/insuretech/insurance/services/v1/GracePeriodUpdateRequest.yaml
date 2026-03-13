@@ -1,0 +1,7 @@
+GracePeriodUpdateRequest:
+  type: object
+  properties:
+    grace_period:
+      $ref: '#/components/schemas/GracePeriod'
+  description: Request payload for updating an existing grace period update. Contains
+    fields to be modified.

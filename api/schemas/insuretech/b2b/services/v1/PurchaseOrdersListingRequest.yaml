@@ -1,0 +1,15 @@
+PurchaseOrdersListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    business_id:
+      type: string
+      description: business_id injected server-side from session.
+    status:
+      $ref: '#/components/schemas/PurchaseOrderStatus'
+  description: Request payload for listing purchase orders listing items. Supports
+    filtering, sorting, and pagination.

@@ -1,0 +1,13 @@
+AnswerReceivedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+      description: ULID format
+    answer:
+      $ref: '#/components/schemas/SDPAnswer'
+    received_at:
+      type: string
+      format: date-time
+  description: Event emitted when answer undergoes received. Published to event stream
+    for downstream processing and audit trail.

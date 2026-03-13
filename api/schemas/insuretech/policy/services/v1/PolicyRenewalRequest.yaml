@@ -1,0 +1,16 @@
+PolicyPolicyRenewalRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    tenure_months:
+      type: integer
+      format: int32
+    update_nominees:
+      type: boolean
+    nominees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nominee'
+  description: Request payload for policy renewal operation. Contains parameters required
+    to execute the operation.

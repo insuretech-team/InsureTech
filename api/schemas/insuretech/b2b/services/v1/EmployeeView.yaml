@@ -1,0 +1,11 @@
+EmployeeView:
+  type: object
+  properties:
+    employee:
+      $ref: '#/components/schemas/Employee'
+    department_name:
+      type: string
+    assigned_plan_name:
+      type: string
+  description: Domain entity representing employee view. Core business object in the
+    system.

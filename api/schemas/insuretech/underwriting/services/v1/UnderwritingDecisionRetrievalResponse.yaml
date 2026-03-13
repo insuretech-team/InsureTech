@@ -1,0 +1,10 @@
+UnderwritingUnderwritingDecisionRetrievalResponse:
+  type: object
+  properties:
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for underwriting decision retrieval operation. Returns
+    operation results and status.

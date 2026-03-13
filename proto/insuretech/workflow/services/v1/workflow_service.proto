@@ -1,0 +1,154 @@
+syntax = "proto3";
+
+package insuretech.workflow.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/workflow/entity/v1/workflow_definition.proto";
+import "insuretech/workflow/entity/v1/workflow_instance.proto";
+import "insuretech/workflow/entity/v1/workflow_task.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/services/v1;workflowservicev1";
+option csharp_namespace = "Insuretech.Workflow.Services.V1";
+
+service WorkflowService {
+  // Create workflow definition
+  rpc CreateWorkflowDefinition(CreateWorkflowDefinitionRequest) returns (CreateWorkflowDefinitionResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflow-definitions"
+      body: "*"
+    };
+  }
+  
+  // Get workflow definition
+  rpc GetWorkflowDefinition(GetWorkflowDefinitionRequest) returns (GetWorkflowDefinitionResponse) {
+    option (google.api.http) = {
+      get: "/v1/workflow-definitions/{workflow_definition_id}"
+    };
+  }
+  
+  // Start workflow instance
+  rpc StartWorkflow(StartWorkflowRequest) returns (StartWorkflowResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflow-instances"
+      body: "*"
+    };
+  }
+  
+  // Get workflow instance
+  rpc GetWorkflowInstance(GetWorkflowInstanceRequest) returns (GetWorkflowInstanceResponse) {
+    option (google.api.http) = {
+      get: "/v1/workflow-instances/{workflow_instance_id}"
+    };
+  }
+  
+  // Get my tasks
+  rpc GetMyTasks(GetMyTasksRequest) returns (GetMyTasksResponse) {
+    option (google.api.http) = {
+      get: "/v1/workflow-tasks/my-tasks"
+    };
+  }
+  
+  // Complete task
+  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {
+    option (google.api.http) = {
+      post: "/v1/workflow-tasks/{task_id}?action=complete"
+      body: "*"
+    };
+  }
+  
+  // Get workflow history for entity
+  rpc GetWorkflowHistory(GetWorkflowHistoryRequest) returns (GetWorkflowHistoryResponse) {
+    option (google.api.http) = {
+      get: "/v1/entities/{entity_type}/{entity_id}/workflow-history"
+    };
+  }
+}
+
+message CreateWorkflowDefinitionRequest {
+  string name = 1;
+  string description = 2;
+  string type = 3;
+  string entity_type = 4;
+  google.protobuf.Struct steps = 5; // CG-7: Typed structured workflow steps
+}
+
+message CreateWorkflowDefinitionResponse {
+  string workflow_definition_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetWorkflowDefinitionRequest {
+  string workflow_definition_id = 1;
+}
+
+message GetWorkflowDefinitionResponse {
+  entity.v1.WorkflowDefinition workflow_definition = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message StartWorkflowRequest {
+  string workflow_definition_id = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+  google.protobuf.Struct context = 4; // CG-7: Typed structured workflow context
+}
+
+message StartWorkflowResponse {
+  string workflow_instance_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetWorkflowInstanceRequest {
+  string workflow_instance_id = 1;
+}
+
+message GetWorkflowInstanceResponse {
+  entity.v1.WorkflowInstance workflow_instance = 1;
+  repeated entity.v1.WorkflowTask tasks = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetMyTasksRequest {
+  string status = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message GetMyTasksResponse {
+  repeated entity.v1.WorkflowTask tasks = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message CompleteTaskRequest {
+  string task_id = 1;
+  string decision = 2; // APPROVED, REJECTED, RETURNED
+  string comments = 3;
+}
+
+message CompleteTaskResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetWorkflowHistoryRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+}
+
+message GetWorkflowHistoryResponse {
+  repeated entity.v1.WorkflowInstance workflow_instances = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

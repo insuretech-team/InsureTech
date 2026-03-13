@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package insuretech.common.v1;
+
+import "google/protobuf/descriptor.proto";
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1;commonv1";
+option csharp_namespace = "Insuretech.Common.V1";
+
+// Security and privacy field annotations
+// These annotations mark fields that contain sensitive or personally identifiable information (PII)
+// and specify how they should be handled for security and compliance
+
+// Field-level security annotations
+extend google.protobuf.FieldOptions {
+  // Marks field as containing Personally Identifiable Information (PII)
+  // Subject to GDPR, privacy laws, and data protection regulations
+  bool pii = 50010;
+  
+  // Field should be encrypted at rest in database
+  // Use AES-256 or equivalent encryption
+  // Note: db.proto uses 50002 for 'encrypted', we use different tag
+  bool encrypted_security = 50011;
+  
+  // Field should be masked in application logs
+  // Example: "01712345678" -> "017****5678"
+  bool log_masked = 50012;
+  
+  // Field should be completely redacted from logs
+  // Example: "password123" -> "[REDACTED]"
+  bool log_redacted = 50013;
+  
+  // Field contains highly sensitive data
+  // Requires special handling, audit logging, and access controls
+  bool sensitive = 50014;
+  
+  // Field requires user consent for processing (GDPR)
+  bool requires_consent = 50015;
+  
+  // Purpose of data collection (for GDPR compliance)
+  string data_purpose = 50016;
+  
+  // Data retention period in days (0 = indefinite)
+  int32 retention_days = 50017;
+}
+
+// Security classification levels
+enum SecurityClassification {
+  SECURITY_CLASSIFICATION_UNSPECIFIED = 0;
+  SECURITY_CLASSIFICATION_PUBLIC = 1; // Public data, no restrictions
+  SECURITY_CLASSIFICATION_INTERNAL = 2; // Internal use only
+  SECURITY_CLASSIFICATION_CONFIDENTIAL = 3; // Restricted access
+  SECURITY_CLASSIFICATION_HIGHLY_CONFIDENTIAL = 4; // Strictly controlled access
+}
+
+// Data categories for privacy compliance
+enum DataCategory {
+  DATA_CATEGORY_UNSPECIFIED = 0;
+  DATA_CATEGORY_PERSONAL_IDENTIFIER = 1; // Name, NID, passport
+  DATA_CATEGORY_CONTACT_INFORMATION = 2; // Email, phone, address
+  DATA_CATEGORY_FINANCIAL_INFORMATION = 3; // Account numbers, transactions
+  DATA_CATEGORY_HEALTH_INFORMATION = 4; // Medical records, health data
+  DATA_CATEGORY_AUTHENTICATION_CREDENTIALS = 5; // Passwords, tokens, keys
+  DATA_CATEGORY_BIOMETRIC_DATA = 6; // Fingerprints, face recognition
+  DATA_CATEGORY_LOCATION_DATA = 7; // GPS coordinates, IP addresses
+}
+
+// Security event for audit logging
+message SecurityEvent {
+  string event_id = 1;
+  string event_type = 2; // ACCESS, MODIFICATION, DELETION, EXPORT
+  string user_id = 3;
+  string resource_type = 4; // USER, POLICY, CLAIM
+  string resource_id = 5;
+  string action = 6; // READ, UPDATE, DELETE
+  bool authorized = 7;
+  string ip_address = 8;
+  string user_agent = 9;
+  google.protobuf.Timestamp timestamp = 10;
+  map<string, string> metadata = 11;
+}

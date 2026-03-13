@@ -1,0 +1,8 @@
+SortDirection:
+  type: string
+  enum:
+  - SORT_DIRECTION_UNSPECIFIED
+  - SORT_DIRECTION_ASC
+  - SORT_DIRECTION_DESC
+  description: 'Enumeration of sort direction values. Valid options: SORT_DIRECTION_UNSPECIFIED,
+    SORT_DIRECTION_ASC, SORT_DIRECTION_DESC.'

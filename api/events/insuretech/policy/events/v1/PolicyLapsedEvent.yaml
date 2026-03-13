@@ -1,0 +1,21 @@
+PolicyPolicyLapsedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    policy_id:
+      type: string
+    policy_number:
+      type: string
+    customer_id:
+      type: string
+    reason:
+      type: string
+      description: '"non_payment", "expired"'
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Policy lapsed'

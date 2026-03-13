@@ -1,0 +1,7 @@
+TelemetrySendingRequest:
+  type: object
+  properties:
+    telemetry:
+      $ref: '#/components/schemas/Telemetry'
+  description: Request payload for telemetry sending operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,310 @@
+# {{.PackageName}}
+
+Official TypeScript/JavaScript SDK for the InsureTech API Platform.
+
+## Installation
+
+```bash
+npm install {{.PackageName}}
+# or
+yarn add {{.PackageName}}
+# or
+pnpm add {{.PackageName}}
+```
+
+## Quick Start
+
+```typescript
+import { InsureTechClient } from '{{.PackageName}}';
+
+// Initialize the client
+const client = new InsureTechClient({
+  apiKey: 'your-api-key-here',
+  baseUrl: 'https://api.insuretech.com', // optional, defaults to production
+});
+
+// Example: List products
+const products = await client.products.list();
+console.log(products);
+
+// Example: Create a policy
+const policy = await client.policies.create({
+  productId: 'prod_123',
+  customerId: 'cust_456',
+  // ... other policy details
+});
+```
+
+## Configuration
+
+### Client Options
+
+```typescript
+interface ClientConfig {
+  /** API key for authentication (required) */
+  apiKey: string;
+  
+  /** Base URL for the API (optional, defaults to production) */
+  baseUrl?: string;
+  
+  /** Request timeout in milliseconds (optional, default: 30000) */
+  timeout?: number;
+  
+  /** Number of retry attempts for failed requests (optional, default: 3) */
+  retryAttempts?: number;
+  
+  /** Initial delay between retries in milliseconds (optional, default: 1000) */
+  retryDelay?: number;
+  
+  /** Custom headers to include in all requests (optional) */
+  headers?: Record<string, string>;
+}
+```
+
+### Example with Custom Configuration
+
+```typescript
+const client = new InsureTechClient({
+  apiKey: process.env.INSURETECH_API_KEY!,
+  baseUrl: 'https://sandbox.insuretech.com',
+  timeout: 60000, // 60 seconds
+  retryAttempts: 5,
+  retryDelay: 2000, // 2 seconds
+  headers: {
+    'X-Custom-Header': 'value',
+  },
+});
+```
+
+## Usage Examples
+
+### Authentication
+
+```typescript
+// Login
+const loginResponse = await client.auth.createLogin({
+  email: 'user@example.com',
+  password: 'secure-password',
+});
+
+// Refresh token
+const refreshResponse = await client.auth.refresh({
+  refreshToken: loginResponse.refreshToken,
+});
+```
+
+### Policies
+
+```typescript
+// Get a policy
+const policy = await client.policies.get('policy_123');
+
+// Update a policy
+const updated = await client.policies.update('policy_123', {
+  status: 'ACTIVE',
+});
+
+// Cancel a policy
+await client.policies.cancel('policy_123', {
+  reason: 'Customer request',
+});
+
+// List endorsements
+const endorsements = await client.policies.listEndorsements('policy_123');
+```
+
+### Claims
+
+```typescript
+// Submit a claim
+const claim = await client.claims.create({
+  policyId: 'policy_123',
+  claimType: 'ACCIDENT',
+  description: 'Vehicle accident on highway',
+  incidentDate: '2024-01-15',
+});
+
+// Upload claim documents
+await client.claims.uploadDocuments('claim_456', {
+  files: [/* file data */],
+});
+
+// Get claim status
+const claimStatus = await client.claims.get('claim_456');
+```
+
+### Products
+
+```typescript
+// List all products
+const products = await client.products.list();
+
+// Get product details
+const product = await client.products.get('prod_123');
+
+// Calculate premium
+const premium = await client.products.calculatePremium('prod_123', {
+  age: 30,
+  coverageAmount: 100000,
+  // ... other factors
+});
+```
+
+## Error Handling
+
+The SDK provides specific error classes for different scenarios:
+
+```typescript
+import {
+  ApiError,
+  ValidationError,
+  AuthenticationError,
+  AuthorizationError,
+  NotFoundError,
+  RateLimitError,
+  ServerError,
+  NetworkError,
+  TimeoutError,
+} from '{{.PackageName}}';
+
+try {
+  const policy = await client.policies.get('invalid_id');
+} catch (error) {
+  if (error instanceof NotFoundError) {
+    console.error('Policy not found');
+  } else if (error instanceof AuthenticationError) {
+    console.error('Invalid API key');
+  } else if (error instanceof ValidationError) {
+    console.error('Invalid request data');
+  } else if (error instanceof RateLimitError) {
+    console.error('Rate limit exceeded, retry after delay');
+  } else if (error instanceof TimeoutError) {
+    console.error('Request timed out');
+  } else if (error instanceof NetworkError) {
+    console.error('Network connection failed');
+  } else if (error instanceof ApiError) {
+    console.error(`API error: ${error.statusCode} - ${error.message}`);
+  } else {
+    console.error('Unexpected error:', error);
+  }
+}
+```
+
+## TypeScript Support
+
+This SDK is written in TypeScript and provides full type definitions:
+
+```typescript
+import type {
+  Policy,
+  Claim,
+  Product,
+  PolicyStatus,
+  ClaimType,
+} from '{{.PackageName}}';
+
+// All types are exported and available
+const policy: Policy = await client.policies.get('policy_123');
+const status: PolicyStatus = policy.status;
+```
+
+## Advanced Features
+
+### Pagination
+
+```typescript
+// Manual pagination
+let page = 1;
+let hasMore = true;
+
+while (hasMore) {
+  const response = await client.policies.list({
+    page,
+    pageSize: 50,
+  });
+  
+  // Process policies
+  response.items.forEach(policy => {
+    console.log(policy.policyNumber);
+  });
+  
+  hasMore = response.pagination.hasNext;
+  page++;
+}
+```
+
+### Custom Headers per Request
+
+```typescript
+// The SDK doesn't support per-request headers directly,
+// but you can access the HTTP client for advanced use cases
+const httpClient = client.getHttpClient();
+```
+
+## Environment Variables
+
+You can use environment variables for configuration:
+
+```bash
+INSURETECH_API_KEY=your_api_key_here
+INSURETECH_BASE_URL=https://api.insuretech.com
+```
+
+```typescript
+const client = new InsureTechClient({
+  apiKey: process.env.INSURETECH_API_KEY!,
+  baseUrl: process.env.INSURETECH_BASE_URL,
+});
+```
+
+## Development
+
+### Building from Source
+
+```bash
+# Install dependencies
+npm install
+
+# Build the SDK
+npm run build
+
+# Run tests
+npm test
+
+# Run linter
+npm run lint
+
+# Format code
+npm run format
+```
+
+### Running Tests
+
+```bash
+# Run all tests
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+```
+
+## API Reference
+
+For detailed API documentation, visit: [https://docs.insuretech.com](https://docs.insuretech.com)
+
+## Support
+
+- Documentation: [https://docs.insuretech.com](https://docs.insuretech.com)
+- Issues: [https://github.com/lifeplus/InsureTech/issues](https://github.com/lifeplus/InsureTech/issues)
+- Email: support@insuretech.com
+
+## License
+
+{{.License}}
+
+## Changelog
+
+See [CHANGELOG.md](./CHANGELOG.md) for version history.

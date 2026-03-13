@@ -1,0 +1,20 @@
+FileUpload:
+  type: object
+  properties:
+    content:
+      type: string
+      format: byte
+    filename:
+      type: string
+    content_type:
+      type: string
+    file_type:
+      $ref: '#/components/schemas/FileType'
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+  description: Domain entity representing file upload. Core business object in the
+    system.

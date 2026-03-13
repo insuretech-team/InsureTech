@@ -1,0 +1,9 @@
+PurchaseOrderRetrievalResponse:
+  type: object
+  properties:
+    purchase_order:
+      $ref: '#/components/schemas/PurchaseOrderView'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for purchase order retrieval operation. Returns operation
+    results and status.

@@ -1,0 +1,10 @@
+PartnerDeletionResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for partner deletion operation. Returns operation
+    results and status.

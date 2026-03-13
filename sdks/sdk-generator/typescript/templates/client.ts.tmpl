@@ -1,0 +1,52 @@
+// Auto-generated TypeScript SDK Client
+// DO NOT EDIT - This file is generated
+
+import { HttpClient } from './http-client';
+import { ClientConfig } from './config';
+{{range .Services}}
+import { {{.ClassName}} } from './services/{{.fileName}}';
+{{end}}
+
+/**
+ * InsureTech API Client
+ * 
+ * Main entry point for interacting with the InsureTech API.
+ * Provides access to all service endpoints.
+ */
+export class InsureTechClient {
+  private httpClient: HttpClient;
+  
+  {{range .Services}}
+  /** {{.Description}} */
+  public readonly {{.propertyName}}: {{.ClassName}};
+  {{end}}
+  
+  /**
+   * Create a new InsureTech API client
+   * 
+   * @param config - Client configuration
+   * @example
+   * ```typescript
+   * const client = new InsureTechClient({
+   *   apiKey: 'your-api-key',
+   *   baseUrl: 'https://api.insuretech.com'
+   * });
+   * ```
+   */
+  constructor(config: ClientConfig) {
+    this.httpClient = new HttpClient(config);
+    
+    // Initialize all services
+    {{range .Services}}
+    this.{{.propertyName}} = new {{.ClassName}}(this.httpClient);
+    {{end}}
+  }
+  
+  /**
+   * Get the underlying HTTP client
+   * @internal
+   */
+  getHttpClient(): HttpClient {
+    return this.httpClient;
+  }
+}

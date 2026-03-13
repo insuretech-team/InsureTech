@@ -1,0 +1,17 @@
+RefundStatusRetrievalResponse:
+  type: object
+  properties:
+    refund_id:
+      type: string
+    status:
+      type: string
+    refund_amount:
+      $ref: '#/components/schemas/Money'
+    completed_at:
+      type: string
+      format: date-time
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for refund status retrieval operation. Returns operation
+    results and status.

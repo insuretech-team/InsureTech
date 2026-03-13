@@ -1,0 +1,15 @@
+InsurerInsurerUpdateRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+    name:
+      type: string
+    email:
+      type: string
+    phone:
+      type: string
+    status:
+      type: string
+  description: Request payload for updating an existing insurer update. Contains fields
+    to be modified.

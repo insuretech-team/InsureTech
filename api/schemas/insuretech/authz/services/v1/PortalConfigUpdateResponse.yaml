@@ -1,0 +1,9 @@
+PortalConfigUpdateResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/PortalConfig'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for portal config update operation. Returns operation
+    results and status.

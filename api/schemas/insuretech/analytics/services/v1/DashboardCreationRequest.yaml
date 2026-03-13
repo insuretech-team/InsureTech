@@ -1,0 +1,7 @@
+DashboardCreationRequest:
+  type: object
+  properties:
+    dashboard:
+      $ref: '#/components/schemas/Dashboard'
+  description: Request payload for creating a new dashboard creation. Contains all
+    required fields and optional parameters for initialization.

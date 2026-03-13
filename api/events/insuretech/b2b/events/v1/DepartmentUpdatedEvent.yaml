@@ -1,0 +1,20 @@
+DepartmentUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    department_id:
+      type: string
+    organisation_id:
+      type: string
+    updated_by:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    timestamp:
+      type: string
+      format: date-time
+  description: DepartmentUpdatedEvent is published when a department is updated

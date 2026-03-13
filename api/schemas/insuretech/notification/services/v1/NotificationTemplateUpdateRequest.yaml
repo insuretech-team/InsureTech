@@ -1,0 +1,13 @@
+NotificationTemplateUpdateRequest:
+  type: object
+  properties:
+    template_id:
+      type: string
+    name:
+      type: string
+    subject:
+      type: string
+    body:
+      type: string
+  description: Request payload for updating an existing notification template update.
+    Contains fields to be modified.

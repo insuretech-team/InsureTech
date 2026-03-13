@@ -1,0 +1,201 @@
+syntax = "proto3";
+
+package insuretech.refund.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/refund/entity/v1;refundv1";
+
+// Refund for policy cancellation (FR-093 to FR-097)
+message Refund {
+  option (insuretech.common.v1.table) = {
+    table_name: "refunds"
+    schema_name: "payment_schema"
+    migration_order: 39
+    is_table: true
+    audit_fields: true
+    comment: "Premium refunds for policy cancellations"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "refund_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:refund_id;not null"
+  
+  string refund_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "refund_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_refunds_number_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:refund_number;not null"
+  
+  string policy_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_refunds_policy_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:policy_id;not null"
+  
+  RefundReason reason = 4 [(insuretech.common.v1.column) = {
+    column_name: "reason"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_refunds_reason"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:reason;not null;serializer:proto_enum"
+  
+  string reason_details = 5 [(insuretech.common.v1.column) = {
+    column_name: "reason_details"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:reason_details"
+  
+  insuretech.common.v1.Money total_premium_paid = 6;
+  insuretech.common.v1.Money premium_used = 7;
+  insuretech.common.v1.Money cancellation_charge = 8;
+  insuretech.common.v1.Money refundable_amount = 9;
+  
+  string calculation_details = 10 [(insuretech.common.v1.column) = {
+    column_name: "calculation_details"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Refund calculation breakdown"
+  }];
+  // @inject_tag: gorm:"column:calculation_details"
+  
+  RefundStatus status = 11 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_refunds_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string requested_by = 12 [(insuretech.common.v1.column) = {
+    column_name: "requested_by"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+  }];
+  // @inject_tag: gorm:"column:requested_by;not null"
+  
+  string approved_by = 13 [(insuretech.common.v1.column) = {
+    column_name: "approved_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+      on_update: REFERENTIAL_ACTION_CASCADE
+    }
+  }];
+  // @inject_tag: gorm:"column:approved_by"
+  
+  string payment_method = 14 [(insuretech.common.v1.column) = {
+    column_name: "payment_method"
+    sql_type: "VARCHAR(20)"
+    comment: "BANK_TRANSFER, MFS, CHEQUE"
+  }];
+  // @inject_tag: gorm:"column:payment_method"
+  
+  string payment_reference = 15 [(insuretech.common.v1.column) = {
+    column_name: "payment_reference"
+    sql_type: "VARCHAR(100)"
+  }];
+  // @inject_tag: gorm:"column:payment_reference"
+  
+  // Link to payment refund transaction record (payment_schema.refunds)
+  string payment_refund_id = 16 [(insuretech.common.v1.column) = {
+    column_name: "payment_refund_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "payment_refunds"
+      references_column: "refund_id"
+      references_schema: "payment_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_refunds_payment_refund_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "Links business refund to payment transaction"
+  }];
+  // @inject_tag: gorm:"column:payment_refund_id"
+  
+  google.protobuf.Timestamp processed_at = 17 [(insuretech.common.v1.column) = {
+    column_name: "processed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum RefundReason {
+  REFUND_REASON_UNSPECIFIED = 0;
+  REFUND_REASON_FREE_LOOK_CANCELLATION = 1; // FR-093: Within free-look period
+  REFUND_REASON_CUSTOMER_REQUEST = 2;
+  REFUND_REASON_UNDERWRITING_REJECTION = 3;
+  REFUND_REASON_DUPLICATE_POLICY = 4;
+  REFUND_REASON_DEATH_OF_INSURED = 5;
+  REFUND_REASON_POLICY_LAPSED = 6;
+  REFUND_REASON_FRAUD = 7;
+}
+
+enum RefundStatus {
+  REFUND_STATUS_UNSPECIFIED = 0;
+  REFUND_STATUS_PENDING = 1;
+  REFUND_STATUS_CALCULATING = 2;
+  REFUND_STATUS_APPROVED = 3;
+  REFUND_STATUS_PROCESSING = 4;
+  REFUND_STATUS_COMPLETED = 5;
+  REFUND_STATUS_FAILED = 6;
+  REFUND_STATUS_REJECTED = 7;
+}
+
+

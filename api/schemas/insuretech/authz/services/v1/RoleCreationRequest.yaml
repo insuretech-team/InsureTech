@@ -1,0 +1,13 @@
+RoleCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    portal:
+      $ref: '#/components/schemas/Portal'
+    description:
+      type: string
+    created_by:
+      type: string
+  description: Request payload for creating a new role creation. Contains all required
+    fields and optional parameters for initialization.

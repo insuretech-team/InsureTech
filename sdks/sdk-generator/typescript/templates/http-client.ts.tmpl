@@ -1,0 +1,153 @@
+// Auto-generated HTTP Client
+// DO NOT EDIT - This file is generated
+
+import { ClientConfig } from './config';
+import { ApiError, NetworkError, TimeoutError } from './errors';
+
+/**
+ * Request options for HTTP requests
+ */
+export interface RequestOptions {
+  method: 'GET' | 'POST' | 'PUT' | 'PATCH' | 'DELETE';
+  path: string;
+  body?: unknown;
+  query?: Record<string, string | number | boolean>;
+  headers?: Record<string, string>;
+}
+
+/**
+ * HTTP Client for making API requests
+ * 
+ * Handles authentication, retries, timeouts, and error handling.
+ */
+export class HttpClient {
+  private baseUrl: string;
+  private apiKey: string;
+  private timeout: number;
+  private retryAttempts: number;
+  private retryDelay: number;
+
+  constructor(config: ClientConfig) {
+    this.baseUrl = config.baseUrl || 'https://api.insuretech.com';
+    this.apiKey = config.apiKey;
+    this.timeout = config.timeout || 30000;
+    this.retryAttempts = config.retryAttempts || 3;
+    this.retryDelay = config.retryDelay || 1000;
+
+    // Remove trailing slash from base URL
+    this.baseUrl = this.baseUrl.replace(/\/$/, '');
+  }
+
+  /**
+   * Make an HTTP request with retry logic
+   */
+  async request<T>(options: RequestOptions): Promise<T> {
+    let lastError: Error | null = null;
+
+    for (let attempt = 0; attempt < this.retryAttempts; attempt++) {
+      try {
+        return await this.makeRequest<T>(options);
+      } catch (error) {
+        lastError = error as Error;
+
+        // Don't retry client errors (4xx) or last attempt
+        if (error instanceof ApiError && error.statusCode < 500) {
+          throw error;
+        }
+
+        if (attempt < this.retryAttempts - 1) {
+          // Exponential backoff
+          const delay = this.retryDelay * Math.pow(2, attempt);
+          await this.sleep(delay);
+        }
+      }
+    }
+
+    throw lastError;
+  }
+
+  /**
+   * Make a single HTTP request
+   */
+  private async makeRequest<T>(options: RequestOptions): Promise<T> {
+    const url = this.buildUrl(options.path, options.query);
+    const headers = this.buildHeaders(options.headers);
+
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.timeout);
+
+    try {
+      const response = await fetch(url, {
+        method: options.method,
+        headers,
+        body: options.body ? JSON.stringify(options.body) : undefined,
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        const body = await response.text();
+        throw new ApiError(response.status, body, response);
+      }
+
+      // Handle empty responses
+      const contentType = response.headers.get('content-type');
+      if (!contentType || !contentType.includes('application/json')) {
+        return {} as T;
+      }
+
+      return (await response.json()) as T;
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      if (error instanceof ApiError) {
+        throw error;
+      }
+
+      if ((error as Error).name === 'AbortError') {
+        throw new TimeoutError(`Request timeout after ${this.timeout}ms`);
+      }
+
+      throw new NetworkError(`Network request failed: ${(error as Error).message}`);
+    }
+  }
+
+  /**
+   * Build the full URL with query parameters
+   */
+  private buildUrl(path: string, query?: Record<string, string | number | boolean>): string {
+    const url = `${this.baseUrl}${path}`;
+
+    if (!query || Object.keys(query).length === 0) {
+      return url;
+    }
+
+    const params = new URLSearchParams();
+    for (const [key, value] of Object.entries(query)) {
+      params.append(key, String(value));
+    }
+
+    return `${url}?${params.toString()}`;
+  }
+
+  /**
+   * Build request headers
+   */
+  private buildHeaders(customHeaders?: Record<string, string>): Record<string, string> {
+    return {
+      'Authorization': `Bearer ${this.apiKey}`,
+      'Content-Type': 'application/json',
+      'Accept': 'application/json',
+      'User-Agent': 'insuretech-typescript-sdk/{{.Version}}',
+      ...customHeaders,
+    };
+  }
+
+  /**
+   * Sleep for a given duration
+   */
+  private sleep(ms: number): Promise<void> {
+    return new Promise(resolve => setTimeout(resolve, ms));
+  }
+}

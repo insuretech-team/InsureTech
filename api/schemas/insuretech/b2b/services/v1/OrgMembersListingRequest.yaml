@@ -1,0 +1,7 @@
+OrgMembersListingRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+  description: Request payload for listing org members listing items. Supports filtering,
+    sorting, and pagination.

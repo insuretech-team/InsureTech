@@ -1,0 +1,10 @@
+ParticipantAnalytics:
+  type: object
+  properties:
+    peer_id:
+      type: string
+    total_time_seconds:
+      type: string
+      format: int64
+  description: Domain entity representing participant analytics. Core business object
+    in the system.

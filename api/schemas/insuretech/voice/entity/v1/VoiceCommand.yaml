@@ -1,0 +1,54 @@
+VoiceCommand:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:command_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    voice_session_id:
+      type: string
+      description: '@inject_tag: gorm:"column:voice_session_id;not null"'
+    type:
+      $ref: '#/components/schemas/CommandType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    command_text:
+      type: string
+      description: '@inject_tag: gorm:"column:command_text"'
+    audio_url:
+      type: string
+      description: '@inject_tag: gorm:"column:audio_url"'
+    parameters:
+      type: string
+      description: '@inject_tag: gorm:"column:parameters"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/CommandStatus'
+      x-database-default: PENDING
+    response_text:
+      type: string
+      description: '@inject_tag: gorm:"column:response_text"'
+    response_audio_url:
+      type: string
+      description: '@inject_tag: gorm:"column:response_audio_url"'
+    confidence_score:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:confidence_score"'
+    executed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:executed_at;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Voice command execution
+  required:
+  - id
+  - voice_session_id
+  - type
+  - status
+  - executed_at
+  - audit_info

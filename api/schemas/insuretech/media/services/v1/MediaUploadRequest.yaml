@@ -1,0 +1,33 @@
+MediaUploadRequest:
+  type: object
+  properties:
+    file_id:
+      type: string
+      description: Reference to file in storage_schema.files
+    tenant_id:
+      type: string
+    media_type:
+      type: string
+      description: IMAGE, DOCUMENT, VIDEO
+    mime_type:
+      type: string
+    file_size_bytes:
+      type: string
+      format: int64
+    entity_type:
+      type: string
+      description: POLICY, CLAIM, etc.
+    entity_id:
+      type: string
+    uploaded_by:
+      type: string
+    auto_validate:
+      type: boolean
+      description: Trigger validation immediately
+    auto_optimize:
+      type: boolean
+      description: Trigger optimization immediately
+    auto_thumbnail:
+      type: boolean
+      description: Generate thumbnail immediately
+  description: Upload Media

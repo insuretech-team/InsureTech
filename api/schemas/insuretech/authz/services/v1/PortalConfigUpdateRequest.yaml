@@ -1,0 +1,32 @@
+PortalConfigUpdateRequest:
+  type: object
+  properties:
+    portal:
+      $ref: '#/components/schemas/Portal'
+    mfa_required:
+      type: boolean
+    mfa_methods:
+      type: array
+      items:
+        type: string
+    access_token_ttl_seconds:
+      type: integer
+      format: int32
+    refresh_token_ttl_seconds:
+      type: integer
+      format: int32
+    session_ttl_seconds:
+      type: integer
+      format: int32
+    idle_timeout_seconds:
+      type: integer
+      format: int32
+    allow_concurrent_sessions:
+      type: boolean
+    max_concurrent_sessions:
+      type: integer
+      format: int32
+    updated_by:
+      type: string
+  description: Request payload for updating an existing portal config update. Contains
+    fields to be modified.

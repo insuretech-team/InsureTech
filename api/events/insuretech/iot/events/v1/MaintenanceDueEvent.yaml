@@ -1,0 +1,16 @@
+MaintenanceDueEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    maintenance_type:
+      type: string
+      description: '"battery_low", "calibration_needed"'
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Device maintenance due'

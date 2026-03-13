@@ -1,0 +1,75 @@
+syntax = "proto3";
+
+package insuretech.storage.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/storage/events/v1;storageeventsv1";
+option csharp_namespace = "Insuretech.Storage.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+
+// Emitted when a file upload is completed and persisted.
+message FileUploadedEvent {
+  string event_id = 1;
+  string file_id = 2;
+  string tenant_id = 3;
+  string filename = 4;
+  string content_type = 5;
+  int64 size_bytes = 6;
+  string storage_key = 7;
+  string bucket = 8;
+  string url = 9;
+  string cdn_url = 10;
+  string reference_id = 11;
+  string reference_type = 12;
+  bool is_public = 13;
+  string uploaded_by = 14;
+  string source = 15; // DIRECT | BATCH | FINALIZE
+  google.protobuf.Timestamp timestamp = 16;
+}
+
+// Emitted when a presigned upload URL is issued.
+message FileUploadURLIssuedEvent {
+  string event_id = 1;
+  string tenant_id = 2;
+  string file_id = 3;
+  string filename = 4;
+  string storage_key = 5;
+  string reference_id = 6;
+  string reference_type = 7;
+  bool is_public = 8;
+  google.protobuf.Timestamp expires_at = 9;
+  string requested_by = 10;
+  google.protobuf.Timestamp timestamp = 11;
+}
+
+// Emitted after finalize/upload verification completes.
+message FileUploadFinalizedEvent {
+  string event_id = 1;
+  string file_id = 2;
+  string tenant_id = 3;
+  int64 size_bytes = 4;
+  string content_type = 5;
+  string finalized_by = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Emitted when metadata is updated on a stored file.
+message FileMetadataUpdatedEvent {
+  string event_id = 1;
+  string file_id = 2;
+  string tenant_id = 3;
+  repeated string updated_fields = 4;
+  string updated_by = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Emitted when a file/object is deleted.
+message FileDeletedEvent {
+  string event_id = 1;
+  string file_id = 2;
+  string tenant_id = 3;
+  string storage_key = 4;
+  string deleted_by = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+

@@ -1,0 +1,9 @@
+RoomState:
+  type: string
+  enum:
+  - ROOM_STATE_UNSPECIFIED
+  - ROOM_STATE_ACTIVE
+  - ROOM_STATE_IDLE
+  - ROOM_STATE_CLOSED
+  description: 'Enumeration of room state values. Valid options: ROOM_STATE_UNSPECIFIED,
+    ROOM_STATE_ACTIVE, ROOM_STATE_IDLE, ROOM_STATE_CLOSED.'

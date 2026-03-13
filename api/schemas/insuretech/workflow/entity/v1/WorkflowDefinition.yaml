@@ -1,0 +1,51 @@
+WorkflowDefinition:
+  type: object
+  properties:
+    workflow_definition_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:workflow_definition_id;not
+        null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+      x-unique: true
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    type:
+      $ref: '#/components/schemas/WorkflowType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    steps:
+      type: string
+      description: '@inject_tag: gorm:"column:steps;not null"'
+    conditions:
+      type: string
+      description: '@inject_tag: gorm:"column:conditions"'
+    version:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:version;not null"'
+      default: 1
+    status:
+      allOf:
+      - $ref: '#/components/schemas/WorkflowStatus'
+      x-database-default: ACTIVE
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Workflow definition (FR-218, FR-219)
+  required:
+  - workflow_definition_id
+  - name
+  - type
+  - entity_type
+  - steps
+  - version
+  - status
+  - audit_info

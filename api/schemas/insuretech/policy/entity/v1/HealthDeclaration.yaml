@@ -1,0 +1,14 @@
+PolicyHealthDeclaration:
+  type: object
+  properties:
+    has_pre_existing_conditions:
+      type: boolean
+    conditions:
+      type: array
+      items:
+        type: string
+    is_smoker:
+      type: boolean
+    blood_group:
+      type: string
+  description: Health declaration (stored as JSONB)

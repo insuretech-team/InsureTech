@@ -1,0 +1,7 @@
+TenantRetrievalRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+  description: Request payload for retrieving tenant retrieval information. May include
+    filters and pagination parameters.

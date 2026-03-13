@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package insuretech.authz.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/events/v1;authzeventsv1";
+option csharp_namespace = "Insuretech.Authz.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ============================================================================
+// AuthZ Domain Events — published to Kafka topic: authz.events
+// All events are immutable and append-only (event sourcing).
+// ============================================================================
+
+// ── Role Events ──────────────────────────────────────────────────────────────
+
+message RoleCreatedEvent {
+  string event_id   = 1;
+  string role_id    = 2;
+  string name       = 3;
+  insuretech.authz.entity.v1.Portal portal = 4;
+  string created_by = 5;
+  google.protobuf.Timestamp occurred_at = 6;
+}
+
+message RoleUpdatedEvent {
+  string event_id   = 1;
+  string role_id    = 2;
+  string updated_by = 3;
+  map<string, string> changed_fields = 4; // field_name -> new_value
+  google.protobuf.Timestamp occurred_at = 5;
+}
+
+message RoleDeletedEvent {
+  string event_id   = 1;
+  string role_id    = 2;
+  string deleted_by = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+}
+
+// ── User-Role Assignment Events ───────────────────────────────────────────────
+
+message RoleAssignedEvent {
+  string event_id    = 1;
+  string user_id     = 2;
+  string role_id     = 3;
+  string role_name   = 4;
+  // domain = "portal:tenant_id"
+  string domain      = 5;
+  string assigned_by = 6;
+  google.protobuf.Timestamp expires_at    = 7;
+  google.protobuf.Timestamp occurred_at   = 8;
+}
+
+message RoleRemovedEvent {
+  string event_id   = 1;
+  string user_id    = 2;
+  string role_id    = 3;
+  string role_name  = 4;
+  string domain     = 5;
+  string removed_by = 6;
+  google.protobuf.Timestamp occurred_at = 7;
+}
+
+// ── Policy Rule Events ────────────────────────────────────────────────────────
+
+message PolicyRuleCreatedEvent {
+  string event_id   = 1;
+  string policy_id  = 2;
+  string subject    = 3;
+  string domain     = 4;
+  string object     = 5;
+  string action     = 6;
+  insuretech.authz.entity.v1.PolicyEffect effect = 7;
+  string condition  = 8;
+  string created_by = 9;
+  google.protobuf.Timestamp occurred_at = 10;
+}
+
+message PolicyRuleUpdatedEvent {
+  string event_id   = 1;
+  string policy_id  = 2;
+  string updated_by = 3;
+  map<string, string> changed_fields = 4;
+  google.protobuf.Timestamp occurred_at = 5;
+}
+
+message PolicyRuleDeletedEvent {
+  string event_id   = 1;
+  string policy_id  = 2;
+  string deleted_by = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+}
+
+// ── Access Decision Events ────────────────────────────────────────────────────
+
+// AccessDeniedEvent — emitted every time Casbin returns DENY
+// Consumed by: security monitoring, anomaly detection, SIEM
+message AccessDeniedEvent {
+  string event_id    = 1;
+  string user_id     = 2;
+  string session_id  = 3;
+  string domain      = 4;  // "portal:tenant_id"
+  string subject     = 5;  // "user:<uuid>"
+  string object      = 6;  // "svc:policy/create"
+  string action      = 7;  // "POST"
+  string reason      = 8;  // "no matching policy" | "explicit deny"
+  string ip_address  = 9;
+  string user_agent  = 10;
+  google.protobuf.Timestamp occurred_at = 11;
+}
+
+// AccessGrantedEvent — emitted for allowed decisions (optional, configurable)
+message AccessGrantedEvent {
+  string event_id    = 1;
+  string user_id     = 2;
+  string session_id  = 3;
+  string domain      = 4;
+  string subject     = 5;
+  string object      = 6;
+  string action      = 7;
+  string matched_rule = 8;
+  google.protobuf.Timestamp occurred_at = 9;
+}
+
+// ── Portal Config Events ──────────────────────────────────────────────────────
+
+message PortalConfigUpdatedEvent {
+  string event_id   = 1;
+  insuretech.authz.entity.v1.Portal portal = 2;
+  string updated_by = 3;
+  map<string, string> changed_fields = 4;
+  google.protobuf.Timestamp occurred_at = 5;
+}
+
+// ── Policy Cache Events ───────────────────────────────────────────────────────
+
+message PolicyCacheInvalidatedEvent {
+  string event_id = 1;
+  string domain   = 2; // empty = global invalidation
+  string reason   = 3;
+  google.protobuf.Timestamp occurred_at = 4;
+}

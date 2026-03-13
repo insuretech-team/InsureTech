@@ -1,0 +1,24 @@
+CommissionStatementRetrievalResponse:
+  type: object
+  properties:
+    recipient_id:
+      type: string
+    period_start:
+      type: string
+    period_end:
+      type: string
+    total_earned:
+      $ref: '#/components/schemas/Money'
+    total_paid:
+      $ref: '#/components/schemas/Money'
+    pending_amount:
+      $ref: '#/components/schemas/Money'
+    by_type:
+      type: array
+      items:
+        $ref: '#/components/schemas/CommissionSummary'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for commission statement retrieval operation. Returns
+    operation results and status.

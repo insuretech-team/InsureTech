@@ -1,0 +1,11 @@
+FilesUploadRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    files:
+      type: array
+      items:
+        $ref: '#/components/schemas/FileUpload'
+  description: Request payload for files upload operation. Contains parameters required
+    to execute the operation.

@@ -1,0 +1,381 @@
+syntax = "proto3";
+
+package insuretech.iot.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/iot/entity/v1;iotv1";
+option csharp_namespace = "Insuretech.Iot.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// IoTDevice represents a connected device (GPS tracker, health monitor, etc.)
+// Maps to 'devices' table in iot_schema
+message IoTDevice {
+  option (insuretech.common.v1.table) = {
+    table_name: "devices"
+    schema_name: "iot_schema"
+    migration_order: 76
+    is_table: true
+    comment: "IoT devices for telematics and monitoring"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string device_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "device_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Device UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:device_id;not null"
+
+  string device_serial = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "device_serial"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      unique: true
+      comment: "Hardware serial number (unique)"
+      index: {
+        index_name: "idx_devices_device_serial"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:device_serial;not null"
+
+  DeviceType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Device type (VEHICLE_TRACKER, HEALTH_MONITOR, HOME_SENSOR, AGRICULTURAL_SENSOR)"
+      index: {
+        index_name: "idx_devices_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  string manufacturer = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "manufacturer"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Device manufacturer"
+    }
+  ];
+  // @inject_tag: gorm:"column:manufacturer;not null"
+
+  string model = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "model"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Device model"
+    }
+  ];
+  // @inject_tag: gorm:"column:model;not null"
+
+  string policy_id = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "policy_id"
+      sql_type: "UUID"
+      comment: "Foreign key to policies table"
+      foreign_key: {
+        references_table: "policies"
+        references_column: "policy_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_devices_policy_id"
+      }
+      index: {
+        index_name: "idx_devices_policy_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:policy_id"
+
+  string owner_id = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "owner_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to users table"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_devices_owner_id"
+      }
+      index: {
+        index_name: "idx_devices_owner_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:owner_id;not null"
+
+  DeviceStatus status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'PENDING_ACTIVATION'"
+      comment: "Device status"
+      index: {
+        index_name: "idx_devices_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp registered_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "registered_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Device registration timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:registered_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp last_seen_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_seen_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Last telemetry data received timestamp"
+      index: {
+        index_name: "idx_devices_last_seen_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"
+
+  map<string, string> metadata = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Device-specific metadata as JSON"
+      is_json: true
+    }
+  ];
+
+  google.protobuf.Timestamp created_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum DeviceType {
+  DEVICE_TYPE_UNSPECIFIED = 0;
+  DEVICE_TYPE_VEHICLE_TRACKER = 1; // GPS tracker for vehicles
+  DEVICE_TYPE_HEALTH_MONITOR = 2; // Wearable health device
+  DEVICE_TYPE_HOME_SENSOR = 3; // Smart home sensors
+  DEVICE_TYPE_AGRICULTURAL_SENSOR = 4; // Farm monitoring
+}
+
+enum DeviceStatus {
+  DEVICE_STATUS_UNSPECIFIED = 0;
+  DEVICE_STATUS_PENDING_ACTIVATION = 1;
+  DEVICE_STATUS_ACTIVE = 2;
+  DEVICE_STATUS_INACTIVE = 3;
+  DEVICE_STATUS_OFFLINE = 4;
+  DEVICE_STATUS_DECOMMISSIONED = 5;
+}
+
+// Telemetry data from device (TimescaleDB hypertable for time-series data)
+// Maps to 'telemetry' table in iot_schema
+message Telemetry {
+  option (insuretech.common.v1.table) = {
+    table_name: "telemetry"
+    schema_name: "iot_schema"
+    migration_order: 77
+    is_table: true
+    comment: "IoT telemetry data (TimescaleDB hypertable, partitioned by time)"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string telemetry_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "telemetry_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Telemetry UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:telemetry_id;not null"
+
+  string device_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "device_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to devices table"
+      foreign_key: {
+        references_table: "devices"
+        references_column: "device_id"
+        references_schema: "iot_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_telemetry_device_id"
+      }
+      index: {
+        index_name: "idx_telemetry_device_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:device_id;not null"
+
+  google.protobuf.Timestamp timestamp = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "timestamp"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Telemetry data timestamp (hypertable partition key)"
+      index: {
+        index_name: "idx_telemetry_timestamp"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+
+  TelemetryType type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Telemetry type"
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  map<string, double> metrics = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "metrics"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Key-value metrics as JSON"
+      is_json: true
+      index: {
+        index_name: "idx_telemetry_metrics"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+
+  double latitude = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "latitude"
+      sql_type: "DOUBLE PRECISION"
+      comment: "GPS latitude"
+    }
+  ];
+  // @inject_tag: gorm:"column:latitude"
+
+  double longitude = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "longitude"
+      sql_type: "DOUBLE PRECISION"
+      comment: "GPS longitude"
+    }
+  ];
+  // @inject_tag: gorm:"column:longitude"
+
+  string raw_data = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "raw_data"
+      sql_type: "JSONB"
+      comment: "Raw telemetry data as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:raw_data"
+
+  Location location = 9;
+}
+
+enum TelemetryType {
+  TELEMETRY_TYPE_UNSPECIFIED = 0;
+  TELEMETRY_TYPE_GPS = 1;
+  TELEMETRY_TYPE_SPEED = 2;
+  TELEMETRY_TYPE_ACCELERATION = 3;
+  TELEMETRY_TYPE_HEART_RATE = 4;
+  TELEMETRY_TYPE_BLOOD_PRESSURE = 5;
+  TELEMETRY_TYPE_TEMPERATURE = 6;
+  TELEMETRY_TYPE_HUMIDITY = 7;
+  TELEMETRY_TYPE_SOIL_MOISTURE = 8;
+}
+
+message Location {
+  double latitude = 1;
+  double longitude = 2;
+  double altitude = 3;
+  double accuracy = 4; // Meters
+}
+
+// Risk assessment based on telemetry
+message RiskAssessment {
+  string assessment_id = 1; // UUID
+  string device_id = 2;
+  string policy_id = 3;
+  google.protobuf.Timestamp assessed_at = 4;
+  double risk_score = 5; // 0-100
+  RiskLevel risk_level = 6;
+  repeated RiskFactor factors = 7;
+  repeated string recommendations = 8;
+}
+
+enum RiskLevel {
+  RISK_LEVEL_UNSPECIFIED = 0;
+  RISK_LEVEL_LOW = 1;
+  RISK_LEVEL_MEDIUM = 2;
+  RISK_LEVEL_HIGH = 3;
+  RISK_LEVEL_CRITICAL = 4;
+}
+
+message RiskFactor {
+  string factor_name = 1; // e.g., "Harsh Braking"
+  double impact_score = 2; // Contribution to risk
+  int32 occurrence_count = 3;
+  string description = 4;
+}
+

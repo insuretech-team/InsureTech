@@ -1,0 +1,17 @@
+ReportDefinitionsListingResponse:
+  type: object
+  properties:
+    report_definitions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportDefinition'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for report definitions listing operation. Returns
+    operation results and status.

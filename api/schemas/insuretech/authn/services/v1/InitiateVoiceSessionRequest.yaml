@@ -1,0 +1,9 @@
+InitiateVoiceSessionRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    portal_id:
+      type: string
+  description: Request payload for initiate voice session operation. Contains parameters
+    required to execute the operation.

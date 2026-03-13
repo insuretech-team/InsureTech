@@ -1,0 +1,63 @@
+PortalConfig:
+  type: object
+  properties:
+    portal_config_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    portal:
+      allOf:
+      - $ref: '#/components/schemas/Portal'
+      x-unique: true
+    mfa_required:
+      type: boolean
+      default: false
+    mfa_methods:
+      type: array
+      items:
+        type: string
+        description: 'stored as JSONB: ["totp","sms","email"]'
+      description: 'stored as JSONB: ["totp","sms","email"]'
+    access_token_ttl_seconds:
+      type: integer
+      format: int32
+      description: "Token expiry in seconds \u2014 configurable, default 900 (15 min)"
+      default: 900
+    refresh_token_ttl_seconds:
+      type: integer
+      format: int32
+      default: 604800
+    session_ttl_seconds:
+      type: integer
+      format: int32
+      default: 28800
+    idle_timeout_seconds:
+      type: integer
+      format: int32
+      default: 1800
+    allow_concurrent_sessions:
+      type: boolean
+      default: true
+    max_concurrent_sessions:
+      type: integer
+      format: int32
+      default: 5
+    updated_by:
+      type: string
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+  description: "---------------------------------------------------------------------------\r\
+    \n 5. PortalConfig \u2014 per-portal MFA and session configuration\r\n ---------------------------------------------------------------------------"
+  required:
+  - portal_config_id
+  - portal
+  - mfa_required
+  - access_token_ttl_seconds
+  - refresh_token_ttl_seconds
+  - session_ttl_seconds
+  - idle_timeout_seconds
+  - allow_concurrent_sessions
+  - max_concurrent_sessions
+  - updated_at

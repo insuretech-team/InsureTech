@@ -1,0 +1,15 @@
+UpcomingRenewalsListingResponse:
+  type: object
+  properties:
+    renewal_schedules:
+      type: array
+      items:
+        $ref: '#/components/schemas/RenewalSchedule'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for upcoming renewals listing operation. Returns operation
+    results and status.

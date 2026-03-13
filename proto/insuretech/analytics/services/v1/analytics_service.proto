@@ -1,0 +1,148 @@
+syntax = "proto3";
+package insuretech.analytics.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/analytics/services/v1;analyticsservicev1";
+option csharp_namespace = "Insuretech.Analytics.Services.V1";
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/analytics/entity/v1/analytics.proto";
+import "insuretech/analytics/entity/v1/metric.proto";
+
+// Analytics Service
+service AnalyticsService {
+  // Get metrics
+  rpc GetMetrics(GetMetricsRequest) returns (GetMetricsResponse) {
+    option (google.api.http) = {
+      post: "/v1/analytics/metrics"
+      body: "*"
+    };
+  }
+  
+  // Get dashboard
+  rpc GetDashboard(GetDashboardRequest) returns (GetDashboardResponse) {
+    option (google.api.http) = {
+      get: "/v1/analytics/dashboards/{dashboard_id}"
+    };
+  }
+  
+  // Create dashboard
+  rpc CreateDashboard(CreateDashboardRequest) returns (CreateDashboardResponse) {
+    option (google.api.http) = {
+      post: "/v1/analytics/dashboards"
+      body: "*"
+    };
+  }
+  
+  // Generate report
+  rpc GenerateReport(GenerateReportRequest) returns (GenerateReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/analytics/reports/{report_id}:generate"
+      body: "*"
+    };
+  }
+  
+  // Schedule report
+  rpc ScheduleReport(ScheduleReportRequest) returns (ScheduleReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/analytics/reports:schedule"
+      body: "*"
+    };
+  }
+  
+  // Run custom query
+  rpc RunQuery(RunQueryRequest) returns (RunQueryResponse) {
+    option (google.api.http) = {
+      post: "/v1/analytics/queries:run"
+      body: "*"
+    };
+  }
+}
+
+message GetMetricsRequest {
+  repeated insuretech.analytics.entity.v1.MetricType metric_types = 1;
+  string start_date = 2;                           // ISO 8601
+  string end_date = 3;
+  map<string, string> filters = 4;                 // Dimension filters
+}
+
+message GetMetricsResponse {
+  repeated insuretech.analytics.entity.v1.AggregatedMetric metrics = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetDashboardRequest {
+  string dashboard_id = 1;
+  string start_date = 2;                           // For time-series widgets
+  string end_date = 3;
+}
+
+message GetDashboardResponse {
+  insuretech.analytics.entity.v1.Dashboard dashboard = 1;
+  map<string, WidgetData> widget_data = 2;         // widget_id -> data
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message WidgetData {
+  repeated Row rows = 1;
+  repeated string columns = 2;
+}
+
+message Row {
+  repeated string values = 1;
+}
+
+message CreateDashboardRequest {
+  insuretech.analytics.entity.v1.Dashboard dashboard = 1;
+}
+
+message CreateDashboardResponse {
+  string dashboard_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GenerateReportRequest {
+  string report_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GenerateReportResponse {
+  string report_url = 1;
+  string file_name = 2;
+  int64 file_size_bytes = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ScheduleReportRequest {
+  insuretech.analytics.entity.v1.Report report = 1;
+}
+
+message ScheduleReportResponse {
+  string report_id = 1;
+  string message = 2;
+  string next_run_at = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message RunQueryRequest {
+  string query = 1;                                // SQL query
+  map<string, string> parameters = 2;
+  int32 limit = 3;
+}
+
+message RunQueryResponse {
+  repeated Row rows = 1;
+  repeated string columns = 2;
+  int32 row_count = 3;
+  double execution_time_ms = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+

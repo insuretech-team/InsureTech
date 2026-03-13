@@ -1,0 +1,7 @@
+InsuranceFraudRuleCreationResponse:
+  type: object
+  properties:
+    rule:
+      $ref: '#/components/schemas/FraudRule'
+  description: Response payload for fraud rule creation operation. Returns operation
+    results and status.

@@ -1,0 +1,728 @@
+{
+  "spec_path": "../openapi.yaml",
+  "timestamp": "2026-01-27T20:47:20.106590",
+  "summary": {
+    "errors": 0,
+    "warnings": 0,
+    "info": 158,
+    "total": 158
+  },
+  "metrics": {
+    "total_schemas": 972,
+    "total_paths": 0,
+    "total_operations": 0,
+    "schemas_with_descriptions": 972,
+    "schemas_with_examples": 0,
+    "operations_with_security": 0,
+    "operations_with_rate_limits": 0,
+    "description_coverage": 100.0,
+    "example_coverage": 0.0,
+    "security_coverage": 0.0
+  },
+  "issues": {
+    "errors": [],
+    "warnings": [],
+    "info": [
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.AIAnalysis.recommendations",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Conversation.messages",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ChatResponse.suggested_actions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ClaimEvaluationRequest.document_urls",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ClaimEvaluationResponse.findings",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.DetectFraudResponse.risk_indicators",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.DocumentAnalysisResponse.warnings",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RiskAssessmentResponse.risk_factors",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.MetricDefinition.dimensions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.MetricsRetrievalRequest.metric_types",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.MetricsRetrievalResponse.metrics",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Row.values",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RunQueryResponse.rows",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RunQueryResponse.columns",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.WidgetData.rows",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.WidgetData.columns",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ApiKey.scopes",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ApiKey.ip_whitelist",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ApiKeyGenerationRequest.scopes",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ApiKeysListingResponse.api_keys",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ApiKeyValidationResponse.scopes",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.AuditLog.user_email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.AuditEventsRetrievalResponse.audit_events",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.AuditLogsRetrievalResponse.audit_logs",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.AuditTrailRetrievalResponse.audit_logs",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ComplianceLogsRetrievalResponse.compliance_logs",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.User.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.RegistrationRequest.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.SessionsListingResponse.sessions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.TokenValidationResponse.roles",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.TokenValidationResponse.permissions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.AccessPolicy.conditions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Role.permissions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.CheckPermissionResponse.applied_policies",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyEvaluationResponse.matched_policies",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RoleCreationRequest.permissions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.UserRolesRetrievalResponse.roles",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.BeneficiariesListingResponse.beneficiaries",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.BeneficiaryUpdateRequest.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.IndividualBeneficiaryCreationRequest.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Claim.approvals",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.FraudCheckResult.risk_factors",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ClaimSubmissionRequest.document_urls",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.DisputeClaimRequest.supporting_document_urls",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RequestMoreDocumentsRequest.required_document_types",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.UserClaimsListingResponse.claims",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.CommissionsListingResponse.commissions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.CommissionStatementRetrievalResponse.by_type",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PayoutCreationRequest.commission_ids",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.ContactInfo.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Business Rules",
+        "location": "schemas.Money.amount",
+        "message": "Money field should use Money type reference",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Business Rules",
+        "location": "schemas.Money.decimal_amount",
+        "message": "Money field should use Money type reference",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.DocumentsListingResponse.documents",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.DocumentTemplatesListingResponse.templates",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Business Rules",
+        "location": "schemas.Endorsement.premium_refund_required",
+        "message": "Money field should use Money type reference",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.EndorsementsListingResponse.endorsements",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.CheckFraudResponse.triggered_rules",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.FraudAlertsListingResponse.fraud_alerts",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.FraudRulesListingResponse.fraud_rules",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Business Rules",
+        "location": "schemas.InsurerProduct.premium_payment_modes",
+        "message": "Money field should use Money type reference",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.InsurerCreationRequest.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.InsurerCreationRequest.phone",
+        "message": "Phone field should have pattern validation",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.InsurerProductsListingResponse.insurer_products",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.InsurersListingResponse.insurers",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.InsurerUpdateRequest.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.InsurerUpdateRequest.phone",
+        "message": "Phone field should have pattern validation",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RiskAssessment.factors",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.RiskAssessment.recommendations",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.KYCVerificationRetrievalResponse.documents",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PendingVerificationsListingResponse.verifications",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.TransactionsListingResponse.transactions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.NotificationPreference.channel_preferences",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.BulkNotificationsSendingRequest.notifications",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.BulkNotificationsSendingResponse.notification_ids",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.MarkAsReadRequest.notification_ids",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.NotificationTemplateCreationRequest.variables",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.UserNotificationsRetrievalResponse.notifications",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.Agent.phone_number",
+        "message": "Phone field should have pattern validation",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.Agent.email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.Partner.contact_email",
+        "message": "Email field should have format: email",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.Partner.contact_phone",
+        "message": "Phone field should have pattern validation",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PartnerCommissionRetrievalResponse.details",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PartnersListingResponse.partners",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PartnerUpdateRequest.update_mask",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PaymentMethodsListingResponse.payment_methods",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PaymentsListingResponse.payments",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.ReconcilePaymentsResponse.mismatch_payment_ids",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyHealthDeclaration.conditions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Constraints",
+        "location": "schemas.Nominee.phone_number",
+        "message": "Phone field should have pattern validation",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Policy.riders",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyCreationRequest.nominees",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyCreationRequest.riders",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyPolicyRenewalRequest.nominees",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PolicyUpdateRequest.nominees",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.UserPoliciesListingResponse.policies",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PricingConfig.rules",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PricingRule.conditions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.Product.exclusions",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PremiumCalculationRequest.rider_ids",
+        "message": "Complex field has no description",
+        "suggestion": null
+      },
+      {
+        "severity": "info",
+        "category": "Documentation",
+        "location": "schemas.PremiumCalculationResponse.breakdown",
+        "message": "Complex field has no description",
+        "suggestion": null
+      }
+    ]
+  }
+}

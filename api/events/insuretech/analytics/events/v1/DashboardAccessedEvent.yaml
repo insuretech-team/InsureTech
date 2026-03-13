@@ -1,0 +1,21 @@
+DashboardAccessedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    dashboard_name:
+      type: string
+    dashboard_type:
+      type: string
+      description: EXECUTIVE, OPERATIONS, PARTNER
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Dashboard accessed'

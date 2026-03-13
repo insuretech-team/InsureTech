@@ -1,0 +1,31 @@
+Department:
+  type: object
+  properties:
+    department_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:department_id;not null"'
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    business_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_id;not null"'
+    employee_no:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:employee_no;not null"'
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: Department represents a corporate department in the B2B portal

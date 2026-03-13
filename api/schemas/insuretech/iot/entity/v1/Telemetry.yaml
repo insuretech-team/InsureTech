@@ -1,0 +1,43 @@
+Telemetry:
+  type: object
+  properties:
+    telemetry_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:telemetry_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    device_id:
+      type: string
+      description: '@inject_tag: gorm:"column:device_id;not null"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+    type:
+      $ref: '#/components/schemas/TelemetryType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    metrics:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    latitude:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:latitude"'
+    longitude:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:longitude"'
+    raw_data:
+      type: string
+      description: '@inject_tag: gorm:"column:raw_data"'
+    location:
+      $ref: '#/components/schemas/Location'
+  description: "Telemetry data from device (TimescaleDB hypertable for time-series\
+    \ data)\n Maps to 'telemetry' table in iot_schema"
+  required:
+  - telemetry_id
+  - device_id
+  - timestamp
+  - type

@@ -1,0 +1,7 @@
+PeerAnalyticsRetrievalResponse:
+  type: object
+  properties:
+    analytics:
+      $ref: '#/components/schemas/ParticipantAnalytics'
+  description: Response payload for peer analytics retrieval operation. Returns operation
+    results and status.

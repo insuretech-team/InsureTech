@@ -1,0 +1,15 @@
+LogoutRequest:
+  type: object
+  properties:
+    session_id:
+      type: string
+      description: 'Optional: extracted from cookie for web'
+    access_token:
+      type: string
+      description: 'Optional: for JWT logout (mobile/API)'
+    logout_reason:
+      type: string
+      description: 'Optional: user_initiated, security, etc.'
+  description: "Logout Request\r\n Note: For web clients, session_id is extracted\
+    \ from HTTP-Only cookie\r\n For mobile clients, provide access_token to identify\
+    \ session"

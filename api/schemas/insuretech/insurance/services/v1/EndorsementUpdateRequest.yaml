@@ -1,0 +1,7 @@
+EndorsementUpdateRequest:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+  description: Request payload for updating an existing endorsement update. Contains
+    fields to be modified.

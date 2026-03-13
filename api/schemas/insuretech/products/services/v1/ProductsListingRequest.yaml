@@ -1,0 +1,13 @@
+ProductsProductsListingRequest:
+  type: object
+  properties:
+    category:
+      $ref: '#/components/schemas/ProductCategory'
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing products listing items. Supports filtering,
+    sorting, and pagination.

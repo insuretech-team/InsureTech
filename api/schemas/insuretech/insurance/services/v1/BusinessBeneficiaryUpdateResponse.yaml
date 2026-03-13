@@ -1,0 +1,7 @@
+BusinessBeneficiaryUpdateResponse:
+  type: object
+  properties:
+    business:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+  description: Response payload for business beneficiary update operation. Returns
+    operation results and status.

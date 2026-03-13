@@ -1,0 +1,10 @@
+ComplianceLogCreationResponse:
+  type: object
+  properties:
+    compliance_log_id:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for compliance log creation operation. Returns operation
+    results and status.

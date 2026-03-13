@@ -1,0 +1,7 @@
+BusinessBeneficiaryRetrievalResponse:
+  type: object
+  properties:
+    business:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+  description: Response payload for business beneficiary retrieval operation. Returns
+    operation results and status.

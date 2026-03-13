@@ -1,0 +1,236 @@
+syntax = "proto3";
+
+package insuretech.media.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/media/entity/v1/media.proto";
+import "insuretech/media/entity/v1/processing_job.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/media/services/v1;mediaservicev1";
+option csharp_namespace = "Insuretech.Media.Services.V1";
+
+service MediaService {
+  // Upload media file
+  rpc UploadMedia(UploadMediaRequest) returns (UploadMediaResponse) {
+    option (google.api.http) = {
+      post: "/v1/media"
+      body: "*"
+    };
+  }
+  
+  // Get media file
+  rpc GetMedia(GetMediaRequest) returns (GetMediaResponse) {
+    option (google.api.http) = {
+      get: "/v1/media/{media_id}"
+    };
+  }
+  
+  // List media files for entity
+  rpc ListMedia(ListMediaRequest) returns (ListMediaResponse) {
+    option (google.api.http) = {
+      get: "/v1/entities/{entity_type}/{entity_id}/media"
+    };
+  }
+  
+  // Download media file
+  rpc DownloadMedia(DownloadMediaRequest) returns (DownloadMediaResponse) {
+    option (google.api.http) = {
+      get: "/v1/media/{media_id}/download"
+    };
+  }
+  
+  // Download optimized version
+  rpc DownloadOptimized(DownloadOptimizedRequest) returns (DownloadOptimizedResponse) {
+    option (google.api.http) = {
+      get: "/v1/media/{media_id}/optimized"
+    };
+  }
+  
+  // Download thumbnail
+  rpc DownloadThumbnail(DownloadThumbnailRequest) returns (DownloadThumbnailResponse) {
+    option (google.api.http) = {
+      get: "/v1/media/{media_id}/thumbnail"
+    };
+  }
+  
+  // Delete media file
+  rpc DeleteMedia(DeleteMediaRequest) returns (DeleteMediaResponse) {
+    option (google.api.http) = {
+      delete: "/v1/media/{media_id}"
+    };
+  }
+  
+  // Validate media file
+  rpc ValidateMedia(ValidateMediaRequest) returns (ValidateMediaResponse) {
+    option (google.api.http) = {
+      post: "/v1/media/{media_id}:validate"
+      body: "*"
+    };
+  }
+  
+  // Request processing (OCR, optimization, etc.)
+  rpc RequestProcessing(RequestProcessingRequest) returns (RequestProcessingResponse) {
+    option (google.api.http) = {
+      post: "/v1/media/{media_id}/process"
+      body: "*"
+    };
+  }
+  
+  // Get processing job status
+  rpc GetProcessingJob(GetProcessingJobRequest) returns (GetProcessingJobResponse) {
+    option (google.api.http) = {
+      get: "/v1/processing-jobs/{job_id}"
+    };
+  }
+  
+  // List processing jobs
+  rpc ListProcessingJobs(ListProcessingJobsRequest) returns (ListProcessingJobsResponse) {
+    option (google.api.http) = {
+      get: "/v1/processing-jobs"
+    };
+  }
+}
+
+// Upload Media
+message UploadMediaRequest {
+  string file_id = 1; // Reference to file in storage_schema.files
+  string tenant_id = 2;
+  string media_type = 3; // IMAGE, DOCUMENT, VIDEO
+  string mime_type = 4;
+  int64 file_size_bytes = 5;
+  string entity_type = 6; // POLICY, CLAIM, etc.
+  string entity_id = 7;
+  string uploaded_by = 8;
+  bool auto_validate = 9; // Trigger validation immediately
+  bool auto_optimize = 10; // Trigger optimization immediately
+  bool auto_thumbnail = 11; // Generate thumbnail immediately
+}
+
+message UploadMediaResponse {
+  string media_id = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Get Media
+message GetMediaRequest {
+  string media_id = 1;
+}
+
+message GetMediaResponse {
+  entity.v1.MediaFile media = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// List Media
+message ListMediaRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string media_type = 3; // Filter by media type
+  string validation_status = 4; // Filter by validation status
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message ListMediaResponse {
+  repeated entity.v1.MediaFile media_files = 1;
+  int32 total_count = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Download Media
+message DownloadMediaRequest {
+  string media_id = 1;
+}
+
+message DownloadMediaResponse {
+  string download_url = 1; // Signed URL
+  int64 expires_in_seconds = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Download Optimized
+message DownloadOptimizedRequest {
+  string media_id = 1;
+}
+
+message DownloadOptimizedResponse {
+  string download_url = 1;
+  int64 expires_in_seconds = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Download Thumbnail
+message DownloadThumbnailRequest {
+  string media_id = 1;
+}
+
+message DownloadThumbnailResponse {
+  string download_url = 1;
+  int64 expires_in_seconds = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Delete Media
+message DeleteMediaRequest {
+  string media_id = 1;
+}
+
+message DeleteMediaResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// Validate Media
+message ValidateMediaRequest {
+  string media_id = 1;
+  repeated string validation_rules = 2; // Custom validation rules
+}
+
+message ValidateMediaResponse {
+  string validation_status = 1;
+  repeated string validation_errors = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+// Request Processing
+message RequestProcessingRequest {
+  string media_id = 1;
+  string processing_type = 2; // OPTIMIZATION, THUMBNAIL, OCR, VIRUS_SCAN
+  int32 priority = 3; // 1-10
+  google.protobuf.Struct options = 4; // Processing-specific options
+}
+
+message RequestProcessingResponse {
+  string job_id = 1;
+  string status = 2;
+  string message = 3;
+  insuretech.common.v1.Error error = 4;
+}
+
+// Get Processing Job
+message GetProcessingJobRequest {
+  string job_id = 1;
+}
+
+message GetProcessingJobResponse {
+  entity.v1.ProcessingJob job = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// List Processing Jobs
+message ListProcessingJobsRequest {
+  string media_id = 1; // Filter by media
+  string processing_type = 2; // Filter by type
+  string status = 3; // Filter by status
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+message ListProcessingJobsResponse {
+  repeated entity.v1.ProcessingJob jobs = 1;
+  int32 total_count = 2;
+  insuretech.common.v1.Error error = 3;
+}

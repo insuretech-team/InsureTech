@@ -1,0 +1,573 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Documents DTOs - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .domain-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .domain-icon {
+            font-size: 2.5em;
+        }
+        
+        .domain-name {
+            font-size: 2em;
+            font-weight: 600;
+        }
+        
+        .domain-description {
+            font-size: 1.1em;
+            opacity: 0.95;
+        }
+        
+        .stats {
+            display: flex;
+            gap: 30px;
+            margin-top: 20px;
+        }
+        
+        .stat {
+            background: rgba(255,255,255,0.2);
+            padding: 10px 20px;
+            border-radius: 8px;
+        }
+        
+        .stat-value {
+            font-size: 1.8em;
+            font-weight: bold;
+        }
+        
+        .stat-label {
+            font-size: 0.9em;
+            opacity: 0.9;
+        }
+        
+        .container {
+            max-width: 1400px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .search-box {
+            margin-bottom: 30px;
+            position: relative;
+        }
+        
+        .search-box input {
+            width: 100%;
+            padding: 15px 50px 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1em;
+            background: white;
+        }
+        
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .search-icon {
+            position: absolute;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 1.2em;
+            color: #999;
+        }
+        
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+            overflow: hidden;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        thead {
+            background: #f8f9fa;
+        }
+        
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        tbody tr {
+            border-bottom: 1px solid #f0f0f0;
+            transition: background 0.2s;
+        }
+        
+        tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        td {
+            padding: 15px 20px;
+        }
+        
+        .name-cell {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #333;
+        }
+        
+        .schema-name {
+            font-size: 1.05em;
+        }
+        
+        .desc-cell {
+            color: #666;
+        }
+        
+        .props-cell {
+            color: #999;
+            font-size: 0.9em;
+            text-align: center;
+        }
+        
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            margin-left: 10px;
+            text-transform: uppercase;
+        }
+        
+        .badge-request {
+            background: #e3f2fd;
+            color: #1565c0;
+        }
+        
+        .badge-response {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+        
+        .badge-type {
+            background: #f3e5f5;
+            color: #7b1fa2;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            margin-bottom: 30px;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / DTOs
+            </div>
+            <div class="domain-title">
+                <span class="domain-icon">📄</span>
+                <div>
+                    <div class="domain-name">Documents DTOs</div>
+                    <div class="domain-description">Document generation and templates</div>
+                </div>
+            </div>
+            <div class="stats">
+                <div class="stat">
+                    <div class="stat-value">32</div>
+                    <div class="stat-label">DTOs</div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        
+        <div class="search-box">
+            <input type="text" id="search" placeholder="Search schemas..." onkeyup="filterTable()">
+            <span class="search-icon">🔍</span>
+        </div>
+        
+        <div class="table-container">
+            <table id="schemaTable">
+                <thead>
+                    <tr>
+                        <th style="width: 35%;">Schema Name</th>
+                        <th style="width: 50%;">Description</th>
+                        <th style="width: 15%;">Properties</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr onclick="window.location.href='schema_documentanalysisrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentAnalysisRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document analysis operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentanalysisresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentAnalysisResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document analysis operation. Returns operation results and status.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentdeletionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentDeletionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document deletion operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentdeletionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentDeletionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document deletion operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentdownloadrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentDownloadRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document download operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentdownloadresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentDownloadResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document download operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentgenerationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentGenerationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document generation operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentgenerationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentGenerationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document generation operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving document retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatecreationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateCreationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for creating a new document template creation. Contains all required fields and optional parameters for initialization.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatecreationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateCreationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document template creation operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatedeactivationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateDeactivationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document template deactivation operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatedeactivationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateDeactivationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document template deactivation operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatedeletionrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateDeletionRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document template deletion operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplatedeletionresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateDeletionResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document template deletion operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateretrievalrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateRetrievalRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for retrieving document template retrieval information. May include filters and pagination parameters.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateretrievalresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateRetrievalResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document template retrieval operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateupdaterequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateUpdateRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for updating an existing document template update. Contains fields to be modified.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateupdateresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplateUpdateResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document template update operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplatesListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing document templates listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttemplateslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTemplatesListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document templates listing operation. Returns operation results and status.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttypeslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTypesListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing document types listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">1 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documenttypeslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentTypesListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document types listing operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentverificationrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentVerificationRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document verification operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentverificationresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentVerificationResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document verification operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentslistingrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentsListingRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for listing documents listing items. Supports filtering, sorting, and pagination.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_documentslistingresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DocumentsListingResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for documents listing operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycdocumentuploadrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KycDocumentUploadRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for document upload operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycdocumentuploadresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KycDocumentUploadResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for document upload operation. Returns operation results and status.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_requestmoredocumentsrequest.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RequestMoreDocumentsRequest</span>
+                    <span class="badge badge-request">Request</span>
+                </td>
+                <td class="desc-cell">Request payload for more documents operation. Contains parameters required to execute the operation.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_requestmoredocumentsresponse.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RequestMoreDocumentsResponse</span>
+                    <span class="badge badge-response">Response</span>
+                </td>
+                <td class="desc-cell">Response payload for request more documents operation. Returns operation results and status.</td>
+                <td class="props-cell">2 properties</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+    </div>
+    
+    <script>
+        function filterTable() {
+            const input = document.getElementById('search');
+            const filter = input.value.toLowerCase();
+            const table = document.getElementById('schemaTable');
+            const rows = table.getElementsByTagName('tr');
+            
+            for (let i = 1; i < rows.length; i++) {
+                const row = rows[i];
+                const text = row.textContent || row.innerText;
+                if (text.toLowerCase().indexOf(filter) > -1) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            }
+        }
+    </script>
+</body>
+</html>

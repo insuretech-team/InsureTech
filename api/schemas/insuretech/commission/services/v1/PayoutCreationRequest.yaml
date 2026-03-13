@@ -1,0 +1,17 @@
+PayoutCreationRequest:
+  type: object
+  properties:
+    recipient_type:
+      type: string
+    recipient_id:
+      type: string
+    period_start:
+      type: string
+    period_end:
+      type: string
+    commission_ids:
+      type: array
+      items:
+        type: string
+  description: Request payload for creating a new payout creation. Contains all required
+    fields and optional parameters for initialization.

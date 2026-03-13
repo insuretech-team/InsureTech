@@ -1,0 +1,201 @@
+Payment:
+  type: object
+  properties:
+    payment_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:payment_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    transaction_id:
+      type: string
+      description: '@inject_tag: gorm:"column:transaction_id"'
+      x-unique: true
+    tigerbeetle_transfer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tigerbeetle_transfer_id"'
+      x-unique: true
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id"'
+    claim_id:
+      type: string
+      description: '@inject_tag: gorm:"column:claim_id"'
+    type:
+      $ref: '#/components/schemas/PaymentType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    method:
+      $ref: '#/components/schemas/PaymentPaymentMethod'
+      description: '@inject_tag: gorm:"column:method;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/PaymentStatus'
+      x-database-default: INITIATED
+    amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:amount;not null"'
+    currency:
+      type: string
+      description: '@inject_tag: gorm:"column:currency;not null"'
+      default: BDT
+    payer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payer_id;not null"'
+    payee_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payee_id"'
+    initiated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:initiated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    gateway:
+      type: string
+      description: '@inject_tag: gorm:"column:gateway"'
+    gateway_response:
+      type: string
+      description: '@inject_tag: gorm:"column:gateway_response"'
+    receipt_url:
+      type: string
+      description: '@inject_tag: gorm:"column:receipt_url"'
+    retry_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:retry_count;not null"'
+      default: 0
+    failure_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:failure_reason"'
+    idempotency_key:
+      type: string
+      description: "Idempotency key for preventing duplicate payment operations (CG-3)\r\
+        \n @inject_tag: gorm:\"column:idempotency_key\""
+      x-unique: true
+    order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:order_id;index:idx_payments_order_id"'
+    invoice_id:
+      type: string
+      description: '@inject_tag: gorm:"column:invoice_id;index:idx_payments_invoice_id"'
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id;index:idx_payments_tenant_id"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;index:idx_payments_customer_id"'
+    organisation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:organisation_id;index:idx_payments_organisation_id"'
+    purchase_order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:purchase_order_id;index:idx_payments_purchase_order_id"'
+    provider:
+      type: string
+      description: '@inject_tag: gorm:"column:provider;index:idx_payments_provider"'
+    provider_reference:
+      type: string
+      description: '@inject_tag: gorm:"column:provider_reference"'
+    tran_id:
+      type: string
+      description: "SSLCommerz-specific fields\r\n @inject_tag: gorm:\"column:tran_id\""
+      x-unique: true
+    val_id:
+      type: string
+      description: '@inject_tag: gorm:"column:val_id"'
+    session_key:
+      type: string
+      description: '@inject_tag: gorm:"column:session_key"'
+    bank_tran_id:
+      type: string
+      description: '@inject_tag: gorm:"column:bank_tran_id"'
+    card_type:
+      type: string
+      description: '@inject_tag: gorm:"column:card_type"'
+    card_brand:
+      type: string
+      description: '@inject_tag: gorm:"column:card_brand"'
+    card_issuer:
+      type: string
+      description: '@inject_tag: gorm:"column:card_issuer"'
+    card_issuer_country:
+      type: string
+      description: '@inject_tag: gorm:"column:card_issuer_country"'
+    validated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:validated_at;serializer:proto_timestamp"'
+    validation_status:
+      type: string
+      description: '@inject_tag: gorm:"column:validation_status"'
+    risk_level:
+      type: string
+      description: '@inject_tag: gorm:"column:risk_level"'
+    risk_title:
+      type: string
+      description: '@inject_tag: gorm:"column:risk_title"'
+    callback_received_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:callback_received_at;serializer:proto_timestamp"'
+    ipn_received_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:ipn_received_at;serializer:proto_timestamp"'
+    manual_review_status:
+      allOf:
+      - $ref: '#/components/schemas/ManualReviewStatus'
+      x-database-default: MANUAL_REVIEW_STATUS_NOT_REQUIRED
+    manual_proof_file_id:
+      type: string
+      description: '@inject_tag: gorm:"column:manual_proof_file_id"'
+    verified_by:
+      type: string
+      description: '@inject_tag: gorm:"column:verified_by"'
+    verified_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"'
+    rejection_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:rejection_reason"'
+    receipt_number:
+      type: string
+      description: '@inject_tag: gorm:"column:receipt_number"'
+      x-unique: true
+    receipt_document_id:
+      type: string
+      description: '@inject_tag: gorm:"column:receipt_document_id"'
+    receipt_file_id:
+      type: string
+      description: '@inject_tag: gorm:"column:receipt_file_id"'
+    ledger_transaction_id:
+      type: string
+      description: '@inject_tag: gorm:"column:ledger_transaction_id"'
+  description: "Payment represents a financial transaction (gateway integration)\r\
+    \n Maps to 'payments' table in payment_schema"
+  required:
+  - payment_id
+  - type
+  - method
+  - status
+  - amount
+  - currency
+  - payer_id
+  - initiated_at
+  - created_at
+  - updated_at
+  - retry_count
+  - manual_review_status

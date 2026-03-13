@@ -1,0 +1,20 @@
+MediaListingRequest:
+  type: object
+  properties:
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    media_type:
+      type: string
+      description: Filter by media type
+    validation_status:
+      type: string
+      description: Filter by validation status
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: List Media

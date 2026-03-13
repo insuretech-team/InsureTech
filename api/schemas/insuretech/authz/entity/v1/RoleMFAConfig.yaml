@@ -1,0 +1,28 @@
+RoleMFAConfig:
+  type: object
+  properties:
+    role_id:
+      type: string
+      x-primary-key: true
+    mfa_required:
+      type: boolean
+      default: false
+    mfa_methods:
+      type: array
+      items:
+        type: string
+        description: 'JSONB: ["totp","sms"]'
+      description: 'JSONB: ["totp","sms"]'
+    updated_by:
+      type: string
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+  description: "---------------------------------------------------------------------------\r\
+    \n 8. RoleMFAConfig \u2014 per-role MFA override (overrides portal-level default)\r\
+    \n ---------------------------------------------------------------------------"
+  required:
+  - role_id
+  - mfa_required
+  - updated_at

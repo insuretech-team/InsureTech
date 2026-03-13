@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package insuretech.document.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/document/entity/v1;documentv1";
+
+// Document generation record
+message DocumentGeneration {
+  option (insuretech.common.v1.table) = {
+    table_name: "document_generations"
+    schema_name: "storage_schema"
+    migration_order: 15
+    is_table: true
+    audit_fields: true
+    comment: "Generated document instances"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "generation_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:generation_id;not null"
+  
+  string document_template_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "document_template_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "document_templates"
+      references_column: "template_id"
+      references_schema: "storage_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_document_generations_template_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:document_template_id;not null"
+  
+  string entity_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    comment: "POLICY, CLAIM, ENDORSEMENT"
+  }];
+  // @inject_tag: gorm:"column:entity_type;not null"
+  
+  string entity_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+    not_null: true
+    index: {
+      index_name: "idx_document_generations_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:entity_id;not null"
+  
+  string data = 5 [(insuretech.common.v1.column) = {
+    column_name: "data"
+    sql_type: "JSONB"
+    is_json: true
+    not_null: true
+    comment: "Template data used for generation"
+  }];
+  // @inject_tag: gorm:"column:data;not null"
+  
+  GenerationStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_document_generations_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string file_url = 7 [(insuretech.common.v1.column) = {
+    column_name: "file_url"
+    sql_type: "VARCHAR(500)"
+    comment: "S3/storage URL of generated document"
+  }];
+  // @inject_tag: gorm:"column:file_url"
+  
+  int64 file_size_bytes = 8 [(insuretech.common.v1.column) = {
+    column_name: "file_size_bytes"
+    sql_type: "BIGINT"
+  }];
+  // @inject_tag: gorm:"column:file_size_bytes"
+  
+  string qr_code_data = 9 [(insuretech.common.v1.column) = {
+    column_name: "qr_code_data"
+    sql_type: "TEXT"
+    comment: "QR code embedded in document (FR-091)"
+  }];
+  // @inject_tag: gorm:"column:qr_code_data"
+  
+  string generated_by = 10 [(insuretech.common.v1.column) = {
+    column_name: "generated_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:generated_by"
+  
+  google.protobuf.Timestamp generated_at = 11 [(insuretech.common.v1.column) = {
+    column_name: "generated_at"
+    sql_type: "TIMESTAMPTZ"
+    index: {
+      index_name: "idx_document_generations_generated_at"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:generated_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum GenerationStatus {
+  GENERATION_STATUS_UNSPECIFIED = 0;
+  GENERATION_STATUS_PENDING = 1;
+  GENERATION_STATUS_PROCESSING = 2;
+  GENERATION_STATUS_COMPLETED = 3;
+  GENERATION_STATUS_FAILED = 4;
+}
+

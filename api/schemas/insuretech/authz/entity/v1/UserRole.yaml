@@ -1,0 +1,32 @@
+UserRole:
+  type: object
+  properties:
+    user_role_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    user_id:
+      type: string
+    role_id:
+      type: string
+    domain:
+      type: string
+      description: domain = "portal:tenant_id"  e.g. "agent:tenant-abc-123"
+    assigned_by:
+      type: string
+    assigned_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    expires_at:
+      type: string
+      format: date-time
+  description: "---------------------------------------------------------------------------\r\
+    \n 3. UserRole \u2014 assignment of a role to a user within a domain (portal:tenant)\r\
+    \n ---------------------------------------------------------------------------"
+  required:
+  - user_role_id
+  - user_id
+  - role_id
+  - domain
+  - assigned_at

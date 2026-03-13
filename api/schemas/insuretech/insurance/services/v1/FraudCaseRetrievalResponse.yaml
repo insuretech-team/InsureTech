@@ -1,0 +1,7 @@
+InsuranceFraudCaseRetrievalResponse:
+  type: object
+  properties:
+    fraud_case:
+      $ref: '#/components/schemas/FraudCase'
+  description: Response payload for fraud case retrieval operation. Returns operation
+    results and status.

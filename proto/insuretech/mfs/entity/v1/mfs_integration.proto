@@ -1,0 +1,101 @@
+syntax = "proto3";
+
+package insuretech.mfs.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/entity/v1;mfsv1";
+
+// MFS integration config (FR-073 to FR-075)
+message MFSIntegration {
+  option (insuretech.common.v1.table) = {
+    table_name: "mfs_integrations"
+    schema_name: "payment_schema"
+    migration_order: 38
+    is_table: true
+    audit_fields: true
+    comment: "Mobile Financial Services integration configs"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "integration_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:integration_id;not null"
+  
+  MFSProvider provider = 2 [(insuretech.common.v1.column) = {
+    column_name: "provider"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_mfs_integrations_provider"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:provider;not null;serializer:proto_enum"
+  
+  string api_base_url = 3 [(insuretech.common.v1.column) = {
+    column_name: "api_base_url"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:api_base_url;not null"
+  
+  string merchant_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "merchant_id"
+    sql_type: "VARCHAR(100)"
+  }];
+  // @inject_tag: gorm:"column:merchant_id"
+  
+  string api_credentials = 5 [(insuretech.common.v1.column) = {
+    column_name: "api_credentials"
+    sql_type: "TEXT"
+    comment: "Encrypted credentials"
+  }];
+  // @inject_tag: gorm:"column:api_credentials"
+  
+  bool is_active = 6 [(insuretech.common.v1.column) = {
+    column_name: "is_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_active"
+  
+  string config = 7 [(insuretech.common.v1.column) = {
+    column_name: "config"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Provider-specific configuration"
+  }];
+  // @inject_tag: gorm:"column:config"
+  
+  insuretech.common.v1.AuditInfo audit_info = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum MFSProvider {
+  MFS_PROVIDER_UNSPECIFIED = 0;
+  MFS_PROVIDER_BKASH = 1;
+  MFS_PROVIDER_NAGAD = 2;
+  MFS_PROVIDER_ROCKET = 3;
+  MFS_PROVIDER_UPAY = 4;
+  MFS_PROVIDER_TAP = 5;
+}
+
+

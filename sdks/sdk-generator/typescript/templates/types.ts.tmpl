@@ -1,0 +1,142 @@
+// Auto-generated Base Types
+// DO NOT EDIT - This file is generated
+
+/**
+ * Pagination request parameters
+ */
+export interface PaginationRequest {
+  /**
+   * Page number (1-indexed)
+   */
+  page?: number;
+
+  /**
+   * Number of items per page
+   */
+  pageSize?: number;
+
+  /**
+   * Sort field
+   */
+  sortBy?: string;
+
+  /**
+   * Sort order
+   */
+  sortOrder?: 'asc' | 'desc';
+}
+
+/**
+ * Pagination response metadata
+ */
+export interface PaginationResponse {
+  /**
+   * Current page number
+   */
+  page: number;
+
+  /**
+   * Number of items per page
+   */
+  pageSize: number;
+
+  /**
+   * Total number of items
+   */
+  total: number;
+
+  /**
+   * Total number of pages
+   */
+  totalPages: number;
+
+  /**
+   * Whether there is a next page
+   */
+  hasNext: boolean;
+
+  /**
+   * Whether there is a previous page
+   */
+  hasPrevious: boolean;
+}
+
+/**
+ * Money amount with currency
+ */
+export interface Money {
+  /**
+   * Amount in minor units (e.g., cents)
+   */
+  amount: number;
+
+  /**
+   * Currency code (ISO 4217)
+   */
+  currency: string;
+}
+
+/**
+ * Address information
+ */
+export interface Address {
+  /**
+   * Street address line 1
+   */
+  line1: string;
+
+  /**
+   * Street address line 2
+   */
+  line2?: string;
+
+  /**
+   * City
+   */
+  city: string;
+
+  /**
+   * State or province
+   */
+  state?: string;
+
+  /**
+   * Postal code
+   */
+  postalCode: string;
+
+  /**
+   * Country code (ISO 3166-1 alpha-2)
+   */
+  country: string;
+}
+
+/**
+ * Timestamp with timezone
+ */
+export type Timestamp = string;
+
+/**
+ * Date in ISO 8601 format
+ */
+export type DateString = string;
+
+/**
+ * UUID string
+ */
+export type UUID = string;
+
+/**
+ * Generic list response
+ */
+export interface ListResponse<T> {
+  /**
+   * List of items
+   */
+  items: T[];
+
+  /**
+   * Pagination metadata
+   */
+  pagination: PaginationResponse;
+}

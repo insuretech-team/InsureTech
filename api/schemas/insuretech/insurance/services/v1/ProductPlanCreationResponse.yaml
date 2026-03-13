@@ -1,0 +1,7 @@
+ProductPlanCreationResponse:
+  type: object
+  properties:
+    plan:
+      $ref: '#/components/schemas/ProductPlan'
+  description: Response payload for product plan creation operation. Returns operation
+    results and status.

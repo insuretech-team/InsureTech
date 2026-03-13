@@ -1,0 +1,7 @@
+ClaimDeletionRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+  description: Request payload for claim deletion operation. Contains parameters required
+    to execute the operation.

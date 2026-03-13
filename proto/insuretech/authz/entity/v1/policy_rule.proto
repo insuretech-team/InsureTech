@@ -1,0 +1,78 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 4. PolicyRule — human-readable view of a Casbin policy line.
+//    Writes sync to casbin_rules via the authz service.
+// ---------------------------------------------------------------------------
+message PolicyRule {
+  option (insuretech.common.v1.table) = {
+    table_name     : "policy_rules"
+    schema_name    : "authz_schema"
+    migration_order: 4
+    is_table       : true
+    comment        : "Human-readable policy definitions that map to casbin_rules"
+    soft_delete    : true
+    audit_fields   : true
+    enable_rls     : true
+  };
+
+  string policy_id    = 1 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"  sql_type: "UUID"  primary_key: true  not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // Subject: "role:<name>" or "user:<uuid>"
+  string subject      = 2 [(insuretech.common.v1.column) = {
+    column_name: "subject"  sql_type: "VARCHAR(200)"  not_null: true
+    comment: "role:<role_name> | user:<user_id>"
+    index: { index_name: "idx_policy_rules_subject_domain" index_type: INDEX_TYPE_BTREE }
+  }];
+  // Domain: "portal:tenant_id"
+  string domain       = 3 [(insuretech.common.v1.column) = {
+    column_name: "domain"  sql_type: "VARCHAR(200)"  not_null: true
+    comment: "portal:tenant_id — e.g. system:root | agent:tenant-abc"
+  }];
+  // Object: "svc:<service>/<resource>"
+  string object       = 4 [(insuretech.common.v1.column) = {
+    column_name: "object"  sql_type: "VARCHAR(200)"  not_null: true
+    comment: "svc:<service>/<resource> — e.g. svc:policy/create | svc:claim/*"
+  }];
+  // Action: HTTP verb or domain verb
+  string action       = 5 [(insuretech.common.v1.column) = {
+    column_name: "action"  sql_type: "VARCHAR(50)"  not_null: true
+    comment: "GET|POST|PUT|PATCH|DELETE|* or domain action: read|write|approve"
+  }];
+  PolicyEffect effect = 6 [(insuretech.common.v1.column) = {
+    column_name: "effect"  sql_type: "VARCHAR(10)"  not_null: true
+    default_value: "'allow'"  comment: "allow | deny"
+  }];
+  // Optional ABAC condition expression (evaluated by custom matcher)
+  string condition    = 7 [(insuretech.common.v1.column) = {
+    column_name: "condition"  sql_type: "TEXT"
+    comment: "Optional ABAC condition: r.sub.kyc==true && r.sub.tenant==r.obj.tenant"
+  }];
+  string description  = 8 [(insuretech.common.v1.column) = { column_name: "description"  sql_type: "TEXT" }];
+  bool   is_active    = 9 [(insuretech.common.v1.column) = {
+    column_name: "is_active"  sql_type: "BOOLEAN"  not_null: true  default_value: "true"
+  }];
+  string created_by   = 10 [(insuretech.common.v1.column) = { column_name: "created_by"  sql_type: "UUID" }];
+  google.protobuf.Timestamp created_at = 11 [(insuretech.common.v1.column) = {
+    column_name: "created_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"  exclude_from_insert: true  exclude_from_update: true
+  }];
+  google.protobuf.Timestamp updated_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "updated_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"  exclude_from_insert: true
+  }];
+  google.protobuf.Timestamp deleted_at = 13 [(insuretech.common.v1.column) = {
+    column_name: "deleted_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+  }];
+}

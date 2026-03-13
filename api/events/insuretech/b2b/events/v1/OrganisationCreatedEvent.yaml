@@ -1,0 +1,23 @@
+OrganisationCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    organisation_id:
+      type: string
+    tenant_id:
+      type: string
+    name:
+      type: string
+    code:
+      type: string
+    industry:
+      type: string
+    created_by:
+      type: string
+      description: SuperAdmin user_id
+    timestamp:
+      type: string
+      format: date-time
+  description: OrganisationCreatedEvent is published when a new organisation is created
+    by SuperAdmin

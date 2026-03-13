@@ -1,0 +1,109 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ============================================================================
+// PERM MODEL — Policy, Effect, Request, Matchers
+// Domain format: "portal:tenant_id"  e.g. "system:root", "agent:tenant-abc"
+// Subject format: "user:<user_id>" or "role:<role_name>"
+// Object format:  "svc:<service>/<resource>"  e.g. "svc:policy/create"
+// Action format:  HTTP verb or domain action  e.g. "POST", "read", "approve"
+// ============================================================================
+
+// ---------------------------------------------------------------------------
+// 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+//    Casbin gorm-adapter reads/writes this table directly.
+//    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+//    g-type rows: ptype="g"  → role assignment: sub, dom, role
+// ---------------------------------------------------------------------------
+message CasbinRule {
+  option (insuretech.common.v1.table) = {
+    table_name : "casbin_rules"
+    schema_name : "authz_schema"
+    migration_order : 1
+    is_table : true
+    comment : "Raw Casbin PERM model rows (gorm-adapter compatible)"
+    soft_delete : false
+    audit_fields : false
+    enable_rls : true
+  };
+
+  // @inject_tag: gorm:"primarykey;autoIncrement"
+  int64 id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "id"
+    sql_type : "BIGSERIAL"
+    primary_key : true
+    not_null : true
+    comment : "Auto-increment primary key (gorm-adapter requirement)"
+  } ];
+
+  // ptype: "p" = policy line, "g" = role-inheritance line
+  // @inject_tag: gorm:"size:10;uniqueIndex:unique_index"
+  string ptype = 2 [ (insuretech.common.v1.column) = {
+    column_name : "ptype"
+    sql_type : "VARCHAR(10)"
+    not_null : true
+    comment : "Casbin policy type: p (policy) or g (grouping)"
+    index : {
+      index_name : "idx_casbin_rules_ptype"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+
+  // v0: subject  (p-line) | member (g-line)
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v0 = 3 [ (insuretech.common.v1.column) = {
+    column_name : "v0"
+    sql_type : "TEXT"
+    comment : "p: subject (user:<id> | role:<name>)  g: member"
+    index : {index_name : "idx_casbin_rules_v0" index_type : INDEX_TYPE_BTREE}
+  } ];
+
+  // v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v1 = 4 [ (insuretech.common.v1.column) = {
+    column_name : "v1"
+    sql_type : "TEXT"
+    comment : "p: domain (portal:tenant)  g: domain"
+    index : {index_name : "idx_casbin_rules_v1" index_type : INDEX_TYPE_BTREE}
+  } ];
+
+  // v2: object   (p-line: svc:resource) | role (g-line: role:<name>)
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v2 = 5 [ (insuretech.common.v1.column) = {
+    column_name : "v2"
+    sql_type : "TEXT"
+    comment : "p: object (svc:service/resource)  g: role"
+  } ];
+
+  // v3: action   (p-line: HTTP verb / domain action)
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v3 = 6 [ (insuretech.common.v1.column) = {
+    column_name : "v3"
+    sql_type : "TEXT"
+    comment : "p: action (GET|POST|PUT|PATCH|DELETE|*)"
+  } ];
+
+  // v4: effect   (p-line: allow | deny)
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v4 = 7 [ (insuretech.common.v1.column) = {
+    column_name : "v4"
+    sql_type : "TEXT"
+    comment : "p: effect (allow | deny)"
+  } ];
+
+  // v5: reserved for future ABAC conditions / attribute matchers
+  // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
+  string v5 = 8 [ (insuretech.common.v1.column) = {
+    column_name : "v5"
+    sql_type : "TEXT"
+    comment : "reserved: ABAC condition string"
+  } ];
+}

@@ -1,0 +1,12 @@
+ReportExecutionResponse:
+  type: object
+  properties:
+    report_execution_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for report execution operation. Returns operation
+    results and status.

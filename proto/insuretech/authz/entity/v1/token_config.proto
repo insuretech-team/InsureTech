@@ -1,0 +1,56 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 6. TokenConfig — RS256 signing key configuration (per environment)
+// ---------------------------------------------------------------------------
+message TokenConfig {
+  option (insuretech.common.v1.table) = {
+    table_name     : "token_configs"
+    schema_name    : "authz_schema"
+    migration_order: 6
+    is_table       : true
+    comment        : "RS256 JWT signing key pairs — kid, public key (PEM), private key ref"
+    soft_delete    : false
+    audit_fields   : true
+    enable_rls     : false
+  };
+
+  string kid               = 1 [(insuretech.common.v1.column) = {
+    column_name: "kid"  sql_type: "VARCHAR(100)"  primary_key: true  not_null: true
+    comment: "Key ID — used in JWT header kid claim"
+  }];
+  string algorithm         = 2 [(insuretech.common.v1.column) = {
+    column_name: "algorithm"  sql_type: "VARCHAR(20)"  not_null: true
+    default_value: "'RS256'"  comment: "Signing algorithm: RS256 (mandatory)"
+  }];
+  // public_key_pem: stored in DB for JWKS endpoint serving
+  string public_key_pem    = 3 [(insuretech.common.v1.column) = {
+    column_name: "public_key_pem"  sql_type: "TEXT"  not_null: true
+    comment: "RSA public key in PEM format — served via /.well-known/jwks.json"
+  }];
+  // private_key_ref: reference to secret in Vault / KMS (NEVER stored in DB)
+  string private_key_ref   = 4 [(insuretech.common.v1.column) = {
+    column_name: "private_key_ref"  sql_type: "VARCHAR(255)"  not_null: true
+    comment: "Vault/KMS path to private key — e.g. secret/authz/jwt-signing-key"
+  }];
+  bool   is_active         = 5 [(insuretech.common.v1.column) = {
+    column_name: "is_active"  sql_type: "BOOLEAN"  not_null: true  default_value: "true"
+  }];
+  google.protobuf.Timestamp created_at = 6 [(insuretech.common.v1.column) = {
+    column_name: "created_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"
+  }];
+  google.protobuf.Timestamp rotated_at = 7 [(insuretech.common.v1.column) = {
+    column_name: "rotated_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    comment: "Last key rotation timestamp"
+  }];
+}

@@ -1,0 +1,7 @@
+RoomAnalyticsRetrievalResponse:
+  type: object
+  properties:
+    analytics:
+      $ref: '#/components/schemas/RoomAnalytics'
+  description: Response payload for room analytics retrieval operation. Returns operation
+    results and status.

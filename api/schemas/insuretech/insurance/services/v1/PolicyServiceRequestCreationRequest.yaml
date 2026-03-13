@@ -1,0 +1,6 @@
+PolicyServiceRequestCreationRequest:
+  type: object
+  properties:
+    request:
+      $ref: '#/components/schemas/PolicyServiceRequest'
+  description: ========== POLICY SERVICE REQUEST MESSAGES ==========

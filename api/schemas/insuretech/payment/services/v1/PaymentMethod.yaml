@@ -1,0 +1,19 @@
+PaymentPaymentMethod:
+  type: object
+  properties:
+    method_id:
+      type: string
+    method_type:
+      type: string
+      description: BKASH, NAGAD, ROCKET, CARD
+    display_name:
+      type: string
+    is_default:
+      type: boolean
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Domain entity representing payment method. Core business object in
+    the system.

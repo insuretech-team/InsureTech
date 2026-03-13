@@ -1,0 +1,14 @@
+WorkflowStartRequest:
+  type: object
+  properties:
+    workflow_definition_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    context:
+      type: object
+      description: 'CG-7: Typed structured workflow context'
+  description: Request payload for workflow start operation. Contains parameters required
+    to execute the operation.

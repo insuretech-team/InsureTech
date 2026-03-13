@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package insuretech.renewal.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/renewal/entity/v1;renewalv1";
+
+// Renewal schedule for policy (FR-084 to FR-092)
+message RenewalSchedule {
+  option (insuretech.common.v1.table) = {
+    table_name: "renewal_schedules"
+    schema_name: "insurance_schema"
+    migration_order: 35
+    is_table: true
+    audit_fields: true
+    comment: "Policy renewal schedules"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "schedule_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:schedule_id;not null"
+  
+  string policy_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_renewal_schedules_policy_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:policy_id;not null"
+  
+  google.protobuf.Timestamp renewal_due_date = 3 [(insuretech.common.v1.column) = {
+    column_name: "renewal_due_date"
+    sql_type: "DATE"
+    not_null: true
+    index: {
+      index_name: "idx_renewal_schedules_due_date"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:renewal_due_date;not null;serializer:proto_timestamp"
+  
+  insuretech.common.v1.Money renewal_premium = 4;
+  
+  RenewalType renewal_type = 5 [(insuretech.common.v1.column) = {
+    column_name: "renewal_type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "AUTOMATIC, MANUAL"
+  }];
+  // @inject_tag: gorm:"column:renewal_type;not null;serializer:proto_enum"
+  
+  RenewalStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_renewal_schedules_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  int32 grace_period_days = 7 [(insuretech.common.v1.column) = {
+    column_name: "grace_period_days"
+    sql_type: "INTEGER"
+    default_value: "30"
+    comment: "FR-089: Grace period"
+  }];
+  // @inject_tag: gorm:"column:grace_period_days"
+  
+  google.protobuf.Timestamp grace_period_end = 8 [(insuretech.common.v1.column) = {
+    column_name: "grace_period_end"
+    sql_type: "DATE"
+  }];
+  // @inject_tag: gorm:"column:grace_period_end;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp renewed_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "renewed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:renewed_at;serializer:proto_timestamp"
+  
+  string renewed_policy_id = 10 [(insuretech.common.v1.column) = {
+    column_name: "renewed_policy_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    comment: "New policy created on renewal"
+  }];
+  // @inject_tag: gorm:"column:renewed_policy_id"
+  
+  insuretech.common.v1.AuditInfo audit_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum RenewalType {
+  RENEWAL_TYPE_UNSPECIFIED = 0;
+  RENEWAL_TYPE_AUTOMATIC = 1; // FR-087
+  RENEWAL_TYPE_MANUAL = 2; // FR-086
+}
+
+enum RenewalStatus {
+  RENEWAL_STATUS_UNSPECIFIED = 0;
+  RENEWAL_STATUS_PENDING = 1;
+  RENEWAL_STATUS_REMINDED = 2;
+  RENEWAL_STATUS_IN_GRACE_PERIOD = 3;
+  RENEWAL_STATUS_RENEWED = 4;
+  RENEWAL_STATUS_LAPSED = 5; // FR-090
+  RENEWAL_STATUS_CANCELLED = 6;
+}
+
+

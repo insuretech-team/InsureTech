@@ -1,0 +1,114 @@
+syntax = "proto3";
+
+package insuretech.report.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/report/entity/v1;reportv1";
+
+// Report definition (FR-137 to FR-139)
+message ReportDefinition {
+  option (insuretech.common.v1.table) = {
+    table_name: "report_definitions"
+    schema_name: "analytics_schema"
+    migration_order: 73
+    is_table: true
+    audit_fields: true
+    comment: "Report templates and definitions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "report_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:report_id;not null"
+  
+  string name = 2 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_report_definitions_name"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  ReportCategory category = 3 [(insuretech.common.v1.column) = {
+    column_name: "category"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_report_definitions_category"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+  
+  string description = 4 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:description"
+  
+  string query = 5 [(insuretech.common.v1.column) = {
+    column_name: "query"
+    sql_type: "TEXT"
+    not_null: true
+    comment: "SQL query or data source config"
+  }];
+  // @inject_tag: gorm:"column:query;not null"
+  
+  string parameters = 6 [(insuretech.common.v1.column) = {
+    column_name: "parameters"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Report parameters definition"
+  }];
+  // @inject_tag: gorm:"column:parameters"
+  
+  string format_config = 7 [(insuretech.common.v1.column) = {
+    column_name: "format_config"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Output format configuration"
+  }];
+  // @inject_tag: gorm:"column:format_config"
+  
+  bool is_active = 8 [(insuretech.common.v1.column) = {
+    column_name: "is_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_active"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ReportCategory {
+  REPORT_CATEGORY_UNSPECIFIED = 0;
+  REPORT_CATEGORY_FINANCIAL = 1;
+  REPORT_CATEGORY_OPERATIONAL = 2;
+  REPORT_CATEGORY_COMPLIANCE = 3;
+  REPORT_CATEGORY_ANALYTICS = 4;
+  REPORT_CATEGORY_CLAIMS = 5;
+  REPORT_CATEGORY_POLICIES = 6;
+}
+

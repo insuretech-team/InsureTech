@@ -1,0 +1,11 @@
+RoomRetrievalResponse:
+  type: object
+  properties:
+    room:
+      $ref: '#/components/schemas/Room'
+    peers:
+      type: array
+      items:
+        $ref: '#/components/schemas/Peer'
+  description: Response payload for room retrieval operation. Returns operation results
+    and status.

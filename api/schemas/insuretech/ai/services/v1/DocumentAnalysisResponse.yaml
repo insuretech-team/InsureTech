@@ -1,0 +1,24 @@
+DocumentAnalysisResponse:
+  type: object
+  properties:
+    analysis_id:
+      type: string
+    extracted_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Key-value pairs extracted
+    confidence_score:
+      type: number
+      format: double
+    warnings:
+      type: array
+      items:
+        type: string
+    verification_passed:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document analysis operation. Returns operation
+    results and status.

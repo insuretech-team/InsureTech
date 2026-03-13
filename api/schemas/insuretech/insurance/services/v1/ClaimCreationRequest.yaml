@@ -1,0 +1,6 @@
+ClaimCreationRequest:
+  type: object
+  properties:
+    claim:
+      $ref: '#/components/schemas/Claim'
+  description: ========== CLAIM MESSAGES ==========

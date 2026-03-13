@@ -1,0 +1,53 @@
+WorkflowInstance:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:instance_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    workflow_definition_id:
+      type: string
+      description: '@inject_tag: gorm:"column:workflow_definition_id;not null"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/InstanceStatus'
+      x-database-default: PENDING
+    current_step:
+      type: string
+      description: '@inject_tag: gorm:"column:current_step"'
+    context:
+      type: string
+      description: '@inject_tag: gorm:"column:context"'
+    initiated_by:
+      type: string
+      description: '@inject_tag: gorm:"column:initiated_by;not null"'
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Workflow instance (execution)
+  required:
+  - id
+  - workflow_definition_id
+  - entity_type
+  - entity_id
+  - status
+  - initiated_by
+  - started_at
+  - audit_info

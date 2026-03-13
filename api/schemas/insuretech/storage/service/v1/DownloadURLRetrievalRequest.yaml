@@ -1,0 +1,13 @@
+DownloadURLRetrievalRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    file_id:
+      type: string
+    expires_in_minutes:
+      type: integer
+      format: int32
+      description: default 60
+  description: Request payload for retrieving download url retrieval information.
+    May include filters and pagination parameters.

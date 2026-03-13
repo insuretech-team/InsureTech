@@ -1,0 +1,25 @@
+EmailLoginSucceededEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    email_masked:
+      type: string
+      description: Masked for audit logs
+    user_type:
+      type: string
+      description: BUSINESS_BENEFICIARY or SYSTEM_USER
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    device_name:
+      type: string
+  description: 'Event: Email OTP login succeeded (Business Beneficiary / System User)'

@@ -1,0 +1,11 @@
+OrderPaymentStatus:
+  type: string
+  enum:
+  - ORDER_PAYMENT_STATUS_UNSPECIFIED
+  - ORDER_PAYMENT_STATUS_UNPAID
+  - ORDER_PAYMENT_STATUS_PAYMENT_IN_PROGRESS
+  - ORDER_PAYMENT_STATUS_PAID
+  - ORDER_PAYMENT_STATUS_PAYMENT_FAILED
+  - ORDER_PAYMENT_STATUS_REFUNDED
+  description: OrderPaymentStatus is the payment dimension of the order lifecycle
+    (separate from primary status).

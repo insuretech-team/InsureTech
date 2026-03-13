@@ -1,0 +1,143 @@
+syntax = "proto3";
+
+package insuretech.commission.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/commission/entity/v1;commissionv1";
+
+// Commission payout batch (FR-063)
+message CommissionPayout {
+  option (insuretech.common.v1.table) = {
+    table_name: "commission_payouts"
+    schema_name: "payment_schema"
+    migration_order: 40
+    is_table: true
+    audit_fields: true
+    comment: "Batch commission payouts"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "payout_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:payout_id;not null"
+  
+  string payout_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "payout_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_payouts_number_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:payout_number;not null"
+  
+  string recipient_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "recipient_type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "PARTNER, AGENT"
+  }];
+  // @inject_tag: gorm:"column:recipient_type;not null"
+  
+  string recipient_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "recipient_id"
+    sql_type: "UUID"
+    not_null: true
+    index: {
+      index_name: "idx_payouts_recipient"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "FK to partners.partner_id or agents.agent_id"
+  }];
+  // @inject_tag: gorm:"column:recipient_id;not null"
+  
+  google.protobuf.Timestamp period_start = 5 [(insuretech.common.v1.column) = {
+    column_name: "period_start"
+    sql_type: "DATE"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp period_end = 6 [(insuretech.common.v1.column) = {
+    column_name: "period_end"
+    sql_type: "DATE"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"
+  
+  insuretech.common.v1.Money total_amount = 7;
+  
+  int32 commission_count = 8 [(insuretech.common.v1.column) = {
+    column_name: "commission_count"
+    sql_type: "INTEGER"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:commission_count;not null"
+  
+  PayoutStatus status = 9 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string payment_method = 10 [(insuretech.common.v1.column) = {
+    column_name: "payment_method"
+    sql_type: "VARCHAR(20)"
+    comment: "BANK_TRANSFER, MFS, CHEQUE"
+  }];
+  // @inject_tag: gorm:"column:payment_method"
+  
+  string payment_reference = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_reference"
+      sql_type: "VARCHAR(100)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Payment tracking and reconciliation"
+  ];
+  // @inject_tag: gorm:"column:payment_reference"
+  
+  google.protobuf.Timestamp paid_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "paid_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum PayoutStatus {
+  PAYOUT_STATUS_UNSPECIFIED = 0;
+  PAYOUT_STATUS_PENDING = 1;
+  PAYOUT_STATUS_APPROVED = 2;
+  PAYOUT_STATUS_PROCESSING = 3;
+  PAYOUT_STATUS_PAID = 4;
+  PAYOUT_STATUS_FAILED = 5;
+  PAYOUT_STATUS_CANCELLED = 6;
+}
+
+

@@ -1,0 +1,16 @@
+RunQueryRequest:
+  type: object
+  properties:
+    query:
+      type: string
+      description: SQL query
+    parameters:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    limit:
+      type: integer
+      format: int32
+  description: Request payload for run query operation. Contains parameters required
+    to execute the operation.

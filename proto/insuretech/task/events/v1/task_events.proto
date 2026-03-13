@@ -1,0 +1,37 @@
+syntax = "proto3";
+
+package insuretech.task.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/task/events/v1;taskeventsv1";
+
+// Kafka event: Task created
+message TaskCreatedEvent {
+  string event_id = 1;
+  string task_id = 2;
+  string title = 3;
+  string type = 4;
+  string assigned_to = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Task assigned
+message TaskAssignedEvent {
+  string event_id = 1;
+  string task_id = 2;
+  string assigned_to = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Kafka event: Task completed
+message TaskCompletedEvent {
+  string event_id = 1;
+  string task_id = 2;
+  string completed_by = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

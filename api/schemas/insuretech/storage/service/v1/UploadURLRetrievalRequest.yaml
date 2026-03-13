@@ -1,0 +1,23 @@
+UploadURLRetrievalRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    filename:
+      type: string
+    content_type:
+      type: string
+    file_type:
+      $ref: '#/components/schemas/FileType'
+    expires_in_minutes:
+      type: integer
+      format: int32
+      description: default 15
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+  description: Request payload for retrieving upload url retrieval information. May
+    include filters and pagination parameters.

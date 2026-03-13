@@ -1,0 +1,35 @@
+Address:
+  type: object
+  properties:
+    address_line1:
+      type: string
+      x-pii: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Service delivery and communication
+    address_line2:
+      type: string
+    city:
+      type: string
+    district:
+      type: string
+    division:
+      type: string
+    postal_code:
+      type: string
+    country:
+      type: string
+      description: 'Default: Bangladesh'
+    latitude:
+      type: number
+      format: double
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Location-based services
+    longitude:
+      type: number
+      format: double
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Location-based services
+  description: Address information

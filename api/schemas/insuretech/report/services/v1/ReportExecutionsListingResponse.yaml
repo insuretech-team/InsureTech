@@ -1,0 +1,15 @@
+ReportExecutionsListingResponse:
+  type: object
+  properties:
+    report_executions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ReportExecution'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for report executions listing operation. Returns operation
+    results and status.

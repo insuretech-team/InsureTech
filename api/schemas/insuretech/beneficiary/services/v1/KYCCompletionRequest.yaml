@@ -1,0 +1,15 @@
+KYCCompletionRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    nid_front_url:
+      type: string
+    nid_back_url:
+      type: string
+    selfie_url:
+      type: string
+    porichoy_verification_id:
+      type: string
+  description: Request payload for kyc completion operation. Contains parameters required
+    to execute the operation.

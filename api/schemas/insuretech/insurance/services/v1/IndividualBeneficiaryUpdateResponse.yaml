@@ -1,0 +1,7 @@
+IndividualBeneficiaryUpdateResponse:
+  type: object
+  properties:
+    individual:
+      $ref: '#/components/schemas/IndividualBeneficiary'
+  description: Response payload for individual beneficiary update operation. Returns
+    operation results and status.

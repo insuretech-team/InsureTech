@@ -1,0 +1,11 @@
+PurchaseOrderCreationResponse:
+  type: object
+  properties:
+    purchase_order:
+      $ref: '#/components/schemas/PurchaseOrderView'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for purchase order creation operation. Returns operation
+    results and status.

@@ -1,0 +1,14 @@
+UserDocumentUploadRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    document_type_id:
+      type: string
+    file_url:
+      type: string
+      description: S3 URL after client upload
+    policy_id:
+      type: string
+  description: Request payload for user document upload operation. Contains parameters
+    required to execute the operation.

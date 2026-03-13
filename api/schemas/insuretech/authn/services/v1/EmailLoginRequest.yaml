@@ -1,0 +1,20 @@
+EmailLoginRequest:
+  type: object
+  properties:
+    email:
+      type: string
+    otp_id:
+      type: string
+      description: From SendEmailOTP
+    code:
+      type: string
+      description: 6-digit OTP code
+    device_id:
+      type: string
+    device_name:
+      type: string
+      description: e.g. "Chrome on Windows"
+  description: "Email Login Request\r\n RESTRICTED: Only BUSINESS_BENEFICIARY and\
+    \ SYSTEM_USER can use this flow.\r\n Email must be verified before login is allowed.\r\
+    \n Always produces a SERVER_SIDE session (web portal cookie-based).\r\n Flow:\
+    \ 1) Call SendEmailOTP(type=email_login) \u2192 2) Call EmailLogin with\r\n otp_id+code"

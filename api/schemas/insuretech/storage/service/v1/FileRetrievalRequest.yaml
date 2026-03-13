@@ -1,0 +1,9 @@
+FileRetrievalRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    file_id:
+      type: string
+  description: Request payload for retrieving file retrieval information. May include
+    filters and pagination parameters.

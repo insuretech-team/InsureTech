@@ -1,0 +1,53 @@
+FraudRule:
+  type: object
+  properties:
+    fraud_rule_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:fraud_rule_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+      x-unique: true
+    category:
+      $ref: '#/components/schemas/RuleCategory'
+      description: '@inject_tag: gorm:"column:category;not null;serializer:proto_enum"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    conditions:
+      type: string
+      description: '@inject_tag: gorm:"column:conditions;not null"'
+    risk_level:
+      $ref: '#/components/schemas/FraudRiskLevel'
+      description: '@inject_tag: gorm:"column:risk_level;not null;serializer:proto_enum"'
+    score_weight:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:score_weight;not null"'
+      default: 10
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active"'
+      default: true
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: Fraud detection rule (FR-186 to FR-192)
+  required:
+  - fraud_rule_id
+  - name
+  - category
+  - conditions
+  - risk_level
+  - score_weight

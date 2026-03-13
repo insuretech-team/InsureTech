@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package insuretech.audit.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/audit/events/v1;auditeventsv1";
+
+// Kafka event: Audit log created
+message AuditLogCreatedEvent {
+  string event_id = 1;
+  string audit_log_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string action = 5;
+  string user_id = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Compliance check performed
+message ComplianceCheckPerformedEvent {
+  string event_id = 1;
+  string compliance_log_id = 2;
+  string type = 3;
+  string regulation = 4;
+  string status = 5;
+  string entity_type = 6;
+  string entity_id = 7;
+  string correlation_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// Kafka event: Security event detected
+message SecurityEventDetectedEvent {
+  string event_id = 1;
+  string audit_event_id = 2;
+  string event_type = 3;
+  string severity = 4;
+  string user_id = 5;
+  string ip_address = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+

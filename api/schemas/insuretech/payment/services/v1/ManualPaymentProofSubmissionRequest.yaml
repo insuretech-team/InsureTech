@@ -1,0 +1,15 @@
+ManualPaymentProofSubmissionRequest:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    manual_proof_file_id:
+      type: string
+      description: Media service file ID
+    submitted_by:
+      type: string
+      description: user_id (from gateway metadata)
+    notes:
+      type: string
+  description: Request payload for manual payment proof submission operation. Contains
+    parameters required to execute the operation.

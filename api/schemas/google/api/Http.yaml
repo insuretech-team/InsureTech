@@ -1,0 +1,22 @@
+Http:
+  type: object
+  properties:
+    rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/HttpRule'
+        description: "A list of HTTP configuration rules that apply to individual\
+          \ API methods.\n\n **NOTE:** All service configuration rules follow \"last\
+          \ one wins\" order."
+      description: "A list of HTTP configuration rules that apply to individual API\
+        \ methods.\n\n **NOTE:** All service configuration rules follow \"last one\
+        \ wins\" order."
+    fully_decode_reserved_expansion:
+      type: boolean
+      description: "When set to true, URL path parameters will be fully URI-decoded\
+        \ except in\n cases of single segment matches in reserved expansion, where\
+        \ \"%2F\" will be\n left encoded.\n\n The default behavior is to not decode\
+        \ RFC 6570 reserved characters in multi\n segment matches."
+  description: "Defines the HTTP configuration for an API service. It contains a list\
+    \ of\n [HttpRule][google.api.HttpRule], each specifying the mapping of an RPC\
+    \ method\n to one or more HTTP REST API methods."

@@ -1,0 +1,14 @@
+RoomUpdateRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+    config:
+      $ref: '#/components/schemas/RoomConfig'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing room update. Contains fields
+    to be modified.

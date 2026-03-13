@@ -1,0 +1,142 @@
+syntax = "proto3";
+
+package insuretech.workflow.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/entity/v1;workflowv1";
+
+// Workflow instance (execution)
+message WorkflowInstance {
+  option (insuretech.common.v1.table) = {
+    table_name: "workflow_instances"
+    schema_name: "workflow_schema"
+    migration_order: 60
+    is_table: true
+    audit_fields: true
+    comment: "Active workflow executions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "instance_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:instance_id;not null"
+  
+  string workflow_definition_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "workflow_definition_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "workflow_definitions"
+      references_column: "workflow_definition_id"
+      references_schema: "workflow_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_workflow_instances_definition_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:workflow_definition_id;not null"
+  
+  string entity_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:entity_type;not null"
+  
+  string entity_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+    not_null: true
+    index: {
+      index_name: "idx_workflow_instances_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "Polymorphic reference to claim_id, policy_id, etc."
+  }];
+  // @inject_tag: gorm:"column:entity_id;not null"
+  
+  InstanceStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_workflow_instances_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string current_step = 6 [(insuretech.common.v1.column) = {
+    column_name: "current_step"
+    sql_type: "VARCHAR(100)"
+  }];
+  // @inject_tag: gorm:"column:current_step"
+  
+  string context = 7 [(insuretech.common.v1.column) = {
+    column_name: "context"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Workflow context data"
+  }];
+  // @inject_tag: gorm:"column:context"
+  
+  string initiated_by = 8 [(insuretech.common.v1.column) = {
+    column_name: "initiated_by"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+  }];
+  // @inject_tag: gorm:"column:initiated_by;not null"
+  
+  google.protobuf.Timestamp started_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "started_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp completed_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum InstanceStatus {
+  INSTANCE_STATUS_UNSPECIFIED = 0;
+  INSTANCE_STATUS_PENDING = 1;
+  INSTANCE_STATUS_IN_PROGRESS = 2;
+  INSTANCE_STATUS_COMPLETED = 3;
+  INSTANCE_STATUS_FAILED = 4;
+  INSTANCE_STATUS_CANCELLED = 5;
+}
+

@@ -1,0 +1,15 @@
+BatchCheckAccessRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    domain:
+      type: string
+    checks:
+      type: array
+      items:
+        $ref: '#/components/schemas/AccessCheckTuple'
+    context:
+      $ref: '#/components/schemas/AccessContext'
+  description: Request payload for batch check access operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,12 @@
+RoomsListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    state_filter:
+      $ref: '#/components/schemas/RoomState'
+  description: Request payload for listing rooms listing items. Supports filtering,
+    sorting, and pagination.

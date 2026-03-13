@@ -1,0 +1,13 @@
+package models
+
+// PaymentType represents a payment_type
+type PaymentType string
+
+// PaymentType values
+const (
+	PaymentTypePAYMENTTYPEUNSPECIFIED PaymentType = "PAYMENT_TYPE_UNSPECIFIED"
+	PaymentTypePAYMENTTYPEPREMIUM  = "PAYMENT_TYPE_PREMIUM"
+	PaymentTypePAYMENTTYPECLAIMSETTLEMENT  = "PAYMENT_TYPE_CLAIM_SETTLEMENT"
+	PaymentTypePAYMENTTYPEREFUND  = "PAYMENT_TYPE_REFUND"
+	PaymentTypePAYMENTTYPECOMMISSION  = "PAYMENT_TYPE_COMMISSION"
+)

@@ -1,0 +1,12 @@
+TracksListingResponse:
+  type: object
+  properties:
+    tracks:
+      type: array
+      items:
+        $ref: '#/components/schemas/Track'
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for tracks listing operation. Returns operation results
+    and status.

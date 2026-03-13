@@ -1,0 +1,7 @@
+ApiKeyRotationRequest:
+  type: object
+  properties:
+    api_key_id:
+      type: string
+  description: Request payload for api key rotation operation. Contains parameters
+    required to execute the operation.

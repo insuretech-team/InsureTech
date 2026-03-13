@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.entity;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/entity;entity";
+option csharp_namespace = "Insuretech.Webrtc.V1.Entity";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/webrtc/v1/entity/track.proto";
+
+// Peer represents a WebRTC conference participant
+message Peer {
+  option (insuretech.common.v1.table) = {
+    table_name: "peers"
+    schema_name: "webrtc"
+    migration_order: 101
+    is_table: true
+    comment: "WebRTC conference participants"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string peer_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "peer_id"
+      sql_type: "VARCHAR(26)"
+      primary_key: true
+      not_null: true
+      comment: "ULID format identifier"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:peer_id;not null"
+
+  string room_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "room_id"
+      sql_type: "VARCHAR(26)"
+      not_null: true
+      comment: "ULID format - Foreign key to rooms table"
+      foreign_key: {
+        references_table: "rooms"
+        references_column: "room_id"
+        references_schema: "webrtc"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_peer_room"
+      }
+      index: {
+        index_name: "idx_peers_room_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:room_id;not null"
+
+  string display_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "display_name"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Participant display name"
+    }
+  ];
+  // @inject_tag: gorm:"column:display_name;not null"
+
+  PeerConnectionState state = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "state"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'PEER_CONNECTION_STATE_NEW'"
+      comment: "Connection state"
+      index: {
+        index_name: "idx_peers_state"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:state;not null;serializer:proto_enum"
+
+  repeated Track tracks = 5;  // Runtime only - not stored in peers table
+
+  map<string, string> metadata = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Flexible key-value storage (IP, region, quality preferences)"
+    }
+  ];
+
+  google.protobuf.Timestamp joined_at = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "joined_at"
+      sql_type: "TIMESTAMPTZ"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "When peer joined the room"
+      index: {
+        index_name: "idx_peers_joined_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp last_seen_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_seen_at"
+      sql_type: "TIMESTAMPTZ"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Last activity timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:last_seen_at;not null;serializer:proto_timestamp"
+
+  string user_agent = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "user_agent"
+      sql_type: "TEXT"
+      comment: "Browser/client user agent string"
+    }
+  ];
+  // @inject_tag: gorm:"column:user_agent"
+
+  google.protobuf.Timestamp left_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "left_at"
+      sql_type: "TIMESTAMPTZ"
+      comment: "When peer left the room"
+      index: {
+        index_name: "idx_peers_left_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:left_at;serializer:proto_timestamp"
+}
+
+// MediaCapability - runtime only.
+message MediaCapability {
+  string mime_type = 1;
+  int32 clock_rate = 2;
+  int32 channels = 3;
+  string sdp_fmtp_line = 4;
+  map<string, string> parameters = 5;
+}
+
+enum PeerConnectionState {
+  PEER_CONNECTION_STATE_UNSPECIFIED = 0;
+  PEER_CONNECTION_STATE_NEW = 1;
+  PEER_CONNECTION_STATE_CONNECTING = 2;
+  PEER_CONNECTION_STATE_CONNECTED = 3;
+  PEER_CONNECTION_STATE_DISCONNECTED = 4;
+  PEER_CONNECTION_STATE_FAILED = 5;
+  PEER_CONNECTION_STATE_CLOSED = 6;
+}
+

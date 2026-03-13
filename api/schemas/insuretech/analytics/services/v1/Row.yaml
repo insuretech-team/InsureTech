@@ -1,0 +1,8 @@
+Row:
+  type: object
+  properties:
+    values:
+      type: array
+      items:
+        type: string
+  description: Domain entity representing row. Core business object in the system.

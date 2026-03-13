@@ -1,0 +1,43 @@
+Tenant:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:tenant_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    code:
+      type: string
+      description: '@inject_tag: gorm:"column:code;not null"'
+      x-unique: true
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    type:
+      $ref: '#/components/schemas/TenantType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/TenantStatus'
+      x-database-default: ACTIVE
+    parent_tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:parent_tenant_id"'
+    config:
+      type: string
+      description: '@inject_tag: gorm:"column:config"'
+    branding:
+      type: string
+      description: '@inject_tag: gorm:"column:branding"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Tenant (FR-016)
+  required:
+  - tenant_id
+  - code
+  - name
+  - type
+  - status
+  - audit_info

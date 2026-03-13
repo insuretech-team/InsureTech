@@ -1,0 +1,16 @@
+DeviceStatusRetrievalResponse:
+  type: object
+  properties:
+    device:
+      $ref: '#/components/schemas/IoTDevice'
+    last_telemetry_at:
+      type: string
+      format: date-time
+    telemetry_count_today:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for device status retrieval operation. Returns operation
+    results and status.

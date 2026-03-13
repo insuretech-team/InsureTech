@@ -1,0 +1,7 @@
+FraudRuleActivationRequest:
+  type: object
+  properties:
+    rule_id:
+      type: string
+  description: Request payload for fraud rule activation operation. Contains parameters
+    required to execute the operation.

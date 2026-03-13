@@ -1,0 +1,135 @@
+syntax = "proto3";
+
+package insuretech.kyc.services.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/kyc/entity/v1/kyc_verification.proto";
+import "insuretech/kyc/entity/v1/document_verification.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/services/v1;kycservicev1";
+option csharp_namespace = "Insuretech.Kyc.Services.V1";
+
+service KYCService {
+  // Start KYC verification
+  rpc StartKYCVerification(StartKYCVerificationRequest) returns (StartKYCVerificationResponse) {
+    option (google.api.http) = {
+      post: "/v1/kyc-verifications"
+      body: "*"
+    };
+  }
+  
+  // Get KYC verification
+  rpc GetKYCVerification(GetKYCVerificationRequest) returns (GetKYCVerificationResponse) {
+    option (google.api.http) = {
+      get: "/v1/kyc-verifications/{kyc_verification_id}"
+    };
+  }
+  
+  // Upload document
+  rpc UploadDocument(UploadDocumentRequest) returns (UploadDocumentResponse) {
+    option (google.api.http) = {
+      post: "/v1/kyc-verifications/{kyc_verification_id}/documents"
+      body: "*"
+    };
+  }
+  
+  // Verify KYC
+  rpc VerifyKYC(VerifyKYCRequest) returns (VerifyKYCResponse) {
+    option (google.api.http) = {
+      post: "/v1/kyc-verifications/{kyc_verification_id}?action=verify"
+      body: "*"
+    };
+  }
+  
+  // Reject KYC
+  rpc RejectKYC(RejectKYCRequest) returns (RejectKYCResponse) {
+    option (google.api.http) = {
+      post: "/v1/kyc-verifications/{kyc_verification_id}?action=reject"
+      body: "*"
+    };
+  }
+  
+  // List pending KYC verifications (admin review queue)
+  rpc ListPendingVerifications(ListPendingVerificationsRequest) returns (ListPendingVerificationsResponse) {
+    option (google.api.http) = {
+      get: "/v1/kyc-verifications:pending"
+    };
+  }
+}
+
+message StartKYCVerificationRequest {
+  string type = 1 [(google.api.field_behavior) = REQUIRED];
+  string entity_type = 2 [(google.api.field_behavior) = REQUIRED];
+  string entity_id = 3 [(google.api.field_behavior) = REQUIRED];
+  string method = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message StartKYCVerificationResponse {
+  string kyc_verification_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetKYCVerificationRequest {
+  string kyc_verification_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetKYCVerificationResponse {
+  entity.v1.KYCVerification kyc_verification = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated entity.v1.DocumentVerification documents = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UploadDocumentRequest {
+  string kyc_verification_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string document_type = 2 [(google.api.field_behavior) = REQUIRED];
+  string document_number = 3 [(google.api.field_behavior) = REQUIRED];
+  string document_url = 4 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UploadDocumentResponse {
+  string document_verification_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message VerifyKYCRequest {
+  string kyc_verification_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string verified_by = 2 [(google.api.field_behavior) = REQUIRED];
+  string verification_result = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifyKYCResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RejectKYCRequest {
+  string kyc_verification_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RejectKYCResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListPendingVerificationsRequest {
+  int32 page_size = 1 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListPendingVerificationsResponse {
+  repeated entity.v1.KYCVerification verifications = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string next_page_token = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

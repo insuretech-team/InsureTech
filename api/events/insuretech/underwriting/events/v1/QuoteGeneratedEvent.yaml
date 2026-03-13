@@ -1,0 +1,19 @@
+QuoteGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    valid_until:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Quote generated'

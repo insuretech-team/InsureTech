@@ -1,0 +1,32 @@
+AiFraudDetectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    entity_type:
+      type: string
+      description: claim, policy, user
+    entity_id:
+      type: string
+    fraud_score:
+      type: number
+      format: double
+      description: 0-100
+    risk_factors:
+      type: array
+      items:
+        type: string
+    severity:
+      type: string
+      description: LOW, MEDIUM, HIGH
+    requires_manual_review:
+      type: boolean
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Fraud detected'

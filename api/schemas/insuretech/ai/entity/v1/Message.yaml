@@ -1,0 +1,18 @@
+Message:
+  type: object
+  properties:
+    message_id:
+      type: string
+    role:
+      $ref: '#/components/schemas/MessageRole'
+    content:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Domain entity representing message. Core business object in the system.

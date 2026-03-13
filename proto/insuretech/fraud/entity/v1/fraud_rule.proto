@@ -1,0 +1,139 @@
+syntax = "proto3";
+
+package insuretech.fraud.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/entity/v1;fraudv1";
+
+// Fraud detection rule (FR-186 to FR-192)
+message FraudRule {
+  option (insuretech.common.v1.table) = {
+    table_name: "fraud_rules"
+    schema_name: "insurance_schema"
+    migration_order: 16
+    is_table: true
+    audit_fields: true
+    comment: "Fraud detection rules and patterns"
+  };
+  
+  string fraud_rule_id = 1 [(insuretech.common.v1.column) = {
+    column_name: "fraud_rule_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:fraud_rule_id;not null"
+  
+  string name = 2 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_fraud_rules_name"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  RuleCategory category = 3 [(insuretech.common.v1.column) = {
+    column_name: "category"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_fraud_rules_category"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+  
+  string description = 4 [(insuretech.common.v1.column) = {
+    column_name: "description"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:description"
+  
+  string conditions = 5 [(insuretech.common.v1.column) = {
+    column_name: "conditions"
+    sql_type: "JSONB"
+    is_json: true
+    not_null: true
+    comment: "Rule conditions and thresholds"
+  }];
+  // @inject_tag: gorm:"column:conditions;not null"
+  
+  RiskLevel risk_level = 6 [(insuretech.common.v1.column) = {
+    column_name: "risk_level"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:risk_level;not null;serializer:proto_enum"
+  
+  int32 score_weight = 7 [(insuretech.common.v1.column) = {
+    column_name: "score_weight"
+    sql_type: "INTEGER"
+    not_null: true
+    default_value: "10"
+    comment: "Weight in fraud score calculation"
+  }];
+  // @inject_tag: gorm:"column:score_weight;not null"
+  
+  bool is_active = 8 [(insuretech.common.v1.column) = {
+    column_name: "is_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_active"
+  
+  google.protobuf.Timestamp created_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum RuleCategory {
+  RULE_CATEGORY_UNSPECIFIED = 0;
+  RULE_CATEGORY_CLAIM_FREQUENCY = 1;
+  RULE_CATEGORY_DUPLICATE_CLAIM = 2;
+  RULE_CATEGORY_SUSPICIOUS_TIMING = 3;
+  RULE_CATEGORY_AMOUNT_ANOMALY = 4;
+  RULE_CATEGORY_BENEFICIARY_PATTERN = 5;
+  RULE_CATEGORY_PROVIDER_PATTERN = 6;
+}
+
+enum RiskLevel {
+  RISK_LEVEL_UNSPECIFIED = 0;
+  RISK_LEVEL_LOW = 1;
+  RISK_LEVEL_MEDIUM = 2;
+  RISK_LEVEL_HIGH = 3;
+  RISK_LEVEL_CRITICAL = 4;
+}
+
+

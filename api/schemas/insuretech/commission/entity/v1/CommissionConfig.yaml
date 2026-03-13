@@ -1,0 +1,53 @@
+CommissionConfig:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:config_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    insurer_product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_product_id;not null"'
+    revenue_model:
+      $ref: '#/components/schemas/RevenueModel'
+      description: '@inject_tag: gorm:"column:revenue_model;not null;serializer:proto_enum"'
+    acquisition_rate:
+      type: string
+      description: "Acquisition commission (first sale)\n @inject_tag: gorm:\"column:acquisition_rate\""
+    acquisition_flat_fee:
+      $ref: '#/components/schemas/Money'
+    renewal_rate:
+      type: string
+      description: "Renewal commission (repeat sale)\n @inject_tag: gorm:\"column:renewal_rate\""
+    renewal_flat_fee:
+      $ref: '#/components/schemas/Money'
+    claims_assistance_rate:
+      type: string
+      description: "Claims assistance commission\n @inject_tag: gorm:\"column:claims_assistance_rate\""
+    agent_split_config:
+      type: string
+      description: "Hierarchical splits (for agent networks)\n @inject_tag: gorm:\"\
+        column:agent_split_config\""
+    performance_tiers:
+      type: string
+      description: "Performance bonuses\n @inject_tag: gorm:\"column:performance_tiers\""
+    effective_from:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"'
+    effective_to:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Commission configuration per insurer product (FR-063)
+  required:
+  - id
+  - insurer_product_id
+  - revenue_model
+  - effective_from
+  - audit_info

@@ -1,0 +1,19 @@
+ProcessingJobsListingRequest:
+  type: object
+  properties:
+    media_id:
+      type: string
+      description: Filter by media
+    processing_type:
+      type: string
+      description: Filter by type
+    status:
+      type: string
+      description: Filter by status
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: List Processing Jobs

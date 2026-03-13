@@ -1,0 +1,21 @@
+EmployeeStatusChangedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    employee_uuid:
+      type: string
+    organisation_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/EmployeeStatus'
+    new_status:
+      $ref: '#/components/schemas/EmployeeStatus'
+    changed_by:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: EmployeeStatusChangedEvent is published when employee status changes

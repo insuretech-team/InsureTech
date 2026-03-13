@@ -1,0 +1,14 @@
+package models
+
+// RecordStatus represents a record_status
+type RecordStatus string
+
+// RecordStatus values
+const (
+	RecordStatusRECORDSTATUSUNSPECIFIED RecordStatus = "RECORD_STATUS_UNSPECIFIED"
+	RecordStatusRECORDSTATUSACTIVE  = "RECORD_STATUS_ACTIVE"
+	RecordStatusRECORDSTATUSINACTIVE  = "RECORD_STATUS_INACTIVE"
+	RecordStatusRECORDSTATUSPENDING  = "RECORD_STATUS_PENDING"
+	RecordStatusRECORDSTATUSSUSPENDED  = "RECORD_STATUS_SUSPENDED"
+	RecordStatusRECORDSTATUSDELETED  = "RECORD_STATUS_DELETED"
+)

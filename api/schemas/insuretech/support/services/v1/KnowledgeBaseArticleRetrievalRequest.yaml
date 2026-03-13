@@ -1,0 +1,7 @@
+KnowledgeBaseArticleRetrievalRequest:
+  type: object
+  properties:
+    slug:
+      type: string
+  description: Request payload for retrieving knowledge base article retrieval information.
+    May include filters and pagination parameters.

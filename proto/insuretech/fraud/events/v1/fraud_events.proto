@@ -1,0 +1,43 @@
+syntax = "proto3";
+
+package insuretech.fraud.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/events/v1;fraudeventsv1";
+
+// Kafka event: Fraud alert triggered
+message FraudAlertTriggeredEvent {
+  string event_id = 1;
+  string fraud_alert_id = 2;
+  string alert_number = 3;
+  string entity_type = 4;
+  string entity_id = 5;
+  string risk_level = 6;
+  int32 fraud_score = 7;
+  string correlation_id = 8;
+  google.protobuf.Timestamp timestamp = 9;
+}
+
+// Kafka event: Fraud case created
+message FraudCaseCreatedEvent {
+  string event_id = 1;
+  string fraud_case_id = 2;
+  string case_number = 3;
+  string fraud_alert_id = 4;
+  string priority = 5;
+  string investigator_id = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Fraud confirmed
+message FraudConfirmedEvent {
+  string event_id = 1;
+  string fraud_case_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+

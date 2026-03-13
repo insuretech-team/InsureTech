@@ -1,0 +1,12 @@
+InsuranceFraudRulesListingResponse:
+  type: object
+  properties:
+    rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/FraudRule'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for fraud rules listing operation. Returns operation
+    results and status.

@@ -1,0 +1,22 @@
+ReportGenerationFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    report_id:
+      type: string
+    report_name:
+      type: string
+    report_type:
+      type: string
+    error_message:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    requested_by:
+      type: string
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Report failed to generate'

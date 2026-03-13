@@ -1,0 +1,48 @@
+InvoiceCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    invoice_id:
+      type: string
+    invoice_number:
+      type: string
+    order_id:
+      type: string
+      description: 'B2C: source order'
+    purchase_order_id:
+      type: string
+      description: 'B2B: source purchase order'
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+      description: B2B context
+    business_id:
+      type: string
+      description: B2B business
+    tenant_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    total_amount:
+      $ref: '#/components/schemas/Money'
+      description: amount + tax
+    currency:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    portal:
+      type: string
+    actor_user_id:
+      type: string
+    due_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Invoice created \u2014 published when billing-service creates\
+    \ a new invoice"

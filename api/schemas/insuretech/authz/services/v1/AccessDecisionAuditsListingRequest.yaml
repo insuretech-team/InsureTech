@@ -1,0 +1,22 @@
+AccessDecisionAuditsListingRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    domain:
+      type: string
+    decision:
+      $ref: '#/components/schemas/PolicyEffect'
+    from:
+      type: string
+      format: date-time
+    to:
+      type: string
+      format: date-time
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+  description: Request payload for listing access decision audits listing items. Supports
+    filtering, sorting, and pagination.

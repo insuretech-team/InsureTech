@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 3. UserRole — assignment of a role to a user within a domain (portal:tenant)
+// ---------------------------------------------------------------------------
+message UserRole {
+  option (insuretech.common.v1.table) = {
+    table_name     : "user_roles"
+    schema_name    : "authz_schema"
+    migration_order: 3
+    is_table       : true
+    comment        : "User-to-role assignments scoped by portal and tenant"
+    soft_delete    : false
+    audit_fields   : true
+    enable_rls     : true
+  };
+
+  string user_role_id = 1 [(insuretech.common.v1.column) = {
+    column_name: "user_role_id"  sql_type: "UUID"  primary_key: true  not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  string user_id      = 2 [(insuretech.common.v1.column) = {
+    column_name: "user_id"  sql_type: "UUID"  not_null: true
+    foreign_key: { references_table: "users" references_column: "user_id"
+      references_schema: "authn_schema" on_delete: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_user_roles_user_id" }
+    index: { index_name: "idx_user_roles_user_domain" index_type: INDEX_TYPE_BTREE }
+  }];
+  string role_id      = 3 [(insuretech.common.v1.column) = {
+    column_name: "role_id"  sql_type: "UUID"  not_null: true
+    foreign_key: { references_table: "roles" references_column: "role_id"
+      references_schema: "authz_schema" on_delete: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_user_roles_role_id" }
+  }];
+  // domain = "portal:tenant_id"  e.g. "agent:tenant-abc-123"
+  string domain       = 4 [(insuretech.common.v1.column) = {
+    column_name: "domain"  sql_type: "VARCHAR(200)"  not_null: true
+    comment: "Casbin domain: portal:tenant_id"
+    index: { index_name: "idx_user_roles_domain" index_type: INDEX_TYPE_BTREE }
+  }];
+  string assigned_by  = 5 [(insuretech.common.v1.column) = { column_name: "assigned_by"  sql_type: "UUID" }];
+  google.protobuf.Timestamp assigned_at  = 6 [(insuretech.common.v1.column) = {
+    column_name: "assigned_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"
+  }];
+  google.protobuf.Timestamp expires_at   = 7 [(insuretech.common.v1.column) = {
+    column_name: "expires_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    comment: "NULL = no expiry, else role expires at this time"
+  }];
+}

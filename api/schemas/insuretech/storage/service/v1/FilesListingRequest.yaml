@@ -1,0 +1,18 @@
+FilesListingRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    page:
+      $ref: '#/components/schemas/PaginationRequest'
+    file_type:
+      $ref: '#/components/schemas/FileType'
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    uploaded_by:
+      type: string
+      description: user-centric indexed listing path
+  description: Request payload for listing files listing items. Supports filtering,
+    sorting, and pagination.

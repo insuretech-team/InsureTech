@@ -1,0 +1,9 @@
+FraudAlertsByEntityListingResponse:
+  type: object
+  properties:
+    alerts:
+      type: array
+      items:
+        $ref: '#/components/schemas/FraudAlert'
+  description: Response payload for fraud alerts by entity listing operation. Returns
+    operation results and status.

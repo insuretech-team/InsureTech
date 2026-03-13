@@ -1,0 +1,13 @@
+MyTasksRetrievalRequest:
+  type: object
+  properties:
+    status:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for retrieving my tasks retrieval information. May
+    include filters and pagination parameters.

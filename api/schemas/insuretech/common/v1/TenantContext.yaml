@@ -1,0 +1,10 @@
+TenantContext:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+      description: ULID format - Multi-tenant isolation
+    organization_id:
+      type: string
+      description: ULID format - Optional higher-level org
+  description: Standard tenant and request-scoped metadata

@@ -1,0 +1,228 @@
+syntax = "proto3";
+
+package insuretech.document.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/document/entity/v1/document_template.proto";
+import "insuretech/document/entity/v1/document_generation.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/document/services/v1;documentservicev1";
+option csharp_namespace = "Insuretech.Document.Services.V1";
+
+service DocumentService {
+  // Generate document
+  rpc GenerateDocument(GenerateDocumentRequest) returns (GenerateDocumentResponse) {
+    option (google.api.http) = {
+      post: "/v1/documents?action=generate"
+      body: "*"
+    };
+  }
+  
+  // Get document
+  rpc GetDocument(GetDocumentRequest) returns (GetDocumentResponse) {
+    option (google.api.http) = {
+      get: "/v1/documents/{document_id}"
+    };
+  }
+  
+  // List documents for entity
+  rpc ListDocuments(ListDocumentsRequest) returns (ListDocumentsResponse) {
+    option (google.api.http) = {
+      get: "/v1/entities/{entity_type}/{entity_id}/documents"
+    };
+  }
+  
+  // Download document
+  rpc DownloadDocument(DownloadDocumentRequest) returns (DownloadDocumentResponse) {
+    option (google.api.http) = {
+      get: "/v1/documents/{document_id}/download"
+    };
+  }
+
+  // Delete document
+  rpc DeleteDocument(DeleteDocumentRequest) returns (DeleteDocumentResponse) {
+    option (google.api.http) = {
+      delete: "/v1/documents/{document_id}"
+    };
+  }
+  
+  // Create template
+  rpc CreateDocumentTemplate(CreateDocumentTemplateRequest) returns (CreateDocumentTemplateResponse) {
+    option (google.api.http) = {
+      post: "/v1/document-templates"
+      body: "*"
+    };
+  }
+  
+  // Get template
+  rpc GetDocumentTemplate(GetDocumentTemplateRequest) returns (GetDocumentTemplateResponse) {
+    option (google.api.http) = {
+      get: "/v1/document-templates/{template_id}"
+    };
+  }
+  
+  // List templates
+  rpc ListDocumentTemplates(ListDocumentTemplatesRequest) returns (ListDocumentTemplatesResponse) {
+    option (google.api.http) = {
+      get: "/v1/document-templates"
+    };
+  }
+  
+  // Update template
+  rpc UpdateDocumentTemplate(UpdateDocumentTemplateRequest) returns (UpdateDocumentTemplateResponse) {
+    option (google.api.http) = {
+      patch: "/v1/document-templates/{template_id}"
+      body: "*"
+    };
+  }
+  
+  // Deactivate template
+  rpc DeactivateDocumentTemplate(DeactivateDocumentTemplateRequest) returns (DeactivateDocumentTemplateResponse) {
+    option (google.api.http) = {
+      post: "/v1/document-templates/{template_id}:deactivate"
+      body: "*"
+    };
+  }
+
+  // Delete template
+  rpc DeleteDocumentTemplate(DeleteDocumentTemplateRequest) returns (DeleteDocumentTemplateResponse) {
+    option (google.api.http) = {
+      delete: "/v1/document-templates/{template_id}"
+    };
+  }
+}
+
+message GenerateDocumentRequest {
+  string template_id = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+  google.protobuf.Struct data = 4; // CG-7: Typed document data for template merge
+  bool include_qr_code = 5;
+}
+
+message GenerateDocumentResponse {
+  string document_id = 1;
+  string file_url = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetDocumentRequest {
+  string document_id = 1;
+}
+
+message GetDocumentResponse {
+  entity.v1.DocumentGeneration document = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListDocumentsRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string status = 3;
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+message ListDocumentsResponse {
+  repeated entity.v1.DocumentGeneration documents = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message DownloadDocumentRequest {
+  string document_id = 1;
+}
+
+message DownloadDocumentResponse {
+  bytes content = 1;
+  string content_type = 2;
+  string filename = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message DeleteDocumentRequest {
+  string document_id = 1;
+}
+
+message DeleteDocumentResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message CreateDocumentTemplateRequest {
+  string name = 1;
+  string type = 2;
+  string description = 3;
+  string template_content = 4;
+  string output_format = 5;
+  repeated string variables = 6; // CG-7: Typed list of variable names
+}
+
+message CreateDocumentTemplateResponse {
+  string template_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetDocumentTemplateRequest {
+  string template_id = 1;
+}
+
+message GetDocumentTemplateResponse {
+  entity.v1.DocumentTemplate template = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListDocumentTemplatesRequest {
+  string type = 1;
+  bool active_only = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListDocumentTemplatesResponse {
+  repeated entity.v1.DocumentTemplate templates = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message UpdateDocumentTemplateRequest {
+  string template_id = 1;
+  entity.v1.DocumentTemplate template = 2;
+}
+
+message UpdateDocumentTemplateResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeactivateDocumentTemplateRequest {
+  string template_id = 1;
+  string reason = 2;
+}
+
+message DeactivateDocumentTemplateResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteDocumentTemplateRequest {
+  string template_id = 1;
+}
+
+message DeleteDocumentTemplateResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+

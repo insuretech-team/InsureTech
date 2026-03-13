@@ -1,0 +1,7 @@
+InsurerInsurerRetrievalRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+  description: Request payload for retrieving insurer retrieval information. May include
+    filters and pagination parameters.

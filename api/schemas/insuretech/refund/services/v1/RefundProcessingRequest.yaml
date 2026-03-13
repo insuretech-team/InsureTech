@@ -1,0 +1,11 @@
+RefundProcessingRequest:
+  type: object
+  properties:
+    refund_id:
+      type: string
+    payment_method:
+      type: string
+    payment_reference:
+      type: string
+  description: Request payload for refund processing operation. Contains parameters
+    required to execute the operation.

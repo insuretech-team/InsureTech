@@ -1,0 +1,47 @@
+LoginResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    session_id:
+      type: string
+    access_token:
+      type: string
+      description: JWT fields (populated only for mobile/API clients)
+    refresh_token:
+      type: string
+    access_token_expires_in:
+      type: integer
+      format: int32
+    refresh_token_expires_in:
+      type: integer
+      format: int32
+    session_token:
+      type: string
+      description: "Server-side session fields (populated only for web clients)\r\n\
+        \ Note: For web, session_id is also set in HTTP-Only cookie\r\n Not sent to\
+        \ client, just for logging"
+    csrf_token:
+      type: string
+      description: For web CSRF protection
+    user:
+      $ref: '#/components/schemas/User'
+    session_type:
+      type: string
+      description: SERVER_SIDE or JWT
+    mfa_required:
+      type: boolean
+      description: "MFA fields \u2014 set when mfa_required=true; client must call\
+        \ VerifyTOTP before getting tokens"
+    mfa_method:
+      type: string
+      description: '"TOTP", "SMS", "EMAIL"'
+    mfa_session_token:
+      type: string
+      description: 'mfa_session_token: opaque 5-min token; pass back in VerifyTOTPRequest
+        to get real session tokens.'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for login operation. Returns operation results and
+    status.

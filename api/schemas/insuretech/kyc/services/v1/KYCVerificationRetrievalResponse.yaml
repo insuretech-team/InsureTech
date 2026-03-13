@@ -1,0 +1,14 @@
+KYCVerificationRetrievalResponse:
+  type: object
+  properties:
+    kyc_verification:
+      $ref: '#/components/schemas/KYCVerification'
+    documents:
+      type: array
+      items:
+        $ref: '#/components/schemas/DocumentVerification'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for kyc verification retrieval operation. Returns
+    operation results and status.

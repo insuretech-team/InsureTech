@@ -1,0 +1,39 @@
+// Auto-generated Model: {{.TypeName}}
+// DO NOT EDIT - This file is generated
+
+{{if .Imports}}
+import {
+  {{range .Imports}}
+  {{.}},
+  {{end}}
+} from './';
+{{end}}
+
+{{if .IsEnum}}
+{{if .Description}}
+/**
+ * {{.Description}}
+ */
+{{end}}
+export enum {{.TypeName}} {
+  {{range .EnumValues}}
+  {{.name}} = '{{.value}}',
+  {{end}}
+}
+{{else}}
+{{if .Description}}
+/**
+ * {{.Description}}
+ */
+{{end}}
+export interface {{.TypeName}} {
+  {{range .Fields}}
+  {{if .description}}
+  /**
+   * {{.description}}
+   */
+  {{end}}
+  {{.name}}{{if .optional}}?{{end}}: {{.type}};
+  {{end}}
+}
+{{end}}

@@ -1,0 +1,15 @@
+EmployeeDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    employee_uuid:
+      type: string
+    organisation_id:
+      type: string
+    deleted_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: EmployeeDeletedEvent is published when an employee is deleted

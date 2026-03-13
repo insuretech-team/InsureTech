@@ -1,0 +1,9 @@
+AddPaymentMethodRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    payment_method:
+      $ref: '#/components/schemas/PaymentPaymentMethod'
+  description: Request payload for add payment method operation. Contains parameters
+    required to execute the operation.

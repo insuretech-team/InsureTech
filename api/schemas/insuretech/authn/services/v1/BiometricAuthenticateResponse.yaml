@@ -1,0 +1,26 @@
+BiometricAuthenticateResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    session_id:
+      type: string
+    access_token:
+      type: string
+    refresh_token:
+      type: string
+    access_token_expires_in:
+      type: integer
+      format: int32
+    refresh_token_expires_in:
+      type: integer
+      format: int32
+    session_type:
+      type: string
+      description: Always JWT for biometric
+    user:
+      $ref: '#/components/schemas/User'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for biometric authenticate operation. Returns operation
+    results and status.

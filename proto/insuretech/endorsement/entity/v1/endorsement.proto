@@ -1,0 +1,183 @@
+syntax = "proto3";
+
+package insuretech.endorsement.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/endorsement/entity/v1;endorsementv1";
+
+// Policy endorsement/amendment (FR-098 to FR-102)
+message Endorsement {
+  option (insuretech.common.v1.table) = {
+    table_name: "endorsements"
+    schema_name: "insurance_schema"
+    migration_order: 34
+    is_table: true
+    audit_fields: true
+    comment: "Policy amendments and endorsements"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "endorsement_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:endorsement_id;not null"
+  
+  string endorsement_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "endorsement_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_endorsements_number_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:endorsement_number;not null"
+  
+  string policy_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_endorsements_policy_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:policy_id;not null"
+  
+  EndorsementType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_endorsements_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string reason = 5 [(insuretech.common.v1.column) = {
+    column_name: "reason"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:reason;not null"
+  
+  string changes = 6 [(insuretech.common.v1.column) = {
+    column_name: "changes"
+    sql_type: "JSONB"
+    is_json: true
+    not_null: true
+    comment: "Before/after values"
+  }];
+  // @inject_tag: gorm:"column:changes;not null"
+  
+  insuretech.common.v1.Money premium_adjustment = 7;
+  
+  bool premium_refund_required = 8 [(insuretech.common.v1.column) = {
+    column_name: "premium_refund_required"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:premium_refund_required"
+  
+  EndorsementStatus status = 9 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_endorsements_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string requested_by = 10 [(insuretech.common.v1.column) = {
+    column_name: "requested_by"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+  }];
+  // @inject_tag: gorm:"column:requested_by;not null"
+  
+  string approved_by = 11 [(insuretech.common.v1.column) = {
+    column_name: "approved_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:approved_by"
+  
+  google.protobuf.Timestamp effective_date = 12 [(insuretech.common.v1.column) = {
+    column_name: "effective_date"
+    sql_type: "DATE"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:effective_date;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp approved_at = 13 [(insuretech.common.v1.column) = {
+    column_name: "approved_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum EndorsementType {
+  ENDORSEMENT_TYPE_UNSPECIFIED = 0;
+  ENDORSEMENT_TYPE_BENEFICIARY_CHANGE = 1;
+  ENDORSEMENT_TYPE_NOMINEE_CHANGE = 2;
+  ENDORSEMENT_TYPE_ADDRESS_CHANGE = 3;
+  ENDORSEMENT_TYPE_CONTACT_CHANGE = 4;
+  ENDORSEMENT_TYPE_SUM_ASSURED_CHANGE = 5;
+  ENDORSEMENT_TYPE_TERM_EXTENSION = 6;
+  ENDORSEMENT_TYPE_RIDER_ADDITION = 7;
+  ENDORSEMENT_TYPE_RIDER_REMOVAL = 8;
+  ENDORSEMENT_TYPE_PREMIUM_ADJUSTMENT = 9;
+  ENDORSEMENT_TYPE_COVERAGE_CHANGE = 10;
+}
+
+enum EndorsementStatus {
+  ENDORSEMENT_STATUS_UNSPECIFIED = 0;
+  ENDORSEMENT_STATUS_PENDING = 1;
+  ENDORSEMENT_STATUS_APPROVED = 2;
+  ENDORSEMENT_STATUS_REJECTED = 3;
+  ENDORSEMENT_STATUS_APPLIED = 4;
+  ENDORSEMENT_STATUS_CANCELLED = 5;
+}
+
+

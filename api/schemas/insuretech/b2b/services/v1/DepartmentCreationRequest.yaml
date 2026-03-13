@@ -1,0 +1,10 @@
+DepartmentCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    business_id:
+      type: string
+      description: business_id injected server-side from session.
+  description: Request payload for creating a new department creation. Contains all
+    required fields and optional parameters for initialization.

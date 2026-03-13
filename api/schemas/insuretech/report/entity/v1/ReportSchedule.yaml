@@ -1,0 +1,50 @@
+ReportSchedule:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:schedule_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    report_definition_id:
+      type: string
+      description: '@inject_tag: gorm:"column:report_definition_id;not null"'
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    frequency:
+      $ref: '#/components/schemas/ScheduleFrequency'
+      description: '@inject_tag: gorm:"column:frequency;not null;serializer:proto_enum"'
+    cron_expression:
+      type: string
+      description: '@inject_tag: gorm:"column:cron_expression"'
+    parameters:
+      type: string
+      description: '@inject_tag: gorm:"column:parameters"'
+    recipients:
+      type: array
+      items:
+        type: string
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active"'
+      default: true
+    next_run_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:next_run_at;serializer:proto_timestamp"'
+    last_run_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_run_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Report schedule
+  required:
+  - id
+  - report_definition_id
+  - name
+  - frequency
+  - audit_info

@@ -1,0 +1,7 @@
+RenewalReminderUpdateRequest:
+  type: object
+  properties:
+    reminder:
+      $ref: '#/components/schemas/RenewalReminder'
+  description: Request payload for updating an existing renewal reminder update. Contains
+    fields to be modified.

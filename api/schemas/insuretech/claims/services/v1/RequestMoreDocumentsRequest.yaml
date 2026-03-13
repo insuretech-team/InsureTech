@@ -1,0 +1,13 @@
+RequestMoreDocumentsRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    required_document_types:
+      type: array
+      items:
+        type: string
+    message:
+      type: string
+  description: Request payload for more documents operation. Contains parameters required
+    to execute the operation.

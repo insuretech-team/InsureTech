@@ -1,0 +1,12 @@
+TelemetrySendingResponse:
+  type: object
+  properties:
+    telemetry_id:
+      type: string
+    accepted:
+      type: boolean
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for telemetry sending operation. Returns operation
+    results and status.

@@ -1,0 +1,202 @@
+syntax = "proto3";
+
+package insuretech.insurer.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/entity/v1;insurerv1";
+
+// Insurer/Underwriter entity
+message Insurer {
+  option (insuretech.common.v1.table) = {
+    table_name: "insurers"
+    schema_name: "insurance_schema"
+    migration_order: 17
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Insurance companies/underwriters"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "insurer_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:insurer_id;not null"
+  
+  string code = 2 [(insuretech.common.v1.column) = {
+    column_name: "code"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_insurers_code_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+    comment: "Insurer code (e.g., MEGHNA, PRAGATI, CHARTERED, METLIFE)"
+  }];
+  // @inject_tag: gorm:"column:code;not null"
+  
+  string name = 3 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  string name_bn = 4 [(insuretech.common.v1.column) = {
+    column_name: "name_bn"
+    sql_type: "VARCHAR(255)"
+  }];
+  // @inject_tag: gorm:"column:name_bn"
+  
+  InsurerType type = 5 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    index: {
+      index_name: "idx_insurers_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  InsurerStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'ACTIVE'"
+    index: {
+      index_name: "idx_insurers_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string trade_license_number = 7 [(insuretech.common.v1.column) = {
+    column_name: "trade_license_number"
+    sql_type: "VARCHAR(50)"
+    unique: true
+    index: {
+      index_name: "idx_insurers_trade_license"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:trade_license_number"
+  
+  string tin_number = 8 [(insuretech.common.v1.column) = {
+    column_name: "tin_number"
+    sql_type: "VARCHAR(12)"
+    unique: true
+    index: {
+      index_name: "idx_insurers_tin"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:tin_number"
+  
+  string idra_license_number = 9 [(insuretech.common.v1.column) = {
+    column_name: "idra_license_number"
+    sql_type: "VARCHAR(50)"
+    comment: "Insurance Development & Regulatory Authority license"
+  }];
+  // @inject_tag: gorm:"column:idra_license_number"
+  
+  google.protobuf.Timestamp idra_license_expiry = 10 [(insuretech.common.v1.column) = {
+    column_name: "idra_license_expiry"
+    sql_type: "DATE"
+  }];
+  // @inject_tag: gorm:"column:idra_license_expiry;serializer:proto_timestamp"
+  
+  insuretech.common.v1.ContactInfo contact_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "contact_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Contact information stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:contact_info;not null"
+  insuretech.common.v1.Address registered_address = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "registered_address"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Address stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:registered_address;not null"
+  insuretech.common.v1.Address head_office_address = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "head_office_address"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Address stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:head_office_address;not null"
+  
+  string logo_url = 14 [(insuretech.common.v1.column) = {
+    column_name: "logo_url"
+    sql_type: "VARCHAR(255)"
+  }];
+  // @inject_tag: gorm:"column:logo_url"
+  
+  string website_url = 15 [(insuretech.common.v1.column) = {
+    column_name: "website_url"
+    sql_type: "VARCHAR(255)"
+  }];
+  // @inject_tag: gorm:"column:website_url"
+  
+  // Financial strength
+  string financial_rating = 16 [(insuretech.common.v1.column) = {
+    column_name: "financial_rating"
+    sql_type: "VARCHAR(10)"
+    comment: "Credit rating (e.g., AA, A+, BBB)"
+  }];
+  // @inject_tag: gorm:"column:financial_rating"
+  
+  insuretech.common.v1.Money paid_up_capital = 17;
+  
+  insuretech.common.v1.AuditInfo audit_info = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum InsurerType {
+  INSURER_TYPE_UNSPECIFIED = 0;
+  INSURER_TYPE_LIFE = 1;
+  INSURER_TYPE_NON_LIFE = 2;
+  INSURER_TYPE_COMPOSITE = 3; // Both life and non-life
+  INSURER_TYPE_REINSURER = 4;
+  INSURER_TYPE_TAKAFUL = 5; // Islamic insurance
+}
+
+enum InsurerStatus {
+  INSURER_STATUS_UNSPECIFIED = 0;
+  INSURER_STATUS_ACTIVE = 1;
+  INSURER_STATUS_SUSPENDED = 2;
+  INSURER_STATUS_INACTIVE = 3;
+}
+
+

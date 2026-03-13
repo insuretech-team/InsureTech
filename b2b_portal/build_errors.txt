@@ -1,0 +1,645 @@
+npm warn using --force Recommended protections disabled.
+
+> insuretech-b2b-portal@0.1.0 lint
+> eslint
+
+
+E:\Projects\InsureTech\b2b_portal\app\api\auth\refresh\route.ts
+  4:27  warning  'badRequest' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\app\api\dashboard\stats\route.ts
+  14:10  warning  'sdkErrorMessage' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\billing-invoices\partials\invoice-card.tsx
+  2:10  warning  'LuArrowRight' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\departments\data-table\data-table.tsx
+  53:17  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\departments\data-table\data-table.tsx:53:17
+  51 |   const [rowSelection, setRowSelection] = React.useState<RowSelectionState>({});
+  52 |
+> 53 |   const table = useReactTable({
+     |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  54 |     data,
+  55 |     columns,
+  56 |     state: {  react-hooks/incompatible-library
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\organisations\data-table\data-table.tsx
+  53:17  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\organisations\data-table\data-table.tsx:53:17
+  51 |   const [addOpen, setAddOpen] = React.useState(false);
+  52 |
+> 53 |   const table = useReactTable({
+     |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  54 |     data,
+  55 |     columns,
+  56 |     state: { sorting, columnFilters, globalFilter, columnVisibility },  react-hooks/incompatible-library
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\purchase-orders\data-table\data-table.tsx
+  77:17  warning  Compilation Skipped: Use of incompatible library
+
+This API returns functions which cannot be memoized without leading to stale UI. To prevent this, by default React Compiler will skip memoizing this component/hook. However, you may see issues if values from this API are passed to other components/hooks that are memoized.
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\purchase-orders\data-table\data-table.tsx:77:17
+  75 |   const [addPurchaseOrderModalOpen, setAddPurchaseOrderModalOpen] = React.useState(false);
+  76 |
+> 77 |   const table = useReactTable({
+     |                 ^^^^^^^^^^^^^ TanStack Table's `useReactTable()` API returns functions that cannot be memoized safely
+  78 |     data,
+  79 |     columns,
+  80 |     state: {  react-hooks/incompatible-library
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\settings\partials\notification-form.tsx
+   3:29  warning  'CardHeader' is defined but never used            @typescript-eslint/no-unused-vars
+   3:41  warning  'CardTitle' is defined but never used             @typescript-eslint/no-unused-vars
+  12:10  warning  'Label' is defined but never used                 @typescript-eslint/no-unused-vars
+  13:10  warning  'Input' is defined but never used                 @typescript-eslint/no-unused-vars
+  15:7   warning  'focusPurple' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\components\dashboard\settings\partials\workflow-form.tsx
+   3:29  warning  'CardHeader' is defined but never used            @typescript-eslint/no-unused-vars
+   3:41  warning  'CardTitle' is defined but never used             @typescript-eslint/no-unused-vars
+  12:10  warning  'Label' is defined but never used                 @typescript-eslint/no-unused-vars
+  13:10  warning  'Input' is defined but never used                 @typescript-eslint/no-unused-vars
+  15:7   warning  'focusPurple' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\components\modals\add-employee-modal.tsx
+  340:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+E:\Projects\InsureTech\b2b_portal\components\organisations\org-detail-panel.tsx
+  33:3  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  44:6  warning  React Hook React.useEffect has a missing dependency: 'org'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\Projects\InsureTech\b2b_portal\src\hooks\useEmployeeForm.ts
+  42:10  warning  'parseCoverage' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\src\lib\auth\resolve-user-id.ts
+  10:10  warning  'authServiceGetCurrentSession' is defined but never used  @typescript-eslint/no-unused-vars
+  10:40  warning  'createInsureTechClient' is defined but never used        @typescript-eslint/no-unused-vars
+  11:10  warning  'getApiBaseUrl' is defined but never used                 @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\src\lib\auth\session-store.ts
+   7:3  warning  'MoneySchema' is defined but never used  @typescript-eslint/no-unused-vars
+  10:3  warning  'UserSchema' is defined but never used   @typescript-eslint/no-unused-vars
+  11:3  warning  'UserStatus' is defined but never used   @typescript-eslint/no-unused-vars
+  12:3  warning  'UserType' is defined but never used     @typescript-eslint/no-unused-vars
+  13:8  warning  'User' is defined but never used         @typescript-eslint/no-unused-vars
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\ai\entity\v1\agent_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\ai\events\v1\ai_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\ai\services\v1\ai_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\analytics\entity\v1\analytics_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\analytics\entity\v1\metric_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\analytics\events\v1\analytics_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\analytics\services\v1\analytics_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\apikey\entity\v1\api_key_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\apikey\entity\v1\api_key_usage_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\apikey\events\v1\api_key_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\apikey\services\v1\api_key_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\audit\entity\v1\audit_event_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\audit\entity\v1\audit_log_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\audit\entity\v1\compliance_log_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\audit\events\v1\audit_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\audit\services\v1\audit_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\document_type_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\enums_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\otp_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\rbac_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\session_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\user_document_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\user_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\entity\v1\user_profile_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\events\v1\auth_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\events\v1\core_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\services\v1\auth_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authn\services\v1\core_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\access_decision_audit_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\casbin_rule_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\enums_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\policy_rule_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\portal_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\role_mfa_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\role_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\token_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\entity\v1\user_role_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\events\v1\authz_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\events\v1\core_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\services\v1\authz_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\authz\services\v1\core_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\entity\v1\department_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\entity\v1\employee_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\entity\v1\organisation_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\entity\v1\purchase_order_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\events\v1\core_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\b2b\services\v1\b2b_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\beneficiary\entity\v1\beneficiary_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\beneficiary\entity\v1\business_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\beneficiary\entity\v1\individual_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\beneficiary\events\v1\beneficiary_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\beneficiary\services\v1\beneficiary_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\billing\entity\v1\invoice_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\claims\entity\v1\claim_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\claims\events\v1\claim_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\claims\services\v1\claim_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\commission\entity\v1\commission_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\commission\entity\v1\commission_payout_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\commission\entity\v1\revenue_share_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\commission\events\v1\commission_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\commission\services\v1\commission_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\common\v1\db_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\common\v1\error_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\common\v1\security_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\common\v1\types_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\document\entity\v1\document_generation_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\document\entity\v1\document_template_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\document\events\v1\document_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\document\services\v1\document_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\endorsement\entity\v1\endorsement_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\endorsement\events\v1\endorsement_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\endorsement\services\v1\endorsement_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\fraud\entity\v1\fraud_alert_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\fraud\entity\v1\fraud_case_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\fraud\entity\v1\fraud_rule_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\fraud\events\v1\fraud_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\fraud\services\v1\fraud_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurance\services\v1\insurance_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurer\entity\v1\insurer_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurer\entity\v1\insurer_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurer\entity\v1\insurer_product_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurer\events\v1\insurer_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\insurer\services\v1\insurer_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\iot\entity\v1\device_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\iot\events\v1\iot_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\iot\services\v1\iot_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\kyc\entity\v1\document_verification_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\kyc\entity\v1\kyc_verification_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\kyc\events\v1\kyc_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\kyc\services\v1\kyc_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\media\entity\v1\media_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\media\entity\v1\processing_job_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\media\events\v1\media_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\media\services\v1\media_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\mfs\entity\v1\mfs_integration_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\mfs\entity\v1\mfs_transaction_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\mfs\entity\v1\mfs_webhook_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\mfs\events\v1\mfs_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\mfs\services\v1\mfs_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\notification\entity\v1\alert_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\notification\entity\v1\notification_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\notification\events\v1\notification_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\notification\services\v1\notification_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\partner\entity\v1\partner_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\partner\events\v1\partner_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\partner\services\v1\partner_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\payment\entity\v1\payment_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\payment\events\v1\payment_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\payment\services\v1\payment_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\policy\entity\v1\policy_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\policy\entity\v1\policy_service_request_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\policy\entity\v1\quotation_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\policy\events\v1\policy_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\policy\services\v1\policy_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\entity\v1\pricing_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\entity\v1\product_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\entity\v1\product_plan_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\entity\v1\rider_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\events\v1\product_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\products\services\v1\product_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\refund\entity\v1\refund_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\refund\events\v1\refund_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\refund\services\v1\refund_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\renewal\entity\v1\grace_period_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\renewal\entity\v1\renewal_reminder_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\renewal\entity\v1\renewal_schedule_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\renewal\events\v1\renewal_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\renewal\services\v1\renewal_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\report\entity\v1\report_definition_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\report\entity\v1\report_execution_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\report\entity\v1\report_schedule_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\report\events\v1\report_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\report\services\v1\report_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\services\entity\v1\service_provider_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\storage\entity\v1\storage_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\storage\events\v1\storage_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\storage\service\v1\storage_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\entity\v1\faq_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\entity\v1\knowledge_base_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\entity\v1\ticket_message_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\entity\v1\ticket_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\events\v1\support_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\support\services\v1\support_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\task\entity\v1\task_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\task\events\v1\task_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\task\services\v1\task_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\tenant\entity\v1\tenant_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\tenant\entity\v1\tenant_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\tenant\events\v1\tenant_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\tenant\services\v1\tenant_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\underwriting\entity\v1\health_declaration_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\underwriting\entity\v1\quote_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\underwriting\entity\v1\underwriting_decision_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\underwriting\events\v1\underwriting_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\underwriting\services\v1\underwriting_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\voice\entity\v1\voice_command_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\voice\entity\v1\voice_session_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\voice\entity\v1\voice_transcript_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\voice\events\v1\voice_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\voice\services\v1\voice_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\entity\peer_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\entity\room_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\entity\session_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\entity\signal_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\entity\track_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\events\peer_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\events\room_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\events\signal_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\events\track_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\service\peer_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\service\room_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\service\signaling_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\service\stats_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\webrtc\v1\service\track_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\entity\v1\workflow_config_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\entity\v1\workflow_definition_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\entity\v1\workflow_instance_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\entity\v1\workflow_task_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\events\v1\workflow_events_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\proto-generated\insuretech\workflow\services\v1\workflow_service_pb.ts
+  3:1  warning  Unused eslint-disable directive (no problems were reported)
+
+E:\Projects\InsureTech\b2b_portal\src\lib\sdk\dashboard-config.ts
+   8:3  warning  'InsuranceType' is defined but never used         @typescript-eslint/no-unused-vars
+  18:3  warning  'QuotationSchema' is defined but never used       @typescript-eslint/no-unused-vars
+  19:3  warning  'QuotationStatus' is defined but never used       @typescript-eslint/no-unused-vars
+  24:8  warning  'Quotation' is defined but never used             @typescript-eslint/no-unused-vars
+  33:3  warning  'QuotationSummaryItem' is defined but never used  @typescript-eslint/no-unused-vars
+  34:3  warning  'StatsCardItem' is defined but never used         @typescript-eslint/no-unused-vars
+  55:7  warning  'navigation' is assigned a value but never used   @typescript-eslint/no-unused-vars
+
+Γ£û 215 problems (0 errors, 215 warnings)
+  0 errors and 182 warnings potentially fixable with the `--fix` option.
+

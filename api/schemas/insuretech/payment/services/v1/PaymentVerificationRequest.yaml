@@ -1,0 +1,32 @@
+PaymentVerificationRequest:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    transaction_id:
+      type: string
+    payment_method:
+      type: string
+    idempotency_key:
+      type: string
+      description: Idempotency key to prevent duplicate verification (CG-3)
+    provider:
+      type: string
+      description: "\u2500\u2500 Provider-specific verification fields \u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
+        \u2500\u2500\u2500\u2500\u2500\r\n sslcommerz, bkash, etc."
+    val_id:
+      type: string
+      description: SSLCommerz val_id for server-side validate
+    tran_id:
+      type: string
+      description: SSLCommerz tran_id
+    session_key:
+      type: string
+      description: SSLCommerz session_key
+    force_provider_requery:
+      type: boolean
+      description: Force re-query even if already verified
+  description: Request payload for payment verification operation. Contains parameters
+    required to execute the operation.

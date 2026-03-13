@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package insuretech.common.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1;commonv1";
+option csharp_namespace = "Insuretech.Common.V1";
+
+import "google/protobuf/descriptor.proto";
+
+// Database table options - applied at message level
+message TableOptions {
+  // Table name in database (if different from message name)
+  string table_name = 1;
+  
+  // Schema name (empty = public schema)
+  string schema_name = 2;
+  
+  // Migration order (lower runs first, for dependency management)
+  int32 migration_order = 3;
+  
+  // Whether this table should be created in the database
+  bool is_table = 4;
+  
+  // Table comment/description
+  string comment = 5;
+  
+  // Enable soft delete (adds deleted_at timestamp)
+  bool soft_delete = 6;
+  
+  // Enable audit fields (created_at, updated_at, created_by, updated_by)
+  bool audit_fields = 7;
+  
+  // Enable row-level security
+  bool enable_rls = 8;
+  
+  // Partition strategy
+  PartitionStrategy partition_strategy = 9;
+  
+  // Partition column (for time-based partitioning)
+  string partition_column = 10;
+}
+
+enum PartitionStrategy {
+  PARTITION_STRATEGY_UNSPECIFIED = 0;
+  PARTITION_STRATEGY_NONE = 1;
+  PARTITION_STRATEGY_RANGE_YEAR = 2;
+  PARTITION_STRATEGY_RANGE_MONTH = 3;
+  PARTITION_STRATEGY_LIST = 4;
+  PARTITION_STRATEGY_HASH = 5;
+}
+
+// Field/Column options - applied at field level
+message ColumnOptions {
+  // Column name in database (if different from field name)
+  string column_name = 1;
+  
+  // SQL data type override (e.g., "VARCHAR(255)", "TEXT", "DECIMAL(12,2)")
+  string sql_type = 2;
+  
+  // NOT NULL constraint
+  bool not_null = 3;
+  
+  // UNIQUE constraint
+  bool unique = 4;
+  
+  // PRIMARY KEY
+  bool primary_key = 5;
+  
+  // AUTO INCREMENT / SERIAL
+  bool auto_increment = 6;
+  
+  // DEFAULT value (SQL expression)
+  string default_value = 7;
+  
+  // CHECK constraint (SQL expression)
+  string check_constraint = 8;
+  
+  // Foreign key reference
+  ForeignKey foreign_key = 9;
+  
+  // Index options
+  IndexOptions index = 10;
+  
+  // Column comment
+  string comment = 11;
+  
+  // Exclude from certain operations
+  bool exclude_from_insert = 12;
+  bool exclude_from_update = 13;
+  
+  // Encryption at rest
+  bool encrypted = 14;
+  
+  // For JSON/JSONB columns
+  bool is_json = 15;
+}
+
+// Foreign key constraint definition
+message ForeignKey {
+  // Referenced table name
+  string references_table = 1;
+  
+  // Referenced column name
+  string references_column = 2;
+  
+  // Referenced schema (empty = same schema)
+  string references_schema = 3;
+  
+  // ON DELETE action
+  ReferentialAction on_delete = 4;
+  
+  // ON UPDATE action
+  ReferentialAction on_update = 5;
+  
+  // Constraint name
+  string constraint_name = 6;
+}
+
+enum ReferentialAction {
+  REFERENTIAL_ACTION_UNSPECIFIED = 0;
+  REFERENTIAL_ACTION_NO_ACTION = 1;
+  REFERENTIAL_ACTION_RESTRICT = 2;
+  REFERENTIAL_ACTION_CASCADE = 3;
+  REFERENTIAL_ACTION_SET_NULL = 4;
+  REFERENTIAL_ACTION_SET_DEFAULT = 5;
+}
+
+// Index options
+message IndexOptions {
+  // Index name
+  string index_name = 1;
+  
+  // Index type
+  IndexType index_type = 2;
+  
+  // Is unique index
+  bool unique = 3;
+  
+  // Composite index (field names to include)
+  repeated string composite_fields = 4;
+  
+  // Index method (btree, hash, gin, gist, etc.)
+  string index_method = 5;
+  
+  // Partial index WHERE clause
+  string where_clause = 6;
+}
+
+enum IndexType {
+  INDEX_TYPE_UNSPECIFIED = 0;
+  INDEX_TYPE_NONE = 1;
+  INDEX_TYPE_BTREE = 2;
+  INDEX_TYPE_HASH = 3;
+  INDEX_TYPE_GIN = 4; // For JSON, arrays, full-text search
+  INDEX_TYPE_GIST = 5; // For spatial data
+  INDEX_TYPE_BRIN = 6; // For large tables with natural ordering
+}
+
+// Extension for message-level options
+extend google.protobuf.MessageOptions {
+  TableOptions table = 50001;
+}
+
+// Extension for field-level options
+extend google.protobuf.FieldOptions {
+  ColumnOptions column = 50002;
+}
+

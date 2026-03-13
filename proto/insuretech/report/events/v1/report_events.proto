@@ -1,0 +1,38 @@
+syntax = "proto3";
+
+package insuretech.report.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/report/events/v1;reporteventsv1";
+
+// Kafka event: Report execution started
+message ReportExecutionStartedEvent {
+  string event_id = 1;
+  string report_execution_id = 2;
+  string report_definition_id = 3;
+  string executed_by = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Report execution completed
+message ReportExecutionCompletedEvent {
+  string event_id = 1;
+  string report_execution_id = 2;
+  string file_url = 3;
+  string file_format = 4;
+  int32 row_count = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Report execution failed
+message ReportExecutionFailedEvent {
+  string event_id = 1;
+  string report_execution_id = 2;
+  string error_message = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

@@ -1,0 +1,306 @@
+syntax = "proto3";
+
+package insuretech.support.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/support/entity/v1/ticket.proto";
+import "insuretech/support/entity/v1/ticket_message.proto";
+import "insuretech/support/entity/v1/faq.proto";
+import "insuretech/support/entity/v1/knowledge_base.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/support/services/v1;supportservicev1";
+option csharp_namespace = "Insuretech.Support.Services.V1";
+
+service SupportService {
+  // Create ticket
+  rpc CreateTicket(CreateTicketRequest) returns (CreateTicketResponse) {
+    option (google.api.http) = {
+      post: "/v1/tickets"
+      body: "*"
+    };
+  }
+  
+  // Get ticket
+  rpc GetTicket(GetTicketRequest) returns (GetTicketResponse) {
+    option (google.api.http) = {
+      get: "/v1/tickets/{ticket_id}"
+    };
+  }
+  
+  // List tickets
+  rpc ListTickets(ListTicketsRequest) returns (ListTicketsResponse) {
+    option (google.api.http) = {
+      get: "/v1/tickets"
+    };
+  }
+  
+  // Add ticket message
+  rpc AddTicketMessage(AddTicketMessageRequest) returns (AddTicketMessageResponse) {
+    option (google.api.http) = {
+      post: "/v1/tickets/{ticket_id}/messages"
+      body: "*"
+    };
+  }
+  
+  // Update ticket status
+  rpc UpdateTicketStatus(UpdateTicketStatusRequest) returns (UpdateTicketStatusResponse) {
+    option (google.api.http) = {
+      patch: "/v1/tickets/{ticket_id}/status"
+      body: "*"
+    };
+  }
+  
+  // Assign ticket
+  rpc AssignTicket(AssignTicketRequest) returns (AssignTicketResponse) {
+    option (google.api.http) = {
+      post: "/v1/tickets/{ticket_id}?action=assign"
+      body: "*"
+    };
+  }
+  
+  // List FAQs
+  rpc ListFAQs(ListFAQsRequest) returns (ListFAQsResponse) {
+    option (google.api.http) = {
+      get: "/v1/faqs"
+    };
+  }
+  
+  // Search knowledge base
+  rpc SearchKnowledgeBase(SearchKnowledgeBaseRequest) returns (SearchKnowledgeBaseResponse) {
+    option (google.api.http) = {
+      get: "/v1/knowledge-base/search"
+    };
+  }
+  
+  // Get knowledge base article
+  rpc GetKnowledgeBaseArticle(GetKnowledgeBaseArticleRequest) returns (GetKnowledgeBaseArticleResponse) {
+    option (google.api.http) = {
+      get: "/v1/knowledge-base/{slug}"
+    };
+  }
+  
+  // Create FAQ
+  rpc CreateFAQ(CreateFAQRequest) returns (CreateFAQResponse) {
+    option (google.api.http) = {
+      post: "/v1/faqs"
+      body: "*"
+    };
+  }
+  
+  // Update FAQ
+  rpc UpdateFAQ(UpdateFAQRequest) returns (UpdateFAQResponse) {
+    option (google.api.http) = {
+      patch: "/v1/faqs/{faq_id}"
+      body: "*"
+    };
+  }
+  
+  // Delete FAQ
+  rpc DeleteFAQ(DeleteFAQRequest) returns (DeleteFAQResponse) {
+    option (google.api.http) = {
+      delete: "/v1/faqs/{faq_id}"
+    };
+  }
+  
+  // Create Knowledge Base Article
+  rpc CreateKnowledgeBaseArticle(CreateKnowledgeBaseArticleRequest) returns (CreateKnowledgeBaseArticleResponse) {
+    option (google.api.http) = {
+      post: "/v1/knowledge-base"
+      body: "*"
+    };
+  }
+  
+  // Update Knowledge Base Article
+  rpc UpdateKnowledgeBaseArticle(UpdateKnowledgeBaseArticleRequest) returns (UpdateKnowledgeBaseArticleResponse) {
+    option (google.api.http) = {
+      patch: "/v1/knowledge-base/{article_id}"
+      body: "*"
+    };
+  }
+  
+  // Delete Knowledge Base Article
+  rpc DeleteKnowledgeBaseArticle(DeleteKnowledgeBaseArticleRequest) returns (DeleteKnowledgeBaseArticleResponse) {
+    option (google.api.http) = {
+      delete: "/v1/knowledge-base/{article_id}"
+    };
+  }
+}
+
+message CreateTicketRequest {
+  string beneficiary_id = 1;
+  string type = 2;
+  string category = 3;
+  string priority = 4;
+  string subject = 5;
+  string description = 6;
+  string related_entity_type = 7;
+  string related_entity_id = 8;
+}
+
+message CreateTicketResponse {
+  string ticket_id = 1;
+  string ticket_number = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetTicketRequest {
+  string ticket_id = 1;
+}
+
+message GetTicketResponse {
+  entity.v1.Ticket ticket = 1;
+  repeated entity.v1.TicketMessage messages = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ListTicketsRequest {
+  string beneficiary_id = 1;
+  string status = 2;
+  string assigned_to = 3;
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+message ListTicketsResponse {
+  repeated entity.v1.Ticket tickets = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message AddTicketMessageRequest {
+  string ticket_id = 1;
+  string content = 2;
+  bool is_internal = 3;
+  string attachments = 4; // JSON
+}
+
+message AddTicketMessageResponse {
+  string message_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateTicketStatusRequest {
+  string ticket_id = 1;
+  string status = 2;
+  string comments = 3;
+}
+
+message UpdateTicketStatusResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message AssignTicketRequest {
+  string ticket_id = 1;
+  string assigned_to = 2;
+}
+
+message AssignTicketResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListFAQsRequest {
+  string category = 1;
+  string language = 2; // en, bn
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListFAQsResponse {
+  repeated entity.v1.FAQ faqs = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message SearchKnowledgeBaseRequest {
+  string query = 1;
+  string category = 2;
+  string language = 3; // en, bn
+}
+
+message SearchKnowledgeBaseResponse {
+  repeated entity.v1.KnowledgeBaseArticle articles = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetKnowledgeBaseArticleRequest {
+  string slug = 1;
+}
+
+message GetKnowledgeBaseArticleResponse {
+  entity.v1.KnowledgeBaseArticle article = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message CreateFAQRequest {
+  entity.v1.FAQ faq = 1;
+}
+
+message CreateFAQResponse {
+  string faq_id = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateFAQRequest {
+  string faq_id = 1;
+  entity.v1.FAQ faq = 2;
+}
+
+message UpdateFAQResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteFAQRequest {
+  string faq_id = 1;
+}
+
+message DeleteFAQResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message CreateKnowledgeBaseArticleRequest {
+  entity.v1.KnowledgeBaseArticle article = 1;
+}
+
+message CreateKnowledgeBaseArticleResponse {
+  string article_id = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateKnowledgeBaseArticleRequest {
+  string article_id = 1;
+  entity.v1.KnowledgeBaseArticle article = 2;
+}
+
+message UpdateKnowledgeBaseArticleResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteKnowledgeBaseArticleRequest {
+  string article_id = 1;
+}
+
+message DeleteKnowledgeBaseArticleResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+

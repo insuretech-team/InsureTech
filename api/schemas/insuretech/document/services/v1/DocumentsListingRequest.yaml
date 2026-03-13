@@ -1,0 +1,17 @@
+DocumentsListingRequest:
+  type: object
+  properties:
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    status:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing documents listing items. Supports filtering,
+    sorting, and pagination.

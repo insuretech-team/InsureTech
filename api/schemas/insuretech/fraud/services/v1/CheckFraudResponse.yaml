@@ -1,0 +1,21 @@
+CheckFraudResponse:
+  type: object
+  properties:
+    is_fraud_detected:
+      type: boolean
+    fraud_score:
+      type: integer
+      format: int32
+    risk_level:
+      type: string
+    triggered_rules:
+      type: array
+      items:
+        type: string
+    fraud_alert_id:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for check fraud operation. Returns operation results
+    and status.

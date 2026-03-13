@@ -1,0 +1,193 @@
+syntax = "proto3";
+
+package insuretech.underwriting.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/underwriting/entity/v1;underwritingv1";
+
+// Underwriting decision for quote approval/rejection
+message UnderwritingDecision {
+  option (insuretech.common.v1.table) = {
+    table_name: "underwriting_decisions"
+    schema_name: "insurance_schema"
+    migration_order: 30
+    is_table: true
+    audit_fields: true
+    comment: "Underwriting decisions for quotes"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "decision_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:decision_id;not null"
+  
+  string quote_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "quote_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "quotes"
+      references_column: "quote_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_underwriting_decisions_quote_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:quote_id;not null"
+  
+  DecisionType decision = 3 [(insuretech.common.v1.column) = {
+    column_name: "decision"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    index: {
+      index_name: "idx_underwriting_decisions_decision"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:decision;not null;serializer:proto_enum"
+  
+  DecisionMethod method = 4 [(insuretech.common.v1.column) = {
+    column_name: "method"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "AUTOMATIC, MANUAL, HYBRID"
+  }];
+  // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
+  
+  // Risk assessment
+  string risk_score = 5 [(insuretech.common.v1.column) = {
+    column_name: "risk_score"
+    sql_type: "DECIMAL(5,2)"
+    comment: "Risk score (0-100)"
+  }];
+  // @inject_tag: gorm:"column:risk_score"
+  
+  RiskLevel risk_level = 6 [(insuretech.common.v1.column) = {
+    column_name: "risk_level"
+    sql_type: "VARCHAR(20)"
+  }];
+  // @inject_tag: gorm:"column:risk_level;serializer:proto_enum"
+  
+  string risk_factors = 7 [(insuretech.common.v1.column) = {
+    column_name: "risk_factors"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "List of identified risk factors"
+  }];
+  // @inject_tag: gorm:"column:risk_factors"
+  
+  // Decision details
+  string reason = 8 [(insuretech.common.v1.column) = {
+    column_name: "reason"
+    sql_type: "TEXT"
+    comment: "Reason for approval/rejection"
+  }];
+  // @inject_tag: gorm:"column:reason"
+  
+  string conditions = 9 [(insuretech.common.v1.column) = {
+    column_name: "conditions"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Special conditions or exclusions"
+  }];
+  // @inject_tag: gorm:"column:conditions"
+  
+  // Premium adjustment
+  bool premium_adjusted = 10 [(insuretech.common.v1.column) = {
+    column_name: "premium_adjusted"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:premium_adjusted"
+  
+  insuretech.common.v1.Money adjusted_premium = 11;
+  
+  string adjustment_reason = 12 [(insuretech.common.v1.column) = {
+    column_name: "adjustment_reason"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:adjustment_reason"
+  
+  // Underwriter info
+  string underwriter_id = 13 [(insuretech.common.v1.column) = {
+    column_name: "underwriter_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    comment: "For manual underwriting"
+  }];
+  // @inject_tag: gorm:"column:underwriter_id"
+  
+  string underwriter_comments = 14 [(insuretech.common.v1.column) = {
+    column_name: "underwriter_comments"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:underwriter_comments"
+  
+  google.protobuf.Timestamp decided_at = 15 [(insuretech.common.v1.column) = {
+    column_name: "decided_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:decided_at;not null;serializer:proto_timestamp"
+  
+  // Approval validity
+  google.protobuf.Timestamp valid_until = 16 [(insuretech.common.v1.column) = {
+    column_name: "valid_until"
+    sql_type: "TIMESTAMPTZ"
+    comment: "Approval validity period"
+  }];
+  // @inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum DecisionType {
+  DECISION_TYPE_UNSPECIFIED = 0;
+  DECISION_TYPE_APPROVED = 1;
+  DECISION_TYPE_REJECTED = 2;
+  DECISION_TYPE_REFERRED = 3; // Referred to senior underwriter
+  DECISION_TYPE_CONDITIONAL = 4; // Approved with conditions
+}
+
+enum DecisionMethod {
+  DECISION_METHOD_UNSPECIFIED = 0;
+  DECISION_METHOD_AUTOMATIC = 1; // AI/rule-based
+  DECISION_METHOD_MANUAL = 2; // Human underwriter
+  DECISION_METHOD_HYBRID = 3; // AI + human review
+}
+
+enum RiskLevel {
+  RISK_LEVEL_UNSPECIFIED = 0;
+  RISK_LEVEL_LOW = 1;
+  RISK_LEVEL_MEDIUM = 2;
+  RISK_LEVEL_HIGH = 3;
+  RISK_LEVEL_VERY_HIGH = 4;
+}
+
+

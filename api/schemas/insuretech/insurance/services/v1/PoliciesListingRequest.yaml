@@ -1,0 +1,15 @@
+PoliciesListingRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    customer_id:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing policies listing items. Supports filtering,
+    sorting, and pagination.

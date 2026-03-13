@@ -1,0 +1,21 @@
+MediaProcessingJobCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    job_id:
+      type: string
+    media_id:
+      type: string
+    processing_type:
+      type: string
+      description: OPTIMIZATION, THUMBNAIL, OCR
+    priority:
+      type: integer
+      format: int32
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Media processing job created'

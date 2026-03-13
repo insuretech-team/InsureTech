@@ -1,0 +1,7 @@
+AnswerSendingResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for answer sending operation. Returns operation results
+    and status.

@@ -1,0 +1,7 @@
+ServiceProviderRetrievalResponse:
+  type: object
+  properties:
+    provider:
+      $ref: '#/components/schemas/ServiceProvider'
+  description: Response payload for service provider retrieval operation. Returns
+    operation results and status.

@@ -1,0 +1,7 @@
+InsurerConfigRetrievalResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/InsurerConfig'
+  description: Response payload for insurer config retrieval operation. Returns operation
+    results and status.

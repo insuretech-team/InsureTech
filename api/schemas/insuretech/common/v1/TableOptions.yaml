@@ -1,0 +1,35 @@
+TableOptions:
+  type: object
+  properties:
+    table_name:
+      type: string
+      description: Table name in database (if different from message name)
+    schema_name:
+      type: string
+      description: Schema name (empty = public schema)
+    migration_order:
+      type: integer
+      format: int32
+      description: Migration order (lower runs first, for dependency management)
+    is_table:
+      type: boolean
+      description: Whether this table should be created in the database
+    comment:
+      type: string
+      description: Table comment/description
+    soft_delete:
+      type: boolean
+      description: Enable soft delete (adds deleted_at timestamp)
+    audit_fields:
+      type: boolean
+      description: Enable audit fields (created_at, updated_at, created_by, updated_by)
+    enable_rls:
+      type: boolean
+      description: Enable row-level security
+    partition_strategy:
+      $ref: '#/components/schemas/PartitionStrategy'
+      description: Partition strategy
+    partition_column:
+      type: string
+      description: Partition column (for time-based partitioning)
+  description: Database table options - applied at message level

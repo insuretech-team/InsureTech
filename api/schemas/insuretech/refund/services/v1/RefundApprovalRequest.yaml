@@ -1,0 +1,11 @@
+RefundApprovalRequest:
+  type: object
+  properties:
+    refund_id:
+      type: string
+    approved_by:
+      type: string
+    comments:
+      type: string
+  description: Request payload for refund approval operation. Contains parameters
+    required to execute the operation.

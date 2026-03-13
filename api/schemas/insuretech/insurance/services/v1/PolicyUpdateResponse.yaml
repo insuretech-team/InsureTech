@@ -1,0 +1,7 @@
+InsurancePolicyUpdateResponse:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/Policy'
+  description: Response payload for policy update operation. Returns operation results
+    and status.

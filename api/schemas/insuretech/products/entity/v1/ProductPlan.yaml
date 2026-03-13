@@ -1,0 +1,34 @@
+ProductPlan:
+  type: object
+  properties:
+    plan_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:plan_id;not null"'
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    plan_name:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_name;not null"'
+    plan_description:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_description"'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:premium_amount;not null"'
+    min_sum_insured:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:min_sum_insured;not null"'
+    max_sum_insured:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:max_sum_insured;not null"'
+    attributes:
+      type: string
+      description: "Store dynamic tier configuration\n @inject_tag: gorm:\"column:attributes\""
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+  description: ProductPlan represents plan variants (e.g., Basic, Silver, Gold)

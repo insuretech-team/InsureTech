@@ -1,0 +1,115 @@
+syntax = "proto3";
+
+package insuretech.endorsement.services.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/endorsement/entity/v1/endorsement.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/endorsement/services/v1;endorsementservicev1";
+option csharp_namespace = "Insuretech.Endorsement.Services.V1";
+
+service EndorsementService {
+  // Request endorsement
+  rpc RequestEndorsement(RequestEndorsementRequest) returns (RequestEndorsementResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}/endorsements"
+      body: "*"
+    };
+  }
+  
+  // Get endorsement
+  rpc GetEndorsement(GetEndorsementRequest) returns (GetEndorsementResponse) {
+    option (google.api.http) = {
+      get: "/v1/endorsements/{endorsement_id}"
+    };
+  }
+  
+  // List endorsements for policy
+  rpc ListEndorsements(ListEndorsementsRequest) returns (ListEndorsementsResponse) {
+    option (google.api.http) = {
+      get: "/v1/policies/{policy_id}/endorsements"
+    };
+  }
+  
+  // Approve endorsement
+  rpc ApproveEndorsement(ApproveEndorsementRequest) returns (ApproveEndorsementResponse) {
+    option (google.api.http) = {
+      post: "/v1/endorsements/{endorsement_id}?action=approve"
+      body: "*"
+    };
+  }
+  
+  // Reject endorsement
+  rpc RejectEndorsement(RejectEndorsementRequest) returns (RejectEndorsementResponse) {
+    option (google.api.http) = {
+      post: "/v1/endorsements/{endorsement_id}?action=reject"
+      body: "*"
+    };
+  }
+}
+
+message RequestEndorsementRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string type = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason = 3 [(google.api.field_behavior) = REQUIRED];
+  string changes = 4 [(google.api.field_behavior) = REQUIRED];
+  string effective_date = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RequestEndorsementResponse {
+  string endorsement_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string endorsement_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetEndorsementRequest {
+  string endorsement_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetEndorsementResponse {
+  entity.v1.Endorsement endorsement = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListEndorsementsRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string status = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListEndorsementsResponse {
+  repeated entity.v1.Endorsement endorsements = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ApproveEndorsementRequest {
+  string endorsement_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string approved_by = 2 [(google.api.field_behavior) = REQUIRED];
+  string comments = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ApproveEndorsementResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RejectEndorsementRequest {
+  string endorsement_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RejectEndorsementResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

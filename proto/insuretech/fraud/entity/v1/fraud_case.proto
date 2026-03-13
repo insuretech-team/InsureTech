@@ -1,0 +1,171 @@
+syntax = "proto3";
+
+package insuretech.fraud.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/entity/v1;fraudv1";
+
+// Fraud investigation case
+message FraudCase {
+  option (insuretech.common.v1.table) = {
+    table_name: "fraud_cases"
+    schema_name: "insurance_schema"
+    migration_order: 56
+    is_table: true
+    audit_fields: true
+    comment: "Fraud investigation cases"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "case_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:case_id;not null"
+  
+  string case_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "case_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_fraud_cases_number"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:case_number;not null"
+  
+  string fraud_alert_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "fraud_alert_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "fraud_alerts"
+      references_column: "alert_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_fraud_cases_alert_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:fraud_alert_id;not null"
+  
+  CasePriority priority = 4 [(insuretech.common.v1.column) = {
+    column_name: "priority"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'MEDIUM'"
+  }];
+  // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+  
+  string investigation_notes = 5 [(insuretech.common.v1.column) = {
+    column_name: "investigation_notes"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:investigation_notes"
+  
+  string evidence = 6 [(insuretech.common.v1.column) = {
+    column_name: "evidence"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Collected evidence and documents"
+  }];
+  // @inject_tag: gorm:"column:evidence"
+  
+  CaseStatus status = 7 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'OPEN'"
+    index: {
+      index_name: "idx_fraud_cases_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  CaseOutcome outcome = 8 [(insuretech.common.v1.column) = {
+    column_name: "outcome"
+    sql_type: "VARCHAR(50)"
+  }];
+  // @inject_tag: gorm:"column:outcome;serializer:proto_enum"
+  
+  string investigator_id = 9 [(insuretech.common.v1.column) = {
+    column_name: "investigator_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:investigator_id"
+  
+  google.protobuf.Timestamp closed_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "closed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp created_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 13 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum CasePriority {
+  CASE_PRIORITY_UNSPECIFIED = 0;
+  CASE_PRIORITY_LOW = 1;
+  CASE_PRIORITY_MEDIUM = 2;
+  CASE_PRIORITY_HIGH = 3;
+  CASE_PRIORITY_URGENT = 4;
+}
+
+enum CaseStatus {
+  CASE_STATUS_UNSPECIFIED = 0;
+  CASE_STATUS_OPEN = 1;
+  CASE_STATUS_INVESTIGATING = 2;
+  CASE_STATUS_PENDING_REVIEW = 3;
+  CASE_STATUS_CLOSED = 4;
+}
+
+enum CaseOutcome {
+  CASE_OUTCOME_UNSPECIFIED = 0;
+  CASE_OUTCOME_FRAUD_CONFIRMED = 1;
+  CASE_OUTCOME_FALSE_POSITIVE = 2;
+  CASE_OUTCOME_INCONCLUSIVE = 3;
+  CASE_OUTCOME_LEGAL_ACTION = 4;
+}
+
+

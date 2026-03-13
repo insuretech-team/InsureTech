@@ -1,0 +1,83 @@
+IndividualBeneficiary:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"'
+    full_name:
+      type: string
+      description: '@inject_tag: gorm:"column:full_name;not null"'
+    full_name_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:full_name_bn"'
+    date_of_birth:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:date_of_birth;not null;serializer:proto_timestamp\"\
+        \n null;serializer:proto_timestamp\""
+    gender:
+      $ref: '#/components/schemas/BeneficiaryGender'
+      description: '@inject_tag: gorm:"column:gender;not null;serializer:proto_enum"'
+    nid_number:
+      type: string
+      description: '@inject_tag: gorm:"column:nid_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification and KYC compliance
+      x-retention-days: 2555
+    passport_number:
+      type: string
+      description: '@inject_tag: gorm:"column:passport_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification for international customers
+    birth_certificate_number:
+      type: string
+      description: '@inject_tag: gorm:"column:birth_certificate_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Age verification and identity confirmation
+    tin_number:
+      type: string
+      description: '@inject_tag: gorm:"column:tin_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-log-masked: true
+    marital_status:
+      $ref: '#/components/schemas/MaritalStatus'
+      description: '@inject_tag: gorm:"column:marital_status;serializer:proto_enum"'
+    occupation:
+      type: string
+      description: '@inject_tag: gorm:"column:occupation"'
+    contact_info:
+      $ref: '#/components/schemas/ContactInfo'
+      description: '@inject_tag: gorm:"column:contact_info;not null"'
+    permanent_address:
+      $ref: '#/components/schemas/Address'
+      description: '@inject_tag: gorm:"column:permanent_address;not null"'
+    present_address:
+      $ref: '#/components/schemas/Address'
+      description: '@inject_tag: gorm:"column:present_address"'
+    nominee_name:
+      type: string
+      description: '@inject_tag: gorm:"column:nominee_name"'
+    nominee_relationship:
+      type: string
+      description: '@inject_tag: gorm:"column:nominee_relationship"'
+    audit_info:
+      $ref: '#/components/schemas/AuditInfo'
+      description: '@inject_tag: gorm:"column:audit_info;not null"'
+  description: Individual (B2C) beneficiary details

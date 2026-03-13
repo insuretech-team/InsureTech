@@ -1,0 +1,7 @@
+InsurerConfigCreationResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/InsurerConfig'
+  description: Response payload for insurer config creation operation. Returns operation
+    results and status.

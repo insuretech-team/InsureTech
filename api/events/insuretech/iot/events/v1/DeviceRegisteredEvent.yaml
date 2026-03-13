@@ -1,0 +1,24 @@
+DeviceRegisteredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    device_type:
+      type: string
+      description: VEHICLE_TRACKER, HEALTH_MONITOR, etc.
+    manufacturer:
+      type: string
+    model:
+      type: string
+    owner_id:
+      type: string
+    policy_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Device registered'

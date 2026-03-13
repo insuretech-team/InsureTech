@@ -1,0 +1,13 @@
+FraudFraudCaseCreationRequest:
+  type: object
+  properties:
+    fraud_alert_id:
+      type: string
+    priority:
+      type: string
+    investigator_id:
+      type: string
+    investigation_notes:
+      type: string
+  description: Request payload for creating a new fraud case creation. Contains all
+    required fields and optional parameters for initialization.

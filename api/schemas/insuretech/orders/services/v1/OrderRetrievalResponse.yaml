@@ -1,0 +1,9 @@
+OrderRetrievalResponse:
+  type: object
+  properties:
+    order:
+      $ref: '#/components/schemas/OrderView'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for order retrieval operation. Returns operation results
+    and status.

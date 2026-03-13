@@ -1,0 +1,701 @@
+syntax = "proto3";
+
+package insuretech.partner.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/partner/entity/v1;partnerv1";
+option csharp_namespace = "Insuretech.Partner.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+// Partner represents a business partner (Hospital, MFS, eCommerce, etc.)
+// Maps to 'partners' table in partner_schema
+message Partner {
+  option (insuretech.common.v1.table) = {
+    table_name : "partners"
+    schema_name : "partner_schema"
+    migration_order : 23
+    is_table : true
+    comment : "Business partners (hospitals, MFS providers, eCommerce, agent "
+              "networks)"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string partner_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "partner_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Partner UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:partner_id;not null"
+
+  string organization_name = 2 [ (insuretech.common.v1.column) = {
+    column_name : "organization_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Organization/company name"
+    index : {
+      index_name : "idx_partners_organization_name"
+      index_type : INDEX_TYPE_GIN
+      index_method : "gin(organization_name gin_trgm_ops)"
+    }
+  } ];
+  // @inject_tag: gorm:"column:organization_name;not null"
+
+  PartnerType type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Partner type (HOSPITAL, MFS, ECOMMERCE, AGENT_NETWORK, "
+              "CORPORATE)"
+    index : {index_name : "idx_partners_type" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  PartnerStatus status = 4 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING_VERIFICATION'"
+    comment : "Partner status"
+    index : {index_name : "idx_partners_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string trade_license = 5 [ (insuretech.common.v1.column) = {
+    column_name : "trade_license"
+    sql_type : "VARCHAR(100)"
+    unique : true
+    not_null : true
+    comment : "Trade license number (unique)"
+    index : {
+      index_name : "idx_partners_trade_license"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:trade_license;not null"
+
+  string tin_number = 6 [ (insuretech.common.v1.column) = {
+    column_name : "tin_number"
+    sql_type : "VARCHAR(12)"
+    unique : true
+    not_null : true
+    check_constraint : "tin_number ~ '^[0-9]{12}$'"
+    // @inject_tag: gorm:"column:tin_number;not null"
+    comment : "TIN number (12-digit, unique)"
+    index : {
+      index_name : "idx_partners_tin_number"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+
+  string bank_account = 7 [
+    (insuretech.common.v1.column) = {
+      column_name : "bank_account"
+      sql_type : "VARCHAR(50)"
+      not_null : true
+      comment : "Bank account number for commission payouts"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Commission payment processing"
+  ];
+  // @inject_tag: gorm:"column:bank_account;not null"
+
+  string bank_name = 8 [ (insuretech.common.v1.column) = {
+    column_name : "bank_name"
+    sql_type : "VARCHAR(100)"
+    comment : "Bank name"
+  } ];
+  // @inject_tag: gorm:"column:bank_name"
+
+  string bank_branch = 9 [ (insuretech.common.v1.column) = {
+    column_name : "bank_branch"
+    sql_type : "VARCHAR(100)"
+    comment : "Bank branch name"
+  } ];
+  // @inject_tag: gorm:"column:bank_branch"
+
+  string contact_email = 10 [
+    (insuretech.common.v1.column) = {
+      column_name : "contact_email"
+      sql_type : "VARCHAR(255)"
+      not_null : true
+      check_constraint : "contact_email ~* "
+                         "'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+      // @inject_tag: gorm:"column:contact_email;not null"
+      comment : "Primary contact email"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Partner communication"
+  ];
+
+  string contact_phone = 11 [
+    (insuretech.common.v1.column) = {
+      column_name : "contact_phone"
+      sql_type : "VARCHAR(20)"
+      not_null : true
+      check_constraint : "contact_phone ~ '^\\+880[1][0-9]{9}$'"
+      // @inject_tag: gorm:"column:contact_phone;not null"
+      comment : "Primary contact phone (Bangladesh format)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Partner communication"
+  ];
+
+  double acquisition_commission_rate = 12 [ (insuretech.common.v1.column) = {
+    column_name : "acquisition_commission_rate"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    check_constraint : "acquisition_commission_rate >= 0 AND "
+                       "acquisition_commission_rate <= 100"
+    comment : "Acquisition commission rate (15-25%)"
+  } ];
+  // @inject_tag: gorm:"column:acquisition_commission_rate;not null"
+
+  double renewal_commission_rate = 13 [ (insuretech.common.v1.column) = {
+    column_name : "renewal_commission_rate"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    check_constraint : "renewal_commission_rate >= 0 AND "
+                       "renewal_commission_rate <= 100"
+    comment : "Renewal commission rate"
+  } ];
+  // @inject_tag: gorm:"column:renewal_commission_rate;not null"
+
+  double claims_assistance_rate = 14 [ (insuretech.common.v1.column) = {
+    column_name : "claims_assistance_rate"
+    sql_type : "DECIMAL(5,2)"
+    check_constraint : "claims_assistance_rate >= 0 AND claims_assistance_rate "
+                       "<= 100"
+    comment : "Claims assistance commission rate"
+  } ];
+  // @inject_tag: gorm:"column:claims_assistance_rate"
+
+  google.protobuf.Timestamp onboarded_at = 15
+      [ (insuretech.common.v1.column) = {
+        column_name : "onboarded_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Partner onboarding completion timestamp"
+      } ];
+  // @inject_tag: gorm:"column:onboarded_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 17 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string focal_person_id = 18 [ (insuretech.common.v1.column) = {
+    column_name : "focal_person_id"
+    sql_type : "UUID"
+    comment : "Foreign key to users table (assigned focal person from company)"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_partners_focal_person_id"
+    }
+    index : {
+      index_name : "idx_partners_focal_person_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:focal_person_id"
+
+  google.protobuf.Timestamp deleted_at = 19 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  // Commission structure stored inline
+  CommissionStructure commission = 20
+      [ (insuretech.common.v1.column) =
+            {column_name : "commission" sql_type : "JSONB" is_json : true} ];
+  // @inject_tag: gorm:"column:commission;serializer:json"
+
+  // Partner benefits (discount & cashless) stored inline
+  PartnerBenefits benefits = 21
+      [ (insuretech.common.v1.column) =
+            {column_name : "benefits" sql_type : "JSONB" is_json : true} ];
+  // @inject_tag: gorm:"column:benefits;serializer:json"
+}
+
+enum PartnerType {
+  PARTNER_TYPE_UNSPECIFIED = 0;
+
+  // Life Insurance Partners
+  PARTNER_TYPE_HOSPITAL = 1;  // Healthcare provider - Life
+  PARTNER_TYPE_PHARMACY = 2;  // Pharmacy/Medicine retailer - Life
+  PARTNER_TYPE_DOCTOR = 3;    // Individual doctor - Life
+  PARTNER_TYPE_AMBULANCE = 4; // Emergency ambulance service - Life
+
+  // Non-Life Insurance Partners
+  PARTNER_TYPE_AUTO_REPAIR = 5;   // Vehicle/Car repair shop - Non-Life
+  PARTNER_TYPE_LAPTOP_REPAIR = 6; // Computer/Laptop repair - Non-Life
+  PARTNER_TYPE_MOBILE_REPAIR = 7; // Mobile phone repair - Non-Life
+
+  // Other Partners
+  PARTNER_TYPE_MFS = 10;           // Mobile Financial Services (bKash, Nagad)
+  PARTNER_TYPE_ECOMMERCE = 11;     // Online marketplace
+  PARTNER_TYPE_AGENT_NETWORK = 12; // Insurance agent network
+  PARTNER_TYPE_CORPORATE = 13;     // Corporate partner (B2B)
+}
+
+enum PartnerStatus {
+  PARTNER_STATUS_UNSPECIFIED = 0;
+  PARTNER_STATUS_PENDING_VERIFICATION = 1; // Awaiting document verification
+  PARTNER_STATUS_ACTIVE = 2;               // Active partner
+  PARTNER_STATUS_SUSPENDED = 3;            // Temporarily suspended
+  PARTNER_STATUS_TERMINATED = 4;           // Contract terminated
+}
+
+// Commission structure (embedded in Partner table)
+message CommissionStructure {
+  double acquisition_rate = 1;       // 15-25%
+  double renewal_rate = 2;           // Renewal commission
+  double claims_assistance_rate = 3; // Claims assistance fee
+}
+
+// Partner Benefits Configuration (Discount & Cashless)
+message PartnerBenefits {
+  // Discount configuration
+  bool discount_enabled = 1;      // Enable/Disable discount
+  double discount_percentage = 2; // Discount percentage (0-100)
+  double min_discount = 3;        // Minimum discount %
+  double max_discount = 4;        // Maximum discount %
+  string discount_type = 5;       // SERVICE, PRODUCT, CONSULTATION
+
+  // Cashless configuration
+  bool cashless_enabled = 6;               // Enable/Disable cashless
+  int64 cashless_limit = 7;                // Maximum cashless amount in paisa
+  int64 auto_approval_threshold = 8;       // Auto-approve below this amount
+  bool pre_authorization_required = 9;     // Require pre-auth
+  int32 authorization_validity_days = 10;  // Pre-auth validity period
+  repeated string required_documents = 11; // Documents needed for cashless
+
+  // Service area
+  repeated string service_locations = 12; // Cities/areas covered
+  bool nationwide_coverage = 13;          // Available nationwide
+
+  // Additional info
+  string notes = 14; // Additional notes
+  google.protobuf.Timestamp effective_from = 15;
+  google.protobuf.Timestamp effective_to = 16;
+}
+
+// Agent working under a partner
+// Maps to 'agents' table in partner_schema
+message Agent {
+  option (insuretech.common.v1.table) = {
+    table_name : "agents"
+    schema_name : "partner_schema"
+    migration_order : 24
+    is_table : true
+    comment : "Insurance agents working under partners"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string agent_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "agent_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Agent UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:agent_id;not null"
+
+  string partner_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "partner_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to partners table"
+    foreign_key : {
+      references_table : "partners"
+      references_column : "partner_id"
+      references_schema : "partner_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_agents_partner_id"
+    }
+    index : {index_name : "idx_agents_partner_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:partner_id;not null"
+
+  string user_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    unique : true
+    comment : "Foreign key to users table (agent's user account)"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_agents_user_id"
+    }
+    index : {
+      index_name : "idx_agents_user_id"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:user_id"
+
+  string full_name = 4 [ (insuretech.common.v1.column) = {
+    column_name : "full_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Agent full name"
+    index : {
+      index_name : "idx_agents_full_name"
+      index_type : INDEX_TYPE_GIN
+      index_method : "gin(full_name gin_trgm_ops)"
+    }
+  } ];
+  // @inject_tag: gorm:"column:full_name;not null"
+
+  string phone_number = 5 [
+    (insuretech.common.v1.column) = {
+      column_name : "phone_number"
+      sql_type : "VARCHAR(20)"
+      not_null : true
+      unique : true
+      check_constraint : "phone_number ~ '^\\+880[1][0-9]{9}$'"
+      // @inject_tag: gorm:"column:phone_number;not null"
+      comment : "Agent phone number (Bangladesh format)"
+      index : {
+        index_name : "idx_agents_phone_number"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Agent contact information"
+  ];
+
+  string email = 6 [
+    (insuretech.common.v1.column) = {
+      column_name : "email"
+      sql_type : "VARCHAR(255)"
+      unique : true
+      check_constraint : "email ~* "
+                         "'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+      // @inject_tag: gorm:"column:email"
+      comment : "Agent email"
+      index : {
+        index_name : "idx_agents_email"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+        where_clause : "email IS NOT NULL"
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Agent contact information"
+  ];
+
+  AgentStatus status = 7 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'ACTIVE'"
+    comment : "Agent status"
+    index : {index_name : "idx_agents_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  double commission_rate = 8 [ (insuretech.common.v1.column) = {
+    column_name : "commission_rate"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    check_constraint : "commission_rate >= 0 AND commission_rate <= 100"
+    comment : "Agent's commission rate (percentage)"
+  } ];
+  // @inject_tag: gorm:"column:commission_rate;not null"
+
+  string nid_number = 9 [
+    (insuretech.common.v1.column) = {
+      column_name : "nid_number"
+      sql_type : "VARCHAR(17)"
+      unique : true
+      check_constraint : "nid_number ~ '^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$'"
+      // @inject_tag: gorm:"column:nid_number"
+      comment : "National ID - 10, 13, or 17 digits"
+      index : {
+        index_name : "idx_agents_nid_number"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Agent identity verification",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+
+  google.protobuf.Timestamp joined_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "joined_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "Agent joining timestamp"
+  } ];
+  // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 13 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum AgentStatus {
+  AGENT_STATUS_UNSPECIFIED = 0;
+  AGENT_STATUS_ACTIVE = 1;    // Active agent
+  AGENT_STATUS_INACTIVE = 2;  // Inactive (voluntary)
+  AGENT_STATUS_SUSPENDED = 3; // Suspended by admin
+}
+
+// Commission payment records
+// Maps to 'commissions' table in partner_schema
+message Commission {
+  option (insuretech.common.v1.table) = {
+    table_name : "commissions"
+    schema_name : "partner_schema"
+    migration_order : 57
+    is_table : true
+    comment : "Commission payments to partners and agents"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+    partition_strategy : PARTITION_STRATEGY_RANGE_MONTH
+    partition_column : "created_at"
+  };
+
+  string commission_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "commission_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Commission UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:commission_id;not null"
+
+  string policy_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to policies table"
+    foreign_key : {
+      references_table : "policies"
+      references_column : "policy_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_commissions_policy_id"
+    }
+    index : {
+      index_name : "idx_commissions_policy_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:policy_id;not null"
+
+  string partner_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "partner_id"
+    sql_type : "UUID"
+    comment : "Foreign key to partners table"
+    foreign_key : {
+      references_table : "partners"
+      references_column : "partner_id"
+      references_schema : "partner_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_commissions_partner_id"
+    }
+    index : {
+      index_name : "idx_commissions_partner_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:partner_id"
+
+  string agent_id = 4 [ (insuretech.common.v1.column) = {
+    column_name : "agent_id"
+    sql_type : "UUID"
+    comment : "Foreign key to agents table"
+    foreign_key : {
+      references_table : "agents"
+      references_column : "agent_id"
+      references_schema : "partner_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_commissions_agent_id"
+    }
+    index : {
+      index_name : "idx_commissions_agent_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:agent_id"
+
+  CommissionType type = 5 [ (insuretech.common.v1.column) = {
+    column_name : "type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Commission type (ACQUISITION, RENEWAL, CLAIMS_ASSISTANCE)"
+    index : {index_name : "idx_commissions_type" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money commission_amount = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "commission_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "commission_amount >= 0"
+        comment : "Commission amount in paisa"
+      } ];
+  // @inject_tag: gorm:"column:commission_amount;not null"
+
+  double commission_rate = 7 [ (insuretech.common.v1.column) = {
+    column_name : "commission_rate"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    comment : "Applied commission rate (percentage)"
+  } ];
+  // @inject_tag: gorm:"column:commission_rate;not null"
+
+  CommissionStatus status = 8 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING'"
+    comment : "Commission payment status"
+    index : {
+      index_name : "idx_commissions_status"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string payment_id = 9 [ (insuretech.common.v1.column) = {
+    column_name : "payment_id"
+    sql_type : "UUID"
+    comment : "Foreign key to payments table (commission payout)"
+    foreign_key : {
+      references_table : "payments"
+      references_column : "payment_id"
+      references_schema : "payment_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_commissions_payment_id"
+    }
+  } ];
+  // @inject_tag: gorm:"column:payment_id"
+
+  google.protobuf.Timestamp paid_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "paid_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Commission payment timestamp"
+  } ];
+  // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum CommissionType {
+  COMMISSION_TYPE_UNSPECIFIED = 0;
+  COMMISSION_TYPE_ACQUISITION = 1;       // New policy commission (15-25%)
+  COMMISSION_TYPE_RENEWAL = 2;           // Renewal commission
+  COMMISSION_TYPE_CLAIMS_ASSISTANCE = 3; // Claims facilitation fee
+}
+
+enum CommissionStatus {
+  COMMISSION_STATUS_UNSPECIFIED = 0;
+  COMMISSION_STATUS_PENDING = 1;    // Awaiting payout
+  COMMISSION_STATUS_PROCESSING = 2; // Being processed
+  COMMISSION_STATUS_PAID = 3;       // Commission paid
+  COMMISSION_STATUS_CANCELLED = 4;  // Cancelled (policy cancelled)
+}

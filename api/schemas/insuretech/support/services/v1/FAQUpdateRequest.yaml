@@ -1,0 +1,9 @@
+FAQUpdateRequest:
+  type: object
+  properties:
+    faq_id:
+      type: string
+    faq:
+      $ref: '#/components/schemas/FAQ'
+  description: Request payload for updating an existing faq update. Contains fields
+    to be modified.

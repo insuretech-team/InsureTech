@@ -1,0 +1,6 @@
+InsuranceBusinessBeneficiaryCreationRequest:
+  type: object
+  properties:
+    business:
+      $ref: '#/components/schemas/BusinessBeneficiary'
+  description: ========== BUSINESS BENEFICIARY MESSAGES ==========

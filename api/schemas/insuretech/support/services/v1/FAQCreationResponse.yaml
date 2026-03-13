@@ -1,0 +1,11 @@
+FAQCreationResponse:
+  type: object
+  properties:
+    faq_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for faq creation operation. Returns operation results
+    and status.

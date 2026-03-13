@@ -1,0 +1,16 @@
+PolicyPolicyRenewalResponse:
+  type: object
+  properties:
+    new_policy_id:
+      type: string
+    new_policy_number:
+      type: string
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for policy renewal operation. Returns operation results
+    and status.

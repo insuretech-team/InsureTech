@@ -1,0 +1,102 @@
+syntax = "proto3";
+
+package insuretech.support.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/support/entity/v1;supportv1";
+
+// FAQ (FR-110)
+message FAQ {
+  option (insuretech.common.v1.table) = {
+    table_name: "faqs"
+    schema_name: "support_schema"
+    migration_order: 84
+    is_table: true
+    audit_fields: true
+    comment: "Frequently asked questions"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "faq_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:faq_id;not null"
+  
+  string category = 2 [(insuretech.common.v1.column) = {
+    column_name: "category"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+    index: {
+      index_name: "idx_faqs_category"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:category;not null"
+  
+  string question = 3 [(insuretech.common.v1.column) = {
+    column_name: "question"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:question;not null"
+  
+  string question_bn = 4 [(insuretech.common.v1.column) = {
+    column_name: "question_bn"
+    sql_type: "TEXT"
+    comment: "Bengali translation"
+  }];
+  // @inject_tag: gorm:"column:question_bn"
+  
+  string answer = 5 [(insuretech.common.v1.column) = {
+    column_name: "answer"
+    sql_type: "TEXT"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:answer;not null"
+  
+  string answer_bn = 6 [(insuretech.common.v1.column) = {
+    column_name: "answer_bn"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:answer_bn"
+  
+  int32 display_order = 7 [(insuretech.common.v1.column) = {
+    column_name: "display_order"
+    sql_type: "INTEGER"
+    default_value: "0"
+  }];
+  // @inject_tag: gorm:"column:display_order"
+  
+  bool is_published = 8 [(insuretech.common.v1.column) = {
+    column_name: "is_published"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+  }];
+  // @inject_tag: gorm:"column:is_published"
+  
+  int32 view_count = 9 [(insuretech.common.v1.column) = {
+    column_name: "view_count"
+    sql_type: "INTEGER"
+    default_value: "0"
+  }];
+  // @inject_tag: gorm:"column:view_count"
+  
+  insuretech.common.v1.AuditInfo audit_info = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+

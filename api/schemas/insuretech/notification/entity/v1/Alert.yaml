@@ -1,0 +1,35 @@
+Alert:
+  type: object
+  properties:
+    alert_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:alert_id;not null"'
+    business_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_id;not null"'
+    alert_type:
+      $ref: '#/components/schemas/AlertType'
+      description: '@inject_tag: gorm:"column:alert_type;not null;serializer:proto_enum"'
+    title:
+      type: string
+      description: '@inject_tag: gorm:"column:title;not null"'
+    message:
+      type: string
+      description: '@inject_tag: gorm:"column:message;not null"'
+    severity:
+      $ref: '#/components/schemas/AlertSeverity'
+      description: '@inject_tag: gorm:"column:severity;not null;serializer:proto_enum"'
+    count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:count;not null"'
+    is_read:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_read;not null"'
+    created_at:
+      type: string
+      format: date-time
+    read_at:
+      type: string
+      format: date-time
+  description: Alert represents system-generated alerts and reminders

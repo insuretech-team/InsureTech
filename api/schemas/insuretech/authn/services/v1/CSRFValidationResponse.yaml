@@ -1,0 +1,11 @@
+CSRFValidationResponse:
+  type: object
+  properties:
+    valid:
+      type: boolean
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for csrf validation operation. Returns operation results
+    and status.

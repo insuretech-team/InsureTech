@@ -1,0 +1,11 @@
+AnswerSendingRequest:
+  type: object
+  properties:
+    from_peer_id:
+      type: string
+    to_peer_id:
+      type: string
+    sdp:
+      type: string
+  description: Request payload for answer sending operation. Contains parameters required
+    to execute the operation.

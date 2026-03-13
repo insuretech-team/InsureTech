@@ -1,0 +1,43 @@
+OrderPaymentConfirmedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    order_id:
+      type: string
+    payment_id:
+      type: string
+    quotation_id:
+      type: string
+    customer_id:
+      type: string
+    product_id:
+      type: string
+    plan_id:
+      type: string
+    total_payable:
+      $ref: '#/components/schemas/Money'
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+    tenant_id:
+      type: string
+      description: Extended context fields (Phase 2)
+    organisation_id:
+      type: string
+    portal:
+      type: string
+    actor_user_id:
+      type: string
+    session_id:
+      type: string
+    causation_id:
+      type: string
+    invoice_id:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Payment confirmed \u2014 triggers downstream policy issuance"

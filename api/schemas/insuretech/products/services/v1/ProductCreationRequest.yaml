@@ -1,0 +1,7 @@
+ProductsProductCreationRequest:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/Product'
+  description: Request payload for creating a new product creation. Contains all required
+    fields and optional parameters for initialization.

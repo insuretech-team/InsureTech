@@ -1,0 +1,24 @@
+RoleAssignedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    role_id:
+      type: string
+    role_name:
+      type: string
+    domain:
+      type: string
+      description: domain = "portal:tenant_id"
+    assigned_by:
+      type: string
+    expires_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when role undergoes assigned. Published to event stream
+    for downstream processing and audit trail.

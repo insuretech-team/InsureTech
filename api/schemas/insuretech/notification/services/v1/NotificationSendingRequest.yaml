@@ -1,0 +1,31 @@
+NotificationSendingRequest:
+  type: object
+  properties:
+    recipient_id:
+      type: string
+    type:
+      $ref: '#/components/schemas/NotificationType'
+    channel:
+      $ref: '#/components/schemas/NotificationChannel'
+    subject:
+      type: string
+      description: 'Optional: for email'
+    message:
+      type: string
+      description: Plain text or use template
+    template_id:
+      type: string
+      description: 'Optional: use template'
+    template_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Variables for template
+    priority:
+      $ref: '#/components/schemas/NotificationPriority'
+    schedule_after_seconds:
+      type: string
+      format: int64
+      description: 'Optional: delayed send'
+  description: Request payload for notification sending operation. Contains parameters
+    required to execute the operation.

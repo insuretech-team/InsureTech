@@ -1,0 +1,7 @@
+RevenueModelAmount:
+  type: object
+  properties:
+    amount:
+      $ref: '#/components/schemas/Money'
+  description: Domain entity representing revenue model amount. Core business object
+    in the system.

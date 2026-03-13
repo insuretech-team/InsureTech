@@ -1,0 +1,11 @@
+RefundExecutionRequest:
+  type: object
+  properties:
+    mfs_transaction_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    reason:
+      type: string
+  description: Request payload for refund execution operation. Contains parameters
+    required to execute the operation.

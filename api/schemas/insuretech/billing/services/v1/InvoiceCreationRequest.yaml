@@ -1,0 +1,43 @@
+InvoiceCreationRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+      description: B2C
+    purchase_order_id:
+      type: string
+      description: B2B
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+      description: B2B
+    business_id:
+      type: string
+      description: B2B legacy
+    tenant_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    tax_amount:
+      $ref: '#/components/schemas/Money'
+    currency:
+      type: string
+    due_date:
+      type: string
+      format: date-time
+    policy_ids:
+      type: array
+      items:
+        type: string
+    notes:
+      type: string
+    idempotency_key:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for creating a new invoice creation. Contains all required
+    fields and optional parameters for initialization.

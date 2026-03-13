@@ -1,0 +1,224 @@
+syntax = "proto3";
+
+package insuretech.billing.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/billing/services/v1;billingservicev1";
+option csharp_namespace = "Insuretech.Billing.Services.V1";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/billing/entity/v1/invoice.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+
+// BillingService manages invoice lifecycle for both B2C and B2B insurance purchases.
+// Invoices are created by the billing-service in response to order events and
+// settled when payment-service confirms payment.
+service BillingService {
+
+  // Create a new invoice for an order (B2C) or purchase order (B2B).
+  rpc CreateInvoice(CreateInvoiceRequest) returns (CreateInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices"
+      body: "*"
+    };
+  }
+
+  // Get a single invoice by ID.
+  rpc GetInvoice(GetInvoiceRequest) returns (GetInvoiceResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoices/{invoice_id}"
+    };
+  }
+
+  // List invoices with optional filters.
+  rpc ListInvoices(ListInvoicesRequest) returns (ListInvoicesResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoices"
+    };
+  }
+
+  // Mark invoice as paid — called by payment-service after payment confirmation.
+  rpc MarkInvoicePaid(MarkInvoicePaidRequest) returns (MarkInvoicePaidResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices/{invoice_id}:mark-paid"
+      body: "*"
+    };
+  }
+
+  // Cancel an invoice (only allowed before PAID).
+  rpc CancelInvoice(CancelInvoiceRequest) returns (CancelInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices/{invoice_id}:cancel"
+      body: "*"
+    };
+  }
+
+  // Issue an invoice — transitions from DRAFT → ISSUED and sends to customer/org.
+  rpc IssueInvoice(IssueInvoiceRequest) returns (IssueInvoiceResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices/{invoice_id}:issue"
+      body: "*"
+    };
+  }
+
+  // Get invoice PDF (pre-signed download URL or file ID).
+  rpc GetInvoicePDF(GetInvoicePDFRequest) returns (GetInvoicePDFResponse) {
+    option (google.api.http) = {
+      get: "/v1/invoices/{invoice_id}/pdf"
+    };
+  }
+
+  // Trigger async invoice PDF generation.
+  rpc GenerateInvoicePDF(GenerateInvoicePDFRequest) returns (GenerateInvoicePDFResponse) {
+    option (google.api.http) = {
+      post: "/v1/invoices/{invoice_id}:generate-pdf"
+      body: "*"
+    };
+  }
+
+  // Get invoice by order ID — used by orders-service to link invoice after creation.
+  rpc GetInvoiceByOrderId(GetInvoiceByOrderIdRequest) returns (GetInvoiceByOrderIdResponse) {
+    option (google.api.http) = {
+      get: "/v1/orders/{order_id}/invoice"
+    };
+  }
+}
+
+// ─── CREATE INVOICE ───────────────────────────────────────────────────────────
+
+message CreateInvoiceRequest {
+  string order_id = 1 [(google.api.field_behavior) = OPTIONAL];            // B2C
+  string purchase_order_id = 2 [(google.api.field_behavior) = OPTIONAL];   // B2B
+  string customer_id = 3 [(google.api.field_behavior) = OPTIONAL];
+  string organisation_id = 4 [(google.api.field_behavior) = OPTIONAL];     // B2B
+  string business_id = 5 [(google.api.field_behavior) = OPTIONAL];         // B2B legacy
+  string tenant_id = 6 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.common.v1.Money amount = 7 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money tax_amount = 8 [(google.api.field_behavior) = OPTIONAL];
+  string currency = 9 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp due_date = 10 [(google.api.field_behavior) = OPTIONAL];
+  repeated string policy_ids = 11 [(google.api.field_behavior) = OPTIONAL];
+  string notes = 12 [(google.api.field_behavior) = OPTIONAL];
+  string idempotency_key = 13 [(google.api.field_behavior) = OPTIONAL];
+  map<string, string> metadata = 14 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CreateInvoiceResponse {
+  insuretech.billing.entity.v1.Invoice invoice = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── GET INVOICE ──────────────────────────────────────────────────────────────
+
+message GetInvoiceRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetInvoiceResponse {
+  insuretech.billing.entity.v1.Invoice invoice = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── LIST INVOICES ────────────────────────────────────────────────────────────
+
+message ListInvoicesRequest {
+  int32 page_size = 1 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 2 [(google.api.field_behavior) = OPTIONAL];
+  string customer_id = 3 [(google.api.field_behavior) = OPTIONAL];
+  string organisation_id = 4 [(google.api.field_behavior) = OPTIONAL];
+  string order_id = 5 [(google.api.field_behavior) = OPTIONAL];
+  string purchase_order_id = 6 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.billing.entity.v1.InvoiceStatus status = 7 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp start_date = 8 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp end_date = 9 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListInvoicesResponse {
+  repeated insuretech.billing.entity.v1.Invoice invoices = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string next_page_token = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── MARK PAID ────────────────────────────────────────────────────────────────
+
+message MarkInvoicePaidRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string payment_id = 2 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp paid_at = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message MarkInvoicePaidResponse {
+  string invoice_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.billing.entity.v1.InvoiceStatus status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── CANCEL INVOICE ───────────────────────────────────────────────────────────
+
+message CancelInvoiceRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+  string cancelled_by = 3 [(google.api.field_behavior) = OPTIONAL];
+  bool issue_credit_note = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CancelInvoiceResponse {
+  string invoice_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.billing.entity.v1.InvoiceStatus status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string credit_note_id = 3 [(google.api.field_behavior) = OUTPUT_ONLY]; // Populated when issue_credit_note=true
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── ISSUE INVOICE ────────────────────────────────────────────────────────────
+
+message IssueInvoiceRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string issued_by = 2 [(google.api.field_behavior) = OPTIONAL]; // admin user_id
+}
+
+message IssueInvoiceResponse {
+  string invoice_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.billing.entity.v1.InvoiceStatus status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── GET INVOICE PDF ──────────────────────────────────────────────────────────
+
+message GetInvoicePDFRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetInvoicePDFResponse {
+  string invoice_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string invoice_pdf_url = 2 [(google.api.field_behavior) = OUTPUT_ONLY]; // Pre-signed URL
+  google.protobuf.Timestamp generated_at = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── GENERATE INVOICE PDF ─────────────────────────────────────────────────────
+
+message GenerateInvoicePDFRequest {
+  string invoice_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string requested_by = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message GenerateInvoicePDFResponse {
+  string invoice_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string job_id = 2 [(google.api.field_behavior) = OUTPUT_ONLY]; // Async generation job ID
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+// ─── GET BY ORDER ID ──────────────────────────────────────────────────────────
+
+message GetInvoiceByOrderIdRequest {
+  string order_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetInvoiceByOrderIdResponse {
+  insuretech.billing.entity.v1.Invoice invoice = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}

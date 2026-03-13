@@ -1,0 +1,20 @@
+SessionsListingRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    session_type:
+      type: string
+      description: 'Filter by: SERVER_SIDE, JWT, or empty for all'
+    active_only:
+      type: boolean
+      description: 'Show only active sessions (default: false)'
+    device_type:
+      type: string
+      description: 'Filter by device type: WEB, MOBILE_ANDROID, MOBILE_IOS, etc.'
+  description: List Sessions Request

@@ -1,0 +1,192 @@
+syntax = "proto3";
+
+package insuretech.kyc.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/entity/v1;kycv1";
+
+// KYC verification (FR-061, FR-169)
+message KYCVerification {
+  option (insuretech.common.v1.table) = {
+    table_name: "kyc_verifications"
+    schema_name: "authn_schema"
+    migration_order: 12
+    is_table: true
+    audit_fields: true
+    comment: "KYC/KYB verification records"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "verification_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:verification_id;not null"
+  
+  VerificationType type = 2 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "KYC (individual) or KYB (business)"
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string entity_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "entity_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    comment: "BENEFICIARY, PARTNER"
+  }];
+  // @inject_tag: gorm:"column:entity_type;not null"
+  
+  string entity_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "entity_id"
+    sql_type: "UUID"
+    not_null: true
+    index: {
+      index_name: "idx_kyc_verifications_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:entity_id;not null"
+  
+  VerificationMethod method = 5 [(insuretech.common.v1.column) = {
+    column_name: "method"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
+  
+  string provider = 6 [(insuretech.common.v1.column) = {
+    column_name: "provider"
+    sql_type: "VARCHAR(100)"
+    comment: "Porichoy, manual, etc."
+  }];
+  // @inject_tag: gorm:"column:provider"
+  
+  string provider_reference = 7 [(insuretech.common.v1.column) = {
+    column_name: "provider_reference"
+    sql_type: "VARCHAR(255)"
+    comment: "External verification ID"
+  }];
+  // @inject_tag: gorm:"column:provider_reference"
+  
+  string documents = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "documents"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "Submitted documents (NID, passport, etc.)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Identity verification and KYC compliance",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:documents"
+  
+  VerificationStatus status = 9 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_kyc_verifications_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string verification_result = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "verification_result"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "Verification response data"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.data_purpose) = "KYC verification audit trail"
+  ];
+  // @inject_tag: gorm:"column:verification_result"
+  
+  string rejection_reason = 11 [(insuretech.common.v1.column) = {
+    column_name: "rejection_reason"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:rejection_reason"
+  
+  string verified_by = 12 [(insuretech.common.v1.column) = {
+    column_name: "verified_by"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:verified_by"
+  
+  google.protobuf.Timestamp verified_at = 13 [(insuretech.common.v1.column) = {
+    column_name: "verified_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp expires_at = 14 [(insuretech.common.v1.column) = {
+    column_name: "expires_at"
+    sql_type: "TIMESTAMPTZ"
+    comment: "KYC validity expiry"
+  }];
+  // @inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum VerificationType {
+  VERIFICATION_TYPE_UNSPECIFIED = 0;
+  VERIFICATION_TYPE_KYC = 1;
+  VERIFICATION_TYPE_KYB = 2;
+}
+
+enum VerificationMethod {
+  VERIFICATION_METHOD_UNSPECIFIED = 0;
+  VERIFICATION_METHOD_PORICHOY = 1;
+  VERIFICATION_METHOD_NID = 2;
+  VERIFICATION_METHOD_PASSPORT = 3;
+  VERIFICATION_METHOD_MANUAL = 4;
+  VERIFICATION_METHOD_TRADE_LICENSE = 5;
+}
+
+enum VerificationStatus {
+  VERIFICATION_STATUS_UNSPECIFIED = 0;
+  VERIFICATION_STATUS_PENDING = 1;
+  VERIFICATION_STATUS_IN_PROGRESS = 2;
+  VERIFICATION_STATUS_VERIFIED = 3;
+  VERIFICATION_STATUS_REJECTED = 4;
+  VERIFICATION_STATUS_EXPIRED = 5;
+}
+
+

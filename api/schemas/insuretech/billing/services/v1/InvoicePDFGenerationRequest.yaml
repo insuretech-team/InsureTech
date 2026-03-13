@@ -1,0 +1,9 @@
+InvoicePDFGenerationRequest:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    requested_by:
+      type: string
+  description: Request payload for invoice pdf generation operation. Contains parameters
+    required to execute the operation.

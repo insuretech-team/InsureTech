@@ -1,0 +1,9 @@
+RevokeAPIKeyResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for revoke api key operation. Returns operation results
+    and status.

@@ -1,0 +1,19 @@
+FileMetadataUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    file_id:
+      type: string
+    tenant_id:
+      type: string
+    updated_fields:
+      type: array
+      items:
+        type: string
+    updated_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: Emitted when metadata is updated on a stored file.

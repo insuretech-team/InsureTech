@@ -1,0 +1,61 @@
+ReportExecution:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:execution_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    report_definition_id:
+      type: string
+      description: '@inject_tag: gorm:"column:report_definition_id;not null"'
+    report_schedule_id:
+      type: string
+      description: '@inject_tag: gorm:"column:report_schedule_id"'
+    parameters:
+      type: string
+      description: '@inject_tag: gorm:"column:parameters"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ExecutionStatus'
+      x-database-default: PENDING
+    file_url:
+      type: string
+      description: '@inject_tag: gorm:"column:file_url"'
+    file_format:
+      type: string
+      description: '@inject_tag: gorm:"column:file_format"'
+    file_size_bytes:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:file_size_bytes"'
+    row_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:row_count"'
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+    executed_by:
+      type: string
+      description: '@inject_tag: gorm:"column:executed_by"'
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Report execution instance
+  required:
+  - id
+  - report_definition_id
+  - status
+  - started_at
+  - audit_info

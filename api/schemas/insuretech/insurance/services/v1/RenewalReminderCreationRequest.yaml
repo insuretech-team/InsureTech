@@ -1,0 +1,6 @@
+RenewalReminderCreationRequest:
+  type: object
+  properties:
+    reminder:
+      $ref: '#/components/schemas/RenewalReminder'
+  description: ========== RENEWAL REMINDER MESSAGES ==========

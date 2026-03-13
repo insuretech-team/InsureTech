@@ -1,0 +1,13 @@
+package models
+
+// ApprovalStatus represents a approval_status
+type ApprovalStatus string
+
+// ApprovalStatus values
+const (
+	ApprovalStatusAPPROVALSTATUSUNSPECIFIED ApprovalStatus = "APPROVAL_STATUS_UNSPECIFIED"
+	ApprovalStatusAPPROVALSTATUSPENDING  = "APPROVAL_STATUS_PENDING"
+	ApprovalStatusAPPROVALSTATUSAPPROVED  = "APPROVAL_STATUS_APPROVED"
+	ApprovalStatusAPPROVALSTATUSREJECTED  = "APPROVAL_STATUS_REJECTED"
+	ApprovalStatusAPPROVALSTATUSCANCELLED  = "APPROVAL_STATUS_CANCELLED"
+)

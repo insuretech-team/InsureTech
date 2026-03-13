@@ -1,0 +1,27 @@
+DataExportRequestedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    export_id:
+      type: string
+    user_id:
+      type: string
+    export_type:
+      type: string
+      description: POLICIES, CLAIMS, PAYMENTS
+    format:
+      type: string
+      description: CSV, EXCEL, JSON
+    filters:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Data export requested'

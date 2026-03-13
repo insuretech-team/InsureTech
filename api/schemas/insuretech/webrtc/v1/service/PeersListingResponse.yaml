@@ -1,0 +1,12 @@
+PeersListingResponse:
+  type: object
+  properties:
+    peers:
+      type: array
+      items:
+        $ref: '#/components/schemas/Peer'
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for peers listing operation. Returns operation results
+    and status.

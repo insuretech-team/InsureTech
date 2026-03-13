@@ -1,0 +1,14 @@
+RoomsListingResponse:
+  type: object
+  properties:
+    rooms:
+      type: array
+      items:
+        $ref: '#/components/schemas/Room'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for rooms listing operation. Returns operation results
+    and status.

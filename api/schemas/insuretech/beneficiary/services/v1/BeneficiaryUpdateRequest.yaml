@@ -1,0 +1,13 @@
+BeneficiaryBeneficiaryUpdateRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    mobile_number:
+      type: string
+    email:
+      type: string
+    address:
+      type: string
+  description: Request payload for updating an existing beneficiary update. Contains
+    fields to be modified.

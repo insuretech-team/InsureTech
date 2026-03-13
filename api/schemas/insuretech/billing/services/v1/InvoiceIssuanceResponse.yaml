@@ -1,0 +1,11 @@
+InvoiceIssuanceResponse:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/InvoiceStatus'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invoice issuance operation. Returns operation
+    results and status.

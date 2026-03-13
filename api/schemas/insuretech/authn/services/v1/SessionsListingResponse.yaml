@@ -1,0 +1,16 @@
+SessionsListingResponse:
+  type: object
+  properties:
+    sessions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Session'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for sessions listing operation. Returns operation
+    results and status.

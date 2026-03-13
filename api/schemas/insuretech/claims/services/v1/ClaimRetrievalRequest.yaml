@@ -1,0 +1,7 @@
+ClaimsClaimRetrievalRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+  description: Request payload for retrieving claim retrieval information. May include
+    filters and pagination parameters.

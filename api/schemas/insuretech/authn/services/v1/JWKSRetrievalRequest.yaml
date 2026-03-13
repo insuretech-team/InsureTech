@@ -1,0 +1,5 @@
+AuthnJWKSRetrievalRequest:
+  type: object
+  properties: {}
+  description: Request payload for retrieving jwks retrieval information. May include
+    filters and pagination parameters.

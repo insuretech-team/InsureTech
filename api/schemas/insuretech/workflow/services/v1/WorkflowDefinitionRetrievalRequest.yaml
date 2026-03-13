@@ -1,0 +1,7 @@
+WorkflowDefinitionRetrievalRequest:
+  type: object
+  properties:
+    workflow_definition_id:
+      type: string
+  description: Request payload for retrieving workflow definition retrieval information.
+    May include filters and pagination parameters.

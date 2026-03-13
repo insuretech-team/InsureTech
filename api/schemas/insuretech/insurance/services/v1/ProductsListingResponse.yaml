@@ -1,0 +1,12 @@
+InsuranceProductsListingResponse:
+  type: object
+  properties:
+    products:
+      type: array
+      items:
+        $ref: '#/components/schemas/Product'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for products listing operation. Returns operation
+    results and status.

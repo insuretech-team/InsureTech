@@ -1,0 +1,43 @@
+AccessDecisionAudit:
+  type: object
+  properties:
+    audit_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    user_id:
+      type: string
+    session_id:
+      type: string
+    domain:
+      type: string
+    subject:
+      type: string
+    object:
+      type: string
+    action:
+      type: string
+    decision:
+      $ref: '#/components/schemas/PolicyEffect'
+    matched_rule:
+      type: string
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    decided_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+  description: "---------------------------------------------------------------------------\r\
+    \n 7. AccessDecisionAudit \u2014 immutable audit log of every Casbin enforcement\
+    \ call\r\n ---------------------------------------------------------------------------"
+  required:
+  - audit_id
+  - user_id
+  - domain
+  - subject
+  - object
+  - action
+  - decision
+  - decided_at

@@ -1,0 +1,1030 @@
+syntax = "proto3";
+
+package insuretech.payment.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/payment/entity/v1;paymentv1";
+option csharp_namespace = "Insuretech.Payment.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+// Payment represents a financial transaction (gateway integration)
+// Maps to 'payments' table in payment_schema
+message Payment {
+  option (insuretech.common.v1.table) = {
+    table_name: "payments"
+    schema_name: "payment_schema"
+    migration_order: 50
+    is_table: true
+    comment: "Payment transactions with gateway integration (bKash, Nagad, SSLCommerz)"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: true
+    partition_strategy: PARTITION_STRATEGY_RANGE_MONTH
+    partition_column: "created_at"
+  };
+
+  string payment_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Payment UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:payment_id;not null"
+
+  string transaction_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "transaction_id"
+      sql_type: "VARCHAR(255)"
+      unique: true
+      comment: "External gateway transaction ID (unique per gateway)"
+      index: {
+        index_name: "idx_payments_transaction_id"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+        where_clause: "transaction_id IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:transaction_id"
+
+  string tigerbeetle_transfer_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "tigerbeetle_transfer_id"
+      sql_type: "NUMERIC(39,0)"
+      unique: true
+      comment: "TigerBeetle transfer ID (128-bit stored as NUMERIC, unique per transfer)"
+      index: {
+        index_name: "idx_payments_tigerbeetle_transfer_id"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+        where_clause: "tigerbeetle_transfer_id IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:tigerbeetle_transfer_id"
+
+  string policy_id = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "policy_id"
+      sql_type: "UUID"
+      comment: "Foreign key to policies table (for premium payments)"
+      foreign_key: {
+        references_table: "policies"
+        references_column: "policy_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_payments_policy_id"
+      }
+      index: {
+        index_name: "idx_payments_policy_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:policy_id"
+
+  string claim_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "claim_id"
+      sql_type: "UUID"
+      comment: "Foreign key to claims table (for claim settlements)"
+      foreign_key: {
+        references_table: "claims"
+        references_column: "claim_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_payments_claim_id"
+      }
+      index: {
+        index_name: "idx_payments_claim_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:claim_id"
+
+  PaymentType type = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Payment type (PREMIUM, CLAIM_SETTLEMENT, REFUND, COMMISSION)"
+      index: {
+        index_name: "idx_payments_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  PaymentMethod method = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "method"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Payment method (bKash, Nagad, Rocket, Card, etc.)"
+      index: {
+        index_name: "idx_payments_method"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
+
+  PaymentStatus status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'INITIATED'"
+      comment: "Payment status"
+      index: {
+        index_name: "idx_payments_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money amount = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "amount"
+      sql_type: "BIGINT"
+      not_null: true
+      check_constraint: "amount > 0"
+      comment: "Amount in paisa (smallest unit, 100 paisa = 1 BDT)"
+    }
+  ];
+  // @inject_tag: gorm:"column:amount;not null"
+
+  string currency = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "currency"
+      sql_type: "VARCHAR(3)"
+      not_null: true
+      default_value: "'BDT'"
+      check_constraint: "currency IN ('BDT', 'USD', 'EUR')"
+      comment: "ISO 4217 currency code"
+    }
+  ];
+  // @inject_tag: gorm:"column:currency;not null"
+
+  string payer_id = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "payer_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to users table (payer)"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_payments_payer_id"
+      }
+      index: {
+        index_name: "idx_payments_payer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:payer_id;not null"
+
+  string payee_id = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "payee_id"
+      sql_type: "UUID"
+      comment: "Foreign key to users table (payee, NULL for company account)"
+      index: {
+        index_name: "idx_payments_payee_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:payee_id"
+
+  google.protobuf.Timestamp initiated_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "initiated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      comment: "Payment initiation timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:initiated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp completed_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "completed_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Payment completion timestamp"
+      index: {
+        index_name: "idx_payments_completed_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string gateway = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "gateway"
+      sql_type: "VARCHAR(50)"
+      comment: "Payment gateway name (bKash, Nagad, SSLCommerz, etc.)"
+    }
+  ];
+  // @inject_tag: gorm:"column:gateway"
+
+  string gateway_response = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "gateway_response"
+      sql_type: "JSONB"
+      comment: "Gateway response JSON (for debugging and reconciliation)"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:gateway_response"
+
+  string receipt_url = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "receipt_url"
+      sql_type: "TEXT"
+      comment: "S3 URL of payment receipt/invoice"
+    }
+  ];
+  // @inject_tag: gorm:"column:receipt_url"
+
+  int32 retry_count = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "retry_count"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "0"
+      check_constraint: "retry_count >= 0 AND retry_count <= 5"
+      comment: "Number of retry attempts (max 5)"
+    }
+  ];
+  // @inject_tag: gorm:"column:retry_count;not null"
+
+  string failure_reason = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "failure_reason"
+      sql_type: "TEXT"
+      comment: "Reason for payment failure"
+    }
+  ];
+  // @inject_tag: gorm:"column:failure_reason"
+
+  // Idempotency key for preventing duplicate payment operations (CG-3)
+  string idempotency_key = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "idempotency_key"
+      sql_type: "VARCHAR(255)"
+      unique: true
+      comment: "Idempotency key to prevent duplicate payments"
+      index: {
+        index_name: "idx_payments_idempotency_key"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+        where_clause: "idempotency_key IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:idempotency_key"
+
+  // ── Identity and linkage fields (Phase 2) ────────────────────────────────
+
+  string order_id = 23 [
+    (insuretech.common.v1.column) = {
+      column_name: "order_id"
+      sql_type: "UUID"
+      comment: "FK to insurance_schema.orders — the order this payment covers"
+      index: {
+        index_name: "idx_payments_order_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:order_id;index:idx_payments_order_id"
+
+  string invoice_id = 24 [
+    (insuretech.common.v1.column) = {
+      column_name: "invoice_id"
+      sql_type: "UUID"
+      comment: "FK to billing_schema.invoices — linked B2B invoice"
+      index: {
+        index_name: "idx_payments_invoice_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:invoice_id;index:idx_payments_invoice_id"
+
+  string tenant_id = 25 [
+    (insuretech.common.v1.column) = {
+      column_name: "tenant_id"
+      sql_type: "UUID"
+      comment: "Multi-tenant isolation key"
+      index: {
+        index_name: "idx_payments_tenant_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:tenant_id;index:idx_payments_tenant_id"
+
+  string customer_id = 26 [
+    (insuretech.common.v1.column) = {
+      column_name: "customer_id"
+      sql_type: "UUID"
+      comment: "FK to authn_schema.users — the customer paying (may differ from payer_id for agent flows)"
+      index: {
+        index_name: "idx_payments_customer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:customer_id;index:idx_payments_customer_id"
+
+  string organisation_id = 27 [
+    (insuretech.common.v1.column) = {
+      column_name: "organisation_id"
+      sql_type: "UUID"
+      comment: "B2B organisation context (from x-business-id gateway header)"
+      index: {
+        index_name: "idx_payments_organisation_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:organisation_id;index:idx_payments_organisation_id"
+
+  string purchase_order_id = 28 [
+    (insuretech.common.v1.column) = {
+      column_name: "purchase_order_id"
+      sql_type: "UUID"
+      comment: "B2B purchase order reference (from b2b_schema.purchase_orders)"
+      index: {
+        index_name: "idx_payments_purchase_order_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:purchase_order_id;index:idx_payments_purchase_order_id"
+
+  // ── SSLCommerz / provider correlation fields ──────────────────────────────
+
+  string provider = 29 [
+    (insuretech.common.v1.column) = {
+      column_name: "provider"
+      sql_type: "VARCHAR(50)"
+      comment: "Payment provider name: sslcommerz, bkash, nagad, manual"
+      index: {
+        index_name: "idx_payments_provider"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:provider;index:idx_payments_provider"
+
+  string provider_reference = 30 [
+    (insuretech.common.v1.column) = {
+      column_name: "provider_reference"
+      sql_type: "VARCHAR(255)"
+      comment: "Canonical provider reference ID — unique per provider"
+      index: {
+        index_name: "idx_payments_provider_reference"
+        index_type: INDEX_TYPE_BTREE
+        where_clause: "provider_reference IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:provider_reference"
+
+  // SSLCommerz-specific fields
+  string tran_id = 31 [
+    (insuretech.common.v1.column) = {
+      column_name: "tran_id"
+      sql_type: "VARCHAR(255)"
+      comment: "SSLCommerz merchant transaction ID (tran_id sent to SSLCommerz)"
+      index: {
+        index_name: "idx_payments_tran_id"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+        where_clause: "tran_id IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:tran_id"
+
+  string val_id = 32 [
+    (insuretech.common.v1.column) = {
+      column_name: "val_id"
+      sql_type: "VARCHAR(255)"
+      comment: "SSLCommerz validation ID returned after successful payment"
+    }
+  ];
+  // @inject_tag: gorm:"column:val_id"
+
+  string session_key = 33 [
+    (insuretech.common.v1.column) = {
+      column_name: "session_key"
+      sql_type: "VARCHAR(255)"
+      comment: "SSLCommerz session key returned from create-session call"
+    }
+  ];
+  // @inject_tag: gorm:"column:session_key"
+
+  string bank_tran_id = 34 [
+    (insuretech.common.v1.column) = {
+      column_name: "bank_tran_id"
+      sql_type: "VARCHAR(255)"
+      comment: "Bank transaction ID returned by SSLCommerz callback"
+    }
+  ];
+  // @inject_tag: gorm:"column:bank_tran_id"
+
+  string card_type = 35 [
+    (insuretech.common.v1.column) = {
+      column_name: "card_type"
+      sql_type: "VARCHAR(50)"
+      comment: "Card type from SSLCommerz: VISA, MASTERCARD, etc."
+    }
+  ];
+  // @inject_tag: gorm:"column:card_type"
+
+  string card_brand = 36 [
+    (insuretech.common.v1.column) = {
+      column_name: "card_brand"
+      sql_type: "VARCHAR(50)"
+      comment: "Card brand from SSLCommerz callback"
+    }
+  ];
+  // @inject_tag: gorm:"column:card_brand"
+
+  string card_issuer = 37 [
+    (insuretech.common.v1.column) = {
+      column_name: "card_issuer"
+      sql_type: "VARCHAR(100)"
+      comment: "Card issuing bank from SSLCommerz callback"
+    }
+  ];
+  // @inject_tag: gorm:"column:card_issuer"
+
+  string card_issuer_country = 38 [
+    (insuretech.common.v1.column) = {
+      column_name: "card_issuer_country"
+      sql_type: "VARCHAR(50)"
+      comment: "Card issuing country from SSLCommerz callback"
+    }
+  ];
+  // @inject_tag: gorm:"column:card_issuer_country"
+
+  // ── Validation and operational fields ────────────────────────────────────
+
+  google.protobuf.Timestamp validated_at = 39 [
+    (insuretech.common.v1.column) = {
+      column_name: "validated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Timestamp when provider validation API confirmed the payment"
+    }
+  ];
+  // @inject_tag: gorm:"column:validated_at;serializer:proto_timestamp"
+
+  string validation_status = 40 [
+    (insuretech.common.v1.column) = {
+      column_name: "validation_status"
+      sql_type: "VARCHAR(50)"
+      comment: "Provider validation status string (VALID, INVALID, VALIDATED)"
+    }
+  ];
+  // @inject_tag: gorm:"column:validation_status"
+
+  string risk_level = 41 [
+    (insuretech.common.v1.column) = {
+      column_name: "risk_level"
+      sql_type: "VARCHAR(20)"
+      comment: "Risk level returned by provider (0=safe, 1=moderate, 2=high)"
+    }
+  ];
+  // @inject_tag: gorm:"column:risk_level"
+
+  string risk_title = 42 [
+    (insuretech.common.v1.column) = {
+      column_name: "risk_title"
+      sql_type: "VARCHAR(100)"
+      comment: "Risk title returned by provider"
+    }
+  ];
+  // @inject_tag: gorm:"column:risk_title"
+
+  google.protobuf.Timestamp callback_received_at = 43 [
+    (insuretech.common.v1.column) = {
+      column_name: "callback_received_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Timestamp when gateway success/fail callback was received"
+    }
+  ];
+  // @inject_tag: gorm:"column:callback_received_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp ipn_received_at = 44 [
+    (insuretech.common.v1.column) = {
+      column_name: "ipn_received_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Timestamp when IPN (Instant Payment Notification) was received"
+    }
+  ];
+  // @inject_tag: gorm:"column:ipn_received_at;serializer:proto_timestamp"
+
+  // ── Manual review fields ──────────────────────────────────────────────────
+
+  ManualReviewStatus manual_review_status = 45 [
+    (insuretech.common.v1.column) = {
+      column_name: "manual_review_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'MANUAL_REVIEW_STATUS_NOT_REQUIRED'"
+      comment: "Manual bank transfer review status"
+    }
+  ];
+  // @inject_tag: gorm:"column:manual_review_status;not null;serializer:proto_enum"
+
+  string manual_proof_file_id = 46 [
+    (insuretech.common.v1.column) = {
+      column_name: "manual_proof_file_id"
+      sql_type: "UUID"
+      comment: "Media service document ID for uploaded bank transfer proof"
+    }
+  ];
+  // @inject_tag: gorm:"column:manual_proof_file_id"
+
+  string verified_by = 47 [
+    (insuretech.common.v1.column) = {
+      column_name: "verified_by"
+      sql_type: "UUID"
+      comment: "User ID of the admin/agent who reviewed and approved the payment"
+    }
+  ];
+  // @inject_tag: gorm:"column:verified_by"
+
+  google.protobuf.Timestamp verified_at = 48 [
+    (insuretech.common.v1.column) = {
+      column_name: "verified_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Timestamp when payment was manually verified"
+    }
+  ];
+  // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+
+  string rejection_reason = 49 [
+    (insuretech.common.v1.column) = {
+      column_name: "rejection_reason"
+      sql_type: "TEXT"
+      comment: "Reason for manual review rejection (if applicable)"
+    }
+  ];
+  // @inject_tag: gorm:"column:rejection_reason"
+
+  // ── Receipt and accounting fields ─────────────────────────────────────────
+
+  string receipt_number = 50 [
+    (insuretech.common.v1.column) = {
+      column_name: "receipt_number"
+      sql_type: "VARCHAR(100)"
+      unique: true
+      comment: "Human-readable receipt number: RCP-2026-000001"
+      index: {
+        index_name: "idx_payments_receipt_number"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+        where_clause: "receipt_number IS NOT NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:receipt_number"
+
+  string receipt_document_id = 51 [
+    (insuretech.common.v1.column) = {
+      column_name: "receipt_document_id"
+      sql_type: "UUID"
+      comment: "Document-service document ID for generated receipt PDF"
+    }
+  ];
+  // @inject_tag: gorm:"column:receipt_document_id"
+
+  string receipt_file_id = 52 [
+    (insuretech.common.v1.column) = {
+      column_name: "receipt_file_id"
+      sql_type: "UUID"
+      comment: "Media/storage service file ID for the receipt PDF"
+    }
+  ];
+  // @inject_tag: gorm:"column:receipt_file_id"
+
+  string ledger_transaction_id = 53 [
+    (insuretech.common.v1.column) = {
+      column_name: "ledger_transaction_id"
+      sql_type: "VARCHAR(255)"
+      comment: "TigerBeetle or accounting ledger transaction reference"
+    }
+  ];
+  // @inject_tag: gorm:"column:ledger_transaction_id"
+}
+
+enum PaymentType {
+  PAYMENT_TYPE_UNSPECIFIED = 0;
+  PAYMENT_TYPE_PREMIUM = 1; // Premium payment from customer
+  PAYMENT_TYPE_CLAIM_SETTLEMENT = 2; // Claim payout to customer
+  PAYMENT_TYPE_REFUND = 3; // Refund to customer
+  PAYMENT_TYPE_COMMISSION = 4; // Commission to agent/partner
+}
+
+enum PaymentMethod {
+  PAYMENT_METHOD_UNSPECIFIED = 0;
+  PAYMENT_METHOD_BKASH = 1;
+  PAYMENT_METHOD_NAGAD = 2;
+  PAYMENT_METHOD_ROCKET = 3;
+  PAYMENT_METHOD_CARD = 4; // Credit/Debit card
+  PAYMENT_METHOD_BANK_TRANSFER = 5; // Bank transfer/NEFT
+  PAYMENT_METHOD_CASH = 6; // Cash payment (agent)
+  PAYMENT_METHOD_CHEQUE = 7; // Cheque payment
+}
+
+enum PaymentStatus {
+  PAYMENT_STATUS_UNSPECIFIED = 0;
+  PAYMENT_STATUS_INITIATED = 1;              // Payment initiated — session created with provider
+  PAYMENT_STATUS_PENDING = 2;               // Awaiting gateway confirmation (customer redirected)
+  PAYMENT_STATUS_PROCESSING = 3;            // Gateway callback received — provider-side processing
+  PAYMENT_STATUS_SUCCESS = 4;               // Payment confirmed by provider validation API
+  PAYMENT_STATUS_FAILED = 5;               // Payment failed at provider or validation
+  PAYMENT_STATUS_REFUNDED = 6;             // Payment fully refunded
+  PAYMENT_STATUS_CANCELLED = 7;            // Payment cancelled by user before completion
+  PAYMENT_STATUS_VERIFIED = 8;             // Payment verified by server-side validation call
+  PAYMENT_STATUS_MANUAL_REVIEW_REQUIRED = 9; // Manual bank transfer — awaiting admin approval
+  PAYMENT_STATUS_RECEIPT_PENDING = 10;     // Verified — receipt generation in progress
+}
+
+// ManualReviewStatus tracks the manual review workflow for bank transfer payments.
+enum ManualReviewStatus {
+  MANUAL_REVIEW_STATUS_UNSPECIFIED = 0;
+  MANUAL_REVIEW_STATUS_NOT_REQUIRED = 1; // Gateway payment — no manual review needed
+  MANUAL_REVIEW_STATUS_PENDING = 2;      // Proof submitted — awaiting admin review
+  MANUAL_REVIEW_STATUS_APPROVED = 3;    // Admin approved — triggers policy issuance
+  MANUAL_REVIEW_STATUS_REJECTED = 4;    // Admin rejected — customer must resubmit
+}
+
+// TigerBeetle Account Ledger (not stored in PostgreSQL - managed by TigerBeetle)
+// This is for documentation purposes only
+message TigerBeetleAccount {
+  option (insuretech.common.v1.table) = {
+    table_name: "tigerbeetle_accounts"
+    schema_name: "payment_schema"
+    migration_order: 53
+    is_table: true
+    comment: "TigerBeetle account ledger tracking (reference table, actual ledger in TigerBeetle)"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string account_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "account_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Account UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:account_id;not null"
+
+  string tigerbeetle_account_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "tigerbeetle_account_id"
+      sql_type: "NUMERIC(39,0)"
+      not_null: true
+      unique: true
+      comment: "TigerBeetle account ID (128-bit stored as NUMERIC)"
+      index: {
+        index_name: "idx_tigerbeetle_accounts_tb_account_id"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:tigerbeetle_account_id;not null"
+
+  string user_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "user_id"
+      sql_type: "UUID"
+      comment: "Foreign key to users table (NULL for system accounts)"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_tigerbeetle_accounts_user_id"
+      }
+      index: {
+        index_name: "idx_tigerbeetle_accounts_user_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:user_id"
+
+  string account_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "account_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Account type: CUSTOMER, COMPANY, AGENT, PARTNER, COMMISSION"
+      index: {
+        index_name: "idx_tigerbeetle_accounts_account_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:account_type;not null"
+
+  int32 ledger_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "ledger_id"
+      sql_type: "INTEGER"
+      not_null: true
+      comment: "TigerBeetle ledger ID (for isolation)"
+    }
+  ];
+  // @inject_tag: gorm:"column:ledger_id;not null"
+
+  string currency = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "currency"
+      sql_type: "VARCHAR(3)"
+      not_null: true
+      default_value: "'BDT'"
+      comment: "Account currency"
+    }
+  ];
+  // @inject_tag: gorm:"column:currency;not null"
+
+  int64 balance = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "balance"
+      sql_type: "BIGINT"
+      not_null: true
+      default_value: "0"
+      comment: "Cached balance in paisa (synced from TigerBeetle)"
+    }
+  ];
+  // @inject_tag: gorm:"column:balance;not null"
+
+  google.protobuf.Timestamp balance_updated_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "balance_updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Last balance sync timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:balance_updated_at;serializer:proto_timestamp"
+
+  bool is_active = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+      comment: "Account active status"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  google.protobuf.Timestamp created_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+// PaymentRefund for cancelled policies or overpayments (payment transaction record)
+// Maps to 'refunds' table in payment_schema
+message PaymentRefund {
+  option (insuretech.common.v1.table) = {
+    table_name: "payment_refunds"
+    schema_name: "payment_schema"
+    migration_order: 54
+    is_table: true
+    comment: "Refund requests and processing"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string refund_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "refund_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Refund UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:refund_id;not null"
+
+  string payment_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to payments table (original payment)"
+      foreign_key: {
+        references_table: "payments"
+        references_column: "payment_id"
+        references_schema: "payment_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_refunds_payment_id"
+      }
+      index: {
+        index_name: "idx_refunds_payment_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:payment_id;not null"
+
+  string refund_payment_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "refund_payment_id"
+      sql_type: "UUID"
+      comment: "Foreign key to payments table (refund payment record)"
+      foreign_key: {
+        references_table: "payments"
+        references_column: "payment_id"
+        references_schema: "payment_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_refunds_refund_payment_id"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:refund_payment_id"
+
+  insuretech.common.v1.Money refund_amount = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "refund_amount"
+      sql_type: "BIGINT"
+      not_null: true
+      check_constraint: "refund_amount > 0"
+      comment: "Refund amount in paisa"
+    }
+  ];
+  // @inject_tag: gorm:"column:refund_amount;not null"
+
+  string reason = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "reason"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Reason for refund"
+    }
+  ];
+  // @inject_tag: gorm:"column:reason;not null"
+
+  PaymentRefundStatus status = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'PENDING'"
+      comment: "Refund status"
+      index: {
+        index_name: "idx_refunds_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string approved_by = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "approved_by"
+      sql_type: "UUID"
+      comment: "User ID who approved the refund"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_refunds_approved_by"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:approved_by"
+
+  google.protobuf.Timestamp approved_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "approved_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Refund approval timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp processed_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "processed_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Refund processing completion timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum PaymentRefundStatus {
+  PAYMENT_REFUND_STATUS_UNSPECIFIED = 0;
+  PAYMENT_REFUND_STATUS_PENDING = 1; // Awaiting approval
+  PAYMENT_REFUND_STATUS_APPROVED = 2; // Approved for processing
+  PAYMENT_REFUND_STATUS_PROCESSING = 3; // Being processed
+  PAYMENT_REFUND_STATUS_COMPLETED = 4; // Refund completed
+  PAYMENT_REFUND_STATUS_REJECTED = 5; // Refund rejected
+  PAYMENT_REFUND_STATUS_FAILED = 6; // Refund processing failed
+}
+

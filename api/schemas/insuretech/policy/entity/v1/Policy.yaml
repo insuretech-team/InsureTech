@@ -1,0 +1,129 @@
+Policy:
+  type: object
+  properties:
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:policy_id;not null"'
+    policy_number:
+      type: string
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    partner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:partner_id"'
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_id"'
+    quote_id:
+      type: string
+      description: "Link to underwriting quote (CG-2 fix)\n @inject_tag: gorm:\"column:quote_id\""
+    underwriting_decision_id:
+      type: string
+      description: "Link to underwriting decision (CG-2 fix)\n @inject_tag: gorm:\"\
+        column:underwriting_decision_id\""
+    status:
+      $ref: '#/components/schemas/PolicyStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:premium_amount;not null"'
+    sum_insured:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:sum_insured;not null"'
+    tenure_months:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:tenure_months;not null"'
+    start_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:start_date;not null;serializer:proto_timestamp"'
+    end_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:end_date;not null;serializer:proto_timestamp"'
+    issued_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:issued_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    policy_document_url:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_document_url"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+    nominees:
+      type: array
+      items:
+        $ref: '#/components/schemas/Nominee'
+        description: Nominees and Riders are stored in separate tables
+      description: Nominees and Riders are stored in separate tables
+    riders:
+      type: array
+      items:
+        $ref: '#/components/schemas/PolicyRider'
+    payment_frequency:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_frequency"'
+    vat_tax:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:vat_tax"'
+    service_fee:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:service_fee"'
+    total_payable:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:total_payable"'
+    payment_gateway_reference:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_gateway_reference"'
+    receipt_number:
+      type: string
+      description: '@inject_tag: gorm:"column:receipt_number"'
+    proposer_details:
+      $ref: '#/components/schemas/Applicant'
+    occupation_risk_class:
+      type: string
+      description: '@inject_tag: gorm:"column:occupation_risk_class"'
+    has_existing_policies:
+      type: boolean
+      description: '@inject_tag: gorm:"column:has_existing_policies"'
+    claims_history_summary:
+      type: string
+      description: '@inject_tag: gorm:"column:claims_history_summary"'
+    provider_name:
+      type: string
+      description: '@inject_tag: gorm:"column:provider_name"'
+    enrollment_start_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:enrollment_start_date;serializer:proto_timestamp"'
+    enrollment_end_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:enrollment_end_date;serializer:proto_timestamp"'
+    underwriting_data:
+      type: string
+      description: '@inject_tag: gorm:"column:underwriting_data"'
+    premium_currency:
+      type: string
+      description: "Currency companion fields for Money types (flattened storage)\n\
+        \ @inject_tag: gorm:\"column:premium_currency;not null\""
+    sum_insured_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:sum_insured_currency;not null"'
+  description: "Policy represents an insurance policy\n Maps to 'policies' table in\
+    \ insurance_schema"

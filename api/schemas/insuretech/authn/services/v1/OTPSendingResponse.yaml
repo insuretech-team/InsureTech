@@ -1,0 +1,21 @@
+OTPSendingResponse:
+  type: object
+  properties:
+    otp_id:
+      type: string
+    message:
+      type: string
+    expires_in_seconds:
+      type: integer
+      format: int32
+    sender_id:
+      type: string
+      description: Actual sender used (LABAIDINS or numeric)
+    cooldown_seconds:
+      type: integer
+      format: int32
+      description: Time before resend allowed
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for otp sending operation. Returns operation results
+    and status.

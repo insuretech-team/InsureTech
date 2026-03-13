@@ -1,0 +1,7 @@
+OrganisationRetrievalRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+  description: Request payload for retrieving organisation retrieval information.
+    May include filters and pagination parameters.

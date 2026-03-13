@@ -1,0 +1,19 @@
+OrganisationUpdateRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    name:
+      type: string
+    industry:
+      type: string
+    contact_email:
+      type: string
+    contact_phone:
+      type: string
+    address:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrganisationStatus'
+  description: Request payload for updating an existing organisation update. Contains
+    fields to be modified.

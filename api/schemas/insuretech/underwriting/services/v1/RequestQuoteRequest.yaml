@@ -1,0 +1,26 @@
+RequestQuoteRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    insurer_product_id:
+      type: string
+    sum_assured:
+      $ref: '#/components/schemas/Money'
+    term_years:
+      type: integer
+      format: int32
+    premium_payment_mode:
+      type: string
+      description: YEARLY, MONTHLY, etc.
+    rider_codes:
+      type: array
+      items:
+        type: string
+    applicant_age:
+      type: integer
+      format: int32
+    smoker:
+      type: boolean
+  description: Request payload for quote operation. Contains parameters required to
+    execute the operation.

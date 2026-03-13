@@ -1,0 +1,7 @@
+FraudRuleRetrievalResponse:
+  type: object
+  properties:
+    rule:
+      $ref: '#/components/schemas/FraudRule'
+  description: Response payload for fraud rule retrieval operation. Returns operation
+    results and status.

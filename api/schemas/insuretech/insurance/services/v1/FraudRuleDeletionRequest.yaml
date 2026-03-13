@@ -1,0 +1,7 @@
+FraudRuleDeletionRequest:
+  type: object
+  properties:
+    fraud_rule_id:
+      type: string
+  description: Request payload for fraud rule deletion operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,64 @@
+ApiKey:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:api_key_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    key_hash:
+      type: string
+      description: '@inject_tag: gorm:"column:key_hash;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-log-redacted: true
+      x-data-purpose: API authentication
+      x-unique: true
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    owner_type:
+      $ref: '#/components/schemas/ApiKeyOwnerType'
+      description: '@inject_tag: gorm:"column:owner_type;not null;serializer:proto_enum"'
+    owner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:owner_id;not null"'
+    scopes:
+      type: array
+      items:
+        type: string
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ApiKeyStatus'
+      x-database-default: ACTIVE
+    rate_limit_per_minute:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:rate_limit_per_minute;not null"'
+      default: 60
+    expires_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"'
+    last_used_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_used_at;serializer:proto_timestamp"'
+    ip_whitelist:
+      type: array
+      items:
+        type: string
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: API Key entity for insurer/partner authentication
+  required:
+  - id
+  - key_hash
+  - name
+  - owner_type
+  - owner_id
+  - status
+  - rate_limit_per_minute
+  - audit_info

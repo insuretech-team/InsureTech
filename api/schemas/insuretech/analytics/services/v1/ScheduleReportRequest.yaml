@@ -1,0 +1,7 @@
+ScheduleReportRequest:
+  type: object
+  properties:
+    report:
+      $ref: '#/components/schemas/Report'
+  description: Request payload for schedule report operation. Contains parameters
+    required to execute the operation.

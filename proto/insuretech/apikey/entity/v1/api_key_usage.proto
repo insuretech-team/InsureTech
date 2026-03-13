@@ -1,0 +1,138 @@
+syntax = "proto3";
+
+package insuretech.apikey.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/apikey/entity/v1;apikeyv1";
+
+// API usage tracking (FR-207)
+message ApiKeyUsage {
+  option (insuretech.common.v1.table) = {
+    table_name: "api_key_usage"
+    schema_name: "authn_schema"
+    migration_order: 66
+    is_table: true
+    audit_fields: false
+    comment: "API key usage logs for tracking and billing"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "usage_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:usage_id;not null"
+  
+  string api_key_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "api_key_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "api_keys"
+      references_column: "api_key_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_api_key_usage_key_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:api_key_id;not null"
+  
+  string endpoint = 3 [(insuretech.common.v1.column) = {
+    column_name: "endpoint"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+    index: {
+      index_name: "idx_api_key_usage_endpoint"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:endpoint;not null"
+  
+  string http_method = 4 [(insuretech.common.v1.column) = {
+    column_name: "http_method"
+    sql_type: "VARCHAR(10)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:http_method;not null"
+  
+  int32 status_code = 5 [(insuretech.common.v1.column) = {
+    column_name: "status_code"
+    sql_type: "INTEGER"
+    not_null: true
+    index: {
+      index_name: "idx_api_key_usage_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status_code;not null"
+  
+  int32 response_time_ms = 6 [(insuretech.common.v1.column) = {
+    column_name: "response_time_ms"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:response_time_ms"
+  
+  string request_ip = 7 [(insuretech.common.v1.column) = {
+    column_name: "request_ip"
+    sql_type: "INET"
+    index: {
+      index_name: "idx_api_key_usage_ip"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:request_ip"
+  
+  string user_agent = 8 [(insuretech.common.v1.column) = {
+    column_name: "user_agent"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:user_agent"
+  
+  string request_payload = 9 [(insuretech.common.v1.column) = {
+    column_name: "request_payload"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Request body (for audit)"
+  }];
+  // @inject_tag: gorm:"column:request_payload"
+  
+  string response_payload = 10 [(insuretech.common.v1.column) = {
+    column_name: "response_payload"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Response body (for audit)"
+  }];
+  // @inject_tag: gorm:"column:response_payload"
+  
+  string trace_id = 11 [(insuretech.common.v1.column) = {
+    column_name: "trace_id"
+    sql_type: "VARCHAR(64)"
+    index: {
+      index_name: "idx_api_key_usage_trace_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+    comment: "Distributed tracing ID (FR-208)"
+  }];
+  // @inject_tag: gorm:"column:trace_id"
+  
+  google.protobuf.Timestamp timestamp = 12 [(insuretech.common.v1.column) = {
+    column_name: "timestamp"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+    index: {
+      index_name: "idx_api_key_usage_timestamp"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+}
+
+

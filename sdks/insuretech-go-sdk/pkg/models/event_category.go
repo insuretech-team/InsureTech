@@ -1,0 +1,13 @@
+package models
+
+// EventCategory represents a event_category
+type EventCategory string
+
+// EventCategory values
+const (
+	EventCategoryEVENTCATEGORYUNSPECIFIED EventCategory = "EVENT_CATEGORY_UNSPECIFIED"
+	EventCategoryEVENTCATEGORYSECURITY  = "EVENT_CATEGORY_SECURITY"
+	EventCategoryEVENTCATEGORYCOMPLIANCE  = "EVENT_CATEGORY_COMPLIANCE"
+	EventCategoryEVENTCATEGORYBUSINESS  = "EVENT_CATEGORY_BUSINESS"
+	EventCategoryEVENTCATEGORYTECHNICAL  = "EVENT_CATEGORY_TECHNICAL"
+)

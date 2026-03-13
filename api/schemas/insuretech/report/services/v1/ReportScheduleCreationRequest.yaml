@@ -1,0 +1,20 @@
+ReportScheduleCreationRequest:
+  type: object
+  properties:
+    report_definition_id:
+      type: string
+    name:
+      type: string
+    frequency:
+      type: string
+    cron_expression:
+      type: string
+    parameters:
+      type: object
+      description: 'CG-7: Typed report parameters'
+    recipients:
+      type: array
+      items:
+        type: string
+  description: Request payload for creating a new report schedule creation. Contains
+    all required fields and optional parameters for initialization.

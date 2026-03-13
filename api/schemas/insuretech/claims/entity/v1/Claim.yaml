@@ -1,0 +1,114 @@
+Claim:
+  type: object
+  properties:
+    claim_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:claim_id;not null"'
+    claim_number:
+      type: string
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    status:
+      $ref: '#/components/schemas/ClaimStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    type:
+      $ref: '#/components/schemas/ClaimType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    claimed_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:claimed_amount;not null"'
+    approved_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:approved_amount"'
+    settled_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:settled_amount"'
+    incident_date:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:incident_date;not null;serializer:proto_timestamp\"\
+        \n null;serializer:proto_timestamp\""
+    incident_description:
+      type: string
+      description: '@inject_tag: gorm:"column:incident_description;not null"'
+    submitted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:submitted_at;not null;serializer:proto_timestamp"'
+    approved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"'
+    settled_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:settled_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    rejection_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:rejection_reason"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+    documents:
+      type: array
+      items:
+        $ref: '#/components/schemas/ClaimDocument'
+        description: Related entities stored in separate tables
+      description: Related entities stored in separate tables
+    approvals:
+      type: array
+      items:
+        $ref: '#/components/schemas/ClaimApproval'
+    fraud_check:
+      $ref: '#/components/schemas/FraudCheckResult'
+    place_of_incident:
+      type: string
+      description: '@inject_tag: gorm:"column:place_of_incident"'
+    bank_details_for_payout:
+      type: string
+      description: '@inject_tag: gorm:"column:bank_details_for_payout"'
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+    appeal_option_available:
+      type: boolean
+      description: '@inject_tag: gorm:"column:appeal_option_available"'
+    in_app_messages:
+      type: string
+      description: '@inject_tag: gorm:"column:in_app_messages"'
+    processing_type:
+      $ref: '#/components/schemas/ClaimProcessingType'
+      description: '@inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"'
+    deductible_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:deductible_amount"'
+    co_pay_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:co_pay_amount"'
+    processor_notes:
+      type: string
+      description: '@inject_tag: gorm:"column:processor_notes"'
+    claimed_currency:
+      type: string
+      description: "Currency companion fields for Money types (flattened storage)\n\
+        \ @inject_tag: gorm:\"column:claimed_currency;not null\""
+    approved_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_currency;not null"'
+    settled_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:settled_currency;not null"'
+  description: "Claim represents an insurance claim\n Maps to 'claims' table in claims_schema"

@@ -1,0 +1,8 @@
+RenewalType:
+  type: string
+  enum:
+  - RENEWAL_TYPE_UNSPECIFIED
+  - RENEWAL_TYPE_AUTOMATIC
+  - RENEWAL_TYPE_MANUAL
+  description: 'Type categorization for renewal. Options: RENEWAL_TYPE_UNSPECIFIED,
+    RENEWAL_TYPE_AUTOMATIC, RENEWAL_TYPE_MANUAL.'

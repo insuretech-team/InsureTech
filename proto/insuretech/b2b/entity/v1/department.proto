@@ -1,0 +1,82 @@
+syntax = "proto3";
+
+package insuretech.b2b.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1;b2bv1";
+option csharp_namespace = "Insuretech.B2b.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Department represents a corporate department in the B2B portal
+message Department {
+  option (insuretech.common.v1.table) = {
+    table_name : "departments"
+    schema_name : "b2b_schema"
+    migration_order : 91
+    is_table : true
+    comment : "B2B Departments"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string department_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "department_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:department_id;not null"
+
+  string name = 2
+      [ (insuretech.common.v1.column) =
+            {column_name : "name" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:name;not null"
+
+  string business_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "business_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to business profile"
+  } ];
+  // @inject_tag: gorm:"column:business_id;not null"
+
+  int32 employee_no = 4 [ (insuretech.common.v1.column) = {
+    column_name : "employee_no"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+  } ];
+  // @inject_tag: gorm:"column:employee_no;not null"
+
+  insuretech.common.v1.Money total_premium = 5;
+
+  google.protobuf.Timestamp created_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}

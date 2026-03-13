@@ -1,0 +1,15 @@
+MyTasksListingRequest:
+  type: object
+  properties:
+    status:
+      type: string
+    priority:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing my tasks listing items. Supports filtering,
+    sorting, and pagination.

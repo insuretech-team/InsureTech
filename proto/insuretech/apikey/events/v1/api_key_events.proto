@@ -1,0 +1,48 @@
+syntax = "proto3";
+
+package insuretech.apikey.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/apikey/events/v1;apikeyeventsv1";
+
+// Kafka event: API key created
+message ApiKeyCreatedEvent {
+  string event_id = 1;
+  string api_key_id = 2;
+  string owner_type = 3;
+  string owner_id = 4;
+  repeated string scopes = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: API key revoked
+message ApiKeyRevokedEvent {
+  string event_id = 1;
+  string api_key_id = 2;
+  string reason = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Kafka event: Rate limit exceeded
+message ApiKeyRateLimitExceededEvent {
+  string event_id = 1;
+  string api_key_id = 2;
+  string owner_id = 3;
+  string endpoint = 4;
+  int32 requests_count = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: API key expired
+message ApiKeyExpiredEvent {
+  string event_id = 1;
+  string api_key_id = 2;
+  string owner_id = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

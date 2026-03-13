@@ -1,0 +1,44 @@
+TokenValidationResponse:
+  type: object
+  properties:
+    valid:
+      type: boolean
+    user_id:
+      type: string
+    session_id:
+      type: string
+      description: validated session ID
+    session_type:
+      type: string
+      description: SERVER_SIDE | JWT | API_KEY
+    user_type:
+      type: string
+      description: B2C_CUSTOMER | AGENT | BUSINESS_BENEFICIARY | SYSTEM_USER | PARTNER
+        | REGULATOR
+    portal:
+      type: string
+      description: system | business | b2b | partner | agent | regulator
+    tenant_id:
+      type: string
+      description: tenant UUID
+    token_id:
+      type: string
+      description: "jti \u2014 for token revocation lookup"
+    device_id:
+      type: string
+      description: device binding fingerprint
+    expires_at:
+      type: string
+      format: date-time
+      description: token/session expiry
+    error:
+      $ref: '#/components/schemas/Error'
+    api_key_scopes:
+      type: array
+      items:
+        type: string
+        description: API key scopes (if session_type == API_KEY)
+      description: API key scopes (if session_type == API_KEY)
+  description: "ValidateTokenResponse \u2014 AuthN only. No roles/permissions here.\r\
+    \n Fine-grained AuthZ (PERM model, Casbin) is handled by the AuthZ service.\r\n\
+    \ The gateway calls AuthZ.CheckAccess after receiving this response."

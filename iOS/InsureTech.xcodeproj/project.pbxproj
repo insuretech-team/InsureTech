@@ -1,0 +1,671 @@
+// !$*UTF8*$!
+{
+	archiveVersion = 1;
+	classes = {
+	};
+	objectVersion = 77;
+	objects = {
+
+/* Begin PBXBuildFile section */
+		0E1712652F387E220032C322 /* SWAPNA_SHAHOS in Frameworks */ = {isa = PBXBuildFile; productRef = 0E1712642F387E220032C322 /* SWAPNA_SHAHOS */; };
+		0E1712672F3891730032C322 /* SWAPNA_SHAHOS in Frameworks */ = {isa = PBXBuildFile; productRef = 0E1712662F3891730032C322 /* SWAPNA_SHAHOS */; };
+		0E1712692F408C970032C322 /* SWAPNA_SHAHOS.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1712682F408C970032C322 /* SWAPNA_SHAHOS.swift */; };
+		0E17126B2F408CF10032C322 /* warning.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E17126A2F408CF10032C322 /* warning.png */; };
+		0E17126D2F408D1B0032C322 /* success.png in Resources */ = {isa = PBXBuildFile; fileRef = 0E17126C2F408D1B0032C322 /* success.png */; };
+		0E17126F2F41B7EB0032C322 /* InsuranceCategory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E17126E2F41B7EB0032C322 /* InsuranceCategory.swift */; };
+		0E1712712F41B8060032C322 /* File.swift in Resources */ = {isa = PBXBuildFile; fileRef = 0E1712702F41B8060032C322 /* File.swift */; };
+		0E1712742F41B8E20032C322 /* InsuranceCategoryCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1712732F41B8E20032C322 /* InsuranceCategoryCell.swift */; };
+		0E1712762F41B8ED0032C322 /* PoliciesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1712752F41B8ED0032C322 /* PoliciesCell.swift */; };
+		0E1712782F41B8FB0032C322 /* FeaturedPoliciesCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1712772F41B8FB0032C322 /* FeaturedPoliciesCell.swift */; };
+		0E17127B2F41F4DD0032C322 /* ProfileViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E17127A2F41F4D90032C322 /* ProfileViewController.swift */; };
+		0E17127D2F41F50C0032C322 /* Profile.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E17127C2F41F50C0032C322 /* Profile.storyboard */; };
+		0E1FBDC02F1CF0B100D20C7F /* FLVETestVCx.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDBF2F1CF0A100D20C7F /* FLVETestVCx.swift */; };
+		0E1FBDC22F1CF2E600D20C7F /* EKYCChallenge.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDC12F1CF2E600D20C7F /* EKYCChallenge.swift */; };
+		0E1FBDC42F1CF2F200D20C7F /* FLVEError.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDC32F1CF2F200D20C7F /* FLVEError.swift */; };
+		0E1FBDC62F1CF30200D20C7F /* FLVEAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDC52F1CF30200D20C7F /* FLVEAPI.swift */; };
+		0E1FBDC82F1E18FB00D20C7F /* DebugHealthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDC72F1E18FB00D20C7F /* DebugHealthResponse.swift */; };
+		0E1FBDCA2F1E55A600D20C7F /* HealthResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDC92F1E55A600D20C7F /* HealthResponse.swift */; };
+		0E1FBDCE2F1F587400D20C7F /* RemoteAPIConfig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDCD2F1F587400D20C7F /* RemoteAPIConfig.swift */; };
+		0E1FBDD12F1FAB7800D20C7F /* RemoteConfigService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDD02F1FAB7800D20C7F /* RemoteConfigService.swift */; };
+		0E1FBDD32F1FAB8D00D20C7F /* FLVETestVC.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDD22F1FAB8D00D20C7F /* FLVETestVC.swift */; };
+		0E1FBDD72F1FAC8100D20C7F /* FLVEAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDD62F1FAC8100D20C7F /* FLVEAPIClient.swift */; };
+		0E1FBDD92F1FACA100D20C7F /* FLVEResponse.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDD82F1FACA100D20C7F /* FLVEResponse.swift */; };
+		0E1FBDDB2F1FACAF00D20C7F /* FaceOverlayView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDDA2F1FACAF00D20C7F /* FaceOverlayView.swift */; };
+		0E1FBDDC2F1FAE4E00D20C7F /* CMSampleBuffer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E1FBDD42F1FAC1300D20C7F /* CMSampleBuffer.swift */; };
+		0E4FF36C2D2FDB82003A65D0 /* SplashViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E4FF36B2D2FDB72003A65D0 /* SplashViewController.swift */; };
+		0E5D208F2F0A371D000FAE9A /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D208E2F0A371B000FAE9A /* AppDelegate.swift */; };
+		0E5D20912F0A39BA000FAE9A /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E5D20902F0A39BA000FAE9A /* Main.storyboard */; };
+		0E5D20932F0A93A3000FAE9A /* OTPTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D20922F0A93A2000FAE9A /* OTPTextField.swift */; };
+		0E5D20982F0BB7CD000FAE9A /* FaceDetectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D20972F0BB7CD000FAE9A /* FaceDetectionViewController.swift */; };
+		0E5D209A2F0BBD66000FAE9A /* FaceEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D20992F0BBD66000FAE9A /* FaceEntry.swift */; };
+		0E5D209C2F0BBD83000FAE9A /* FaceListViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D209B2F0BBD83000FAE9A /* FaceListViewController.swift */; };
+		0E5D209E2F0BBDA0000FAE9A /* FaceCaptureViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E5D209D2F0BBDA0000FAE9A /* FaceCaptureViewController.swift */; };
+		0E77971E2CFD89D40012180B /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 0E7797152CFD89D40012180B /* Assets.xcassets */; };
+		0E7797202CFD89D40012180B /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E7797182CFD89D40012180B /* LaunchScreen.storyboard */; };
+		0E7797212CFD89D40012180B /* Main2.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0E77971A2CFD89D40012180B /* Main2.storyboard */; };
+		0E7797232CFD89D40012180B /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E77971B2CFD89D40012180B /* SceneDelegate.swift */; };
+		0E7797242CFD89D40012180B /* LoginViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0E77971C2CFD89D40012180B /* LoginViewController.swift */; };
+		0EA4B2392F2F3BCF007438C6 /* IQKeyboardManagerSwift in Frameworks */ = {isa = PBXBuildFile; productRef = 0EA4B2382F2F3BCF007438C6 /* IQKeyboardManagerSwift */; };
+		0EA4B23C2F2F3CD9007438C6 /* SVProgressHUD in Frameworks */ = {isa = PBXBuildFile; productRef = 0EA4B23B2F2F3CD9007438C6 /* SVProgressHUD */; };
+		0ED944D82F0CD659007267E5 /* Home.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 0ED944D72F0CD659007267E5 /* Home.storyboard */; };
+		0ED944DA2F0CD6B1007267E5 /* HomeViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0ED944D92F0CD6B1007267E5 /* HomeViewController.swift */; };
+		0EE98CB12D2D25C00028154F /* OTPViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 0EE98CB02D2D25B30028154F /* OTPViewController.swift */; };
+/* End PBXBuildFile section */
+
+/* Begin PBXFileReference section */
+		0E1712682F408C970032C322 /* SWAPNA_SHAHOS.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SWAPNA_SHAHOS.swift; sourceTree = "<group>"; };
+		0E17126A2F408CF10032C322 /* warning.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = warning.png; sourceTree = "<group>"; };
+		0E17126C2F408D1B0032C322 /* success.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = success.png; sourceTree = "<group>"; };
+		0E17126E2F41B7EB0032C322 /* InsuranceCategory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsuranceCategory.swift; sourceTree = "<group>"; };
+		0E1712702F41B8060032C322 /* File.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = File.swift; sourceTree = "<group>"; };
+		0E1712732F41B8E20032C322 /* InsuranceCategoryCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InsuranceCategoryCell.swift; sourceTree = "<group>"; };
+		0E1712752F41B8ED0032C322 /* PoliciesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PoliciesCell.swift; sourceTree = "<group>"; };
+		0E1712772F41B8FB0032C322 /* FeaturedPoliciesCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FeaturedPoliciesCell.swift; sourceTree = "<group>"; };
+		0E17127A2F41F4D90032C322 /* ProfileViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileViewController.swift; sourceTree = "<group>"; };
+		0E17127C2F41F50C0032C322 /* Profile.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Profile.storyboard; sourceTree = "<group>"; };
+		0E1FBDBF2F1CF0A100D20C7F /* FLVETestVCx.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVETestVCx.swift; sourceTree = "<group>"; };
+		0E1FBDC12F1CF2E600D20C7F /* EKYCChallenge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EKYCChallenge.swift; sourceTree = "<group>"; };
+		0E1FBDC32F1CF2F200D20C7F /* FLVEError.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVEError.swift; sourceTree = "<group>"; };
+		0E1FBDC52F1CF30200D20C7F /* FLVEAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVEAPI.swift; sourceTree = "<group>"; };
+		0E1FBDC72F1E18FB00D20C7F /* DebugHealthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DebugHealthResponse.swift; sourceTree = "<group>"; };
+		0E1FBDC92F1E55A600D20C7F /* HealthResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HealthResponse.swift; sourceTree = "<group>"; };
+		0E1FBDCD2F1F587400D20C7F /* RemoteAPIConfig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteAPIConfig.swift; sourceTree = "<group>"; };
+		0E1FBDD02F1FAB7800D20C7F /* RemoteConfigService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RemoteConfigService.swift; sourceTree = "<group>"; };
+		0E1FBDD22F1FAB8D00D20C7F /* FLVETestVC.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVETestVC.swift; sourceTree = "<group>"; };
+		0E1FBDD42F1FAC1300D20C7F /* CMSampleBuffer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CMSampleBuffer.swift; sourceTree = "<group>"; };
+		0E1FBDD62F1FAC8100D20C7F /* FLVEAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVEAPIClient.swift; sourceTree = "<group>"; };
+		0E1FBDD82F1FACA100D20C7F /* FLVEResponse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FLVEResponse.swift; sourceTree = "<group>"; };
+		0E1FBDDA2F1FACAF00D20C7F /* FaceOverlayView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceOverlayView.swift; sourceTree = "<group>"; };
+		0E4FF36B2D2FDB72003A65D0 /* SplashViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SplashViewController.swift; sourceTree = "<group>"; };
+		0E5D208E2F0A371B000FAE9A /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
+		0E5D20902F0A39BA000FAE9A /* Main.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Main.storyboard; sourceTree = "<group>"; };
+		0E5D20922F0A93A2000FAE9A /* OTPTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPTextField.swift; sourceTree = "<group>"; };
+		0E5D20972F0BB7CD000FAE9A /* FaceDetectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceDetectionViewController.swift; sourceTree = "<group>"; };
+		0E5D20992F0BBD66000FAE9A /* FaceEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceEntry.swift; sourceTree = "<group>"; };
+		0E5D209B2F0BBD83000FAE9A /* FaceListViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceListViewController.swift; sourceTree = "<group>"; };
+		0E5D209D2F0BBDA0000FAE9A /* FaceCaptureViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FaceCaptureViewController.swift; sourceTree = "<group>"; };
+		0E7796D92CFD89080012180B /* InsureTech.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = InsureTech.app; sourceTree = BUILT_PRODUCTS_DIR; };
+		0E7797152CFD89D40012180B /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		0E7797162CFD89D40012180B /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		0E7797172CFD89D40012180B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
+		0E7797192CFD89D40012180B /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/Main2.storyboard; sourceTree = "<group>"; };
+		0E77971B2CFD89D40012180B /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
+		0E77971C2CFD89D40012180B /* LoginViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoginViewController.swift; sourceTree = "<group>"; };
+		0ED944D72F0CD659007267E5 /* Home.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = Home.storyboard; sourceTree = "<group>"; };
+		0ED944D92F0CD6B1007267E5 /* HomeViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeViewController.swift; sourceTree = "<group>"; };
+		0EE98CB02D2D25B30028154F /* OTPViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OTPViewController.swift; sourceTree = "<group>"; };
+/* End PBXFileReference section */
+
+/* Begin PBXFrameworksBuildPhase section */
+		0E7796D62CFD89080012180B /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E1712672F3891730032C322 /* SWAPNA_SHAHOS in Frameworks */,
+				0E1712652F387E220032C322 /* SWAPNA_SHAHOS in Frameworks */,
+				0EA4B23C2F2F3CD9007438C6 /* SVProgressHUD in Frameworks */,
+				0EA4B2392F2F3BCF007438C6 /* IQKeyboardManagerSwift in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXFrameworksBuildPhase section */
+
+/* Begin PBXGroup section */
+		0E00EB482D0EFF5F00F90236 /* Resources */ = {
+			isa = PBXGroup;
+			children = (
+				0E5D208E2F0A371B000FAE9A /* AppDelegate.swift */,
+				0E1712682F408C970032C322 /* SWAPNA_SHAHOS.swift */,
+				0E7797152CFD89D40012180B /* Assets.xcassets */,
+				0E17126C2F408D1B0032C322 /* success.png */,
+				0E17126A2F408CF10032C322 /* warning.png */,
+				0E7797182CFD89D40012180B /* LaunchScreen.storyboard */,
+				0E77971A2CFD89D40012180B /* Main2.storyboard */,
+				0E77971B2CFD89D40012180B /* SceneDelegate.swift */,
+			);
+			path = Resources;
+			sourceTree = "<group>";
+		};
+		0E1712722F41B8C40032C322 /* HomeModel */ = {
+			isa = PBXGroup;
+			children = (
+				0E17126E2F41B7EB0032C322 /* InsuranceCategory.swift */,
+				0E1712702F41B8060032C322 /* File.swift */,
+				0E1712732F41B8E20032C322 /* InsuranceCategoryCell.swift */,
+				0E1712752F41B8ED0032C322 /* PoliciesCell.swift */,
+				0E1712772F41B8FB0032C322 /* FeaturedPoliciesCell.swift */,
+			);
+			path = HomeModel;
+			sourceTree = "<group>";
+		};
+		0E1712792F41F4C80032C322 /* ProfileModule */ = {
+			isa = PBXGroup;
+			children = (
+				0E17127A2F41F4D90032C322 /* ProfileViewController.swift */,
+				0E17127C2F41F50C0032C322 /* Profile.storyboard */,
+			);
+			path = ProfileModule;
+			sourceTree = "<group>";
+		};
+		0E1FBDBE2F1CF09600D20C7F /* FLVE */ = {
+			isa = PBXGroup;
+			children = (
+				0E1FBDBF2F1CF0A100D20C7F /* FLVETestVCx.swift */,
+				0E1FBDCD2F1F587400D20C7F /* RemoteAPIConfig.swift */,
+				0E1FBDC72F1E18FB00D20C7F /* DebugHealthResponse.swift */,
+				0E1FBDC92F1E55A600D20C7F /* HealthResponse.swift */,
+				0E1FBDC12F1CF2E600D20C7F /* EKYCChallenge.swift */,
+				0E1FBDC32F1CF2F200D20C7F /* FLVEError.swift */,
+				0E1FBDC52F1CF30200D20C7F /* FLVEAPI.swift */,
+			);
+			path = FLVE;
+			sourceTree = "<group>";
+		};
+		0E1FBDCF2F1FAB6E00D20C7F /* Test */ = {
+			isa = PBXGroup;
+			children = (
+				0E1FBDD22F1FAB8D00D20C7F /* FLVETestVC.swift */,
+				0E1FBDD02F1FAB7800D20C7F /* RemoteConfigService.swift */,
+				0E1FBDD82F1FACA100D20C7F /* FLVEResponse.swift */,
+				0E1FBDDA2F1FACAF00D20C7F /* FaceOverlayView.swift */,
+				0E1FBDD42F1FAC1300D20C7F /* CMSampleBuffer.swift */,
+				0E1FBDD62F1FAC8100D20C7F /* FLVEAPIClient.swift */,
+			);
+			path = Test;
+			sourceTree = "<group>";
+		};
+		0E5D20952F0A9C4B000FAE9A /* Model Class */ = {
+			isa = PBXGroup;
+			children = (
+				0E5D20922F0A93A2000FAE9A /* OTPTextField.swift */,
+			);
+			path = "Model Class";
+			sourceTree = "<group>";
+		};
+		0E5D20962F0BB7B9000FAE9A /* JoyTest */ = {
+			isa = PBXGroup;
+			children = (
+				0E5D20972F0BB7CD000FAE9A /* FaceDetectionViewController.swift */,
+				0E5D20992F0BBD66000FAE9A /* FaceEntry.swift */,
+				0E5D209B2F0BBD83000FAE9A /* FaceListViewController.swift */,
+				0E5D209D2F0BBDA0000FAE9A /* FaceCaptureViewController.swift */,
+			);
+			path = JoyTest;
+			sourceTree = "<group>";
+		};
+		0E7796D02CFD89080012180B = {
+			isa = PBXGroup;
+			children = (
+				0E77971D2CFD89D40012180B /* InsureTech */,
+				0E7796DA2CFD89080012180B /* Products */,
+			);
+			sourceTree = "<group>";
+		};
+		0E7796DA2CFD89080012180B /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				0E7796D92CFD89080012180B /* InsureTech.app */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		0E77971D2CFD89D40012180B /* InsureTech */ = {
+			isa = PBXGroup;
+			children = (
+				0E1712792F41F4C80032C322 /* ProfileModule */,
+				0E1FBDCF2F1FAB6E00D20C7F /* Test */,
+				0E1FBDBE2F1CF09600D20C7F /* FLVE */,
+				0E7797272CFDB5450012180B /* Authentication */,
+				0ED944D62F0CD626007267E5 /* HomeModule */,
+				0E7797162CFD89D40012180B /* Info.plist */,
+				0E5D20962F0BB7B9000FAE9A /* JoyTest */,
+				0E00EB482D0EFF5F00F90236 /* Resources */,
+			);
+			path = InsureTech;
+			sourceTree = "<group>";
+		};
+		0E7797272CFDB5450012180B /* Authentication */ = {
+			isa = PBXGroup;
+			children = (
+				0E77971C2CFD89D40012180B /* LoginViewController.swift */,
+				0E5D20902F0A39BA000FAE9A /* Main.storyboard */,
+				0E5D20952F0A9C4B000FAE9A /* Model Class */,
+				0EE98CB02D2D25B30028154F /* OTPViewController.swift */,
+				0E4FF36B2D2FDB72003A65D0 /* SplashViewController.swift */,
+			);
+			path = Authentication;
+			sourceTree = "<group>";
+		};
+		0ED944D62F0CD626007267E5 /* HomeModule */ = {
+			isa = PBXGroup;
+			children = (
+				0ED944D72F0CD659007267E5 /* Home.storyboard */,
+				0ED944D92F0CD6B1007267E5 /* HomeViewController.swift */,
+				0E1712722F41B8C40032C322 /* HomeModel */,
+			);
+			path = HomeModule;
+			sourceTree = "<group>";
+		};
+/* End PBXGroup section */
+
+/* Begin PBXNativeTarget section */
+		0E7796D82CFD89080012180B /* InsureTech */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 0E7796EC2CFD890B0012180B /* Build configuration list for PBXNativeTarget "InsureTech" */;
+			buildPhases = (
+				0E7796D52CFD89080012180B /* Sources */,
+				0E7796D62CFD89080012180B /* Frameworks */,
+				0E7796D72CFD89080012180B /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = InsureTech;
+			productName = oneTapService;
+			productReference = 0E7796D92CFD89080012180B /* InsureTech.app */;
+			productType = "com.apple.product-type.application";
+		};
+/* End PBXNativeTarget section */
+
+/* Begin PBXProject section */
+		0E7796D12CFD89080012180B /* Project object */ = {
+			isa = PBXProject;
+			attributes = {
+				BuildIndependentTargetsInParallel = 1;
+				LastSwiftUpdateCheck = 1610;
+				LastUpgradeCheck = 1610;
+				TargetAttributes = {
+					0E7796D82CFD89080012180B = {
+						CreatedOnToolsVersion = 16.1;
+					};
+				};
+			};
+			buildConfigurationList = 0E7796D42CFD89080012180B /* Build configuration list for PBXProject "InsureTech" */;
+			developmentRegion = en;
+			hasScannedForEncodings = 0;
+			knownRegions = (
+				en,
+				Base,
+			);
+			mainGroup = 0E7796D02CFD89080012180B;
+			minimizedProjectReferenceProxies = 1;
+			packageReferences = (
+				0EA4B2362F2F36DF007438C6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */,
+				0EA4B2372F2F3BCF007438C6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */,
+				0EA4B23A2F2F3CD9007438C6 /* XCRemoteSwiftPackageReference "SVProgressHUD" */,
+				0E1712632F387E220032C322 /* XCRemoteSwiftPackageReference "SWAPNA_SHAHOS" */,
+			);
+			preferredProjectObjectVersion = 77;
+			productRefGroup = 0E7796DA2CFD89080012180B /* Products */;
+			projectDirPath = "";
+			projectRoot = "";
+			targets = (
+				0E7796D82CFD89080012180B /* InsureTech */,
+			);
+		};
+/* End PBXProject section */
+
+/* Begin PBXResourcesBuildPhase section */
+		0E7796D72CFD89080012180B /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0ED944D82F0CD659007267E5 /* Home.storyboard in Resources */,
+				0E77971E2CFD89D40012180B /* Assets.xcassets in Resources */,
+				0E17126B2F408CF10032C322 /* warning.png in Resources */,
+				0E5D20912F0A39BA000FAE9A /* Main.storyboard in Resources */,
+				0E7797202CFD89D40012180B /* LaunchScreen.storyboard in Resources */,
+				0E7797212CFD89D40012180B /* Main2.storyboard in Resources */,
+				0E17127D2F41F50C0032C322 /* Profile.storyboard in Resources */,
+				0E1712712F41B8060032C322 /* File.swift in Resources */,
+				0E17126D2F408D1B0032C322 /* success.png in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXResourcesBuildPhase section */
+
+/* Begin PBXSourcesBuildPhase section */
+		0E7796D52CFD89080012180B /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				0E1712692F408C970032C322 /* SWAPNA_SHAHOS.swift in Sources */,
+				0E1FBDC42F1CF2F200D20C7F /* FLVEError.swift in Sources */,
+				0E17126F2F41B7EB0032C322 /* InsuranceCategory.swift in Sources */,
+				0E1FBDCA2F1E55A600D20C7F /* HealthResponse.swift in Sources */,
+				0E1FBDD92F1FACA100D20C7F /* FLVEResponse.swift in Sources */,
+				0E1FBDD12F1FAB7800D20C7F /* RemoteConfigService.swift in Sources */,
+				0E1FBDD72F1FAC8100D20C7F /* FLVEAPIClient.swift in Sources */,
+				0E1712782F41B8FB0032C322 /* FeaturedPoliciesCell.swift in Sources */,
+				0E5D208F2F0A371D000FAE9A /* AppDelegate.swift in Sources */,
+				0EE98CB12D2D25C00028154F /* OTPViewController.swift in Sources */,
+				0E1712762F41B8ED0032C322 /* PoliciesCell.swift in Sources */,
+				0E1FBDC22F1CF2E600D20C7F /* EKYCChallenge.swift in Sources */,
+				0E17127B2F41F4DD0032C322 /* ProfileViewController.swift in Sources */,
+				0E1FBDD32F1FAB8D00D20C7F /* FLVETestVC.swift in Sources */,
+				0E5D209A2F0BBD66000FAE9A /* FaceEntry.swift in Sources */,
+				0E4FF36C2D2FDB82003A65D0 /* SplashViewController.swift in Sources */,
+				0E1FBDCE2F1F587400D20C7F /* RemoteAPIConfig.swift in Sources */,
+				0E7797232CFD89D40012180B /* SceneDelegate.swift in Sources */,
+				0E5D209C2F0BBD83000FAE9A /* FaceListViewController.swift in Sources */,
+				0E1FBDC02F1CF0B100D20C7F /* FLVETestVCx.swift in Sources */,
+				0E1712742F41B8E20032C322 /* InsuranceCategoryCell.swift in Sources */,
+				0E5D20982F0BB7CD000FAE9A /* FaceDetectionViewController.swift in Sources */,
+				0E5D209E2F0BBDA0000FAE9A /* FaceCaptureViewController.swift in Sources */,
+				0E1FBDDC2F1FAE4E00D20C7F /* CMSampleBuffer.swift in Sources */,
+				0E1FBDC82F1E18FB00D20C7F /* DebugHealthResponse.swift in Sources */,
+				0E7797242CFD89D40012180B /* LoginViewController.swift in Sources */,
+				0E1FBDDB2F1FACAF00D20C7F /* FaceOverlayView.swift in Sources */,
+				0ED944DA2F0CD6B1007267E5 /* HomeViewController.swift in Sources */,
+				0E1FBDC62F1CF30200D20C7F /* FLVEAPI.swift in Sources */,
+				0E5D20932F0A93A3000FAE9A /* OTPTextField.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+/* End PBXSourcesBuildPhase section */
+
+/* Begin PBXVariantGroup section */
+		0E7797182CFD89D40012180B /* LaunchScreen.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0E7797172CFD89D40012180B /* Base */,
+			);
+			name = LaunchScreen.storyboard;
+			sourceTree = "<group>";
+		};
+		0E77971A2CFD89D40012180B /* Main2.storyboard */ = {
+			isa = PBXVariantGroup;
+			children = (
+				0E7797192CFD89D40012180B /* Base */,
+			);
+			name = Main2.storyboard;
+			sourceTree = "<group>";
+		};
+/* End PBXVariantGroup section */
+
+/* Begin XCBuildConfiguration section */
+		0E7796ED2CFD890B0012180B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CA8778G6V5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InsureTech/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = InsureTech;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera so you can capture & upload image.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We use your location to match you with the nearest service provider to improve response time during urgent consultations.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to match you with the nearest service provider to improve response time during urgent consultations.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insureTech.iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Debug;
+		};
+		0E7796EE2CFD890B0012180B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				ASSETCATALOG_COMPILER_GLOBAL_ACCENT_COLOR_NAME = AccentColor;
+				CODE_SIGN_ENTITLEMENTS = "";
+				CODE_SIGN_IDENTITY = "Apple Development";
+				CODE_SIGN_STYLE = Automatic;
+				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = CA8778G6V5;
+				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = InsureTech/Info.plist;
+				INFOPLIST_KEY_CFBundleDisplayName = InsureTech;
+				INFOPLIST_KEY_LSApplicationCategoryType = "public.app-category.utilities";
+				INFOPLIST_KEY_NSCameraUsageDescription = "We use your camera so you can capture & upload image.";
+				INFOPLIST_KEY_NSLocationAlwaysUsageDescription = "We use your location to match you with the nearest service provider to improve response time during urgent consultations.";
+				INFOPLIST_KEY_NSLocationWhenInUseUsageDescription = "We use your location to match you with the nearest service provider to improve response time during urgent consultations.";
+				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
+				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen.storyboard;
+				INFOPLIST_KEY_UIMainStoryboardFile = Main;
+				INFOPLIST_KEY_UIRequiresFullScreen = YES;
+				INFOPLIST_KEY_UIStatusBarHidden = YES;
+				INFOPLIST_KEY_UIStatusBarStyle = UIStatusBarStyleDarkContent;
+				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationPortrait;
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+				);
+				MARKETING_VERSION = 1.0.0;
+				PRODUCT_BUNDLE_IDENTIFIER = com.insureTech.iOS;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				PROVISIONING_PROFILE_SPECIFIER = "";
+				SUPPORTED_PLATFORMS = "iphoneos iphonesimulator";
+				SUPPORTS_MACCATALYST = NO;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = 1;
+			};
+			name = Release;
+		};
+		0E7796EF2CFD890B0012180B /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = dwarf;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_TESTABILITY = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_DYNAMIC_NO_PIC = NO;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_OPTIMIZATION_LEVEL = 0;
+				GCC_PREPROCESSOR_DEFINITIONS = (
+					"DEBUG=1",
+					"$(inherited)",
+				);
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = INCLUDE_SOURCE;
+				MTL_FAST_MATH = YES;
+				ONLY_ACTIVE_ARCH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "DEBUG $(inherited)";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+			};
+			name = Debug;
+		};
+		0E7796F02CFD890B0012180B /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				ALWAYS_SEARCH_USER_PATHS = NO;
+				ASSETCATALOG_COMPILER_GENERATE_SWIFT_ASSET_SYMBOL_EXTENSIONS = YES;
+				CLANG_ANALYZER_NONNULL = YES;
+				CLANG_ANALYZER_NUMBER_OBJECT_CONVERSION = YES_AGGRESSIVE;
+				CLANG_CXX_LANGUAGE_STANDARD = "gnu++20";
+				CLANG_ENABLE_MODULES = YES;
+				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_ENABLE_OBJC_WEAK = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
+				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
+				CLANG_WARN_CONSTANT_CONVERSION = YES;
+				CLANG_WARN_DEPRECATED_OBJC_IMPLEMENTATIONS = YES;
+				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
+				CLANG_WARN_DOCUMENTATION_COMMENTS = YES;
+				CLANG_WARN_EMPTY_BODY = YES;
+				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
+				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_IMPLICIT_RETAIN_SELF = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
+				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_QUOTED_INCLUDE_IN_FRAMEWORK_HEADER = YES;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
+				CLANG_WARN_UNGUARDED_AVAILABILITY = YES_AGGRESSIVE;
+				CLANG_WARN_UNREACHABLE_CODE = YES;
+				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
+				COPY_PHASE_STRIP = NO;
+				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
+				ENABLE_NS_ASSERTIONS = NO;
+				ENABLE_STRICT_OBJC_MSGSEND = YES;
+				ENABLE_USER_SCRIPT_SANDBOXING = YES;
+				GCC_C_LANGUAGE_STANDARD = gnu17;
+				GCC_NO_COMMON_BLOCKS = YES;
+				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
+				GCC_WARN_ABOUT_RETURN_TYPE = YES_ERROR;
+				GCC_WARN_UNDECLARED_SELECTOR = YES;
+				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
+				GCC_WARN_UNUSED_FUNCTION = YES;
+				GCC_WARN_UNUSED_VARIABLE = YES;
+				IPHONEOS_DEPLOYMENT_TARGET = 18.1;
+				LOCALIZATION_PREFERS_STRING_CATALOGS = YES;
+				MTL_ENABLE_DEBUG_INFO = NO;
+				MTL_FAST_MATH = YES;
+				SDKROOT = iphoneos;
+				SWIFT_COMPILATION_MODE = wholemodule;
+				VALIDATE_PRODUCT = YES;
+			};
+			name = Release;
+		};
+/* End XCBuildConfiguration section */
+
+/* Begin XCConfigurationList section */
+		0E7796D42CFD89080012180B /* Build configuration list for PBXProject "InsureTech" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0E7796EF2CFD890B0012180B /* Debug */,
+				0E7796F02CFD890B0012180B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		0E7796EC2CFD890B0012180B /* Build configuration list for PBXNativeTarget "InsureTech" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				0E7796ED2CFD890B0012180B /* Debug */,
+				0E7796EE2CFD890B0012180B /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+/* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		0E1712632F387E220032C322 /* XCRemoteSwiftPackageReference "SWAPNA_SHAHOS" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/shahos10/SWAPNA_SHAHOS.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		0EA4B2362F2F36DF007438C6 /* XCRemoteSwiftPackageReference "firebase-ios-sdk" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/firebase/firebase-ios-sdk.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 12.8.0;
+			};
+		};
+		0EA4B2372F2F3BCF007438C6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/hackiftekhar/IQKeyboardManager.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 8.0.2;
+			};
+		};
+		0EA4B23A2F2F3CD9007438C6 /* XCRemoteSwiftPackageReference "SVProgressHUD" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/littleigloo/SVProgressHUD.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		0E1712642F387E220032C322 /* SWAPNA_SHAHOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0E1712632F387E220032C322 /* XCRemoteSwiftPackageReference "SWAPNA_SHAHOS" */;
+			productName = SWAPNA_SHAHOS;
+		};
+		0E1712662F3891730032C322 /* SWAPNA_SHAHOS */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0E1712632F387E220032C322 /* XCRemoteSwiftPackageReference "SWAPNA_SHAHOS" */;
+			productName = SWAPNA_SHAHOS;
+		};
+		0EA4B2382F2F3BCF007438C6 /* IQKeyboardManagerSwift */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0EA4B2372F2F3BCF007438C6 /* XCRemoteSwiftPackageReference "IQKeyboardManager" */;
+			productName = IQKeyboardManagerSwift;
+		};
+		0EA4B23B2F2F3CD9007438C6 /* SVProgressHUD */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 0EA4B23A2F2F3CD9007438C6 /* XCRemoteSwiftPackageReference "SVProgressHUD" */;
+			productName = SVProgressHUD;
+		};
+/* End XCSwiftPackageProductDependency section */
+	};
+	rootObject = 0E7796D12CFD89080012180B /* Project object */;
+}

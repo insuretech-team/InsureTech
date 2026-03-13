@@ -1,0 +1,21 @@
+OrganisationStatusChangedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    organisation_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/OrganisationStatus'
+    new_status:
+      $ref: '#/components/schemas/OrganisationStatus'
+    changed_by:
+      type: string
+      description: SuperAdmin user_id
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: OrganisationStatusChangedEvent is published when organisation status
+    changes

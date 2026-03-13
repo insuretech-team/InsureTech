@@ -1,0 +1,46 @@
+OrderCreationRequest:
+  type: object
+  properties:
+    quotation_id:
+      type: string
+      description: ID of the approved quotation to convert into an order.
+    customer_id:
+      type: string
+      description: Customer placing the order (injected server-side from session if
+        omitted).
+    payment_method:
+      type: string
+      description: Payment method preference (BKASH, NAGAD, CARD, etc.)
+    tenant_id:
+      type: string
+      description: Extended fields (Phase 2)
+    organisation_id:
+      type: string
+    idempotency_key:
+      type: string
+      description: "Client-supplied idempotency key \u2014 duplicate requests with\
+        \ same key return existing order."
+    total_payable:
+      $ref: '#/components/schemas/Money'
+      description: "Total payable amount \u2014 sourced from quotation. Caller must\
+        \ supply from quotation lookup."
+    coverage_start_at:
+      type: string
+      format: date-time
+    coverage_end_at:
+      type: string
+      format: date-time
+    payment_due_at:
+      type: string
+      format: date-time
+    purchase_order_id:
+      type: string
+      description: B2B purchase order reference (b2b flow only).
+    product_id:
+      type: string
+      description: "Product and plan (resolved from quotation \u2014 caller may supply\
+        \ to skip re-lookup)."
+    plan_id:
+      type: string
+  description: Request payload for creating a new order creation. Contains all required
+    fields and optional parameters for initialization.

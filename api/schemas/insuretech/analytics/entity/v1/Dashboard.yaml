@@ -1,0 +1,19 @@
+Dashboard:
+  type: object
+  properties:
+    dashboard_id:
+      type: string
+    dashboard_name:
+      type: string
+    description:
+      type: string
+    layout:
+      type: string
+      description: JSON layout configuration
+    created_at:
+      type: string
+      format: date-time
+    updated_at:
+      type: string
+      format: date-time
+  description: Dashboard definition

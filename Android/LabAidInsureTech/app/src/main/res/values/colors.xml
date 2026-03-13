@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="black">#FF000000</color>
+    <color name="white">#FFFFFFFF</color>
+    <color name="band_color">#8C34C7</color>
+    <color name="base_color">#322F70</color>
+    <color name="otp_box_color">#AEAEAE</color>
+    <color name="slider_unselected_color">#EEE1F7</color>
+    <color name="text_color">#242424</color>
+    <color name="band_start_color">#8C34C7</color>
+    <color name="band_end_color">#702A9F</color>
+    <color name="layout_bg_color">#EBF1F5</color>
+
+    <!-- Primary Colors -->
+    <color name="purple_primary">#6B3FA0</color>
+    <color name="purple_dark">#5A2E8C</color>
+    <color name="purple_light">#8B5FBF</color>
+
+    <!-- Text Colors -->
+    <color name="text_primary">#333333</color>
+    <color name="text_secondary">#757575</color>
+    <color name="text_hint">#BDBDBD</color>
+
+    <!-- Button Colors -->
+    <color name="button_purple">#8B5FBF</color>
+</resources>

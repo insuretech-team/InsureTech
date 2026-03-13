@@ -1,0 +1,7 @@
+UploadFinalizationResponse:
+  type: object
+  properties:
+    file:
+      $ref: '#/components/schemas/StoredFile'
+  description: Response payload for upload finalization operation. Returns operation
+    results and status.

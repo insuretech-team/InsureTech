@@ -1,0 +1,476 @@
+syntax = "proto3";
+
+package insuretech.orders.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/orders/entity/v1;ordersv1";
+option csharp_namespace = "Insuretech.Orders.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Order represents a purchase order for an insurance policy.
+// Created from an approved quotation → payment → policy issuance flow.
+// Maps to 'orders' table in insurance_schema.
+message Order {
+  option (insuretech.common.v1.table) = {
+    table_name: "orders"
+    schema_name: "insurance_schema"
+    migration_order: 45
+    is_table: true
+    comment: "Insurance purchase orders — quotation-to-policy checkout flow"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string order_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "order_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key — Order UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:order_id;not null"
+
+  string order_number = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "order_number"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Human-readable order number (ORD-YYYYMMDD-XXXXXX)"
+      index: {
+        index_name: "idx_orders_order_number"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:order_number;not null;uniqueIndex"
+
+  string tenant_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "tenant_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Multi-tenant isolation key"
+      index: {
+        index_name: "idx_orders_tenant_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:tenant_id;not null"
+
+  string quotation_id = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "quotation_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "FK to quotations table — source quotation"
+      foreign_key: {
+        references_table: "quotations"
+        references_column: "quotation_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_quotation_id"
+      }
+      index: {
+        index_name: "idx_orders_quotation_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:quotation_id;not null"
+
+  string customer_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "customer_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "FK to users table — purchasing customer"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_customer_id"
+      }
+      index: {
+        index_name: "idx_orders_customer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  string product_id = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "FK to products table — ordered product"
+      foreign_key: {
+        references_table: "products"
+        references_column: "product_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_product_id"
+      }
+      index: {
+        index_name: "idx_orders_product_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string plan_id = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "plan_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "FK to product_plans table — selected plan"
+      foreign_key: {
+        references_table: "product_plans"
+        references_column: "plan_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_plan_id"
+      }
+      index: {
+        index_name: "idx_orders_plan_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:plan_id;not null"
+
+  OrderStatus status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ORDER_STATUS_PENDING'"
+      comment: "Current order lifecycle status"
+      index: {
+        index_name: "idx_orders_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money total_payable = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "total_payable"
+      sql_type: "BIGINT"
+      not_null: true
+      check_constraint: "total_payable > 0"
+      comment: "Total amount payable in paisa (100 paisa = 1 BDT)"
+    }
+  ];
+  // @inject_tag: gorm:"column:total_payable;not null"
+
+  string currency = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "currency"
+      sql_type: "VARCHAR(3)"
+      not_null: true
+      default_value: "'BDT'"
+      check_constraint: "currency IN ('BDT', 'USD', 'EUR')"
+      comment: "ISO 4217 currency code"
+    }
+  ];
+  // @inject_tag: gorm:"column:currency;not null"
+
+  // Payment fields — populated after InitiatePayment
+  string payment_id = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_id"
+      sql_type: "UUID"
+      comment: "FK to payments table — linked payment record"
+      foreign_key: {
+        references_table: "payments"
+        references_column: "payment_id"
+        references_schema: "payment_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_payment_id"
+      }
+      index: {
+        index_name: "idx_orders_payment_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:payment_id"
+
+  string payment_gateway_ref = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_gateway_ref"
+      sql_type: "VARCHAR(255)"
+      comment: "External payment gateway reference/transaction ID"
+    }
+  ];
+  // @inject_tag: gorm:"column:payment_gateway_ref"
+
+  // Policy fields — populated after PolicyIssued
+  string policy_id = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "policy_id"
+      sql_type: "UUID"
+      comment: "FK to policies table — issued policy"
+      foreign_key: {
+        references_table: "policies"
+        references_column: "policy_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_policy_id"
+      }
+      index: {
+        index_name: "idx_orders_policy_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:policy_id"
+
+  string cancellation_reason = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "cancellation_reason"
+      sql_type: "TEXT"
+      comment: "Reason for order cancellation (if cancelled)"
+    }
+  ];
+  // @inject_tag: gorm:"column:cancellation_reason"
+
+  string failure_reason = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "failure_reason"
+      sql_type: "TEXT"
+      comment: "Reason for payment failure (if failed)"
+    }
+  ];
+  // @inject_tag: gorm:"column:failure_reason"
+
+  google.protobuf.Timestamp created_at = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp paid_at = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "paid_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Payment confirmation timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
+
+  // ── Extended fields (Phase 2) ─────────────────────────────────────────────
+
+  string invoice_id = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "invoice_id"
+      sql_type: "UUID"
+      comment: "FK to billing_schema.invoices — linked invoice"
+    }
+  ];
+  // @inject_tag: gorm:"column:invoice_id;index:idx_orders_invoice_id"
+
+  string organisation_id = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "organisation_id"
+      sql_type: "UUID"
+      comment: "B2B organisation context (from x-business-id gateway header)"
+      index: {
+        index_name: "idx_orders_organisation_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:organisation_id;index:idx_orders_organisation_id"
+
+  string idempotency_key = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "idempotency_key"
+      sql_type: "TEXT"
+      unique: true
+      comment: "Client-supplied dedup key — unique index prevents duplicate orders"
+    }
+  ];
+  // @inject_tag: gorm:"column:idempotency_key;uniqueIndex"
+
+  string correlation_id = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "correlation_id"
+      sql_type: "TEXT"
+      comment: "Distributed tracing ID propagated across the saga"
+    }
+  ];
+  // @inject_tag: gorm:"column:correlation_id"
+
+  OrderPaymentStatus payment_status = 23 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ORDER_PAYMENT_STATUS_UNPAID'"
+      comment: "Payment dimension of the order lifecycle"
+    }
+  ];
+  // @inject_tag: gorm:"column:payment_status;not null"
+
+  OrderBillingStatus billing_status = 24 [
+    (insuretech.common.v1.column) = {
+      column_name: "billing_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ORDER_BILLING_STATUS_NOT_INVOICED'"
+      comment: "Billing/invoice dimension of the order lifecycle"
+    }
+  ];
+  // @inject_tag: gorm:"column:billing_status;not null"
+
+  OrderFulfillmentStatus fulfillment_status = 25 [
+    (insuretech.common.v1.column) = {
+      column_name: "fulfillment_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ORDER_FULFILLMENT_STATUS_NOT_STARTED'"
+      comment: "Policy issuance dimension of the order lifecycle"
+    }
+  ];
+  // @inject_tag: gorm:"column:fulfillment_status;not null"
+
+  bool manual_review_required = 26 [
+    (insuretech.common.v1.column) = {
+      column_name: "manual_review_required"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "false"
+      comment: "AML/fraud flag — order held for manual review before processing"
+    }
+  ];
+  // @inject_tag: gorm:"column:manual_review_required;not null;default:false"
+
+  google.protobuf.Timestamp payment_due_at = 27 [
+    (insuretech.common.v1.column) = {
+      column_name: "payment_due_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Payment deadline — order auto-expires if unpaid after this"
+    }
+  ];
+  // @inject_tag: gorm:"column:payment_due_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp coverage_start_at = 28 [
+    (insuretech.common.v1.column) = {
+      column_name: "coverage_start_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Requested policy coverage start date"
+    }
+  ];
+  // @inject_tag: gorm:"column:coverage_start_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp coverage_end_at = 29 [
+    (insuretech.common.v1.column) = {
+      column_name: "coverage_end_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Requested policy coverage end date"
+    }
+  ];
+  // @inject_tag: gorm:"column:coverage_end_at;serializer:proto_timestamp"
+
+  string actor_user_id = 30 [
+    (insuretech.common.v1.column) = {
+      column_name: "actor_user_id"
+      sql_type: "UUID"
+      comment: "Portal user who created the order (agent/admin assisted vs customer self-service)"
+    }
+  ];
+  // @inject_tag: gorm:"column:actor_user_id"
+
+  string portal = 31 [
+    (insuretech.common.v1.column) = {
+      column_name: "portal"
+      sql_type: "VARCHAR(50)"
+      comment: "Normalized portal name: b2c, b2b, agent, system"
+    }
+  ];
+  // @inject_tag: gorm:"column:portal"
+
+  string purchase_order_id = 32 [
+    (insuretech.common.v1.column) = {
+      column_name: "purchase_order_id"
+      sql_type: "UUID"
+      comment: "B2B purchase order reference (from b2b_schema.purchase_orders)"
+    }
+  ];
+  // @inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"
+}
+
+// OrderStatus represents the primary lifecycle state of an insurance purchase order.
+enum OrderStatus {
+  ORDER_STATUS_UNSPECIFIED = 0;
+  ORDER_STATUS_PENDING = 1;           // Order created, awaiting payment
+  ORDER_STATUS_PAYMENT_INITIATED = 2; // Payment flow started via gateway
+  ORDER_STATUS_PAID = 3;              // Payment confirmed — triggers policy issuance
+  ORDER_STATUS_POLICY_ISSUED = 4;     // Policy successfully issued (terminal success)
+  ORDER_STATUS_CANCELLED = 5;         // Cancelled by user or system
+  ORDER_STATUS_FAILED = 6;            // Payment failed or timed out
+}
+
+// OrderPaymentStatus is the payment dimension of the order lifecycle (separate from primary status).
+enum OrderPaymentStatus {
+  ORDER_PAYMENT_STATUS_UNSPECIFIED = 0;
+  ORDER_PAYMENT_STATUS_UNPAID = 1;            // No payment attempted yet
+  ORDER_PAYMENT_STATUS_PAYMENT_IN_PROGRESS = 2; // Gateway URL issued, awaiting customer action
+  ORDER_PAYMENT_STATUS_PAID = 3;              // Payment confirmed by gateway or admin
+  ORDER_PAYMENT_STATUS_PAYMENT_FAILED = 4;    // Payment attempt failed
+  ORDER_PAYMENT_STATUS_REFUNDED = 5;          // Payment refunded
+}
+
+// OrderBillingStatus is the billing/invoice dimension of the order lifecycle.
+enum OrderBillingStatus {
+  ORDER_BILLING_STATUS_UNSPECIFIED = 0;
+  ORDER_BILLING_STATUS_NOT_INVOICED = 1;      // No invoice created yet
+  ORDER_BILLING_STATUS_INVOICED = 2;          // Invoice issued by billing-service
+  ORDER_BILLING_STATUS_INVOICE_CANCELLED = 3; // Invoice cancelled (order cancelled)
+}
+
+// OrderFulfillmentStatus is the policy issuance dimension of the order lifecycle.
+enum OrderFulfillmentStatus {
+  ORDER_FULFILLMENT_STATUS_UNSPECIFIED = 0;
+  ORDER_FULFILLMENT_STATUS_NOT_STARTED = 1;        // Policy not yet issued
+  ORDER_FULFILLMENT_STATUS_FULFILLMENT_IN_PROGRESS = 2; // Insurance-service processing
+  ORDER_FULFILLMENT_STATUS_FULFILLED = 3;          // Policy successfully issued
+  ORDER_FULFILLMENT_STATUS_FULFILLMENT_FAILED = 4; // Policy issuance failed
+}

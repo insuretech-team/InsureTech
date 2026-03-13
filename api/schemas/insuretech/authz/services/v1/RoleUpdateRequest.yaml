@@ -1,0 +1,15 @@
+RoleUpdateRequest:
+  type: object
+  properties:
+    role_id:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    is_active:
+      type: boolean
+    updated_by:
+      type: string
+  description: Request payload for updating an existing role update. Contains fields
+    to be modified.

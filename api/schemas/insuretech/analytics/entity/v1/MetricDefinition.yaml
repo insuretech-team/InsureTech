@@ -1,0 +1,43 @@
+MetricDefinition:
+  type: object
+  properties:
+    metric_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:metric_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    metric_name:
+      type: string
+      description: '@inject_tag: gorm:"column:metric_name;not null"'
+      x-unique: true
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    type:
+      $ref: '#/components/schemas/MetricType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    unit:
+      type: string
+      description: '@inject_tag: gorm:"column:unit"'
+    dimensions:
+      type: array
+      items:
+        type: string
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "Metric definition catalog\n Maps to 'metric_definitions' table in\
+    \ analytics_schema"
+  required:
+  - metric_id
+  - metric_name
+  - type
+  - created_at
+  - updated_at

@@ -1,0 +1,45 @@
+AuditEvent:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:event_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    category:
+      $ref: '#/components/schemas/EventCategory'
+      description: '@inject_tag: gorm:"column:category;not null;serializer:proto_enum"'
+    event_type:
+      type: string
+      description: '@inject_tag: gorm:"column:event_type;not null"'
+    severity:
+      $ref: '#/components/schemas/EventSeverity'
+      description: '@inject_tag: gorm:"column:severity;not null;serializer:proto_enum"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description;not null"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id"'
+    metadata:
+      type: string
+      description: '@inject_tag: gorm:"column:metadata"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+  description: Audit event (business events)
+  required:
+  - id
+  - category
+  - event_type
+  - severity
+  - description
+  - timestamp

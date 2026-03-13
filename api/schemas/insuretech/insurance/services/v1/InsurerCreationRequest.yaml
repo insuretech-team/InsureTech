@@ -1,0 +1,6 @@
+InsuranceInsurerCreationRequest:
+  type: object
+  properties:
+    insurer:
+      $ref: '#/components/schemas/Insurer'
+  description: ========== INSURER MESSAGES ==========

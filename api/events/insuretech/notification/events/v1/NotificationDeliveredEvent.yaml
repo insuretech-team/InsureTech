@@ -1,0 +1,16 @@
+NotificationDeliveredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    notification_id:
+      type: string
+    recipient_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Notification delivered'

@@ -1,0 +1,11 @@
+MediaUploadResponse:
+  type: object
+  properties:
+    media_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for media upload operation. Returns operation results
+    and status.

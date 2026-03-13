@@ -1,0 +1,22 @@
+PurchaseOrderStatusChangedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    purchase_order_id:
+      type: string
+    organisation_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/PurchaseOrderStatus'
+    new_status:
+      $ref: '#/components/schemas/PurchaseOrderStatus'
+    changed_by:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: PurchaseOrderStatusChangedEvent is published when purchase order status
+    changes

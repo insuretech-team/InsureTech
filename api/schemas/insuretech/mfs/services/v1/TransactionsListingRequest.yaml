@@ -1,0 +1,21 @@
+TransactionsListingRequest:
+  type: object
+  properties:
+    provider:
+      type: string
+    status:
+      type: string
+    payment_id:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing transactions listing items. Supports filtering,
+    sorting, and pagination.

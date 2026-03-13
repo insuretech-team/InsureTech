@@ -1,0 +1,50 @@
+WorkflowTask:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:task_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    workflow_instance_id:
+      type: string
+      description: '@inject_tag: gorm:"column:workflow_instance_id;not null"'
+    step_name:
+      type: string
+      description: '@inject_tag: gorm:"column:step_name;not null"'
+    type:
+      $ref: '#/components/schemas/WorkflowTaskType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    assigned_to:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_to"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/WorkflowTaskStatus'
+      x-database-default: PENDING
+    decision:
+      type: string
+      description: '@inject_tag: gorm:"column:decision"'
+    comments:
+      type: string
+      description: '@inject_tag: gorm:"column:comments"'
+    due_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:due_date;serializer:proto_timestamp"'
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Workflow task (step execution)
+  required:
+  - id
+  - workflow_instance_id
+  - step_name
+  - type
+  - status
+  - audit_info

@@ -1,0 +1,13 @@
+ICECandidateReceivedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+      description: ULID format
+    candidate:
+      $ref: '#/components/schemas/ICECandidate'
+    received_at:
+      type: string
+      format: date-time
+  description: Event emitted when ice candidate undergoes received. Published to event
+    stream for downstream processing and audit trail.

@@ -1,0 +1,7 @@
+FraudCaseDeletionRequest:
+  type: object
+  properties:
+    case_id:
+      type: string
+  description: Request payload for fraud case deletion operation. Contains parameters
+    required to execute the operation.

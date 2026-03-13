@@ -1,0 +1,9 @@
+KYCApprovalRequest:
+  type: object
+  properties:
+    kyc_id:
+      type: string
+    reviewer_id:
+      type: string
+  description: Request payload for kyc approval operation. Contains parameters required
+    to execute the operation.

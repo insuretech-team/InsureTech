@@ -1,0 +1,14 @@
+PartnersListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    filter:
+      type: string
+    order_by:
+      type: string
+  description: Request payload for listing partners listing items. Supports filtering,
+    sorting, and pagination.

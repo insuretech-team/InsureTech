@@ -1,0 +1,9 @@
+ProductActivationResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for product activation operation. Returns operation
+    results and status.

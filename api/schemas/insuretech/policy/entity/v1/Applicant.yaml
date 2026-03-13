@@ -1,0 +1,20 @@
+Applicant:
+  type: object
+  properties:
+    full_name:
+      type: string
+    date_of_birth:
+      type: string
+      format: date-time
+    nid_number:
+      type: string
+    occupation:
+      type: string
+    annual_income:
+      $ref: '#/components/schemas/Money'
+    address:
+      type: string
+    health_declaration:
+      $ref: '#/components/schemas/PolicyHealthDeclaration'
+  description: Applicant information (stored as JSONB in policies table or separate
+    table)

@@ -1,0 +1,15 @@
+VoiceSessionCreationRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    language:
+      type: string
+      description: bn or en
+    session_type:
+      type: string
+      description: POLICY_PURCHASE, CLAIMS, STATUS_CHECK
+    phone_number:
+      type: string
+  description: Request payload for creating a new voice session creation. Contains
+    all required fields and optional parameters for initialization.

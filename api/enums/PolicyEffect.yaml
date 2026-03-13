@@ -1,0 +1,7 @@
+PolicyEffect:
+  type: string
+  enum:
+  - POLICY_EFFECT_UNSPECIFIED
+  - POLICY_EFFECT_ALLOW
+  - POLICY_EFFECT_DENY
+  description: PolicyEffect mirrors Casbin allow/deny semantics.

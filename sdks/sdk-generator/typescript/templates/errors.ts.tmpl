@@ -1,0 +1,130 @@
+// Auto-generated Error Classes
+// DO NOT EDIT - This file is generated
+
+/**
+ * Base error class for all API errors
+ */
+export class ApiError extends Error {
+  constructor(
+    public statusCode: number,
+    public body: string,
+    public response?: Response
+  ) {
+    super(`API Error ${statusCode}: ${body}`);
+    this.name = 'ApiError';
+    Object.setPrototypeOf(this, ApiError.prototype);
+  }
+
+  /**
+   * Check if the error is a client error (4xx)
+   */
+  isClientError(): boolean {
+    return this.statusCode >= 400 && this.statusCode < 500;
+  }
+
+  /**
+   * Check if the error is a server error (5xx)
+   */
+  isServerError(): boolean {
+    return this.statusCode >= 500;
+  }
+}
+
+/**
+ * Validation error (400)
+ */
+export class ValidationError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(400, body, response);
+    this.name = 'ValidationError';
+    Object.setPrototypeOf(this, ValidationError.prototype);
+  }
+}
+
+/**
+ * Authentication error (401)
+ */
+export class AuthenticationError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(401, body, response);
+    this.name = 'AuthenticationError';
+    Object.setPrototypeOf(this, AuthenticationError.prototype);
+  }
+}
+
+/**
+ * Authorization error (403)
+ */
+export class AuthorizationError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(403, body, response);
+    this.name = 'AuthorizationError';
+    Object.setPrototypeOf(this, AuthorizationError.prototype);
+  }
+}
+
+/**
+ * Not found error (404)
+ */
+export class NotFoundError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(404, body, response);
+    this.name = 'NotFoundError';
+    Object.setPrototypeOf(this, NotFoundError.prototype);
+  }
+}
+
+/**
+ * Conflict error (409)
+ */
+export class ConflictError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(409, body, response);
+    this.name = 'ConflictError';
+    Object.setPrototypeOf(this, ConflictError.prototype);
+  }
+}
+
+/**
+ * Rate limit error (429)
+ */
+export class RateLimitError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(429, body, response);
+    this.name = 'RateLimitError';
+    Object.setPrototypeOf(this, RateLimitError.prototype);
+  }
+}
+
+/**
+ * Server error (500)
+ */
+export class ServerError extends ApiError {
+  constructor(body: string, response?: Response) {
+    super(500, body, response);
+    this.name = 'ServerError';
+    Object.setPrototypeOf(this, ServerError.prototype);
+  }
+}
+
+/**
+ * Network error (connection failed, etc.)
+ */
+export class NetworkError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'NetworkError';
+    Object.setPrototypeOf(this, NetworkError.prototype);
+  }
+}
+
+/**
+ * Timeout error
+ */
+export class TimeoutError extends Error {
+  constructor(message: string) {
+    super(message);
+    this.name = 'TimeoutError';
+    Object.setPrototypeOf(this, TimeoutError.prototype);
+  }
+}

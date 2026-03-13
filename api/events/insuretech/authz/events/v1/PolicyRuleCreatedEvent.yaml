@@ -1,0 +1,26 @@
+PolicyRuleCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    policy_id:
+      type: string
+    subject:
+      type: string
+    domain:
+      type: string
+    object:
+      type: string
+    action:
+      type: string
+    effect:
+      $ref: '#/components/schemas/PolicyEffect'
+    condition:
+      type: string
+    created_by:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when policy rule is created. Published to event stream
+    for downstream processing and audit trail.

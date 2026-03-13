@@ -1,0 +1,7 @@
+InsuranceIndividualBeneficiaryCreationResponse:
+  type: object
+  properties:
+    individual:
+      $ref: '#/components/schemas/IndividualBeneficiary'
+  description: Response payload for individual beneficiary creation operation. Returns
+    operation results and status.

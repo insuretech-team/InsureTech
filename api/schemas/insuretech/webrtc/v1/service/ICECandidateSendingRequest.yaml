@@ -1,0 +1,16 @@
+ICECandidateSendingRequest:
+  type: object
+  properties:
+    from_peer_id:
+      type: string
+    to_peer_id:
+      type: string
+    candidate:
+      type: string
+    sdp_mid:
+      type: string
+    sdp_m_line_index:
+      type: integer
+      format: int32
+  description: Request payload for ice candidate sending operation. Contains parameters
+    required to execute the operation.

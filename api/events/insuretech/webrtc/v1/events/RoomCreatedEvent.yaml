@@ -1,0 +1,16 @@
+RoomCreatedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    name:
+      type: string
+    creator_id:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+    config:
+      $ref: '#/components/schemas/RoomConfig'
+  description: Event emitted when room is created. Published to event stream for downstream
+    processing and audit trail.

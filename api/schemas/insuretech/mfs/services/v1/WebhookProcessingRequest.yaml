@@ -1,0 +1,18 @@
+WebhookProcessingRequest:
+  type: object
+  properties:
+    provider:
+      type: string
+    payload:
+      type: object
+      description: 'CG-7: Typed webhook payload'
+    headers:
+      type: object
+      additionalProperties:
+        type: string
+      description: 'CG-7: Typed headers as map'
+    idempotency_key:
+      type: string
+      description: Idempotency key to prevent duplicate webhook processing (CG-3)
+  description: Request payload for webhook processing operation. Contains parameters
+    required to execute the operation.

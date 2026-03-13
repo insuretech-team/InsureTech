@@ -1,0 +1,10 @@
+PaymentRetrievalResponse:
+  type: object
+  properties:
+    payment:
+      $ref: '#/components/schemas/Payment'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for payment retrieval operation. Returns operation
+    results and status.

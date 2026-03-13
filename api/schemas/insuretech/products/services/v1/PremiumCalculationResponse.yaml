@@ -1,0 +1,18 @@
+PremiumCalculationResponse:
+  type: object
+  properties:
+    base_premium:
+      $ref: '#/components/schemas/Money'
+    rider_premium:
+      $ref: '#/components/schemas/Money'
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    breakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/PremiumBreakdown'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for premium calculation operation. Returns operation
+    results and status.

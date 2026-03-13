@@ -1,0 +1,52 @@
+UserProfileCreationRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    full_name:
+      type: string
+    date_of_birth:
+      type: string
+      format: date-time
+    gender:
+      type: string
+      description: MALE, FEMALE, OTHER
+    address_line1:
+      type: string
+    city:
+      type: string
+    district:
+      type: string
+    division:
+      type: string
+    nid_number:
+      type: string
+    occupation:
+      type: string
+    employer:
+      type: string
+    address_line2:
+      type: string
+    country:
+      type: string
+    postal_code:
+      type: string
+    permanent_address:
+      type: string
+    marital_status:
+      type: string
+      description: SINGLE, MARRIED, DIVORCED, WIDOWED
+    emergency_contact_name:
+      type: string
+    emergency_contact_number:
+      type: string
+    nationality:
+      type: string
+    blood_group:
+      type: string
+    income_range:
+      type: string
+    passport_number:
+      type: string
+  description: Request payload for creating a new user profile creation. Contains
+    all required fields and optional parameters for initialization.

@@ -1,0 +1,46 @@
+RenewalReminder:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:reminder_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    renewal_schedule_id:
+      type: string
+      description: '@inject_tag: gorm:"column:renewal_schedule_id;not null"'
+    days_before_renewal:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:days_before_renewal;not null"'
+    channel:
+      $ref: '#/components/schemas/ReminderChannel'
+      description: '@inject_tag: gorm:"column:channel;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ReminderStatus'
+      x-database-default: PENDING
+    scheduled_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:scheduled_at;not null;serializer:proto_timestamp"'
+    sent_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"'
+    notification_id:
+      type: string
+      description: '@inject_tag: gorm:"column:notification_id"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Renewal reminder tracking (FR-085)
+  required:
+  - id
+  - renewal_schedule_id
+  - days_before_renewal
+  - channel
+  - status
+  - scheduled_at
+  - audit_info

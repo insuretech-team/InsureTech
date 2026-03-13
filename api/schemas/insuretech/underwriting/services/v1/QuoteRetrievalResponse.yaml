@@ -1,0 +1,14 @@
+UnderwritingQuoteRetrievalResponse:
+  type: object
+  properties:
+    quote:
+      $ref: '#/components/schemas/Quote'
+    health_declaration:
+      $ref: '#/components/schemas/UnderwritingHealthDeclaration'
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for quote retrieval operation. Returns operation results
+    and status.

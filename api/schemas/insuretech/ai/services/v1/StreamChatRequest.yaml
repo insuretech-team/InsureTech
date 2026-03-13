@@ -1,0 +1,7 @@
+StreamChatRequest:
+  type: object
+  properties:
+    message:
+      $ref: '#/components/schemas/Message'
+  description: Request payload for stream chat operation. Contains parameters required
+    to execute the operation.

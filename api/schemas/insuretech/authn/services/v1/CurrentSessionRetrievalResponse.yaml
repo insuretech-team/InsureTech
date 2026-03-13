@@ -1,0 +1,13 @@
+CurrentSessionRetrievalResponse:
+  type: object
+  properties:
+    session:
+      $ref: '#/components/schemas/Session'
+    error:
+      $ref: '#/components/schemas/Error'
+    user_type:
+      type: string
+      description: "user_type lets callers determine the role without an extra user\
+        \ lookup.\r\n Same format as ValidateTokenResponse.user_type: e.g. \"SYSTEM_USER\""
+  description: Response payload for current session retrieval operation. Returns operation
+    results and status.

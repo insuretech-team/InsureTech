@@ -1,0 +1,7 @@
+FraudAlertUpdateRequest:
+  type: object
+  properties:
+    alert:
+      $ref: '#/components/schemas/FraudAlert'
+  description: Request payload for updating an existing fraud alert update. Contains
+    fields to be modified.

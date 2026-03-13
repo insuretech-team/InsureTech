@@ -1,0 +1,15 @@
+UserPoliciesListingRequest:
+  type: object
+  properties:
+    customer_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/PolicyStatus'
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing user policies listing items. Supports filtering,
+    sorting, and pagination.

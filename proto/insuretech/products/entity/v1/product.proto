@@ -1,0 +1,252 @@
+syntax = "proto3";
+
+package insuretech.products.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/products/entity/v1;productsv1";
+option csharp_namespace = "Insuretech.Products.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/products/entity/v1/product_plan.proto";
+import "insuretech/products/entity/v1/rider.proto";
+import "insuretech/products/entity/v1/pricing_config.proto";
+
+// Product represents an insurance product (Motor, Health, Travel, Device, etc.)
+// Maps to 'products' table in product_schema
+message Product {
+  option (insuretech.common.v1.table) = {
+    table_name : "products"
+    schema_name : "insurance_schema"
+    migration_order : 19
+    is_table : true
+    comment : "Insurance product catalog (Motor, Health, Travel, Device, "
+              "Agricultural)"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : false
+  };
+
+  string product_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "product_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Product UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:product_id;not null"
+
+  string product_code = 2 [ (insuretech.common.v1.column) = {
+    column_name : "product_code"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    unique : true
+    check_constraint : "product_code ~ '^[A-Z]{3}-[0-9]{3}$'"
+  // @inject_tag: gorm:"column:product_code;not null"
+    comment : "Unique product code (e.g., MOT-001, HLT-001, TRV-001)"
+    index : {
+      index_name : "idx_products_product_code"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+
+  string product_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "product_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Product display name"
+    index : {
+      index_name : "idx_products_product_name"
+      index_type : INDEX_TYPE_GIN
+      index_method : "gin(product_name gin_trgm_ops)"
+    }
+  } ];
+  // @inject_tag: gorm:"column:product_name;not null"
+
+  ProductCategory category = 4 [ (insuretech.common.v1.column) = {
+    column_name : "category"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Product category (MOTOR, HEALTH, TRAVEL, HOME, DEVICE, "
+              "AGRICULTURAL, LIFE)"
+    index : {index_name : "idx_products_category" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+
+  string description = 5 [ (insuretech.common.v1.column) = {
+    column_name : "description"
+    sql_type : "TEXT"
+    comment : "Product description and features"
+  } ];
+  // @inject_tag: gorm:"column:description"
+
+  insuretech.common.v1.Money base_premium = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "base_premium"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "base_premium > 0"
+        comment : "Base premium amount in paisa"
+      } ];
+  // @inject_tag: gorm:"column:base_premium;not null"
+
+  insuretech.common.v1.Money min_sum_insured = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "min_sum_insured"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "min_sum_insured > 0"
+        comment : "Minimum coverage amount in paisa"
+      } ];
+  // @inject_tag: gorm:"column:min_sum_insured;not null"
+
+  insuretech.common.v1.Money max_sum_insured = 8
+      [ (insuretech.common.v1.column) = {
+        column_name : "max_sum_insured"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "max_sum_insured >= min_sum_insured"
+        comment : "Maximum coverage amount in paisa"
+      } ];
+  // @inject_tag: gorm:"column:max_sum_insured;not null"
+
+  int32 min_tenure_months = 9 [ (insuretech.common.v1.column) = {
+    column_name : "min_tenure_months"
+    sql_type : "INTEGER"
+    not_null : true
+    check_constraint : "min_tenure_months > 0"
+    comment : "Minimum policy tenure in months"
+  } ];
+  // @inject_tag: gorm:"column:min_tenure_months;not null"
+
+  int32 max_tenure_months = 10 [ (insuretech.common.v1.column) = {
+    column_name : "max_tenure_months"
+    sql_type : "INTEGER"
+    not_null : true
+    check_constraint : "max_tenure_months >= min_tenure_months"
+    comment : "Maximum policy tenure in months"
+  } ];
+  // @inject_tag: gorm:"column:max_tenure_months;not null"
+
+  repeated string exclusions = 11 [ (insuretech.common.v1.column) = {
+    column_name : "exclusions"
+    sql_type : "TEXT[]"
+  // @inject_tag: gorm:"column:exclusions"
+    comment : "Array of policy exclusions"
+  } ];
+
+  ProductStatus status = 12 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'DRAFT'"
+    comment : "Product status"
+    index : {index_name : "idx_products_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp created_at = 13 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 14 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string created_by = 15 [ (insuretech.common.v1.column) = {
+    column_name : "created_by"
+    sql_type : "UUID"
+    not_null : true
+    comment : "User ID who created the product"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_products_created_by"
+    }
+  } ];
+  // @inject_tag: gorm:"column:created_by;not null"
+
+  google.protobuf.Timestamp deleted_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  // Related entities
+  repeated Rider available_riders = 17;
+  PricingConfig pricing_config = 18;
+
+  string product_attributes = 19 [ (insuretech.common.v1.column) = {
+    column_name : "product_attributes"
+    sql_type : "JSONB"
+    comment : "Flexible product attributes"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:product_attributes"
+
+  repeated ProductPlan plans = 20;
+
+  // Currency companion fields for Money types (flattened storage)
+  string base_premium_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "base_premium_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for base_premium (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:base_premium_currency;not null"
+
+  string min_sum_insured_currency = 10002 [ (insuretech.common.v1.column) = {
+    column_name : "min_sum_insured_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for min_sum_insured (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:min_sum_insured_currency;not null"
+
+  string max_sum_insured_currency = 10003 [ (insuretech.common.v1.column) = {
+    column_name : "max_sum_insured_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for max_sum_insured (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:max_sum_insured_currency;not null"
+}
+
+enum ProductCategory {
+  PRODUCT_CATEGORY_UNSPECIFIED = 0;
+  PRODUCT_CATEGORY_MOTOR = 1;        // Motor vehicle insurance
+  PRODUCT_CATEGORY_HEALTH = 2;       // Health/medical insurance
+  PRODUCT_CATEGORY_TRAVEL = 3;       // Travel insurance
+  PRODUCT_CATEGORY_HOME = 4;         // Home insurance
+  PRODUCT_CATEGORY_DEVICE = 5;       // Device/gadget insurance
+  PRODUCT_CATEGORY_AGRICULTURAL = 6; // Crop/livestock insurance
+  PRODUCT_CATEGORY_LIFE = 7;         // Life insurance (future)
+}
+
+enum ProductStatus {
+  PRODUCT_STATUS_UNSPECIFIED = 0;
+  PRODUCT_STATUS_DRAFT = 1;        // Under development
+  PRODUCT_STATUS_ACTIVE = 2;       // Available for sale
+  PRODUCT_STATUS_INACTIVE = 3;     // Temporarily disabled
+  PRODUCT_STATUS_DISCONTINUED = 4; // Permanently discontinued
+}

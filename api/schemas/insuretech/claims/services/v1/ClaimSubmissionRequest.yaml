@@ -1,0 +1,21 @@
+ClaimSubmissionRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    customer_id:
+      type: string
+    type:
+      $ref: '#/components/schemas/ClaimType'
+    claimed_amount:
+      $ref: '#/components/schemas/Money'
+    incident_date:
+      type: string
+    incident_description:
+      type: string
+    document_urls:
+      type: array
+      items:
+        type: string
+  description: Request payload for claim submission operation. Contains parameters
+    required to execute the operation.

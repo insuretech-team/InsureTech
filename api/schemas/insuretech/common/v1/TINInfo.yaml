@@ -1,0 +1,12 @@
+TINInfo:
+  type: object
+  properties:
+    tin_number:
+      type: string
+      description: 12-digit
+    taxpayer_name:
+      type: string
+    verified_at:
+      type: string
+      format: date-time
+  description: Domain entity representing tin info. Core business object in the system.

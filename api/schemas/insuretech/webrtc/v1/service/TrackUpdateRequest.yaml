@@ -1,0 +1,14 @@
+TrackUpdateRequest:
+  type: object
+  properties:
+    track_id:
+      type: string
+    settings:
+      $ref: '#/components/schemas/TrackSettings'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing track update. Contains fields
+    to be modified.

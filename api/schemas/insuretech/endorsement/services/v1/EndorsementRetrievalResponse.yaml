@@ -1,0 +1,10 @@
+EndorsementEndorsementRetrievalResponse:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for endorsement retrieval operation. Returns operation
+    results and status.

@@ -1,0 +1,9 @@
+InvoiceRetrievalResponse:
+  type: object
+  properties:
+    invoice:
+      $ref: '#/components/schemas/Invoice'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for invoice retrieval operation. Returns operation
+    results and status.

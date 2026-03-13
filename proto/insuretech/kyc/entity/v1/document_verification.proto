@@ -1,0 +1,141 @@
+syntax = "proto3";
+
+package insuretech.kyc.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/entity/v1;kycv1";
+
+// Document verification
+message DocumentVerification {
+  option (insuretech.common.v1.table) = {
+    table_name: "document_verifications"
+    schema_name: "authn_schema"
+    migration_order: 13
+    is_table: true
+    audit_fields: true
+    comment: "Individual document verifications"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "doc_verification_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:doc_verification_id;not null"
+  
+  string kyc_verification_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "kyc_verification_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "kyc_verifications"
+      references_column: "verification_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_document_verifications_kyc_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:kyc_verification_id;not null"
+  
+  DocumentType document_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "document_type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:document_type;not null;serializer:proto_enum"
+  
+  string document_number = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "document_number"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Document verification and KYC compliance",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:document_number;not null"
+  
+  string document_url = 5 [(insuretech.common.v1.column) = {
+    column_name: "document_url"
+    sql_type: "VARCHAR(500)"
+    comment: "Document file URL"
+  }];
+  // @inject_tag: gorm:"column:document_url"
+  
+  string extracted_data = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "extracted_data"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "OCR extracted data"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Document data extraction for verification",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:extracted_data"
+  
+  DocumentStatus status = 7 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  float confidence_score = 8 [(insuretech.common.v1.column) = {
+    column_name: "confidence_score"
+    sql_type: "REAL"
+    comment: "Verification confidence (0-1)"
+  }];
+  // @inject_tag: gorm:"column:confidence_score"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum DocumentType {
+  DOCUMENT_TYPE_UNSPECIFIED = 0;
+  DOCUMENT_TYPE_NID = 1;
+  DOCUMENT_TYPE_PASSPORT = 2;
+  DOCUMENT_TYPE_BIRTH_CERTIFICATE = 3;
+  DOCUMENT_TYPE_TRADE_LICENSE = 4;
+  DOCUMENT_TYPE_TIN_CERTIFICATE = 5;
+  DOCUMENT_TYPE_SELFIE = 6;
+}
+
+enum DocumentStatus {
+  DOCUMENT_STATUS_UNSPECIFIED = 0;
+  DOCUMENT_STATUS_PENDING = 1;
+  DOCUMENT_STATUS_VERIFIED = 2;
+  DOCUMENT_STATUS_REJECTED = 3;
+}
+
+

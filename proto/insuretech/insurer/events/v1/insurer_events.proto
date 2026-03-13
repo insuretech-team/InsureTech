@@ -1,0 +1,60 @@
+syntax = "proto3";
+
+package insuretech.insurer.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/events/v1;insurereventsv1";
+
+// Kafka event: Insurer created
+message InsurerCreatedEvent {
+  string event_id = 1;
+  string insurer_id = 2;
+  string insurer_code = 3;
+  string insurer_name = 4;
+  string type = 5; // LIFE, NON_LIFE, COMPOSITE
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Insurer status changed
+message InsurerStatusChangedEvent {
+  string event_id = 1;
+  string insurer_id = 2;
+  string old_status = 3;
+  string new_status = 4;
+  string reason = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Insurer product added
+message InsurerProductAddedEvent {
+  string event_id = 1;
+  string insurer_product_id = 2;
+  string insurer_id = 3;
+  string product_id = 4;
+  string product_code = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Insurer product status changed
+message InsurerProductStatusChangedEvent {
+  string event_id = 1;
+  string insurer_product_id = 2;
+  string old_status = 3;
+  string new_status = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Insurer config updated
+message InsurerConfigUpdatedEvent {
+  string event_id = 1;
+  string insurer_id = 2;
+  string config_type = 3; // API, BUSINESS_MODEL, UNDERWRITING
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

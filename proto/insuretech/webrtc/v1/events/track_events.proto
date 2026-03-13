@@ -1,0 +1,45 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.events;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/insuretech/lifepluscore/webrtc/v1/events;events";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/track.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Track Events
+// ═══════════════════════════════════════════════════════════════════════════
+
+message TrackPublishedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+ insuretech.webrtc.v1.entity.Track track = 3;
+  google.protobuf.Timestamp published_at = 4;
+}
+
+message TrackUnpublishedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+  string track_id = 3;
+  google.protobuf.Timestamp unpublished_at = 4;
+}
+
+message TrackMutedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+  string track_id = 3;
+  bool muted = 4;
+  google.protobuf.Timestamp changed_at = 5;
+}
+
+message TrackStateChangedEvent {
+ string room_id = 1;
+ string peer_id = 2;
+  string track_id = 3;
+ insuretech.webrtc.v1.entity.TrackState old_state = 4;
+ insuretech.webrtc.v1.entity.TrackState new_state = 5;
+  google.protobuf.Timestamp changed_at = 6;
+}
+

@@ -1,0 +1,37 @@
+AIDecisionMadeEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    agent_name:
+      type: string
+    decision_type:
+      type: string
+      description: UNDERWRITING_APPROVAL, CLAIM_ASSESSMENT, FRAUD_FLAG
+    entity_type:
+      type: string
+      description: policy, claim
+    entity_id:
+      type: string
+    decision:
+      type: string
+      description: APPROVED, REJECTED, FLAGGED
+    confidence_score:
+      type: number
+      format: double
+      description: 0-100
+    reasoning:
+      type: array
+      items:
+        type: string
+        description: Explanation of decision
+      description: Explanation of decision
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: AI decision made'

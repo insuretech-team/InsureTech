@@ -1,0 +1,7 @@
+InsuranceBeneficiaryRetrievalResponse:
+  type: object
+  properties:
+    beneficiary:
+      $ref: '#/components/schemas/Beneficiary'
+  description: Response payload for beneficiary retrieval operation. Returns operation
+    results and status.

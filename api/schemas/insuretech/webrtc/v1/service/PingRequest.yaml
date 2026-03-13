@@ -1,0 +1,8 @@
+PingRequest:
+  type: object
+  properties:
+    timestamp:
+      type: string
+      format: date-time
+  description: Request payload for ping operation. Contains parameters required to
+    execute the operation.

@@ -1,0 +1,17 @@
+PartnerOnboardedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    partner_id:
+      type: string
+    organization_name:
+      type: string
+    partner_type:
+      type: string
+    focal_person_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Partner onboarded'

@@ -1,0 +1,19 @@
+DocumentGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    document_generation_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    file_url:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Document generated'

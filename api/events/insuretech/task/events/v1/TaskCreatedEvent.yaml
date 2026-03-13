@@ -1,0 +1,19 @@
+TaskCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    task_id:
+      type: string
+    title:
+      type: string
+    type:
+      type: string
+    assigned_to:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Task created'

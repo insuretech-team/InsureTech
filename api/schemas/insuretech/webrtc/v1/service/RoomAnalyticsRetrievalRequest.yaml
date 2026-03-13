@@ -1,0 +1,7 @@
+RoomAnalyticsRetrievalRequest:
+  type: object
+  properties:
+    room_id:
+      type: string
+  description: Request payload for retrieving room analytics retrieval information.
+    May include filters and pagination parameters.

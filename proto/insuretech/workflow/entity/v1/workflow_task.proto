@@ -1,0 +1,144 @@
+syntax = "proto3";
+
+package insuretech.workflow.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/entity/v1;workflowv1";
+
+// Workflow task (step execution)
+message WorkflowTask {
+  option (insuretech.common.v1.table) = {
+    table_name: "workflow_tasks"
+    schema_name: "workflow_schema"
+    migration_order: 61
+    is_table: true
+    audit_fields: true
+    comment: "Individual workflow step tasks"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "task_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:task_id;not null"
+  
+  string workflow_instance_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "workflow_instance_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "workflow_instances"
+      references_column: "instance_id"
+      references_schema: "workflow_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_workflow_tasks_instance_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:workflow_instance_id;not null"
+  
+  string step_name = 3 [(insuretech.common.v1.column) = {
+    column_name: "step_name"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:step_name;not null"
+  
+  TaskType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  string assigned_to = 5 [(insuretech.common.v1.column) = {
+    column_name: "assigned_to"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_workflow_tasks_assigned_to"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:assigned_to"
+  
+  TaskStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+    index: {
+      index_name: "idx_workflow_tasks_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string decision = 7 [(insuretech.common.v1.column) = {
+    column_name: "decision"
+    sql_type: "VARCHAR(20)"
+    comment: "APPROVED, REJECTED, RETURNED"
+  }];
+  // @inject_tag: gorm:"column:decision"
+  
+  string comments = 8 [(insuretech.common.v1.column) = {
+    column_name: "comments"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:comments"
+  
+  google.protobuf.Timestamp due_date = 9 [(insuretech.common.v1.column) = {
+    column_name: "due_date"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:due_date;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp completed_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "completed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum TaskType {
+  TASK_TYPE_UNSPECIFIED = 0;
+  TASK_TYPE_APPROVAL = 1;
+  TASK_TYPE_REVIEW = 2;
+  TASK_TYPE_NOTIFICATION = 3;
+  TASK_TYPE_ACTION = 4;
+}
+
+enum TaskStatus {
+  TASK_STATUS_UNSPECIFIED = 0;
+  TASK_STATUS_PENDING = 1;
+  TASK_STATUS_IN_PROGRESS = 2;
+  TASK_STATUS_COMPLETED = 3;
+  TASK_STATUS_SKIPPED = 4;
+}
+

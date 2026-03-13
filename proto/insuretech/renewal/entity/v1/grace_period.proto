@@ -1,0 +1,116 @@
+syntax = "proto3";
+
+package insuretech.renewal.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/renewal/entity/v1;renewalv1";
+
+// Grace period tracking (FR-089, FR-090)
+message GracePeriod {
+  option (insuretech.common.v1.table) = {
+    table_name: "grace_periods"
+    schema_name: "insurance_schema"
+    migration_order: 37
+    is_table: true
+    audit_fields: true
+    comment: "Grace period tracking for lapsed policies"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "grace_period_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:grace_period_id;not null"
+  
+  string policy_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_grace_periods_policy_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:policy_id;not null"
+  
+  google.protobuf.Timestamp start_date = 3 [(insuretech.common.v1.column) = {
+    column_name: "start_date"
+    sql_type: "DATE"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:start_date;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp end_date = 4 [(insuretech.common.v1.column) = {
+    column_name: "end_date"
+    sql_type: "DATE"
+    not_null: true
+    index: {
+      index_name: "idx_grace_periods_end_date"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:end_date;not null;serializer:proto_timestamp"
+  
+  int32 days_remaining = 5 [(insuretech.common.v1.column) = {
+    column_name: "days_remaining"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:days_remaining"
+  
+  GracePeriodStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'ACTIVE'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  bool coverage_active = 7 [(insuretech.common.v1.column) = {
+    column_name: "coverage_active"
+    sql_type: "BOOLEAN"
+    default_value: "true"
+    comment: "Coverage continues during grace period"
+  }];
+  // @inject_tag: gorm:"column:coverage_active"
+  
+  google.protobuf.Timestamp revived_at = 8 [(insuretech.common.v1.column) = {
+    column_name: "revived_at"
+    sql_type: "TIMESTAMPTZ"
+    comment: "When policy was revived during grace period"
+  }];
+  // @inject_tag: gorm:"column:revived_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum GracePeriodStatus {
+  GRACE_PERIOD_STATUS_UNSPECIFIED = 0;
+  GRACE_PERIOD_STATUS_ACTIVE = 1;
+  GRACE_PERIOD_STATUS_REVIVED = 2;
+  GRACE_PERIOD_STATUS_LAPSED = 3; // FR-090
+}
+
+

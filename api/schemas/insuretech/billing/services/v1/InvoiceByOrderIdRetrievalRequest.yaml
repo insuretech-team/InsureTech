@@ -1,0 +1,7 @@
+InvoiceByOrderIdRetrievalRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+  description: Request payload for retrieving invoice by order id retrieval information.
+    May include filters and pagination parameters.

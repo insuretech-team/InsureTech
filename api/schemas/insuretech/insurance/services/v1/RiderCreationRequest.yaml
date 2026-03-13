@@ -1,0 +1,6 @@
+RiderCreationRequest:
+  type: object
+  properties:
+    rider:
+      $ref: '#/components/schemas/ProductsRider'
+  description: ========== RIDER MESSAGES ==========

@@ -1,0 +1,18 @@
+RoleCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    role_id:
+      type: string
+    name:
+      type: string
+    portal:
+      $ref: '#/components/schemas/Portal'
+    created_by:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when role is created. Published to event stream for downstream
+    processing and audit trail.

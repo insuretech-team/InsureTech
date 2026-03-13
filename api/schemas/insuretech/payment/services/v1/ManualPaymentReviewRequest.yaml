@@ -1,0 +1,18 @@
+ManualPaymentReviewRequest:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    approved:
+      type: boolean
+      description: true = approve, false = reject
+    reviewed_by:
+      type: string
+      description: admin/agent user_id
+    review_notes:
+      type: string
+    rejection_reason:
+      type: string
+      description: Required when approved=false
+  description: Request payload for manual payment review operation. Contains parameters
+    required to execute the operation.

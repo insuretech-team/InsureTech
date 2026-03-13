@@ -1,0 +1,7 @@
+PricingConfigRetrievalRequest:
+  type: object
+  properties:
+    config_id:
+      type: string
+  description: Request payload for retrieving pricing config retrieval information.
+    May include filters and pagination parameters.

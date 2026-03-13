@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+package insuretech.audit.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/audit/entity/v1/audit_log.proto";
+import "insuretech/audit/entity/v1/audit_event.proto";
+import "insuretech/audit/entity/v1/compliance_log.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/audit/services/v1;auditservicev1";
+option csharp_namespace = "Insuretech.Audit.Services.V1";
+
+service AuditService {
+  // Create audit log
+  rpc CreateAuditLog(CreateAuditLogRequest) returns (CreateAuditLogResponse) {
+    option (google.api.http) = {
+      post: "/v1/audit-logs"
+      body: "*"
+    };
+  }
+  
+  // Get audit logs for entity
+  rpc GetAuditLogs(GetAuditLogsRequest) returns (GetAuditLogsResponse) {
+    option (google.api.http) = {
+      get: "/v1/audit-logs"
+    };
+  }
+  
+  // Get audit trail for entity
+  rpc GetAuditTrail(GetAuditTrailRequest) returns (GetAuditTrailResponse) {
+    option (google.api.http) = {
+      get: "/v1/entities/{entity_type}/{entity_id}/audit-trail"
+    };
+  }
+  
+  // Create audit event
+  rpc CreateAuditEvent(CreateAuditEventRequest) returns (CreateAuditEventResponse) {
+    option (google.api.http) = {
+      post: "/v1/audit-events"
+      body: "*"
+    };
+  }
+  
+  // Get audit events
+  rpc GetAuditEvents(GetAuditEventsRequest) returns (GetAuditEventsResponse) {
+    option (google.api.http) = {
+      get: "/v1/audit-events"
+    };
+  }
+  
+  // Create compliance log
+  rpc CreateComplianceLog(CreateComplianceLogRequest) returns (CreateComplianceLogResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance-logs"
+      body: "*"
+    };
+  }
+  
+  // Get compliance logs
+  rpc GetComplianceLogs(GetComplianceLogsRequest) returns (GetComplianceLogsResponse) {
+    option (google.api.http) = {
+      get: "/v1/compliance-logs"
+    };
+  }
+  
+  // Generate compliance report
+  rpc GenerateComplianceReport(GenerateComplianceReportRequest) returns (GenerateComplianceReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/compliance-reports?action=generate"
+      body: "*"
+    };
+  }
+}
+
+message CreateAuditLogRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string action = 3;
+  string old_values = 4; // JSON
+  string new_values = 5; // JSON
+  string ip_address = 6;
+  string user_agent = 7;
+}
+
+message CreateAuditLogResponse {
+  string audit_log_id = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetAuditLogsRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+  string action = 3;
+  string user_id = 4;
+  string start_date = 5;
+  string end_date = 6;
+  int32 page = 7;
+  int32 page_size = 8;
+}
+
+message GetAuditLogsResponse {
+  repeated entity.v1.AuditLog audit_logs = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetAuditTrailRequest {
+  string entity_type = 1;
+  string entity_id = 2;
+}
+
+message GetAuditTrailResponse {
+  repeated entity.v1.AuditLog audit_logs = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message CreateAuditEventRequest {
+  string category = 1;
+  string event_type = 2;
+  string severity = 3;
+  string description = 4;
+  string entity_type = 5;
+  string entity_id = 6;
+  string metadata = 7; // JSON
+}
+
+message CreateAuditEventResponse {
+  string audit_event_id = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetAuditEventsRequest {
+  string category = 1;
+  string severity = 2;
+  string start_date = 3;
+  string end_date = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message GetAuditEventsResponse {
+  repeated entity.v1.AuditEvent audit_events = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message CreateComplianceLogRequest {
+  string type = 1;
+  string regulation = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string status = 5;
+  string description = 6;
+  string evidence = 7; // JSON
+}
+
+message CreateComplianceLogResponse {
+  string compliance_log_id = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetComplianceLogsRequest {
+  string type = 1;
+  string regulation = 2;
+  string status = 3;
+  string start_date = 4;
+  string end_date = 5;
+  int32 page = 6;
+  int32 page_size = 7;
+}
+
+message GetComplianceLogsResponse {
+  repeated entity.v1.ComplianceLog compliance_logs = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GenerateComplianceReportRequest {
+  string regulation = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GenerateComplianceReportResponse {
+  string report_url = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+

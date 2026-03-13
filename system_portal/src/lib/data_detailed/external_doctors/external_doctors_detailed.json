@@ -1,0 +1,668 @@
+[
+  {
+    "id": "1",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Akteruzzaman",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Akteruzzaman",
+      "more": "Speciality\n\t\n\t\n\t\tMedicine"
+    }
+  },
+  {
+    "id": "2",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Nurunnahar Akter",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Nurunnahar Akter",
+      "more": "Speciality\n\t\n\t\n\t\tGynecology"
+    }
+  },
+  {
+    "id": "3",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Dr. M. K Talukder",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Dr. M. K Talukder",
+      "more": "Speciality\n\t\n\t\n\t\tPediatrics"
+    }
+  },
+  {
+    "id": "4",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Shahin Reza Chowdhury",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Shahin Reza Chowdhury",
+      "more": "Speciality\n\t\n\t\n\t\tDermatology"
+    }
+  },
+  {
+    "id": "5",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Rafiul Alam",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Rafiul Alam",
+      "more": "Speciality\n\t\n\t\n\t\tENT"
+    }
+  },
+  {
+    "id": "6",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Ahsan Habib",
+    "address": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tMedinet Healthcare Ltd.\n1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Ahsan Habib",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "7",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Dr. Md. Ferdous-ur-Rahman",
+    "address": "Chamber\n\t\n\t\n\t\tDigilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\tDigilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Dr. Md. Ferdous-ur-Rahman",
+      "more": "Speciality\n\t\n\t\n\t\tMedicine"
+    }
+  },
+  {
+    "id": "8",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Jesmin Jerin",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Jesmin Jerin",
+      "more": "Speciality\n\t\n\t\n\t\tGynecology"
+    }
+  },
+  {
+    "id": "9",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. M. A Kamal",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. M. A Kamal",
+      "more": "Speciality\n\t\n\t\n\t\tPediatrics"
+    }
+  },
+  {
+    "id": "10",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Tahmina Sultana Shimul",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Tahmina Sultana Shimul",
+      "more": "Speciality\n\t\n\t\n\t\tDermatology"
+    }
+  },
+  {
+    "id": "11",
+    "name": "Doctor Name\n\t\n\t\n\t\tAsst. Proff. Dr. Lt. Col. Ahsan",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tAsst. Proff. Dr. Lt. Col. Ahsan",
+      "more": "Speciality\n\t\n\t\n\t\tENT"
+    }
+  },
+  {
+    "id": "12",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Saiful Islam",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur Original 10, Opposite to Indoor Stadium\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Saiful Islam",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "13",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Fayezur Rahman Fahim",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Fayezur Rahman Fahim",
+      "more": "Speciality\n\t\n\t\n\t\tMedicine"
+    }
+  },
+  {
+    "id": "14",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Tanzila Halim",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Tanzila Halim",
+      "more": "Speciality\n\t\n\t\n\t\tGynecology"
+    }
+  },
+  {
+    "id": "15",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Dr. H. S. K Alam",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Dr. H. S. K Alam",
+      "more": "Speciality\n\t\n\t\n\t\tPediatrics"
+    }
+  },
+  {
+    "id": "16",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Hasan Mahmud",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Hasan Mahmud",
+      "more": "Speciality\n\t\n\t\n\t\tDermatology"
+    }
+  },
+  {
+    "id": "17",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Khorshed Alam",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Khorshed Alam",
+      "more": "Speciality\n\t\n\t\n\t\tENT"
+    }
+  },
+  {
+    "id": "18",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Abu Sayed Molla",
+    "address": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Digilab Medical Services\nMirpur 12 Road No. 2, Dhaka\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Abu Sayed Molla",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "19",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Shakira Nova",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Shakira Nova",
+      "more": "Speciality\n\t\n\t\n\t\tMedicine"
+    }
+  },
+  {
+    "id": "20",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Sabikun Nahar",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Sabikun Nahar",
+      "more": "Speciality\n\t\n\t\n\t\tGynecology"
+    }
+  },
+  {
+    "id": "21",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Zannat Ara",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Zannat Ara",
+      "more": "Speciality\n\t\n\t\n\t\tPediatrics"
+    }
+  },
+  {
+    "id": "22",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Ismot Ara Munni",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Ismot Ara Munni",
+      "more": "Speciality\n\t\n\t\n\t\tDermatology"
+    }
+  },
+  {
+    "id": "23",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Saiful Islam (Saif)",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Saiful Islam (Saif)",
+      "more": "Speciality\n\t\n\t\n\t\tENT"
+    }
+  },
+  {
+    "id": "24",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Rajib Dey Sarker",
+    "address": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"DMFR Molecular Lab \u0026 Diagnostics BD Ltd.\nNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Rajib Dey Sarker",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "25",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Mahfuzul Haque",
+    "address": "Chamber\n\t\n\t\n\t\t\"Haque pharmacy\nLane 23, Nahid Market, Purbachal Road, Uttar Badda\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Haque pharmacy\nLane 23, Nahid Market, Purbachal Road, Uttar Badda\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Mahfuzul Haque",
+      "more": "Speciality\n\t\n\t\n\t\tGeneral Physician"
+    }
+  },
+  {
+    "id": "26",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Salma Akter",
+    "address": "Chamber\n\t\n\t\n\t\t\"Maria Pharmacy-2\nSouth Azompur \"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Maria Pharmacy-2\nSouth Azompur \"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Salma Akter",
+      "more": "Speciality\n\t\n\t\n\t\tGeneral Physician"
+    }
+  },
+  {
+    "id": "27",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Sohel",
+    "address": "Chamber\n\t\n\t\n\t\t\"Holy Lab Diagonistic Complex\nHouse-3, Sector-4, Shayestakha Avenue \"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Holy Lab Diagonistic Complex\nHouse-3, Sector-4, Shayestakha Avenue \"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Sohel",
+      "more": "Speciality\n\t\n\t\n\t\tGeneral Physician"
+    }
+  },
+  {
+    "id": "28",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Korobe Saha Toni",
+    "address": "Chamber\n\t\n\t\n\t\t\"Allahar dan Pharmacy, Chandpur Pharmacy\nShekher tek 6 (sesh mathay), Adabor\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Allahar dan Pharmacy, Chandpur Pharmacy\nShekher tek 6 (sesh mathay), Adabor\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Korobe Saha Toni",
+      "more": "Speciality\n\t\n\t\n\t\tGeneral Physician"
+    }
+  },
+  {
+    "id": "29",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Mazharul Islam",
+    "address": "Chamber\n\t\n\t\n\t\t\"Jalalabad Pharmacy, Chandpur Pharmacy\nHouse No. 315, Middle Badda, Adorsha Nagar (Abul Hoteler Pashe)\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Jalalabad Pharmacy, Chandpur Pharmacy\nHouse No. 315, Middle Badda, Adorsha Nagar (Abul Hoteler Pashe)\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Mazharul Islam",
+      "more": "Speciality\n\t\n\t\n\t\tGeneral Physician"
+    }
+  },
+  {
+    "id": "30",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. (retd.) Dr. Salma Choudhury",
+    "address": "Chamber\n\t\n\t\n\t\t\"Al-Raji Hospital, Comfort Hospital\nShop No- G2, Concord Center Point, Kazi Nazrul Islam Ave, Dhaka 1215, Comfort Tower, 167/B Green Rd, Dhaka 1205\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Al-Raji Hospital, Comfort Hospital\nShop No- G2, Concord Center Point, Kazi Nazrul Islam Ave, Dhaka 1215, Comfort Tower, 167/B Green Rd, Dhaka 1205\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. (retd.) Dr. Salma Choudhury",
+      "more": "Speciality\n\t\n\t\n\t\tGynecologist"
+    }
+  },
+  {
+    "id": "31",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Morsalin Rahman",
+    "address": "Chamber\n\t\n\t\n\t\t\"Semec Health\nHouse-17 (Lift-8, SIBL Bank) Rd No. 6, Opposite of Gonoshastho Hospital\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Semec Health\nHouse-17 (Lift-8, SIBL Bank) Rd No. 6, Opposite of Gonoshastho Hospital\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Morsalin Rahman",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "32",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Tanjia Arobi Dina",
+    "address": "Chamber\n\t\n\t\n\t\t\"Human Aid Research Lab \u0026 Hospital\n54 Darus Salam Rd\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Human Aid Research Lab \u0026 Hospital\n54 Darus Salam Rd\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Tanjia Arobi Dina",
+      "more": "Speciality\n\t\n\t\n\t\tPaediatrics"
+    }
+  },
+  {
+    "id": "33",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Soma Halder",
+    "address": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Soma Halder",
+      "more": "Speciality\n\t\n\t\n\t\tPaediatrics"
+    }
+  },
+  {
+    "id": "34",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Afroza Suraiya Mazumder",
+    "address": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Afroza Suraiya Mazumder",
+      "more": "Speciality\n\t\n\t\n\t\tENT"
+    }
+  },
+  {
+    "id": "35",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Dr. Rubayat Sheikh Giasuddin",
+    "address": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Dr. Rubayat Sheikh Giasuddin",
+      "more": "Speciality\n\t\n\t\n\t\tMedicine"
+    }
+  },
+  {
+    "id": "36",
+    "name": "Doctor Name\n\t\n\t\n\t\tDr. Md. Ehsan-Ul-Bari (Rahat)",
+    "address": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tDr. Md. Ehsan-Ul-Bari (Rahat)",
+      "more": "Speciality\n\t\n\t\n\t\tSurgery"
+    }
+  },
+  {
+    "id": "37",
+    "name": "Doctor Name\n\t\n\t\n\t\tProf. Dr. A. Z. M. Maidul Islam",
+    "address": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+    "contact": "",
+    "email": "",
+    "type": "External Doctors",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Chamber\n\t\n\t\n\t\t\"Anwer Khan Modern Hospital\nhouse-17 Rd No. 8\"",
+      "HospitalName": "Doctor Name\n\t\n\t\n\t\tProf. Dr. A. Z. M. Maidul Islam",
+      "more": "Speciality\n\t\n\t\n\t\tDermatology"
+    }
+  }
+]

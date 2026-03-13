@@ -1,0 +1,18 @@
+BulkNotificationsSendingResponse:
+  type: object
+  properties:
+    notification_ids:
+      type: array
+      items:
+        type: string
+    success_count:
+      type: integer
+      format: int32
+    failed_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for bulk notifications sending operation. Returns
+    operation results and status.

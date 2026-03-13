@@ -1,0 +1,7 @@
+KnowledgeBaseArticleCreationRequest:
+  type: object
+  properties:
+    article:
+      $ref: '#/components/schemas/KnowledgeBaseArticle'
+  description: Request payload for creating a new knowledge base article creation.
+    Contains all required fields and optional parameters for initialization.

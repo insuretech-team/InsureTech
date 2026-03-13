@@ -1,0 +1,202 @@
+syntax = "proto3";
+
+package insuretech.storage.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/storage/entity/v1;storageentityv1";
+option csharp_namespace = "Insuretech.Storage.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// StoredFile represents a file stored in object storage (S3/Spaces/etc.)
+// Maps to 'files' table in storage_schema
+message StoredFile {
+  option (insuretech.common.v1.table) = {
+    table_name : "files"
+    schema_name : "storage_schema"
+    migration_order : 98
+    is_table : true
+    comment : "File metadata for object storage (S3/Spaces)"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string file_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "file_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - File UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:file_id;not null"
+
+  string tenant_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "tenant_id"
+    sql_type : "UUID"
+    comment : "Tenant/partner ID for multi-tenancy"
+    index : {index_name : "idx_files_tenant_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:tenant_id"
+
+  string filename = 3 [ (insuretech.common.v1.column) = {
+    column_name : "filename"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Original filename"
+  } ];
+  // @inject_tag: gorm:"column:filename;not null"
+
+  string content_type = 4 [ (insuretech.common.v1.column) = {
+    column_name : "content_type"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    comment : "MIME type (e.g., image/png, application/pdf)"
+    index : {
+      index_name : "idx_files_content_type"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:content_type;not null"
+
+  int64 size_bytes = 5 [ (insuretech.common.v1.column) = {
+    column_name : "size_bytes"
+    sql_type : "BIGINT"
+    not_null : true
+    comment : "File size in bytes"
+  } ];
+  // @inject_tag: gorm:"column:size_bytes;not null"
+
+  string storage_key = 6 [ (insuretech.common.v1.column) = {
+    column_name : "storage_key"
+    sql_type : "TEXT"
+    not_null : true
+    comment : "Path/key in object storage bucket"
+    index : {
+      index_name : "idx_files_storage_key"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:storage_key;not null"
+
+  string bucket = 7 [ (insuretech.common.v1.column) = {
+    column_name : "bucket"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    comment : "Storage bucket name"
+    index : {index_name : "idx_files_bucket" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:bucket;not null"
+
+  string url = 8 [ (insuretech.common.v1.column) = {
+    column_name : "url"
+    sql_type : "TEXT"
+    not_null : true
+    comment : "Direct access URL"
+  } ];
+  // @inject_tag: gorm:"column:url;not null"
+
+  string cdn_url = 9 [ (insuretech.common.v1.column) = {
+    column_name : "cdn_url"
+    sql_type : "TEXT"
+    comment : "CDN URL if available"
+  } ];
+  // @inject_tag: gorm:"column:cdn_url"
+
+  FileType file_type = 10 [ (insuretech.common.v1.column) = {
+    column_name : "file_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "File type category"
+    index : {index_name : "idx_files_file_type" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:file_type;not null;serializer:proto_enum"
+
+  string reference_id = 11 [ (insuretech.common.v1.column) = {
+    column_name : "reference_id"
+    sql_type : "UUID"
+    comment : "Related entity ID (policy, claim, etc.)"
+    index : {
+      index_name : "idx_files_reference_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:reference_id"
+
+  string reference_type = 12 [ (insuretech.common.v1.column) = {
+    column_name : "reference_type"
+    sql_type : "VARCHAR(50)"
+    comment : "Related entity type (policy, claim, user, etc.)"
+    index : {
+      index_name : "idx_files_reference_type"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:reference_type"
+
+  bool is_public = 13 [ (insuretech.common.v1.column) = {
+    column_name : "is_public"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Public access flag"
+    index : {index_name : "idx_files_is_public" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:is_public;not null"
+
+  google.protobuf.Timestamp expires_at = 14 [ (insuretech.common.v1.column) = {
+    column_name : "expires_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Expiry timestamp for temporary files"
+    index : {
+      index_name : "idx_files_expires_at"
+      index_type : INDEX_TYPE_BTREE
+      where_clause : "expires_at IS NOT NULL"
+    }
+  } ];
+  // @inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 15 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string uploaded_by = 17 [ (insuretech.common.v1.column) = {
+    column_name : "uploaded_by"
+    sql_type : "UUID"
+    not_null : true
+    comment : "User ID who uploaded the file"
+    index : {index_name : "idx_files_uploaded_by" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:uploaded_by;not null"
+}
+
+enum FileType {
+  FILE_TYPE_UNSPECIFIED = 0;
+  FILE_TYPE_IMAGE = 1;
+  FILE_TYPE_PDF = 2;
+  FILE_TYPE_DOCUMENT = 3;
+  FILE_TYPE_SHIPPING_LABEL = 4;
+  FILE_TYPE_INVOICE = 5;
+  FILE_TYPE_RECEIPT = 6;
+  FILE_TYPE_PRODUCT_IMAGE = 7;
+  FILE_TYPE_AVATAR = 8;
+  FILE_TYPE_VIDEO = 9;
+  FILE_TYPE_OTHER = 99;
+}

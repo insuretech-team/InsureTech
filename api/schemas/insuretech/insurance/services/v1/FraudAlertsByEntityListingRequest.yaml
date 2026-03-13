@@ -1,0 +1,7 @@
+FraudAlertsByEntityListingRequest:
+  type: object
+  properties:
+    entity_id:
+      type: string
+  description: Request payload for listing fraud alerts by entity listing items. Supports
+    filtering, sorting, and pagination.

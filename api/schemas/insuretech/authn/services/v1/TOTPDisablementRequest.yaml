@@ -1,0 +1,10 @@
+TOTPDisablementRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    totp_code:
+      type: string
+      description: confirm before disabling
+  description: Request payload for totp disablement operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,22 @@
+RunQueryResponse:
+  type: object
+  properties:
+    rows:
+      type: array
+      items:
+        $ref: '#/components/schemas/Row'
+    columns:
+      type: array
+      items:
+        type: string
+    row_count:
+      type: integer
+      format: int32
+    execution_time_ms:
+      type: number
+      format: double
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for run query operation. Returns operation results
+    and status.

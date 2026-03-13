@@ -1,0 +1,13 @@
+RoomAnalytics:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peak_participants:
+      type: integer
+      format: int32
+    total_sessions:
+      type: string
+      format: int64
+  description: Domain entity representing room analytics. Core business object in
+    the system.

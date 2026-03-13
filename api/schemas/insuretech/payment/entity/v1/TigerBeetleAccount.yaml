@@ -1,0 +1,61 @@
+TigerBeetleAccount:
+  type: object
+  properties:
+    account_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:account_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    tigerbeetle_account_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tigerbeetle_account_id;not null"'
+      x-unique: true
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id"'
+    account_type:
+      type: string
+      description: '@inject_tag: gorm:"column:account_type;not null"'
+    ledger_id:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:ledger_id;not null"'
+    currency:
+      type: string
+      description: '@inject_tag: gorm:"column:currency;not null"'
+      default: BDT
+    balance:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:balance;not null"'
+      default: '0'
+    balance_updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:balance_updated_at;serializer:proto_timestamp"'
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "TigerBeetle Account Ledger (not stored in PostgreSQL - managed by\
+    \ TigerBeetle)\r\n This is for documentation purposes only"
+  required:
+  - account_id
+  - tigerbeetle_account_id
+  - account_type
+  - ledger_id
+  - currency
+  - balance
+  - is_active
+  - created_at
+  - updated_at

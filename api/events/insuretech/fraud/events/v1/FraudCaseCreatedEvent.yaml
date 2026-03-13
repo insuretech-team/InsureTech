@@ -1,0 +1,21 @@
+FraudCaseCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    fraud_case_id:
+      type: string
+    case_number:
+      type: string
+    fraud_alert_id:
+      type: string
+    priority:
+      type: string
+    investigator_id:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Fraud case created'

@@ -1,0 +1,163 @@
+@import 'tailwindcss';
+
+@layer theme {
+  :root {
+    /* Base colors - Light */
+    --color-background: 0 0% 100%;
+    --color-foreground: 196 63% 10%;
+
+    /* Card colors */
+    --color-card: 0 0% 100%;
+    --color-card-foreground: 196 63% 10%;
+
+    /* Popover colors */
+    --color-popover: 0 0% 100%;
+    --color-popover-foreground: 196 63% 10%;
+
+    /* Primary - Cold and Dark (#123F50) */
+    --color-primary: 196 63% 19%;
+    --color-primary-foreground: 0 0% 100%;
+
+    /* Secondary / Muted - Dark Grey (#A8A9AD) */
+    --color-secondary: 228 3% 67%;
+    --color-secondary-foreground: 196 63% 10%;
+
+    --color-muted: 228 3% 67%;
+    --color-muted-foreground: 196 63% 30%;
+
+    /* Accent - Jungle Green (#03A765) */
+    --color-accent: 156 96% 33%;
+    --color-accent-foreground: 0 0% 100%;
+
+    /* Informational & Status Colors */
+    --color-success: 156 96% 33%;
+    --color-success-foreground: 0 0% 100%;
+
+    --color-warning: 38 92% 55%;
+    --color-warning-foreground: 0 0% 100%;
+
+    --color-info: 196 63% 40%;
+    --color-info-foreground: 0 0% 100%;
+
+    --color-destructive: 0 84% 60%;
+    --color-destructive-foreground: 0 0% 100%;
+
+    /* Border and input */
+    --color-border: 228 3% 80%;
+    --color-input: 228 3% 90%;
+    --color-ring: 156 96% 33%;
+
+    --radius: 0.5rem;
+  }
+
+  .dark {
+    /* True dark mode - Using deep cold & dark base */
+    --color-background: 196 50% 10%;
+    --color-foreground: 228 10% 90%;
+
+    /* Card colors */
+    --color-card: 196 50% 15%;
+    --color-card-foreground: 228 10% 95%;
+
+    /* Popover colors */
+    --color-popover: 196 50% 15%;
+    --color-popover-foreground: 228 10% 95%;
+
+    /* Primary - Jungle Green for contrast in dark mode */
+    --color-primary: 156 96% 40%;
+    --color-primary-foreground: 196 63% 10%;
+
+    /* Secondary */
+    --color-secondary: 196 40% 20%;
+    --color-secondary-foreground: 228 10% 90%;
+
+    /* Muted colors */
+    --color-muted: 196 40% 20%;
+    --color-muted-foreground: 228 5% 70%;
+
+    /* Accent - Brighter Green */
+    --color-accent: 156 96% 45%;
+    --color-accent-foreground: 196 63% 10%;
+
+    /* Success */
+    --color-success: 156 96% 45%;
+    --color-success-foreground: 196 63% 10%;
+
+    /* Warning */
+    --color-warning: 38 92% 60%;
+    --color-warning-foreground: 196 63% 10%;
+
+    /* Info */
+    --color-info: 196 63% 60%;
+    --color-info-foreground: 196 63% 10%;
+
+    /* Destructive */
+    --color-destructive: 0 84% 65%;
+    --color-destructive-foreground: 196 63% 10%;
+
+    /* Border and input */
+    --color-border: 196 40% 25%;
+    --color-input: 196 40% 18%;
+    --color-ring: 156 96% 45%;
+  }
+}
+
+@layer base {
+  * {
+    border-color: hsl(var(--color-border));
+  }
+
+  body {
+    background: hsl(var(--color-background));
+    color: hsl(var(--color-foreground));
+    font-feature-settings: "rlig" 1, "calt" 1;
+  }
+
+  /* Enhanced card shadows and glow */
+  .card {
+    box-shadow:
+      0 4px 6px -1px rgb(0 0 0 / 0.3),
+      0 2px 4px -2px rgb(0 0 0 / 0.3),
+      0 0 0 1px rgb(255 255 255 / 0.05) inset;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  .card:hover {
+    box-shadow:
+      0 10px 15px -3px rgb(0 0 0 / 0.4),
+      0 4px 6px -4px rgb(0 0 0 / 0.4),
+      0 0 0 1px rgb(255 255 255 / 0.1) inset,
+      0 0 20px -5px hsl(var(--color-primary) / 0.3);
+    transform: translateY(-2px);
+  }
+
+  /* Smooth transitions */
+  button,
+  a,
+  input,
+  select,
+  textarea {
+    transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  }
+
+  /* Subtle pulsing animation for accents */
+  @keyframes pulse-glow {
+
+    0%,
+    100% {
+      opacity: 1;
+    }
+
+    50% {
+      opacity: 0.6;
+    }
+  }
+
+  /* Gradient text effect for headers */
+  .gradient-text {
+    background: linear-gradient(135deg, hsl(var(--color-primary)) 0%, hsl(var(--color-accent)) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+  }
+}

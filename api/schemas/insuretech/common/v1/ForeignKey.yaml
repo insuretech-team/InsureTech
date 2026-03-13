@@ -1,0 +1,22 @@
+ForeignKey:
+  type: object
+  properties:
+    references_table:
+      type: string
+      description: Referenced table name
+    references_column:
+      type: string
+      description: Referenced column name
+    references_schema:
+      type: string
+      description: Referenced schema (empty = same schema)
+    on_delete:
+      $ref: '#/components/schemas/ReferentialAction'
+      description: ON DELETE action
+    on_update:
+      $ref: '#/components/schemas/ReferentialAction'
+      description: ON UPDATE action
+    constraint_name:
+      type: string
+      description: Constraint name
+  description: Foreign key constraint definition

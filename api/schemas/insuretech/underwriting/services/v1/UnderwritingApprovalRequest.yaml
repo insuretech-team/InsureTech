@@ -1,0 +1,20 @@
+UnderwritingApprovalRequest:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    underwriter_id:
+      type: string
+    risk_level:
+      type: string
+    premium_adjusted:
+      type: boolean
+    adjusted_premium:
+      $ref: '#/components/schemas/Money'
+    conditions:
+      type: object
+      description: 'CG-7: Typed underwriting conditions (exclusions, riders, etc.)'
+    comments:
+      type: string
+  description: Request payload for underwriting approval operation. Contains parameters
+    required to execute the operation.

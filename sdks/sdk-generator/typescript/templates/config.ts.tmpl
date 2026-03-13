@@ -1,0 +1,56 @@
+// Auto-generated Configuration Types
+// DO NOT EDIT - This file is generated
+
+/**
+ * Client configuration options
+ */
+export interface ClientConfig {
+  /**
+   * API key for authentication
+   * @required
+   */
+  apiKey: string;
+
+  /**
+   * Base URL for the API
+   * @default 'https://api.insuretech.com'
+   */
+  baseUrl?: string;
+
+  /**
+   * Request timeout in milliseconds
+   * @default 30000
+   */
+  timeout?: number;
+
+  /**
+   * Number of retry attempts for failed requests
+   * @default 3
+   */
+  retryAttempts?: number;
+
+  /**
+   * Initial delay between retries in milliseconds
+   * @default 1000
+   */
+  retryDelay?: number;
+
+  /**
+   * Custom headers to include in all requests
+   */
+  headers?: Record<string, string>;
+}
+
+/**
+ * Create a client configuration with defaults
+ */
+export function createConfig(config: ClientConfig): Required<ClientConfig> {
+  return {
+    apiKey: config.apiKey,
+    baseUrl: config.baseUrl || 'https://api.insuretech.com',
+    timeout: config.timeout || 30000,
+    retryAttempts: config.retryAttempts || 3,
+    retryDelay: config.retryDelay || 1000,
+    headers: config.headers || {},
+  };
+}

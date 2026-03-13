@@ -1,0 +1,20 @@
+WorkflowTaskCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    task_id:
+      type: string
+    workflow_instance_id:
+      type: string
+    decision:
+      type: string
+      description: APPROVED, REJECTED
+    completed_by:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Workflow task completed'

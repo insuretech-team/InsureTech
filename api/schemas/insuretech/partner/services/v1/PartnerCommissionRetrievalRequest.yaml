@@ -1,0 +1,13 @@
+PartnerCommissionRetrievalRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+  description: Request payload for retrieving partner commission retrieval information.
+    May include filters and pagination parameters.

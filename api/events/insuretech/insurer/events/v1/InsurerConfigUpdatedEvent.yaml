@@ -1,0 +1,16 @@
+InsurerConfigUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    insurer_id:
+      type: string
+    config_type:
+      type: string
+      description: API, BUSINESS_MODEL, UNDERWRITING
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Insurer config updated'

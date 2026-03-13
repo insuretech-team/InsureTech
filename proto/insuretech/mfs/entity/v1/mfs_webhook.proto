@@ -1,0 +1,123 @@
+syntax = "proto3";
+
+package insuretech.mfs.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/entity/v1;mfsv1";
+
+// MFS webhook log
+message MFSWebhook {
+  option (insuretech.common.v1.table) = {
+    table_name: "mfs_webhooks"
+    schema_name: "payment_schema"
+    migration_order: 52
+    is_table: true
+    audit_fields: true
+    comment: "MFS webhook callbacks"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "webhook_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:webhook_id;not null"
+  
+  string provider = 2 [(insuretech.common.v1.column) = {
+    column_name: "provider"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_mfs_webhooks_provider"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:provider;not null"
+  
+  string event_type = 3 [(insuretech.common.v1.column) = {
+    column_name: "event_type"
+    sql_type: "VARCHAR(100)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:event_type;not null"
+  
+  string payload = 4 [(insuretech.common.v1.column) = {
+    column_name: "payload"
+    sql_type: "JSONB"
+    is_json: true
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:payload;not null"
+  
+  string headers = 5 [(insuretech.common.v1.column) = {
+    column_name: "headers"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:headers"
+  
+  WebhookStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'PENDING'"
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  bool signature_valid = 7 [(insuretech.common.v1.column) = {
+    column_name: "signature_valid"
+    sql_type: "BOOLEAN"
+  }];
+  // @inject_tag: gorm:"column:signature_valid"
+  
+  string mfs_transaction_id = 8 [(insuretech.common.v1.column) = {
+    column_name: "mfs_transaction_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "mfs_transactions"
+      references_column: "transaction_id"
+      references_schema: "payment_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+  }];
+  // @inject_tag: gorm:"column:mfs_transaction_id"
+  
+  string error_message = 9 [(insuretech.common.v1.column) = {
+    column_name: "error_message"
+    sql_type: "TEXT"
+  }];
+  // @inject_tag: gorm:"column:error_message"
+  
+  google.protobuf.Timestamp processed_at = 10 [(insuretech.common.v1.column) = {
+    column_name: "processed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum WebhookStatus {
+  WEBHOOK_STATUS_UNSPECIFIED = 0;
+  WEBHOOK_STATUS_PENDING = 1;
+  WEBHOOK_STATUS_PROCESSED = 2;
+  WEBHOOK_STATUS_FAILED = 3;
+}
+
+

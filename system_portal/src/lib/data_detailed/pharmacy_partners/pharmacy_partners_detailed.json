@@ -1,0 +1,4922 @@
+[
+  {
+    "id": "11",
+    "name": "Partner Name\n\t\n\t\n\t\tAzmir pharmacy",
+    "address": "Address\n\t\n\t\n\t\tInfront of model mosjide, Road-1,Kolpolok R/A, Bakalia, Chattogram\nPhone: 01863749372",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tInfront of model mosjide, Road-1,Kolpolok R/A, Bakalia, Chattogram\nPhone: 01863749372",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAzmir pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% discount on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "12",
+    "name": "Partner Name\n\t\n\t\n\t\tMCM pharma",
+    "address": "Address\n\t\n\t\n\t\t29, Jaynagar,owalibeg kha mosjid, Chawkbazar, Chattogram\nPhone 01817795748",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t29, Jaynagar,owalibeg kha mosjid, Chawkbazar, Chattogram\nPhone 01817795748",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMCM pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "13",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Makka Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tMirjapul, Chattogram\nPhone: 01875231458",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMirjapul, Chattogram\nPhone: 01875231458",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Makka Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "14",
+    "name": "Partner Name\n\t\n\t\n\t\tNasima Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tEPZ, Gate No-2, Adjacent to Yasin Market, Unaishar, Cumilla Sadar, Cumilla\nPhone: 01302043961",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tEPZ, Gate No-2, Adjacent to Yasin Market, Unaishar, Cumilla Sadar, Cumilla\nPhone: 01302043961",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNasima Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "15",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAccess road moor, Chattogram\nPhone: 01602449686",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAccess road moor, Chattogram\nPhone: 01602449686",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "16",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sun Drug House",
+    "address": "Address\n\t\n\t\n\t\t86/39, Sheikh forid market, Chattogram\nPhone: 01709364124",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t86/39, Sheikh forid market, Chattogram\nPhone: 01709364124",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sun Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "17",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Iqbal Medico",
+    "address": "Address\n\t\n\t\n\t\tEpic nur landmark, Chattogram\nPhone: 01850912685",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tEpic nur landmark, Chattogram\nPhone: 01850912685",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Iqbal Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "18",
+    "name": "Partner Name\n\t\n\t\n\t\tSharmi Medico",
+    "address": "Address\n\t\n\t\n\t\tUnite-1, Hoque Market, Bahaddarhat, Chattogram\nPhone - 01829468358",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tUnite-1, Hoque Market, Bahaddarhat, Chattogram\nPhone - 01829468358",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSharmi Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "19",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Mannan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tForida para, Taltola, Chattogram\nPhone: 01815680494",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tForida para, Taltola, Chattogram\nPhone: 01815680494",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Mannan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% discount on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "20",
+    "name": "Partner Name\n\t\n\t\n\t\tAl-Falah Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAl Falah Building, (In front of Jhautala Jame Mosjide), Police Lines, Jhautala, Cumilla Sadar, Cumilla\nPhone: 01717335649",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAl Falah Building, (In front of Jhautala Jame Mosjide), Police Lines, Jhautala, Cumilla Sadar, Cumilla\nPhone: 01717335649",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl-Falah Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "21",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Kaderia Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tSajeda super market, Shah amanat link road, Chattogram\nPhone: 01817081886",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSajeda super market, Shah amanat link road, Chattogram\nPhone: 01817081886",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Kaderia Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "22",
+    "name": "Partner Name\n\t\n\t\n\t\tN. Islam Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tR. Ahmed Complex, (next to Bonoful), Rahattarpul More Chattogram\nPhone: 01857637677",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tR. Ahmed Complex, (next to Bonoful), Rahattarpul More Chattogram\nPhone: 01857637677",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tN. Islam Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "23",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Madina Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSide of tower, 2no road, Chattogram\nPhone: 01847916000",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSide of tower, 2no road, Chattogram\nPhone: 01847916000",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Madina Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "24",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Central pharma",
+    "address": "Address\n\t\n\t\n\t\t562/A,Central shopping complex, O R nizam road, Chattogram\nPhone: 01821182080",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t562/A,Central shopping complex, O R nizam road, Chattogram\nPhone: 01821182080",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Central pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "25",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S M.S Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSide of Bahaddarhat jame mosjid,Hazi chad mia road, Chattogram\nPhone: 01818957039",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSide of Bahaddarhat jame mosjid,Hazi chad mia road, Chattogram\nPhone: 01818957039",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S M.S Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "26",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Ma Medical",
+    "address": "Address\n\t\n\t\n\t\tRamghat, Laksham Road, (next to Masjid Namira), Kandirpar\nCumilla Sadar, Cumilla\nPhone: 01647049189",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRamghat, Laksham Road, (next to Masjid Namira), Kandirpar\nCumilla Sadar, Cumilla\nPhone: 01647049189",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Ma Medical",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "27",
+    "name": "Partner Name\n\t\n\t\n\t\tSD Medicine Hall",
+    "address": "Address\n\t\n\t\n\t\tUnder Epic Health Care,Arunaloy Bhabon,6no Momen Road, Chattogram\nPhone: 01838828779",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tUnder Epic Health Care,Arunaloy Bhabon,6no Momen Road, Chattogram\nPhone: 01838828779",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSD Medicine Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "28",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S New Al-Raji Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t102/103, Opposite Azam Plaza, Hazari Lane,\nChattogram\nPhone: 1829321855",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t102/103, Opposite Azam Plaza, Hazari Lane,\nChattogram\nPhone: 1829321855",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S New Al-Raji Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "29",
+    "name": "Partner Name\n\t\n\t\n\t\tDulkash Medico",
+    "address": "Address\n\t\n\t\n\t\t167 No Kalibari Road, Chattogram\nPhone: 01521225131",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t167 No Kalibari Road, Chattogram\nPhone: 01521225131",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDulkash Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "30",
+    "name": "Partner Name\n\t\n\t\n\t\tAl Aqsa Drug House",
+    "address": "Address\n\t\n\t\n\t\tInfront of Fulkoli, Amanat khan Tower, 257/ D T Road, Chattogram\nPhone: 01616341635",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tInfront of Fulkoli, Amanat khan Tower, 257/ D T Road, Chattogram\nPhone: 01616341635",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl Aqsa Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "31",
+    "name": "Partner Name\n\t\n\t\n\t\tOxygen Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAli Nur Complex, Mosjide Goli, Oxygen Moor\tChattogram \nPhone : 01632385410",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAli Nur Complex, Mosjide Goli, Oxygen Moor\tChattogram \nPhone : 01632385410",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tOxygen Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% discount on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "32",
+    "name": "Partner Name\n\t\n\t\n\t\tBismillah Medicine",
+    "address": "Address\n\t\n\t\n\t\tOn the south side of the minaret, Shershah\n Chattogram \nPhone 01814030469",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOn the south side of the minaret, Shershah\n Chattogram \nPhone 01814030469",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBismillah Medicine",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "33",
+    "name": "Partner Name\n\t\n\t\n\t\tN J Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tIn Front of Hamidia School, Pathaniagoda, Chattogram \nPhone : 01829584629",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIn Front of Hamidia School, Pathaniagoda, Chattogram \nPhone : 01829584629",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tN J Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 10% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "34",
+    "name": "Partner Name\n\t\n\t\n\t\tJ R S Medicine Center",
+    "address": "Address\n\t\n\t\n\t\tM D Squere, 37 Mohim Das Road, Chattogram \nPhone : 01858397445",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tM D Squere, 37 Mohim Das Road, Chattogram \nPhone : 01858397445",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJ R S Medicine Center",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "35",
+    "name": "Partner Name\n\t\n\t\n\t\tShahadat Pharma",
+    "address": "Address\n\t\n\t\n\t\tEpic Centre, 37 K.B Fajlul Kader Road, In Front of Chattogram Medical Collage Hospital Main Gate, Chattogram \nPhone : 01712667142",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tEpic Centre, 37 K.B Fajlul Kader Road, In Front of Chattogram Medical Collage Hospital Main Gate, Chattogram \nPhone : 01712667142",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShahadat Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\tUp to 11% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on Medicine"
+    }
+  },
+  {
+    "id": "36",
+    "name": "Partner Name\n\t\n\t\n\t\tShikder medical hall",
+    "address": "Address\n\t\n\t\n\t\t72, Shankar Plaza, Shankar Bus Stand, Dhanmondi, Dhaka\nPhone 01712269501",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t72, Shankar Plaza, Shankar Bus Stand, Dhanmondi, Dhaka\nPhone 01712269501",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShikder medical hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "37",
+    "name": "Partner Name\n\t\n\t\n\t\tAL Raji Medicative Store",
+    "address": "Address\n\t\n\t\n\t\t28/30 Green road,(oposite of green life medical collage and hospital), Dhanmondi, Dhaka\nPhone 01819011646",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t28/30 Green road,(oposite of green life medical collage and hospital), Dhanmondi, Dhaka\nPhone 01819011646",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAL Raji Medicative Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "38",
+    "name": "Partner Name\n\t\n\t\n\t\tShohag Pharma",
+    "address": "Address\n\t\n\t\n\t\t36,Jigatola,(Be side of shopno super shop), Dhanmondi, Dhaka\nPhone 01711709924",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t36,Jigatola,(Be side of shopno super shop), Dhanmondi, Dhaka\nPhone 01711709924",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShohag Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "39",
+    "name": "Partner Name\n\t\n\t\n\t\tAsian Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t64/1,Lake surcus,kolabagan(Lake view jame mosjid)\tDhanmondi,Dhaka\nPhone 01986602269",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t64/1,Lake surcus,kolabagan(Lake view jame mosjid)\tDhanmondi,Dhaka\nPhone 01986602269",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAsian Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "40",
+    "name": "Partner Name\n\t\n\t\n\t\tOrchid Pharma",
+    "address": "Address\n\t\n\t\n\t\tShop no-6, House-2, Orchid plaza, Dhanmondi 27,\tDhanmondi, Dhaka\nPhone 01730484204",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop no-6, House-2, Orchid plaza, Dhanmondi 27,\tDhanmondi, Dhaka\nPhone 01730484204",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tOrchid Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "41",
+    "name": "Partner Name\n\t\n\t\n\t\tSafe Pharma",
+    "address": "Address\n\t\n\t\n\t\tHouse No-8,Opposite Lab Aid, Dhanmondi-4, Dhanmondi,\nDhaka\t\nPhone 01816533355",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse No-8,Opposite Lab Aid, Dhanmondi-4, Dhanmondi,\nDhaka\t\nPhone 01816533355",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSafe Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "42",
+    "name": "Partner Name\n\t\n\t\n\t\tTaqwa pharmacy",
+    "address": "Address\n\t\n\t\n\t\tHouse No-1, Road No-6, Block-Ka, Section-8, Duaripara,Rupnagar, Mirpur, Dhaka\t\nPhone 01975487055",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse No-1, Road No-6, Block-Ka, Section-8, Duaripara,Rupnagar, Mirpur, Dhaka\t\nPhone 01975487055",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tTaqwa pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "43",
+    "name": "Partner Name\n\t\n\t\n\t\tDoctors and Care Pharma",
+    "address": "Address\n\t\n\t\n\t\tStan Housing Beribandh Road, Sonali Bazar, Mirpur, Dhaka\t\t\nPhone 01785225635",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tStan Housing Beribandh Road, Sonali Bazar, Mirpur, Dhaka\t\t\nPhone 01785225635",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDoctors and Care Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "44",
+    "name": "Partner Name\n\t\n\t\n\t\tAmena Pharma",
+    "address": "Address\n\t\n\t\n\t\tShop-122, Bazarpara, Boro Bazar, Gabtoli, Mirpur, Dhaka\t\t\nPhone 01950658858",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop-122, Bazarpara, Boro Bazar, Gabtoli, Mirpur, Dhaka\t\t\nPhone 01950658858",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAmena Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "45",
+    "name": "Partner Name\n\t\n\t\n\t\tBokul Pharma",
+    "address": "Address\n\t\n\t\n\t\t259, Khalek City Market, Bagbari Darussalam, Gabtoli, Dhaka\nPhone 1712378766",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t259, Khalek City Market, Bagbari Darussalam, Gabtoli, Dhaka\nPhone 1712378766",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBokul Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "46",
+    "name": "Partner Name\n\t\n\t\n\t\tWell Care Pharmac",
+    "address": "Address\n\t\n\t\n\t\tM.A Mannan Khan Market, Ahmed Nagar, Paikpara, Ansar Camp, Mirpur-1, Dhaka\t\nPhone 01914020635",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tM.A Mannan Khan Market, Ahmed Nagar, Paikpara, Ansar Camp, Mirpur-1, Dhaka\t\nPhone 01914020635",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tWell Care Pharmac",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "47",
+    "name": "Partner Name\n\t\n\t\n\t\tShohagh Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBuddhijibi Shohid Minar Road\tMirpur-1,Dhaka\nPhone 01721410320",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBuddhijibi Shohid Minar Road\tMirpur-1,Dhaka\nPhone 01721410320",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShohagh Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "48",
+    "name": "Partner Name\n\t\n\t\n\t\tMedi Pharma",
+    "address": "Address\n\t\n\t\n\t\tHakim Center, Medinate Goli\tMirpur-1, Dhaka\t\nPhone  01621449500",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHakim Center, Medinate Goli\tMirpur-1, Dhaka\t\nPhone  01621449500",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedi Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "49",
+    "name": "Partner Name\n\t\n\t\n\t\tKhan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSouth Bishil (beside Baitul Mannan Masjid) , Mirpur-1, Dhaka\nPhone 01763544594",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSouth Bishil (beside Baitul Mannan Masjid) , Mirpur-1, Dhaka\nPhone 01763544594",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKhan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "50",
+    "name": "Partner Name\n\t\n\t\n\t\tSha Ali Pharma",
+    "address": "Address\n\t\n\t\n\t\t1 no Colony, Lalkuti Bazar, Mirpur-1, Dhaka\nPhone 01734170950",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1 no Colony, Lalkuti Bazar, Mirpur-1, Dhaka\nPhone 01734170950",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSha Ali Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "51",
+    "name": "Partner Name\n\t\n\t\n\t\tJanata Pharmacy model medicine shop",
+    "address": "Address\n\t\n\t\n\t\tJanata housing, Mirpur-1, Dhaka\nPhone 01703306509",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tJanata housing, Mirpur-1, Dhaka\nPhone 01703306509",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanata Pharmacy model medicine shop",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "52",
+    "name": "Partner Name\n\t\n\t\n\t\tSuper Drug",
+    "address": "Address\n\t\n\t\n\t\tHouse no # 2, Road no # 2, Block-F, Mirpur-1, Dhaka\t\nPhone 01988360561",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse no # 2, Road no # 2, Block-F, Mirpur-1, Dhaka\t\nPhone 01988360561",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSuper Drug",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "53",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Soma Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t1-Kha, 39/40,Battola, Kazipur, Gudaraghat, Mirpur-1, Dhaka\nPhone 01715332648",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1-Kha, 39/40,Battola, Kazipur, Gudaraghat, Mirpur-1, Dhaka\nPhone 01715332648",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Soma Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "54",
+    "name": "Partner Name\n\t\n\t\n\t\tOyshi Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t5/64/7, Chiriakhana Road, Rainkhola Bazar, Mirpur-2, Dhaka\nPhone 01819727852",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t5/64/7, Chiriakhana Road, Rainkhola Bazar, Mirpur-2, Dhaka\nPhone 01819727852",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tOyshi Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "55",
+    "name": "Partner Name\n\t\n\t\n\t\tApon pharmacy",
+    "address": "Address\n\t\n\t\n\t\tRoad-9, Rupnagar R/A, (Beside BUBT University), Mirpur-2, Dhaka\nPhone 01641347411",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRoad-9, Rupnagar R/A, (Beside BUBT University), Mirpur-2, Dhaka\nPhone 01641347411",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tApon pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "56",
+    "name": "Partner Name\n\t\n\t\n\t\tMaisha Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tIn front of M R Khan Sishu Hospital, Boro Bagh, Block-1\tMirpur-2, Dhaka\nPhone 01726296713",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIn front of M R Khan Sishu Hospital, Boro Bagh, Block-1\tMirpur-2, Dhaka\nPhone 01726296713",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMaisha Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "57",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tRoad-23,Park Colony, Block-D, Mirpur-6, Dhaka\t\nPhone 01535165164",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRoad-23,Park Colony, Block-D, Mirpur-6, Dhaka\t\nPhone 01535165164",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "58",
+    "name": "Partner Name\n\t\n\t\n\t\tPure Pharma",
+    "address": "Address\n\t\n\t\n\t\tMilkvita Mor, Section-7, Mirpur-7, Dhaka\nPhone 01600000344",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMilkvita Mor, Section-7, Mirpur-7, Dhaka\nPhone 01600000344",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tPure Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "59",
+    "name": "Partner Name\n\t\n\t\n\t\tPharmacy Aloevera",
+    "address": "Address\n\t\n\t\n\t\tPlot-11, Road-8, East Senpara, Kafrul, Mirpur-10, Dhaka\t\nPhone 01714136575",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPlot-11, Road-8, East Senpara, Kafrul, Mirpur-10, Dhaka\t\nPhone 01714136575",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tPharmacy Aloevera",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "60",
+    "name": "Partner Name\n\t\n\t\n\t\tJoytun Pharma",
+    "address": "Address\n\t\n\t\n\t\tFlat 1/2, Road-5,Section-07, Pallabi, Dhaka\nPhone 01518307677",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tFlat 1/2, Road-5,Section-07, Pallabi, Dhaka\nPhone 01518307677",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJoytun Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "61",
+    "name": "Partner Name\n\t\n\t\n\t\tDesh pharma",
+    "address": "Address\n\t\n\t\n\t\tPlot-23,Road-8,Block-A,beside RFL best buy showroom\tMirpur-12, Dhaka\nPhone 01894010887",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPlot-23,Road-8,Block-A,beside RFL best buy showroom\tMirpur-12, Dhaka\nPhone 01894010887",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDesh pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "62",
+    "name": "Partner Name\n\t\n\t\n\t\tAbdullah Medicine",
+    "address": "Address\n\t\n\t\n\t\t7/A, Main Road, Mohammadia Housing Ltd, Mohammadpur, \tDhaka\t\nPhone 01716023895",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t7/A, Main Road, Mohammadia Housing Ltd, Mohammadpur, \tDhaka\t\nPhone 01716023895",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAbdullah Medicine",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "63",
+    "name": "Partner Name\n\t\n\t\n\t\tChadpur Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t9/17, Block-C, Tajmahal Road, Mohammadpur, Dhaka\t\tPhone 01902232857",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t9/17, Block-C, Tajmahal Road, Mohammadpur, Dhaka\t\tPhone 01902232857",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tChadpur Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "64",
+    "name": "Partner Name\n\t\n\t\n\t\tNational Pharma",
+    "address": "Address\n\t\n\t\n\t\t88/1, Main Road, Kaderabad Housing, Mohammadpur, Dhaka\nPhone 01963592200",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t88/1, Main Road, Kaderabad Housing, Mohammadpur, Dhaka\nPhone 01963592200",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNational Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "65",
+    "name": "Partner Name\n\t\n\t\n\t\tAyesha Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t772/5 Bosila Road, (Maa villa), Mohammadpur, Dhaka\t\n\nPhone 01628640433",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t772/5 Bosila Road, (Maa villa), Mohammadpur, Dhaka\t\n\nPhone 01628640433",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAyesha Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "66",
+    "name": "Partner Name\n\t\n\t\n\t\tMahbub Cresent Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t1/5, Asad avenue, Mohammadpur Bus Stand, (Behind of Allah karim Jame Mosjide), Mohammadpur, Dhaka\nPhone 01865660081",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1/5, Asad avenue, Mohammadpur Bus Stand, (Behind of Allah karim Jame Mosjide), Mohammadpur, Dhaka\nPhone 01865660081",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMahbub Cresent Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "67",
+    "name": "Partner Name\n\t\n\t\n\t\tNew Dhaka Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t3/3, Hasem khan Road,Sultangonj, Rayer Bazar\tMohammadpur, Dhaka\nPhone 01997604820",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t3/3, Hasem khan Road,Sultangonj, Rayer Bazar\tMohammadpur, Dhaka\nPhone 01997604820",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNew Dhaka Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "68",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Medicine Corne",
+    "address": "Address\n\t\n\t\n\t\tHouse-10, Road-8, PC culture Housing, Shekhertek,  Adabor\tDhaka\nPhone 01710591454",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse-10, Road-8, PC culture Housing, Shekhertek,  Adabor\tDhaka\nPhone 01710591454",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Medicine Corne",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "69",
+    "name": "Partner Name\n\t\n\t\n\t\tAsh-Shifa Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t7No, Shampa Super Market, Adorsho Chayaneer Ring Road, \t Adabor, Dhaka\t\nPhone : 01817593748",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t7No, Shampa Super Market, Adorsho Chayaneer Ring Road, \t Adabor, Dhaka\t\nPhone : 01817593748",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAsh-Shifa Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "70",
+    "name": "Partner Name\n\t\n\t\n\t\tEpoc Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tHouse-435, Road-2, Baitul Aman Housing Socity, Adabor, Dhaka\nPhone 01916785440",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse-435, Road-2, Baitul Aman Housing Socity, Adabor, Dhaka\nPhone 01916785440",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tEpoc Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "71",
+    "name": "Partner Name\n\t\n\t\n\t\tFamily Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t24/1, Khilji Road, (Behind Shyamoli Square Shopping Mall), Shyamoli, Dhaka\nPhone 01723055030",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t24/1, Khilji Road, (Behind Shyamoli Square Shopping Mall), Shyamoli, Dhaka\nPhone 01723055030",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFamily Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "72",
+    "name": "Partner Name\n\t\n\t\n\t\t Shyamoli Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t23/1, Under Sisumela Over Briz, Shyamoli, Dhaka\t\nPhone 01612243164",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t23/1, Under Sisumela Over Briz, Shyamoli, Dhaka\t\nPhone 01612243164",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\t Shyamoli Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "73",
+    "name": "Partner Name\n\t\n\t\n\t\tMagura Pharma",
+    "address": "Address\n\t\n\t\n\t\tOpposite the emergency gate of Pangu Hospital, Agargaon main road, Sher-E-Bangla Nagar, Dhaka\nPhone 01918599425",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite the emergency gate of Pangu Hospital, Agargaon main road, Sher-E-Bangla Nagar, Dhaka\nPhone 01918599425",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMagura Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "74",
+    "name": "Partner Name\n\t\n\t\n\t\tYes Pharma",
+    "address": "Address\n\t\n\t\n\t\t1/4-B, Shuruj Mansion, Tali Office Moar, Hazaribagh, Dhaka\t\nPhone 01689792213",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1/4-B, Shuruj Mansion, Tali Office Moar, Hazaribagh, Dhaka\t\nPhone 01689792213",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tYes Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "75",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S The New Pharmacy-2",
+    "address": "Address\n\t\n\t\n\t\tGomti New Market, Upazila Parishad Road, Muradnagar Bazar, Muradnagar, Cumilla\n\nPhone 01815980352",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tGomti New Market, Upazila Parishad Road, Muradnagar Bazar, Muradnagar, Cumilla\n\nPhone 01815980352",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S The New Pharmacy-2",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "76",
+    "name": "Partner Name\n\t\n\t\n\t\tMedi zone",
+    "address": "Address\n\t\n\t\n\t\tK-11/2D, Syed Ali Super Market, Bashundhara Road, Jagannathpur, Bhatara, Dhaka\t\nPhone : 01670102345",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tK-11/2D, Syed Ali Super Market, Bashundhara Road, Jagannathpur, Bhatara, Dhaka\t\nPhone : 01670102345",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedi zone",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "77",
+    "name": "Partner Name\n\t\n\t\n\t\tBoishakhi Pharma",
+    "address": "Address\n\t\n\t\n\t\tKa-40, Ayat Ali Villa, Shaheed Harez Road, Nardda, Vatara, Dhaka\nPhone 01615352496",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKa-40, Ayat Ali Villa, Shaheed Harez Road, Nardda, Vatara, Dhaka\nPhone 01615352496",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBoishakhi Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "78",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Munir Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t32/5, TB Gate, Mohakhali, Dhaka\t\t\nPhone 01930399372",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t32/5, TB Gate, Mohakhali, Dhaka\t\t\nPhone 01930399372",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Munir Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "79",
+    "name": "Partner Name\n\t\n\t\n\t\tDhaka Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tA/6/3, Mohakhali Bazar South Entrance, Mohakhali, Dhaka\tPhone 01716018153",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tA/6/3, Mohakhali Bazar South Entrance, Mohakhali, Dhaka\tPhone 01716018153",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDhaka Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicine",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "80",
+    "name": "Partner Name\n\t\n\t\n\t\tBismillah Pharma",
+    "address": "Address\n\t\n\t\n\t\tHouse # 47, Road # 1, Sector # 10, Fulbaria Bazar, Uttara, Dhaka\nPhone 01920476240",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse # 47, Road # 1, Sector # 10, Fulbaria Bazar, Uttara, Dhaka\nPhone 01920476240",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBismillah Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "81",
+    "name": "Partner Name\n\t\n\t\n\t\tFriend's Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tM.A. Gani Road, Brahmanpara Bazar, Brahmanpara, Cumilla\n\nPhone 1952153081",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tM.A. Gani Road, Brahmanpara Bazar, Brahmanpara, Cumilla\n\nPhone 1952153081",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFriend's Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "82",
+    "name": "Partner Name\n\t\n\t\n\t\tUttara Comfort Pharmac",
+    "address": "Address\n\t\n\t\n\t\tHouse # 22,Road # Rabindra Sarani, Sector # 7, Azompur, Uttara, Dhaka\nPhone 01866263080",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse # 22,Road # Rabindra Sarani, Sector # 7, Azompur, Uttara, Dhaka\nPhone 01866263080",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tUttara Comfort Pharmac",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "83",
+    "name": "Partner Name\n\t\n\t\n\t\tHaji Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t645, Ashkona, Under Hotel Shajalal, Dakshinkhan, Uttara, Dhaka\nPhonde 01775249587",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t645, Ashkona, Under Hotel Shajalal, Dakshinkhan, Uttara, Dhaka\nPhonde 01775249587",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHaji Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "84",
+    "name": "Partner Name\n\t\n\t\n\t\tRokeya Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tHouse # 06, Road # 1/3, Sector # 9, Uttara, Dhaka\nPhone 01793011660",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHouse # 06, Road # 1/3, Sector # 9, Uttara, Dhaka\nPhone 01793011660",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRokeya Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "85",
+    "name": "Partner Name\n\t\n\t\n\t\tKhan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tM.A. Gani Road, Burichang  North Bazar, Burichang, Cumilla\nPhone : 01773456530",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tM.A. Gani Road, Burichang  North Bazar, Burichang, Cumilla\nPhone : 01773456530",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKhan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "86",
+    "name": "Partner Name\n\t\n\t\n\t\tGenuine Medicines",
+    "address": "Address\n\t\n\t\n\t\tPlot-12, (Opposite Zamzam Tower), Garib-E-Newaz Avenue, Sector-11, Uttara, Dhaka\nPhone 01929358739",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPlot-12, (Opposite Zamzam Tower), Garib-E-Newaz Avenue, Sector-11, Uttara, Dhaka\nPhone 01929358739",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tGenuine Medicines",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "87",
+    "name": "Partner Name\n\t\n\t\n\t\tLife Pharma",
+    "address": "Address\n\t\n\t\n\t\tB-37/2, Khilkhet Bazar, Khilkhet, Dhaka\nPhone 01711340790",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tB-37/2, Khilkhet Bazar, Khilkhet, Dhaka\nPhone 01711340790",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tLife Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "88",
+    "name": "Partner Name\n\t\n\t\n\t\tNaz Pharma",
+    "address": "Address\n\t\n\t\n\t\tShop No-6, Shahbag Biponi Bitan, Shahbag, Dhaka\nPhone 01711829054",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop No-6, Shahbag Biponi Bitan, Shahbag, Dhaka\nPhone 01711829054",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNaz Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "89",
+    "name": "Partner Name\n\t\n\t\n\t\tAhmed Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t57, West Tejturi Bazar,Farmgate, Tejgaon, Dhaka\t\nPhone 01704201108",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t57, West Tejturi Bazar,Farmgate, Tejgaon, Dhaka\t\nPhone 01704201108",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAhmed Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "90",
+    "name": "Partner Name\n\t\n\t\n\t\tZafor Medical Store",
+    "address": "Address\n\t\n\t\n\t\t11, Holy cross collage Road, (In Front of Farmgate Over Briz),  Farmgate, Tejgaon, Dhaka\nPhone 01709364901",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t11, Holy cross collage Road, (In Front of Farmgate Over Briz),  Farmgate, Tejgaon, Dhaka\nPhone 01709364901",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tZafor Medical Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "91",
+    "name": "Partner Name\n\t\n\t\n\t\tDx Pharma",
+    "address": "Address\n\t\n\t\n\t\t152/2, Rawshan Tower, Panthapath Crossroads, Panthapath\t, Dhaka\nPhone 01313010249",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t152/2, Rawshan Tower, Panthapath Crossroads, Panthapath\t, Dhaka\nPhone 01313010249",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDx Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "92",
+    "name": "Partner Name\n\t\n\t\n\t\tSoikat Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t23, Indira Road, (Side of Metrorail stairs), Sher-e-Bangla Nagar, Farmgate, Tejgaon, Dhaka\nPhone 01728941354",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t23, Indira Road, (Side of Metrorail stairs), Sher-e-Bangla Nagar, Farmgate, Tejgaon, Dhaka\nPhone 01728941354",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSoikat Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "93",
+    "name": "Partner Name\n\t\n\t\n\t\tJahanara Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t108/A, East Rajabazar, Sher-e-Bangla Nagar, Farmgate, \tTejgaon, Dhaka\nPhone 01406878737",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t108/A, East Rajabazar, Sher-e-Bangla Nagar, Farmgate, \tTejgaon, Dhaka\nPhone 01406878737",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJahanara Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "94",
+    "name": "Partner Name\n\t\n\t\n\t\tShikder Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t44-45, Azimpur Road, (Chapda Mosjid), Azimpur, Dhaka\tPhone 01643059877",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t44-45, Azimpur Road, (Chapda Mosjid), Azimpur, Dhaka\tPhone 01643059877",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShikder Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "95",
+    "name": "Partner Name\n\t\n\t\n\t\tRashed Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t42, New Super Market, ( In front of Biswas builders), New Market City Complex, New Market, Dhaka\nPhone 01687754414",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t42, New Super Market, ( In front of Biswas builders), New Market City Complex, New Market, Dhaka\nPhone 01687754414",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRashed Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "96",
+    "name": "Partner Name\n\t\n\t\n\t\tNadia Pharma",
+    "address": "Address\n\t\n\t\n\t\t262/F, Elephant Road, Katabon dhal, Katabon, Dhaka\nPhone 01745707098",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t262/F, Elephant Road, Katabon dhal, Katabon, Dhaka\nPhone 01745707098",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNadia Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "97",
+    "name": "Partner Name\n\t\n\t\n\t\tAbdullah Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t218, Tropicana Tower, Syed Shahid Nazrul Islam Sarani, Purana Paltan More, Purana Paltan, Dhaka\t\nPhone 01842179449",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t218, Tropicana Tower, Syed Shahid Nazrul Islam Sarani, Purana Paltan More, Purana Paltan, Dhaka\t\nPhone 01842179449",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAbdullah Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "98",
+    "name": "Partner Name\n\t\n\t\n\t\tYousuf Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tPanchayat More, Dogair Road, Signboard North, Signboard, \tDhaka\t\nPhone 01608566424",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPanchayat More, Dogair Road, Signboard North, Signboard, \tDhaka\t\nPhone 01608566424",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tYousuf Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "99",
+    "name": "Partner Name\n\t\n\t\n\t\tJanata Health House-2",
+    "address": "Address\n\t\n\t\n\t\tShop No. 18-19, Shamsuddin Molla Market, (In front of Matuail Medical), South Matuail, Kadamtoli, Dhaka\nPhone 01875220863",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop No. 18-19, Shamsuddin Molla Market, (In front of Matuail Medical), South Matuail, Kadamtoli, Dhaka\nPhone 01875220863",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanata Health House-2",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "100",
+    "name": "Partner Name\n\t\n\t\n\t\tBarisal Pharma",
+    "address": "Address\n\t\n\t\n\t\tAbu Taher Market, Rayerbagh Bus Stand, Donia, Kadamtoli, Dhaka\nPhone 01919570219",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAbu Taher Market, Rayerbagh Bus Stand, Donia, Kadamtoli, Dhaka\nPhone 01919570219",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBarisal Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "101",
+    "name": "Partner Name\n\t\n\t\n\t\tFaizan Pharma-3",
+    "address": "Address\n\t\n\t\n\t\t613, South Goran Main Road, Basabo, Khilgaon, Dhaka\t\nPhone 01616059609",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t613, South Goran Main Road, Basabo, Khilgaon, Dhaka\t\nPhone 01616059609",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFaizan Pharma-3",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "102",
+    "name": "Partner Name\n\t\n\t\n\t\tNazia Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t10/1, North Mugdapara, Mugda Main Road, Mugda, Dhaka\tPhone 01725706437",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t10/1, North Mugdapara, Mugda Main Road, Mugda, Dhaka\tPhone 01725706437",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNazia Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "103",
+    "name": "Partner Name\n\t\n\t\n\t\tRakib Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t168, Shahid Faroque Road, (Popular Diagnostic Center Road)\tJatrabari, Dhaka\nPhone 01330990164",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t168, Shahid Faroque Road, (Popular Diagnostic Center Road)\tJatrabari, Dhaka\nPhone 01330990164",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRakib Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "104",
+    "name": "Partner Name\n\t\n\t\n\t\tKhandkar Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t125/2, South Jatrabari, (Dholaipar Road)\tJatrabari\t, Dhaka\tPhone 01521206363",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t125/2, South Jatrabari, (Dholaipar Road)\tJatrabari\t, Dhaka\tPhone 01521206363",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKhandkar Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "105",
+    "name": "Partner Name\n\t\n\t\n\t\tSafa Marwa Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t82/6, North Jatrabari, (Below Safa Marwa Hospital), Jatrabari, Dhaka\t\nPhone 01632881851",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t82/6, North Jatrabari, (Below Safa Marwa Hospital), Jatrabari, Dhaka\t\nPhone 01632881851",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSafa Marwa Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "106",
+    "name": "Partner Name\n\t\n\t\n\t\tMaisha Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t178, East Dholaipar, Kadamtoli, Dhaka\nPhone 01911269405",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t178, East Dholaipar, Kadamtoli, Dhaka\nPhone 01911269405",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMaisha Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "107",
+    "name": "Partner Name\n\t\n\t\n\t\tShefa Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t496, Taleb Plaza, Haji Khorshed Ali Sardar Road, East Jurain, Jurain, Dhaka\t\nPhone 01765775115",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t496, Taleb Plaza, Haji Khorshed Ali Sardar Road, East Jurain, Jurain, Dhaka\t\nPhone 01765775115",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShefa Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "108",
+    "name": "Partner Name\n\t\n\t\n\t\tRekha Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t28/29, D.I.T. Plot, (Adjacent to South East Model Hospital)\tPostogola, Dhaka\t\nPhone 01310410069",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t28/29, D.I.T. Plot, (Adjacent to South East Model Hospital)\tPostogola, Dhaka\t\nPhone 01310410069",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRekha Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "109",
+    "name": "Partner Name\n\t\n\t\n\t\tMetro Pharma",
+    "address": "Address\n\t\n\t\n\t\t114, Agamasih Lane, (One Star Hotel Goli) Nazira Bazar, Bangshal, Dhaka\t\nPhone 01310179683",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t114, Agamasih Lane, (One Star Hotel Goli) Nazira Bazar, Bangshal, Dhaka\t\nPhone 01310179683",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMetro Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "110",
+    "name": "Partner Name\n\t\n\t\n\t\tNadia Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAbdul Aziz Tower, Maniknagar Main Road, Maniknagar, Dhaka\nPhone 01687813142",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAbdul Aziz Tower, Maniknagar Main Road, Maniknagar, Dhaka\nPhone 01687813142",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNadia Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "111",
+    "name": "Partner Name\n\t\n\t\n\t\tTahsin Drugs",
+    "address": "Address\n\t\n\t\n\t\t301/A, Saherunbag, New Road, Sipahibagh, Khilgaon, Dhaka\nPhone 01709364945",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t301/A, Saherunbag, New Road, Sipahibagh, Khilgaon, Dhaka\nPhone 01709364945",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tTahsin Drugs",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "112",
+    "name": "Partner Name\n\t\n\t\n\t\tMedinova Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t168, North Shahjahanpur, (next to Sonali Bank), Khilgaon Railgate,\tKhilgaon, Dhaka\nPhone 01818789134",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t168, North Shahjahanpur, (next to Sonali Bank), Khilgaon Railgate,\tKhilgaon, Dhaka\nPhone 01818789134",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedinova Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "113",
+    "name": "Partner Name\n\t\n\t\n\t\tHeal Pharma",
+    "address": "Address\n\t\n\t\n\t\t309/A, Road-9, Tilpapara, Khilgaon, Dhaka\nPhone 01304459017",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t309/A, Road-9, Tilpapara, Khilgaon, Dhaka\nPhone 01304459017",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHeal Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "114",
+    "name": "Partner Name\n\t\n\t\n\t\tMedilife Pharma",
+    "address": "Address\n\t\n\t\n\t\tL-53, Post Office Building, Post Office Road, Middle Badda, \tDhaka\nPhone 01727431393",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tL-53, Post Office Building, Post Office Road, Middle Badda, \tDhaka\nPhone 01727431393",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedilife Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "115",
+    "name": "Partner Name\n\t\n\t\n\t\tFarazy Pharma",
+    "address": "Address\n\t\n\t\n\t\t1204, Madani Avenue, Baridhara, Notun Bazar, Vatara, Dhaka\tPhone 01889983784",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1204, Madani Avenue, Baridhara, Notun Bazar, Vatara, Dhaka\tPhone 01889983784",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFarazy Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "116",
+    "name": "Partner Name\n\t\n\t\n\t\tAl Makka Pharma And Departmental Store",
+    "address": "Address\n\t\n\t\n\t\tS.S Bhaban, Plot-1, Block-B, Avenue-1, (Under the metrorail station), Mirpur-10, Dhaka\nPhone 01860808966",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tS.S Bhaban, Plot-1, Block-B, Avenue-1, (Under the metrorail station), Mirpur-10, Dhaka\nPhone 01860808966",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl Makka Pharma And Departmental Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "117",
+    "name": "Partner Name\n\t\n\t\n\t\tVai Vai Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t741, West Shewrapara, Mirpur, Dhaka\nPhone 01832946415",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t741, West Shewrapara, Mirpur, Dhaka\nPhone 01832946415",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tVai Vai Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "118",
+    "name": "Partner Name\n\t\n\t\n\t\tFirst Life Pharma",
+    "address": "Address\n\t\n\t\n\t\t492, East Kazipara, Kafrul, Mirpur, Dhaka\nPhone 01974491688",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t492, East Kazipara, Kafrul, Mirpur, Dhaka\nPhone 01974491688",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFirst Life Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "119",
+    "name": "Partner Name\n\t\n\t\n\t\tModina Drug House",
+    "address": "Address\n\t\n\t\n\t\t433, Nurpur, (Below Haji Rahman Community Center), Donia, Shonir Akhra, Jatrabari, Dhaka\nPhone 01776512692",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t433, Nurpur, (Below Haji Rahman Community Center), Donia, Shonir Akhra, Jatrabari, Dhaka\nPhone 01776512692",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tModina Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "120",
+    "name": "Partner Name\n\t\n\t\n\t\tIslamia Medical Hall",
+    "address": "Address\n\t\n\t\n\t\t17/2, (Opposite Islamia General Hospital), North Sayedabad, \tSayedabad, Dhaka\nPhone 01718383936",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t17/2, (Opposite Islamia General Hospital), North Sayedabad, \tSayedabad, Dhaka\nPhone 01718383936",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tIslamia Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "121",
+    "name": "Partner Name\n\t\n\t\n\t\tCosmic Pharma \u0026 Departmental Store",
+    "address": "Address\n\t\n\t\n\t\t86/C, Narinda Road, Narinda, Dhaka\nPhone 01767707869",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t86/C, Narinda Road, Narinda, Dhaka\nPhone 01767707869",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tCosmic Pharma \u0026 Departmental Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "122",
+    "name": "Partner Name\n\t\n\t\n\t\tHealth Mart Pharma",
+    "address": "Address\n\t\n\t\n\t\t29, ( Near Lab Aid), Doyagonj Moar, Doyagonj, Dhaka\nPhone 01747657843",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t29, ( Near Lab Aid), Doyagonj Moar, Doyagonj, Dhaka\nPhone 01747657843",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHealth Mart Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "123",
+    "name": "Partner Name\n\t\n\t\n\t\tNahar Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t85, (next to Gopibag Jame Masjid), R K Mission Road, Gopibag, \tDhaka\nPhone 01973504263",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t85, (next to Gopibag Jame Masjid), R K Mission Road, Gopibag, \tDhaka\nPhone 01973504263",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNahar Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "124",
+    "name": "Partner Name\n\t\n\t\n\t\tAnanda Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t42/A/2, Feroza Tower, (Near The Fuel Pump) Hatkhola Road, Tikatuli, Dhaka\nPhone 01819747227",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t42/A/2, Feroza Tower, (Near The Fuel Pump) Hatkhola Road, Tikatuli, Dhaka\nPhone 01819747227",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAnanda Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "125",
+    "name": "Partner Name\n\t\n\t\n\t\tSanjida Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t45/2-B, Hospital Road, Jhilpar, North Mugda, Mugda, Dhaka\nPhone 01716257765",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t45/2-B, Hospital Road, Jhilpar, North Mugda, Mugda, Dhaka\nPhone 01716257765",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSanjida Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "126",
+    "name": "Partner Name\n\t\n\t\n\t\tA.G.B Drug House",
+    "address": "Address\n\t\n\t\n\t\tBohumukhi Shomobay Shomiti Super Market, A.G.B Colony, Kachha Bazar Road, Motijheel, Dhaka\nPhone 01914231928",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBohumukhi Shomobay Shomiti Super Market, A.G.B Colony, Kachha Bazar Road, Motijheel, Dhaka\nPhone 01914231928",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tA.G.B Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "127",
+    "name": "Partner Name\n\t\n\t\n\t\tEmdadia Drug House",
+    "address": "Address\n\t\n\t\n\t\tToyenbee Circular Road, (Doinik Bangla), Aligarh House, Motijheel R/A, Motijheel, Dhaka\nPhone 01819394283",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tToyenbee Circular Road, (Doinik Bangla), Aligarh House, Motijheel R/A, Motijheel, Dhaka\nPhone 01819394283",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tEmdadia Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "128",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tChand Super Market, (Ground Floor), Mukti Smroni, Chittagong Road, Siddhirganj, Narayanganj\nPhone 01304038746",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tChand Super Market, (Ground Floor), Mukti Smroni, Chittagong Road, Siddhirganj, Narayanganj\nPhone 01304038746",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "129",
+    "name": "Partner Name\n\t\n\t\n\t\tNew Shamim Drug House",
+    "address": "Address\n\t\n\t\n\t\t(In front of Qutub Ail Primary School), Shibu Market, Fatullah, Narayanganj\nPhone 01764417506",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(In front of Qutub Ail Primary School), Shibu Market, Fatullah, Narayanganj\nPhone 01764417506",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNew Shamim Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "130",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sanjida Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tJalkuri Bus Stand,Jalkuri, Siddhirganj, Narayanganj\nPhone 01300886322",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tJalkuri Bus Stand,Jalkuri, Siddhirganj, Narayanganj\nPhone 01300886322",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sanjida Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "131",
+    "name": "Partner Name\n\t\n\t\n\t\tMatlab Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tRupayan Road, Bhuighar Bus Stand, Bhuighar, Fatullah, \tNarayanganj\nPhone 01813774228",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRupayan Road, Bhuighar Bus Stand, Bhuighar, Fatullah, \tNarayanganj\nPhone 01813774228",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMatlab Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "132",
+    "name": "Partner Name\n\t\n\t\n\t\tShefa Medicine Fair",
+    "address": "Address\n\t\n\t\n\t\tMosjide Market, Panchabati, Fatullah, Narayanganj\nPhone 01685320896",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMosjide Market, Panchabati, Fatullah, Narayanganj\nPhone 01685320896",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShefa Medicine Fair",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "133",
+    "name": "Partner Name\n\t\n\t\n\t\tAl Hayat Pharma",
+    "address": "Address\n\t\n\t\n\t\t( Near By Bag-E-Jannat Mosjid), Chasara, Narayanganj\t\nPhone 01818795020",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t( Near By Bag-E-Jannat Mosjid), Chasara, Narayanganj\t\nPhone 01818795020",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl Hayat Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "134",
+    "name": "Partner Name\n\t\n\t\n\t\tMedicine Point",
+    "address": "Address\n\t\n\t\n\t\t4No, D.I.T., City Doel Plaza\tD.I.T, Narayanganj\nPhone 01682231917",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t4No, D.I.T., City Doel Plaza\tD.I.T, Narayanganj\nPhone 01682231917",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedicine Point",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "135",
+    "name": "Partner Name\n\t\n\t\n\t\tAntar Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t1 No,Municipal Market, Khanpur Hospital Road, Khanpur, Narayanganj\nPhone 01718382509",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1 No,Municipal Market, Khanpur Hospital Road, Khanpur, Narayanganj\nPhone 01718382509",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAntar Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "136",
+    "name": "Partner Name\n\t\n\t\n\t\tHasan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t57/3, Delwar Tower, Sirajdaulla Road, Kalir Bazar, \tNarayanganj\t\nPhone 01817537180",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t57/3, Delwar Tower, Sirajdaulla Road, Kalir Bazar, \tNarayanganj\t\nPhone 01817537180",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHasan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "137",
+    "name": "Partner Name\n\t\n\t\n\t\tAmena Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tZero Point, Gajaghanta Bazar, Gangachara\nPhone: 01521338557",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tZero Point, Gajaghanta Bazar, Gangachara\nPhone: 01521338557",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAmena Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "138",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Hossen Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tGangachara Upazila Health Complex Gate, Gangachara\nPhone: 01773270410",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tGangachara Upazila Health Complex Gate, Gangachara\nPhone: 01773270410",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Hossen Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "139",
+    "name": "Partner Name\n\t\n\t\n\t\tBabla Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tManthana Bazar, Gangachara\nPhone: 01767476816",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tManthana Bazar, Gangachara\nPhone: 01767476816",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBabla Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "140",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tAnur Bazar, Gajaghanta Road, Mohipur\nPhone: 01737936294",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAnur Bazar, Gajaghanta Road, Mohipur\nPhone: 01737936294",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "141",
+    "name": "Partner Name\n\t\n\t\n\t\tSufiya Medical Store",
+    "address": "Address\n\t\n\t\n\t\tNotun Briz Road, (Badher Matha) Sundargonj Road\nPhone: 01843900485",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNotun Briz Road, (Badher Matha) Sundargonj Road\nPhone: 01843900485",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSufiya Medical Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "142",
+    "name": "Partner Name\n\t\n\t\n\t\tSultan Medical",
+    "address": "Address\n\t\n\t\n\t\tDariapur Bazar, Sundargonj Road\nPhone: 01711413776",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDariapur Bazar, Sundargonj Road\nPhone: 01711413776",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSultan Medical",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "143",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Amena Medical Center",
+    "address": "Address\n\t\n\t\n\t\tMain Road, Kamarjani Bazar\nPhone: 01720993932",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMain Road, Kamarjani Bazar\nPhone: 01720993932",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Amena Medical Center",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "144",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Kajal Medical Store",
+    "address": "Address\n\t\n\t\n\t\tRupar Bazar, Dariapur Road\nPhone: 01724321486",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRupar Bazar, Dariapur Road\nPhone: 01724321486",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Kajal Medical Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "145",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tKholahati Mor, Kumarpara Bazar,Dariapur Road\nPhone: 01796914930",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKholahati Mor, Kumarpara Bazar,Dariapur Road\nPhone: 01796914930",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "146",
+    "name": "Partner Name\n\t\n\t\n\t\tM R Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tKarnaphuli Market, Chowmuhani\nPhone: 01831843083",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKarnaphuli Market, Chowmuhani\nPhone: 01831843083",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM R Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "147",
+    "name": "Partner Name\n\t\n\t\n\t\tNew Alam Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t8/2, Lucky Plaza (Ground Floor), P W Rest House Road\nPhone: 01623182861",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t8/2, Lucky Plaza (Ground Floor), P W Rest House Road\nPhone: 01623182861",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNew Alam Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "148",
+    "name": "Partner Name\n\t\n\t\n\t\tAgrabad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t1110/A, 413/B, In front of Agrabad Jama Masjid, Hotel Agrabad Road\nPhone: 01832676130",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1110/A, 413/B, In front of Agrabad Jama Masjid, Hotel Agrabad Road\nPhone: 01832676130",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAgrabad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "149",
+    "name": "Partner Name\n\t\n\t\n\t\tMedicine For Life",
+    "address": "Address\n\t\n\t\n\t\t42, CDO Avenue Hoque View, Wasa More\nPhone: 01610964120",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t42, CDO Avenue Hoque View, Wasa More\nPhone: 01610964120",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedicine For Life",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "150",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Chandanaish Medico",
+    "address": "Address\n\t\n\t\n\t\tAdjacent to Lalkhan Bazar Government Primary School, Motijharna Lane\nPhone: 01866406399",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAdjacent to Lalkhan Bazar Government Primary School, Motijharna Lane\nPhone: 01866406399",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Chandanaish Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "151",
+    "name": "Partner Name\n\t\n\t\n\t\tSafe Land Medico",
+    "address": "Address\n\t\n\t\n\t\tAdjacent to Woodland Diagnostic Center (Ground Floor), Newmooring Fakir Mohammad Sawdagar Road, CEPZ\nPhone: 01814715017",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAdjacent to Woodland Diagnostic Center (Ground Floor), Newmooring Fakir Mohammad Sawdagar Road, CEPZ\nPhone: 01814715017",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSafe Land Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "152",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tZohir Mansion, In front of Sea view School, Charpara Road, West Katgor\nPhone: 01675433753",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tZohir Mansion, In front of Sea view School, Charpara Road, West Katgor\nPhone: 01675433753",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "153",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Trisha Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSteel Mill Bazar, North Potenga\nPhone: 01816905244",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSteel Mill Bazar, North Potenga\nPhone: 01816905244",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Trisha Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "154",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Joy Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tCement Crossing, South Halishahar\nPhone: 01764522599",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tCement Crossing, South Halishahar\nPhone: 01764522599",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Joy Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "155",
+    "name": "Partner Name\n\t\n\t\n\t\tSohan Medico",
+    "address": "Address\n\t\n\t\n\t\tIn front of Akmal Ali's house, Akmal Ali Road\nPhone: 01818890806",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIn front of Akmal Ali's house, Akmal Ali Road\nPhone: 01818890806",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSohan Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "156",
+    "name": "Partner Name\n\t\n\t\n\t\tLife Care Medicine",
+    "address": "Address\n\t\n\t\n\t\tKolsi Dighi Road, EPZ  2No. Pocket Gate More, Ward No. 38\nPhone: 01814166025",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKolsi Dighi Road, EPZ  2No. Pocket Gate More, Ward No. 38\nPhone: 01814166025",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tLife Care Medicine",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "157",
+    "name": "Partner Name\n\t\n\t\n\t\tJ S Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tIshan Mistry's Hat, Salt Gola Crossing, South-Central Halishahar\nPhone: 01670565936",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIshan Mistry's Hat, Salt Gola Crossing, South-Central Halishahar\nPhone: 01670565936",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJ S Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "158",
+    "name": "Partner Name\n\t\n\t\n\t\tKazi Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tEast side of the canal road, Akmal Ali pocket gate\nPhone: 01737167589",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tEast side of the canal road, Akmal Ali pocket gate\nPhone: 01737167589",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKazi Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "159",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Rupali Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tJabbar Market, Box Ali Munshi Road, Bandartila\nPhone: 01816172937",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tJabbar Market, Box Ali Munshi Road, Bandartila\nPhone: 01816172937",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Rupali Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "160",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Brothers Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t1254, Beparipara Intersection, Halishahar Road, South Agrabad\nPhone: 01319207887",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1254, Beparipara Intersection, Halishahar Road, South Agrabad\nPhone: 01319207887",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Brothers Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "161",
+    "name": "Partner Name\n\t\n\t\n\t\tTalukder Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tIn front of Sheikh Dewan Ali Mosque, Halishahar Road, Chotopul\nPhone: 01943331335",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIn front of Sheikh Dewan Ali Mosque, Halishahar Road, Chotopul\nPhone: 01943331335",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tTalukder Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "162",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sha Amanat Medico",
+    "address": "Address\n\t\n\t\n\t\tB.F.I.D.C Road, C\u0026B\nPhone: 01556537928",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tB.F.I.D.C Road, C\u0026B\nPhone: 01556537928",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sha Amanat Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "163",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Nahar Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tShop No. 3/4, Unishe Tower, Mymensingh Road, Chandana Chowrasta, Gazipur Chowrasta\nPhone: 01915529827",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop No. 3/4, Unishe Tower, Mymensingh Road, Chandana Chowrasta, Gazipur Chowrasta\nPhone: 01915529827",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Nahar Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "164",
+    "name": "Partner Name\n\t\n\t\n\t\tKhodeja Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t210/216, Hanif Tower, Next to Fulkoli, Nawab Shiraj-ud- dowla Road\nPhone: 01304159189",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t210/216, Hanif Tower, Next to Fulkoli, Nawab Shiraj-ud- dowla Road\nPhone: 01304159189",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKhodeja Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "165",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t561, Bibir Hat, (in front of Gorur Bazar gate), Hathazari Road\n\nPhone: 01874245492",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t561, Bibir Hat, (in front of Gorur Bazar gate), Hathazari Road\n\nPhone: 01874245492",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "166",
+    "name": "Partner Name\n\t\n\t\n\t\tTaqdeer Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tTayef Mansion, Mohammad Nagar, Bayezid Thana Road\nPhone: 01858056370",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tTayef Mansion, Mohammad Nagar, Bayezid Thana Road\nPhone: 01858056370",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tTaqdeer Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "167",
+    "name": "Partner Name\n\t\n\t\n\t\tMa Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tKachabazar Road, (In front of IFIC Bank), Bayezid Residential, Bayezid Bostami\nPhone: 01826553994",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKachabazar Road, (In front of IFIC Bank), Bayezid Residential, Bayezid Bostami\nPhone: 01826553994",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMa Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "168",
+    "name": "Partner Name\n\t\n\t\n\t\tHossen Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tRoufabad Mor, Hathazari Road\nPhone: 01828454547",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRoufabad Mor, Hathazari Road\nPhone: 01828454547",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHossen Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "169",
+    "name": "Partner Name\n\t\n\t\n\t\tKarnaphuli Medico",
+    "address": "Address\n\t\n\t\n\t\tAturar Dipu Kacha Bazar Road, Next to Jangalpara Shahi Jame Mosque\nPhone: 01827424000",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAturar Dipu Kacha Bazar Road, Next to Jangalpara Shahi Jame Mosque\nPhone: 01827424000",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKarnaphuli Medico",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "170",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Nur Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBoropol Mor, Halisahar Road\nPhone: 01823988575",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBoropol Mor, Halisahar Road\nPhone: 01823988575",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Nur Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "171",
+    "name": "Partner Name\n\t\n\t\n\t\tSajid Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tNext to Rupsha Bakery, Eidgaon, East Rampura, Doublemooring\nPhone: 01690106051",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNext to Rupsha Bakery, Eidgaon, East Rampura, Doublemooring\nPhone: 01690106051",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSajid Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "172",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Noyon Moni Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tNoyabazar Bishwa Road Intersection, West Side\nPhone: 01614663222",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNoyabazar Bishwa Road Intersection, West Side\nPhone: 01614663222",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Noyon Moni Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "173",
+    "name": "Partner Name\n\t\n\t\n\t\tMohammodia Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tZia Market, (Next to Kutukbari Resturent), Alankar Mor\nPhone: 01817764420",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tZia Market, (Next to Kutukbari Resturent), Alankar Mor\nPhone: 01817764420",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMohammodia Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "174",
+    "name": "Partner Name\n\t\n\t\n\t\tModina Drug House",
+    "address": "Address\n\t\n\t\n\t\tLane-1, Road-5, Foillatoli Bazar\n Phone: 01813090507",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tLane-1, Road-5, Foillatoli Bazar\n Phone: 01813090507",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tModina Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "175",
+    "name": "Partner Name\n\t\n\t\n\t\tNagorik pharma",
+    "address": "Address\n\t\n\t\n\t\tRoad-8/A,309 West Dhanmondi-15 Bus stand road,(Beside Jabale ur Mosjid)\nPhone: 01791831211",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRoad-8/A,309 West Dhanmondi-15 Bus stand road,(Beside Jabale ur Mosjid)\nPhone: 01791831211",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNagorik pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "176",
+    "name": "Partner Name\n\t\n\t\n\t\tPriya Medical Store",
+    "address": "Address\n\t\n\t\n\t\tShoyeb Market, 10, Mitford Road, No. 1 Main Gate, Mitford Hospital\nPhone: 01830012154",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShoyeb Market, 10, Mitford Road, No. 1 Main Gate, Mitford Hospital\nPhone: 01830012154",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tPriya Medical Store",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "177",
+    "name": "Partner Name\n\t\n\t\n\t\tMedicine Corner",
+    "address": "Address\n\t\n\t\n\t\tDhaka Medical College Hospital Emergency Gate, Next to the Mosjid, 1/2 Secretariat Road, Dhaka Medical\nPhone: 01819488680",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDhaka Medical College Hospital Emergency Gate, Next to the Mosjid, 1/2 Secretariat Road, Dhaka Medical\nPhone: 01819488680",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "178",
+    "name": "Partner Name\n\t\n\t\n\t\tNur Pharma And Surgical",
+    "address": "Address\n\t\n\t\n\t\tDhaka Medical College Hospital, Unit-2, Adjacent to Main Gate, (Next to Noor Jame Mosjid)\nPhone: 01721715598",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDhaka Medical College Hospital, Unit-2, Adjacent to Main Gate, (Next to Noor Jame Mosjid)\nPhone: 01721715598",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNur Pharma And Surgical",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "179",
+    "name": "Partner Name\n\t\n\t\n\t\tPanna Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tShaheed Smriti School Market, Bus Stand, Gazipur Sadar, Gazipur\t\nPhone: 01963271762",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShaheed Smriti School Market, Bus Stand, Gazipur Sadar, Gazipur\t\nPhone: 01963271762",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tPanna Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "180",
+    "name": "Partner Name\n\t\n\t\n\t\tNur Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tWireless Gate, T\u0026T Road, Naljani, Gazipur sadar, Gazipur\nPhone: 01992224946",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tWireless Gate, T\u0026T Road, Naljani, Gazipur sadar, Gazipur\nPhone: 01992224946",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNur Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "181",
+    "name": "Partner Name\n\t\n\t\n\t\tModina Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tThana Road, Joydebpur Bazar, Gazipur Sadar, Gazipur\tPhone: 01622066445",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tThana Road, Joydebpur Bazar, Gazipur Sadar, Gazipur\tPhone: 01622066445",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tModina Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "182",
+    "name": "Partner Name\n\t\n\t\n\t\tAlam Drugs",
+    "address": "Address\n\t\n\t\n\t\t6 No Powro Super Market, Rajbari Road, Joydebpur, Gazipur\tPhone: 01913395922",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t6 No Powro Super Market, Rajbari Road, Joydebpur, Gazipur\tPhone: 01913395922",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAlam Drugs",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "183",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Jaman Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBrihottor Mymensingh Samity Super Market, (Adjacent to Shaheed Tajuddin Ahmed Medical College Hospital)\tJoydebpur, Gazipur\t\nPhone:  01729464476",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBrihottor Mymensingh Samity Super Market, (Adjacent to Shaheed Tajuddin Ahmed Medical College Hospital)\tJoydebpur, Gazipur\t\nPhone:  01729464476",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Jaman Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "184",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Jaman Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBrihottor Mymensingh Samity Super Market, (Adjacent to Shaheed Tajuddin Ahmed Medical College Hospital)\tJoydebpur, Gazipur\t\nPhone: 01729464476",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBrihottor Mymensingh Samity Super Market, (Adjacent to Shaheed Tajuddin Ahmed Medical College Hospital)\tJoydebpur, Gazipur\t\nPhone: 01729464476",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Jaman Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "185",
+    "name": "Partner Name\n\t\n\t\n\t\tNirapad Medicine Mart",
+    "address": "Address\n\t\n\t\n\t\tOn the other side of the Kacha Bazar, near the Jorpukur par, Joydebpur\tJoydebpur, Gazipur\t\nPhone: 01817560263",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOn the other side of the Kacha Bazar, near the Jorpukur par, Joydebpur\tJoydebpur, Gazipur\t\nPhone: 01817560263",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNirapad Medicine Mart",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "186",
+    "name": "Partner Name\n\t\n\t\n\t\tEma Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tTelipara, T\u0026T Road, Gazipur Chowrasta\tGazipur Sadar, Gazipur\tPhone: 01762529736",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tTelipara, T\u0026T Road, Gazipur Chowrasta\tGazipur Sadar, Gazipur\tPhone: 01762529736",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tEma Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "187",
+    "name": "Partner Name\n\t\n\t\n\t\tMayer Doa Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tSarkar Market, Salna Bazar West Side, (Kaultia Road), Salna\tGazipur Sadar, Gazipur\t\nPhone: 01973243947",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSarkar Market, Salna Bazar West Side, (Kaultia Road), Salna\tGazipur Sadar, Gazipur\t\nPhone: 01973243947",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMayer Doa Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "188",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Ma Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tMaster Bari Bazar, Bhawal Mirzapur Road\tGazipur Sadar, Gazipur\t\nPhone: 01611665949",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMaster Bari Bazar, Bhawal Mirzapur Road\tGazipur Sadar, Gazipur\t\nPhone: 01611665949",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Ma Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "189",
+    "name": "Partner Name\n\t\n\t\n\t\tGazipur Sadar",
+    "address": "Address\n\t\n\t\n\t\tBiswas Super Market, Hotapara-Pirozali Road, Hotapara\tGazipur Sadar, Gazipur\t\nPhone: 01911182442",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBiswas Super Market, Hotapara-Pirozali Road, Hotapara\tGazipur Sadar, Gazipur\t\nPhone: 01911182442",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tGazipur Sadar",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "190",
+    "name": "Partner Name\n\t\n\t\n\t\tJihad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tHigh School Road, Bhabanipur Bazar\tGazipur Sadar, Gazipur\t1977385431",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHigh School Road, Bhabanipur Bazar\tGazipur Sadar, Gazipur\t1977385431",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJihad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "191",
+    "name": "Partner Name\n\t\n\t\n\t\tMohsin Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tHazi Abdul Kadir Super Market, Shingratuli Road, Bagher Bazar\tGazipur Sadar, Gazipur\t\nPhone: 01917464444",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHazi Abdul Kadir Super Market, Shingratuli Road, Bagher Bazar\tGazipur Sadar, Gazipur\t\nPhone: 01917464444",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMohsin Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "192",
+    "name": "Partner Name\n\t\n\t\n\t\tKalam Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBairagirchala-Sreepur Road, Gorgodia Master Bari\tSreepur , Gazipur\t\nPhone: 01916804423",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBairagirchala-Sreepur Road, Gorgodia Master Bari\tSreepur , Gazipur\t\nPhone: 01916804423",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKalam Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "193",
+    "name": "Partner Name\n\t\n\t\n\t\tJanata Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tKhan Super Market, Mawna Bazar Road, Mawna Chowrasta\tSreepur, Gazipur\t\nPhone: 01780402420",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKhan Super Market, Mawna Bazar Road, Mawna Chowrasta\tSreepur, Gazipur\t\nPhone: 01780402420",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanata Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "194",
+    "name": "Partner Name\n\t\n\t\n\t\tMedicine Express",
+    "address": "Address\n\t\n\t\n\t\t(Sisu Polli Road) M C Bazar\tSreepur, Gazipur\t\nPhone: 01857717810",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(Sisu Polli Road) M C Bazar\tSreepur, Gazipur\t\nPhone: 01857717810",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedicine Express",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "195",
+    "name": "Partner Name\n\t\n\t\n\t\tMonimala Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tChakpara Road,Nayanpur Bazar\tSreepur, Gazipur\t\nPhone: 01719434487",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tChakpara Road,Nayanpur Bazar\tSreepur, Gazipur\t\nPhone: 01719434487",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMonimala Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "196",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Alamgir Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tJoina Bazar, (Next to the Over Bridge), Bus Stand\tSreepur, Gazipur\t\nPhone: 01715783487",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tJoina Bazar, (Next to the Over Bridge), Bus Stand\tSreepur, Gazipur\t\nPhone: 01715783487",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Alamgir Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "197",
+    "name": "Partner Name\n\t\n\t\n\t\tCity Drug House",
+    "address": "Address\n\t\n\t\n\t\tIslampur Road, (Opposite Nawjor General Hospital), Nawjor\tKaliakair, Gazipur\t\nPhone: 01853330185",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIslampur Road, (Opposite Nawjor General Hospital), Nawjor\tKaliakair, Gazipur\t\nPhone: 01853330185",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tCity Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "198",
+    "name": "Partner Name\n\t\n\t\n\t\tGazipur Pharma",
+    "address": "Address\n\t\n\t\n\t\t(Below Southeast Bank), Next to Family Care Mega Shop, Konabari\tKaliakair, Gazipur\nPhone: 01521214500",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(Below Southeast Bank), Next to Family Care Mega Shop, Konabari\tKaliakair, Gazipur\nPhone: 01521214500",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tGazipur Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "199",
+    "name": "Partner Name\n\t\n\t\n\t\tM.S Pharma",
+    "address": "Address\n\t\n\t\n\t\tOsman Market, Mouchak Bus Stand\tKaliakair, Gazipur\t\nPhone: 01623640962",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOsman Market, Mouchak Bus Stand\tKaliakair, Gazipur\t\nPhone: 01623640962",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM.S Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "200",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Mayer Doa Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tRuby Syndicate, Sinbah Road, Shafipur Bazar\tKaliakair, Gazipur\t\nPhone: 01731544176",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRuby Syndicate, Sinbah Road, Shafipur Bazar\tKaliakair, Gazipur\t\nPhone: 01731544176",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Mayer Doa Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "201",
+    "name": "Partner Name\n\t\n\t\n\t\tBhola Grug House",
+    "address": "Address\n\t\n\t\n\t\tApex Road, Palli Bidyut Stand, Chandra\tKaliakair, Gazipur\t\nPhone: 01789323881",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tApex Road, Palli Bidyut Stand, Chandra\tKaliakair, Gazipur\t\nPhone: 01789323881",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBhola Grug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "202",
+    "name": "Partner Name\n\t\n\t\n\t\tJihad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tHazi Mokdom Plaza, Dainkini Road, Chandra\tKaliakair, Gazipur\t\nPhone: 01811225870",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tHazi Mokdom Plaza, Dainkini Road, Chandra\tKaliakair, Gazipur\t\nPhone: 01811225870",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJihad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "203",
+    "name": "Partner Name\n\t\n\t\n\t\tBismillah Drug House",
+    "address": "Address\n\t\n\t\n\t\tMojibur Rahman Market, Vogra Bypass\tGazipur Sadar, Gazipur\t\nPhone : 01831940265",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMojibur Rahman Market, Vogra Bypass\tGazipur Sadar, Gazipur\t\nPhone : 01831940265",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBismillah Drug House",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "204",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Janosheba Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tVogra, Bashon Sadak\tGazipur Sadar, Gazipur\t\nPhone: 01727898609",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tVogra, Bashon Sadak\tGazipur Sadar, Gazipur\t\nPhone: 01727898609",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Janosheba Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "205",
+    "name": "Partner Name\n\t\n\t\n\t\tHasan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSharifpur Road, ( Infront of Kabi Kishor School), Maleker Bari\tGazipur Sadar, Gazipur\t\nPhone: 01915709514",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSharifpur Road, ( Infront of Kabi Kishor School), Maleker Bari\tGazipur Sadar, Gazipur\t\nPhone: 01915709514",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHasan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "206",
+    "name": "Partner Name\n\t\n\t\n\t\tJami-Sami Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tKunia (Targas), Gasa, National University\tGazipur Sadar, Gazipur\t\nPhone: 01712501012",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKunia (Targas), Gasa, National University\tGazipur Sadar, Gazipur\t\nPhone: 01712501012",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJami-Sami Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "207",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sheik Rofiz Uddin Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAbdus Sohan Member Super Market, Choidana, Degerchala Road\tGazipur Sadar, Gazipur\t\nPhone: 01776207872",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAbdus Sohan Member Super Market, Choidana, Degerchala Road\tGazipur Sadar, Gazipur\t\nPhone: 01776207872",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sheik Rofiz Uddin Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "208",
+    "name": "Partner Name\n\t\n\t\n\t\tChadpur Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tMale Mohammad Market, Kamarjuri Road, Signbord\tGazipur Sadar, Gazipur\t\nPhone: 01684211150",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMale Mohammad Market, Kamarjuri Road, Signbord\tGazipur Sadar, Gazipur\t\nPhone: 01684211150",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tChadpur Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "209",
+    "name": "Partner Name\n\t\n\t\n\t\tJahangir Pharma",
+    "address": "Address\n\t\n\t\n\t\tNidu Mia Complex, Bottola Road, Bord Bazar\tGazipur Sadar, Gazipur\t\nPhone: 01682562738",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNidu Mia Complex, Bottola Road, Bord Bazar\tGazipur Sadar, Gazipur\t\nPhone: 01682562738",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJahangir Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "210",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tMiajan Sarkar Super Market, Bus Stand, Boro Bari\tGazipur Sadar, Gazipur\nPhone: 01766501200",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMiajan Sarkar Super Market, Bus Stand, Boro Bari\tGazipur Sadar, Gazipur\nPhone: 01766501200",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Sheba Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "211",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Maa-Jahanara Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tAsha Model School Road, (next to Dutch Bangla Bank), Khairtul Bazar, Gazipura Sataish\tTongi, Gazipur\t\nPhone: 01975461993",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAsha Model School Road, (next to Dutch Bangla Bank), Khairtul Bazar, Gazipura Sataish\tTongi, Gazipur\t\nPhone: 01975461993",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Maa-Jahanara Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "212",
+    "name": "Partner Name\n\t\n\t\n\t\tSabiha Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tBanamala Road, (Opposite Asian General Hospital), Dattapara, Tongi\tTongi, Gazipur\t\nPhone: 01320697349",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBanamala Road, (Opposite Asian General Hospital), Dattapara, Tongi\tTongi, Gazipur\t\nPhone: 01320697349",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSabiha Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t9% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "213",
+    "name": "Partner Name\n\t\n\t\n\t\tAl-Araf Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tExpedition # 96, College Road, Auchpara, Tongi\tTongi, Gazipur\t\nPhone: 01712469810",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tExpedition # 96, College Road, Auchpara, Tongi\tTongi, Gazipur\t\nPhone: 01712469810",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl-Araf Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "214",
+    "name": "Partner Name\n\t\n\t\n\t\tRabeya Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tBholaichan Market, Boro Masjid Road, (Opposite Unique Diagnostic Center), Hemayetpur\tSavar, Dhaka\t\nPhone: 01914384483",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBholaichan Market, Boro Masjid Road, (Opposite Unique Diagnostic Center), Hemayetpur\tSavar, Dhaka\t\nPhone: 01914384483",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRabeya Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "215",
+    "name": "Partner Name\n\t\n\t\n\t\tNoyon Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSchool Market, Joynabari Road, Hemayetpur\tSavar, Dhaka\t1749994785",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSchool Market, Joynabari Road, Hemayetpur\tSavar, Dhaka\t1749994785",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNoyon Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "216",
+    "name": "Partner Name\n\t\n\t\n\t\tAlif Pharma-2",
+    "address": "Address\n\t\n\t\n\t\tD-135, Talbag, Savar Thana Bus Stand\tSavar, Dhaka\t\nPhone: 01939648450",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tD-135, Talbag, Savar Thana Bus Stand\tSavar, Dhaka\t\nPhone: 01939648450",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAlif Pharma-2",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "217",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Roni Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tA-19, Wapda Road, (Opposite Utsav Plaza), Bazar Road\tSavar, Dhaka\t\nPhone: 01684440155",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tA-19, Wapda Road, (Opposite Utsav Plaza), Bazar Road\tSavar, Dhaka\t\nPhone: 01684440155",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Roni Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "218",
+    "name": "Partner Name\n\t\n\t\n\t\tRipon Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t10/33, Upazila Road, South Daryapur, J J Garments Road, Genda\tSavar, Dhaka\t\nPhone: 01716435273",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t10/33, Upazila Road, South Daryapur, J J Garments Road, Genda\tSavar, Dhaka\t\nPhone: 01716435273",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRipon Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "219",
+    "name": "Partner Name\n\t\n\t\n\t\tKhaled Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tBlock-A, (Pakija Gate No. 6), 3rd Street Intersection, Imandipur, Pakija\tSavar, Dhaka\t\nPhone: 01646773428",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBlock-A, (Pakija Gate No. 6), 3rd Street Intersection, Imandipur, Pakija\tSavar, Dhaka\t\nPhone: 01646773428",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKhaled Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t6% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "220",
+    "name": "Partner Name\n\t\n\t\n\t\tMaster Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tDhan Bazar, Monohardi Bazar\tMonohardi, Narsingdi\t\nPhone: 01762006567",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDhan Bazar, Monohardi Bazar\tMonohardi, Narsingdi\t\nPhone: 01762006567",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMaster Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "221",
+    "name": "Partner Name\n\t\n\t\n\t\tKamar Medicine",
+    "address": "Address\n\t\n\t\n\t\tMain Road, Hatirdiya Bazar\tMonohardi, Narsingdi\t\nPhone: 01731573880",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMain Road, Hatirdiya Bazar\tMonohardi, Narsingdi\t\nPhone: 01731573880",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tKamar Medicine",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "222",
+    "name": "Partner Name\n\t\n\t\n\t\tRabbi Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tTaj Mahal Shopping Center, Munseferchar, Itakhola\tShibpur,Narsingdi\t\nPhone: 01922810571",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tTaj Mahal Shopping Center, Munseferchar, Itakhola\tShibpur,Narsingdi\t\nPhone: 01922810571",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRabbi Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "223",
+    "name": "Partner Name\n\t\n\t\n\t\tAshirbad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tCharsindur Bazar, Sadar Road\tPolash, Narsingdi\t\nPhone: 01624822629",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tCharsindur Bazar, Sadar Road\tPolash, Narsingdi\t\nPhone: 01624822629",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAshirbad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "224",
+    "name": "Partner Name\n\t\n\t\n\t\tFatema Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tNext to Bangladesh Commerce Bank, Pachdona Mor\tPachdona, Narsingdi\t\nPhone: 01759186883",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNext to Bangladesh Commerce Bank, Pachdona Mor\tPachdona, Narsingdi\t\nPhone: 01759186883",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFatema Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t7% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "225",
+    "name": "Partner Name\n\t\n\t\n\t\tFarazi Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tMahbub Molla Concord Tower, (Below SBAC Bank), George Court Road, Jailkhana Mor, Torowa\tNarsingdi Sadar, Narsingdi\t\nPhone: 01710356970",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMahbub Molla Concord Tower, (Below SBAC Bank), George Court Road, Jailkhana Mor, Torowa\tNarsingdi Sadar, Narsingdi\t\nPhone: 01710356970",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tFarazi Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "226",
+    "name": "Partner Name\n\t\n\t\n\t\tHealth Care Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tShaheed Sattar Road, Station Road, (Opposite Foot Over Bridge)\tNarsingdi Sadar, Narsingdi\t\nPhone: 01552335003",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShaheed Sattar Road, Station Road, (Opposite Foot Over Bridge)\tNarsingdi Sadar, Narsingdi\t\nPhone: 01552335003",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tHealth Care Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "227",
+    "name": "Partner Name\n\t\n\t\n\t\tRony Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tBhuiyan Plaza, (Pouroshava Mor), Madhabdi Bazar\tMadhabdi, Narsingdi\t\nPhone: 01731467153",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBhuiyan Plaza, (Pouroshava Mor), Madhabdi Bazar\tMadhabdi, Narsingdi\t\nPhone: 01731467153",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRony Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "228",
+    "name": "Partner Name\n\t\n\t\n\t\tR.M. Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tMandal Market, Moddho  Bazar, (Old Gorur Hat Road)\tShambhuganj, Mymensingh\t\nPhone: 01710832249",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMandal Market, Moddho  Bazar, (Old Gorur Hat Road)\tShambhuganj, Mymensingh\t\nPhone: 01710832249",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tR.M. Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "229",
+    "name": "Partner Name\n\t\n\t\n\t\tRa'd Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tFuji Complex, Kalibari Road, Kathgudam, Bridge Mor\tMymensingh Sadar, Mymensingh\t\nPhone: 01718013329",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tFuji Complex, Kalibari Road, Kathgudam, Bridge Mor\tMymensingh Sadar, Mymensingh\t\nPhone: 01718013329",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRa'd Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "230",
+    "name": "Partner Name\n\t\n\t\n\t\tJahanara Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tOpposite 1 No Hospital Gate , Charpara\tMymensingh Sadar, Mymensingh\t\nPhone: 01919834384",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite 1 No Hospital Gate , Charpara\tMymensingh Sadar, Mymensingh\t\nPhone: 01919834384",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJahanara Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "231",
+    "name": "Partner Name\n\t\n\t\n\t\tOmar Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tDhaka Bypass Roundabout\tMymensingh Sadar, Mymensingh\t\nPhone: 01884660715",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDhaka Bypass Roundabout\tMymensingh Sadar, Mymensingh\t\nPhone: 01884660715",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tOmar Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t8% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "232",
+    "name": "Partner Name\n\t\n\t\n\t\tSarkar Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tNazrul Mansion, Dapunia Bazar, Fulbaria Road\tMymensingh Sadar, Mymensingh\t\nPhone: 01724323091",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNazrul Mansion, Dapunia Bazar, Fulbaria Road\tMymensingh Sadar, Mymensingh\t\nPhone: 01724323091",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSarkar Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "233",
+    "name": "Partner Name\n\t\n\t\n\t\tAl-Rakib Pharma",
+    "address": "Address\n\t\n\t\n\t\tMain Road,Fulbaria Bazar\tFulbaria, Mymensingh\t\nPhone: 01735339908",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMain Road,Fulbaria Bazar\tFulbaria, Mymensingh\t\nPhone: 01735339908",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl-Rakib Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "234",
+    "name": "Partner Name\n\t\n\t\n\t\tShihab Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tMain Road, Napitkhola More, (Opposite Rupali Bank)\tMuktagacha, Mymensingh\t\nPhone: 01893721743",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMain Road, Napitkhola More, (Opposite Rupali Bank)\tMuktagacha, Mymensingh\t\nPhone: 01893721743",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShihab Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "235",
+    "name": "Partner Name\n\t\n\t\n\t\tJannat Medicine",
+    "address": "Address\n\t\n\t\n\t\tDhaka-Mymensingh Highway, Churkhai Panch Rasta Mor\tChurkhai, Mymensingh\t\nPhone: 01725200178",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tDhaka-Mymensingh Highway, Churkhai Panch Rasta Mor\tChurkhai, Mymensingh\t\nPhone: 01725200178",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJannat Medicine",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t10% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "236",
+    "name": "Partner Name\n\t\n\t\n\t\tMir Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tTrishal Bus Stand, Thana Road, Ward No. 4\tTrishal, Mymensingh\t\nPhone: 01740647747",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tTrishal Bus Stand, Thana Road, Ward No. 4\tTrishal, Mymensingh\t\nPhone: 01740647747",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMir Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "237",
+    "name": "Partner Name\n\t\n\t\n\t\tAmin Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tPanch Rastar Mor, Bhaluka Bazar\tBhaluka, Mymensingh\t\nPhone: 01602947583",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPanch Rastar Mor, Bhaluka Bazar\tBhaluka, Mymensingh\t\nPhone: 01602947583",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAmin Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "238",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Leke view Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tAkbar Shah Bazar Road, North Pahartali, Akbar Shah, Chattogram\nPhone: 01712059578",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAkbar Shah Bazar Road, North Pahartali, Akbar Shah, Chattogram\nPhone: 01712059578",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Leke view Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "239",
+    "name": "Partner Name\n\t\n\t\n\t\tJanakalyan Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t262, Sobhan Market, Block-I, Biswa Colony, (Seven Market), Akbar Shah, Chattogram\nPhone: 01684261787",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t262, Sobhan Market, Block-I, Biswa Colony, (Seven Market), Akbar Shah, Chattogram\nPhone: 01684261787",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanakalyan Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "240",
+    "name": "Partner Name\n\t\n\t\n\t\tSamira Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tPlot No-G, 50/51, Road No- 1, CDA, Karnalhat, Akbar Shah, Chattogram\nPhone: 01815810014",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPlot No-G, 50/51, Road No- 1, CDA, Karnalhat, Akbar Shah, Chattogram\nPhone: 01815810014",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSamira Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "241",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Friend's Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tAbu Jafar Road, (Three Road Intersection) New Mosque, Char-Chaktai, Bakalia, Chattogram\nPhone: 01602444869",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAbu Jafar Road, (Three Road Intersection) New Mosque, Char-Chaktai, Bakalia, Chattogram\nPhone: 01602444869",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Friend's Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "242",
+    "name": "Partner Name\n\t\n\t\n\t\tNew Hridoy Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tNurul Islam Plaza, Paduar Bazar Bishwa Road, Cumilla Sadar, Cumilla\nPhone: 01937516651",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNurul Islam Plaza, Paduar Bazar Bishwa Road, Cumilla Sadar, Cumilla\nPhone: 01937516651",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNew Hridoy Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "243",
+    "name": "Partner Name\n\t\n\t\n\t\tSardar Medicine-3",
+    "address": "Address\n\t\n\t\n\t\t(Opposite People's Hospital), Medical Road, Tamsam Bridge,Cumilla Sadar, Cumilla\nPhone: 01974249520",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(Opposite People's Hospital), Medical Road, Tamsam Bridge,Cumilla Sadar, Cumilla\nPhone: 01974249520",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSardar Medicine-3",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "244",
+    "name": "Partner Name\n\t\n\t\n\t\tBrother's Pharma",
+    "address": "Address\n\t\n\t\n\t\t1 No E.P.Z Gate, CMC Road, Cumilla Sadar, Cumilla\nPhone: 01819957112",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1 No E.P.Z Gate, CMC Road, Cumilla Sadar, Cumilla\nPhone: 01819957112",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tBrother's Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "245",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Khorshed Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tAmin Mension, Infront of Medical Main Gate, Kuchaituli, Cumilla Sadar, Cumilla\nPhone: 01814480805",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAmin Mension, Infront of Medical Main Gate, Kuchaituli, Cumilla Sadar, Cumilla\nPhone: 01814480805",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Khorshed Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "246",
+    "name": "Partner Name\n\t\n\t\n\t\tMajumder Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tSardar Mension, 4 Road Junction, Laksham Road, Cumilla Sadar, Cumilla\nPhone: 01708320032",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSardar Mension, 4 Road Junction, Laksham Road, Cumilla Sadar, Cumilla\nPhone: 01708320032",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMajumder Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "247",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Protidin Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\tAlam Mension, Badsha Miar Bazar, Shasongacha, Cumilla Sadar, Cumilla\nPhone: 01757464715",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tAlam Mension, Badsha Miar Bazar, Shasongacha, Cumilla Sadar, Cumilla\nPhone: 01757464715",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Protidin Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "248",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Surokkha Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tWest Chowmuhuni, (Infront of Dharmapur Jame Mosjide), Dharmapur, Cumilla Sadar, Cumilla\nPhone: 01742422976",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tWest Chowmuhuni, (Infront of Dharmapur Jame Mosjide), Dharmapur, Cumilla Sadar, Cumilla\nPhone: 01742422976",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Surokkha Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "249",
+    "name": "Partner Name\n\t\n\t\n\t\tThe Janapriyo Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tOpposite Madrasa Gate, Ranir Bazar, Cumilla Sadar, Cumilla\nPhone: 01717685537",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite Madrasa Gate, Ranir Bazar, Cumilla Sadar, Cumilla\nPhone: 01717685537",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tThe Janapriyo Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "250",
+    "name": "Partner Name\n\t\n\t\n\t\tTrust Made Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tKotwali Model Thana Road, Rajgonj, Cumilla Sadar, Cumilla\nPhone: 01804777379",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKotwali Model Thana Road, Rajgonj, Cumilla Sadar, Cumilla\nPhone: 01804777379",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tTrust Made Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "251",
+    "name": "Partner Name\n\t\n\t\n\t\tJaowad Medicine Corner",
+    "address": "Address\n\t\n\t\n\t\t(Next to Madrasa-e-Jamiriya Islamic Research Center and Orphanage), Kaptan Bazar, Cumilla Sadar, Cumilla\nPhone: 01818297256",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(Next to Madrasa-e-Jamiriya Islamic Research Center and Orphanage), Kaptan Bazar, Cumilla Sadar, Cumilla\nPhone: 01818297256",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJaowad Medicine Corner",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "252",
+    "name": "Partner Name\n\t\n\t\n\t\tRoyel Pharma",
+    "address": "Address\n\t\n\t\n\t\tOpposite City Super Market, Chawkbazar, Cumilla Sadar, Cumilla\nPhone: 01841574277",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite City Super Market, Chawkbazar, Cumilla Sadar, Cumilla\nPhone: 01841574277",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tRoyel Pharma",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "253",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Jihad Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tOk Tower, (Below Prime Hospital and Diagnostic Center), Trunk Road, Chauddagram Bazar, Chauddagram, Cumilla\nPhone: 01811932929",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOk Tower, (Below Prime Hospital and Diagnostic Center), Trunk Road, Chauddagram Bazar, Chauddagram, Cumilla\nPhone: 01811932929",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Jihad Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "254",
+    "name": "Partner Name\n\t\n\t\n\t\tAl-Nur Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tMunshirhat West Bazar, Kadair Road, Chauddagram, Cumilla\nPhone: 01810205959",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMunshirhat West Bazar, Kadair Road, Chauddagram, Cumilla\nPhone: 01810205959",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl-Nur Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "255",
+    "name": "Partner Name\n\t\n\t\n\t\tMakka Pharmacy and Surgical Shop",
+    "address": "Address\n\t\n\t\n\t\tSirajul Islam Maju Market, Kadair Middle Market, Chauddagram, Cumilla\nPhone: 01793711227",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tSirajul Islam Maju Market, Kadair Middle Market, Chauddagram, Cumilla\nPhone: 01793711227",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMakka Pharmacy and Surgical Shop",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "256",
+    "name": "Partner Name\n\t\n\t\n\t\tM Hossen Pharmacy",
+    "address": "Address\n\t\n\t\n\t\t(Adjacent to Mosjide Market), Trunk Road, Miar Bazar, Chauddagram, Cumilla\nPhone: 01915746755",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t(Adjacent to Mosjide Market), Trunk Road, Miar Bazar, Chauddagram, Cumilla\nPhone: 01915746755",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM Hossen Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "257",
+    "name": "Partner Name\n\t\n\t\n\t\tJanani Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tRamij Uddin Market, Adarsha Sadar, Kalir Bazar, Cumilla\nPhone: 01814346294",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tRamij Uddin Market, Adarsha Sadar, Kalir Bazar, Cumilla\nPhone: 01814346294",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanani Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "258",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Majumder Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tOpposite Cambrian College, Gandhamati, Kotbari, Cumilla\nPhone: 01642162205",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite Cambrian College, Gandhamati, Kotbari, Cumilla\nPhone: 01642162205",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Majumder Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "259",
+    "name": "Partner Name\n\t\n\t\n\t\tNew Soudia Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tShop No. 148, Cantonment Market, Opposite Sandu Hotel \u0026 Restaurant, Comilla-Sylhet Highway, Cantonment, Cumilla\nPhone: 01726233401",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop No. 148, Cantonment Market, Opposite Sandu Hotel \u0026 Restaurant, Comilla-Sylhet Highway, Cantonment, Cumilla\nPhone: 01726233401",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tNew Soudia Pharmacy",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "260",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Dhaka Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tIn Front of Badiul Alam Degree College Main Gate, Companiganj Bazar, Companiganj, Cumilla\nPhone: 01617859314",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tIn Front of Badiul Alam Degree College Main Gate, Companiganj Bazar, Companiganj, Cumilla\nPhone: 01617859314",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Dhaka Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "261",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Janasheba Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tNew Market, Collage Road, Debidwar, Cumilla\nPhone: 01322208989",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNew Market, Collage Road, Debidwar, Cumilla\nPhone: 01322208989",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Janasheba Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "262",
+    "name": "Partner Name\n\t\n\t\n\t\tApon Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tStation Road, Chandina Bazar, Chandina, Cumilla\nPhone: 01893013791",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tStation Road, Chandina Bazar, Chandina, Cumilla\nPhone: 01893013791",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tApon Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "263",
+    "name": "Partner Name\n\t\n\t\n\t\tJanaseba Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tWahab Master Market, Girls School Road, Nimsar Bazar, Nimsar, Cumilla\nPhone: 01834447194",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tWahab Master Market, Girls School Road, Nimsar Bazar, Nimsar, Cumilla\nPhone: 01834447194",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tJanaseba Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "264",
+    "name": "Partner Name\n\t\n\t\n\t\tMedicine Point",
+    "address": "Address\n\t\n\t\n\t\tShop No-8/62, 2nd Floor, New Zilla Parishad Market, Mudafarganj Bazar, Laksam, Cumilla\nPhone: 01883317228",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tShop No-8/62, 2nd Floor, New Zilla Parishad Market, Mudafarganj Bazar, Laksam, Cumilla\nPhone: 01883317228",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedicine Point",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "265",
+    "name": "Partner Name\n\t\n\t\n\t\tShahin Medical Hall",
+    "address": "Address\n\t\n\t\n\t\tOpposite School College Market, Bhauksar Road, Bijra East Bazar, Laksam, Cumilla\nPhone: 01862793951",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tOpposite School College Market, Bhauksar Road, Bijra East Bazar, Laksam, Cumilla\nPhone: 01862793951",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tShahin Medical Hall",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t12% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "266",
+    "name": "Partner Name\n\t\n\t\n\t\tAl Madina Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tPouro Biponi Bitan Market, (below Al-Razi Diagnostic Center), Hajiganj Bazar, Hajiganj, Chadpur\nPhone: 01690201429",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tPouro Biponi Bitan Market, (below Al-Razi Diagnostic Center), Hajiganj Bazar, Hajiganj, Chadpur\nPhone: 01690201429",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl Madina Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "267",
+    "name": "Partner Name\n\t\n\t\n\t\tAl Shefa Medical",
+    "address": "Address\n\t\n\t\n\t\tUpazila Health Complex Gate, (Below Shahrasti Medinova Digital Diagnostic Center), Sharasti, Chadpur\nPhone: 01848055824",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tUpazila Health Complex Gate, (Below Shahrasti Medinova Digital Diagnostic Center), Sharasti, Chadpur\nPhone: 01848055824",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl Shefa Medical",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "268",
+    "name": "Partner Name\n\t\n\t\n\t\tM. Alam Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tKaptai Rastar Matha, (Main Road), Mohra, Chandgaon, Chattogram\nPhone: 01681342216",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tKaptai Rastar Matha, (Main Road), Mohra, Chandgaon, Chattogram\nPhone: 01681342216",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM. Alam Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  },
+  {
+    "id": "269",
+    "name": "Partner Name\n\t\n\t\n\t\tM/S Kari Pharmacy",
+    "address": "Address\n\t\n\t\n\t\tBelal Mosjid Market, (Mirzapul Road), Muradpur, Chattogram\nPhone: 01870594348",
+    "contact": "",
+    "email": "",
+    "type": "Pharmacy Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBelal Mosjid Market, (Mirzapul Road), Muradpur, Chattogram\nPhone: 01870594348",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tM/S Kari Pharmacy",
+      "Hospitalization": "Hospitalization\n\t\n\t\n\t\t11% on Local Medicines",
+      "more": "Service type\n\t\n\t\n\t\tDiscount on medicine"
+    }
+  }
+]

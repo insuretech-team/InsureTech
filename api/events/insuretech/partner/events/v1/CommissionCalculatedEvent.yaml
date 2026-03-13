@@ -1,0 +1,23 @@
+CommissionCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    commission_id:
+      type: string
+    partner_id:
+      type: string
+    agent_id:
+      type: string
+      description: Optional
+    policy_id:
+      type: string
+    commission_amount:
+      $ref: '#/components/schemas/Money'
+    commission_type:
+      type: string
+      description: acquisition, renewal
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Commission calculated'

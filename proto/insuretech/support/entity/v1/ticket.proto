@@ -1,0 +1,221 @@
+syntax = "proto3";
+
+package insuretech.support.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/support/entity/v1;supportv1";
+
+// Support ticket (FR-106 to FR-113)
+message Ticket {
+  option (insuretech.common.v1.table) = {
+    table_name: "tickets"
+    schema_name: "support_schema"
+    migration_order: 86
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Customer support tickets"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "ticket_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:ticket_id;not null"
+  
+  string ticket_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "ticket_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_tickets_number_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:ticket_number;not null"
+  
+  string beneficiary_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "beneficiary_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "beneficiaries"
+      references_column: "beneficiary_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_tickets_beneficiary_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:beneficiary_id;not null"
+  
+  TicketType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    index: {
+      index_name: "idx_tickets_type"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  TicketCategory category = 5 [(insuretech.common.v1.column) = {
+    column_name: "category"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+  
+  TicketPriority priority = 6 [(insuretech.common.v1.column) = {
+    column_name: "priority"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'MEDIUM'"
+    index: {
+      index_name: "idx_tickets_priority"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+  
+  string subject = 7 [(insuretech.common.v1.column) = {
+    column_name: "subject"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:subject;not null"
+  
+  string description = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "description"
+      sql_type: "TEXT"
+      not_null: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Customer support and issue resolution"
+  ];
+  // @inject_tag: gorm:"column:description;not null"
+  
+  TicketStatus status = 9 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'OPEN'"
+    index: {
+      index_name: "idx_tickets_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string related_entity_type = 10 [(insuretech.common.v1.column) = {
+    column_name: "related_entity_type"
+    sql_type: "VARCHAR(50)"
+    comment: "POLICY, CLAIM, PAYMENT"
+  }];
+  // @inject_tag: gorm:"column:related_entity_type"
+  
+  string related_entity_id = 11 [(insuretech.common.v1.column) = {
+    column_name: "related_entity_id"
+    sql_type: "UUID"
+    index: {
+      index_name: "idx_tickets_related_entity"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:related_entity_id"
+  
+  string assigned_to = 12 [(insuretech.common.v1.column) = {
+    column_name: "assigned_to"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    index: {
+      index_name: "idx_tickets_assigned_to"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:assigned_to"
+  
+  google.protobuf.Timestamp resolved_at = 13 [(insuretech.common.v1.column) = {
+    column_name: "resolved_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:resolved_at;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp closed_at = 14 [(insuretech.common.v1.column) = {
+    column_name: "closed_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum TicketType {
+  TICKET_TYPE_UNSPECIFIED = 0;
+  TICKET_TYPE_INQUIRY = 1;
+  TICKET_TYPE_COMPLAINT = 2;
+  TICKET_TYPE_REQUEST = 3;
+  TICKET_TYPE_FEEDBACK = 4;
+  TICKET_TYPE_TECHNICAL = 5;
+}
+
+enum TicketCategory {
+  TICKET_CATEGORY_UNSPECIFIED = 0;
+  TICKET_CATEGORY_POLICY = 1;
+  TICKET_CATEGORY_CLAIM = 2;
+  TICKET_CATEGORY_PAYMENT = 3;
+  TICKET_CATEGORY_RENEWAL = 4;
+  TICKET_CATEGORY_CANCELLATION = 5;
+  TICKET_CATEGORY_DOCUMENTATION = 6;
+  TICKET_CATEGORY_TECHNICAL = 7;
+  TICKET_CATEGORY_OTHER = 8;
+}
+
+enum TicketPriority {
+  TICKET_PRIORITY_UNSPECIFIED = 0;
+  TICKET_PRIORITY_LOW = 1;
+  TICKET_PRIORITY_MEDIUM = 2;
+  TICKET_PRIORITY_HIGH = 3;
+  TICKET_PRIORITY_URGENT = 4;
+}
+
+enum TicketStatus {
+  TICKET_STATUS_UNSPECIFIED = 0;
+  TICKET_STATUS_OPEN = 1;
+  TICKET_STATUS_IN_PROGRESS = 2;
+  TICKET_STATUS_WAITING_CUSTOMER = 3;
+  TICKET_STATUS_RESOLVED = 4;
+  TICKET_STATUS_CLOSED = 5;
+  TICKET_STATUS_CANCELLED = 6;
+}
+

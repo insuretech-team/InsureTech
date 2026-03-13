@@ -1,0 +1,13 @@
+TenantConfigUpdateRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    config_key:
+      type: string
+    config_value:
+      type: string
+    type:
+      type: string
+  description: Request payload for updating an existing tenant config update. Contains
+    fields to be modified.

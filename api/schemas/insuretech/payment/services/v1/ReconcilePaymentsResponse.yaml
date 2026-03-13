@@ -1,0 +1,21 @@
+ReconcilePaymentsResponse:
+  type: object
+  properties:
+    total_payments:
+      type: integer
+      format: int32
+    reconciled_count:
+      type: integer
+      format: int32
+    mismatch_count:
+      type: integer
+      format: int32
+    mismatch_payment_ids:
+      type: array
+      items:
+        type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for reconcile payments operation. Returns operation
+    results and status.

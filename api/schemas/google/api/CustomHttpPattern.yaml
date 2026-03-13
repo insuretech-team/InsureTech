@@ -1,0 +1,10 @@
+CustomHttpPattern:
+  type: object
+  properties:
+    kind:
+      type: string
+      description: The name of this custom HTTP verb.
+    path:
+      type: string
+      description: The path matched by this custom verb.
+  description: A custom pattern is used for defining custom HTTP verb.

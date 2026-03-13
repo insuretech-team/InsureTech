@@ -1,0 +1,7 @@
+InsurerDeletionRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+  description: Request payload for insurer deletion operation. Contains parameters
+    required to execute the operation.

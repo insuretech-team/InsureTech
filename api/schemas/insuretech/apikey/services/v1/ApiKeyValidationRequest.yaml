@@ -1,0 +1,11 @@
+ApiKeyValidationRequest:
+  type: object
+  properties:
+    api_key:
+      type: string
+    required_scope:
+      type: string
+    request_ip:
+      type: string
+  description: Request payload for api key validation operation. Contains parameters
+    required to execute the operation.

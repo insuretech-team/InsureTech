@@ -1,0 +1,57 @@
+Report:
+  type: object
+  properties:
+    report_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:report_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    report_name:
+      type: string
+      description: '@inject_tag: gorm:"column:report_name;not null"'
+    type:
+      $ref: '#/components/schemas/ReportType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    period_start:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"'
+    period_end:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"'
+    report_data:
+      type: string
+      description: '@inject_tag: gorm:"column:report_data;not null"'
+    report_url:
+      type: string
+      description: '@inject_tag: gorm:"column:report_url"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ReportStatus'
+      x-database-default: GENERATING
+    generated_by:
+      type: string
+      description: '@inject_tag: gorm:"column:generated_by"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "Report templates and generated reports\n Maps to 'reports' table in\
+    \ analytics_schema"
+  required:
+  - report_id
+  - report_name
+  - type
+  - period_start
+  - period_end
+  - report_data
+  - status
+  - created_at
+  - updated_at

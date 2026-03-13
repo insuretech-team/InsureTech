@@ -1,0 +1,48 @@
+Error:
+  type: object
+  properties:
+    code:
+      type: string
+      description: "Machine-readable error code (e.g., \"POLICY_NOT_FOUND\", \"INVALID_PREMIUM_AMOUNT\"\
+        )\n Use UPPER_SNAKE_CASE format"
+    message:
+      type: string
+      description: "Human-readable error message in user's language\n Should be clear\
+        \ and actionable"
+    details:
+      type: object
+      additionalProperties:
+        type: string
+      description: "Additional error details as key-value pairs\n Examples: {\"field\"\
+        : \"email\", \"reason\": \"invalid format\"}"
+    field_violations:
+      type: array
+      items:
+        $ref: '#/components/schemas/FieldViolation'
+        description: "List of field-specific validation errors\n Used for form validation\
+          \ errors"
+      description: "List of field-specific validation errors\n Used for form validation\
+        \ errors"
+    retryable:
+      type: boolean
+      description: "Whether the operation can be retried\n true: Temporary error,\
+        \ client should retry\n false: Permanent error, don't retry"
+    retry_after_seconds:
+      type: integer
+      format: int32
+      description: "Suggested delay before retry (in seconds)\n Only set if retryable\
+        \ = true"
+    http_status_code:
+      type: integer
+      format: int32
+      description: "HTTP status code equivalent\n 400 = Bad Request, 404 = Not Found,\
+        \ 500 = Internal Error"
+    error_id:
+      type: string
+      description: "Unique error instance ID for tracking and debugging\n Can be used\
+        \ to look up error in logs"
+    documentation_url:
+      type: string
+      description: Link to documentation for this error
+  description: "Standard error response message for all services\n Provides consistent\
+    \ error handling across the entire API"

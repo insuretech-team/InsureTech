@@ -1,0 +1,7 @@
+ClaimCreationResponse:
+  type: object
+  properties:
+    claim:
+      $ref: '#/components/schemas/Claim'
+  description: Response payload for claim creation operation. Returns operation results
+    and status.

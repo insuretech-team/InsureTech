@@ -1,0 +1,11 @@
+PolicyIssuanceRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    quote_id:
+      type: string
+    payment_id:
+      type: string
+  description: Request payload for policy issuance operation. Contains parameters
+    required to execute the operation.

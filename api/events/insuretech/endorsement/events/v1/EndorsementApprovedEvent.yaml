@@ -1,0 +1,21 @@
+EndorsementApprovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    endorsement_id:
+      type: string
+    policy_id:
+      type: string
+    type:
+      type: string
+    approved_by:
+      type: string
+    effective_date:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Endorsement approved'

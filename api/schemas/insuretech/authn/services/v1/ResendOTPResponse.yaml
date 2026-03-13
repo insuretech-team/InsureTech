@@ -1,0 +1,30 @@
+ResendOTPResponse:
+  type: object
+  properties:
+    otp_id:
+      type: string
+      description: New OTP ID (replaces the original)
+    message:
+      type: string
+    expires_in_seconds:
+      type: integer
+      format: int32
+    cooldown_seconds:
+      type: integer
+      format: int32
+      description: Cooldown before next resend is allowed
+    attempts_remaining:
+      type: integer
+      format: int32
+      description: How many resend attempts remain before lockout
+    can_retry_at:
+      type: string
+      format: date-time
+      description: Earliest timestamp when another resend is allowed
+    sender_id:
+      type: string
+      description: Sender ID used (for display to user)
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for resend otp operation. Returns operation results
+    and status.

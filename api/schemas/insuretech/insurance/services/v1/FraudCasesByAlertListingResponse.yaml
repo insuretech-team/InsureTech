@@ -1,0 +1,9 @@
+FraudCasesByAlertListingResponse:
+  type: object
+  properties:
+    cases:
+      type: array
+      items:
+        $ref: '#/components/schemas/FraudCase'
+  description: Response payload for fraud cases by alert listing operation. Returns
+    operation results and status.

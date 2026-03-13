@@ -1,0 +1,246 @@
+syntax = "proto3";
+
+package insuretech.b2b.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1;b2bv1";
+option csharp_namespace = "Insuretech.B2b.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Organisation represents a corporate client (B2B tenant) enrolled in the
+// platform. Each organisation belongs to a parent InsureTech tenant
+// (tenant_id). An organisation has one or more OrgMembers (admins, HR staff)
+// and many employees.
+message Organisation {
+  option (insuretech.common.v1.table) = {
+    table_name : "organisations"
+    schema_name : "b2b_schema"
+    migration_order : 88
+    is_table : true
+    comment : "B2B corporate client organisations"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  // UUID primary key — used as business_id across all B2B tables
+  string organisation_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "organisation_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:organisation_id;not null"
+
+  // Parent InsureTech tenant (top-level partner/reseller)
+  string tenant_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "tenant_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "FK to tenant_schema.tenants"
+  } ];
+  // @inject_tag: gorm:"column:tenant_id;not null"
+
+  // Human-readable display name (e.g. "Labaid Group")
+  string name = 3
+      [ (insuretech.common.v1.column) =
+            {column_name : "name" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:name;not null"
+
+  // Short code for display and lookup (e.g. "LABAID")
+  string code = 4 [ (insuretech.common.v1.column) = {
+    column_name : "code"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    unique : true
+  } ];
+  // @inject_tag: gorm:"column:code;not null;uniqueIndex"
+
+  // Industry / sector (e.g. "Healthcare", "Finance", "Manufacturing")
+  string industry = 5 [ (insuretech.common.v1.column) = {
+    column_name : "industry"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:industry"
+
+  // Primary contact email for the organisation
+  string contact_email = 6 [ (insuretech.common.v1.column) = {
+    column_name : "contact_email"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:contact_email"
+
+  // Primary contact phone
+  string contact_phone = 7 [ (insuretech.common.v1.column) = {
+    column_name : "contact_phone"
+    sql_type : "VARCHAR(30)"
+  } ];
+  // @inject_tag: gorm:"column:contact_phone"
+
+  // Physical address (free-text for now)
+  string address = 8 [
+    (insuretech.common.v1.column) = {column_name : "address" sql_type : "TEXT"}
+  ];
+  // @inject_tag: gorm:"column:address"
+
+  OrganisationStatus status = 9 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'ACTIVE'"
+  } ];
+  // @inject_tag: gorm:"column:status;not null"
+
+  // Total number of enrolled employees (denormalised for fast reads)
+  int32 total_employees = 10 [ (insuretech.common.v1.column) = {
+    column_name : "total_employees"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+  } ];
+  // @inject_tag: gorm:"column:total_employees;not null"
+
+  google.protobuf.Timestamp created_at = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 13 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum OrganisationStatus {
+  ORGANISATION_STATUS_UNSPECIFIED = 0;
+  ORGANISATION_STATUS_ACTIVE = 1;
+  ORGANISATION_STATUS_INACTIVE = 2;
+  ORGANISATION_STATUS_SUSPENDED = 3;
+}
+
+// OrgMember links a platform user (authn_schema.users) to an Organisation with
+// a role. This is how we know which organisation a logged-in admin/HR belongs
+// to. The business_id stored in every JWT-derived session maps to
+// organisation_id here.
+message OrgMember {
+  option (insuretech.common.v1.table) = {
+    table_name : "org_members"
+    schema_name : "b2b_schema"
+    migration_order : 89
+    is_table : true
+    comment : "Links platform users to B2B organisations with roles"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string member_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "member_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:member_id;not null"
+
+  // The organisation this member belongs to
+  string organisation_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "organisation_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "FK to b2b_schema.organisations"
+  } ];
+  // @inject_tag: gorm:"column:organisation_id;not null;index"
+
+  // The platform user ID (from authn_schema.users.user_id)
+  string user_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "FK to authn_schema.users"
+  } ];
+  // @inject_tag: gorm:"column:user_id;not null;index"
+
+  // Role within the organisation (BUSINESS_ADMIN, HR_MANAGER, VIEWER)
+  OrgMemberRole role = 4 [ (insuretech.common.v1.column) = {
+    column_name : "role"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'HR_MANAGER'"
+  } ];
+  // @inject_tag: gorm:"column:role;not null"
+
+  OrgMemberStatus status = 5 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'ACTIVE'"
+  } ];
+  // @inject_tag: gorm:"column:status;not null"
+
+  google.protobuf.Timestamp joined_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "joined_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+  } ];
+  // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum OrgMemberRole {
+  ORG_MEMBER_ROLE_UNSPECIFIED = 0;
+  ORG_MEMBER_ROLE_BUSINESS_ADMIN = 1; // Full admin access to organisation
+  ORG_MEMBER_ROLE_HR_MANAGER = 2;     // Can manage employees & departments
+  ORG_MEMBER_ROLE_VIEWER = 3;         // Read-only access
+}
+
+enum OrgMemberStatus {
+  ORG_MEMBER_STATUS_UNSPECIFIED = 0;
+  ORG_MEMBER_STATUS_ACTIVE = 1;
+  ORG_MEMBER_STATUS_INACTIVE = 2;
+}

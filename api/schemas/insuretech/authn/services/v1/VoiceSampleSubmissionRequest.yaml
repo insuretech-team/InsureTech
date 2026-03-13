@@ -1,0 +1,14 @@
+VoiceSampleSubmissionRequest:
+  type: object
+  properties:
+    session_id:
+      type: string
+    transcript:
+      type: string
+    confidence_score:
+      type: number
+      format: double
+    audio_url:
+      type: string
+  description: Request payload for voice sample submission operation. Contains parameters
+    required to execute the operation.

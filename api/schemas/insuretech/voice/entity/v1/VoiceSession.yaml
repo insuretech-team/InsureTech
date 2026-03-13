@@ -1,0 +1,50 @@
+VoiceSession:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:session_id;not null"'
+    session_id:
+      type: string
+      description: '@inject_tag: gorm:"column:external_session_id;not null"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id"'
+    phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:phone_number"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-log-masked: true
+    language:
+      type: string
+      description: '@inject_tag: gorm:"column:language;not null"'
+    status:
+      $ref: '#/components/schemas/SessionStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    intent:
+      type: string
+      description: '@inject_tag: gorm:"column:intent"'
+    context:
+      type: string
+      description: '@inject_tag: gorm:"column:context"'
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"'
+    ended_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"'
+    duration_seconds:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:duration_seconds"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Voice interaction session (FR-170 to FR-177)
+  required:
+  - audit_info

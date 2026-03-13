@@ -1,0 +1,293 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authn/entity/v1/enums.proto";
+
+// UserProfile stores additional user information
+// Maps to 'user_profiles' table in public schema
+message UserProfile {
+  option (insuretech.common.v1.table) = {
+    table_name : "user_profiles"
+    schema_name : "authn_schema"
+    migration_order : 2
+    is_table : true
+    comment : "Extended user profile information including KYC data"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string user_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    comment : "Foreign key to users table"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_user_profiles_user_id"
+    }
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:user_id;not null"
+
+  string full_name = 2 [ (insuretech.common.v1.column) = {
+    column_name : "full_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Full name as per NID"
+    index : {
+      index_name : "idx_user_profiles_full_name"
+      index_type : INDEX_TYPE_GIN
+      index_method : "gin(full_name gin_trgm_ops)"
+    }
+  } ];
+  // @inject_tag: gorm:"column:full_name;not null"
+
+  google.protobuf.Timestamp date_of_birth = 3
+      [ (insuretech.common.v1.column) = {
+        column_name : "date_of_birth"
+        sql_type : "DATE"
+        not_null : true
+        check_constraint : "date_of_birth <= CURRENT_DATE - INTERVAL '18 years'"
+        comment : "Date of birth (must be 18+ years old)"
+      } ];
+  // @inject_tag: gorm:"column:date_of_birth;not null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp" null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp" null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp" null;serializer:proto_timestamp"
+
+  Gender gender = 4 [ (insuretech.common.v1.column) = {
+    column_name : "gender"
+    sql_type : "VARCHAR(20)"
+    not_null : true
+    comment : "Gender"
+  } ];
+  // @inject_tag: gorm:"column:gender;not null;serializer:proto_enum"
+
+  string occupation = 5 [ (insuretech.common.v1.column) = {
+    column_name : "occupation"
+    sql_type : "VARCHAR(100)"
+    comment : "Current occupation"
+  } ];
+  // @inject_tag: gorm:"column:occupation"
+
+  string address_line1 = 6 [
+    (insuretech.common.v1.column) = {
+      column_name : "address_line1"
+      sql_type : "TEXT"
+      not_null : true
+      comment : "Address line 1"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "User communication and service delivery"
+  ];
+  // @inject_tag: gorm:"column:address_line1;not null"
+
+  string address_line2 = 7 [ (insuretech.common.v1.column) = {
+    column_name : "address_line2"
+    sql_type : "TEXT"
+    comment : "Address line 2"
+  } ];
+  // @inject_tag: gorm:"column:address_line2"
+
+  string city = 8
+      [ (insuretech.common.v1.column) =
+            {column_name : "city" sql_type : "VARCHAR(100)" not_null : true} ];
+  // @inject_tag: gorm:"column:city;not null"
+
+  string district = 9 [ (insuretech.common.v1.column) = {
+    column_name : "district"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    index : {
+      index_name : "idx_user_profiles_district"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:district;not null"
+
+  string division = 10 [ (insuretech.common.v1.column) = {
+    column_name : "division"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    index : {
+      index_name : "idx_user_profiles_division"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:division;not null"
+
+  string postal_code = 11 [ (insuretech.common.v1.column) = {
+    column_name : "postal_code"
+    sql_type : "VARCHAR(10)"
+  } ];
+  // @inject_tag: gorm:"column:postal_code"
+
+  string country = 12 [ (insuretech.common.v1.column) = {
+    column_name : "country"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    default_value : "'Bangladesh'"
+  } ];
+  // @inject_tag: gorm:"column:country;not null"
+
+  string nid_number = 13 [
+    (insuretech.common.v1.column) = {
+      column_name : "nid_number"
+      sql_type : "VARCHAR(17)"
+      unique : true
+      not_null : true
+      check_constraint : "nid_number ~ '^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$'"
+  // @inject_tag: gorm:"column:nid_number;not null"
+      comment : "National ID - 10, 13, or 17 digits"
+      index : {
+        index_name : "idx_user_profiles_nid_number"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification and KYC compliance",
+    (insuretech.common.v1.retention_days) =
+        2555 // 7 years for regulatory compliance
+  ];
+
+  string profile_photo_url = 14 [ (insuretech.common.v1.column) = {
+    column_name : "profile_photo_url"
+    sql_type : "TEXT"
+    comment : "S3 URL of profile photo"
+  } ];
+  // @inject_tag: gorm:"column:profile_photo_url"
+
+  bool kyc_verified = 15 [ (insuretech.common.v1.column) = {
+    column_name : "kyc_verified"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "KYC verification status"
+    index : {
+      index_name : "idx_user_profiles_kyc_verified"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:kyc_verified;not null"
+
+  google.protobuf.Timestamp kyc_verified_at = 16
+      [ (insuretech.common.v1.column) = {
+        column_name : "kyc_verified_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "KYC verification timestamp"
+      } ];
+  // @inject_tag: gorm:"column:kyc_verified_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 17 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 18 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string marital_status = 19 [ (insuretech.common.v1.column) = {
+    column_name : "marital_status"
+    sql_type : "VARCHAR(50)"
+  } ];
+  // @inject_tag: gorm:"column:marital_status"
+
+  string employer = 20 [ (insuretech.common.v1.column) = {
+    column_name : "employer"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:employer"
+
+  string permanent_address = 21 [ (insuretech.common.v1.column) = {
+    column_name : "permanent_address"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:permanent_address"
+
+  string emergency_contact_name = 22 [ (insuretech.common.v1.column) = {
+    column_name : "emergency_contact_name"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:emergency_contact_name"
+
+  string emergency_contact_number = 23 [ (insuretech.common.v1.column) = {
+    column_name : "emergency_contact_number"
+    sql_type : "VARCHAR(20)"
+  } ];
+  // @inject_tag: gorm:"column:emergency_contact_number"
+
+  string id_type = 24 [ (insuretech.common.v1.column) = {
+    column_name : "id_type"
+    sql_type : "VARCHAR(50)"
+    comment : "e.g., NID, PASSPORT"
+  } ];
+  // @inject_tag: gorm:"column:id_type"
+
+  string id_upload_front_url = 25 [ (insuretech.common.v1.column) = {
+    column_name : "id_upload_front_url"
+    sql_type : "TEXT"
+    comment : "S3 URL"
+  } ];
+  // @inject_tag: gorm:"column:id_upload_front_url"
+
+  string id_upload_back_url = 26 [ (insuretech.common.v1.column) = {
+    column_name : "id_upload_back_url"
+    sql_type : "TEXT"
+    comment : "S3 URL"
+  } ];
+  // @inject_tag: gorm:"column:id_upload_back_url"
+
+  string photograph_selfie_url = 27 [ (insuretech.common.v1.column) = {
+    column_name : "photograph_selfie_url"
+    sql_type : "TEXT"
+    comment : "S3 URL"
+  } ];
+  // @inject_tag: gorm:"column:photograph_selfie_url"
+
+  string proof_of_address_url = 28 [ (insuretech.common.v1.column) = {
+    column_name : "proof_of_address_url"
+    sql_type : "TEXT"
+    comment : "S3 URL"
+  } ];
+  // @inject_tag: gorm:"column:proof_of_address_url"
+
+  bool consent_privacy_acceptance = 29 [ (insuretech.common.v1.column) = {
+    column_name : "consent_privacy_acceptance"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:consent_privacy_acceptance;not null"
+}

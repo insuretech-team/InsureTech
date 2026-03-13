@@ -1,0 +1,7 @@
+RoomUpdateResponse:
+  type: object
+  properties:
+    room:
+      $ref: '#/components/schemas/Room'
+  description: Response payload for room update operation. Returns operation results
+    and status.

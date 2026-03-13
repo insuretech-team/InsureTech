@@ -1,0 +1,7 @@
+PeerAnalyticsRetrievalRequest:
+  type: object
+  properties:
+    peer_id:
+      type: string
+  description: Request payload for retrieving peer analytics retrieval information.
+    May include filters and pagination parameters.

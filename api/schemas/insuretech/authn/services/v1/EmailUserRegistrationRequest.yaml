@@ -1,0 +1,23 @@
+EmailUserRegistrationRequest:
+  type: object
+  properties:
+    email:
+      type: string
+      description: 'Required: valid email address'
+    password:
+      type: string
+      description: Min 8 chars, 1 upper, 1 number, 1 special
+    user_type:
+      type: string
+      description: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
+    full_name:
+      type: string
+      description: Full name for account
+    device_id:
+      type: string
+    mobile_number:
+      type: string
+      description: Optional for business users
+  description: "Register Email User Request\n Only for user_type: BUSINESS_BENEFICIARY,\
+    \ SYSTEM_USER, AGENT, or\n B2B_ORG_ADMIN\n Email is REQUIRED. Triggers an email\
+    \ verification OTP automatically."

@@ -1,0 +1,7 @@
+FraudRuleRetrievalRequest:
+  type: object
+  properties:
+    fraud_rule_id:
+      type: string
+  description: Request payload for retrieving fraud rule retrieval information. May
+    include filters and pagination parameters.

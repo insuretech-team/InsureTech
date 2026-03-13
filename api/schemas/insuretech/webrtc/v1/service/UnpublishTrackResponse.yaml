@@ -1,0 +1,7 @@
+UnpublishTrackResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for unpublish track operation. Returns operation results
+    and status.

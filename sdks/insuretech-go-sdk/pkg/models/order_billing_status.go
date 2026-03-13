@@ -1,0 +1,12 @@
+package models
+
+// OrderBillingStatus represents a order_billing_status
+type OrderBillingStatus string
+
+// OrderBillingStatus values
+const (
+	OrderBillingStatusORDERBILLINGSTATUSUNSPECIFIED OrderBillingStatus = "ORDER_BILLING_STATUS_UNSPECIFIED"
+	OrderBillingStatusORDERBILLINGSTATUSNOTINVOICED  = "ORDER_BILLING_STATUS_NOT_INVOICED"
+	OrderBillingStatusORDERBILLINGSTATUSINVOICED  = "ORDER_BILLING_STATUS_INVOICED"
+	OrderBillingStatusORDERBILLINGSTATUSINVOICECANCELLED  = "ORDER_BILLING_STATUS_INVOICE_CANCELLED"
+)

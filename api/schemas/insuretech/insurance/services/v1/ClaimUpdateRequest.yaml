@@ -1,0 +1,7 @@
+ClaimUpdateRequest:
+  type: object
+  properties:
+    claim:
+      $ref: '#/components/schemas/Claim'
+  description: Request payload for updating an existing claim update. Contains fields
+    to be modified.

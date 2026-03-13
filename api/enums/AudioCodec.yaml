@@ -1,0 +1,10 @@
+AudioCodec:
+  type: string
+  enum:
+  - AUDIO_CODEC_UNSPECIFIED
+  - AUDIO_CODEC_OPUS
+  - AUDIO_CODEC_PCMU
+  - AUDIO_CODEC_PCMA
+  - AUDIO_CODEC_ISAC
+  description: 'Enumeration of audio codec values. Valid options: AUDIO_CODEC_UNSPECIFIED,
+    AUDIO_CODEC_OPUS, AUDIO_CODEC_PCMU, AUDIO_CODEC_PCMA, AUDIO_CODEC_ISAC.'

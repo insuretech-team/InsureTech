@@ -1,0 +1,7 @@
+UnderwritingDecisionUpdateResponse:
+  type: object
+  properties:
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+  description: Response payload for underwriting decision update operation. Returns
+    operation results and status.

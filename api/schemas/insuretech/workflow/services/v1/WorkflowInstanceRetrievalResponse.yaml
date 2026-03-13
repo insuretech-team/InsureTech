@@ -1,0 +1,14 @@
+WorkflowInstanceRetrievalResponse:
+  type: object
+  properties:
+    workflow_instance:
+      $ref: '#/components/schemas/WorkflowInstance'
+    tasks:
+      type: array
+      items:
+        $ref: '#/components/schemas/WorkflowTask'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for workflow instance retrieval operation. Returns
+    operation results and status.

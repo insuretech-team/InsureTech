@@ -1,0 +1,23 @@
+AccessContext:
+  type: object
+  properties:
+    ip_address:
+      type: string
+    user_agent:
+      type: string
+    device_id:
+      type: string
+    token_id:
+      type: string
+      description: "jti \u2014 for revocation check"
+    session_id:
+      type: string
+    kyc_verified:
+      type: boolean
+    attributes:
+      type: object
+      additionalProperties:
+        type: string
+      description: Arbitrary key-value attributes for custom ABAC matchers
+  description: Domain entity representing access context. Core business object in
+    the system.

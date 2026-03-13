@@ -1,0 +1,7 @@
+EmployeeRetrievalRequest:
+  type: object
+  properties:
+    employee_uuid:
+      type: string
+  description: Request payload for retrieving employee retrieval information. May
+    include filters and pagination parameters.

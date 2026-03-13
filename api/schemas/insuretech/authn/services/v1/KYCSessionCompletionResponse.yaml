@@ -1,0 +1,20 @@
+KYCSessionCompletionResponse:
+  type: object
+  properties:
+    kyc_id:
+      type: string
+    status:
+      type: string
+    success:
+      type: boolean
+    liveness_confidence:
+      type: number
+      format: double
+    profile_image_url:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for kyc session completion operation. Returns operation
+    results and status.

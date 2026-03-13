@@ -1,0 +1,21 @@
+PremiumCalculationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    sum_insured:
+      $ref: '#/components/schemas/Money'
+    tenure_months:
+      type: integer
+      format: int32
+    rider_ids:
+      type: array
+      items:
+        type: string
+    applicant_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for premium calculation operation. Contains parameters
+    required to execute the operation.

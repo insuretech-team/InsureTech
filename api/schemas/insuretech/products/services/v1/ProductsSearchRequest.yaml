@@ -1,0 +1,13 @@
+ProductsSearchRequest:
+  type: object
+  properties:
+    query:
+      type: string
+    category:
+      $ref: '#/components/schemas/ProductCategory'
+    min_premium:
+      $ref: '#/components/schemas/Money'
+    max_premium:
+      $ref: '#/components/schemas/Money'
+  description: Request payload for products search operation. Contains parameters
+    required to execute the operation.

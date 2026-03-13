@@ -1,0 +1,58 @@
+Nominee:
+  type: object
+  properties:
+    nominee_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:nominee_id;not null"'
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    full_name:
+      type: string
+      description: '@inject_tag: gorm:"column:full_name;not null"'
+    relationship:
+      type: string
+      description: '@inject_tag: gorm:"column:relationship;not null"'
+    share_percentage:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:share_percentage;not null"'
+    date_of_birth:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:date_of_birth;not null;serializer:proto_timestamp\"\
+        \n null;serializer:proto_timestamp\" null;serializer:proto_timestamp\""
+    nid_number:
+      type: string
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification for policy nominee
+      x-retention-days: 2555
+    phone_number:
+      type: string
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Nominee contact information
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    nominee_dob_text:
+      type: string
+      description: '@inject_tag: gorm:"column:nominee_dob_text"'
+    nominee_share_percent:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:nominee_share_percent"'
+  description: "Nominee/Beneficiary information\n Maps to 'policy_nominees' table\
+    \ in insurance_schema"

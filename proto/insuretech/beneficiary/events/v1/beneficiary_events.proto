@@ -1,0 +1,49 @@
+syntax = "proto3";
+
+package insuretech.beneficiary.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/beneficiary/events/v1;beneficiaryeventsv1";
+
+// Kafka event: Beneficiary created
+message BeneficiaryCreatedEvent {
+  string event_id = 1;
+  string beneficiary_id = 2;
+  string beneficiary_code = 3;
+  string type = 4; // INDIVIDUAL, BUSINESS
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: KYC completed
+message BeneficiaryKYCCompletedEvent {
+  string event_id = 1;
+  string beneficiary_id = 2;
+  string kyc_status = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Kafka event: Status changed
+message BeneficiaryStatusChangedEvent {
+  string event_id = 1;
+  string beneficiary_id = 2;
+  string old_status = 3;
+  string new_status = 4;
+  string reason = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Risk score updated
+message BeneficiaryRiskScoreUpdatedEvent {
+  string event_id = 1;
+  string beneficiary_id = 2;
+  string old_risk_score = 3;
+  string new_risk_score = 4;
+  string reason = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+

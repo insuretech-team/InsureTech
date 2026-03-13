@@ -1,0 +1,12 @@
+InsuranceBeneficiariesListingResponse:
+  type: object
+  properties:
+    beneficiaries:
+      type: array
+      items:
+        $ref: '#/components/schemas/Beneficiary'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for beneficiaries listing operation. Returns operation
+    results and status.

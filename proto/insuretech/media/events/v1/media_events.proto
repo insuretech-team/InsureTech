@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package insuretech.media.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/media/events/v1;mediaeventsv1";
+
+// Kafka event: Media file uploaded
+message MediaFileUploadedEvent {
+  string event_id = 1;
+  string media_id = 2;
+  string file_id = 3;
+  string tenant_id = 4;
+  string entity_type = 5;
+  string entity_id = 6;
+  string media_type = 7;
+  string mime_type = 8;
+  int64 file_size_bytes = 9;
+  string uploaded_by = 10;
+  string correlation_id = 11;
+  google.protobuf.Timestamp timestamp = 12;
+}
+
+// Kafka event: Media validation completed
+message MediaValidationCompletedEvent {
+  string event_id = 1;
+  string media_id = 2;
+  string validation_status = 3; // VALIDATED, REJECTED
+  repeated string validation_errors = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Media virus scan completed
+message MediaVirusScanCompletedEvent {
+  string event_id = 1;
+  string media_id = 2;
+  string virus_scan_status = 3; // CLEAN, INFECTED
+  string scan_result = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Media processing job created
+message MediaProcessingJobCreatedEvent {
+  string event_id = 1;
+  string job_id = 2;
+  string media_id = 3;
+  string processing_type = 4; // OPTIMIZATION, THUMBNAIL, OCR
+  int32 priority = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Media processing completed
+message MediaProcessingCompletedEvent {
+  string event_id = 1;
+  string job_id = 2;
+  string media_id = 3;
+  string processing_type = 4;
+  string result_file_id = 5; // ID of optimized/thumbnail file
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Media processing failed
+message MediaProcessingFailedEvent {
+  string event_id = 1;
+  string job_id = 2;
+  string media_id = 3;
+  string processing_type = 4;
+  string error_message = 5;
+  int32 retry_count = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: OCR extraction completed
+message MediaOCRCompletedEvent {
+  string event_id = 1;
+  string media_id = 2;
+  string ocr_text = 3;
+  double confidence_score = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}

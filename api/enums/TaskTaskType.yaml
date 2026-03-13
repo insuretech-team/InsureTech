@@ -1,0 +1,11 @@
+TaskTaskType:
+  type: string
+  enum:
+  - TASK_TYPE_UNSPECIFIED
+  - TASK_TYPE_FOLLOW_UP
+  - TASK_TYPE_REVIEW
+  - TASK_TYPE_APPROVAL
+  - TASK_TYPE_DOCUMENT
+  - TASK_TYPE_REMINDER
+  description: 'Type categorization for task. Options: TASK_TYPE_UNSPECIFIED, TASK_TYPE_FOLLOW_UP,
+    TASK_TYPE_REVIEW, TASK_TYPE_APPROVAL, TASK_TYPE_DOCUMENT (and 1 more).'

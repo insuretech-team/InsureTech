@@ -1,0 +1,13 @@
+package models
+
+// RevenueModel represents a revenue_model
+type RevenueModel string
+
+// RevenueModel values
+const (
+	RevenueModelREVENUEMODELUNSPECIFIED RevenueModel = "REVENUE_MODEL_UNSPECIFIED"
+	RevenueModelREVENUEMODELCOMMISSION  = "REVENUE_MODEL_COMMISSION"
+	RevenueModelREVENUEMODELFLATFEE  = "REVENUE_MODEL_FLAT_FEE"
+	RevenueModelREVENUEMODELHYBRID  = "REVENUE_MODEL_HYBRID"
+	RevenueModelREVENUEMODELREINSURANCE  = "REVENUE_MODEL_REINSURANCE"
+)

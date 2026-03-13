@@ -1,0 +1,28 @@
+ClaimEvaluationResponse:
+  type: object
+  properties:
+    analysis_id:
+      type: string
+    recommendation:
+      type: string
+      description: APPROVE, REJECT, NEEDS_REVIEW
+    suggested_amount:
+      $ref: '#/components/schemas/Money'
+    confidence:
+      type: number
+      format: double
+    findings:
+      type: array
+      items:
+        type: string
+    required_documents:
+      type: array
+      items:
+        type: string
+        description: Missing documents
+      description: Missing documents
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for claim evaluation operation. Returns operation
+    results and status.

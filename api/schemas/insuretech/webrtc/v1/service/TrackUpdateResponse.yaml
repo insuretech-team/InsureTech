@@ -1,0 +1,7 @@
+TrackUpdateResponse:
+  type: object
+  properties:
+    track:
+      $ref: '#/components/schemas/Track'
+  description: Response payload for track update operation. Returns operation results
+    and status.

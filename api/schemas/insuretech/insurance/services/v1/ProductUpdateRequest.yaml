@@ -1,0 +1,7 @@
+InsuranceProductUpdateRequest:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/Product'
+  description: Request payload for updating an existing product update. Contains fields
+    to be modified.

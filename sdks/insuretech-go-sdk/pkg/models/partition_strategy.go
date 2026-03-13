@@ -1,0 +1,14 @@
+package models
+
+// PartitionStrategy represents a partition_strategy
+type PartitionStrategy string
+
+// PartitionStrategy values
+const (
+	PartitionStrategyPARTITIONSTRATEGYUNSPECIFIED PartitionStrategy = "PARTITION_STRATEGY_UNSPECIFIED"
+	PartitionStrategyPARTITIONSTRATEGYNONE  = "PARTITION_STRATEGY_NONE"
+	PartitionStrategyPARTITIONSTRATEGYRANGEYEAR  = "PARTITION_STRATEGY_RANGE_YEAR"
+	PartitionStrategyPARTITIONSTRATEGYRANGEMONTH  = "PARTITION_STRATEGY_RANGE_MONTH"
+	PartitionStrategyPARTITIONSTRATEGYLIST  = "PARTITION_STRATEGY_LIST"
+	PartitionStrategyPARTITIONSTRATEGYHASH  = "PARTITION_STRATEGY_HASH"
+)

@@ -1,0 +1,7 @@
+ServiceProviderUpdateRequest:
+  type: object
+  properties:
+    provider:
+      $ref: '#/components/schemas/ServiceProvider'
+  description: Request payload for updating an existing service provider update. Contains
+    fields to be modified.

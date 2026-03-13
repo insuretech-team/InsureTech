@@ -1,0 +1,18 @@
+BeneficiaryCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    beneficiary_id:
+      type: string
+    beneficiary_code:
+      type: string
+    type:
+      type: string
+      description: INDIVIDUAL, BUSINESS
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Beneficiary created'

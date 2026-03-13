@@ -1,0 +1,21 @@
+RoomConfig:
+  type: object
+  properties:
+    max_participants:
+      type: integer
+      format: int32
+    require_token:
+      type: boolean
+    enable_recording:
+      type: boolean
+    enable_transcription:
+      type: boolean
+    video_config:
+      $ref: '#/components/schemas/VideoConfig'
+    audio_config:
+      $ref: '#/components/schemas/AudioConfig'
+    session_timeout_seconds:
+      type: integer
+      format: int32
+  description: Domain entity representing room config. Core business object in the
+    system.

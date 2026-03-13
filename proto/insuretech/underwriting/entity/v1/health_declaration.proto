@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package insuretech.underwriting.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/underwriting/entity/v1;underwritingv1";
+
+// Health declaration for underwriting
+message HealthDeclaration {
+  option (insuretech.common.v1.table) = {
+    table_name: "health_declarations"
+    schema_name: "insurance_schema"
+    migration_order: 29
+    is_table: true
+    audit_fields: true
+    comment: "Health declarations for underwriting"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "declaration_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:declaration_id;not null"
+  
+  string quote_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "quote_id"
+    sql_type: "UUID"
+    not_null: true
+    unique: true
+    foreign_key: {
+      references_table: "quotes"
+      references_column: "quote_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_health_declarations_quote_id"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:quote_id;not null"
+  
+  // Physical measurements
+  int32 height_cm = 3 [(insuretech.common.v1.column) = {
+    column_name: "height_cm"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:height_cm"
+  
+  string weight_kg = 4 [(insuretech.common.v1.column) = {
+    column_name: "weight_kg"
+    sql_type: "DECIMAL(5,2)"
+  }];
+  // @inject_tag: gorm:"column:weight_kg"
+  
+  string bmi = 5 [(insuretech.common.v1.column) = {
+    column_name: "bmi"
+    sql_type: "DECIMAL(5,2)"
+    comment: "Body Mass Index"
+  }];
+  // @inject_tag: gorm:"column:bmi"
+  
+  // Medical history
+  bool has_pre_existing_conditions = 6 [(insuretech.common.v1.column) = {
+    column_name: "has_pre_existing_conditions"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:has_pre_existing_conditions"
+  
+  string pre_existing_conditions = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "pre_existing_conditions"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "List of pre-existing medical conditions"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Underwriting risk assessment",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:pre_existing_conditions"
+  
+  bool is_currently_hospitalized = 8 [(insuretech.common.v1.column) = {
+    column_name: "is_currently_hospitalized"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:is_currently_hospitalized"
+  
+  bool has_family_history = 9 [(insuretech.common.v1.column) = {
+    column_name: "has_family_history"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:has_family_history"
+  
+  string family_history = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "family_history"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "Family medical history"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Underwriting risk assessment",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:family_history"
+  
+  // Lifestyle
+  bool smoker = 11 [(insuretech.common.v1.column) = {
+    column_name: "smoker"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:smoker"
+  
+  bool alcohol_consumer = 12 [(insuretech.common.v1.column) = {
+    column_name: "alcohol_consumer"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:alcohol_consumer"
+  
+  string occupation_risk_level = 13 [(insuretech.common.v1.column) = {
+    column_name: "occupation_risk_level"
+    sql_type: "VARCHAR(20)"
+    comment: "LOW, MEDIUM, HIGH based on occupation"
+  }];
+  // @inject_tag: gorm:"column:occupation_risk_level"
+  
+  // Medical examination
+  bool medical_exam_required = 14 [(insuretech.common.v1.column) = {
+    column_name: "medical_exam_required"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:medical_exam_required"
+  
+  bool medical_exam_completed = 15 [(insuretech.common.v1.column) = {
+    column_name: "medical_exam_completed"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:medical_exam_completed"
+  
+  string medical_exam_results = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "medical_exam_results"
+      sql_type: "JSONB"
+      is_json: true
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Medical underwriting",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:medical_exam_results"
+  
+  google.protobuf.Timestamp medical_exam_date = 17 [(insuretech.common.v1.column) = {
+    column_name: "medical_exam_date"
+    sql_type: "DATE"
+  }];
+  // @inject_tag: gorm:"column:medical_exam_date;serializer:proto_timestamp"
+  
+  // Documents
+  string medical_documents = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "medical_documents"
+      sql_type: "JSONB"
+      is_json: true
+      comment: "Medical reports, prescriptions, etc."
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Medical underwriting and claim processing",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:medical_documents"
+  
+  insuretech.common.v1.AuditInfo audit_info = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+

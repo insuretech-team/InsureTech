@@ -1,0 +1,6 @@
+MediaRetrievalRequest:
+  type: object
+  properties:
+    media_id:
+      type: string
+  description: Get Media

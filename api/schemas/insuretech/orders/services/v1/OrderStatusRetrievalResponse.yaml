@@ -1,0 +1,15 @@
+OrderStatusRetrievalResponse:
+  type: object
+  properties:
+    order_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrderStatus'
+    payment_id:
+      type: string
+    policy_id:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for order status retrieval operation. Returns operation
+    results and status.

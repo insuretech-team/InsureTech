@@ -1,0 +1,23 @@
+UserType:
+  type: string
+  enum:
+  - USER_TYPE_UNSPECIFIED
+  - USER_TYPE_B2C_CUSTOMER
+  - USER_TYPE_AGENT
+  - USER_TYPE_BUSINESS_BENEFICIARY
+  - USER_TYPE_SYSTEM_USER
+  - USER_TYPE_PARTNER
+  - USER_TYPE_REGULATOR
+  - USER_TYPE_BUSINESS_ADMIN
+  - USER_TYPE_B2B_ORG_ADMIN
+  description: "UserType controls authentication method routing\r\n BUSINESS_BENEFICIARY\
+    \ + SYSTEM_USER \u2192 email OTP + web portal (server-side\r\n session) B2C_CUSTOMER\
+    \ + AGENT \u2192 mobile OTP + JWT (mobile app)\r\n UserType controls authentication\
+    \ method routing and portal assignment.\r\n portal mapping:\r\n   B2C_CUSTOMER\
+    \          \u2192 portal: \"b2c\"        (mobile SMS OTP + JWT)\r\n   AGENT  \
+    \               \u2192 portal: \"agent\"      (mobile SMS OTP + JWT)\r\n   BUSINESS_BENEFICIARY\
+    \  \u2192 portal: \"business\"   (email OTP + web server-side\r\n   session) SYSTEM_USER\
+    \           \u2192 portal: \"system\"     (email OTP + web\r\n   server-side session)\
+    \ PARTNER               \u2192 portal: \"b2b\"        (email\r\n   OTP + web server-side\
+    \ session) REGULATOR             \u2192 portal: \"regulator\"\r\n   (email OTP\
+    \ + web server-side session, read-only)"

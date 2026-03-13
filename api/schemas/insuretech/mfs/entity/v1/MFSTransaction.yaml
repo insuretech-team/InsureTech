@@ -1,0 +1,63 @@
+MFSTransaction:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:transaction_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    transaction_id:
+      type: string
+      description: '@inject_tag: gorm:"column:external_transaction_id;not null"'
+      x-unique: true
+    mfs_integration_id:
+      type: string
+      description: '@inject_tag: gorm:"column:mfs_integration_id;not null"'
+    provider:
+      type: string
+      description: '@inject_tag: gorm:"column:provider;not null"'
+    payment_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_id"'
+    type:
+      $ref: '#/components/schemas/TransactionType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    amount:
+      $ref: '#/components/schemas/Money'
+    customer_msisdn:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_msisdn;not null"'
+    provider_transaction_id:
+      type: string
+      description: '@inject_tag: gorm:"column:provider_transaction_id"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/TransactionStatus'
+      x-database-default: PENDING
+    request_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:request_payload"'
+    response_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:response_payload"'
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: MFS transaction
+  required:
+  - id
+  - transaction_id
+  - mfs_integration_id
+  - provider
+  - type
+  - customer_msisdn
+  - status
+  - audit_info

@@ -1,0 +1,27 @@
+MetricRecordedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    metric_id:
+      type: string
+    metric_name:
+      type: string
+    metric_type:
+      type: string
+      description: COUNTER, GAUGE, HISTOGRAM
+    value:
+      type: number
+      format: double
+    dimensions:
+      type: object
+      additionalProperties:
+        type: string
+      description: product_id, partner_id, region
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Metric recorded'

@@ -1,0 +1,315 @@
+syntax = "proto3";
+
+package insuretech.authz.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1;authzservicev1";
+option csharp_namespace = "Insuretech.Authz.Services.V1";
+
+import "google/api/field_behavior.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+import "insuretech/authz/entity/v1/role.proto";
+import "insuretech/authz/entity/v1/user_role.proto";
+import "insuretech/authz/entity/v1/policy_rule.proto";
+import "insuretech/authz/entity/v1/portal_config.proto";
+import "insuretech/authz/entity/v1/access_decision_audit.proto";
+
+// ── CheckAccess ──────────────────────────────────────────────────────────────
+
+message CheckAccessRequest {
+  // Subject: "user:<uuid>" — populated from ValidateToken response
+  string user_id    = 1 [(google.api.field_behavior) = REQUIRED];
+  // Domain: "portal:tenant_id" — e.g. "system:root", "agent:tenant-abc"
+  string domain     = 2 [(google.api.field_behavior) = REQUIRED];
+  // Object: "svc:<service>/<resource>" — e.g. "svc:policy/create"
+  string object     = 3 [(google.api.field_behavior) = REQUIRED];
+  // Action: HTTP verb or domain verb — e.g. "POST", "approve"
+  string action     = 4 [(google.api.field_behavior) = REQUIRED];
+  // Optional context for ABAC conditions
+  AccessContext context = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message CheckAccessResponse {
+  bool                       allowed     = 1;
+  insuretech.authz.entity.v1.PolicyEffect effect = 2;
+  string                     matched_rule = 3; // which casbin rule matched
+  string                     reason       = 4; // human-readable deny reason
+  insuretech.common.v1.Error error        = 5;
+}
+
+// ── BatchCheckAccess ──────────────────────────────────────────────────────────
+
+message AccessCheckTuple {
+  string object = 1;
+  string action = 2;
+}
+
+message BatchCheckAccessRequest {
+  string user_id            = 1 [(google.api.field_behavior) = REQUIRED];
+  string domain             = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated AccessCheckTuple checks  = 3 [(google.api.field_behavior) = REQUIRED];
+  AccessContext context     = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message AccessCheckResult {
+  string object  = 1;
+  string action  = 2;
+  bool   allowed = 3;
+  string reason  = 4;
+}
+
+message BatchCheckAccessResponse {
+  repeated AccessCheckResult results = 1;
+  insuretech.common.v1.Error error   = 2;
+}
+
+// ── AccessContext — ABAC attributes passed at enforcement time ────────────────
+
+message AccessContext {
+  string ip_address  = 1;
+  string user_agent  = 2;
+  string device_id   = 3;
+  string token_id    = 4;  // jti — for revocation check
+  string session_id  = 5;
+  bool   kyc_verified = 6;
+  // Arbitrary key-value attributes for custom ABAC matchers
+  map<string, string> attributes = 7;
+}
+
+// ── Role CRUD ────────────────────────────────────────────────────────────────
+
+message CreateRoleRequest {
+  string name        = 1 [(google.api.field_behavior) = REQUIRED];
+  insuretech.authz.entity.v1.Portal portal = 2 [(google.api.field_behavior) = REQUIRED];
+  string description = 3 [(google.api.field_behavior) = OPTIONAL];
+  string created_by  = 4 [(google.api.field_behavior) = REQUIRED];
+}
+message CreateRoleResponse {
+  insuretech.authz.entity.v1.Role role = 1;
+  insuretech.common.v1.Error error     = 2;
+}
+
+message GetRoleRequest {
+  string role_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+message GetRoleResponse {
+  insuretech.authz.entity.v1.Role role = 1;
+  insuretech.common.v1.Error error     = 2;
+}
+
+message UpdateRoleRequest {
+  string role_id     = 1 [(google.api.field_behavior) = REQUIRED];
+  string name        = 2 [(google.api.field_behavior) = OPTIONAL];
+  string description = 3 [(google.api.field_behavior) = OPTIONAL];
+  bool   is_active   = 4 [(google.api.field_behavior) = OPTIONAL];
+  string updated_by  = 5 [(google.api.field_behavior) = REQUIRED];
+}
+message UpdateRoleResponse {
+  insuretech.authz.entity.v1.Role role = 1;
+  insuretech.common.v1.Error error     = 2;
+}
+
+message DeleteRoleRequest {
+  string role_id    = 1 [(google.api.field_behavior) = REQUIRED];
+  string deleted_by = 2 [(google.api.field_behavior) = REQUIRED];
+}
+message DeleteRoleResponse {
+  string message                 = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListRolesRequest {
+  insuretech.authz.entity.v1.Portal portal = 1 [(google.api.field_behavior) = OPTIONAL];
+  bool   active_only = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32  page_size   = 3 [(google.api.field_behavior) = OPTIONAL];
+  string page_token  = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+message ListRolesResponse {
+  repeated insuretech.authz.entity.v1.Role roles = 1;
+  string next_page_token                          = 2;
+  int32  total_count                              = 3;
+  insuretech.common.v1.Error error                = 4;
+}
+
+// ── User-Role Assignment ──────────────────────────────────────────────────────
+
+message AssignRoleRequest {
+  string user_id     = 1 [(google.api.field_behavior) = REQUIRED];
+  string role_id     = 2 [(google.api.field_behavior) = REQUIRED];
+  // domain = "portal:tenant_id"
+  string domain      = 3 [(google.api.field_behavior) = REQUIRED];
+  string assigned_by = 4 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp expires_at = 5 [(google.api.field_behavior) = OPTIONAL];
+}
+message AssignRoleResponse {
+  insuretech.authz.entity.v1.UserRole user_role = 1;
+  insuretech.common.v1.Error error              = 2;
+}
+
+message RemoveRoleRequest {
+  string user_id    = 1 [(google.api.field_behavior) = REQUIRED];
+  string role_id    = 2 [(google.api.field_behavior) = REQUIRED];
+  string domain     = 3 [(google.api.field_behavior) = REQUIRED];
+  string removed_by = 4 [(google.api.field_behavior) = REQUIRED];
+}
+message RemoveRoleResponse {
+  string message                 = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListUserRolesRequest {
+  string user_id    = 1 [(google.api.field_behavior) = REQUIRED];
+  string domain     = 2 [(google.api.field_behavior) = OPTIONAL]; // filter by domain
+  int32  page_size  = 3 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+message ListUserRolesResponse {
+  repeated insuretech.authz.entity.v1.UserRole user_roles = 1;
+  repeated insuretech.authz.entity.v1.Role     roles      = 2;
+  string next_page_token                                   = 3;
+  insuretech.common.v1.Error error                        = 4;
+}
+
+message GetUserPermissionsRequest {
+  string user_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string domain  = 2 [(google.api.field_behavior) = REQUIRED]; // "portal:tenant_id"
+}
+message GetUserPermissionsResponse {
+  // All effective (object, action) pairs the user is allowed in this domain
+  repeated EffectivePermission permissions = 1;
+  insuretech.common.v1.Error error         = 2;
+}
+message EffectivePermission {
+  string object  = 1; // "svc:policy/create"
+  string action  = 2; // "POST"
+  string via_role = 3; // which role granted this (empty = direct user policy)
+}
+
+// ── Policy Rule CRUD ──────────────────────────────────────────────────────────
+
+message CreatePolicyRuleRequest {
+  string subject     = 1 [(google.api.field_behavior) = REQUIRED]; // "role:<name>" | "user:<uuid>"
+  string domain      = 2 [(google.api.field_behavior) = REQUIRED]; // "portal:tenant_id"
+  string object      = 3 [(google.api.field_behavior) = REQUIRED]; // "svc:policy/create"
+  string action      = 4 [(google.api.field_behavior) = REQUIRED]; // "POST"
+  insuretech.authz.entity.v1.PolicyEffect effect = 5 [(google.api.field_behavior) = REQUIRED];
+  string condition   = 6 [(google.api.field_behavior) = OPTIONAL]; // ABAC condition expression
+  string description = 7 [(google.api.field_behavior) = OPTIONAL];
+  string created_by  = 8 [(google.api.field_behavior) = REQUIRED];
+}
+message CreatePolicyRuleResponse {
+  insuretech.authz.entity.v1.PolicyRule policy = 1;
+  insuretech.common.v1.Error error             = 2;
+}
+
+message UpdatePolicyRuleRequest {
+  string policy_id   = 1 [(google.api.field_behavior) = REQUIRED];
+  string action      = 2 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.authz.entity.v1.PolicyEffect effect = 3 [(google.api.field_behavior) = OPTIONAL];
+  string condition   = 4 [(google.api.field_behavior) = OPTIONAL];
+  string description = 5 [(google.api.field_behavior) = OPTIONAL];
+  bool   is_active   = 6 [(google.api.field_behavior) = OPTIONAL];
+  string updated_by  = 7 [(google.api.field_behavior) = REQUIRED];
+}
+message UpdatePolicyRuleResponse {
+  insuretech.authz.entity.v1.PolicyRule policy = 1;
+  insuretech.common.v1.Error error             = 2;
+}
+
+message DeletePolicyRuleRequest {
+  string policy_id  = 1 [(google.api.field_behavior) = REQUIRED];
+  string deleted_by = 2 [(google.api.field_behavior) = REQUIRED];
+}
+message DeletePolicyRuleResponse {
+  string message                 = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListPolicyRulesRequest {
+  string domain      = 1 [(google.api.field_behavior) = OPTIONAL]; // filter by domain
+  string subject     = 2 [(google.api.field_behavior) = OPTIONAL]; // filter by subject
+  string object      = 3 [(google.api.field_behavior) = OPTIONAL]; // filter by object prefix
+  bool   active_only = 4 [(google.api.field_behavior) = OPTIONAL];
+  int32  page_size   = 5 [(google.api.field_behavior) = OPTIONAL];
+  string page_token  = 6 [(google.api.field_behavior) = OPTIONAL];
+}
+message ListPolicyRulesResponse {
+  repeated insuretech.authz.entity.v1.PolicyRule policies = 1;
+  string next_page_token                                   = 2;
+  int32  total_count                                       = 3;
+  insuretech.common.v1.Error error                         = 4;
+}
+
+// ── Portal Config ─────────────────────────────────────────────────────────────
+
+message GetPortalConfigRequest {
+  insuretech.authz.entity.v1.Portal portal = 1 [(google.api.field_behavior) = REQUIRED];
+}
+message GetPortalConfigResponse {
+  insuretech.authz.entity.v1.PortalConfig config = 1;
+  insuretech.common.v1.Error error               = 2;
+}
+
+message UpdatePortalConfigRequest {
+  insuretech.authz.entity.v1.Portal portal = 1 [(google.api.field_behavior) = REQUIRED];
+  bool   mfa_required              = 2 [(google.api.field_behavior) = OPTIONAL];
+  repeated string mfa_methods      = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32  access_token_ttl_seconds  = 4 [(google.api.field_behavior) = OPTIONAL];
+  int32  refresh_token_ttl_seconds = 5 [(google.api.field_behavior) = OPTIONAL];
+  int32  session_ttl_seconds       = 6 [(google.api.field_behavior) = OPTIONAL];
+  int32  idle_timeout_seconds      = 7 [(google.api.field_behavior) = OPTIONAL];
+  bool   allow_concurrent_sessions = 8 [(google.api.field_behavior) = OPTIONAL];
+  int32  max_concurrent_sessions   = 9 [(google.api.field_behavior) = OPTIONAL];
+  string updated_by                = 10 [(google.api.field_behavior) = REQUIRED];
+}
+message UpdatePortalConfigResponse {
+  insuretech.authz.entity.v1.PortalConfig config = 1;
+  insuretech.common.v1.Error error               = 2;
+}
+
+// ── JWKS ──────────────────────────────────────────────────────────────────────
+
+message GetJWKSRequest {}
+
+message JWK {
+  string kty = 1; // "RSA"
+  string use = 2; // "sig"
+  string alg = 3; // "RS256"
+  string kid = 4; // key ID
+  string n   = 5; // RSA modulus (base64url)
+  string e   = 6; // RSA exponent (base64url)
+}
+
+message GetJWKSResponse {
+  repeated JWK keys           = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+// ── Access Decision Audits ────────────────────────────────────────────────────
+
+message ListAccessDecisionAuditsRequest {
+  string user_id   = 1 [(google.api.field_behavior) = OPTIONAL];
+  string domain    = 2 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.authz.entity.v1.PolicyEffect decision = 3 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp from = 4 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp to   = 5 [(google.api.field_behavior) = OPTIONAL];
+  int32  page_size  = 6 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 7 [(google.api.field_behavior) = OPTIONAL];
+}
+message ListAccessDecisionAuditsResponse {
+  repeated insuretech.authz.entity.v1.AccessDecisionAudit audits = 1;
+  string next_page_token                                          = 2;
+  int32  total_count                                              = 3;
+  insuretech.common.v1.Error error                                = 4;
+}
+
+// ── Cache Invalidation (internal) ────────────────────────────────────────────
+
+message InvalidatePolicyCacheRequest {
+  string domain = 1; // invalidate for specific domain, empty = all
+}
+message InvalidatePolicyCacheResponse {
+  bool   invalidated           = 1;
+  insuretech.common.v1.Error error = 2;
+}

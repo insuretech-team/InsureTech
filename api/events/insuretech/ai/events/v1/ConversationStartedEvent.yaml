@@ -1,0 +1,23 @@
+ConversationStartedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    conversation_id:
+      type: string
+    user_id:
+      type: string
+    agent_id:
+      type: string
+    agent_name:
+      type: string
+    channel:
+      type: string
+      description: web, mobile, whatsapp
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Conversation started'

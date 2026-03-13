@@ -1,0 +1,219 @@
+syntax = "proto3";
+
+package insuretech.insurer.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/entity/v1;insurerv1";
+
+// Insurer-specific product configuration
+message InsurerProduct {
+  option (insuretech.common.v1.table) = {
+    table_name: "insurer_products"
+    schema_name: "insurance_schema"
+    migration_order: 20
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Insurer-specific product variants and configurations"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "product_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:product_id;not null"
+  
+  string insurer_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "insurer_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "insurers"
+      references_column: "insurer_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_insurer_products_insurer_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_id;not null"
+  
+  string product_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "base_product_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "products"
+      references_column: "product_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_insurer_products_base_product_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:base_product_id;not null"
+  
+  string code = 4 [(insuretech.common.v1.column) = {
+    column_name: "code"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_insurer_products_code_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+    comment: "Insurer's internal product code"
+  }];
+  // @inject_tag: gorm:"column:code;not null"
+  
+  string name = 5 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  ProductStatus status = 6 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'ACTIVE'"
+    index: {
+      index_name: "idx_insurer_products_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  // Pricing
+  insuretech.common.v1.Money min_sum_assured = 7;
+  insuretech.common.v1.Money max_sum_assured = 8;
+  insuretech.common.v1.Money min_premium = 9;
+  insuretech.common.v1.Money max_premium = 10;
+  
+  // Age limits
+  int32 min_entry_age = 11 [(insuretech.common.v1.column) = {
+    column_name: "min_entry_age"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:min_entry_age"
+  
+  int32 max_entry_age = 12 [(insuretech.common.v1.column) = {
+    column_name: "max_entry_age"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:max_entry_age"
+  
+  int32 max_maturity_age = 13 [(insuretech.common.v1.column) = {
+    column_name: "max_maturity_age"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:max_maturity_age"
+  
+  // Term
+  int32 min_term_years = 14 [(insuretech.common.v1.column) = {
+    column_name: "min_term_years"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:min_term_years"
+  
+  int32 max_term_years = 15 [(insuretech.common.v1.column) = {
+    column_name: "max_term_years"
+    sql_type: "INTEGER"
+  }];
+  // @inject_tag: gorm:"column:max_term_years"
+  
+  // Premium payment
+  repeated string premium_payment_modes = 16 [(insuretech.common.v1.column) = {
+    column_name: "premium_payment_modes"
+    sql_type: "TEXT[]"
+  // @inject_tag: gorm:"column:premium_payment_modes"
+    comment: "YEARLY, HALF_YEARLY, QUARTERLY, MONTHLY"
+  }];
+  
+  // Underwriting
+  bool medical_required = 17 [(insuretech.common.v1.column) = {
+    column_name: "medical_required"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:medical_required"
+  
+  insuretech.common.v1.Money medical_threshold = 18;
+  
+  int32 free_look_period_days = 19 [(insuretech.common.v1.column) = {
+    column_name: "free_look_period_days"
+    sql_type: "INTEGER"
+    default_value: "15"
+  }];
+  // @inject_tag: gorm:"column:free_look_period_days"
+  
+  // Commission structure (links to commission_configs)
+  string commission_config_id = 20 [(insuretech.common.v1.column) = {
+    column_name: "commission_config_id"
+    sql_type: "UUID"
+    comment: "Link to commission_configs table"
+  }];
+  // @inject_tag: gorm:"column:commission_config_id"
+  
+  // Product features
+  string features = 21 [(insuretech.common.v1.column) = {
+    column_name: "features"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Product-specific features and riders"
+  }];
+  // @inject_tag: gorm:"column:features"
+  
+  string exclusions = 22 [(insuretech.common.v1.column) = {
+    column_name: "exclusions"
+    sql_type: "JSONB"
+    is_json: true
+  }];
+  // @inject_tag: gorm:"column:exclusions"
+  
+  google.protobuf.Timestamp effective_from = 23 [(insuretech.common.v1.column) = {
+    column_name: "effective_from"
+    sql_type: "DATE"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp effective_to = 24 [(insuretech.common.v1.column) = {
+    column_name: "effective_to"
+    sql_type: "DATE"
+  }];
+  // @inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 25 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum ProductStatus {
+  PRODUCT_STATUS_UNSPECIFIED = 0;
+  PRODUCT_STATUS_ACTIVE = 1;
+  PRODUCT_STATUS_INACTIVE = 2;
+  PRODUCT_STATUS_DISCONTINUED = 3;
+}
+
+

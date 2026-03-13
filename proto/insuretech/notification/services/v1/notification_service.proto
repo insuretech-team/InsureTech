@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.notification.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/notification/services/v1;notificationservicev1";
+option csharp_namespace = "Insuretech.Notification.Services.V1";
+
+import "insuretech/notification/entity/v1/notification.proto";
+
+// Notification Service
+service NotificationService {
+  // Send notification
+  rpc SendNotification(SendNotificationRequest) returns (SendNotificationResponse) {
+    option (google.api.http) = {
+      post: "/v1/notifications"
+      body: "*"
+    };
+  }
+  
+  // Send bulk notifications
+  rpc SendBulkNotifications(SendBulkNotificationsRequest) returns (SendBulkNotificationsResponse) {
+    option (google.api.http) = {
+      post: "/v1/notifications:sendBulk"
+      body: "*"
+    };
+  }
+  
+  // Get notification status
+  rpc GetNotificationStatus(GetNotificationStatusRequest) returns (GetNotificationStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/notifications/{notification_id}"
+    };
+  }
+  
+  // Get user notifications
+  rpc GetUserNotifications(GetUserNotificationsRequest) returns (GetUserNotificationsResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{user_id}/notifications"
+    };
+  }
+  
+  // Mark as read
+  rpc MarkAsRead(MarkAsReadRequest) returns (MarkAsReadResponse) {
+    option (google.api.http) = {
+      post: "/v1/notifications:markAsRead"
+      body: "*"
+    };
+  }
+  
+  // Update notification preferences
+  rpc UpdatePreferences(UpdatePreferencesRequest) returns (UpdatePreferencesResponse) {
+    option (google.api.http) = {
+      put: "/v1/users/{user_id}/notification-preferences"
+      body: "*"
+    };
+  }
+  
+  // Create notification template
+  rpc CreateNotificationTemplate(CreateNotificationTemplateRequest) returns (CreateNotificationTemplateResponse) {
+    option (google.api.http) = {
+      post: "/v1/notification-templates"
+      body: "*"
+    };
+  }
+  
+  // Update notification template
+  rpc UpdateNotificationTemplate(UpdateNotificationTemplateRequest) returns (UpdateNotificationTemplateResponse) {
+    option (google.api.http) = {
+      patch: "/v1/notification-templates/{template_id}"
+      body: "*"
+    };
+  }
+  
+  // Deactivate notification template
+  rpc DeactivateNotificationTemplate(DeactivateNotificationTemplateRequest) returns (DeactivateNotificationTemplateResponse) {
+    option (google.api.http) = {
+      post: "/v1/notification-templates/{template_id}:deactivate"
+      body: "*"
+    };
+  }
+}
+
+message SendNotificationRequest {
+  string recipient_id = 1;
+  entity.v1.NotificationType type = 2;
+  entity.v1.NotificationChannel channel = 3;
+  string subject = 4; // Optional: for email
+  string message = 5; // Plain text or use template
+  string template_id = 6; // Optional: use template
+  map<string, string> template_data = 7; // Variables for template
+  entity.v1.NotificationPriority priority = 8;
+  int64 schedule_after_seconds = 9; // Optional: delayed send
+}
+
+message SendNotificationResponse {
+  string notification_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message SendBulkNotificationsRequest {
+  repeated SendNotificationRequest notifications = 1;
+}
+
+message SendBulkNotificationsResponse {
+  repeated string notification_ids = 1;
+  int32 success_count = 2;
+  int32 failed_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetNotificationStatusRequest {
+  string notification_id = 1;
+}
+
+message GetNotificationStatusResponse {
+  entity.v1.Notification notification = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetUserNotificationsRequest {
+  string user_id = 1;
+  bool unread_only = 2;
+  int32 limit = 3;
+  int32 offset = 4;
+}
+
+message GetUserNotificationsResponse {
+  repeated entity.v1.Notification notifications = 1;
+  int32 total_count = 2;
+  int32 unread_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message MarkAsReadRequest {
+  repeated string notification_ids = 1;
+}
+
+message MarkAsReadResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message UpdatePreferencesRequest {
+  string user_id = 1;
+  entity.v1.NotificationPreference preferences = 2;
+}
+
+message UpdatePreferencesResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message CreateNotificationTemplateRequest {
+  string name = 1;
+  entity.v1.NotificationType type = 2;
+  string subject = 3;
+  string body = 4;
+  repeated string variables = 5;
+}
+
+message CreateNotificationTemplateResponse {
+  string template_id = 1;
+  string message = 2;
+  insuretech.common.v1.Error error = 3;
+}
+
+message UpdateNotificationTemplateRequest {
+  string template_id = 1;
+  string name = 2;
+  string subject = 3;
+  string body = 4;
+}
+
+message UpdateNotificationTemplateResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeactivateNotificationTemplateRequest {
+  string template_id = 1;
+  string reason = 2;
+}
+
+message DeactivateNotificationTemplateResponse {
+  string message = 1;
+  insuretech.common.v1.Error error = 2;
+}
+

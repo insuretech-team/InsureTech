@@ -1,0 +1,13 @@
+ReportExecutionRequest:
+  type: object
+  properties:
+    report_definition_id:
+      type: string
+    parameters:
+      type: object
+      description: 'CG-7: Typed report parameters (date ranges, filters, etc.)'
+    format:
+      type: string
+      description: PDF, XLSX, CSV
+  description: Request payload for report execution operation. Contains parameters
+    required to execute the operation.

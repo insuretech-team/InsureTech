@@ -1,0 +1,10 @@
+CSRFValidationRequest:
+  type: object
+  properties:
+    session_id:
+      type: string
+      description: 'Optional: extracted from cookie'
+    csrf_token:
+      type: string
+      description: CSRF token from client
+  description: Validate CSRF Token Request (server-side sessions only)

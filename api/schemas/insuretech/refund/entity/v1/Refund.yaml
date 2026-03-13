@@ -1,0 +1,69 @@
+Refund:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:refund_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    refund_number:
+      type: string
+      description: '@inject_tag: gorm:"column:refund_number;not null"'
+      x-unique: true
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    reason:
+      $ref: '#/components/schemas/RefundReason'
+      description: '@inject_tag: gorm:"column:reason;not null;serializer:proto_enum"'
+    reason_details:
+      type: string
+      description: '@inject_tag: gorm:"column:reason_details"'
+    total_premium_paid:
+      $ref: '#/components/schemas/Money'
+    premium_used:
+      $ref: '#/components/schemas/Money'
+    cancellation_charge:
+      $ref: '#/components/schemas/Money'
+    refundable_amount:
+      $ref: '#/components/schemas/Money'
+    calculation_details:
+      type: string
+      description: '@inject_tag: gorm:"column:calculation_details"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/RefundStatus'
+      x-database-default: PENDING
+    requested_by:
+      type: string
+      description: '@inject_tag: gorm:"column:requested_by;not null"'
+    approved_by:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_by"'
+    payment_method:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_method"'
+    payment_reference:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_reference"'
+    payment_refund_id:
+      type: string
+      description: "Link to payment refund transaction record (payment_schema.refunds)\n\
+        \ @inject_tag: gorm:\"column:payment_refund_id\""
+    processed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Refund for policy cancellation (FR-093 to FR-097)
+  required:
+  - id
+  - refund_number
+  - policy_id
+  - reason
+  - status
+  - requested_by
+  - audit_info

@@ -1,0 +1,14 @@
+ProfilePhotoUploadURLRetrievalResponse:
+  type: object
+  properties:
+    upload_url:
+      type: string
+    file_url:
+      type: string
+    expires_in_seconds:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for profile photo upload url retrieval operation.
+    Returns operation results and status.

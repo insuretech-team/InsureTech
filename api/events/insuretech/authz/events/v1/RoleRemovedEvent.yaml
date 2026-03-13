@@ -1,0 +1,20 @@
+RoleRemovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    role_id:
+      type: string
+    role_name:
+      type: string
+    domain:
+      type: string
+    removed_by:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when role undergoes removed. Published to event stream
+    for downstream processing and audit trail.

@@ -1,0 +1,21 @@
+DocumentTemplateCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    type:
+      type: string
+    description:
+      type: string
+    template_content:
+      type: string
+    output_format:
+      type: string
+    variables:
+      type: array
+      items:
+        type: string
+        description: 'CG-7: Typed list of variable names'
+      description: 'CG-7: Typed list of variable names'
+  description: Request payload for creating a new document template creation. Contains
+    all required fields and optional parameters for initialization.

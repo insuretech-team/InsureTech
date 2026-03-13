@@ -1,0 +1,187 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+
+package insuretech.policy.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/policy/services/v1;policyservicev1";
+option csharp_namespace = "Insuretech.Policy.Services.V1";
+
+import "insuretech/policy/entity/v1/policy.proto";
+
+// Policy Service
+service PolicyService {
+  // Create policy
+  rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies"
+      body: "*"
+    };
+  }
+  
+  // Get policy details
+  rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse) {
+    option (google.api.http) = {
+      get: "/v1/policies/{policy_id}"
+    };
+  }
+  
+  // List user policies
+  rpc ListUserPolicies(ListUserPoliciesRequest) returns (ListUserPoliciesResponse) {
+    option (google.api.http) = {
+      get: "/v1/users/{customer_id}/policies"
+    };
+  }
+  
+  // Update policy
+  rpc UpdatePolicy(UpdatePolicyRequest) returns (UpdatePolicyResponse) {
+    option (google.api.http) = {
+      patch: "/v1/policies/{policy_id}"
+      body: "*"
+    };
+  }
+  
+  // Cancel policy
+  rpc CancelPolicy(CancelPolicyRequest) returns (CancelPolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}:cancel"
+      body: "*"
+    };
+  }
+  
+  // Renew policy
+  rpc RenewPolicy(RenewPolicyRequest) returns (RenewPolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}:renew"
+      body: "*"
+    };
+  }
+  
+  // Generate policy document
+  rpc GeneratePolicyDocument(GeneratePolicyDocumentRequest) returns (GeneratePolicyDocumentResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}:generateDocument"
+      body: "*"
+    };
+  }
+  
+  // Issue policy (explicit transition from pending to active after payment)
+  rpc IssuePolicy(IssuePolicyRequest) returns (IssuePolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}:issue"
+      body: "*"
+    };
+  }
+}
+
+message CreatePolicyRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string customer_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string partner_id = 3 [(google.api.field_behavior) = OPTIONAL];
+  string agent_id = 4 [(google.api.field_behavior) = OPTIONAL];
+  entity.v1.Applicant applicant = 5 [(google.api.field_behavior) = REQUIRED];
+  repeated entity.v1.Nominee nominees = 6 [(google.api.field_behavior) = OPTIONAL];
+  repeated entity.v1.Rider riders = 7 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.common.v1.Money premium_amount = 8 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money sum_insured = 9 [(google.api.field_behavior) = REQUIRED];
+  int32 tenure_months = 10 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CreatePolicyResponse {
+  string policy_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string policy_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPolicyResponse {
+  entity.v1.Policy policy = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListUserPoliciesRequest {
+  string customer_id = 1 [(google.api.field_behavior) = REQUIRED];
+  entity.v1.PolicyStatus status = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListUserPoliciesResponse {
+  repeated entity.v1.Policy policies = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdatePolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  repeated entity.v1.Nominee nominees = 2 [(google.api.field_behavior) = OPTIONAL];
+  string address = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message UpdatePolicyResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CancelPolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CancelPolicyResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money refund_amount = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RenewPolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  int32 tenure_months = 2 [(google.api.field_behavior) = REQUIRED];
+  bool update_nominees = 3 [(google.api.field_behavior) = OPTIONAL];
+  repeated entity.v1.Nominee nominees = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message RenewPolicyResponse {
+  string new_policy_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string new_policy_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money premium_amount = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GeneratePolicyDocumentRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GeneratePolicyDocumentResponse {
+  string document_url = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string qr_code = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message IssuePolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string quote_id = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_id = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message IssuePolicyResponse {
+  entity.v1.Policy policy = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

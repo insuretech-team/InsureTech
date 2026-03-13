@@ -1,0 +1,13 @@
+InsuranceProductsListingRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing products listing items. Supports filtering,
+    sorting, and pagination.

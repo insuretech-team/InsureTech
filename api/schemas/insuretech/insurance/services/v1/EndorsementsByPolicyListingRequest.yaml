@@ -1,0 +1,7 @@
+EndorsementsByPolicyListingRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+  description: Request payload for listing endorsements by policy listing items. Supports
+    filtering, sorting, and pagination.

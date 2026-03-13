@@ -1,0 +1,204 @@
+syntax = "proto3";
+
+package insuretech.underwriting.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/underwriting/entity/v1;underwritingv1";
+
+// Quote entity - premium quote before policy issuance
+message Quote {
+  option (insuretech.common.v1.table) = {
+    table_name: "quotes"
+    schema_name: "insurance_schema"
+    migration_order: 28
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Premium quotes generated during underwriting"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "quote_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:quote_id;not null"
+  
+  string quote_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "quote_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_quotes_quote_number_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:quote_number;not null"
+  
+  string beneficiary_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "beneficiary_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "beneficiaries"
+      references_column: "beneficiary_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_quotes_beneficiary_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:beneficiary_id;not null"
+  
+  string insurer_product_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "insurer_product_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "insurer_products"
+      references_column: "product_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_quotes_insurer_product_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_product_id;not null"
+  
+  QuoteStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'DRAFT'"
+    index: {
+      index_name: "idx_quotes_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  // Quote details
+  insuretech.common.v1.Money sum_assured = 6;
+  int32 term_years = 7 [(insuretech.common.v1.column) = {
+    column_name: "term_years"
+    sql_type: "INTEGER"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:term_years;not null"
+  
+  string premium_payment_mode = 8 [(insuretech.common.v1.column) = {
+    column_name: "premium_payment_mode"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "YEARLY, HALF_YEARLY, QUARTERLY, MONTHLY"
+  }];
+  // @inject_tag: gorm:"column:premium_payment_mode;not null"
+  
+  // Calculated premium
+  insuretech.common.v1.Money base_premium = 9;
+  insuretech.common.v1.Money rider_premium = 10;
+  insuretech.common.v1.Money tax_amount = 11;
+  insuretech.common.v1.Money total_premium = 12;
+  
+  string premium_calculation = 13 [(insuretech.common.v1.column) = {
+    column_name: "premium_calculation"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Premium breakdown and calculation details"
+  }];
+  // @inject_tag: gorm:"column:premium_calculation"
+  
+  // Riders
+  string selected_riders = 14 [(insuretech.common.v1.column) = {
+    column_name: "selected_riders"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Additional riders selected"
+  }];
+  // @inject_tag: gorm:"column:selected_riders"
+  
+  // Applicant details (snapshot at quote time)
+  int32 applicant_age = 15 [(insuretech.common.v1.column) = {
+    column_name: "applicant_age"
+    sql_type: "INTEGER"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:applicant_age;not null"
+  
+  string applicant_occupation = 16 [(insuretech.common.v1.column) = {
+    column_name: "applicant_occupation"
+    sql_type: "VARCHAR(100)"
+  }];
+  // @inject_tag: gorm:"column:applicant_occupation"
+  
+  bool smoker = 17 [(insuretech.common.v1.column) = {
+    column_name: "smoker"
+    sql_type: "BOOLEAN"
+    default_value: "false"
+  }];
+  // @inject_tag: gorm:"column:smoker"
+  
+  // Validity
+  google.protobuf.Timestamp valid_until = 18 [(insuretech.common.v1.column) = {
+    column_name: "valid_until"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    comment: "Quote validity period (typically 30 days)"
+  }];
+  // @inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"
+  
+  // Conversion
+  string converted_policy_id = 19 [(insuretech.common.v1.column) = {
+    column_name: "converted_policy_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    comment: "Policy created from this quote"
+  }];
+  // @inject_tag: gorm:"column:converted_policy_id"
+  
+  google.protobuf.Timestamp converted_at = 20 [(insuretech.common.v1.column) = {
+    column_name: "converted_at"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum QuoteStatus {
+  QUOTE_STATUS_UNSPECIFIED = 0;
+  QUOTE_STATUS_DRAFT = 1;
+  QUOTE_STATUS_PENDING_UNDERWRITING = 2;
+  QUOTE_STATUS_APPROVED = 3;
+  QUOTE_STATUS_REJECTED = 4;
+  QUOTE_STATUS_EXPIRED = 5;
+  QUOTE_STATUS_CONVERTED = 6;
+}
+
+

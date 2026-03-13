@@ -1,0 +1,11 @@
+ManualPaymentReviewResponse:
+  type: object
+  properties:
+    payment_id:
+      type: string
+    status:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for manual payment review operation. Returns operation
+    results and status.

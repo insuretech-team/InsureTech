@@ -1,0 +1,24 @@
+ContactInfo:
+  type: object
+  properties:
+    mobile_number:
+      type: string
+      description: +880 1XXX XXXXXX
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Customer communication and authentication
+    email:
+      type: string
+    alternate_mobile:
+      type: string
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Emergency contact
+    landline:
+      type: string
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Business contact
+  description: Contact information

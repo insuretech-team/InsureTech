@@ -1,0 +1,6 @@
+QuoteCreationRequest:
+  type: object
+  properties:
+    quote:
+      $ref: '#/components/schemas/Quote'
+  description: ========== QUOTE MESSAGES ==========

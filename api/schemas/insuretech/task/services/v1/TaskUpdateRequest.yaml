@@ -1,0 +1,17 @@
+TaskUpdateRequest:
+  type: object
+  properties:
+    task_id:
+      type: string
+    title:
+      type: string
+    description:
+      type: string
+    status:
+      type: string
+    priority:
+      type: string
+    due_date:
+      type: string
+  description: Request payload for updating an existing task update. Contains fields
+    to be modified.

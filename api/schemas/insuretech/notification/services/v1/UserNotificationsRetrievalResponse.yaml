@@ -1,0 +1,18 @@
+UserNotificationsRetrievalResponse:
+  type: object
+  properties:
+    notifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/Notification'
+    total_count:
+      type: integer
+      format: int32
+    unread_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for user notifications retrieval operation. Returns
+    operation results and status.

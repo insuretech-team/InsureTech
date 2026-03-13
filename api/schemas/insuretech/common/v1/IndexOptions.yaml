@@ -1,0 +1,25 @@
+IndexOptions:
+  type: object
+  properties:
+    index_name:
+      type: string
+      description: Index name
+    index_type:
+      $ref: '#/components/schemas/IndexType'
+      description: Index type
+    unique:
+      type: boolean
+      description: Is unique index
+    composite_fields:
+      type: array
+      items:
+        type: string
+        description: Composite index (field names to include)
+      description: Composite index (field names to include)
+    index_method:
+      type: string
+      description: Index method (btree, hash, gin, gist, etc.)
+    where_clause:
+      type: string
+      description: Partial index WHERE clause
+  description: Index options

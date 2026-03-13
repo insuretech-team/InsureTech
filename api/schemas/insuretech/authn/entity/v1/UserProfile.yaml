@@ -1,0 +1,110 @@
+UserProfile:
+  type: object
+  properties:
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:user_id;not null"'
+    full_name:
+      type: string
+      description: '@inject_tag: gorm:"column:full_name;not null"'
+    date_of_birth:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:date_of_birth;not null;serializer:proto_timestamp\"\
+        \r\n null;serializer:proto_timestamp\" null;serializer:proto_timestamp\"\r\
+        \n null;serializer:proto_timestamp\" null;serializer:proto_timestamp\"\r\n\
+        \ null;serializer:proto_timestamp\" null;serializer:proto_timestamp\""
+    gender:
+      $ref: '#/components/schemas/AuthnGender'
+      description: '@inject_tag: gorm:"column:gender;not null;serializer:proto_enum"'
+    occupation:
+      type: string
+      description: '@inject_tag: gorm:"column:occupation"'
+    address_line1:
+      type: string
+      description: '@inject_tag: gorm:"column:address_line1;not null"'
+      x-pii: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: User communication and service delivery
+    address_line2:
+      type: string
+      description: '@inject_tag: gorm:"column:address_line2"'
+    city:
+      type: string
+      description: '@inject_tag: gorm:"column:city;not null"'
+    district:
+      type: string
+      description: '@inject_tag: gorm:"column:district;not null"'
+    division:
+      type: string
+      description: '@inject_tag: gorm:"column:division;not null"'
+    postal_code:
+      type: string
+      description: '@inject_tag: gorm:"column:postal_code"'
+    country:
+      type: string
+      description: '@inject_tag: gorm:"column:country;not null"'
+    nid_number:
+      type: string
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification and KYC compliance
+      x-retention-days: 2555
+    profile_photo_url:
+      type: string
+      description: '@inject_tag: gorm:"column:profile_photo_url"'
+    kyc_verified:
+      type: boolean
+      description: '@inject_tag: gorm:"column:kyc_verified;not null"'
+    kyc_verified_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:kyc_verified_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    marital_status:
+      type: string
+      description: '@inject_tag: gorm:"column:marital_status"'
+    employer:
+      type: string
+      description: '@inject_tag: gorm:"column:employer"'
+    permanent_address:
+      type: string
+      description: '@inject_tag: gorm:"column:permanent_address"'
+    emergency_contact_name:
+      type: string
+      description: '@inject_tag: gorm:"column:emergency_contact_name"'
+    emergency_contact_number:
+      type: string
+      description: '@inject_tag: gorm:"column:emergency_contact_number"'
+    id_type:
+      type: string
+      description: '@inject_tag: gorm:"column:id_type"'
+    id_upload_front_url:
+      type: string
+      description: '@inject_tag: gorm:"column:id_upload_front_url"'
+    id_upload_back_url:
+      type: string
+      description: '@inject_tag: gorm:"column:id_upload_back_url"'
+    photograph_selfie_url:
+      type: string
+      description: '@inject_tag: gorm:"column:photograph_selfie_url"'
+    proof_of_address_url:
+      type: string
+      description: '@inject_tag: gorm:"column:proof_of_address_url"'
+    consent_privacy_acceptance:
+      type: boolean
+      description: '@inject_tag: gorm:"column:consent_privacy_acceptance;not null"'
+  description: "UserProfile stores additional user information\r\n Maps to 'user_profiles'\
+    \ table in public schema"

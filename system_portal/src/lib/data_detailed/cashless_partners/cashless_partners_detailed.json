@@ -1,0 +1,189 @@
+[
+  {
+    "id": "2",
+    "name": "Partner Name\n\t\n\t\n\t\tDigilab Medical Services",
+    "address": "Address\n\t\n\t\n\t\tMirpur Original 10, Opposite to Indoor Stadium",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tMirpur Original 10, Opposite to Indoor Stadium",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDigilab Medical Services"
+    }
+  },
+  {
+    "id": "3",
+    "name": "Partner Name\n\t\n\t\n\t\tDigilab Medical Services",
+    "address": "Address\n\t\n\t\n\t\t12 Road No. 2",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t12 Road No. 2",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDigilab Medical Services"
+    }
+  },
+  {
+    "id": "4",
+    "name": "Partner Name\n\t\n\t\n\t\tDelta Health Care Mirpur Ltd.",
+    "address": "Address\n\t\n\t\n\t\tCentral Mosque, Bus Stand",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tCentral Mosque, Bus Stand",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDelta Health Care Mirpur Ltd."
+    }
+  },
+  {
+    "id": "5",
+    "name": "Partner Name\n\t\n\t\n\t\tAl-Helal Specialized Hospital",
+    "address": "Address\n\t\n\t\n\t\t150, Begum Rokeya Sarani",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t150, Begum Rokeya Sarani",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAl-Helal Specialized Hospital"
+    }
+  },
+  {
+    "id": "6",
+    "name": "Partner Name\n\t\n\t\n\t\tMedinet Healthcare Ltd.",
+    "address": "Address\n\t\n\t\n\t\t1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tMedinet Healthcare Ltd."
+    }
+  },
+  {
+    "id": "7",
+    "name": "Partner Name\n\t\n\t\n\t\tZakia Memorial Hospital",
+    "address": "Address\n\t\n\t\n\t\t1,2,3 BNSB Bhaban, Kolwalapara",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t1,2,3 BNSB Bhaban, Kolwalapara",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tZakia Memorial Hospital"
+    }
+  },
+  {
+    "id": "8",
+    "name": "Partner Name\n\t\n\t\n\t\tProbe Bangladesh Ltd.",
+    "address": "Address\n\t\n\t\n\t\tUDDIPAN HQ(L-G), H-9, R-1, Janata Cooperative Housing Society Ltd, Ring Rd",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tUDDIPAN HQ(L-G), H-9, R-1, Janata Cooperative Housing Society Ltd, Ring Rd",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tProbe Bangladesh Ltd."
+    }
+  },
+  {
+    "id": "9",
+    "name": "Partner Name\n\t\n\t\n\t\tSamorita Hospital Ltd.",
+    "address": "Address\n\t\n\t\n\t\t89, 1 Panthapath",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\t89, 1 Panthapath",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tSamorita Hospital Ltd."
+    }
+  },
+  {
+    "id": "10",
+    "name": "Partner Name\n\t\n\t\n\t\tAnwar Khan Modern Hospital Ltd.",
+    "address": "Address\n\t\n\t\n\t\thouse-17 Rd No. 8",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\thouse-17 Rd No. 8",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tAnwar Khan Modern Hospital Ltd."
+    }
+  },
+  {
+    "id": "11",
+    "name": "Partner Name\n\t\n\t\n\t\tDMFR Molecular Lab \u0026 Diagnostics BD Ltd.",
+    "address": "Address\n\t\n\t\n\t\tNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tNavana Newbury place, 4/1/A (7th Floor), Sobhanbag, Mirpur Rd",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tDMFR Molecular Lab \u0026 Diagnostics BD Ltd."
+    }
+  },
+  {
+    "id": "12",
+    "name": "Partner Name\n\t\n\t\n\t\tPraava Health",
+    "address": "Address\n\t\n\t\n\t\tBlock C, Plot 9 Rd 17",
+    "contact": "",
+    "email": "",
+    "type": "Cashless Partners",
+    "district": "",
+    "area": "",
+    "details": "",
+    "services": "",
+    "specialties": "",
+    "full_data": {
+      "AddressofHospital": "Address\n\t\n\t\n\t\tBlock C, Plot 9 Rd 17",
+      "HospitalName": "Partner Name\n\t\n\t\n\t\tPraava Health"
+    }
+  }
+]

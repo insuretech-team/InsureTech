@@ -1,0 +1,22 @@
+ApiKeyValidationResponse:
+  type: object
+  properties:
+    valid:
+      type: boolean
+    api_key_id:
+      type: string
+    owner_type:
+      type: string
+    owner_id:
+      type: string
+    scopes:
+      type: array
+      items:
+        type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for api key validation operation. Returns operation
+    results and status.

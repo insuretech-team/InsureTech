@@ -1,0 +1,9 @@
+BulkNotificationsSendingRequest:
+  type: object
+  properties:
+    notifications:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationSendingRequest'
+  description: Request payload for bulk notifications sending operation. Contains
+    parameters required to execute the operation.

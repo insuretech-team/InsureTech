@@ -1,0 +1,6 @@
+FraudAlertCreationRequest:
+  type: object
+  properties:
+    alert:
+      $ref: '#/components/schemas/FraudAlert'
+  description: ========== FRAUD ALERT MESSAGES ==========

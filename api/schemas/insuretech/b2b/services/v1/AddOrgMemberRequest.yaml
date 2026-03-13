@@ -1,0 +1,11 @@
+AddOrgMemberRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    user_id:
+      type: string
+    role:
+      $ref: '#/components/schemas/OrgMemberRole'
+  description: Request payload for add org member operation. Contains parameters required
+    to execute the operation.

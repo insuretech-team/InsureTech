@@ -1,0 +1,23 @@
+AuthnVoiceSessionRetrievalResponse:
+  type: object
+  properties:
+    voice_session_id:
+      type: string
+    user_id:
+      type: string
+    status:
+      type: string
+    language:
+      type: string
+    session_type:
+      type: string
+    started_at:
+      type: string
+      format: date-time
+    ended_at:
+      type: string
+      format: date-time
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for voice session retrieval operation. Returns operation
+    results and status.

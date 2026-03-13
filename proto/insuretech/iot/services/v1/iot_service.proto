@@ -1,0 +1,131 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.iot.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/iot/services/v1;iotservicev1";
+option csharp_namespace = "Insuretech.Iot.Services.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/iot/entity/v1/device.proto";
+
+// IoT Service
+service IoTService {
+  // Register device
+  rpc RegisterDevice(RegisterDeviceRequest) returns (RegisterDeviceResponse) {
+    option (google.api.http) = {
+      post: "/v1/iot/devices"
+      body: "*"
+    };
+  }
+  
+  // Send telemetry data
+  rpc SendTelemetry(SendTelemetryRequest) returns (SendTelemetryResponse) {
+    option (google.api.http) = {
+      post: "/v1/iot/telemetry"
+      body: "*"
+    };
+  }
+  
+  // Stream telemetry (bidirectional)
+  rpc StreamTelemetry(stream StreamTelemetryRequest) returns (stream StreamTelemetryResponse);
+  
+  // Get device status
+  rpc GetDeviceStatus(GetDeviceStatusRequest) returns (GetDeviceStatusResponse) {
+    option (google.api.http) = {
+      get: "/v1/iot/devices/{device_id}"
+    };
+  }
+  
+  // Get risk assessment
+  rpc GetRiskAssessment(GetRiskAssessmentRequest) returns (GetRiskAssessmentResponse) {
+    option (google.api.http) = {
+      get: "/v1/iot/devices/{device_id}/risk"
+    };
+  }
+  
+  // Deactivate device
+  rpc DeactivateDevice(DeactivateDeviceRequest) returns (DeactivateDeviceResponse) {
+    option (google.api.http) = {
+      post: "/v1/iot/devices/{device_id}:deactivate"
+      body: "*"
+    };
+  }
+}
+
+message RegisterDeviceRequest {
+  string device_serial = 1;
+  entity.v1.DeviceType type = 2;
+  string manufacturer = 3;
+  string model = 4;
+  string policy_id = 5;
+  string owner_id = 6;
+}
+
+message RegisterDeviceResponse {
+  string device_id = 1;
+  string activation_token = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message SendTelemetryRequest {
+  entity.v1.Telemetry telemetry = 1;
+}
+
+message SendTelemetryResponse {
+  string telemetry_id = 1;
+  bool accepted = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message StreamTelemetryRequest {
+  entity.v1.Telemetry telemetry = 1;
+}
+
+message StreamTelemetryResponse {
+  string telemetry_id = 1;
+  bool received = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetDeviceStatusRequest {
+  string device_id = 1;
+}
+
+message GetDeviceStatusResponse {
+  entity.v1.IoTDevice device = 1;
+  google.protobuf.Timestamp last_telemetry_at = 2;
+  int32 telemetry_count_today = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetRiskAssessmentRequest {
+  string device_id = 1;
+  string policy_id = 2;
+}
+
+message GetRiskAssessmentResponse {
+  entity.v1.RiskAssessment assessment = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeactivateDeviceRequest {
+  string device_id = 1;
+  string reason = 2;
+}
+
+message DeactivateDeviceResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

@@ -1,0 +1,9 @@
+PolicyServiceRequestsByPolicyListingResponse:
+  type: object
+  properties:
+    requests:
+      type: array
+      items:
+        $ref: '#/components/schemas/PolicyServiceRequest'
+  description: Response payload for policy service requests by policy listing operation.
+    Returns operation results and status.

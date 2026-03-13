@@ -1,0 +1,23 @@
+SessionExpiredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    session_type:
+      type: string
+      description: SERVER_SIDE or JWT
+    timestamp:
+      type: string
+      format: date-time
+    expired_at:
+      type: string
+      format: date-time
+    inactivity_seconds:
+      type: integer
+      format: int32
+      description: Seconds since last activity
+  description: 'Event: Session expired (auto-cleanup event)'

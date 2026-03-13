@@ -1,0 +1,137 @@
+syntax = "proto3";
+
+package insuretech.products.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/products/entity/v1;productsv1";
+option csharp_namespace = "Insuretech.Products.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Product rider/add-on
+// Maps to 'product_riders' table in product_schema
+message Rider {
+  option (insuretech.common.v1.table) = {
+    table_name : "product_riders"
+    schema_name : "insurance_schema"
+    migration_order : 21
+    is_table : true
+    comment : "Product riders/add-ons (optional coverage enhancements)"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : false
+  };
+
+  string rider_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "rider_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Rider UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:rider_id;not null"
+
+  string product_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "product_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to products table"
+    foreign_key : {
+      references_table : "products"
+      references_column : "product_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_product_riders_product_id"
+    }
+    index : {
+      index_name : "idx_product_riders_product_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string rider_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "rider_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Rider display name"
+  } ];
+  // @inject_tag: gorm:"column:rider_name;not null"
+
+  string description = 4 [ (insuretech.common.v1.column) = {
+    column_name : "description"
+    sql_type : "TEXT"
+    comment : "Rider description"
+  } ];
+  // @inject_tag: gorm:"column:description"
+
+  insuretech.common.v1.Money premium_amount = 5
+      [ (insuretech.common.v1.column) = {
+        column_name : "premium_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "premium_amount >= 0"
+        comment : "Additional premium in paisa"
+      } ];
+  // @inject_tag: gorm:"column:premium_amount;not null"
+
+  insuretech.common.v1.Money coverage_amount = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "coverage_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "coverage_amount > 0"
+        comment : "Additional coverage in paisa"
+      } ];
+  // @inject_tag: gorm:"column:coverage_amount;not null"
+
+  bool is_mandatory = 7 [ (insuretech.common.v1.column) = {
+    column_name : "is_mandatory"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Whether rider is mandatory"
+  } ];
+  // @inject_tag: gorm:"column:is_mandatory;not null"
+
+  google.protobuf.Timestamp created_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  // Currency companion fields for Money types (flattened storage)
+  string premium_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "premium_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for premium_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:premium_currency;not null"
+
+  string coverage_currency = 10002 [ (insuretech.common.v1.column) = {
+    column_name : "coverage_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for coverage_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:coverage_currency;not null"
+}

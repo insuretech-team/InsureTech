@@ -1,0 +1,19 @@
+BeneficiaryRiskScoreUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    beneficiary_id:
+      type: string
+    old_risk_score:
+      type: string
+    new_risk_score:
+      type: string
+    reason:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Risk score updated'

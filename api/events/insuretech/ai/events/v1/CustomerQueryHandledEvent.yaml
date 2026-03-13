@@ -1,0 +1,28 @@
+CustomerQueryHandledEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    conversation_id:
+      type: string
+    user_id:
+      type: string
+    agent_id:
+      type: string
+    query_type:
+      type: string
+      description: POLICY_INFO, CLAIM_STATUS, PREMIUM_QUOTE
+    resolved_by_ai:
+      type: boolean
+    escalated_to_human:
+      type: boolean
+    response_time_seconds:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Customer query handled'

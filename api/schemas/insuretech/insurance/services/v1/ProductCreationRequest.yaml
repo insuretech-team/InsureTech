@@ -1,0 +1,6 @@
+InsuranceProductCreationRequest:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/Product'
+  description: ========== PRODUCT MESSAGES ==========

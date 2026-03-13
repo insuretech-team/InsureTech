@@ -1,0 +1,14 @@
+RoomStateChangedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    old_state:
+      $ref: '#/components/schemas/RoomState'
+    new_state:
+      $ref: '#/components/schemas/RoomState'
+    changed_at:
+      type: string
+      format: date-time
+  description: Event emitted when room state undergoes changed. Published to event
+    stream for downstream processing and audit trail.

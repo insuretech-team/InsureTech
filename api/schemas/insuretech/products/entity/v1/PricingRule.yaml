@@ -1,0 +1,16 @@
+PricingRule:
+  type: object
+  properties:
+    rule_id:
+      type: string
+    rule_name:
+      type: string
+    type:
+      $ref: '#/components/schemas/RuleType'
+    conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/RuleCondition'
+    action:
+      $ref: '#/components/schemas/RuleAction'
+  description: Pricing rule (stored as JSONB in pricing_configs table)

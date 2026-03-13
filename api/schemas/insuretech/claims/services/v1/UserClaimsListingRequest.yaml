@@ -1,0 +1,15 @@
+UserClaimsListingRequest:
+  type: object
+  properties:
+    customer_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/ClaimStatus'
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing user claims listing items. Supports filtering,
+    sorting, and pagination.

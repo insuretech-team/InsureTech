@@ -1,0 +1,11 @@
+ComplianceReportGenerationRequest:
+  type: object
+  properties:
+    regulation:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+  description: Request payload for compliance report generation operation. Contains
+    parameters required to execute the operation.

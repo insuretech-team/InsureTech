@@ -1,0 +1,10 @@
+FraudFraudAlertRetrievalResponse:
+  type: object
+  properties:
+    fraud_alert:
+      $ref: '#/components/schemas/FraudAlert'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for fraud alert retrieval operation. Returns operation
+    results and status.

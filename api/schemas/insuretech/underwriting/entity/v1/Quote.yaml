@@ -1,0 +1,86 @@
+Quote:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:quote_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    quote_number:
+      type: string
+      description: '@inject_tag: gorm:"column:quote_number;not null"'
+      x-unique: true
+    beneficiary_id:
+      type: string
+      description: '@inject_tag: gorm:"column:beneficiary_id;not null"'
+    insurer_product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_product_id;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/QuoteStatus'
+      x-database-default: DRAFT
+    sum_assured:
+      $ref: '#/components/schemas/Money'
+      description: Quote details
+    term_years:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:term_years;not null"'
+    premium_payment_mode:
+      type: string
+      description: '@inject_tag: gorm:"column:premium_payment_mode;not null"'
+    base_premium:
+      $ref: '#/components/schemas/Money'
+      description: Calculated premium
+    rider_premium:
+      $ref: '#/components/schemas/Money'
+    tax_amount:
+      $ref: '#/components/schemas/Money'
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    premium_calculation:
+      type: string
+      description: '@inject_tag: gorm:"column:premium_calculation"'
+    selected_riders:
+      type: string
+      description: "Riders\n @inject_tag: gorm:\"column:selected_riders\""
+    applicant_age:
+      type: integer
+      format: int32
+      description: "Applicant details (snapshot at quote time)\n @inject_tag: gorm:\"\
+        column:applicant_age;not null\""
+    applicant_occupation:
+      type: string
+      description: '@inject_tag: gorm:"column:applicant_occupation"'
+    smoker:
+      type: boolean
+      description: '@inject_tag: gorm:"column:smoker"'
+      default: false
+    valid_until:
+      type: string
+      format: date-time
+      description: "Validity\n @inject_tag: gorm:\"column:valid_until;not null;serializer:proto_timestamp\""
+    converted_policy_id:
+      type: string
+      description: "Conversion\n @inject_tag: gorm:\"column:converted_policy_id\""
+    converted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Quote entity - premium quote before policy issuance
+  required:
+  - id
+  - quote_number
+  - beneficiary_id
+  - insurer_product_id
+  - status
+  - term_years
+  - premium_payment_mode
+  - applicant_age
+  - valid_until
+  - audit_info

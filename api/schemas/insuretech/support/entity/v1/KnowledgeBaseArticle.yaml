@@ -1,0 +1,57 @@
+KnowledgeBaseArticle:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:article_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    title:
+      type: string
+      description: '@inject_tag: gorm:"column:title;not null"'
+    title_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:title_bn"'
+    slug:
+      type: string
+      description: '@inject_tag: gorm:"column:slug;not null"'
+      x-unique: true
+    category:
+      type: string
+      description: '@inject_tag: gorm:"column:category;not null"'
+    content:
+      type: string
+      description: '@inject_tag: gorm:"column:content;not null"'
+    content_bn:
+      type: string
+      description: '@inject_tag: gorm:"column:content_bn"'
+    tags:
+      type: array
+      items:
+        type: string
+    is_published:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_published"'
+      default: false
+    view_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:view_count"'
+      default: 0
+    helpful_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:helpful_count"'
+      default: 0
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Knowledge base article
+  required:
+  - id
+  - title
+  - slug
+  - category
+  - content
+  - audit_info

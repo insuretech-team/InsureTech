@@ -1,0 +1,44 @@
+Commission:
+  type: object
+  properties:
+    commission_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:commission_id;not null"'
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    partner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:partner_id"'
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_id"'
+    type:
+      $ref: '#/components/schemas/CommissionType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    commission_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:commission_amount;not null"'
+    commission_rate:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:commission_rate;not null"'
+    status:
+      $ref: '#/components/schemas/CommissionStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    payment_id:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_id"'
+    paid_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+  description: "Commission payment records\n Maps to 'commissions' table in partner_schema"

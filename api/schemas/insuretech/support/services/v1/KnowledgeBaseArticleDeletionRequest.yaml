@@ -1,0 +1,7 @@
+KnowledgeBaseArticleDeletionRequest:
+  type: object
+  properties:
+    article_id:
+      type: string
+  description: Request payload for knowledge base article deletion operation. Contains
+    parameters required to execute the operation.

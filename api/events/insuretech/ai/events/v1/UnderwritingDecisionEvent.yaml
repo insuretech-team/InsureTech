@@ -1,0 +1,28 @@
+UnderwritingDecisionEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    policy_id:
+      type: string
+    agent_id:
+      type: string
+    decision:
+      type: string
+      description: APPROVED, REJECTED, MANUAL_REVIEW
+    risk_score:
+      type: number
+      format: double
+    recommended_premium:
+      $ref: '#/components/schemas/Money'
+    risk_factors:
+      type: array
+      items:
+        type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Underwriting decision made'

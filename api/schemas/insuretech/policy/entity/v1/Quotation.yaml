@@ -1,0 +1,68 @@
+Quotation:
+  type: object
+  properties:
+    quotation_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:quotation_id;not null"'
+    business_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_id"'
+    insurer_name:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_name"'
+    plan_id:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_id"'
+    insurance_category:
+      $ref: '#/components/schemas/InsuranceType'
+      description: '@inject_tag: gorm:"column:insurance_category"'
+    department_id:
+      type: string
+      description: '@inject_tag: gorm:"column:department_id"'
+    employee_no:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:employee_no"'
+    estimated_premium:
+      $ref: '#/components/schemas/Money'
+    quoted_amount:
+      $ref: '#/components/schemas/Money'
+    status:
+      $ref: '#/components/schemas/QuotationStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    submission_date:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:submission_date;serializer:proto_timestamp"'
+    valid_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    quotation_number:
+      type: string
+      description: '@inject_tag: gorm:"column:quotation_number"'
+    plan_name:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_name"'
+    created_by_user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by_user_id"'
+    approved_by_user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_by_user_id"'
+    approved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"'
+    rejection_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:rejection_reason"'
+  description: Quotation represents a B2B or B2C insurance quote request

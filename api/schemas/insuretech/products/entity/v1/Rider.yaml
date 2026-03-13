@@ -1,0 +1,40 @@
+ProductsRider:
+  type: object
+  properties:
+    rider_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:rider_id;not null"'
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    rider_name:
+      type: string
+      description: '@inject_tag: gorm:"column:rider_name;not null"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:premium_amount;not null"'
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:coverage_amount;not null"'
+    is_mandatory:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_mandatory;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    premium_currency:
+      type: string
+      description: "Currency companion fields for Money types (flattened storage)\n\
+        \ @inject_tag: gorm:\"column:premium_currency;not null\""
+    coverage_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:coverage_currency;not null"'
+  description: "Product rider/add-on\n Maps to 'product_riders' table in product_schema"

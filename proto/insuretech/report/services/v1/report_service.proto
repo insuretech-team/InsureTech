@@ -1,0 +1,164 @@
+syntax = "proto3";
+
+package insuretech.report.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/report/entity/v1/report_definition.proto";
+import "insuretech/report/entity/v1/report_schedule.proto";
+import "insuretech/report/entity/v1/report_execution.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/report/services/v1;reportservicev1";
+option csharp_namespace = "Insuretech.Report.Services.V1";
+
+service ReportService {
+  // Execute report
+  rpc ExecuteReport(ExecuteReportRequest) returns (ExecuteReportResponse) {
+    option (google.api.http) = {
+      post: "/v1/reports/{report_definition_id}?action=execute"
+      body: "*"
+    };
+  }
+  
+  // Get report execution
+  rpc GetReportExecution(GetReportExecutionRequest) returns (GetReportExecutionResponse) {
+    option (google.api.http) = {
+      get: "/v1/report-executions/{report_execution_id}"
+    };
+  }
+  
+  // List report executions
+  rpc ListReportExecutions(ListReportExecutionsRequest) returns (ListReportExecutionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/report-executions"
+    };
+  }
+  
+  // Download report
+  rpc DownloadReport(DownloadReportRequest) returns (DownloadReportResponse) {
+    option (google.api.http) = {
+      get: "/v1/report-executions/{report_execution_id}/download"
+    };
+  }
+  
+  // List report definitions
+  rpc ListReportDefinitions(ListReportDefinitionsRequest) returns (ListReportDefinitionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/report-definitions"
+    };
+  }
+  
+  // Create report schedule
+  rpc CreateReportSchedule(CreateReportScheduleRequest) returns (CreateReportScheduleResponse) {
+    option (google.api.http) = {
+      post: "/v1/report-schedules"
+      body: "*"
+    };
+  }
+  
+  // List report schedules
+  rpc ListReportSchedules(ListReportSchedulesRequest) returns (ListReportSchedulesResponse) {
+    option (google.api.http) = {
+      get: "/v1/report-schedules"
+    };
+  }
+}
+
+message ExecuteReportRequest {
+  string report_definition_id = 1;
+  google.protobuf.Struct parameters = 2; // CG-7: Typed report parameters (date ranges, filters, etc.)
+  string format = 3; // PDF, XLSX, CSV
+}
+
+message ExecuteReportResponse {
+  string report_execution_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message GetReportExecutionRequest {
+  string report_execution_id = 1;
+}
+
+message GetReportExecutionResponse {
+  entity.v1.ReportExecution report_execution = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListReportExecutionsRequest {
+  string report_definition_id = 1;
+  string status = 2;
+  string start_date = 3;
+  string end_date = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message ListReportExecutionsResponse {
+  repeated entity.v1.ReportExecution report_executions = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message DownloadReportRequest {
+  string report_execution_id = 1;
+}
+
+message DownloadReportResponse {
+  bytes content = 1;
+  string content_type = 2;
+  string filename = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ListReportDefinitionsRequest {
+  string category = 1;
+  bool active_only = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListReportDefinitionsResponse {
+  repeated entity.v1.ReportDefinition report_definitions = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message CreateReportScheduleRequest {
+  string report_definition_id = 1;
+  string name = 2;
+  string frequency = 3;
+  string cron_expression = 4;
+  google.protobuf.Struct parameters = 5; // CG-7: Typed report parameters
+  repeated string recipients = 6;
+}
+
+message CreateReportScheduleResponse {
+  string report_schedule_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ListReportSchedulesRequest {
+  string report_definition_id = 1;
+  bool active_only = 2;
+  int32 page_size = 3;
+  string page_token = 4;
+}
+
+message ListReportSchedulesResponse {
+  repeated entity.v1.ReportSchedule report_schedules = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+

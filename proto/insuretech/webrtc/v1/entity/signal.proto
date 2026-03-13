@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.entity;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/entity;entity";
+option csharp_namespace = "Insuretech.Webrtc.V1.Entity";
+
+import "insuretech/common/v1/types.proto";
+
+message SDPOffer {
+  string from_peer_id = 1;  // ULID format
+  string to_peer_id = 2;    // ULID format
+  string sdp = 3;
+  SDPType type = 4;
+}
+
+message SDPAnswer {
+  string from_peer_id = 1;  // ULID format
+  string to_peer_id = 2;    // ULID format
+  string sdp = 3;
+  SDPType type = 4;
+}
+
+message ICECandidate {
+  string from_peer_id = 1;  // ULID format
+  string to_peer_id = 2;    // ULID format
+  string candidate = 3;
+  string sdp_mid = 4;
+  int32 sdp_m_line_index = 5;
+  string username_fragment = 6;
+}
+
+enum SDPType {
+  SDP_TYPE_UNSPECIFIED = 0;
+  SDP_TYPE_OFFER = 1;
+  SDP_TYPE_ANSWER = 2;
+  SDP_TYPE_PRANSWER = 3;
+  SDP_TYPE_ROLLBACK = 4;
+}
+

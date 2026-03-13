@@ -1,0 +1,13 @@
+ResolveMyOrganisationResponse:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    organisation_name:
+      type: string
+    role:
+      $ref: '#/components/schemas/OrgMemberRole'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for resolve my organisation operation. Returns operation
+    results and status.

@@ -1,0 +1,33 @@
+InvoiceIssuedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    invoice_id:
+      type: string
+    invoice_number:
+      type: string
+    order_id:
+      type: string
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+    tenant_id:
+      type: string
+    total_amount:
+      $ref: '#/components/schemas/Money'
+    issued_by:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    issued_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Invoice issued \u2014 published when invoice transitions DRAFT\
+    \ \u2192 ISSUED"

@@ -1,0 +1,13 @@
+VoiceCommandProcessingRequest:
+  type: object
+  properties:
+    voice_session_id:
+      type: string
+    audio_url:
+      type: string
+    command_text:
+      type: string
+    language:
+      type: string
+  description: Request payload for voice command processing operation. Contains parameters
+    required to execute the operation.

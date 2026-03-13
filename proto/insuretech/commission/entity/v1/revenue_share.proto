@@ -1,0 +1,106 @@
+syntax = "proto3";
+
+package insuretech.commission.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/commission/entity/v1;commissionv1";
+
+// Insurer revenue share tracking (BRD revenue models)
+message RevenueShare {
+  option (insuretech.common.v1.table) = {
+    table_name: "revenue_shares"
+    schema_name: "payment_schema"
+    migration_order: 90
+    is_table: true
+    audit_fields: true
+    comment: "Revenue share between platform and insurer"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "share_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:share_id;not null"
+  
+  string policy_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "policy_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_revenue_shares_policy"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:policy_id;not null"
+  
+  string insurer_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "insurer_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "insurers"
+      references_column: "insurer_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+    }
+    index: {
+      index_name: "idx_revenue_shares_insurer"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_id;not null"
+  
+  insuretech.common.v1.Money gross_premium = 4;
+  insuretech.common.v1.Money platform_share = 5;
+  insuretech.common.v1.Money insurer_share = 6;
+  
+  string split_config = 7 [(insuretech.common.v1.column) = {
+    column_name: "split_config"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Revenue split breakdown by component"
+  }];
+  // @inject_tag: gorm:"column:split_config"
+  
+  string revenue_model = 8 [(insuretech.common.v1.column) = {
+    column_name: "revenue_model"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "Per BRD: COMMISSION, FLAT_FEE, HYBRID, REINSURANCE"
+  }];
+  // @inject_tag: gorm:"column:revenue_model;not null"
+  
+  google.protobuf.Timestamp recorded_at = 9 [(insuretech.common.v1.column) = {
+    column_name: "recorded_at"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+    default_value: "now()"
+  }];
+  // @inject_tag: gorm:"column:recorded_at;not null;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+

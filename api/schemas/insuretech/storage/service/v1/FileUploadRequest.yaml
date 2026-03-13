@@ -1,0 +1,25 @@
+FileUploadRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    content:
+      type: string
+      format: byte
+    filename:
+      type: string
+    content_type:
+      type: string
+    file_type:
+      $ref: '#/components/schemas/FileType'
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+    expires_at:
+      type: string
+      format: date-time
+  description: Request payload for file upload operation. Contains parameters required
+    to execute the operation.

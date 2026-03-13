@@ -1,0 +1,13 @@
+GatewayWebhookHandlingResponse:
+  type: object
+  properties:
+    accepted:
+      type: boolean
+    payment_id:
+      type: string
+    status:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for gateway webhook handling operation. Returns operation
+    results and status.

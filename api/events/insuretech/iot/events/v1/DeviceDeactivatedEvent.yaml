@@ -1,0 +1,16 @@
+DeviceDeactivatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    reason:
+      type: string
+      description: '"policy_expired", "user_request", "malfunction"'
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Device deactivated'

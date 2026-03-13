@@ -1,0 +1,13 @@
+APIKeysListingResponse:
+  type: object
+  properties:
+    keys:
+      type: array
+      items:
+        $ref: '#/components/schemas/APIKeySummary'
+    next_page_token:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for api keys listing operation. Returns operation
+    results and status.

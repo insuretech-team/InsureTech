@@ -1,0 +1,15 @@
+UserRolesListingRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    domain:
+      type: string
+      description: filter by domain
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+  description: Request payload for listing user roles listing items. Supports filtering,
+    sorting, and pagination.

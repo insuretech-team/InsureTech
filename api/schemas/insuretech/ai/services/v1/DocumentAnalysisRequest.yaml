@@ -1,0 +1,14 @@
+DocumentAnalysisRequest:
+  type: object
+  properties:
+    document_url:
+      type: string
+    document_type:
+      type: string
+      description: bill, prescription, id_card, etc.
+    document_data:
+      type: string
+      format: byte
+      description: Alternative to URL
+  description: Request payload for document analysis operation. Contains parameters
+    required to execute the operation.

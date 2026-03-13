@@ -1,0 +1,14 @@
+OrganisationsListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    tenant_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrganisationStatus'
+  description: Request payload for listing organisations listing items. Supports filtering,
+    sorting, and pagination.

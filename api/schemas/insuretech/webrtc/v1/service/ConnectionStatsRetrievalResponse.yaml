@@ -1,0 +1,7 @@
+ConnectionStatsRetrievalResponse:
+  type: object
+  properties:
+    stats:
+      $ref: '#/components/schemas/ConnectionStats'
+  description: Response payload for connection stats retrieval operation. Returns
+    operation results and status.

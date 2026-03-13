@@ -1,0 +1,6 @@
+InsuranceFraudCaseCreationRequest:
+  type: object
+  properties:
+    fraud_case:
+      $ref: '#/components/schemas/FraudCase'
+  description: ========== FRAUD CASE MESSAGES ==========

@@ -1,0 +1,87 @@
+Partner:
+  type: object
+  properties:
+    partner_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:partner_id;not null"'
+    organization_name:
+      type: string
+      description: '@inject_tag: gorm:"column:organization_name;not null"'
+    type:
+      $ref: '#/components/schemas/PartnerType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    status:
+      $ref: '#/components/schemas/PartnerStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    trade_license:
+      type: string
+      description: '@inject_tag: gorm:"column:trade_license;not null"'
+    tin_number:
+      type: string
+    bank_account:
+      type: string
+      description: '@inject_tag: gorm:"column:bank_account;not null"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Commission payment processing
+    bank_name:
+      type: string
+      description: '@inject_tag: gorm:"column:bank_name"'
+    bank_branch:
+      type: string
+      description: '@inject_tag: gorm:"column:bank_branch"'
+    contact_email:
+      type: string
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Partner communication
+    contact_phone:
+      type: string
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-data-purpose: Partner communication
+    acquisition_commission_rate:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:acquisition_commission_rate;not null"'
+    renewal_commission_rate:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:renewal_commission_rate;not null"'
+    claims_assistance_rate:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:claims_assistance_rate"'
+    onboarded_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:onboarded_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    focal_person_id:
+      type: string
+      description: '@inject_tag: gorm:"column:focal_person_id"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+    commission:
+      $ref: '#/components/schemas/CommissionStructure'
+      description: "Commission structure stored inline\n @inject_tag: gorm:\"column:commission;serializer:json\""
+    benefits:
+      $ref: '#/components/schemas/PartnerBenefits'
+      description: "Partner benefits (discount & cashless) stored inline\n @inject_tag:\
+        \ gorm:\"column:benefits;serializer:json\""
+  description: "Partner represents a business partner (Hospital, MFS, eCommerce, etc.)\n\
+    \ Maps to 'partners' table in partner_schema"

@@ -1,0 +1,16 @@
+RolesListingResponse:
+  type: object
+  properties:
+    roles:
+      type: array
+      items:
+        $ref: '#/components/schemas/Role'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for roles listing operation. Returns operation results
+    and status.

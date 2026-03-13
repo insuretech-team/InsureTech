@@ -1,0 +1,714 @@
+{
+  "workflow_schema": {
+    "name": "Workflow Schema",
+    "icon": "\u2699\ufe0f",
+    "description": "Workflow and task management",
+    "tables": [
+      {
+        "table_name": "workflow_definitions",
+        "message_name": "WorkflowDefinition",
+        "migration_order": 59,
+        "package": "insuretech.workflow.entity.v1"
+      },
+      {
+        "table_name": "workflow_instances",
+        "message_name": "WorkflowInstance",
+        "migration_order": 60,
+        "package": "insuretech.workflow.entity.v1"
+      },
+      {
+        "table_name": "workflow_tasks",
+        "message_name": "WorkflowTask",
+        "migration_order": 61,
+        "package": "insuretech.workflow.entity.v1"
+      },
+      {
+        "table_name": "tasks",
+        "message_name": "Task",
+        "migration_order": 62,
+        "package": "insuretech.task.entity.v1"
+      },
+      {
+        "table_name": "workflow_configs",
+        "message_name": "WorkflowConfig",
+        "migration_order": 96,
+        "package": "insuretech.workflow.entity.v1"
+      }
+    ]
+  },
+  "webrtc": {
+    "name": "Webrtc",
+    "icon": "\ud83d\udcf9",
+    "description": "Real-time communication (WebRTC)",
+    "tables": [
+      {
+        "table_name": "rooms",
+        "message_name": "Room",
+        "migration_order": 100,
+        "package": "insuretech.webrtc.v1.entity"
+      },
+      {
+        "table_name": "peers",
+        "message_name": "Peer",
+        "migration_order": 101,
+        "package": "insuretech.webrtc.v1.entity"
+      },
+      {
+        "table_name": "tracks",
+        "message_name": "Track",
+        "migration_order": 102,
+        "package": "insuretech.webrtc.v1.entity"
+      },
+      {
+        "table_name": "room_sessions",
+        "message_name": "RoomSession",
+        "migration_order": 103,
+        "package": "insuretech.webrtc.v1.entity"
+      },
+      {
+        "table_name": "peer_sessions",
+        "message_name": "PeerSession",
+        "migration_order": 104,
+        "package": "insuretech.webrtc.v1.entity"
+      }
+    ]
+  },
+  "ai_schema": {
+    "name": "Ai Schema",
+    "icon": "\ud83e\udd16",
+    "description": "AI agents and voice processing",
+    "tables": [
+      {
+        "table_name": "voice_commands",
+        "message_name": "VoiceCommand",
+        "migration_order": 68,
+        "package": "insuretech.voice.entity.v1"
+      },
+      {
+        "table_name": "voice_transcripts",
+        "message_name": "VoiceTranscript",
+        "migration_order": 69,
+        "package": "insuretech.voice.entity.v1"
+      },
+      {
+        "table_name": "ai_agents",
+        "message_name": "AIAgent",
+        "migration_order": 78,
+        "package": "insuretech.ai.entity.v1"
+      },
+      {
+        "table_name": "ai_conversations",
+        "message_name": "Conversation",
+        "migration_order": 79,
+        "package": "insuretech.ai.entity.v1"
+      }
+    ]
+  },
+  "authn_schema": {
+    "name": "Authn Schema",
+    "icon": "\ud83d\udd10",
+    "description": "Authentication and user management tables",
+    "tables": [
+      {
+        "table_name": "users",
+        "message_name": "User",
+        "migration_order": 1,
+        "package": "insuretech.authn.entity.v1"
+      },
+      {
+        "table_name": "user_profiles",
+        "message_name": "UserProfile",
+        "migration_order": 2,
+        "package": "insuretech.authn.entity.v1"
+      },
+      {
+        "table_name": "sessions",
+        "message_name": "Session",
+        "migration_order": 3,
+        "package": "insuretech.authn.entity.v1"
+      },
+      {
+        "table_name": "otps",
+        "message_name": "OTP",
+        "migration_order": 4,
+        "package": "insuretech.authn.entity.v1"
+      },
+      {
+        "table_name": "kyc_verifications",
+        "message_name": "KYCVerification",
+        "migration_order": 12,
+        "package": "insuretech.kyc.entity.v1"
+      },
+      {
+        "table_name": "document_verifications",
+        "message_name": "DocumentVerification",
+        "migration_order": 13,
+        "package": "insuretech.kyc.entity.v1"
+      },
+      {
+        "table_name": "api_keys",
+        "message_name": "ApiKey",
+        "migration_order": 65,
+        "package": "insuretech.apikey.entity.v1"
+      },
+      {
+        "table_name": "api_key_usage",
+        "message_name": "ApiKeyUsage",
+        "migration_order": 66,
+        "package": "insuretech.apikey.entity.v1"
+      },
+      {
+        "table_name": "voice_sessions",
+        "message_name": "VoiceSession",
+        "migration_order": 67,
+        "package": "insuretech.voice.entity.v1"
+      },
+      {
+        "table_name": "document_types",
+        "message_name": "DocumentType",
+        "migration_order": 95,
+        "package": "insuretech.authn.entity.v1"
+      },
+      {
+        "table_name": "users_documents",
+        "message_name": "UserDocument",
+        "migration_order": 96,
+        "package": "insuretech.authn.entity.v1"
+      }
+    ]
+  },
+  "insurance_schema": {
+    "name": "Insurance Schema",
+    "icon": "\ud83c\udfe5",
+    "description": "Core insurance business logic tables",
+    "tables": [
+      {
+        "table_name": "fraud_rules",
+        "message_name": "FraudRule",
+        "migration_order": 16,
+        "package": "insuretech.fraud.entity.v1"
+      },
+      {
+        "table_name": "insurers",
+        "message_name": "Insurer",
+        "migration_order": 17,
+        "package": "insuretech.insurer.entity.v1"
+      },
+      {
+        "table_name": "insurer_configs",
+        "message_name": "InsurerConfig",
+        "migration_order": 18,
+        "package": "insuretech.insurer.entity.v1"
+      },
+      {
+        "table_name": "products",
+        "message_name": "Product",
+        "migration_order": 19,
+        "package": "insuretech.products.entity.v1"
+      },
+      {
+        "table_name": "insurer_products",
+        "message_name": "InsurerProduct",
+        "migration_order": 20,
+        "package": "insuretech.insurer.entity.v1"
+      },
+      {
+        "table_name": "product_riders",
+        "message_name": "Rider",
+        "migration_order": 21,
+        "package": "insuretech.products.entity.v1"
+      },
+      {
+        "table_name": "pricing_configs",
+        "message_name": "PricingConfig",
+        "migration_order": 22,
+        "package": "insuretech.products.entity.v1"
+      },
+      {
+        "table_name": "beneficiaries",
+        "message_name": "Beneficiary",
+        "migration_order": 25,
+        "package": "insuretech.beneficiary.entity.v1"
+      },
+      {
+        "table_name": "individual_beneficiaries",
+        "message_name": "IndividualBeneficiary",
+        "migration_order": 26,
+        "package": "insuretech.beneficiary.entity.v1"
+      },
+      {
+        "table_name": "business_beneficiaries",
+        "message_name": "BusinessBeneficiary",
+        "migration_order": 27,
+        "package": "insuretech.beneficiary.entity.v1"
+      },
+      {
+        "table_name": "quotes",
+        "message_name": "Quote",
+        "migration_order": 28,
+        "package": "insuretech.underwriting.entity.v1"
+      },
+      {
+        "table_name": "health_declarations",
+        "message_name": "HealthDeclaration",
+        "migration_order": 29,
+        "package": "insuretech.underwriting.entity.v1"
+      },
+      {
+        "table_name": "underwriting_decisions",
+        "message_name": "UnderwritingDecision",
+        "migration_order": 30,
+        "package": "insuretech.underwriting.entity.v1"
+      },
+      {
+        "table_name": "policies",
+        "message_name": "Policy",
+        "migration_order": 31,
+        "package": "insuretech.policy.entity.v1"
+      },
+      {
+        "table_name": "policy_nominees",
+        "message_name": "Nominee",
+        "migration_order": 32,
+        "package": "insuretech.policy.entity.v1"
+      },
+      {
+        "table_name": "policy_riders",
+        "message_name": "Rider",
+        "migration_order": 33,
+        "package": "insuretech.policy.entity.v1"
+      },
+      {
+        "table_name": "endorsements",
+        "message_name": "Endorsement",
+        "migration_order": 34,
+        "package": "insuretech.endorsement.entity.v1"
+      },
+      {
+        "table_name": "renewal_schedules",
+        "message_name": "RenewalSchedule",
+        "migration_order": 35,
+        "package": "insuretech.renewal.entity.v1"
+      },
+      {
+        "table_name": "renewal_reminders",
+        "message_name": "RenewalReminder",
+        "migration_order": 36,
+        "package": "insuretech.renewal.entity.v1"
+      },
+      {
+        "table_name": "grace_periods",
+        "message_name": "GracePeriod",
+        "migration_order": 37,
+        "package": "insuretech.renewal.entity.v1"
+      },
+      {
+        "table_name": "claims",
+        "message_name": "Claim",
+        "migration_order": 46,
+        "package": "insuretech.claims.entity.v1"
+      },
+      {
+        "table_name": "claim_documents",
+        "message_name": "ClaimDocument",
+        "migration_order": 47,
+        "package": "insuretech.claims.entity.v1"
+      },
+      {
+        "table_name": "claim_approvals",
+        "message_name": "ClaimApproval",
+        "migration_order": 48,
+        "package": "insuretech.claims.entity.v1"
+      },
+      {
+        "table_name": "fraud_checks",
+        "message_name": "FraudCheckResult",
+        "migration_order": 49,
+        "package": "insuretech.claims.entity.v1"
+      },
+      {
+        "table_name": "fraud_alerts",
+        "message_name": "FraudAlert",
+        "migration_order": 55,
+        "package": "insuretech.fraud.entity.v1"
+      },
+      {
+        "table_name": "fraud_cases",
+        "message_name": "FraudCase",
+        "migration_order": 56,
+        "package": "insuretech.fraud.entity.v1"
+      },
+      {
+        "table_name": "quotations",
+        "message_name": "Quotation",
+        "migration_order": 93,
+        "package": "insuretech.policy.entity.v1"
+      },
+      {
+        "table_name": "product_plans",
+        "message_name": "ProductPlan",
+        "migration_order": 95,
+        "package": "insuretech.products.entity.v1"
+      },
+      {
+        "table_name": "policy_service_requests",
+        "message_name": "PolicyServiceRequest",
+        "migration_order": 98,
+        "package": "insuretech.policy.entity.v1"
+      },
+      {
+        "table_name": "service_providers",
+        "message_name": "ServiceProvider",
+        "migration_order": 99,
+        "package": "insuretech.services.entity.v1"
+      }
+    ]
+  },
+  "tenant_schema": {
+    "name": "Tenant Schema",
+    "icon": "\ud83c\udfe2",
+    "description": "Multi-tenant configuration",
+    "tables": [
+      {
+        "table_name": "tenants",
+        "message_name": "Tenant",
+        "migration_order": 71,
+        "package": "insuretech.tenant.entity.v1"
+      },
+      {
+        "table_name": "tenant_configs",
+        "message_name": "TenantConfig",
+        "migration_order": 72,
+        "package": "insuretech.tenant.entity.v1"
+      }
+    ]
+  },
+  "support_schema": {
+    "name": "Support Schema",
+    "icon": "\ud83d\udcac",
+    "description": "Customer support and ticketing",
+    "tables": [
+      {
+        "table_name": "faqs",
+        "message_name": "FAQ",
+        "migration_order": 84,
+        "package": "insuretech.support.entity.v1"
+      },
+      {
+        "table_name": "knowledge_base_articles",
+        "message_name": "KnowledgeBaseArticle",
+        "migration_order": 85,
+        "package": "insuretech.support.entity.v1"
+      },
+      {
+        "table_name": "tickets",
+        "message_name": "Ticket",
+        "migration_order": 86,
+        "package": "insuretech.support.entity.v1"
+      },
+      {
+        "table_name": "ticket_messages",
+        "message_name": "TicketMessage",
+        "migration_order": 88,
+        "package": "insuretech.support.entity.v1"
+      }
+    ]
+  },
+  "storage_schema": {
+    "name": "Storage Schema",
+    "icon": "\ud83d\udcc1",
+    "description": "Document and file storage",
+    "tables": [
+      {
+        "table_name": "document_templates",
+        "message_name": "DocumentTemplate",
+        "migration_order": 14,
+        "package": "insuretech.document.entity.v1"
+      },
+      {
+        "table_name": "document_generations",
+        "message_name": "DocumentGeneration",
+        "migration_order": 15,
+        "package": "insuretech.document.entity.v1"
+      },
+      {
+        "table_name": "files",
+        "message_name": "StoredFile",
+        "migration_order": 98,
+        "package": "insuretech.storage.entity.v1"
+      }
+    ]
+  },
+  "analytics_schema": {
+    "name": "Analytics Schema",
+    "icon": "\ud83d\udcca",
+    "description": "Analytics, metrics, and reporting",
+    "tables": [
+      {
+        "table_name": "report_definitions",
+        "message_name": "ReportDefinition",
+        "migration_order": 73,
+        "package": "insuretech.report.entity.v1"
+      },
+      {
+        "table_name": "report_schedules",
+        "message_name": "ReportSchedule",
+        "migration_order": 74,
+        "package": "insuretech.report.entity.v1"
+      },
+      {
+        "table_name": "report_executions",
+        "message_name": "ReportExecution",
+        "migration_order": 75,
+        "package": "insuretech.report.entity.v1"
+      },
+      {
+        "table_name": "business_metrics",
+        "message_name": "BusinessMetrics",
+        "migration_order": 80,
+        "package": "insuretech.analytics.entity.v1"
+      },
+      {
+        "table_name": "metric_definitions",
+        "message_name": "MetricDefinition",
+        "migration_order": 81,
+        "package": "insuretech.analytics.entity.v1"
+      },
+      {
+        "table_name": "aggregated_metrics",
+        "message_name": "AggregatedMetric",
+        "migration_order": 82,
+        "package": "insuretech.analytics.entity.v1"
+      },
+      {
+        "table_name": "reports",
+        "message_name": "Report",
+        "migration_order": 83,
+        "package": "insuretech.analytics.entity.v1"
+      }
+    ]
+  },
+  "payment_schema": {
+    "name": "Payment Schema",
+    "icon": "\ud83d\udcb3",
+    "description": "Payment processing and financial transactions",
+    "tables": [
+      {
+        "table_name": "mfs_integrations",
+        "message_name": "MFSIntegration",
+        "migration_order": 38,
+        "package": "insuretech.mfs.entity.v1"
+      },
+      {
+        "table_name": "refunds",
+        "message_name": "Refund",
+        "migration_order": 39,
+        "package": "insuretech.refund.entity.v1"
+      },
+      {
+        "table_name": "commission_payouts",
+        "message_name": "CommissionPayout",
+        "migration_order": 40,
+        "package": "insuretech.commission.entity.v1"
+      },
+      {
+        "table_name": "payments",
+        "message_name": "Payment",
+        "migration_order": 50,
+        "package": "insuretech.payment.entity.v1"
+      },
+      {
+        "table_name": "mfs_transactions",
+        "message_name": "MFSTransaction",
+        "migration_order": 51,
+        "package": "insuretech.mfs.entity.v1"
+      },
+      {
+        "table_name": "mfs_webhooks",
+        "message_name": "MFSWebhook",
+        "migration_order": 52,
+        "package": "insuretech.mfs.entity.v1"
+      },
+      {
+        "table_name": "tigerbeetle_accounts",
+        "message_name": "TigerBeetleAccount",
+        "migration_order": 53,
+        "package": "insuretech.payment.entity.v1"
+      },
+      {
+        "table_name": "payment_refunds",
+        "message_name": "PaymentRefund",
+        "migration_order": 54,
+        "package": "insuretech.payment.entity.v1"
+      },
+      {
+        "table_name": "commission_configs",
+        "message_name": "CommissionConfig",
+        "migration_order": 58,
+        "package": "insuretech.commission.entity.v1"
+      },
+      {
+        "table_name": "revenue_shares",
+        "message_name": "RevenueShare",
+        "migration_order": 90,
+        "package": "insuretech.commission.entity.v1"
+      },
+      {
+        "table_name": "invoices",
+        "message_name": "Invoice",
+        "migration_order": 94,
+        "package": "insuretech.billing.entity.v1"
+      }
+    ]
+  },
+  "partner_schema": {
+    "name": "Partner Schema",
+    "icon": "\ud83e\udd1d",
+    "description": "Partner and agent management",
+    "tables": [
+      {
+        "table_name": "partners",
+        "message_name": "Partner",
+        "migration_order": 23,
+        "package": "insuretech.partner.entity.v1"
+      },
+      {
+        "table_name": "agents",
+        "message_name": "Agent",
+        "migration_order": 24,
+        "package": "insuretech.partner.entity.v1"
+      },
+      {
+        "table_name": "commissions",
+        "message_name": "Commission",
+        "migration_order": 57,
+        "package": "insuretech.partner.entity.v1"
+      }
+    ]
+  },
+  "notification_schema": {
+    "name": "Notification Schema",
+    "icon": "\ud83d\udd14",
+    "description": "Notification and alert system",
+    "tables": [
+      {
+        "table_name": "notifications",
+        "message_name": "Notification",
+        "migration_order": 63,
+        "package": "insuretech.notification.entity.v1"
+      },
+      {
+        "table_name": "notification_templates",
+        "message_name": "NotificationTemplate",
+        "migration_order": 64,
+        "package": "insuretech.notification.entity.v1"
+      },
+      {
+        "table_name": "alerts",
+        "message_name": "Alert",
+        "migration_order": 97,
+        "package": "insuretech.notification.entity.v1"
+      }
+    ]
+  },
+  "iot_schema": {
+    "name": "Iot Schema",
+    "icon": "\ud83d\udce1",
+    "description": "IoT devices and telemetry data",
+    "tables": [
+      {
+        "table_name": "devices",
+        "message_name": "IoTDevice",
+        "migration_order": 76,
+        "package": "insuretech.iot.entity.v1"
+      },
+      {
+        "table_name": "telemetry",
+        "message_name": "Telemetry",
+        "migration_order": 77,
+        "package": "insuretech.iot.entity.v1"
+      }
+    ]
+  },
+  "b2b_schema": {
+    "name": "B2B Schema",
+    "icon": "\ud83c\udfe2",
+    "description": "B2B group insurance (departments, employees)",
+    "tables": [
+      {
+        "table_name": "departments",
+        "message_name": "Department",
+        "migration_order": 91,
+        "package": "insuretech.b2b.entity.v1"
+      },
+      {
+        "table_name": "employees",
+        "message_name": "Employee",
+        "migration_order": 92,
+        "package": "insuretech.b2b.entity.v1"
+      }
+    ]
+  },
+  "authz_schema": {
+    "name": "Authz Schema",
+    "icon": "\ud83d\udee1\ufe0f",
+    "description": "Authorization, roles, and permissions",
+    "tables": [
+      {
+        "table_name": "roles",
+        "message_name": "Role",
+        "migration_order": 5,
+        "package": "insuretech.authz.entity.v1"
+      },
+      {
+        "table_name": "permissions",
+        "message_name": "Permission",
+        "migration_order": 6,
+        "package": "insuretech.authz.entity.v1"
+      },
+      {
+        "table_name": "role_permissions",
+        "message_name": "RolePermission",
+        "migration_order": 7,
+        "package": "insuretech.authz.entity.v1"
+      },
+      {
+        "table_name": "role_assignments",
+        "message_name": "RoleAssignment",
+        "migration_order": 8,
+        "package": "insuretech.authz.entity.v1"
+      },
+      {
+        "table_name": "access_policies",
+        "message_name": "AccessPolicy",
+        "migration_order": 9,
+        "package": "insuretech.authz.entity.v1"
+      }
+    ]
+  },
+  "compliance_schema": {
+    "name": "Compliance Schema",
+    "icon": "\ud83d\udccb",
+    "description": "Audit logs and compliance tracking",
+    "tables": [
+      {
+        "table_name": "audit_events",
+        "message_name": "AuditEvent",
+        "migration_order": 10,
+        "package": "insuretech.audit.entity.v1"
+      },
+      {
+        "table_name": "compliance_logs",
+        "message_name": "ComplianceLog",
+        "migration_order": 11,
+        "package": "insuretech.audit.entity.v1"
+      },
+      {
+        "table_name": "audit_logs",
+        "message_name": "AuditLog",
+        "migration_order": 97,
+        "package": "insuretech.audit.entity.v1"
+      }
+    ]
+  }
+}

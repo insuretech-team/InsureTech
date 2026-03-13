@@ -1,0 +1,13 @@
+package models
+
+// DecisionType represents a decision_type
+type DecisionType string
+
+// DecisionType values
+const (
+	DecisionTypeDECISIONTYPEUNSPECIFIED DecisionType = "DECISION_TYPE_UNSPECIFIED"
+	DecisionTypeDECISIONTYPEAPPROVED  = "DECISION_TYPE_APPROVED"
+	DecisionTypeDECISIONTYPEREJECTED  = "DECISION_TYPE_REJECTED"
+	DecisionTypeDECISIONTYPEREFERRED  = "DECISION_TYPE_REFERRED"
+	DecisionTypeDECISIONTYPECONDITIONAL  = "DECISION_TYPE_CONDITIONAL"
+)

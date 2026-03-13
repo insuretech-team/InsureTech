@@ -1,0 +1,17 @@
+DepartmentCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    department_id:
+      type: string
+    organisation_id:
+      type: string
+    name:
+      type: string
+    created_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: DepartmentCreatedEvent is published when a new department is created

@@ -1,0 +1,7 @@
+SessionType:
+  type: string
+  enum:
+  - SESSION_TYPE_UNSPECIFIED
+  - SESSION_TYPE_SERVER_SIDE
+  - SESSION_TYPE_JWT
+  description: Session type enum - determines authentication method

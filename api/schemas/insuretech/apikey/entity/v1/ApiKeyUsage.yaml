@@ -1,0 +1,53 @@
+ApiKeyUsage:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:usage_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    api_key_id:
+      type: string
+      description: '@inject_tag: gorm:"column:api_key_id;not null"'
+    endpoint:
+      type: string
+      description: '@inject_tag: gorm:"column:endpoint;not null"'
+    http_method:
+      type: string
+      description: '@inject_tag: gorm:"column:http_method;not null"'
+    status_code:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:status_code;not null"'
+    response_time_ms:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:response_time_ms"'
+    request_ip:
+      type: string
+      description: '@inject_tag: gorm:"column:request_ip"'
+    user_agent:
+      type: string
+      description: '@inject_tag: gorm:"column:user_agent"'
+    request_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:request_payload"'
+    response_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:response_payload"'
+    trace_id:
+      type: string
+      description: '@inject_tag: gorm:"column:trace_id"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+  description: API usage tracking (FR-207)
+  required:
+  - id
+  - api_key_id
+  - endpoint
+  - http_method
+  - status_code
+  - timestamp

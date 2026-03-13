@@ -1,0 +1,12 @@
+InsurerInsurerRetrievalResponse:
+  type: object
+  properties:
+    insurer:
+      $ref: '#/components/schemas/Insurer'
+    config:
+      $ref: '#/components/schemas/InsurerConfig'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for insurer retrieval operation. Returns operation
+    results and status.

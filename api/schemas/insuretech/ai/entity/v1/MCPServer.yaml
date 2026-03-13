@@ -1,0 +1,23 @@
+MCPServer:
+  type: object
+  properties:
+    server_id:
+      type: string
+      description: UUID
+    server_name:
+      type: string
+    endpoint:
+      type: string
+      description: URL or connection string
+    capabilities:
+      type: array
+      items:
+        type: string
+        description: What tools this server provides
+      description: What tools this server provides
+    status:
+      $ref: '#/components/schemas/ServerStatus'
+    last_ping_at:
+      type: string
+      format: date-time
+  description: MCP Server connection

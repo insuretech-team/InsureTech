@@ -1,0 +1,7 @@
+RenewalScheduleUpdateResponse:
+  type: object
+  properties:
+    schedule:
+      $ref: '#/components/schemas/RenewalSchedule'
+  description: Response payload for renewal schedule update operation. Returns operation
+    results and status.

@@ -1,0 +1,15 @@
+RequestContext:
+  type: object
+  properties:
+    tenant:
+      $ref: '#/components/schemas/TenantContext'
+    request_id:
+      type: string
+      description: Correlation ID
+    headers:
+      type: object
+      additionalProperties:
+        type: string
+      description: Selected headers (trace, auth)
+  description: Domain entity representing request context. Core business object in
+    the system.

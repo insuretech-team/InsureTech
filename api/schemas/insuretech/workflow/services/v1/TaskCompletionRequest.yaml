@@ -1,0 +1,12 @@
+WorkflowTaskCompletionRequest:
+  type: object
+  properties:
+    task_id:
+      type: string
+    decision:
+      type: string
+      description: APPROVED, REJECTED, RETURNED
+    comments:
+      type: string
+  description: Request payload for task completion operation. Contains parameters
+    required to execute the operation.

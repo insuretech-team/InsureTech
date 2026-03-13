@@ -1,0 +1,16 @@
+AuthnJWK:
+  type: object
+  properties:
+    kty:
+      type: string
+    use:
+      type: string
+    alg:
+      type: string
+    kid:
+      type: string
+    n:
+      type: string
+    e:
+      type: string
+  description: Domain entity representing jwk. Core business object in the system.

@@ -1,0 +1,14 @@
+CommissionDetail:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    commission_amount:
+      $ref: '#/components/schemas/Money'
+    commission_type:
+      type: string
+    earned_at:
+      type: string
+      format: date-time
+  description: Domain entity representing commission detail. Core business object
+    in the system.

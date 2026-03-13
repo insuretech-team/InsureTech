@@ -1,0 +1,17 @@
+SignalRequest:
+  type: object
+  properties:
+    peer_id:
+      type: string
+    room_id:
+      type: string
+    offer:
+      $ref: '#/components/schemas/OfferSendingRequest'
+    answer:
+      $ref: '#/components/schemas/AnswerSendingRequest'
+    ice_candidate:
+      $ref: '#/components/schemas/ICECandidateSendingRequest'
+    ping:
+      $ref: '#/components/schemas/PingRequest'
+  description: Request payload for signal operation. Contains parameters required
+    to execute the operation.

@@ -1,0 +1,15 @@
+RefreshTokenRequest:
+  type: object
+  properties:
+    refresh_token:
+      type: string
+    device_id:
+      type: string
+      description: For device binding validation
+    ip_address:
+      type: string
+      description: For anomaly detection
+    user_agent:
+      type: string
+      description: For device fingerprinting
+  description: Refresh Token Request

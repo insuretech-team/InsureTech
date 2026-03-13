@@ -1,0 +1,18 @@
+MediaVirusScanCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    media_id:
+      type: string
+    virus_scan_status:
+      type: string
+      description: CLEAN, INFECTED
+    scan_result:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Media virus scan completed'

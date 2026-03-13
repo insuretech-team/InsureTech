@@ -1,0 +1,670 @@
+syntax = "proto3";
+
+package insuretech.policy.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1;policyv1";
+option csharp_namespace = "Insuretech.Policy.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/types.proto";
+// Policy represents an insurance policy
+// Maps to 'policies' table in insurance_schema
+message Policy {
+  option (insuretech.common.v1.table) = {
+    table_name : "policies"
+    schema_name : "insurance_schema"
+    migration_order : 31
+    is_table : true
+    comment : "Insurance policies with coverage and premium details"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+    partition_strategy : PARTITION_STRATEGY_RANGE_YEAR
+    partition_column : "created_at"
+  };
+
+  string policy_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Policy UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:policy_id;not null"
+
+  string policy_number = 2 [ (insuretech.common.v1.column) = {
+    column_name : "policy_number"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    unique : true
+    check_constraint : "policy_number ~ '^LBT-[0-9]{4}-[A-Z0-9]{4}-[0-9]{6}$'"
+  // @inject_tag: gorm:"column:policy_number;not null"
+    comment : "Unique policy number format: LBT-YYYY-XXXX-NNNNNN"
+    index : {
+      index_name : "idx_policies_policy_number"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+
+  string product_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "product_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to products table"
+    foreign_key : {
+      references_table : "products"
+      references_column : "product_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_product_id"
+    }
+    index : {
+      index_name : "idx_policies_product_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string customer_id = 4 [ (insuretech.common.v1.column) = {
+    column_name : "customer_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to users table (policyholder)"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_customer_id"
+    }
+    index : {
+      index_name : "idx_policies_customer_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  string partner_id = 5 [ (insuretech.common.v1.column) = {
+    column_name : "partner_id"
+    sql_type : "UUID"
+    comment : "Optional: Partner who facilitated the policy"
+    foreign_key : {
+      references_table : "partners"
+      references_column : "partner_id"
+      references_schema : "partner_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_partner_id"
+    }
+    index : {
+      index_name : "idx_policies_partner_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:partner_id"
+
+  string agent_id = 6 [ (insuretech.common.v1.column) = {
+    column_name : "agent_id"
+    sql_type : "UUID"
+    comment : "Optional: Agent who sold the policy"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_agent_id"
+    }
+    index : {index_name : "idx_policies_agent_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:agent_id"
+
+  // Link to underwriting quote (CG-2 fix)
+  string quote_id = 7 [ (insuretech.common.v1.column) = {
+    column_name : "quote_id"
+    sql_type : "UUID"
+    comment : "Foreign key to quotes table (underwriting)"
+    foreign_key : {
+      references_table : "quotes"
+      references_column : "quote_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_quote_id"
+    }
+    index : {index_name : "idx_policies_quote_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:quote_id"
+
+  // Link to underwriting decision (CG-2 fix)
+  string underwriting_decision_id = 8 [ (insuretech.common.v1.column) = {
+    column_name : "underwriting_decision_id"
+    sql_type : "UUID"
+    comment : "Foreign key to underwriting_decisions table"
+    foreign_key : {
+      references_table : "underwriting_decisions"
+      references_column : "decision_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policies_underwriting_decision_id"
+    }
+    index : {
+      index_name : "idx_policies_underwriting_decision_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:underwriting_decision_id"
+
+  PolicyStatus status = 9 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING_PAYMENT'"
+    comment : "Policy status"
+    index : {index_name : "idx_policies_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money premium_amount = 10
+      [ (insuretech.common.v1.column) = {
+        column_name : "premium_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "premium_amount > 0"
+        comment : "Premium amount in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:premium_amount;not null"
+
+  insuretech.common.v1.Money sum_insured = 11
+      [ (insuretech.common.v1.column) = {
+        column_name : "sum_insured"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "sum_insured > 0"
+        comment : "Coverage amount in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:sum_insured;not null"
+
+  int32 tenure_months = 12 [ (insuretech.common.v1.column) = {
+    column_name : "tenure_months"
+    sql_type : "INTEGER"
+    not_null : true
+    check_constraint : "tenure_months > 0 AND tenure_months <= 1200"
+    comment : "Policy tenure in months (max 100 years)"
+  } ];
+  // @inject_tag: gorm:"column:tenure_months;not null"
+
+  google.protobuf.Timestamp start_date = 13 [ (insuretech.common.v1.column) = {
+    column_name : "start_date"
+    sql_type : "DATE"
+    not_null : true
+    comment : "Policy coverage start date"
+    index : {
+      index_name : "idx_policies_start_date"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:start_date;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp end_date = 14 [ (insuretech.common.v1.column) = {
+    column_name : "end_date"
+    sql_type : "DATE"
+    not_null : true
+    check_constraint : "end_date > start_date"
+    comment : "Policy coverage end date"
+    index : {index_name : "idx_policies_end_date" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:end_date;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp issued_at = 15 [ (insuretech.common.v1.column) = {
+    column_name : "issued_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Policy issuance timestamp"
+  } ];
+  // @inject_tag: gorm:"column:issued_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 17 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string policy_document_url = 18 [ (insuretech.common.v1.column) = {
+    column_name : "policy_document_url"
+    sql_type : "TEXT"
+    comment : "S3 URL of policy PDF document"
+  } ];
+  // @inject_tag: gorm:"column:policy_document_url"
+
+  google.protobuf.Timestamp deleted_at = 19 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  // Nominees and Riders are stored in separate tables
+  repeated Nominee nominees = 20;
+  repeated Rider riders = 21;
+
+  string payment_frequency = 22 [ (insuretech.common.v1.column) = {
+    column_name : "payment_frequency"
+    sql_type : "VARCHAR(50)"
+    comment : "e.g., MONTHLY, YEARLY"
+  } ];
+  // @inject_tag: gorm:"column:payment_frequency"
+
+  insuretech.common.v1.Money vat_tax = 23 [ (insuretech.common.v1.column) = {
+    column_name : "vat_tax"
+    sql_type : "BIGINT"
+    comment : "VAT / Tax in paisa"
+  } ];
+  // @inject_tag: gorm:"column:vat_tax"
+
+  insuretech.common.v1.Money service_fee = 24
+      [ (insuretech.common.v1.column) = {
+        column_name : "service_fee"
+        sql_type : "BIGINT"
+        comment : "Service fee in paisa"
+      } ];
+  // @inject_tag: gorm:"column:service_fee"
+
+  insuretech.common.v1.Money total_payable = 25
+      [ (insuretech.common.v1.column) = {
+        column_name : "total_payable"
+        sql_type : "BIGINT"
+        comment : "Total Payable in paisa"
+      } ];
+  // @inject_tag: gorm:"column:total_payable"
+
+  string payment_gateway_reference = 26 [ (insuretech.common.v1.column) = {
+    column_name : "payment_gateway_reference"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:payment_gateway_reference"
+
+  string receipt_number = 27 [ (insuretech.common.v1.column) = {
+    column_name : "receipt_number"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:receipt_number"
+
+  Applicant proposer_details = 28;
+
+  string occupation_risk_class = 29 [ (insuretech.common.v1.column) = {
+    column_name : "occupation_risk_class"
+    sql_type : "VARCHAR(50)"
+  } ];
+  // @inject_tag: gorm:"column:occupation_risk_class"
+
+  bool has_existing_policies = 30 [ (insuretech.common.v1.column) = {
+    column_name : "has_existing_policies"
+    sql_type : "BOOLEAN"
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:has_existing_policies"
+
+  string claims_history_summary = 31 [ (insuretech.common.v1.column) = {
+    column_name : "claims_history_summary"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:claims_history_summary"
+
+  string provider_name = 32 [ (insuretech.common.v1.column) = {
+    column_name : "provider_name"
+    sql_type : "VARCHAR(255)"
+    comment : "Name of the insurance provider"
+  } ];
+  // @inject_tag: gorm:"column:provider_name"
+
+  google.protobuf.Timestamp enrollment_start_date = 33
+      [ (insuretech.common.v1.column) = {
+        column_name : "enrollment_start_date"
+        sql_type : "DATE"
+        comment : "Start date of the enrollment period"
+      } ];
+  // @inject_tag: gorm:"column:enrollment_start_date;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp enrollment_end_date = 34
+      [ (insuretech.common.v1.column) = {
+        column_name : "enrollment_end_date"
+        sql_type : "DATE"
+        comment : "End date of the enrollment period"
+      } ];
+  // @inject_tag: gorm:"column:enrollment_end_date;serializer:proto_timestamp"
+
+  string underwriting_data = 35 [ (insuretech.common.v1.column) = {
+    column_name : "underwriting_data"
+    sql_type : "JSONB"
+    comment : "Flexible underwriting data"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:underwriting_data"
+
+  // Currency companion fields for Money types (flattened storage)
+  string premium_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "premium_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for premium_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:premium_currency;not null"
+
+  string sum_insured_currency = 10002 [ (insuretech.common.v1.column) = {
+    column_name : "sum_insured_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for sum_insured (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:sum_insured_currency;not null"
+}
+
+enum PolicyStatus {
+  POLICY_STATUS_UNSPECIFIED = 0;
+  POLICY_STATUS_PENDING_PAYMENT = 1; // Awaiting payment
+  POLICY_STATUS_ACTIVE = 2;          // Active coverage
+  POLICY_STATUS_GRACE_PERIOD = 3;    // 30-day grace period
+  POLICY_STATUS_LAPSED = 4;          // Payment overdue
+  POLICY_STATUS_SUSPENDED = 5;       // Temporarily suspended
+  POLICY_STATUS_CANCELLED = 6;       // Cancelled by user/admin
+  POLICY_STATUS_EXPIRED = 7;         // Tenure completed
+}
+
+// Nominee/Beneficiary information
+// Maps to 'policy_nominees' table in insurance_schema
+message Nominee {
+  option (insuretech.common.v1.table) = {
+    table_name : "policy_nominees"
+    schema_name : "insurance_schema"
+    migration_order : 32
+    is_table : true
+    comment : "Policy beneficiaries with share percentages"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string nominee_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "nominee_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Nominee UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:nominee_id;not null"
+
+  string policy_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to policies table"
+    foreign_key : {
+      references_table : "policies"
+      references_column : "policy_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policy_nominees_policy_id"
+    }
+    index : {
+      index_name : "idx_policy_nominees_policy_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:policy_id;not null"
+
+  string full_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "full_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Nominee full name"
+  } ];
+  // @inject_tag: gorm:"column:full_name;not null"
+
+  string relationship = 4 [ (insuretech.common.v1.column) = {
+    column_name : "relationship"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Relationship to policyholder (e.g., Spouse, Child, Parent)"
+  } ];
+  // @inject_tag: gorm:"column:relationship;not null"
+
+  double share_percentage = 5 [ (insuretech.common.v1.column) = {
+    column_name : "share_percentage"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    check_constraint : "share_percentage > 0 AND share_percentage <= 100"
+    comment : "Beneficiary share percentage (must sum to 100 per policy)"
+  } ];
+  // @inject_tag: gorm:"column:share_percentage;not null"
+
+  google.protobuf.Timestamp date_of_birth = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "date_of_birth"
+        sql_type : "DATE"
+        not_null : true
+        comment : "Nominee date of birth"
+      } ];
+  // @inject_tag: gorm:"column:date_of_birth;not null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp" null;serializer:proto_timestamp"
+
+  string nid_number = 7 [
+    (insuretech.common.v1.column) = {
+      column_name : "nid_number"
+      sql_type : "VARCHAR(17)"
+      check_constraint : "nid_number ~ '^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$'"
+  // @inject_tag: gorm:"column:nid_number"
+      comment : "National ID - 10, 13, or 17 digits"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification for policy nominee",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+
+  string phone_number = 8 [
+    (insuretech.common.v1.column) = {
+      column_name : "phone_number"
+      sql_type : "VARCHAR(20)"
+      check_constraint : "phone_number ~ '^\\+880[1][0-9]{9}$'"
+  // @inject_tag: gorm:"column:phone_number"
+      comment : "Bangladesh mobile format: +880 1XXX XXXXXX"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Nominee contact information"
+  ];
+
+  google.protobuf.Timestamp created_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string nominee_dob_text = 11 [ (insuretech.common.v1.column) = {
+    column_name : "nominee_dob_text"
+    sql_type : "VARCHAR(15)"
+    comment : "Date of birth in text format (e.g., DD-MM-YYYY)"
+  } ];
+  // @inject_tag: gorm:"column:nominee_dob_text"
+
+  double nominee_share_percent = 12 [ (insuretech.common.v1.column) = {
+    column_name : "nominee_share_percent"
+    sql_type : "DECIMAL(5,2)"
+    comment : "Duplicate or alternative to share_percentage for specific "
+              "frontend dtos"
+  } ];
+  // @inject_tag: gorm:"column:nominee_share_percent"
+}
+
+// Rider/Add-on coverage
+// Maps to 'policy_riders' table in insurance_schema
+message Rider {
+  option (insuretech.common.v1.table) = {
+    table_name : "policy_riders"
+    schema_name : "insurance_schema"
+    migration_order : 33
+    is_table : true
+    comment : "Optional riders/add-ons attached to policies"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string rider_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "rider_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Rider UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:rider_id;not null"
+
+  string policy_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to policies table"
+    foreign_key : {
+      references_table : "policies"
+      references_column : "policy_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_policy_riders_policy_id"
+    }
+    index : {
+      index_name : "idx_policy_riders_policy_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:policy_id;not null"
+
+  string rider_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "rider_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+    comment : "Rider/add-on name"
+  } ];
+  // @inject_tag: gorm:"column:rider_name;not null"
+
+  insuretech.common.v1.Money premium_amount = 4
+      [ (insuretech.common.v1.column) = {
+        column_name : "premium_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "premium_amount >= 0"
+        comment : "Additional premium for this rider in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:premium_amount;not null"
+
+  insuretech.common.v1.Money coverage_amount = 5
+      [ (insuretech.common.v1.column) = {
+        column_name : "coverage_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "coverage_amount > 0"
+        comment : "Additional coverage amount in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:coverage_amount;not null"
+
+  google.protobuf.Timestamp created_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  // Currency companion fields for Money types (flattened storage)
+  string premium_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "premium_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for premium_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:premium_currency;not null"
+
+  string coverage_currency = 10002 [ (insuretech.common.v1.column) = {
+    column_name : "coverage_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for coverage_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:coverage_currency;not null"
+}
+
+// Applicant information (stored as JSONB in policies table or separate table)
+message Applicant {
+  string full_name = 1;
+  google.protobuf.Timestamp date_of_birth = 2;
+  string nid_number = 3;
+  string occupation = 4;
+  insuretech.common.v1.Money annual_income = 5;
+  string address = 6;
+  HealthDeclaration health_declaration = 7;
+}
+
+// Health declaration (stored as JSONB)
+message HealthDeclaration {
+  bool has_pre_existing_conditions = 1;
+  repeated string conditions = 2;
+  bool is_smoker = 3;
+  string blood_group = 4;
+}

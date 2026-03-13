@@ -1,0 +1,18 @@
+VoiceSessionEndedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    voice_session_id:
+      type: string
+    status:
+      type: string
+    duration_seconds:
+      type: integer
+      format: int32
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Voice session ended'

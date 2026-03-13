@@ -1,0 +1,9 @@
+FileDeletionRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    file_id:
+      type: string
+  description: Request payload for file deletion operation. Contains parameters required
+    to execute the operation.

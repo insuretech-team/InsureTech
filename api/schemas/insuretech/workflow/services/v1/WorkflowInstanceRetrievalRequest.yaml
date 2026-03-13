@@ -1,0 +1,7 @@
+WorkflowInstanceRetrievalRequest:
+  type: object
+  properties:
+    workflow_instance_id:
+      type: string
+  description: Request payload for retrieving workflow instance retrieval information.
+    May include filters and pagination parameters.

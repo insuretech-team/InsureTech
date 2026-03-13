@@ -1,0 +1,12 @@
+PoliciesListingResponse:
+  type: object
+  properties:
+    policies:
+      type: array
+      items:
+        $ref: '#/components/schemas/Policy'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for policies listing operation. Returns operation
+    results and status.

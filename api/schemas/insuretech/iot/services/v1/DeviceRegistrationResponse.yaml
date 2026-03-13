@@ -1,0 +1,14 @@
+DeviceRegistrationResponse:
+  type: object
+  properties:
+    device_id:
+      type: string
+    activation_token:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for device registration operation. Returns operation
+    results and status.

@@ -1,0 +1,14 @@
+package models
+
+// ScheduleFrequency represents a schedule_frequency
+type ScheduleFrequency string
+
+// ScheduleFrequency values
+const (
+	ScheduleFrequencySCHEDULEFREQUENCYUNSPECIFIED ScheduleFrequency = "SCHEDULE_FREQUENCY_UNSPECIFIED"
+	ScheduleFrequencySCHEDULEFREQUENCYHOURLY  = "SCHEDULE_FREQUENCY_HOURLY"
+	ScheduleFrequencySCHEDULEFREQUENCYDAILY  = "SCHEDULE_FREQUENCY_DAILY"
+	ScheduleFrequencySCHEDULEFREQUENCYWEEKLY  = "SCHEDULE_FREQUENCY_WEEKLY"
+	ScheduleFrequencySCHEDULEFREQUENCYMONTHLY  = "SCHEDULE_FREQUENCY_MONTHLY"
+	ScheduleFrequencySCHEDULEFREQUENCYCUSTOM  = "SCHEDULE_FREQUENCY_CUSTOM"
+)

@@ -1,0 +1,11 @@
+FilesListingResponse:
+  type: object
+  properties:
+    files:
+      type: array
+      items:
+        $ref: '#/components/schemas/StoredFile'
+    page:
+      $ref: '#/components/schemas/PaginationResponse'
+  description: Response payload for files listing operation. Returns operation results
+    and status.

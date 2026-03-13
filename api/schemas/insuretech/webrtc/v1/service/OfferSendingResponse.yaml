@@ -1,0 +1,7 @@
+OfferSendingResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for offer sending operation. Returns operation results
+    and status.

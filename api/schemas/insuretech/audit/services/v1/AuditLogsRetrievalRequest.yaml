@@ -1,0 +1,23 @@
+AuditLogsRetrievalRequest:
+  type: object
+  properties:
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    action:
+      type: string
+    user_id:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for retrieving audit logs retrieval information. May
+    include filters and pagination parameters.

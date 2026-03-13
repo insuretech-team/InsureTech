@@ -1,0 +1,9 @@
+ActiveFraudRulesListingResponse:
+  type: object
+  properties:
+    rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/FraudRule'
+  description: Response payload for active fraud rules listing operation. Returns
+    operation results and status.

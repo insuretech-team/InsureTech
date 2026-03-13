@@ -1,0 +1,719 @@
+syntax = "proto3";
+
+package insuretech.claims.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/claims/entity/v1;claimsv1";
+option csharp_namespace = "Insuretech.Claims.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+
+// Claim represents an insurance claim
+// Maps to 'claims' table in claims_schema
+message Claim {
+  option (insuretech.common.v1.table) = {
+    table_name : "claims"
+    schema_name : "insurance_schema"
+    migration_order : 46
+    is_table : true
+    comment : "Insurance claims with status tracking and approval workflow"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+    partition_strategy : PARTITION_STRATEGY_RANGE_MONTH
+    partition_column : "created_at"
+  };
+
+  string claim_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "claim_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Claim UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:claim_id;not null"
+
+  string claim_number = 2 [ (insuretech.common.v1.column) = {
+    column_name : "claim_number"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    unique : true
+    check_constraint : "claim_number ~ '^CLM-[0-9]{4}-[A-Z0-9]{4}-[0-9]{6}$'"
+  // @inject_tag: gorm:"column:claim_number;not null"
+    comment : "Unique claim number format: CLM-YYYY-XXXX-NNNNNN"
+    index : {
+      index_name : "idx_claims_claim_number"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+
+  string policy_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "policy_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to policies table"
+    foreign_key : {
+      references_table : "policies"
+      references_column : "policy_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claims_policy_id"
+    }
+    index : {index_name : "idx_claims_policy_id" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:policy_id;not null"
+
+  string customer_id = 4 [ (insuretech.common.v1.column) = {
+    column_name : "customer_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to users table (claimant)"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claims_customer_id"
+    }
+    index : {
+      index_name : "idx_claims_customer_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  ClaimStatus status = 5 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'SUBMITTED'"
+    comment : "Claim status"
+    index : {index_name : "idx_claims_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  ClaimType type = 6 [ (insuretech.common.v1.column) = {
+    column_name : "type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    comment : "Claim type/category"
+    index : {index_name : "idx_claims_type" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money claimed_amount = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "claimed_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        check_constraint : "claimed_amount > 0"
+        comment : "Amount claimed by customer in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:claimed_amount;not null"
+
+  insuretech.common.v1.Money approved_amount = 8
+      [ (insuretech.common.v1.column) = {
+        column_name : "approved_amount"
+        sql_type : "BIGINT"
+        check_constraint : "approved_amount >= 0"
+        comment : "Amount approved for settlement in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:approved_amount"
+
+  insuretech.common.v1.Money settled_amount = 9
+      [ (insuretech.common.v1.column) = {
+        column_name : "settled_amount"
+        sql_type : "BIGINT"
+        check_constraint : "settled_amount >= 0"
+        comment : "Final settled amount in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:settled_amount"
+
+  google.protobuf.Timestamp incident_date = 10
+      [ (insuretech.common.v1.column) = {
+        column_name : "incident_date"
+        sql_type : "DATE"
+        not_null : true
+        comment : "Date of incident/event"
+        index : {
+          index_name : "idx_claims_incident_date"
+          index_type : INDEX_TYPE_BTREE
+        }
+      } ];
+  // @inject_tag: gorm:"column:incident_date;not null;serializer:proto_timestamp"
+  // null;serializer:proto_timestamp"
+
+  string incident_description = 11 [ (insuretech.common.v1.column) = {
+    column_name : "incident_description"
+    sql_type : "TEXT"
+    not_null : true
+    comment : "Detailed description of incident"
+  } ];
+  // @inject_tag: gorm:"column:incident_description;not null"
+
+  google.protobuf.Timestamp submitted_at = 12
+      [ (insuretech.common.v1.column) = {
+        column_name : "submitted_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        not_null : true
+        default_value : "CURRENT_TIMESTAMP"
+        comment : "Claim submission timestamp"
+      } ];
+  // @inject_tag: gorm:"column:submitted_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp approved_at = 13 [ (insuretech.common.v1.column) = {
+    column_name : "approved_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Claim approval timestamp"
+  } ];
+  // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp settled_at = 14 [ (insuretech.common.v1.column) = {
+    column_name : "settled_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Claim settlement timestamp"
+  } ];
+  // @inject_tag: gorm:"column:settled_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 15 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 16 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  string rejection_reason = 17 [ (insuretech.common.v1.column) = {
+    column_name : "rejection_reason"
+    sql_type : "TEXT"
+    comment : "Reason for rejection (if rejected)"
+  } ];
+  // @inject_tag: gorm:"column:rejection_reason"
+
+  google.protobuf.Timestamp deleted_at = 18 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  // Related entities stored in separate tables
+  repeated ClaimDocument documents = 19;
+  repeated ClaimApproval approvals = 20;
+  FraudCheckResult fraud_check = 21;
+
+  string place_of_incident = 22 [ (insuretech.common.v1.column) = {
+    column_name : "place_of_incident"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:place_of_incident"
+
+  string bank_details_for_payout = 23 [
+    (insuretech.common.v1.column) = {
+      column_name : "bank_details_for_payout"
+      sql_type : "TEXT"
+      comment : "Encrypted bank details or ref to linked bank"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_redacted) = true
+  ];
+  // @inject_tag: gorm:"column:bank_details_for_payout"
+
+  bool appeal_option_available = 24 [ (insuretech.common.v1.column) = {
+    column_name : "appeal_option_available"
+    sql_type : "BOOLEAN"
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:appeal_option_available"
+
+  string in_app_messages = 25 [ (insuretech.common.v1.column) = {
+    column_name : "in_app_messages"
+    sql_type : "JSONB"
+    comment : "JSON array of messages related to claim"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:in_app_messages"
+
+  ClaimProcessingType processing_type = 28 [ (insuretech.common.v1.column) = {
+    column_name : "processing_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'MANUAL'"
+  } ];
+  // @inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money deductible_amount = 29
+      [ (insuretech.common.v1.column) = {
+        column_name : "deductible_amount"
+        sql_type : "BIGINT"
+        comment : "Deductible amount applied in paisa"
+      } ];
+  // @inject_tag: gorm:"column:deductible_amount"
+
+  insuretech.common.v1.Money co_pay_amount = 30
+      [ (insuretech.common.v1.column) = {
+        column_name : "co_pay_amount"
+        sql_type : "BIGINT"
+        comment : "Co-pay amount applied in paisa"
+      } ];
+  // @inject_tag: gorm:"column:co_pay_amount"
+
+  string processor_notes = 31 [ (insuretech.common.v1.column) = {
+    column_name : "processor_notes"
+    sql_type : "TEXT"
+    comment : "Internal notes from claim processor"
+  } ];
+  // @inject_tag: gorm:"column:processor_notes"
+
+  // Currency companion fields for Money types (flattened storage)
+  string claimed_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "claimed_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for claimed_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:claimed_currency;not null"
+
+  string approved_currency = 10002 [ (insuretech.common.v1.column) = {
+    column_name : "approved_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for approved_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:approved_currency;not null"
+
+  string settled_currency = 10003 [ (insuretech.common.v1.column) = {
+    column_name : "settled_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for settled_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:settled_currency;not null"
+}
+
+enum ClaimStatus {
+  CLAIM_STATUS_UNSPECIFIED = 0;
+  CLAIM_STATUS_SUBMITTED = 1;         // Initial submission
+  CLAIM_STATUS_UNDER_REVIEW = 2;      // Being reviewed
+  CLAIM_STATUS_PENDING_DOCUMENTS = 3; // Awaiting documents
+  CLAIM_STATUS_APPROVED = 4;          // Approved for payment
+  CLAIM_STATUS_REJECTED = 5;          // Rejected
+  CLAIM_STATUS_SETTLED = 6;           // Payment completed
+  CLAIM_STATUS_DISPUTED = 7;          // Under dispute
+}
+
+enum ClaimType {
+  CLAIM_TYPE_UNSPECIFIED = 0;
+  CLAIM_TYPE_HEALTH_HOSPITALIZATION = 1;
+  CLAIM_TYPE_HEALTH_SURGERY = 2;
+  CLAIM_TYPE_MOTOR_ACCIDENT = 3;
+  CLAIM_TYPE_MOTOR_THEFT = 4;
+  CLAIM_TYPE_TRAVEL_MEDICAL = 5;
+  CLAIM_TYPE_TRAVEL_BAGGAGE_LOSS = 6;
+  CLAIM_TYPE_DEVICE_DAMAGE = 7;
+  CLAIM_TYPE_DEVICE_THEFT = 8;
+  CLAIM_TYPE_DEATH = 9;
+}
+
+enum ClaimProcessingType {
+  CLAIM_PROCESSING_TYPE_UNSPECIFIED = 0;
+  CLAIM_PROCESSING_TYPE_MANUAL = 1;
+  CLAIM_PROCESSING_TYPE_AUTO_ADJUDICATED = 2;
+  CLAIM_PROCESSING_TYPE_AI_ASSISTED = 3;
+}
+
+// Claim supporting documents
+// Maps to 'claim_documents' table in claims_schema
+message ClaimDocument {
+  option (insuretech.common.v1.table) = {
+    table_name : "claim_documents"
+    schema_name : "insurance_schema"
+    migration_order : 47
+    is_table : true
+    comment : "Supporting documents for claims (bills, reports, etc.)"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string document_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "document_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Document UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:document_id;not null"
+
+  string claim_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "claim_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to claims table"
+    foreign_key : {
+      references_table : "claims"
+      references_column : "claim_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claim_documents_claim_id"
+    }
+    index : {
+      index_name : "idx_claim_documents_claim_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:claim_id;not null"
+
+  string document_type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "document_type"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    comment : "Document type: bill, prescription, police_report, "
+              "medical_report, etc."
+  } ];
+  // @inject_tag: gorm:"column:document_type;not null"
+
+  string file_url = 4 [ (insuretech.common.v1.column) = {
+    column_name : "file_url"
+    sql_type : "TEXT"
+    not_null : true
+    comment : "S3 URL of document file"
+  } ];
+  // @inject_tag: gorm:"column:file_url;not null"
+
+  string file_hash = 5 [ (insuretech.common.v1.column) = {
+    column_name : "file_hash"
+    sql_type : "VARCHAR(64)"
+    not_null : true
+    comment : "SHA-256 hash for integrity verification"
+    index : {
+      index_name : "idx_claim_documents_file_hash"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:file_hash;not null"
+
+  google.protobuf.Timestamp uploaded_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "uploaded_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "Document upload timestamp"
+  } ];
+  // @inject_tag: gorm:"column:uploaded_at;not null;serializer:proto_timestamp"
+
+  bool verified = 7 [ (insuretech.common.v1.column) = {
+    column_name : "verified"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Document verification status"
+  } ];
+  // @inject_tag: gorm:"column:verified;not null"
+
+  string verified_by = 8 [ (insuretech.common.v1.column) = {
+    column_name : "verified_by"
+    sql_type : "UUID"
+    comment : "User ID who verified the document"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claim_documents_verified_by"
+    }
+  } ];
+  // @inject_tag: gorm:"column:verified_by"
+
+  google.protobuf.Timestamp created_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+// Claim approval workflow (multi-level approval)
+// Maps to 'claim_approvals' table in claims_schema
+message ClaimApproval {
+  option (insuretech.common.v1.table) = {
+    table_name : "claim_approvals"
+    schema_name : "insurance_schema"
+    migration_order : 48
+    is_table : true
+    comment : "Multi-level claim approval workflow (L1, L2, L3 as per approval "
+              "matrix)"
+    soft_delete : false
+    audit_fields : false
+    enable_rls : true
+  };
+
+  string approval_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "approval_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Approval UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:approval_id;not null"
+
+  string claim_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "claim_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Foreign key to claims table"
+    foreign_key : {
+      references_table : "claims"
+      references_column : "claim_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claim_approvals_claim_id"
+    }
+    index : {
+      index_name : "idx_claim_approvals_claim_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:claim_id;not null"
+
+  string approver_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "approver_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "User ID of approver"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_RESTRICT
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_claim_approvals_approver_id"
+    }
+    index : {
+      index_name : "idx_claim_approvals_approver_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:approver_id;not null"
+
+  string approver_role = 4 [ (insuretech.common.v1.column) = {
+    column_name : "approver_role"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    comment : "Role: Claims Officer, Claims Manager, Business Admin, Focal "
+              "Person"
+  } ];
+  // @inject_tag: gorm:"column:approver_role;not null"
+
+  int32 approval_level = 5 [ (insuretech.common.v1.column) = {
+    column_name : "approval_level"
+    sql_type : "INTEGER"
+    not_null : true
+    check_constraint : "approval_level >= 1 AND approval_level <= 4"
+    comment : "Approval level: 1 (L1), 2 (L2), 3 (L3), 4 (Board)"
+  } ];
+  // @inject_tag: gorm:"column:approval_level;not null"
+
+  ApprovalDecision decision = 6 [ (insuretech.common.v1.column) = {
+    column_name : "decision"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING'"
+    comment : "Approval decision"
+  } ];
+  // @inject_tag: gorm:"column:decision;not null;serializer:proto_enum"
+
+  insuretech.common.v1.Money approved_amount = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "approved_amount"
+        sql_type : "BIGINT"
+        comment : "Amount approved at this level in paisa (BDT minor units)"
+      } ];
+  // @inject_tag: gorm:"column:approved_amount"
+
+  string notes = 8 [ (insuretech.common.v1.column) = {
+    column_name : "notes"
+    sql_type : "TEXT"
+    comment : "Approver notes/comments"
+  } ];
+  // @inject_tag: gorm:"column:notes"
+
+  google.protobuf.Timestamp approved_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "approved_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Approval decision timestamp"
+  } ];
+  // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "Record creation timestamp"
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  // Currency companion field for Money type (flattened storage)
+  string approved_currency = 10001 [ (insuretech.common.v1.column) = {
+    column_name : "approved_currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    comment : "Currency code for approved_amount (ISO 4217)"
+  } ];
+  // @inject_tag: gorm:"column:approved_currency;not null"
+}
+
+enum ApprovalDecision {
+  APPROVAL_DECISION_UNSPECIFIED = 0;
+  APPROVAL_DECISION_PENDING = 1;
+  APPROVAL_DECISION_APPROVED = 2;
+  APPROVAL_DECISION_REJECTED = 3;
+  APPROVAL_DECISION_NEEDS_MORE_INFO = 4;
+}
+
+// Fraud detection results
+// Maps to 'fraud_checks' table in claims_schema
+message FraudCheckResult {
+  option (insuretech.common.v1.table) = {
+    table_name : "fraud_checks"
+    schema_name : "insurance_schema"
+    migration_order : 49
+    is_table : true
+    comment : "AI-powered fraud detection results for claims"
+    soft_delete : false
+    audit_fields : false
+    enable_rls : true
+  };
+
+  string fraud_check_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "fraud_check_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - Fraud Check UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:fraud_check_id;not null"
+
+  string claim_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "claim_id"
+    sql_type : "UUID"
+    not_null : true
+    unique : true
+    comment : "Foreign key to claims table (one-to-one)"
+    foreign_key : {
+      references_table : "claims"
+      references_column : "claim_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_fraud_checks_claim_id"
+    }
+    index : {
+      index_name : "idx_fraud_checks_claim_id"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:claim_id;not null"
+
+  double fraud_score = 3 [ (insuretech.common.v1.column) = {
+    column_name : "fraud_score"
+    sql_type : "DECIMAL(5,2)"
+    not_null : true
+    check_constraint : "fraud_score >= 0 AND fraud_score <= 100"
+    comment : "Fraud risk score (0-100, higher is more risky)"
+  } ];
+  // @inject_tag: gorm:"column:fraud_score;not null"
+
+  repeated string risk_factors = 4 [ (insuretech.common.v1.column) = {
+    column_name : "risk_factors"
+    sql_type : "TEXT[]"
+  // @inject_tag: gorm:"column:risk_factors"
+    comment : "Array of detected risk factors"
+  } ];
+
+  bool flagged = 5 [ (insuretech.common.v1.column) = {
+    column_name : "flagged"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Whether claim is flagged for manual review"
+    index : {
+      index_name : "idx_fraud_checks_flagged"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:flagged;not null"
+
+  string reviewed_by = 6 [ (insuretech.common.v1.column) = {
+    column_name : "reviewed_by"
+    sql_type : "UUID"
+    comment : "User ID who reviewed flagged claim"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema : "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+      on_update : REFERENTIAL_ACTION_CASCADE
+      constraint_name : "fk_fraud_checks_reviewed_by"
+    }
+  } ];
+  // @inject_tag: gorm:"column:reviewed_by"
+
+  google.protobuf.Timestamp reviewed_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "reviewed_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Manual review timestamp"
+  } ];
+  // @inject_tag: gorm:"column:reviewed_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    comment : "Fraud check timestamp"
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+}

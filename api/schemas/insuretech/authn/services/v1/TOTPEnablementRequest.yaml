@@ -1,0 +1,7 @@
+TOTPEnablementRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+  description: Request payload for totp enablement operation. Contains parameters
+    required to execute the operation.

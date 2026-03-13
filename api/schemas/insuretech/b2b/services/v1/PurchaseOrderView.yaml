@@ -1,0 +1,13 @@
+PurchaseOrderView:
+  type: object
+  properties:
+    purchase_order:
+      $ref: '#/components/schemas/PurchaseOrder'
+    department_name:
+      type: string
+    product_name:
+      type: string
+    plan_name:
+      type: string
+  description: Domain entity representing purchase order view. Core business object
+    in the system.

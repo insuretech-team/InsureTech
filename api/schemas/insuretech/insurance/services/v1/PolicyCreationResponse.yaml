@@ -1,0 +1,7 @@
+InsurancePolicyCreationResponse:
+  type: object
+  properties:
+    policy:
+      $ref: '#/components/schemas/Policy'
+  description: Response payload for policy creation operation. Returns operation results
+    and status.

@@ -1,0 +1,9 @@
+KYCSessionCompletionRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    session_id:
+      type: string
+  description: Request payload for kyc session completion operation. Contains parameters
+    required to execute the operation.

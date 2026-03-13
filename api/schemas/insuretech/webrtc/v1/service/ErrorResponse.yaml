@@ -1,0 +1,14 @@
+ErrorResponse:
+  type: object
+  properties:
+    code:
+      $ref: '#/components/schemas/WebrtcErrorCode'
+    message:
+      type: string
+    details:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Response payload for error operation. Returns operation results and
+    status.

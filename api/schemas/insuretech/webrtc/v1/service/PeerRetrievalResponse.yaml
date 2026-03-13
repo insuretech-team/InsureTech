@@ -1,0 +1,7 @@
+PeerRetrievalResponse:
+  type: object
+  properties:
+    peer:
+      $ref: '#/components/schemas/Peer'
+  description: Response payload for peer retrieval operation. Returns operation results
+    and status.

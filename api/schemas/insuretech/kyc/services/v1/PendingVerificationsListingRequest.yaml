@@ -1,0 +1,10 @@
+PendingVerificationsListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+  description: Request payload for listing pending verifications listing items. Supports
+    filtering, sorting, and pagination.

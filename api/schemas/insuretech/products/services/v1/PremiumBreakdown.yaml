@@ -1,0 +1,11 @@
+PremiumBreakdown:
+  type: object
+  properties:
+    item:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    description:
+      type: string
+  description: Domain entity representing premium breakdown. Core business object
+    in the system.

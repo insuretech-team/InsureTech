@@ -1,0 +1,6 @@
+InsurerConfigCreationRequest:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/InsurerConfig'
+  description: ========== INSURER CONFIG MESSAGES ==========

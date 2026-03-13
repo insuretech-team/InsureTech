@@ -1,0 +1,7 @@
+TrackRetrievalResponse:
+  type: object
+  properties:
+    track:
+      $ref: '#/components/schemas/Track'
+  description: Response payload for track retrieval operation. Returns operation results
+    and status.

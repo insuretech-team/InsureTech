@@ -1,0 +1,11 @@
+UploadURLRetrievalResponse:
+  type: object
+  properties:
+    upload_url:
+      type: string
+    file_id:
+      type: string
+    storage_key:
+      type: string
+  description: Response payload for upload url retrieval operation. Returns operation
+    results and status.

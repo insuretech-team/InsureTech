@@ -1,0 +1,12 @@
+ServiceProvidersListingResponse:
+  type: object
+  properties:
+    providers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ServiceProvider'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for service providers listing operation. Returns operation
+    results and status.

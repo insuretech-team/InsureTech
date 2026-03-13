@@ -1,0 +1,16 @@
+PolicyRulesListingResponse:
+  type: object
+  properties:
+    policies:
+      type: array
+      items:
+        $ref: '#/components/schemas/PolicyRule'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for policy rules listing operation. Returns operation
+    results and status.

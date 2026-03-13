@@ -1,0 +1,513 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST /v1/policies/{policy_id}/refund - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .endpoint-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .method-badge {
+            background: #2196f3;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .endpoint-path {
+            font-size: 1.8em;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .endpoint-summary {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .param {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        
+        .param-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .param-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .param-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-query { background: #e3f2fd; color: #1565c0; }
+        .badge-path { background: #fff3e0; color: #ef6c00; }
+        .badge-header { background: #f3e5f5; color: #7b1fa2; }
+        .badge-body { background: #e8f5e9; color: #2e7d32; }
+        
+        .param-type {
+            color: #666;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .param-required {
+            color: #f44336;
+            font-size: 0.85em;
+        }
+        
+        .param-description {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .response {
+            background: #f8f9fa;
+            border-left: 4px solid #666;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        
+        .response-success { border-color: #4caf50; }
+        .response-error { border-color: #f44336; }
+        .response-info { border-color: #2196f3; }
+        
+        .response-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .response-code {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .response-desc {
+            color: #666;
+        }
+        
+        .response-schema {
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .schema-ref {
+            font-family: 'Courier New', monospace;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .json-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        .json-block pre {
+            margin: 0;
+            color: #d4d4d4;
+        }
+        
+        .json-key {
+            color: #9cdcfe;
+            font-weight: 600;
+        }
+        
+        .json-type {
+            color: #ce9178;
+        }
+        
+        .json-ref {
+            color: #4ec9b0;
+            font-style: italic;
+        }
+        
+        .json-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .json-required {
+            color: #f48771;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .schema-ref-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #f0f4ff;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        
+        .schema-properties {
+            margin: 10px 0;
+        }
+        
+        .content-type-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .section-description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .response-body {
+            margin-top: 15px;
+        }
+        
+        .request-body {
+            margin-top: 15px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / 
+                <a href="index.html#policy">Policies</a>
+            </div>
+            <div class="endpoint-title">
+                <span class="method-badge">POST</span>
+                <span class="endpoint-path">/v1/policies/{policy_id}/refund</span>
+            </div>
+            <div class="endpoint-summary">Request refund</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card"><div class="description">Request refund</div></div>
+        
+        <div class="card"><h2>Parameters</h2><div class="params-list">
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">policy_id</span>
+                        <span class="param-badge badge-path">path</span>
+                        <span class="param-type">string</span>
+                        <span class="param-required">(required)</span>
+                    </div>
+                    <div class="param-description">No description</div>
+                </div>
+                
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">page</span>
+                        <span class="param-badge badge-query">query</span>
+                        <span class="param-type">integer</span>
+                        <span class="param-required">(optional)</span>
+                    </div>
+                    <div class="param-description">Page number (1-based)</div>
+                </div>
+                
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">page_size</span>
+                        <span class="param-badge badge-query">query</span>
+                        <span class="param-type">integer</span>
+                        <span class="param-required">(optional)</span>
+                    </div>
+                    <div class="param-description">Number of items per page</div>
+                </div>
+                </div></div>
+        
+        <div class="card">
+                <h2>Request Body</h2>
+                
+                <div class="request-body">
+                    <div class="content-type-badge">application/json</div>
+                    <div class="schema-ref-name">RequestRefundRequest</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">policy_id</span>": <span class="json-type">"string"</span>, <span class="json-required">(required)</span>
+  "<span class="json-key">reason</span>": <span class="json-type">"string"</span>,
+  "<span class="json-key">reason_details</span>": <span class="json-type">"string"</span>,
+}</pre></div></div>
+                </div>
+                </div>
+        
+        <div class="card">
+            <h2>Responses</h2><div class="responses-list">
+            <div class="response response-success">
+                <div class="response-header">
+                    <span class="response-code">200</span>
+                    <span class="response-desc">Successful response</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">RequestRefundResponse</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">refund_id</span>": <span class="json-type">"string"</span>,
+  "<span class="json-key">refund_number</span>": <span class="json-type">"string"</span>,
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,
+  "<span class="json-key">error</span>": <span class="json-ref">Error</span>,  <span class="json-comment">// Error information if operation failed</span>
+}</pre></div></div></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">400</span>
+                    <span class="response-desc">Bad request - Invalid input parameters</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+ Use UPPER_SNAKE_CASE format</span>
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
+ Should be clear and actionable</span>
+  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
+ Examples: {"field": "email", "reason": "invalid format"}</span>
+  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
+ Used for form validation errors</span>
+  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
+ true: Temporary error, client should retry
+ false: Permanent error, don't retry</span>
+  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
+ Only set if retryable = true</span>
+  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
+ 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
+  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
+ Can be used to look up error in logs</span>
+  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
+}</pre></div></div></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">401</span>
+                    <span class="response-desc">Unauthorized - Authentication required</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+ Use UPPER_SNAKE_CASE format</span>
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
+ Should be clear and actionable</span>
+  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
+ Examples: {"field": "email", "reason": "invalid format"}</span>
+  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
+ Used for form validation errors</span>
+  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
+ true: Temporary error, client should retry
+ false: Permanent error, don't retry</span>
+  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
+ Only set if retryable = true</span>
+  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
+ 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
+  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
+ Can be used to look up error in logs</span>
+  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
+}</pre></div></div></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">403</span>
+                    <span class="response-desc">Forbidden - Insufficient permissions</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+ Use UPPER_SNAKE_CASE format</span>
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
+ Should be clear and actionable</span>
+  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
+ Examples: {"field": "email", "reason": "invalid format"}</span>
+  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
+ Used for form validation errors</span>
+  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
+ true: Temporary error, client should retry
+ false: Permanent error, don't retry</span>
+  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
+ Only set if retryable = true</span>
+  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
+ 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
+  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
+ Can be used to look up error in logs</span>
+  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
+}</pre></div></div></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">404</span>
+                    <span class="response-desc">Not found - Resource does not exist</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+ Use UPPER_SNAKE_CASE format</span>
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
+ Should be clear and actionable</span>
+  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
+ Examples: {"field": "email", "reason": "invalid format"}</span>
+  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
+ Used for form validation errors</span>
+  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
+ true: Temporary error, client should retry
+ false: Permanent error, don't retry</span>
+  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
+ Only set if retryable = true</span>
+  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
+ 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
+  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
+ Can be used to look up error in logs</span>
+  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
+}</pre></div></div></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">500</span>
+                    <span class="response-desc">Internal server error</span>
+                </div>
+                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
+ Use UPPER_SNAKE_CASE format</span>
+  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
+ Should be clear and actionable</span>
+  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
+ Examples: {"field": "email", "reason": "invalid format"}</span>
+  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
+ Used for form validation errors</span>
+  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
+ true: Temporary error, client should retry
+ false: Permanent error, don't retry</span>
+  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
+ Only set if retryable = true</span>
+  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
+ 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
+  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
+ Can be used to look up error in logs</span>
+  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
+}</pre></div></div></div>
+            </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        </div>
+    </div>
+</body>
+</html>

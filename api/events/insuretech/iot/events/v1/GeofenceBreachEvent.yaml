@@ -1,0 +1,23 @@
+GeofenceBreachEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    policy_id:
+      type: string
+    geofence_name:
+      type: string
+    latitude:
+      type: number
+      format: double
+    longitude:
+      type: number
+      format: double
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Geofence breach (for vehicle tracking)'

@@ -1,0 +1,7 @@
+GracePeriodUpdateResponse:
+  type: object
+  properties:
+    grace_period:
+      $ref: '#/components/schemas/GracePeriod'
+  description: Response payload for grace period update operation. Returns operation
+    results and status.

@@ -1,0 +1,10 @@
+InvoiceIssuanceRequest:
+  type: object
+  properties:
+    invoice_id:
+      type: string
+    issued_by:
+      type: string
+      description: admin user_id
+  description: Request payload for invoice issuance operation. Contains parameters
+    required to execute the operation.

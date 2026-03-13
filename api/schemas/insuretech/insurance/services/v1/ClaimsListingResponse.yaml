@@ -1,0 +1,12 @@
+ClaimsListingResponse:
+  type: object
+  properties:
+    claims:
+      type: array
+      items:
+        $ref: '#/components/schemas/Claim'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for claims listing operation. Returns operation results
+    and status.

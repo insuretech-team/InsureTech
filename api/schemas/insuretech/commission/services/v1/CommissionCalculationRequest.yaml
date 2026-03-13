@@ -1,0 +1,14 @@
+CommissionCalculationRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    commission_type:
+      type: string
+      description: ACQUISITION, RENEWAL
+    recipient_type:
+      type: string
+    recipient_id:
+      type: string
+  description: Request payload for commission calculation operation. Contains parameters
+    required to execute the operation.

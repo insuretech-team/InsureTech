@@ -1,0 +1,9 @@
+ErrorSeverity:
+  type: string
+  enum:
+  - ERROR_SEVERITY_UNSPECIFIED
+  - ERROR_SEVERITY_INFO
+  - ERROR_SEVERITY_WARNING
+  - ERROR_SEVERITY_ERROR
+  - ERROR_SEVERITY_CRITICAL
+  description: Error severity levels

@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.events;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/insuretech/lifepluscore/webrtc/v1/events;events";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/webrtc/v1/entity/room.proto";
+
+// ═══════════════════════════════════════════════════════════════════════════
+// Room Events
+// ═══════════════════════════════════════════════════════════════════════════
+
+message RoomCreatedEvent {
+ string room_id = 1;
+  string name = 2;
+ string creator_id = 3;
+  google.protobuf.Timestamp created_at = 4;
+ insuretech.webrtc.v1.entity.RoomConfig config = 5;
+}
+
+message RoomClosedEvent {
+ string room_id = 1;
+  string reason = 2;
+  google.protobuf.Timestamp closed_at = 3;
+}
+
+message RoomStateChangedEvent {
+ string room_id = 1;
+ insuretech.webrtc.v1.entity.RoomState old_state = 2;
+ insuretech.webrtc.v1.entity.RoomState new_state = 3;
+  google.protobuf.Timestamp changed_at = 4;
+}
+
+message RoomConfigUpdatedEvent {
+ string room_id = 1;
+ insuretech.webrtc.v1.entity.RoomConfig old_config = 2;
+ insuretech.webrtc.v1.entity.RoomConfig new_config = 3;
+  google.protobuf.Timestamp updated_at = 4;
+}
+

@@ -1,0 +1,15 @@
+InsurerInsurerProductsListingResponse:
+  type: object
+  properties:
+    insurer_products:
+      type: array
+      items:
+        $ref: '#/components/schemas/InsurerProduct'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for insurer products listing operation. Returns operation
+    results and status.

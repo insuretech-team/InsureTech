@@ -1,0 +1,16 @@
+DocumentGenerationRequest:
+  type: object
+  properties:
+    template_id:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    data:
+      type: object
+      description: 'CG-7: Typed document data for template merge'
+    include_qr_code:
+      type: boolean
+  description: Request payload for document generation operation. Contains parameters
+    required to execute the operation.

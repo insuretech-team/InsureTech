@@ -1,0 +1,17 @@
+GracePeriodStartedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    grace_period_id:
+      type: string
+    policy_id:
+      type: string
+    end_date:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Grace period started'

@@ -1,0 +1,5 @@
+CurrentSessionRetrievalRequest:
+  type: object
+  properties: {}
+  description: "Get Current Session Request\r\n Session extracted from cookie (web)\
+    \ or Authorization header (mobile)"

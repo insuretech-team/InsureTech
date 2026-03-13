@@ -1,0 +1,9 @@
+KnowledgeBaseArticleUpdateRequest:
+  type: object
+  properties:
+    article_id:
+      type: string
+    article:
+      $ref: '#/components/schemas/KnowledgeBaseArticle'
+  description: Request payload for updating an existing knowledge base article update.
+    Contains fields to be modified.

@@ -1,0 +1,61 @@
+ingJobProcessing:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:job_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    media_id:
+      type: string
+      description: '@inject_tag: gorm:"column:media_id;not null"'
+    processing_type:
+      $ref: '#/components/schemas/ProcessingType'
+      description: '@inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ProcessingStatus'
+      x-database-default: PENDING
+    priority:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:priority;not null"'
+      default: 5
+    retry_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:retry_count;not null"'
+      default: 0
+    max_retries:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_retries;not null"'
+      default: 3
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at"'
+    completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:completed_at"'
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+    result_data:
+      type: string
+      description: '@inject_tag: gorm:"column:result_data"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: ProcessingJob entity - tracks async media processing tasks
+  required:
+  - id
+  - media_id
+  - processing_type
+  - status
+  - priority
+  - retry_count
+  - max_retries
+  - audit_info

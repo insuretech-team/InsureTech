@@ -1,0 +1,7 @@
+VoiceSessionVerificationRequest:
+  type: object
+  properties:
+    session_id:
+      type: string
+  description: Request payload for voice session verification operation. Contains
+    parameters required to execute the operation.

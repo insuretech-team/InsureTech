@@ -1,0 +1,11 @@
+PaymentConfirmationRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+    payment_id:
+      type: string
+    transaction_id:
+      type: string
+  description: Request payload for payment confirmation operation. Contains parameters
+    required to execute the operation.

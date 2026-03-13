@@ -1,0 +1,7 @@
+ProductPlansListingRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+  description: Request payload for listing product plans listing items. Supports filtering,
+    sorting, and pagination.

@@ -1,0 +1,10 @@
+CommissionRetrievalResponse:
+  type: object
+  properties:
+    commission:
+      $ref: '#/components/schemas/Commission'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for commission retrieval operation. Returns operation
+    results and status.

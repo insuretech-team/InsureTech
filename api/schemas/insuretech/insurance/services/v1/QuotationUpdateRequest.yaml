@@ -1,0 +1,7 @@
+QuotationUpdateRequest:
+  type: object
+  properties:
+    quotation:
+      $ref: '#/components/schemas/Quotation'
+  description: Request payload for updating an existing quotation update. Contains
+    fields to be modified.

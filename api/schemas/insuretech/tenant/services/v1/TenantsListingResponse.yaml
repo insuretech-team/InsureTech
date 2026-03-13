@@ -1,0 +1,15 @@
+TenantsListingResponse:
+  type: object
+  properties:
+    tenants:
+      type: array
+      items:
+        $ref: '#/components/schemas/Tenant'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for tenants listing operation. Returns operation results
+    and status.

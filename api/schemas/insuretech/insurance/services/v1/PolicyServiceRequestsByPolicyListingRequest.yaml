@@ -1,0 +1,7 @@
+PolicyServiceRequestsByPolicyListingRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+  description: Request payload for listing policy services by policy listing items.
+    Supports filtering, sorting, and pagination.

@@ -1,0 +1,284 @@
+syntax = "proto3";
+
+package insuretech.common.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1;commonv1";
+option csharp_namespace = "Insuretech.Common.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+
+// Common types used across all domains
+
+// Money representation with currency
+message Money {
+  // Amount in smallest currency unit (paisa for BDT)
+  int64 amount = 1;
+
+  // Currency code (ISO 4217)
+  string currency = 2; // Default: BDT
+
+  // Decimal amount for display (amount / 100)
+  double decimal_amount = 3;
+}
+
+// DEPRECATED: UUID wrapper removed - use string with ULID format directly
+// Kept for backward compatibility only
+message UUID {
+  string value = 1; // Use plain string fields instead
+}
+
+// Standard tenant and request-scoped metadata
+message TenantContext {
+  string tenant_id = 1;       // ULID format - Multi-tenant isolation
+  string organization_id = 2; // ULID format - Optional higher-level org
+}
+
+message RequestContext {
+  TenantContext tenant = 1;
+  string request_id = 2;           // Correlation ID
+  map<string, string> headers = 3; // Selected headers (trace, auth)
+}
+
+// Pagination helpers
+message PageRequest {
+  int32 page = 1;        // 1-based
+  int32 page_size = 2;   // items per page
+  string page_token = 3; // alt token-based pagination
+}
+
+message PageResponse {
+  int32 page = 1;
+  int32 page_size = 2;
+  int32 total_pages = 3;
+  int64 total_items = 4;
+  string next_page_token = 5;
+}
+
+enum SortDirection {
+  SORT_DIRECTION_UNSPECIFIED = 0;
+  SORT_DIRECTION_ASC = 1;
+  SORT_DIRECTION_DESC = 2;
+}
+
+message SortField {
+  string field = 1;            // e.g., "created_at"
+  SortDirection direction = 2; // ASC/DESC
+}
+
+// Common time fields
+message Timestamps {
+  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp updated_at = 2;
+}
+
+// Standard error info when embedding inline
+message ErrorInfo {
+  int32 code = 1;               // application code
+  string message = 2;           // human-readable
+  map<string, string> meta = 3; // additional context
+}
+
+// Address information
+message Address {
+  string address_line1 = 1 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) = "Service delivery and communication"
+  ];
+  string address_line2 = 2;
+  string city = 3;
+  string district = 4;
+  string division = 5;
+  string postal_code = 6;
+  string country = 7; // Default: Bangladesh
+  double latitude = 8 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Location-based services"
+  ];
+  double longitude = 9 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Location-based services"
+  ];
+}
+
+// Contact information
+message ContactInfo {
+  string mobile_number = 1 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Customer communication and authentication"
+  ]; // +880 1XXX XXXXXX
+  string email = 2 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Customer communication and notifications"
+  ];
+  string alternate_mobile = 3 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Emergency contact"
+  ];
+  string landline = 4 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Business contact"
+  ];
+}
+
+// Document/File reference
+message Document {
+  string document_id = 1;   // UUID
+  string document_type = 2; // NID, TIN, TradeLicense, etc.
+  string file_name = 3;
+  string file_url = 4;  // S3 URL
+  string mime_type = 5; // image/jpeg, application/pdf
+  int64 file_size = 6;  // bytes
+  string hash = 7;      // SHA-256 hash
+  google.protobuf.Timestamp uploaded_at = 8;
+  string uploaded_by = 9; // user_id
+}
+
+// Audit information
+message AuditInfo {
+  google.protobuf.Timestamp created_at = 1;
+  google.protobuf.Timestamp updated_at = 2;
+  string created_by = 3;                    // user_id
+  string updated_by = 4;                    // user_id
+  google.protobuf.Timestamp deleted_at = 5; // for soft delete
+  string deleted_by = 6;
+}
+
+// Pagination request
+message PaginationRequest {
+  int32 page = 1;      // Page number (1-based)
+  int32 page_size = 2; // Items per page (max 100)
+  string sort_by = 3;  // Field name
+  SortOrder sort_order = 4;
+}
+
+enum SortOrder {
+  SORT_ORDER_UNSPECIFIED = 0;
+  SORT_ORDER_ASC = 1;
+  SORT_ORDER_DESC = 2;
+}
+
+// Pagination response
+message PaginationResponse {
+  int32 total_items = 1;
+  int32 total_pages = 2;
+  int32 current_page = 3;
+  int32 page_size = 4;
+  bool has_next = 5;
+  bool has_previous = 6;
+}
+
+// Generic response wrapper
+message Response {
+  bool success = 1;
+  string message = 2;
+  string error_code = 3;
+  map<string, string> metadata = 4;
+}
+
+// Status tracking
+enum RecordStatus {
+  RECORD_STATUS_UNSPECIFIED = 0;
+  RECORD_STATUS_ACTIVE = 1;
+  RECORD_STATUS_INACTIVE = 2;
+  RECORD_STATUS_PENDING = 3;
+  RECORD_STATUS_SUSPENDED = 4;
+  RECORD_STATUS_DELETED = 5;
+}
+
+// Approval workflow
+message ApprovalInfo {
+  string approval_id = 1;
+  ApprovalStatus status = 2;
+  string approved_by = 3; // user_id
+  google.protobuf.Timestamp approved_at = 4;
+  string rejection_reason = 5;
+  int32 approval_level = 6; // 1, 2, 3 (as per approval matrix)
+}
+
+enum ApprovalStatus {
+  APPROVAL_STATUS_UNSPECIFIED = 0;
+  APPROVAL_STATUS_PENDING = 1;
+  APPROVAL_STATUS_APPROVED = 2;
+  APPROVAL_STATUS_REJECTED = 3;
+  APPROVAL_STATUS_CANCELLED = 4;
+}
+
+// Bangladesh-specific types
+message NIDInfo {
+  string nid_number = 1 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification and KYC compliance",
+    (insuretech.common.v1.retention_days) = 2555
+  ]; // 10, 13, or 17 digit
+  string full_name = 2 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.data_purpose) = "Identity verification"
+  ]; // As per NID
+  google.protobuf.Timestamp date_of_birth = 3 [
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Age verification for insurance eligibility"
+  ];
+  bool verified = 4;
+  google.protobuf.Timestamp verified_at = 5;
+  string verification_method = 6; // PORICHOY, MANUAL
+}
+
+message TINInfo {
+  string tin_number = 1; // 12-digit
+  string taxpayer_name = 2;
+  google.protobuf.Timestamp verified_at = 4;
+}
+
+// Insurance categorization
+enum PolicyCategory {
+  POLICY_CATEGORY_UNSPECIFIED = 0;
+  POLICY_CATEGORY_LIFE = 1;
+  POLICY_CATEGORY_NONLIFE = 2;
+}
+
+enum InsuranceType {
+  INSURANCE_TYPE_UNSPECIFIED = 0;
+  INSURANCE_TYPE_LIFE = 1;
+  INSURANCE_TYPE_HEALTH = 2;
+  INSURANCE_TYPE_AUTO = 3;
+  INSURANCE_TYPE_TRAVEL = 4;
+  INSURANCE_TYPE_FIRE = 5;
+  INSURANCE_TYPE_MARINE = 6;
+  INSURANCE_TYPE_PROPERTY = 7;
+  INSURANCE_TYPE_LIABILITY = 8;
+  INSURANCE_TYPE_LOSS_OF_INCOME = 9;
+  INSURANCE_TYPE_GOODS_IN_TRANSIT = 10;
+  INSURANCE_TYPE_CROPS = 11;
+  INSURANCE_TYPE_LIVESTOCK = 12;
+  INSURANCE_TYPE_CREDIT = 13;
+  INSURANCE_TYPE_SURETY = 14;
+  INSURANCE_TYPE_ENGINEERING = 15;
+  INSURANCE_TYPE_AVIATION = 16;
+  INSURANCE_TYPE_PET = 17;
+  INSURANCE_TYPE_CYBER = 18;
+  INSURANCE_TYPE_TERRORISM = 19;
+  INSURANCE_TYPE_NATURAL_DISASTER = 20;
+  INSURANCE_TYPE_DEVICE = 21;
+}

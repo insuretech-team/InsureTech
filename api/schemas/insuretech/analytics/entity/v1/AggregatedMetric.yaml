@@ -1,0 +1,43 @@
+AggregatedMetric:
+  type: object
+  properties:
+    aggregated_metric_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:aggregated_metric_id;not
+        null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    metric_id:
+      type: string
+      description: '@inject_tag: gorm:"column:metric_id;not null"'
+    metric_name:
+      type: string
+      description: '@inject_tag: gorm:"column:metric_name;not null"'
+    aggregation:
+      $ref: '#/components/schemas/MetricAggregation'
+      description: '@inject_tag: gorm:"column:aggregation;not null;serializer:proto_enum"'
+    value:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:value;not null"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+    dimensions:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    time_bucket:
+      type: string
+      description: '@inject_tag: gorm:"column:time_bucket;not null"'
+  description: "Aggregated metric values\n Maps to 'aggregated_metrics' table in analytics_schema"
+  required:
+  - aggregated_metric_id
+  - metric_id
+  - metric_name
+  - aggregation
+  - value
+  - timestamp
+  - time_bucket

@@ -1,0 +1,14 @@
+RoomConfigUpdatedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    old_config:
+      $ref: '#/components/schemas/RoomConfig'
+    new_config:
+      $ref: '#/components/schemas/RoomConfig'
+    updated_at:
+      type: string
+      format: date-time
+  description: Event emitted when room config is updated. Published to event stream
+    for downstream processing and audit trail.

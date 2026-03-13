@@ -1,0 +1,26 @@
+InvoicePDFGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    invoice_id:
+      type: string
+    invoice_number:
+      type: string
+    invoice_pdf_url:
+      type: string
+      description: S3/storage URL
+    document_id:
+      type: string
+      description: Document-service document ID
+    tenant_id:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Invoice PDF generated \u2014 published when document generation\
+    \ completes"

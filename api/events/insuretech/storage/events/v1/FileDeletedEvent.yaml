@@ -1,0 +1,17 @@
+FileDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    file_id:
+      type: string
+    tenant_id:
+      type: string
+    storage_key:
+      type: string
+    deleted_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: Emitted when a file/object is deleted.

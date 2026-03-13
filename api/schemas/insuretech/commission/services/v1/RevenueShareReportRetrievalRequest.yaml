@@ -1,0 +1,11 @@
+RevenueShareReportRetrievalRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+  description: Request payload for retrieving revenue share report retrieval information.
+    May include filters and pagination parameters.

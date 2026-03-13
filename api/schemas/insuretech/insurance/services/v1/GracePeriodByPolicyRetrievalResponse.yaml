@@ -1,0 +1,7 @@
+GracePeriodByPolicyRetrievalResponse:
+  type: object
+  properties:
+    grace_period:
+      $ref: '#/components/schemas/GracePeriod'
+  description: Response payload for grace period by policy retrieval operation. Returns
+    operation results and status.

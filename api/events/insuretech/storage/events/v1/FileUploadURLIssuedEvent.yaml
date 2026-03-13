@@ -1,0 +1,28 @@
+FileUploadURLIssuedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    tenant_id:
+      type: string
+    file_id:
+      type: string
+    filename:
+      type: string
+    storage_key:
+      type: string
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+    expires_at:
+      type: string
+      format: date-time
+    requested_by:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: Emitted when a presigned upload URL is issued.

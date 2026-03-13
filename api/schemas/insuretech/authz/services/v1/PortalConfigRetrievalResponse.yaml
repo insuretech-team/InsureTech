@@ -1,0 +1,9 @@
+PortalConfigRetrievalResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/PortalConfig'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for portal config retrieval operation. Returns operation
+    results and status.

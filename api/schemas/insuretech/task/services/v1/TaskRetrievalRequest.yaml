@@ -1,0 +1,7 @@
+TaskRetrievalRequest:
+  type: object
+  properties:
+    task_id:
+      type: string
+  description: Request payload for retrieving task retrieval information. May include
+    filters and pagination parameters.

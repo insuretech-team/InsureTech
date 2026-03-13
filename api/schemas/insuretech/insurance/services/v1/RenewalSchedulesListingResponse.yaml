@@ -1,0 +1,9 @@
+RenewalSchedulesListingResponse:
+  type: object
+  properties:
+    schedules:
+      type: array
+      items:
+        $ref: '#/components/schemas/RenewalSchedule'
+  description: Response payload for renewal schedules listing operation. Returns operation
+    results and status.

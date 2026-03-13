@@ -1,0 +1,17 @@
+Location:
+  type: object
+  properties:
+    latitude:
+      type: number
+      format: double
+    longitude:
+      type: number
+      format: double
+    altitude:
+      type: number
+      format: double
+    accuracy:
+      type: number
+      format: double
+      description: Meters
+  description: Domain entity representing location. Core business object in the system.

@@ -1,0 +1,74 @@
+Employee:
+  type: object
+  properties:
+    employee_uuid:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:employee_uuid;not null"'
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    employee_id:
+      type: string
+      description: '@inject_tag: gorm:"column:employee_id;not null"'
+    department_id:
+      type: string
+      description: '@inject_tag: gorm:"column:department_id;not null"'
+    business_id:
+      type: string
+      description: "FK to b2b_schema.organisations.organisation_id \u2014 tenant isolation\
+        \ key\r\n @inject_tag: gorm:\"column:business_id;not null;index\""
+    insurance_category:
+      $ref: '#/components/schemas/InsuranceType'
+      description: '@inject_tag: gorm:"column:insurance_category"'
+    assigned_plan_id:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_plan_id"'
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    status:
+      $ref: '#/components/schemas/EmployeeStatus'
+      description: '@inject_tag: gorm:"column:status;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    number_of_dependent:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:number_of_dependent;not null"'
+    email:
+      type: string
+      description: "Work email address\r\n @inject_tag: gorm:\"column:email\""
+    mobile_number:
+      type: string
+      description: "Mobile number (BD format: +8801XXXXXXXXX)\r\n @inject_tag: gorm:\"\
+        column:mobile_number\""
+    date_of_birth:
+      type: string
+      description: "Date of birth (ISO 8601 string: YYYY-MM-DD)\r\n @inject_tag: gorm:\"\
+        column:date_of_birth\""
+    date_of_joining:
+      type: string
+      description: "Date of joining (ISO 8601 string: YYYY-MM-DD)\r\n @inject_tag:\
+        \ gorm:\"column:date_of_joining\""
+    gender:
+      $ref: '#/components/schemas/EmployeeGender'
+      description: '@inject_tag: gorm:"column:gender"'
+    user_id:
+      type: string
+      description: "B2C portal bridge: set when portal access is granted via GrantPortalAccess\r\
+        \n RPC. Links to authn_schema.users.user_id.\r\n @inject_tag: gorm:\"column:user_id\""
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Employee represents a corporate employee in the B2B portal.\r\n business_id\
+    \ is the organisation_id from b2b_schema.organisations \u2014 the tenant\r\n isolation\
+    \ key. user_id links to authn_schema.users when portal access is\r\n granted (B2C\
+    \ bridge)."

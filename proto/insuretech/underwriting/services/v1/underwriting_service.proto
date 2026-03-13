@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package insuretech.underwriting.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/underwriting/entity/v1/quote.proto";
+import "insuretech/underwriting/entity/v1/health_declaration.proto";
+import "insuretech/underwriting/entity/v1/underwriting_decision.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/underwriting/services/v1;underwritingservicev1";
+option csharp_namespace = "Insuretech.Underwriting.Services.V1";
+
+service UnderwritingService {
+  // Request premium quote
+  rpc RequestQuote(RequestQuoteRequest) returns (RequestQuoteResponse) {
+    option (google.api.http) = {
+      post: "/v1/quotes"
+      body: "*"
+    };
+  }
+  
+  // Get quote details
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse) {
+    option (google.api.http) = {
+      get: "/v1/quotes/{quote_id}"
+    };
+  }
+  
+  // List quotes for beneficiary
+  rpc ListQuotes(ListQuotesRequest) returns (ListQuotesResponse) {
+    option (google.api.http) = {
+      get: "/v1/beneficiaries/{beneficiary_id}/quotes"
+    };
+  }
+  
+  // Submit health declaration
+  rpc SubmitHealthDeclaration(SubmitHealthDeclarationRequest) returns (SubmitHealthDeclarationResponse) {
+    option (google.api.http) = {
+      post: "/v1/quotes/{quote_id}/health-declaration"
+      body: "*"
+    };
+  }
+  
+  // Get health declaration
+  rpc GetHealthDeclaration(GetHealthDeclarationRequest) returns (GetHealthDeclarationResponse) {
+    option (google.api.http) = {
+      get: "/v1/quotes/{quote_id}/health-declaration"
+    };
+  }
+  
+  // Approve underwriting (manual)
+  rpc ApproveUnderwriting(ApproveUnderwritingRequest) returns (ApproveUnderwritingResponse) {
+    option (google.api.http) = {
+      post: "/v1/quotes/{quote_id}?action=approve"
+      body: "*"
+    };
+  }
+  
+  // Reject underwriting (manual)
+  rpc RejectUnderwriting(RejectUnderwritingRequest) returns (RejectUnderwritingResponse) {
+    option (google.api.http) = {
+      post: "/v1/quotes/{quote_id}?action=reject"
+      body: "*"
+    };
+  }
+  
+  // Convert quote to policy
+  rpc ConvertQuoteToPolicy(ConvertQuoteToPolicyRequest) returns (ConvertQuoteToPolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/quotes/{quote_id}?action=convert"
+      body: "*"
+    };
+  }
+  
+  // Get underwriting decision
+  rpc GetUnderwritingDecision(GetUnderwritingDecisionRequest) returns (GetUnderwritingDecisionResponse) {
+    option (google.api.http) = {
+      get: "/v1/quotes/{quote_id}/decision"
+    };
+  }
+}
+
+message RequestQuoteRequest {
+  string beneficiary_id = 1;
+  string insurer_product_id = 2;
+  insuretech.common.v1.Money sum_assured = 3;
+  int32 term_years = 4;
+  string premium_payment_mode = 5; // YEARLY, MONTHLY, etc.
+  repeated string rider_codes = 6;
+  int32 applicant_age = 7;
+  bool smoker = 8;
+}
+
+message RequestQuoteResponse {
+  string quote_id = 1;
+  string quote_number = 2;
+  insuretech.common.v1.Money base_premium = 3;
+  insuretech.common.v1.Money total_premium = 4;
+  string valid_until = 5;
+  string message = 6;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}
+
+message GetQuoteRequest {
+  string quote_id = 1;
+}
+
+message GetQuoteResponse {
+  entity.v1.Quote quote = 1;
+  entity.v1.HealthDeclaration health_declaration = 2;
+  entity.v1.UnderwritingDecision decision = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ListQuotesRequest {
+  string beneficiary_id = 1;
+  string status = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListQuotesResponse {
+  repeated entity.v1.Quote quotes = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message SubmitHealthDeclarationRequest {
+  string quote_id = 1;
+  int32 height_cm = 2;
+  string weight_kg = 3;
+  bool has_pre_existing_conditions = 4;
+  string pre_existing_conditions = 5; // JSON
+  bool smoker = 6;
+  bool alcohol_consumer = 7;
+  string occupation_risk_level = 8;
+}
+
+message SubmitHealthDeclarationResponse {
+  string message = 1;
+  bool medical_exam_required = 2;
+  bool auto_approval_possible = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetHealthDeclarationRequest {
+  string quote_id = 1;
+}
+
+message GetHealthDeclarationResponse {
+  entity.v1.HealthDeclaration health_declaration = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ApproveUnderwritingRequest {
+  string quote_id = 1;
+  string underwriter_id = 2;
+  string risk_level = 3;
+  bool premium_adjusted = 4;
+  insuretech.common.v1.Money adjusted_premium = 5;
+  google.protobuf.Struct conditions = 6; // CG-7: Typed underwriting conditions (exclusions, riders, etc.)
+  string comments = 7;
+}
+
+message ApproveUnderwritingResponse {
+  string decision_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message RejectUnderwritingRequest {
+  string quote_id = 1;
+  string underwriter_id = 2;
+  string reason = 3;
+  string risk_level = 4;
+  string comments = 5;
+}
+
+message RejectUnderwritingResponse {
+  string decision_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ConvertQuoteToPolicyRequest {
+  string quote_id = 1;
+  string payment_method = 2;
+  string payment_reference = 3;
+}
+
+message ConvertQuoteToPolicyResponse {
+  string policy_id = 1;
+  string policy_number = 2;
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetUnderwritingDecisionRequest {
+  string quote_id = 1;
+}
+
+message GetUnderwritingDecisionResponse {
+  entity.v1.UnderwritingDecision decision = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+

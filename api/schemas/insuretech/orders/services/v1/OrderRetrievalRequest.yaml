@@ -1,0 +1,7 @@
+OrderRetrievalRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+  description: Request payload for retrieving order retrieval information. May include
+    filters and pagination parameters.

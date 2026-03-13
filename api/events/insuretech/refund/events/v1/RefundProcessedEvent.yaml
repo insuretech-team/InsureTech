@@ -1,0 +1,19 @@
+RefundRefundProcessedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    refund_id:
+      type: string
+    payment_method:
+      type: string
+    payment_reference:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Refund processed'

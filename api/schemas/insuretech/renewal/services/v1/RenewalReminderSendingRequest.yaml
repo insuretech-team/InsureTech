@@ -1,0 +1,9 @@
+RenewalReminderSendingRequest:
+  type: object
+  properties:
+    renewal_schedule_id:
+      type: string
+    channel:
+      type: string
+  description: Request payload for renewal reminder sending operation. Contains parameters
+    required to execute the operation.

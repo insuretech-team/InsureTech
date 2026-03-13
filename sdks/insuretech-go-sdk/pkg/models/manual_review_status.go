@@ -1,0 +1,13 @@
+package models
+
+// ManualReviewStatus represents a manual_review_status
+type ManualReviewStatus string
+
+// ManualReviewStatus values
+const (
+	ManualReviewStatusMANUALREVIEWSTATUSUNSPECIFIED ManualReviewStatus = "MANUAL_REVIEW_STATUS_UNSPECIFIED"
+	ManualReviewStatusMANUALREVIEWSTATUSNOTREQUIRED  = "MANUAL_REVIEW_STATUS_NOT_REQUIRED"
+	ManualReviewStatusMANUALREVIEWSTATUSPENDING  = "MANUAL_REVIEW_STATUS_PENDING"
+	ManualReviewStatusMANUALREVIEWSTATUSAPPROVED  = "MANUAL_REVIEW_STATUS_APPROVED"
+	ManualReviewStatusMANUALREVIEWSTATUSREJECTED  = "MANUAL_REVIEW_STATUS_REJECTED"
+)

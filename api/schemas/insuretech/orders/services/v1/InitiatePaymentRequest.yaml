@@ -1,0 +1,16 @@
+OrdersInitiatePaymentRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+    payment_method:
+      type: string
+      description: 'Payment method: BKASH, NAGAD, ROCKET, CARD, BANK_TRANSFER'
+    callback_url:
+      type: string
+      description: Frontend callback URL after payment gateway redirect
+    idempotency_key:
+      type: string
+      description: Idempotency key to prevent duplicate payment initiation (CG-3)
+  description: Request payload for initiate payment operation. Contains parameters
+    required to execute the operation.

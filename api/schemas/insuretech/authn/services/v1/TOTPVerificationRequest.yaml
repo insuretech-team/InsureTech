@@ -1,0 +1,14 @@
+TOTPVerificationRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    totp_code:
+      type: string
+      description: 6-digit code
+    mfa_session_token:
+      type: string
+      description: "mfa_session_token: returned by Login when mfa_required=true.\r\
+        \n If provided, VerifyTOTP will issue full session tokens after TOTP validation."
+  description: Request payload for totp verification operation. Contains parameters
+    required to execute the operation.

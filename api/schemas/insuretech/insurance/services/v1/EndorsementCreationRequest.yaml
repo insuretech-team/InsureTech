@@ -1,0 +1,6 @@
+EndorsementCreationRequest:
+  type: object
+  properties:
+    endorsement:
+      $ref: '#/components/schemas/Endorsement'
+  description: ========== ENDORSEMENT MESSAGES ==========

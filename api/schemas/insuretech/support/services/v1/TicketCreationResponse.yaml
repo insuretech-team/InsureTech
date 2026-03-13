@@ -1,0 +1,14 @@
+TicketCreationResponse:
+  type: object
+  properties:
+    ticket_id:
+      type: string
+    ticket_number:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for ticket creation operation. Returns operation results
+    and status.

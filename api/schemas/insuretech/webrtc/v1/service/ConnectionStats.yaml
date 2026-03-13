@@ -1,0 +1,22 @@
+ConnectionStats:
+  type: object
+  properties:
+    peer_id:
+      type: string
+    bitrate_kbps:
+      type: number
+      format: double
+    packet_loss_percent:
+      type: number
+      format: double
+    rtt_ms:
+      type: number
+      format: double
+    bytes_sent:
+      type: string
+      format: int64
+    bytes_received:
+      type: string
+      format: int64
+  description: Domain entity representing connection stats. Core business object in
+    the system.

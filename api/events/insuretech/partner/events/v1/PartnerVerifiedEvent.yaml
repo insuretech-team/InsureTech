@@ -1,0 +1,14 @@
+PartnerVerifiedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    partner_id:
+      type: string
+    verified_by:
+      type: string
+      description: Focal person ID
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Partner verified'

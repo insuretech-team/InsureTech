@@ -1,0 +1,7 @@
+InitiateKYCRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+  description: Request payload for initiate kyc operation. Contains parameters required
+    to execute the operation.

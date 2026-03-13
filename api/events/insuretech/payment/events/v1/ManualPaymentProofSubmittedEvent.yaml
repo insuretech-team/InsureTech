@@ -1,0 +1,27 @@
+ManualPaymentProofSubmittedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    payment_id:
+      type: string
+    order_id:
+      type: string
+    manual_proof_file_id:
+      type: string
+      description: Media service file ID
+    submitted_by:
+      type: string
+      description: customer user_id
+    tenant_id:
+      type: string
+    organisation_id:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: 'Event: Customer submitted manual bank transfer proof for admin review'

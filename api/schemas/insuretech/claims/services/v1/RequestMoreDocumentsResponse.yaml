@@ -1,0 +1,9 @@
+RequestMoreDocumentsResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for request more documents operation. Returns operation
+    results and status.

@@ -1,0 +1,30 @@
+NIDInfo:
+  type: object
+  properties:
+    nid_number:
+      type: string
+      description: 10, 13, or 17 digit
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification and KYC compliance
+      x-retention-days: 2555
+    full_name:
+      type: string
+      description: As per NID
+    date_of_birth:
+      type: string
+      format: date-time
+    verified:
+      type: boolean
+    verified_at:
+      type: string
+      format: date-time
+    verification_method:
+      type: string
+      description: PORICHOY, MANUAL
+  description: Bangladesh-specific types

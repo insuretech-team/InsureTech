@@ -1,0 +1,20 @@
+ChatRequest:
+  type: object
+  properties:
+    conversation_id:
+      type: string
+      description: Resume existing or create new
+    user_id:
+      type: string
+    agent_id:
+      type: string
+      description: 'Optional: specific agent'
+    message:
+      type: string
+    context:
+      type: object
+      additionalProperties:
+        type: string
+      description: Additional context
+  description: Request payload for chat operation. Contains parameters required to
+    execute the operation.

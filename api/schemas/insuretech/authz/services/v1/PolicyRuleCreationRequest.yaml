@@ -1,0 +1,26 @@
+PolicyRuleCreationRequest:
+  type: object
+  properties:
+    subject:
+      type: string
+      description: '"role:<name>" | "user:<uuid>"'
+    domain:
+      type: string
+      description: '"portal:tenant_id"'
+    object:
+      type: string
+      description: '"svc:policy/create"'
+    action:
+      type: string
+      description: '"POST"'
+    effect:
+      $ref: '#/components/schemas/PolicyEffect'
+    condition:
+      type: string
+      description: ABAC condition expression
+    description:
+      type: string
+    created_by:
+      type: string
+  description: Request payload for creating a new policy rule creation. Contains all
+    required fields and optional parameters for initialization.

@@ -1,0 +1,10 @@
+SDPType:
+  type: string
+  enum:
+  - SDP_TYPE_UNSPECIFIED
+  - SDP_TYPE_OFFER
+  - SDP_TYPE_ANSWER
+  - SDP_TYPE_PRANSWER
+  - SDP_TYPE_ROLLBACK
+  description: 'Type categorization for sdp. Options: SDP_TYPE_UNSPECIFIED, SDP_TYPE_OFFER,
+    SDP_TYPE_ANSWER, SDP_TYPE_PRANSWER, SDP_TYPE_ROLLBACK.'

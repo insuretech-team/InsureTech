@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package insuretech.voice.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/voice/events/v1;voiceeventsv1";
+
+// Kafka event: Voice session started
+message VoiceSessionStartedEvent {
+  string event_id = 1;
+  string voice_session_id = 2;
+  string session_id = 3;
+  string user_id = 4;
+  string language = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Voice command executed
+message VoiceCommandExecutedEvent {
+  string event_id = 1;
+  string voice_command_id = 2;
+  string voice_session_id = 3;
+  string command_type = 4;
+  string status = 5;
+  float confidence_score = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Voice session ended
+message VoiceSessionEndedEvent {
+  string event_id = 1;
+  string voice_session_id = 2;
+  string status = 3;
+  int32 duration_seconds = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+

@@ -1,0 +1,139 @@
+Order:
+  type: object
+  properties:
+    order_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:order_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    order_number:
+      type: string
+      description: '@inject_tag: gorm:"column:order_number;not null;uniqueIndex"'
+      x-unique: true
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id;not null"'
+    quotation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:quotation_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    plan_id:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_id;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/OrderStatus'
+      x-database-default: ORDER_STATUS_PENDING
+    total_payable:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:total_payable;not null"'
+    currency:
+      type: string
+      description: '@inject_tag: gorm:"column:currency;not null"'
+      default: BDT
+    payment_id:
+      type: string
+      description: "Payment fields \u2014 populated after InitiatePayment\r\n @inject_tag:\
+        \ gorm:\"column:payment_id\""
+    payment_gateway_ref:
+      type: string
+      description: '@inject_tag: gorm:"column:payment_gateway_ref"'
+    policy_id:
+      type: string
+      description: "Policy fields \u2014 populated after PolicyIssued\r\n @inject_tag:\
+        \ gorm:\"column:policy_id\""
+    cancellation_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:cancellation_reason"'
+    failure_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:failure_reason"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    paid_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"'
+    invoice_id:
+      type: string
+      description: '@inject_tag: gorm:"column:invoice_id;index:idx_orders_invoice_id"'
+    organisation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:organisation_id;index:idx_orders_organisation_id"'
+    idempotency_key:
+      type: string
+      description: '@inject_tag: gorm:"column:idempotency_key;uniqueIndex"'
+      x-unique: true
+    correlation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:correlation_id"'
+    payment_status:
+      allOf:
+      - $ref: '#/components/schemas/OrderPaymentStatus'
+      x-database-default: ORDER_PAYMENT_STATUS_UNPAID
+    billing_status:
+      allOf:
+      - $ref: '#/components/schemas/OrderBillingStatus'
+      x-database-default: ORDER_BILLING_STATUS_NOT_INVOICED
+    fulfillment_status:
+      allOf:
+      - $ref: '#/components/schemas/OrderFulfillmentStatus'
+      x-database-default: ORDER_FULFILLMENT_STATUS_NOT_STARTED
+    manual_review_required:
+      type: boolean
+      description: '@inject_tag: gorm:"column:manual_review_required;not null;default:false"'
+      default: false
+    payment_due_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:payment_due_at;serializer:proto_timestamp"'
+    coverage_start_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:coverage_start_at;serializer:proto_timestamp"'
+    coverage_end_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:coverage_end_at;serializer:proto_timestamp"'
+    actor_user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:actor_user_id"'
+    portal:
+      type: string
+      description: '@inject_tag: gorm:"column:portal"'
+    purchase_order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"'
+  description: "Order represents a purchase order for an insurance policy.\r\n Created\
+    \ from an approved quotation \u2192 payment \u2192 policy issuance flow.\r\n Maps\
+    \ to 'orders' table in insurance_schema."
+  required:
+  - order_id
+  - order_number
+  - tenant_id
+  - quotation_id
+  - customer_id
+  - product_id
+  - plan_id
+  - status
+  - total_payable
+  - currency
+  - created_at
+  - updated_at
+  - payment_status
+  - billing_status
+  - fulfillment_status
+  - manual_review_required

@@ -1,0 +1,9 @@
+BeneficiaryGender:
+  type: string
+  enum:
+  - GENDER_UNSPECIFIED
+  - GENDER_MALE
+  - GENDER_FEMALE
+  - GENDER_OTHER
+  description: 'Enumeration of gender values. Valid options: GENDER_UNSPECIFIED, GENDER_MALE,
+    GENDER_FEMALE, GENDER_OTHER.'

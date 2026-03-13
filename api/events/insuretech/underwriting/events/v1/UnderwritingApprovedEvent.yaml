@@ -1,0 +1,22 @@
+UnderwritingApprovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    decision_id:
+      type: string
+    decision_method:
+      type: string
+      description: AUTOMATIC, MANUAL, HYBRID
+    risk_level:
+      type: string
+    premium_adjusted:
+      type: boolean
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Underwriting approved'

@@ -1,0 +1,6 @@
+UnderwritingDecisionCreationRequest:
+  type: object
+  properties:
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+  description: ========== UNDERWRITING DECISION MESSAGES ==========

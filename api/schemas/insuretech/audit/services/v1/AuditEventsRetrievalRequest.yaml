@@ -1,0 +1,19 @@
+AuditEventsRetrievalRequest:
+  type: object
+  properties:
+    category:
+      type: string
+    severity:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for retrieving audit events retrieval information.
+    May include filters and pagination parameters.

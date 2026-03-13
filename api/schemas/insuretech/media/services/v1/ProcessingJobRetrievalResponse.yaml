@@ -1,0 +1,9 @@
+ProcessingJobRetrievalResponse:
+  type: object
+  properties:
+    job:
+      $ref: '#/components/schemas/ingJobProcessing'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for processing job retrieval operation. Returns operation
+    results and status.

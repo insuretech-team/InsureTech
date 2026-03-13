@@ -1,0 +1,15 @@
+ChannelPreference:
+  type: object
+  properties:
+    channel:
+      $ref: '#/components/schemas/NotificationChannel'
+    enabled:
+      type: boolean
+    excluded_types:
+      type: array
+      items:
+        $ref: '#/components/schemas/NotificationType'
+        description: Types to not receive on this channel
+      description: Types to not receive on this channel
+  description: Domain entity representing channel preference. Core business object
+    in the system.

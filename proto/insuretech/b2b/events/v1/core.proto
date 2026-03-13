@@ -1,0 +1,235 @@
+syntax = "proto3";
+
+package insuretech.b2b.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/events/v1;b2beventsv1";
+option csharp_namespace = "Insuretech.B2b.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/b2b/entity/v1/organisation.proto";
+import "insuretech/b2b/entity/v1/employee.proto";
+import "insuretech/b2b/entity/v1/purchase_order.proto";
+
+// ============================================================================
+// B2B Domain Events — published to Kafka topics: b2b.*
+// All events are immutable and append-only (event sourcing).
+// ============================================================================
+
+// ── Organisation Events ──────────────────────────────────────────────────────
+
+// OrganisationCreatedEvent is published when a new organisation is created by SuperAdmin
+message OrganisationCreatedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  string tenant_id = 3;
+  string name = 4;
+  string code = 5;
+  string industry = 6;
+  string created_by = 7; // SuperAdmin user_id
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// OrganisationUpdatedEvent is published when an organisation is updated
+message OrganisationUpdatedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  string name = 3;
+  insuretech.b2b.entity.v1.OrganisationStatus status = 4;
+  string updated_by = 5;
+  map<string, string> changed_fields = 6; // field_name -> new_value
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// OrganisationStatusChangedEvent is published when organisation status changes
+message OrganisationStatusChangedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  insuretech.b2b.entity.v1.OrganisationStatus old_status = 3;
+  insuretech.b2b.entity.v1.OrganisationStatus new_status = 4;
+  string changed_by = 5; // SuperAdmin user_id
+  string reason = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// OrganisationApprovedEvent is published when SuperAdmin approves an organisation
+message OrganisationApprovedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  string approved_by = 3; // SuperAdmin user_id
+  google.protobuf.Timestamp timestamp = 4;
+}
+
+// OrganisationSuspendedEvent is published when an organisation is suspended
+message OrganisationSuspendedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  string suspended_by = 3; // SuperAdmin user_id
+  string reason = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// ── OrgMember Events ─────────────────────────────────────────────────────────
+
+// OrgMemberAddedEvent is published when a user is added to an organisation
+message OrgMemberAddedEvent {
+  string event_id = 1;
+  string member_id = 2;
+  string organisation_id = 3;
+  string user_id = 4;
+  insuretech.b2b.entity.v1.OrgMemberRole role = 5;
+  string added_by = 6; // SuperAdmin or BizAdmin user_id
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// OrgMemberRemovedEvent is published when a user is removed from an organisation
+message OrgMemberRemovedEvent {
+  string event_id = 1;
+  string member_id = 2;
+  string organisation_id = 3;
+  string user_id = 4;
+  string removed_by = 5;
+  string reason = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// B2BAdminAssignedEvent is published when a B2B admin is assigned to an organisation
+message B2BAdminAssignedEvent {
+  string event_id = 1;
+  string organisation_id = 2;
+  string user_id = 3;
+  string assigned_by = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// OrgMemberRoleChangedEvent is published when a member's role changes
+message OrgMemberRoleChangedEvent {
+  string event_id = 1;
+  string member_id = 2;
+  string organisation_id = 3;
+  string user_id = 4;
+  insuretech.b2b.entity.v1.OrgMemberRole old_role = 5;
+  insuretech.b2b.entity.v1.OrgMemberRole new_role = 6;
+  string changed_by = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// ── Department Events ────────────────────────────────────────────────────────
+
+// DepartmentCreatedEvent is published when a new department is created
+message DepartmentCreatedEvent {
+  string event_id = 1;
+  string department_id = 2;
+  string organisation_id = 3;
+  string name = 4;
+  string created_by = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// DepartmentUpdatedEvent is published when a department is updated
+message DepartmentUpdatedEvent {
+  string event_id = 1;
+  string department_id = 2;
+  string organisation_id = 3;
+  string updated_by = 4;
+  map<string, string> changed_fields = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// DepartmentDeletedEvent is published when a department is deleted
+message DepartmentDeletedEvent {
+  string event_id = 1;
+  string department_id = 2;
+  string organisation_id = 3;
+  string deleted_by = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// ── Employee Events ──────────────────────────────────────────────────────────
+
+// EmployeeCreatedEvent is published when a new employee is created
+message EmployeeCreatedEvent {
+  string event_id = 1;
+  string employee_uuid = 2;
+  string employee_id = 3;
+  string organisation_id = 4;
+  string department_id = 5;
+  string name = 6;
+  string created_by = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// EmployeeUpdatedEvent is published when an employee is updated
+message EmployeeUpdatedEvent {
+  string event_id = 1;
+  string employee_uuid = 2;
+  string organisation_id = 3;
+  string updated_by = 4;
+  map<string, string> changed_fields = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// EmployeeDeletedEvent is published when an employee is deleted
+message EmployeeDeletedEvent {
+  string event_id = 1;
+  string employee_uuid = 2;
+  string organisation_id = 3;
+  string deleted_by = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// EmployeeStatusChangedEvent is published when employee status changes
+message EmployeeStatusChangedEvent {
+  string event_id = 1;
+  string employee_uuid = 2;
+  string organisation_id = 3;
+  insuretech.b2b.entity.v1.EmployeeStatus old_status = 4;
+  insuretech.b2b.entity.v1.EmployeeStatus new_status = 5;
+  string changed_by = 6;
+  string reason = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// ── Purchase Order Events ────────────────────────────────────────────────────
+
+// PurchaseOrderCreatedEvent is published when a new purchase order is created
+message PurchaseOrderCreatedEvent {
+  string event_id = 1;
+  string purchase_order_id = 2;
+  string organisation_id = 3;
+  string department_id = 4;
+  string plan_id = 5;
+  int32 employee_count = 6;
+  string created_by = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// PurchaseOrderStatusChangedEvent is published when purchase order status changes
+message PurchaseOrderStatusChangedEvent {
+  string event_id = 1;
+  string purchase_order_id = 2;
+  string organisation_id = 3;
+  insuretech.b2b.entity.v1.PurchaseOrderStatus old_status = 4;
+  insuretech.b2b.entity.v1.PurchaseOrderStatus new_status = 5;
+  string changed_by = 6;
+  string reason = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// PurchaseOrderApprovedEvent is published when a purchase order is approved
+message PurchaseOrderApprovedEvent {
+  string event_id = 1;
+  string purchase_order_id = 2;
+  string organisation_id = 3;
+  string approved_by = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// PurchaseOrderRejectedEvent is published when a purchase order is rejected
+message PurchaseOrderRejectedEvent {
+  string event_id = 1;
+  string purchase_order_id = 2;
+  string organisation_id = 3;
+  string rejected_by = 4;
+  string reason = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}

@@ -1,0 +1,46 @@
+Conversation:
+  type: object
+  properties:
+    conversation_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:conversation_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id;not null"'
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_id;not null"'
+    messages:
+      type: array
+      items:
+        $ref: '#/components/schemas/Message'
+        description: '@inject_tag: gorm:"column:messages;not null;serializer:proto_enum"'
+      description: '@inject_tag: gorm:"column:messages;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ConversationStatus'
+      x-database-default: ACTIVE
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    ended_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"'
+    context:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: "Conversation with AI agent (for customer support, chatbots)\n Maps\
+    \ to 'ai_conversations' table in ai_schema"
+  required:
+  - conversation_id
+  - user_id
+  - agent_id
+  - status
+  - started_at

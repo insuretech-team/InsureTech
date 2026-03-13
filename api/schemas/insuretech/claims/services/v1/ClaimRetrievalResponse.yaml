@@ -1,0 +1,10 @@
+ClaimsClaimRetrievalResponse:
+  type: object
+  properties:
+    claim:
+      $ref: '#/components/schemas/Claim'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for claim retrieval operation. Returns operation results
+    and status.

@@ -1,0 +1,112 @@
+syntax = "proto3";
+
+package insuretech.billing.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/billing/events/v1;billingeventsv1";
+option csharp_namespace = "Insuretech.Billing.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Invoice created — published when billing-service creates a new invoice
+message InvoiceCreatedEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string order_id = 4;           // B2C: source order
+  string purchase_order_id = 5;  // B2B: source purchase order
+  string customer_id = 6;
+  string organisation_id = 7;    // B2B context
+  string business_id = 8;        // B2B business
+  string tenant_id = 9;
+  insuretech.common.v1.Money amount = 10;
+  insuretech.common.v1.Money total_amount = 11; // amount + tax
+  string currency = 12;
+  string correlation_id = 13;
+  string causation_id = 14;
+  string portal = 15;
+  string actor_user_id = 16;
+  google.protobuf.Timestamp due_at = 17;
+  google.protobuf.Timestamp occurred_at = 18;
+}
+
+// Event: Invoice issued — published when invoice transitions DRAFT → ISSUED
+message InvoiceIssuedEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string order_id = 4;
+  string customer_id = 5;
+  string organisation_id = 6;
+  string tenant_id = 7;
+  insuretech.common.v1.Money total_amount = 8;
+  string issued_by = 9;
+  string correlation_id = 10;
+  string causation_id = 11;
+  google.protobuf.Timestamp issued_at = 12;
+  google.protobuf.Timestamp occurred_at = 13;
+}
+
+// Event: Invoice paid — published when payment is confirmed and invoice marked PAID
+message InvoicePaidEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string order_id = 4;
+  string payment_id = 5;
+  string customer_id = 6;
+  string organisation_id = 7;
+  string tenant_id = 8;
+  insuretech.common.v1.Money total_amount = 9;
+  string correlation_id = 10;
+  string causation_id = 11;
+  google.protobuf.Timestamp paid_at = 12;
+  google.protobuf.Timestamp occurred_at = 13;
+}
+
+// Event: Invoice cancelled — published when invoice is cancelled before payment
+message InvoiceCancelledEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string order_id = 4;
+  string customer_id = 5;
+  string organisation_id = 6;
+  string tenant_id = 7;
+  string reason = 8;
+  string cancelled_by = 9;
+  bool credit_note_issued = 10;
+  string credit_note_id = 11; // Populated when credit_note_issued=true
+  string correlation_id = 12;
+  string causation_id = 13;
+  google.protobuf.Timestamp cancelled_at = 14;
+  google.protobuf.Timestamp occurred_at = 15;
+}
+
+// Event: Invoice overdue — published by a scheduler when due date passes without payment
+message InvoiceOverdueEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string order_id = 4;
+  string customer_id = 5;
+  string organisation_id = 6;
+  string tenant_id = 7;
+  insuretech.common.v1.Money total_amount = 8;
+  string correlation_id = 9;
+  google.protobuf.Timestamp due_at = 10;
+  google.protobuf.Timestamp occurred_at = 11;
+}
+
+// Event: Invoice PDF generated — published when document generation completes
+message InvoicePDFGeneratedEvent {
+  string event_id = 1;
+  string invoice_id = 2;
+  string invoice_number = 3;
+  string invoice_pdf_url = 4; // S3/storage URL
+  string document_id = 5;     // Document-service document ID
+  string tenant_id = 6;
+  string correlation_id = 7;
+  string causation_id = 8;
+  google.protobuf.Timestamp occurred_at = 9;
+}

@@ -1,0 +1,18 @@
+EmployeesListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    department_id:
+      type: string
+    business_id:
+      type: string
+      description: business_id injected server-side from session; do NOT set from
+        client.
+    status:
+      $ref: '#/components/schemas/EmployeeStatus'
+  description: Request payload for listing employees listing items. Supports filtering,
+    sorting, and pagination.

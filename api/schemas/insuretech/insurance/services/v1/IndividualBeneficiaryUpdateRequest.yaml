@@ -1,0 +1,7 @@
+IndividualBeneficiaryUpdateRequest:
+  type: object
+  properties:
+    individual:
+      $ref: '#/components/schemas/IndividualBeneficiary'
+  description: Request payload for updating an existing individual beneficiary update.
+    Contains fields to be modified.

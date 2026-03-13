@@ -1,0 +1,7 @@
+GracePeriodDeletionRequest:
+  type: object
+  properties:
+    grace_period_id:
+      type: string
+  description: Request payload for grace period deletion operation. Contains parameters
+    required to execute the operation.

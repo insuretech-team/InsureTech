@@ -1,0 +1,24 @@
+PolicyCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    policy_id:
+      type: string
+    policy_number:
+      type: string
+    customer_id:
+      type: string
+    product_id:
+      type: string
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    sum_insured:
+      $ref: '#/components/schemas/Money'
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Policy created'

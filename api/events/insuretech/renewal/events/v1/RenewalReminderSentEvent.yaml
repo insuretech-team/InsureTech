@@ -1,0 +1,20 @@
+RenewalReminderSentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    reminder_id:
+      type: string
+    policy_id:
+      type: string
+    days_before_renewal:
+      type: integer
+      format: int32
+    channel:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Renewal reminder sent'

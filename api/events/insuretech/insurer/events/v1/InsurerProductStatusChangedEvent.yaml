@@ -1,0 +1,17 @@
+InsurerProductStatusChangedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    insurer_product_id:
+      type: string
+    old_status:
+      type: string
+    new_status:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Insurer product status changed'

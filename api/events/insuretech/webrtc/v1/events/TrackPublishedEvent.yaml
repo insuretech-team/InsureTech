@@ -1,0 +1,14 @@
+TrackPublishedEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+    peer_id:
+      type: string
+    track:
+      $ref: '#/components/schemas/Track'
+    published_at:
+      type: string
+      format: date-time
+  description: Event emitted when track undergoes published. Published to event stream
+    for downstream processing and audit trail.

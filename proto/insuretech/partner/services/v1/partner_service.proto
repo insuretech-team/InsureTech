@@ -1,0 +1,231 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.partner.services.v1;
+
+import "insuretech/partner/entity/v1/partner.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/partner/services/v1;partnerservicev1";
+option csharp_namespace = "LabAid.InsureTech.Partner.Services.V1";
+
+// PartnerService manages partner organizations and their relationships
+service PartnerService {
+  // Partner Management
+  rpc CreatePartner(CreatePartnerRequest) returns (CreatePartnerResponse) {
+    option (google.api.http) = {
+      post: "/v1/partners"
+      body: "*"
+    };
+  }
+  rpc GetPartner(GetPartnerRequest) returns (GetPartnerResponse) {
+    option (google.api.http) = {
+      get: "/v1/partners/{partner_id}"
+    };
+  }
+  rpc UpdatePartner(UpdatePartnerRequest) returns (UpdatePartnerResponse) {
+    option (google.api.http) = {
+      patch: "/v1/partners/{partner_id}"
+      body: "*"
+    };
+  }
+  rpc ListPartners(ListPartnersRequest) returns (ListPartnersResponse) {
+    option (google.api.http) = {
+      get: "/v1/partners"
+    };
+  }
+  rpc DeletePartner(DeletePartnerRequest) returns (DeletePartnerResponse) {
+    option (google.api.http) = {
+      delete: "/v1/partners/{partner_id}"
+    };
+  }
+  
+  // Partner Verification & Onboarding
+  rpc VerifyPartner(VerifyPartnerRequest) returns (VerifyPartnerResponse) {
+    option (google.api.http) = {
+      post: "/v1/partners/{partner_id}:verify"
+      body: "*"
+    };
+  }
+  rpc UpdatePartnerStatus(UpdatePartnerStatusRequest) returns (UpdatePartnerStatusResponse) {
+    option (google.api.http) = {
+      post: "/v1/partners/{partner_id}:updateStatus"
+      body: "*"
+    };
+  }
+  
+  // Partner Commission & Financials
+  rpc GetPartnerCommission(GetPartnerCommissionRequest) returns (GetPartnerCommissionResponse) {
+    option (google.api.http) = {
+      get: "/v1/partners/{partner_id}/commission"
+    };
+  }
+  rpc UpdateCommissionStructure(UpdateCommissionStructureRequest) returns (UpdateCommissionStructureResponse) {
+    option (google.api.http) = {
+      put: "/v1/partners/{partner_id}/commission"
+      body: "*"
+    };
+  }
+  
+  // Partner Integration
+  rpc GetPartnerAPICredentials(GetPartnerAPICredentialsRequest) returns (GetPartnerAPICredentialsResponse) {
+    option (google.api.http) = {
+      get: "/v1/partners/{partner_id}/credentials"
+    };
+  }
+  rpc RotatePartnerAPIKey(RotatePartnerAPIKeyRequest) returns (RotatePartnerAPIKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/partners/{partner_id}/credentials:rotate"
+      body: "*"
+    };
+  }
+}
+
+// Request/Response Messages
+message CreatePartnerRequest {
+  insuretech.partner.entity.v1.Partner partner = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CreatePartnerResponse {
+  string partner_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.partner.entity.v1.Partner partner = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPartnerRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPartnerResponse {
+  insuretech.partner.entity.v1.Partner partner = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdatePartnerRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+  insuretech.partner.entity.v1.Partner partner = 2 [(google.api.field_behavior) = REQUIRED];
+  repeated string update_mask = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message UpdatePartnerResponse {
+  insuretech.partner.entity.v1.Partner partner = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListPartnersRequest {
+  int32 page_size = 1 [(google.api.field_behavior) = OPTIONAL];
+  string page_token = 2 [(google.api.field_behavior) = OPTIONAL];
+  string filter = 3 [(google.api.field_behavior) = OPTIONAL];
+  string order_by = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListPartnersResponse {
+  repeated insuretech.partner.entity.v1.Partner partners = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string next_page_token = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message DeletePartnerRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message DeletePartnerResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message VerifyPartnerRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string verification_type = 2 [(google.api.field_behavior) = REQUIRED];
+  map<string, string> verification_data = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message VerifyPartnerResponse {
+  bool verified = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string verification_status = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp verified_at = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string verified_by = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdatePartnerStatusRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string status = 2 [(google.api.field_behavior) = REQUIRED];
+  string reason = 3 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdatePartnerStatusResponse {
+  insuretech.partner.entity.v1.Partner partner = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPartnerCommissionRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+  google.protobuf.Timestamp start_date = 2 [(google.api.field_behavior) = OPTIONAL];
+  google.protobuf.Timestamp end_date = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message GetPartnerCommissionResponse {
+  string partner_id = 1;
+  insuretech.common.v1.Money total_commission = 2;
+  string currency = 3;
+  repeated CommissionDetail details = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+message CommissionDetail {
+  string policy_id = 1;
+  insuretech.common.v1.Money commission_amount = 2;
+  string commission_type = 3;
+  google.protobuf.Timestamp earned_at = 4;
+}
+
+message UpdateCommissionStructureRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+  map<string, double> commission_rates = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateCommissionStructureResponse {
+  bool success = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetPartnerAPICredentialsRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetPartnerAPICredentialsResponse {
+  string api_key = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string api_secret = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp expires_at = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RotatePartnerAPIKeyRequest {
+  string partner_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message RotatePartnerAPIKeyResponse {
+  string new_api_key = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string new_api_secret = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  google.protobuf.Timestamp expires_at = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

@@ -1,0 +1,7 @@
+EndorsementDeletionRequest:
+  type: object
+  properties:
+    endorsement_id:
+      type: string
+  description: Request payload for endorsement deletion operation. Contains parameters
+    required to execute the operation.

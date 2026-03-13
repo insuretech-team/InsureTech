@@ -1,0 +1,21 @@
+CommissionsListingRequest:
+  type: object
+  properties:
+    recipient_type:
+      type: string
+    recipient_id:
+      type: string
+    status:
+      type: string
+    start_date:
+      type: string
+    end_date:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing commissions listing items. Supports filtering,
+    sorting, and pagination.

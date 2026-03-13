@@ -1,0 +1,17 @@
+TicketResolvedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    ticket_id:
+      type: string
+    ticket_number:
+      type: string
+    resolved_by:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Ticket resolved'

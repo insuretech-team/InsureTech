@@ -1,0 +1,14 @@
+SDPOffer:
+  type: object
+  properties:
+    from_peer_id:
+      type: string
+      description: ULID format
+    to_peer_id:
+      type: string
+      description: ULID format
+    sdp:
+      type: string
+    type:
+      $ref: '#/components/schemas/SDPType'
+  description: Domain entity representing sdp offer. Core business object in the system.

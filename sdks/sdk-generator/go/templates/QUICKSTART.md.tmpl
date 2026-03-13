@@ -1,0 +1,349 @@
+# InsureTech Go SDK - Quick Start Guide
+
+## Installation
+
+```bash
+go get github.com/insuretech/go-sdk
+```
+
+## Basic Setup
+
+```go
+package main
+
+import (
+    "context"
+    "fmt"
+    "log"
+    
+    "github.com/insuretech/go-sdk/pkg/client"
+    "github.com/insuretech/go-sdk/pkg/models"
+)
+
+func main() {
+    // Initialize the client with your API key
+    c := client.NewClient(
+        client.WithAPIKey("your-api-key-here"),
+        client.WithBaseURL("https://api.insuretech.com"),
+    )
+    
+    ctx := context.Background()
+    
+    // Example: Create a policy
+    policy, err := c.Policies.Create(ctx, &models.PolicyCreationRequest{
+        ProductID:  "prod_123",
+        CustomerID: "cust_456",
+        Premium:    1200.00,
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    fmt.Printf("Created policy: %s\n", policy.PolicyID)
+}
+```
+
+## Configuration Options
+
+### API Key Authentication
+```go
+c := client.NewClient(
+    client.WithAPIKey("your-api-key"),
+)
+```
+
+### OAuth2 Bearer Token
+```go
+c := client.NewClient(
+    client.WithOAuth2("your-oauth-token"),
+)
+```
+
+### Custom Base URL
+```go
+c := client.NewClient(
+    client.WithBaseURL("https://sandbox.insuretech.com"),
+)
+```
+
+### Custom Timeout
+```go
+c := client.NewClient(
+    client.WithTimeout(60 * time.Second),
+)
+```
+
+### Retry Configuration
+```go
+c := client.NewClient(
+    client.WithRetry(3, 1*time.Second), // 3 retries, 1 second delay
+)
+```
+
+## Common Operations
+
+### Policies
+
+#### Create a Policy
+```go
+policy, err := c.Policies.Create(ctx, &models.PolicyCreationRequest{
+    ProductID:     "prod_123",
+    CustomerID:    "cust_456",
+    Premium:       1200.00,
+    StartDate:     time.Now(),
+    EndDate:       time.Now().AddDate(1, 0, 0),
+    CoverageType:  "comprehensive",
+})
+```
+
+#### Get a Policy
+```go
+policy, err := c.Policies.Get(ctx, "policy_789")
+```
+
+#### List Policies
+```go
+policies, err := c.Policies.List(ctx, &models.PoliciesListingRequest{
+    Page:     1,
+    PageSize: 20,
+    Status:   "active",
+})
+```
+
+#### Update a Policy
+```go
+policy, err := c.Policies.Update(ctx, "policy_789", &models.PolicyUpdateRequest{
+    Status: "suspended",
+})
+```
+
+### Claims
+
+#### Submit a Claim
+```go
+claim, err := c.Claims.Create(ctx, &models.ClaimSubmissionRequest{
+    PolicyID:    "policy_789",
+    ClaimType:   "accident",
+    Amount:      5000.00,
+    Description: "Vehicle accident on highway",
+    IncidentDate: time.Now().AddDate(0, 0, -1),
+})
+```
+
+#### Get Claim Status
+```go
+claim, err := c.Claims.Get(ctx, "claim_123")
+```
+
+#### List Claims
+```go
+claims, err := c.Claims.List(ctx, &models.UserClaimsListingRequest{
+    PolicyID: "policy_789",
+    Status:   "pending",
+    Page:     1,
+    PageSize: 20,
+})
+```
+
+### Payments
+
+#### Initiate a Payment
+```go
+payment, err := c.Payments.Create(ctx, &models.PaymentInitiatePaymentRequest{
+    PolicyID: "policy_789",
+    Amount:   1200.00,
+    Method:   "card",
+})
+```
+
+#### Verify Payment
+```go
+result, err := c.Payments.Verify(ctx, &models.PaymentVerificationRequest{
+    PaymentID: "pay_456",
+})
+```
+
+### Quotes
+
+#### Request a Quote
+```go
+quote, err := c.Quotes.Create(ctx, &models.RequestQuoteRequest{
+    ProductID:     "prod_123",
+    CoverageType:  "comprehensive",
+    CustomerAge:   30,
+    VehicleValue:  25000.00,
+})
+```
+
+#### Convert Quote to Policy
+```go
+policy, err := c.Quotes.ConvertToPolicy(ctx, "quote_123", &models.ConvertQuoteToPolicyRequest{
+    CustomerID: "cust_456",
+    StartDate:  time.Now(),
+})
+```
+
+### KYC Verification
+
+#### Start KYC Verification
+```go
+verification, err := c.KycVerifications.Start(ctx, &models.KycVerificationStartRequest{
+    CustomerID: "cust_456",
+    DocumentType: "national_id",
+})
+```
+
+#### Upload KYC Document
+```go
+result, err := c.KycVerifications.UploadDocument(ctx, &models.KycDocumentUploadRequest{
+    VerificationID: "kyc_123",
+    DocumentType:   "national_id",
+    DocumentData:   base64EncodedData,
+})
+```
+
+## Error Handling
+
+```go
+policy, err := c.Policies.Get(ctx, "policy_123")
+if err != nil {
+    // Check for specific error types
+    if apiErr, ok := err.(*errors.APIError); ok {
+        switch {
+        case apiErr.IsNotFound():
+            fmt.Println("Policy not found")
+        case apiErr.IsUnauthorized():
+            fmt.Println("Authentication failed")
+        case apiErr.IsRateLimited():
+            fmt.Println("Rate limit exceeded")
+        case apiErr.IsServerError():
+            fmt.Println("Server error occurred")
+        default:
+            fmt.Printf("API error: %s\n", apiErr.Message)
+        }
+    } else {
+        fmt.Printf("Unexpected error: %v\n", err)
+    }
+    return
+}
+```
+
+## Pagination
+
+```go
+// First page
+response, err := c.Policies.List(ctx, &models.PoliciesListingRequest{
+    Page:     1,
+    PageSize: 20,
+})
+
+// Iterate through pages
+for page := 1; page <= response.TotalPages; page++ {
+    response, err := c.Policies.List(ctx, &models.PoliciesListingRequest{
+        Page:     page,
+        PageSize: 20,
+    })
+    if err != nil {
+        log.Fatal(err)
+    }
+    
+    for _, policy := range response.Policies {
+        fmt.Printf("Policy: %s\n", policy.PolicyID)
+    }
+}
+```
+
+## Context and Cancellation
+
+```go
+// With timeout
+ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+defer cancel()
+
+policy, err := c.Policies.Get(ctx, "policy_123")
+
+// With cancellation
+ctx, cancel := context.WithCancel(context.Background())
+go func() {
+    // Cancel after some event
+    <-someChan
+    cancel()
+}()
+
+policy, err := c.Policies.Get(ctx, "policy_123")
+```
+
+## Advanced Usage
+
+### Custom HTTP Client
+
+```go
+import "net/http"
+
+httpClient := &http.Client{
+    Timeout: 30 * time.Second,
+    Transport: &http.Transport{
+        MaxIdleConns:        100,
+        MaxIdleConnsPerHost: 10,
+        IdleConnTimeout:     90 * time.Second,
+    },
+}
+
+c := client.NewClient(
+    client.WithHTTPClient(httpClient),
+)
+```
+
+### Logging and Debugging
+
+```go
+// Enable request/response logging (implement custom transport)
+type loggingTransport struct {
+    transport http.RoundTripper
+}
+
+func (t *loggingTransport) RoundTrip(req *http.Request) (*http.Response, error) {
+    log.Printf("Request: %s %s", req.Method, req.URL)
+    resp, err := t.transport.RoundTrip(req)
+    if err == nil {
+        log.Printf("Response: %d", resp.StatusCode)
+    }
+    return resp, err
+}
+
+httpClient := &http.Client{
+    Transport: &loggingTransport{
+        transport: http.DefaultTransport,
+    },
+}
+
+c := client.NewClient(
+    client.WithHTTPClient(httpClient),
+)
+```
+
+## Best Practices
+
+1. **Reuse Client Instances**: Create one client instance and reuse it across your application
+2. **Use Context**: Always pass context for cancellation and timeout control
+3. **Handle Errors**: Check for specific error types and handle them appropriately
+4. **Rate Limiting**: Implement exponential backoff when rate limited
+5. **Pagination**: Process large result sets page by page to avoid memory issues
+6. **Secure API Keys**: Never hardcode API keys, use environment variables
+
+```go
+apiKey := os.Getenv("INSURETECH_API_KEY")
+c := client.NewClient(client.WithAPIKey(apiKey))
+```
+
+## Next Steps
+
+- Check the [API Reference](./API_REFERENCE.md) for complete method documentation
+- See [Examples](../examples/) for more code samples
+- Read the [Integration Guide](./INTEGRATION_GUIDE.md) for production deployment
+
+## Support
+
+- Documentation: https://docs.insuretech.com
+- API Status: https://status.insuretech.com
+- Support Email: support@insuretech.com

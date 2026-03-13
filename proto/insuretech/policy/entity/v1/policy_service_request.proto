@@ -1,0 +1,91 @@
+syntax = "proto3";
+
+package insuretech.policy.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1;policyv1";
+option csharp_namespace = "Insuretech.Policy.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+message PolicyServiceRequest {
+  option (insuretech.common.v1.table) = {
+    table_name : "policy_service_requests"
+    schema_name : "insurance_schema"
+    migration_order : 98
+    is_table : true
+    comment : "Self-service requests from customers"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string request_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "request_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:request_id;not null"
+
+  string policy_id = 2
+      [ (insuretech.common.v1.column) =
+            {column_name : "policy_id" sql_type : "UUID" not_null : true} ];
+  // @inject_tag: gorm:"column:policy_id;not null"
+
+  string customer_id = 3
+      [ (insuretech.common.v1.column) =
+            {column_name : "customer_id" sql_type : "UUID" not_null : true} ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  ServiceRequestType request_type = 4 [ (insuretech.common.v1.column) = {
+    column_name : "request_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:request_type;not null;serializer:proto_enum"
+
+  string request_data = 5
+      [ (insuretech.common.v1.column) =
+            {column_name : "request_data" sql_type : "JSONB" is_json : true} ];
+  // @inject_tag: gorm:"column:request_data"
+
+  ServiceRequestStatus status = 6 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING'"
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string processed_by = 7 [ (insuretech.common.v1.column) = {
+    column_name : "processed_by"
+    sql_type : "UUID"
+  } ];
+  // @inject_tag: gorm:"column:processed_by"
+
+  google.protobuf.Timestamp created_at = 8;
+  google.protobuf.Timestamp processed_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "processed_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+  } ];
+  // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+}
+
+enum ServiceRequestType {
+  SERVICE_REQUEST_TYPE_UNSPECIFIED = 0;
+  SERVICE_REQUEST_TYPE_DOWNLOAD_POLICY = 1;
+  SERVICE_REQUEST_TYPE_UPDATE_PROFILE = 2;
+  SERVICE_REQUEST_TYPE_CHANGE_NOMINEE = 3;
+  SERVICE_REQUEST_TYPE_PREMIUM_TOPUP = 4;
+  SERVICE_REQUEST_TYPE_ENDORSEMENT = 5;
+}
+
+enum ServiceRequestStatus {
+  SERVICE_REQUEST_STATUS_UNSPECIFIED = 0;
+  SERVICE_REQUEST_STATUS_PENDING = 1;
+  SERVICE_REQUEST_STATUS_PROCESSING = 2;
+  SERVICE_REQUEST_STATUS_COMPLETED = 3;
+  SERVICE_REQUEST_STATUS_REJECTED = 4;
+}

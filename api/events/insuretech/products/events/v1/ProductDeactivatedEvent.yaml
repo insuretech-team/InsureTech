@@ -1,0 +1,17 @@
+ProductDeactivatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    deactivated_by:
+      type: string
+  description: 'Event: Product deactivated (temporarily disabled)'

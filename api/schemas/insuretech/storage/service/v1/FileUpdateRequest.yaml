@@ -1,0 +1,26 @@
+FileUpdateRequest:
+  type: object
+  properties:
+    tenant_id:
+      type: string
+    file_id:
+      type: string
+    filename:
+      type: string
+    content_type:
+      type: string
+    file_type:
+      $ref: '#/components/schemas/FileType'
+    reference_id:
+      type: string
+    reference_type:
+      type: string
+    is_public:
+      type: boolean
+    expires_at:
+      type: string
+      format: date-time
+    clear_expires_at:
+      type: boolean
+  description: Request payload for updating an existing file update. Contains fields
+    to be modified.

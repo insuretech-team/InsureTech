@@ -1,0 +1,21 @@
+QuoteRequestedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    beneficiary_id:
+      type: string
+    insurer_product_id:
+      type: string
+    sum_assured:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Quote requested'

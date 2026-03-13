@@ -1,0 +1,9 @@
+InsuranceInsurerProductsListingResponse:
+  type: object
+  properties:
+    products:
+      type: array
+      items:
+        $ref: '#/components/schemas/InsurerProduct'
+  description: Response payload for insurer products listing operation. Returns operation
+    results and status.

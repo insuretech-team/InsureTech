@@ -1,0 +1,13 @@
+InitiateKYCResponse:
+  type: object
+  properties:
+    kyc_id:
+      type: string
+    status:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for initiate kyc operation. Returns operation results
+    and status.

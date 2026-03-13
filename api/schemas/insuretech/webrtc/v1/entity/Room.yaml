@@ -1,0 +1,54 @@
+Room:
+  type: object
+  properties:
+    room_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:room_id;not null"'
+      x-primary-key: true
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    config:
+      allOf:
+      - $ref: '#/components/schemas/RoomConfig'
+      x-database-default: '{}''::jsonb'
+    participant_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:participant_count;not null"'
+      default: 0
+    max_participants:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_participants;not null"'
+      default: 10
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    state:
+      allOf:
+      - $ref: '#/components/schemas/RoomState'
+      x-database-default: ROOM_STATE_ACTIVE
+    closed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"'
+    creator_id:
+      type: string
+      description: '@inject_tag: gorm:"column:creator_id"'
+  description: WebRTC conference room
+  required:
+  - room_id
+  - name
+  - config
+  - participant_count
+  - max_participants
+  - created_at
+  - state

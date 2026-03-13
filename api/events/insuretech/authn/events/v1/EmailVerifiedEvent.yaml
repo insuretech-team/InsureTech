@@ -1,0 +1,13 @@
+EmailVerifiedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    email:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Email verified'

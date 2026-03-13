@@ -1,0 +1,35 @@
+RoomSession:
+  type: object
+  properties:
+    session_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:session_id;not null"'
+      x-primary-key: true
+    room_id:
+      type: string
+      description: '@inject_tag: gorm:"column:room_id;not null"'
+    started_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    ended_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"'
+    participant_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:participant_count;not null"'
+      default: 0
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Room session for analytics tracking
+  required:
+  - session_id
+  - room_id
+  - started_at
+  - participant_count

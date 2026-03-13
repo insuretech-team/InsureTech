@@ -1,0 +1,27 @@
+OrderFulfillmentCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    order_id:
+      type: string
+    policy_id:
+      type: string
+    invoice_id:
+      type: string
+    payment_id:
+      type: string
+    customer_id:
+      type: string
+    tenant_id:
+      type: string
+    organisation_id:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Order fully fulfilled \u2014 policy issued, receipt generated"

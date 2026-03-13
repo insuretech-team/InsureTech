@@ -1,0 +1,26 @@
+MetricAnomalyDetectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    metric_name:
+      type: string
+    current_value:
+      type: number
+      format: double
+    expected_value:
+      type: number
+      format: double
+    deviation_percentage:
+      type: number
+      format: double
+    anomaly_type:
+      type: string
+      description: SPIKE, DROP, TREND_CHANGE
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Anomaly detected in metrics'

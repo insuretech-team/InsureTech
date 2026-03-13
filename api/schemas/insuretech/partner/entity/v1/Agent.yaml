@@ -1,0 +1,63 @@
+Agent:
+  type: object
+  properties:
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:agent_id;not null"'
+    partner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:partner_id;not null"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id"'
+    full_name:
+      type: string
+      description: '@inject_tag: gorm:"column:full_name;not null"'
+    phone_number:
+      type: string
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Agent contact information
+    email:
+      type: string
+      x-pii: true
+      x-encrypted: true
+      x-log-masked: true
+      x-requires-consent: true
+      x-data-purpose: Agent contact information
+    status:
+      $ref: '#/components/schemas/PartnerAgentStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    commission_rate:
+      type: number
+      format: double
+      description: '@inject_tag: gorm:"column:commission_rate;not null"'
+    nid_number:
+      type: string
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Agent identity verification
+      x-retention-days: 2555
+    joined_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Agent working under a partner\n Maps to 'agents' table in partner_schema"

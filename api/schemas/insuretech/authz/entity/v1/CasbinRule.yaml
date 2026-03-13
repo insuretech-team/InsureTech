@@ -1,0 +1,39 @@
+CasbinRule:
+  type: object
+  properties:
+    id:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"primarykey;autoIncrement"'
+    ptype:
+      type: string
+      description: "ptype: \"p\" = policy line, \"g\" = role-inheritance line\r\n\
+        \ @inject_tag: gorm:\"size:10;uniqueIndex:unique_index\""
+    v0:
+      type: string
+      description: "v0: subject  (p-line) | member (g-line)\r\n @inject_tag: gorm:\"\
+        size:256;uniqueIndex:unique_index\""
+    v1:
+      type: string
+      description: "v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)\r\
+        \n @inject_tag: gorm:\"size:256;uniqueIndex:unique_index\""
+    v2:
+      type: string
+      description: "v2: object   (p-line: svc:resource) | role (g-line: role:<name>)\r\
+        \n @inject_tag: gorm:\"size:256;uniqueIndex:unique_index\""
+    v3:
+      type: string
+      description: "v3: action   (p-line: HTTP verb / domain action)\r\n @inject_tag:\
+        \ gorm:\"size:256;uniqueIndex:unique_index\""
+    v4:
+      type: string
+      description: "v4: effect   (p-line: allow | deny)\r\n @inject_tag: gorm:\"size:256;uniqueIndex:unique_index\""
+    v5:
+      type: string
+      description: "v5: reserved for future ABAC conditions / attribute matchers\r\
+        \n @inject_tag: gorm:\"size:256;uniqueIndex:unique_index\""
+  description: "---------------------------------------------------------------------------\r\
+    \n 1. CasbinRule \u2014 raw Casbin policy/grouping rows stored in PostgreSQL.\r\
+    \n    Casbin gorm-adapter reads/writes this table directly.\r\n    p-type rows:\
+    \ ptype=\"p\"  \u2192 policy line: sub, dom, obj, act, eft\r\n    g-type rows:\
+    \ ptype=\"g\"  \u2192 role assignment: sub, dom, role\r\n ---------------------------------------------------------------------------"

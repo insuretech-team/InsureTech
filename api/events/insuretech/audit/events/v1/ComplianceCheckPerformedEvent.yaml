@@ -1,0 +1,23 @@
+ComplianceCheckPerformedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    compliance_log_id:
+      type: string
+    type:
+      type: string
+    regulation:
+      type: string
+    status:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Compliance check performed'

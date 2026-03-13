@@ -1,0 +1,121 @@
+syntax = "proto3";
+
+package insuretech.services.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/services/entity/v1;servicesv1";
+option csharp_namespace = "Insuretech.Services.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+message ServiceProvider {
+  option (insuretech.common.v1.table) = {
+    table_name : "service_providers"
+    schema_name : "insurance_schema"
+    migration_order : 99
+    is_table : true
+    comment : "Directory of hospitals, garages, etc."
+    soft_delete : false
+    audit_fields : true
+    enable_rls : false
+  };
+
+  string provider_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "provider_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:provider_id;not null"
+
+  string provider_name = 2 [ (insuretech.common.v1.column) = {
+    column_name : "provider_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:provider_name;not null"
+
+  ServiceProviderType provider_type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "provider_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:provider_type;not null;serializer:proto_enum"
+
+  string address = 4 [
+    (insuretech.common.v1.column) = {column_name : "address" sql_type : "TEXT"}
+  ];
+  // @inject_tag: gorm:"column:address"
+
+  string city = 5 [ (insuretech.common.v1.column) = {
+    column_name : "city"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:city"
+
+  string district = 6 [ (insuretech.common.v1.column) = {
+    column_name : "district"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:district"
+
+  string phone_number = 7 [ (insuretech.common.v1.column) = {
+    column_name : "phone_number"
+    sql_type : "VARCHAR(20)"
+  } ];
+  // @inject_tag: gorm:"column:phone_number"
+
+  string email = 8 [ (insuretech.common.v1.column) = {
+    column_name : "email"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:email"
+
+  double latitude = 9 [ (insuretech.common.v1.column) = {
+    column_name : "latitude"
+    sql_type : "DOUBLE PRECISION"
+  } ];
+  // @inject_tag: gorm:"column:latitude"
+
+  double longitude = 10 [ (insuretech.common.v1.column) = {
+    column_name : "longitude"
+    sql_type : "DOUBLE PRECISION"
+  } ];
+  // @inject_tag: gorm:"column:longitude"
+
+  repeated string services_offered = 11 [ (insuretech.common.v1.column) = {
+    column_name : "services_offered"
+    sql_type : "TEXT[]"
+  // @inject_tag: gorm:"column:services_offered"
+  } ];
+
+  bool is_network_provider = 12 [ (insuretech.common.v1.column) = {
+    column_name : "is_network_provider"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:is_network_provider;not null"
+
+  repeated string supported_product_categories = 13
+      [ (insuretech.common.v1.column) = {
+        column_name : "supported_product_categories"
+        sql_type : "TEXT[]"
+  // @inject_tag: gorm:"column:supported_product_categories"
+      } ];
+
+  google.protobuf.Timestamp created_at = 14;
+  google.protobuf.Timestamp updated_at = 15;
+}
+
+enum ServiceProviderType {
+  SERVICE_PROVIDER_TYPE_UNSPECIFIED = 0;
+  SERVICE_PROVIDER_TYPE_HOSPITAL = 1;
+  SERVICE_PROVIDER_TYPE_CLINIC = 2;
+  SERVICE_PROVIDER_TYPE_DIAGNOSTIC_CENTER = 3;
+  SERVICE_PROVIDER_TYPE_GARAGE = 4;
+  SERVICE_PROVIDER_TYPE_WORKSHOP = 5;
+  SERVICE_PROVIDER_TYPE_TELEMEDICINE = 6;
+  SERVICE_PROVIDER_TYPE_ROADSIDE_ASSISTANCE = 7;
+}

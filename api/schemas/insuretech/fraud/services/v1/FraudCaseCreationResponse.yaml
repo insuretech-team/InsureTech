@@ -1,0 +1,14 @@
+FraudFraudCaseCreationResponse:
+  type: object
+  properties:
+    fraud_case_id:
+      type: string
+    case_number:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for fraud case creation operation. Returns operation
+    results and status.

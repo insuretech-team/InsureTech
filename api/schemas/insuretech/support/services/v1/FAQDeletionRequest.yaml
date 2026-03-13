@@ -1,0 +1,7 @@
+FAQDeletionRequest:
+  type: object
+  properties:
+    faq_id:
+      type: string
+  description: Request payload for faq deletion operation. Contains parameters required
+    to execute the operation.

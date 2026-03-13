@@ -1,0 +1,15 @@
+ClaimsListingRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    customer_id:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing claims listing items. Supports filtering,
+    sorting, and pagination.

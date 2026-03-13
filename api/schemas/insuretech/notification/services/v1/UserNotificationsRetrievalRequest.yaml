@@ -1,0 +1,15 @@
+UserNotificationsRetrievalRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    unread_only:
+      type: boolean
+    limit:
+      type: integer
+      format: int32
+    offset:
+      type: integer
+      format: int32
+  description: Request payload for retrieving user notifications retrieval information.
+    May include filters and pagination parameters.

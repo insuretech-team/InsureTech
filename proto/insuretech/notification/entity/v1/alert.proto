@@ -1,0 +1,98 @@
+syntax = "proto3";
+
+package insuretech.notification.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/notification/entity/v1;notificationv1";
+option csharp_namespace = "Insuretech.Notification.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// Alert represents system-generated alerts and reminders
+message Alert {
+  option (insuretech.common.v1.table) = {
+    table_name : "alerts"
+    schema_name : "notification_schema"
+    migration_order : 97
+    is_table : true
+    comment : "System alerts and reminders for B2B portal"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string alert_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "alert_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:alert_id;not null"
+
+  string business_id = 2
+      [ (insuretech.common.v1.column) =
+            {column_name : "business_id" sql_type : "UUID" not_null : true} ];
+  // @inject_tag: gorm:"column:business_id;not null"
+
+  AlertType alert_type = 3 [ (insuretech.common.v1.column) = {
+    column_name : "alert_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:alert_type;not null;serializer:proto_enum"
+
+  string title = 4
+      [ (insuretech.common.v1.column) =
+            {column_name : "title" sql_type : "VARCHAR(255)" not_null : true} ];
+  // @inject_tag: gorm:"column:title;not null"
+
+  string message = 5
+      [ (insuretech.common.v1.column) =
+            {column_name : "message" sql_type : "TEXT" not_null : true} ];
+  // @inject_tag: gorm:"column:message;not null"
+
+  AlertSeverity severity = 6 [ (insuretech.common.v1.column) = {
+    column_name : "severity"
+    sql_type : "VARCHAR(20)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:severity;not null;serializer:proto_enum"
+
+  int32 count = 7 [ (insuretech.common.v1.column) = {
+    column_name : "count"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Number of items triggering this alert"
+  } ];
+  // @inject_tag: gorm:"column:count;not null"
+
+  bool is_read = 8 [ (insuretech.common.v1.column) = {
+    column_name : "is_read"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+  } ];
+  // @inject_tag: gorm:"column:is_read;not null"
+
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp read_at = 10;
+}
+
+enum AlertType {
+  ALERT_TYPE_UNSPECIFIED = 0;
+  ALERT_TYPE_POLICY_EXPIRING = 1;
+  ALERT_TYPE_EMPLOYEES_WITHOUT_COVERAGE = 2;
+  ALERT_TYPE_PREMIUM_DUE = 3;
+  ALERT_TYPE_QUOTATION_PENDING = 4;
+  ALERT_TYPE_APPROVAL_REQUIRED = 5;
+}
+
+enum AlertSeverity {
+  ALERT_SEVERITY_UNSPECIFIED = 0;
+  ALERT_SEVERITY_INFO = 1;
+  ALERT_SEVERITY_WARNING = 2;
+  ALERT_SEVERITY_ERROR = 3;
+  ALERT_SEVERITY_CRITICAL = 4;
+}

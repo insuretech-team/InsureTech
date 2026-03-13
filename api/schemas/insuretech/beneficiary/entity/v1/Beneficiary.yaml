@@ -1,0 +1,57 @@
+Beneficiary:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id;not null"'
+      x-unique: true
+    type:
+      $ref: '#/components/schemas/BeneficiaryType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    code:
+      type: string
+      description: '@inject_tag: gorm:"column:code;not null"'
+      x-unique: true
+    status:
+      allOf:
+      - $ref: '#/components/schemas/BeneficiaryStatus'
+      x-database-default: PENDING_KYC
+    kyc_status:
+      allOf:
+      - $ref: '#/components/schemas/KYCStatus'
+      x-database-default: NOT_STARTED
+    kyc_completed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:kyc_completed_at;serializer:proto_timestamp"'
+    risk_score:
+      type: string
+      description: '@inject_tag: gorm:"column:risk_score"'
+    referral_code:
+      type: string
+      description: '@inject_tag: gorm:"column:referral_code"'
+      x-unique: true
+    referred_by:
+      type: string
+      description: '@inject_tag: gorm:"column:referred_by"'
+    partner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:partner_id"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Base Beneficiary entity (primary customer record)
+  required:
+  - beneficiary_id
+  - user_id
+  - type
+  - code
+  - status
+  - kyc_status
+  - audit_info

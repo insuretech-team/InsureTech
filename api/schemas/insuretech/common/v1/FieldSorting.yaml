@@ -1,0 +1,11 @@
+FieldSorting:
+  type: object
+  properties:
+    field:
+      type: string
+      description: e.g., "created_at"
+    direction:
+      $ref: '#/components/schemas/SortDirection'
+      description: ASC/DESC
+  description: Domain entity representing field sorting. Core business object in the
+    system.

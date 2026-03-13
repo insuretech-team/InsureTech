@@ -1,0 +1,13 @@
+ProfilePhotoUploadURLRetrievalRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    content_type:
+      type: string
+      description: image/jpeg or image/png
+    file_size_bytes:
+      type: string
+      format: int64
+  description: Request payload for retrieving profile photo upload url retrieval information.
+    May include filters and pagination parameters.

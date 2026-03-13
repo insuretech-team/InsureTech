@@ -1,0 +1,9 @@
+TicketAssignmentRequest:
+  type: object
+  properties:
+    ticket_id:
+      type: string
+    assigned_to:
+      type: string
+  description: Request payload for ticket assignment operation. Contains parameters
+    required to execute the operation.

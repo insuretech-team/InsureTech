@@ -1,0 +1,7 @@
+CloseRoomResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for close room operation. Returns operation results
+    and status.

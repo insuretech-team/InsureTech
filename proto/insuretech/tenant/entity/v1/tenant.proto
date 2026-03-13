@@ -1,0 +1,127 @@
+syntax = "proto3";
+
+package insuretech.tenant.entity.v1;
+
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/tenant/entity/v1;tenantv1";
+
+// Tenant (FR-016)
+message Tenant {
+  option (insuretech.common.v1.table) = {
+    table_name: "tenants"
+    schema_name: "tenant_schema"
+    migration_order: 71
+    is_table: true
+    soft_delete: true
+    audit_fields: true
+    comment: "Multi-tenancy support for partners/organizations"
+  };
+  
+  string tenant_id = 1 [(insuretech.common.v1.column) = {
+    column_name: "tenant_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:tenant_id;not null"
+  
+  string code = 2 [(insuretech.common.v1.column) = {
+    column_name: "code"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    index: {
+      index_name: "idx_tenants_code_unique"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:code;not null"
+  
+  string name = 3 [(insuretech.common.v1.column) = {
+    column_name: "name"
+    sql_type: "VARCHAR(255)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:name;not null"
+  
+  TenantType type = 4 [(insuretech.common.v1.column) = {
+    column_name: "type"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+  
+  TenantStatus status = 5 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    default_value: "'ACTIVE'"
+    index: {
+      index_name: "idx_tenants_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+  
+  string parent_tenant_id = 6 [(insuretech.common.v1.column) = {
+    column_name: "parent_tenant_id"
+    sql_type: "UUID"
+    foreign_key: {
+      references_table: "tenants"
+      references_column: "tenant_id"
+      references_schema: "tenant_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+    }
+    comment: "For hierarchical tenants"
+  }];
+  // @inject_tag: gorm:"column:parent_tenant_id"
+  
+  string config = 7 [(insuretech.common.v1.column) = {
+    column_name: "config"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Tenant-specific configuration"
+  }];
+  // @inject_tag: gorm:"column:config"
+  
+  string branding = 8 [(insuretech.common.v1.column) = {
+    column_name: "branding"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Logo, colors, etc."
+  }];
+  // @inject_tag: gorm:"column:branding"
+  
+  insuretech.common.v1.AuditInfo audit_info = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum TenantType {
+  TENANT_TYPE_UNSPECIFIED = 0;
+  TENANT_TYPE_PLATFORM = 1;
+  TENANT_TYPE_PARTNER = 2;
+  TENANT_TYPE_INSURER = 3;
+  TENANT_TYPE_AGENT = 4;
+}
+
+enum TenantStatus {
+  TENANT_STATUS_UNSPECIFIED = 0;
+  TENANT_STATUS_ACTIVE = 1;
+  TENANT_STATUS_SUSPENDED = 2;
+  TENANT_STATUS_INACTIVE = 3;
+}
+

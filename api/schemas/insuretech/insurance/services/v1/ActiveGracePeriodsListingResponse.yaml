@@ -1,0 +1,9 @@
+ActiveGracePeriodsListingResponse:
+  type: object
+  properties:
+    grace_periods:
+      type: array
+      items:
+        $ref: '#/components/schemas/GracePeriod'
+  description: Response payload for active grace periods listing operation. Returns
+    operation results and status.

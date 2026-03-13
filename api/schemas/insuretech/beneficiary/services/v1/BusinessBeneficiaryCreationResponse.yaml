@@ -1,0 +1,14 @@
+BeneficiaryBusinessBeneficiaryCreationResponse:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    beneficiary_code:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for business beneficiary creation operation. Returns
+    operation results and status.

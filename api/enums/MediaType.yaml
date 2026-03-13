@@ -1,0 +1,9 @@
+MediaType:
+  type: string
+  enum:
+  - MEDIA_TYPE_UNSPECIFIED
+  - MEDIA_TYPE_IMAGE
+  - MEDIA_TYPE_DOCUMENT
+  - MEDIA_TYPE_VIDEO
+  description: 'Type categorization for media. Options: MEDIA_TYPE_UNSPECIFIED, MEDIA_TYPE_IMAGE,
+    MEDIA_TYPE_DOCUMENT, MEDIA_TYPE_VIDEO.'

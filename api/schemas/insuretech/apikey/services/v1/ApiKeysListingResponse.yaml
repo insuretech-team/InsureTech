@@ -1,0 +1,15 @@
+ApiKeysListingResponse:
+  type: object
+  properties:
+    api_keys:
+      type: array
+      items:
+        $ref: '#/components/schemas/ApiKey'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for api keys listing operation. Returns operation
+    results and status.

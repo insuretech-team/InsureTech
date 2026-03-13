@@ -1,0 +1,28 @@
+DataExportCompletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    export_id:
+      type: string
+    user_id:
+      type: string
+    export_url:
+      type: string
+      description: S3 URL
+    record_count:
+      type: string
+      format: int64
+    file_size_bytes:
+      type: string
+      format: int64
+    generation_time_seconds:
+      type: integer
+      format: int32
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Data export completed'

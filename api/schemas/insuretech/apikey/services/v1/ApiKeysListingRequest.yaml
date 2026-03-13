@@ -1,0 +1,17 @@
+ApiKeysListingRequest:
+  type: object
+  properties:
+    owner_type:
+      type: string
+    owner_id:
+      type: string
+    status:
+      type: string
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing api keys listing items. Supports filtering,
+    sorting, and pagination.

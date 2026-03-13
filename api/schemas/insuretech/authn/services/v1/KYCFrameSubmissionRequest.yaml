@@ -1,0 +1,15 @@
+KYCFrameSubmissionRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    session_id:
+      type: string
+    image_data:
+      type: string
+      format: byte
+    frame_sequence:
+      type: integer
+      format: int32
+  description: Request payload for kyc frame submission operation. Contains parameters
+    required to execute the operation.

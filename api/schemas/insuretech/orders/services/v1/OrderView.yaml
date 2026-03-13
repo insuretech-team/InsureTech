@@ -1,0 +1,15 @@
+OrderView:
+  type: object
+  properties:
+    order:
+      $ref: '#/components/schemas/Order'
+    product_name:
+      type: string
+    plan_name:
+      type: string
+    customer_name:
+      type: string
+    quotation_number:
+      type: string
+  description: Domain entity representing order view. Core business object in the
+    system.

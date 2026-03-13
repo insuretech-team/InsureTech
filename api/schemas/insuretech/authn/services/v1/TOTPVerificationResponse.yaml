@@ -1,0 +1,34 @@
+TOTPVerificationResponse:
+  type: object
+  properties:
+    verified:
+      type: boolean
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+    access_token:
+      type: string
+      description: "Session tokens \u2014 only populated when mfa_session_token was\
+        \ provided in request.\r\n After MFA verification the client receives full\
+        \ session tokens identical to LoginResponse."
+    refresh_token:
+      type: string
+    session_token:
+      type: string
+      description: server-side web session cookie
+    csrf_token:
+      type: string
+    session_id:
+      type: string
+    session_type:
+      type: string
+      description: JWT | SERVER_SIDE
+    access_token_expires_in:
+      type: integer
+      format: int32
+    refresh_token_expires_in:
+      type: integer
+      format: int32
+  description: Response payload for totp verification operation. Returns operation
+    results and status.

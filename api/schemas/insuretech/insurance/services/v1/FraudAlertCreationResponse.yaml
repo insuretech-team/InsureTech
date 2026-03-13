@@ -1,0 +1,7 @@
+FraudAlertCreationResponse:
+  type: object
+  properties:
+    alert:
+      $ref: '#/components/schemas/FraudAlert'
+  description: Response payload for fraud alert creation operation. Returns operation
+    results and status.

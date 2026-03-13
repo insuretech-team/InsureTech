@@ -1,0 +1,9 @@
+RemoveOrgMemberRequest:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    member_id:
+      type: string
+  description: Request payload for remove org member operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,19 @@
+VideoConfig:
+  type: object
+  properties:
+    allowed_qualities:
+      type: array
+      items:
+        $ref: '#/components/schemas/VideoQuality'
+    default_quality:
+      $ref: '#/components/schemas/VideoQuality'
+    enable_simulcast:
+      type: boolean
+    max_bitrate_kbps:
+      type: integer
+      format: int32
+    min_bitrate_kbps:
+      type: integer
+      format: int32
+  description: Domain entity representing video config. Core business object in the
+    system.

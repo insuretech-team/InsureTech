@@ -1,0 +1,19 @@
+EmailUserRegistrationResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    message:
+      type: string
+    verification_email_sent:
+      type: boolean
+    otp_id:
+      type: string
+      description: OTP ID for verification step
+    otp_expires_in_seconds:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for email user registration operation. Returns operation
+    results and status.

@@ -1,0 +1,75 @@
+KYCVerification:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:verification_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    type:
+      $ref: '#/components/schemas/VerificationType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    method:
+      $ref: '#/components/schemas/VerificationMethod'
+      description: '@inject_tag: gorm:"column:method;not null;serializer:proto_enum"'
+    provider:
+      type: string
+      description: '@inject_tag: gorm:"column:provider"'
+    provider_reference:
+      type: string
+      description: '@inject_tag: gorm:"column:provider_reference"'
+    documents:
+      type: string
+      description: '@inject_tag: gorm:"column:documents"'
+      x-sensitive: true
+      writeOnly: true
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-requires-consent: true
+      x-data-purpose: Identity verification and KYC compliance
+      x-retention-days: 2555
+    status:
+      allOf:
+      - $ref: '#/components/schemas/VerificationStatus'
+      x-database-default: PENDING
+    verification_result:
+      type: string
+      description: '@inject_tag: gorm:"column:verification_result"'
+      x-pii: true
+      x-encrypted: true
+      x-log-redacted: true
+      x-data-purpose: KYC verification audit trail
+    rejection_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:rejection_reason"'
+    verified_by:
+      type: string
+      description: '@inject_tag: gorm:"column:verified_by"'
+    verified_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"'
+    expires_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: KYC verification (FR-061, FR-169)
+  required:
+  - id
+  - type
+  - entity_type
+  - entity_id
+  - method
+  - status
+  - audit_info

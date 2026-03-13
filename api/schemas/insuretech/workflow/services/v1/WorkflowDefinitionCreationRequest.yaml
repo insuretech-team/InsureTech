@@ -1,0 +1,16 @@
+WorkflowDefinitionCreationRequest:
+  type: object
+  properties:
+    name:
+      type: string
+    description:
+      type: string
+    type:
+      type: string
+    entity_type:
+      type: string
+    steps:
+      type: object
+      description: 'CG-7: Typed structured workflow steps'
+  description: Request payload for creating a new workflow definition creation. Contains
+    all required fields and optional parameters for initialization.

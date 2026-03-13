@@ -1,0 +1,20 @@
+ApprovalInfo:
+  type: object
+  properties:
+    approval_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/ApprovalStatus'
+    approved_by:
+      type: string
+      description: user_id
+    approved_at:
+      type: string
+      format: date-time
+    rejection_reason:
+      type: string
+    approval_level:
+      type: integer
+      format: int32
+      description: 1, 2, 3 (as per approval matrix)
+  description: Approval workflow

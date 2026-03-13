@@ -1,0 +1,6 @@
+SessionRetrievalRequest:
+  type: object
+  properties:
+    session_id:
+      type: string
+  description: Get Session Request

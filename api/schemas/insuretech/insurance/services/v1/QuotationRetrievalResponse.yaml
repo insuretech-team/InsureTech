@@ -1,0 +1,7 @@
+QuotationRetrievalResponse:
+  type: object
+  properties:
+    quotation:
+      $ref: '#/components/schemas/Quotation'
+  description: Response payload for quotation retrieval operation. Returns operation
+    results and status.

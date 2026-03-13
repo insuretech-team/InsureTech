@@ -1,0 +1,30 @@
+AnomalyDetectedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    anomaly_type:
+      type: string
+      description: '"speed_violation", "harsh_braking", "geo_fence_breach"'
+    severity:
+      type: string
+      description: LOW, MEDIUM, HIGH, CRITICAL
+    anomaly_details:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    timestamp:
+      type: string
+      format: date-time
+    latitude:
+      type: number
+      format: double
+    longitude:
+      type: number
+      format: double
+  description: 'Event: Anomaly detected in telemetry'

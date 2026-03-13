@@ -1,0 +1,68 @@
+UnderwritingDecision:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:decision_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    quote_id:
+      type: string
+      description: '@inject_tag: gorm:"column:quote_id;not null"'
+    decision:
+      $ref: '#/components/schemas/DecisionType'
+      description: '@inject_tag: gorm:"column:decision;not null;serializer:proto_enum"'
+    method:
+      $ref: '#/components/schemas/DecisionMethod'
+      description: '@inject_tag: gorm:"column:method;not null;serializer:proto_enum"'
+    risk_score:
+      type: string
+      description: "Risk assessment\n @inject_tag: gorm:\"column:risk_score\""
+    risk_level:
+      $ref: '#/components/schemas/UnderwritingRiskLevel'
+      description: '@inject_tag: gorm:"column:risk_level;serializer:proto_enum"'
+    risk_factors:
+      type: string
+      description: '@inject_tag: gorm:"column:risk_factors"'
+    reason:
+      type: string
+      description: "Decision details\n @inject_tag: gorm:\"column:reason\""
+    conditions:
+      type: string
+      description: '@inject_tag: gorm:"column:conditions"'
+    premium_adjusted:
+      type: boolean
+      description: "Premium adjustment\n @inject_tag: gorm:\"column:premium_adjusted\""
+      default: false
+    adjusted_premium:
+      $ref: '#/components/schemas/Money'
+    adjustment_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:adjustment_reason"'
+    underwriter_id:
+      type: string
+      description: "Underwriter info\n @inject_tag: gorm:\"column:underwriter_id\""
+    underwriter_comments:
+      type: string
+      description: '@inject_tag: gorm:"column:underwriter_comments"'
+    decided_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:decided_at;not null;serializer:proto_timestamp"'
+      x-database-default: now()
+    valid_until:
+      type: string
+      format: date-time
+      description: "Approval validity\n @inject_tag: gorm:\"column:valid_until;serializer:proto_timestamp\""
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Underwriting decision for quote approval/rejection
+  required:
+  - id
+  - quote_id
+  - decision
+  - method
+  - decided_at
+  - audit_info

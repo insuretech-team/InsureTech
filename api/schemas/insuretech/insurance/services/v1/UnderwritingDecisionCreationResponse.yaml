@@ -1,0 +1,7 @@
+UnderwritingDecisionCreationResponse:
+  type: object
+  properties:
+    decision:
+      $ref: '#/components/schemas/UnderwritingDecision'
+  description: Response payload for underwriting decision creation operation. Returns
+    operation results and status.

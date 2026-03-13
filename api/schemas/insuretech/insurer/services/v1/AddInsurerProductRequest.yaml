@@ -1,0 +1,25 @@
+AddInsurerProductRequest:
+  type: object
+  properties:
+    insurer_id:
+      type: string
+    product_id:
+      type: string
+    code:
+      type: string
+    name:
+      type: string
+    min_sum_assured:
+      $ref: '#/components/schemas/Money'
+    max_sum_assured:
+      $ref: '#/components/schemas/Money'
+    min_entry_age:
+      type: integer
+      format: int32
+    max_entry_age:
+      type: integer
+      format: int32
+    effective_from:
+      type: string
+  description: Request payload for add insurer product operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,14 @@
+PartnerVerificationRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+    verification_type:
+      type: string
+    verification_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for partner verification operation. Contains parameters
+    required to execute the operation.

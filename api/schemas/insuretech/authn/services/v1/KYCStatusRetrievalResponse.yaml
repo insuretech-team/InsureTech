@@ -1,0 +1,19 @@
+KYCStatusRetrievalResponse:
+  type: object
+  properties:
+    kyc_id:
+      type: string
+    status:
+      type: string
+    rejection_reason:
+      type: string
+    submitted_at:
+      type: string
+      format: date-time
+    reviewed_at:
+      type: string
+      format: date-time
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for kyc status retrieval operation. Returns operation
+    results and status.

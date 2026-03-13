@@ -1,0 +1,48 @@
+ColumnOptions:
+  type: object
+  properties:
+    column_name:
+      type: string
+      description: Column name in database (if different from field name)
+    sql_type:
+      type: string
+      description: SQL data type override (e.g., "VARCHAR(255)", "TEXT", "DECIMAL(12,2)")
+    not_null:
+      type: boolean
+      description: NOT NULL constraint
+    unique:
+      type: boolean
+      description: UNIQUE constraint
+    primary_key:
+      type: boolean
+      description: PRIMARY KEY
+    auto_increment:
+      type: boolean
+      description: AUTO INCREMENT / SERIAL
+    default_value:
+      type: string
+      description: DEFAULT value (SQL expression)
+    check_constraint:
+      type: string
+      description: CHECK constraint (SQL expression)
+    foreign_key:
+      $ref: '#/components/schemas/ForeignKey'
+      description: Foreign key reference
+    index:
+      $ref: '#/components/schemas/IndexOptions'
+      description: Index options
+    comment:
+      type: string
+      description: Column comment
+    exclude_from_insert:
+      type: boolean
+      description: Exclude from certain operations
+    exclude_from_update:
+      type: boolean
+    encrypted:
+      type: boolean
+      description: Encryption at rest
+    is_json:
+      type: boolean
+      description: For JSON/JSONB columns
+  description: Field/Column options - applied at field level

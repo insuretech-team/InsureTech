@@ -1,0 +1,71 @@
+Ticket:
+  type: object
+  properties:
+    id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:ticket_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    ticket_number:
+      type: string
+      description: '@inject_tag: gorm:"column:ticket_number;not null"'
+      x-unique: true
+    beneficiary_id:
+      type: string
+      description: '@inject_tag: gorm:"column:beneficiary_id;not null"'
+    type:
+      $ref: '#/components/schemas/TicketType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    category:
+      $ref: '#/components/schemas/TicketCategory'
+      description: '@inject_tag: gorm:"column:category;not null;serializer:proto_enum"'
+    priority:
+      allOf:
+      - $ref: '#/components/schemas/TicketPriority'
+      x-database-default: MEDIUM
+    subject:
+      type: string
+      description: '@inject_tag: gorm:"column:subject;not null"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description;not null"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Customer support and issue resolution
+    status:
+      allOf:
+      - $ref: '#/components/schemas/TicketStatus'
+      x-database-default: OPEN
+    related_entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:related_entity_type"'
+    related_entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:related_entity_id"'
+    assigned_to:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_to"'
+    resolved_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:resolved_at;serializer:proto_timestamp"'
+    closed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"'
+    audit_info:
+      allOf:
+      - $ref: '#/components/schemas/AuditInfo'
+      x-database-default: '{}''::jsonb'
+  description: Support ticket (FR-106 to FR-113)
+  required:
+  - id
+  - ticket_number
+  - beneficiary_id
+  - type
+  - category
+  - priority
+  - subject
+  - description
+  - status
+  - audit_info

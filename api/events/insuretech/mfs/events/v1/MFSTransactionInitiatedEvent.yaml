@@ -1,0 +1,21 @@
+MFSTransactionInitiatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    mfs_transaction_id:
+      type: string
+    transaction_id:
+      type: string
+    provider:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    payment_id:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: MFS transaction initiated'

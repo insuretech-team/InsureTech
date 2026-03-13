@@ -1,0 +1,6 @@
+ProductPlanCreationRequest:
+  type: object
+  properties:
+    plan:
+      $ref: '#/components/schemas/ProductPlan'
+  description: ========== PRODUCT PLAN MESSAGES ==========

@@ -1,0 +1,12 @@
+PolicyCancellationResponse:
+  type: object
+  properties:
+    message:
+      type: string
+    refund_amount:
+      $ref: '#/components/schemas/Money'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for policy cancellation operation. Returns operation
+    results and status.

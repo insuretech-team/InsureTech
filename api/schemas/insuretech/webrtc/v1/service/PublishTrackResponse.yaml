@@ -1,0 +1,7 @@
+PublishTrackResponse:
+  type: object
+  properties:
+    track:
+      $ref: '#/components/schemas/Track'
+  description: Response payload for publish track operation. Returns operation results
+    and status.

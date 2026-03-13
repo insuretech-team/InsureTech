@@ -1,0 +1,163 @@
+syntax = "proto3";
+
+package insuretech.apikey.services.v1;
+
+import "google/api/annotations.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/apikey/entity/v1/api_key.proto";
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/apikey/services/v1;apikeyservicev1";
+option csharp_namespace = "Insuretech.Apikey.Services.V1";
+
+service ApiKeyService {
+  // Generate new API key for insurer/partner
+  rpc GenerateApiKey(GenerateApiKeyRequest) returns (GenerateApiKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/api-keys"
+      body: "*"
+    };
+  }
+  
+  // Revoke API key
+  rpc RevokeApiKey(RevokeApiKeyRequest) returns (RevokeApiKeyResponse) {
+    option (google.api.http) = {
+      delete: "/v1/api-keys/{api_key_id}"
+    };
+  }
+  
+  // Rotate API key
+  rpc RotateApiKey(RotateApiKeyRequest) returns (RotateApiKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/api-keys/{api_key_id}?action=rotate"
+      body: "*"
+    };
+  }
+  
+  // Get API key details
+  rpc GetApiKey(GetApiKeyRequest) returns (GetApiKeyResponse) {
+    option (google.api.http) = {
+      get: "/v1/api-keys/{api_key_id}"
+    };
+  }
+  
+  // List API keys for owner
+  rpc ListApiKeys(ListApiKeysRequest) returns (ListApiKeysResponse) {
+    option (google.api.http) = {
+      get: "/v1/api-keys"
+    };
+  }
+  
+  // Validate API key and check scopes
+  rpc ValidateApiKey(ValidateApiKeyRequest) returns (ValidateApiKeyResponse) {
+    option (google.api.http) = {
+      post: "/v1/api-keys?action=validate"
+      body: "*"
+    };
+  }
+  
+  // Get usage statistics
+  rpc GetUsageStats(GetUsageStatsRequest) returns (GetUsageStatsResponse) {
+    option (google.api.http) = {
+      get: "/v1/api-keys/{api_key_id}/usage"
+    };
+  }
+}
+
+message GenerateApiKeyRequest {
+  string name = 1;
+  string owner_type = 2; // INSURER, PARTNER
+  string owner_id = 3;
+  repeated string scopes = 4;
+  int32 rate_limit_per_minute = 5;
+  string expires_in_days = 6; // Optional
+  repeated string ip_whitelist = 7; // Optional
+}
+
+message GenerateApiKeyResponse {
+  string api_key_id = 1;
+  string api_key = 2; // Plain text - show only once!
+  string message = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message RevokeApiKeyRequest {
+  string api_key_id = 1;
+  string reason = 2;
+}
+
+message RevokeApiKeyResponse {
+  string message = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message RotateApiKeyRequest {
+  string api_key_id = 1;
+}
+
+message RotateApiKeyResponse {
+  string new_api_key = 1; // Plain text - show only once!
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ValidateApiKeyRequest {
+  string api_key = 1;
+  string required_scope = 2;
+  string request_ip = 3;
+}
+
+message ValidateApiKeyResponse {
+  bool valid = 1;
+  string api_key_id = 2;
+  string owner_type = 3;
+  string owner_id = 4;
+  repeated string scopes = 5;
+  string message = 6;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}
+
+message GetUsageStatsRequest {
+  string api_key_id = 1;
+  string start_date = 2;
+  string end_date = 3;
+}
+
+message GetUsageStatsResponse {
+  int64 total_requests = 1;
+  int64 successful_requests = 2;
+  int64 failed_requests = 3;
+  double avg_response_time_ms = 4;
+  map<string, int64> requests_by_endpoint = 5;
+  map<string, int64> requests_by_status_code = 6;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}
+
+message GetApiKeyRequest {
+  string api_key_id = 1;
+}
+
+message GetApiKeyResponse {
+  entity.v1.ApiKey api_key = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListApiKeysRequest {
+  string owner_type = 1;
+  string owner_id = 2;
+  string status = 3;
+  int32 page = 4;
+  int32 page_size = 5;
+}
+
+message ListApiKeysResponse {
+  repeated entity.v1.ApiKey api_keys = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+

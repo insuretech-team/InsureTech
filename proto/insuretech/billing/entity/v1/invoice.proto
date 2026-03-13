@@ -1,0 +1,290 @@
+syntax = "proto3";
+
+package insuretech.billing.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/billing/entity/v1;billingv1";
+option csharp_namespace = "Insuretech.Billing.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Invoice represents a billing invoice covering one or more insurance orders/policies.
+// Supports both B2C (single order) and B2B (group purchase order) scenarios.
+message Invoice {
+  option (insuretech.common.v1.table) = {
+    table_name : "invoices"
+    schema_name : "billing_schema"
+    migration_order : 94
+    is_table : true
+    comment : "Billing invoices — covers B2C single orders and B2B group purchase orders"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string invoice_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "invoice_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key — Invoice UUID"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:invoice_id;not null"
+
+  string invoice_number = 2 [ (insuretech.common.v1.column) = {
+    column_name : "invoice_number"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    unique : true
+    comment : "Human-readable invoice number (e.g., INV-2026-000001)"
+    index: {
+      index_name: "idx_invoices_invoice_number"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  } ];
+  // @inject_tag: gorm:"column:invoice_number;not null;uniqueIndex"
+
+  string business_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "business_id"
+    sql_type : "UUID"
+    comment : "B2B: FK to b2b_schema.organisations — the business being billed"
+    index: {
+      index_name: "idx_invoices_business_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:business_id;index:idx_invoices_business_id"
+
+  insuretech.common.v1.Money amount = 4 [ (insuretech.common.v1.column) = {
+    column_name : "amount"
+    sql_type : "BIGINT"
+    not_null : true
+    check_constraint: "amount >= 0"
+    comment : "Base invoice amount in paisa (before tax)"
+  } ];
+  // @inject_tag: gorm:"column:amount;not null"
+
+  google.protobuf.Timestamp due_date = 5 [ (insuretech.common.v1.column) = {
+    column_name : "due_date"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    comment : "Payment due date/time"
+  } ];
+  // @inject_tag: gorm:"column:due_date;not null;serializer:proto_timestamp"
+
+  InvoiceStatus status = 6 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'INVOICE_STATUS_DRAFT'"
+    comment : "Invoice lifecycle status"
+    index: {
+      index_name: "idx_invoices_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp issued_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "issued_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Timestamp when invoice was formally issued to the customer/org"
+  } ];
+  // @inject_tag: gorm:"column:issued_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp paid_at = 8 [ (insuretech.common.v1.column) = {
+    column_name : "paid_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Timestamp when payment was confirmed"
+  } ];
+  // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
+
+  string payment_id = 9 [ (insuretech.common.v1.column) = {
+    column_name : "payment_id"
+    sql_type : "UUID"
+    comment : "FK to payment_schema.payments — the payment that settled this invoice"
+    index: {
+      index_name: "idx_invoices_payment_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:payment_id;index:idx_invoices_payment_id"
+
+  string invoice_pdf_url = 10 [ (insuretech.common.v1.column) = {
+    column_name : "invoice_pdf_url"
+    sql_type : "TEXT"
+    comment : "S3/storage URL of the generated invoice PDF"
+  } ];
+  // @inject_tag: gorm:"column:invoice_pdf_url"
+
+  repeated string policy_ids = 11 [ (insuretech.common.v1.column) = {
+    column_name : "policy_ids"
+    sql_type : "UUID[]"
+    comment : "Array of policy IDs covered by this invoice"
+  } ];
+  // @inject_tag: gorm:"column:policy_ids;serializer:json"
+
+  google.protobuf.Timestamp created_at = 12 [ (insuretech.common.v1.column) = {
+    column_name: "created_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true
+    default_value: "CURRENT_TIMESTAMP"
+    exclude_from_insert: true
+    exclude_from_update: true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 13 [ (insuretech.common.v1.column) = {
+    column_name: "updated_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true
+    default_value: "CURRENT_TIMESTAMP"
+    exclude_from_insert: true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  // ── Extended linkage fields (Phase 2) ────────────────────────────────────
+
+  string order_id = 14 [ (insuretech.common.v1.column) = {
+    column_name : "order_id"
+    sql_type : "UUID"
+    comment : "FK to insurance_schema.orders — the primary order this invoice covers (B2C)"
+    index: {
+      index_name: "idx_invoices_order_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:order_id;index:idx_invoices_order_id"
+
+  string customer_id = 15 [ (insuretech.common.v1.column) = {
+    column_name : "customer_id"
+    sql_type : "UUID"
+    comment : "FK to authn_schema.users — the customer being billed (B2C) or contact (B2B)"
+    index: {
+      index_name: "idx_invoices_customer_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:customer_id;index:idx_invoices_customer_id"
+
+  string organisation_id = 16 [ (insuretech.common.v1.column) = {
+    column_name : "organisation_id"
+    sql_type : "UUID"
+    comment : "B2B: FK to b2b_schema.organisations — billing organisation"
+    index: {
+      index_name: "idx_invoices_organisation_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:organisation_id;index:idx_invoices_organisation_id"
+
+  string purchase_order_id = 17 [ (insuretech.common.v1.column) = {
+    column_name : "purchase_order_id"
+    sql_type : "UUID"
+    comment : "B2B: FK to b2b_schema.purchase_orders — the PO this invoice settles"
+    index: {
+      index_name: "idx_invoices_purchase_order_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:purchase_order_id;index:idx_invoices_purchase_order_id"
+
+  string tenant_id = 18 [ (insuretech.common.v1.column) = {
+    column_name : "tenant_id"
+    sql_type : "UUID"
+    not_null : true
+    comment : "Multi-tenant isolation key"
+    index: {
+      index_name: "idx_invoices_tenant_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:tenant_id;not null;index:idx_invoices_tenant_id"
+
+  insuretech.common.v1.Money tax_amount = 19 [ (insuretech.common.v1.column) = {
+    column_name : "tax_amount"
+    sql_type : "BIGINT"
+    not_null : true
+    default_value : "0"
+    check_constraint: "tax_amount >= 0"
+    comment : "Tax/VAT amount in paisa"
+  } ];
+  // @inject_tag: gorm:"column:tax_amount;not null;default:0"
+
+  insuretech.common.v1.Money total_amount = 20 [ (insuretech.common.v1.column) = {
+    column_name : "total_amount"
+    sql_type : "BIGINT"
+    not_null : true
+    check_constraint: "total_amount >= 0"
+    comment : "Total invoice amount (amount + tax_amount) in paisa"
+  } ];
+  // @inject_tag: gorm:"column:total_amount;not null"
+
+  string currency = 21 [ (insuretech.common.v1.column) = {
+    column_name : "currency"
+    sql_type : "VARCHAR(3)"
+    not_null : true
+    default_value : "'BDT'"
+    check_constraint: "currency IN ('BDT', 'USD', 'EUR')"
+    comment : "ISO 4217 currency code"
+  } ];
+  // @inject_tag: gorm:"column:currency;not null"
+
+  string notes = 22 [ (insuretech.common.v1.column) = {
+    column_name : "notes"
+    sql_type : "TEXT"
+    comment : "Free-text billing notes or memo"
+  } ];
+  // @inject_tag: gorm:"column:notes"
+
+  string issued_by = 23 [ (insuretech.common.v1.column) = {
+    column_name : "issued_by"
+    sql_type : "UUID"
+    comment : "User ID who issued/approved the invoice (admin/finance team)"
+  } ];
+  // @inject_tag: gorm:"column:issued_by"
+
+  google.protobuf.Timestamp cancelled_at = 24 [ (insuretech.common.v1.column) = {
+    column_name : "cancelled_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Timestamp when invoice was cancelled (if applicable)"
+  } ];
+  // @inject_tag: gorm:"column:cancelled_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp overdue_at = 25 [ (insuretech.common.v1.column) = {
+    column_name : "overdue_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Timestamp when invoice was marked overdue"
+  } ];
+  // @inject_tag: gorm:"column:overdue_at;serializer:proto_timestamp"
+
+  map<string, string> metadata = 26 [ (insuretech.common.v1.column) = {
+    column_name : "metadata"
+    sql_type : "JSONB"
+    comment : "Extension key-value pairs (e.g. external billing system reference)"
+    is_json: true
+  } ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  string credit_note_id = 27 [ (insuretech.common.v1.column) = {
+    column_name : "credit_note_id"
+    sql_type : "UUID"
+    comment : "FK to billing_schema.invoices — the credit note issued when this invoice is cancelled"
+  } ];
+  // @inject_tag: gorm:"column:credit_note_id"
+}
+
+enum InvoiceStatus {
+  INVOICE_STATUS_UNSPECIFIED = 0;
+  INVOICE_STATUS_DRAFT = 1;              // Created but not yet issued to customer
+  INVOICE_STATUS_ISSUED = 2;            // Formally issued — awaiting payment
+  INVOICE_STATUS_PENDING = 3;           // Legacy alias for ISSUED (kept for backwards compat)
+  INVOICE_STATUS_APPROVED = 4;          // B2B: purchase order approved — ready to pay
+  INVOICE_STATUS_PAID = 5;              // Payment confirmed
+  INVOICE_STATUS_OVERDUE = 6;           // Past due date, unpaid
+  INVOICE_STATUS_CANCELLED = 7;         // Cancelled before payment
+  INVOICE_STATUS_CREDIT_NOTE_ISSUED = 8; // Refund/credit note issued against this invoice
+}

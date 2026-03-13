@@ -1,0 +1,7 @@
+ReportDownloadRequest:
+  type: object
+  properties:
+    report_execution_id:
+      type: string
+  description: Request payload for report download operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,124 @@
+syntax = "proto3";
+
+package insuretech.mfs.services.v1;
+
+import "google/api/annotations.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/mfs/entity/v1/mfs_integration.proto";
+import "insuretech/mfs/entity/v1/mfs_transaction.proto";
+import "insuretech/common/v1/types.proto";
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/services/v1;mfsservicev1";
+option csharp_namespace = "Insuretech.Mfs.Services.V1";
+
+service MFSService {
+  // Initiate payment
+  rpc InitiatePayment(InitiatePaymentRequest) returns (InitiatePaymentResponse) {
+    option (google.api.http) = {
+      post: "/v1/mfs/payments"
+      body: "*"
+    };
+  }
+  
+  // Get transaction
+  rpc GetTransaction(GetTransactionRequest) returns (GetTransactionResponse) {
+    option (google.api.http) = {
+      get: "/v1/mfs/transactions/{mfs_transaction_id}"
+    };
+  }
+  
+  // Process webhook
+  rpc ProcessWebhook(ProcessWebhookRequest) returns (ProcessWebhookResponse) {
+    option (google.api.http) = {
+      post: "/v1/mfs/webhooks/{provider}"
+      body: "*"
+    };
+  }
+  
+  // Execute refund
+  rpc ExecuteRefund(ExecuteRefundRequest) returns (ExecuteRefundResponse) {
+    option (google.api.http) = {
+      post: "/v1/mfs/refunds"
+      body: "*"
+    };
+  }
+  
+  // List transactions
+  rpc ListTransactions(ListTransactionsRequest) returns (ListTransactionsResponse) {
+    option (google.api.http) = {
+      get: "/v1/mfs/transactions"
+    };
+  }
+}
+
+message InitiatePaymentRequest {
+  string provider = 1;
+  string payment_id = 2;
+  insuretech.common.v1.Money amount = 3;
+  string customer_msisdn = 4;
+}
+
+message InitiatePaymentResponse {
+  string mfs_transaction_id = 1;
+  string transaction_id = 2;
+  string payment_url = 3;
+  string message = 4;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5;
+}
+
+message GetTransactionRequest {
+  string mfs_transaction_id = 1;
+}
+
+message GetTransactionResponse {
+  entity.v1.MFSTransaction transaction = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ProcessWebhookRequest {
+  string provider = 1;
+  google.protobuf.Struct payload = 2; // CG-7: Typed webhook payload
+  map<string, string> headers = 3; // CG-7: Typed headers as map
+  // Idempotency key to prevent duplicate webhook processing (CG-3)
+  string idempotency_key = 4;
+}
+
+message ProcessWebhookResponse {
+  string message = 1;
+  bool success = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ExecuteRefundRequest {
+  string mfs_transaction_id = 1;
+  insuretech.common.v1.Money amount = 2;
+  string reason = 3;
+}
+
+message ExecuteRefundResponse {
+  string refund_transaction_id = 1;
+  string message = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message ListTransactionsRequest {
+  string provider = 1;
+  string status = 2;
+  string payment_id = 3;
+  string start_date = 4;
+  string end_date = 5;
+  int32 page = 6;
+  int32 page_size = 7;
+}
+
+message ListTransactionsResponse {
+  repeated entity.v1.MFSTransaction transactions = 1;
+  int32 total_count = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+

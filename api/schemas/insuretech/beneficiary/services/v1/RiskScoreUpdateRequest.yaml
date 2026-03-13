@@ -1,0 +1,11 @@
+RiskScoreUpdateRequest:
+  type: object
+  properties:
+    beneficiary_id:
+      type: string
+    risk_score:
+      type: string
+    reason:
+      type: string
+  description: Request payload for updating an existing risk score update. Contains
+    fields to be modified.

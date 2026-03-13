@@ -1,0 +1,13 @@
+PartnerUpdateRequest:
+  type: object
+  properties:
+    partner_id:
+      type: string
+    partner:
+      $ref: '#/components/schemas/Partner'
+    update_mask:
+      type: array
+      items:
+        type: string
+  description: Request payload for updating an existing partner update. Contains fields
+    to be modified.

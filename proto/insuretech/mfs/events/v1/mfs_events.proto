@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package insuretech.mfs.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/events/v1;mfseventsv1";
+
+// Kafka event: MFS transaction initiated
+message MFSTransactionInitiatedEvent {
+  string event_id = 1;
+  string mfs_transaction_id = 2;
+  string transaction_id = 3;
+  string provider = 4;
+  insuretech.common.v1.Money amount = 5;
+  string payment_id = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: MFS transaction completed
+message MFSTransactionCompletedEvent {
+  string event_id = 1;
+  string mfs_transaction_id = 2;
+  string provider_transaction_id = 3;
+  insuretech.common.v1.Money amount = 4;
+  string payment_id = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: MFS transaction failed
+message MFSTransactionFailedEvent {
+  string event_id = 1;
+  string mfs_transaction_id = 2;
+  string error_message = 3;
+  string payment_id = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+

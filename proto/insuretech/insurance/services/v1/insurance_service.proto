@@ -1,0 +1,1110 @@
+syntax = "proto3";
+
+package insuretech.insurance.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/insurance/services/v1;insuranceservicev1";
+option csharp_namespace = "Insuretech.Insurance.Services.V1";
+
+import "google/protobuf/empty.proto";
+import "insuretech/products/entity/v1/product.proto";
+import "insuretech/products/entity/v1/product_plan.proto";
+import "insuretech/products/entity/v1/rider.proto";
+import "insuretech/products/entity/v1/pricing_config.proto";
+import "insuretech/policy/entity/v1/policy.proto";
+import "insuretech/claims/entity/v1/claim.proto";
+import "insuretech/underwriting/entity/v1/quote.proto";
+import "insuretech/underwriting/entity/v1/underwriting_decision.proto";
+import "insuretech/underwriting/entity/v1/health_declaration.proto";
+import "insuretech/renewal/entity/v1/renewal_schedule.proto";
+import "insuretech/renewal/entity/v1/renewal_reminder.proto";
+import "insuretech/renewal/entity/v1/grace_period.proto";
+import "insuretech/insurer/entity/v1/insurer.proto";
+import "insuretech/insurer/entity/v1/insurer_config.proto";
+import "insuretech/insurer/entity/v1/insurer_product.proto";
+import "insuretech/fraud/entity/v1/fraud_rule.proto";
+import "insuretech/fraud/entity/v1/fraud_case.proto";
+import "insuretech/fraud/entity/v1/fraud_alert.proto";
+import "insuretech/beneficiary/entity/v1/beneficiary.proto";
+import "insuretech/beneficiary/entity/v1/individual.proto";
+import "insuretech/beneficiary/entity/v1/business.proto";
+import "insuretech/endorsement/entity/v1/endorsement.proto";
+import "insuretech/policy/entity/v1/quotation.proto";
+import "insuretech/policy/entity/v1/policy_service_request.proto";
+import "insuretech/services/entity/v1/service_provider.proto";
+
+// Insurance Service - Generic CRUD for insurance_schema tables
+service InsuranceService {
+  // ========== PRODUCT CRUD ==========
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse);
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse);
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse);
+  rpc DeleteProduct(DeleteProductRequest) returns (google.protobuf.Empty);
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse);
+
+  // ========== PRODUCT PLAN CRUD ==========
+  rpc CreateProductPlan(CreateProductPlanRequest) returns (CreateProductPlanResponse);
+  rpc GetProductPlan(GetProductPlanRequest) returns (GetProductPlanResponse);
+  rpc ListProductPlans(ListProductPlansRequest) returns (ListProductPlansResponse);
+
+  // ========== RIDER CRUD ==========
+  rpc CreateRider(CreateRiderRequest) returns (CreateRiderResponse);
+  rpc GetRider(GetRiderRequest) returns (GetRiderResponse);
+  rpc ListRiders(ListRidersRequest) returns (ListRidersResponse);
+
+  // ========== PRICING CONFIG CRUD ==========
+  rpc CreatePricingConfig(CreatePricingConfigRequest) returns (CreatePricingConfigResponse);
+  rpc GetPricingConfig(GetPricingConfigRequest) returns (GetPricingConfigResponse);
+
+  // ========== POLICY CRUD ==========
+  rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
+  rpc GetPolicy(GetPolicyRequest) returns (GetPolicyResponse);
+  rpc UpdatePolicy(UpdatePolicyRequest) returns (UpdatePolicyResponse);
+  rpc DeletePolicy(DeletePolicyRequest) returns (google.protobuf.Empty);
+  rpc ListPolicies(ListPoliciesRequest) returns (ListPoliciesResponse);
+
+  // ========== CLAIM CRUD ==========
+  rpc CreateClaim(CreateClaimRequest) returns (CreateClaimResponse);
+  rpc GetClaim(GetClaimRequest) returns (GetClaimResponse);
+  rpc UpdateClaim(UpdateClaimRequest) returns (UpdateClaimResponse);
+  rpc DeleteClaim(DeleteClaimRequest) returns (google.protobuf.Empty);
+  rpc ListClaims(ListClaimsRequest) returns (ListClaimsResponse);
+
+  // ========== QUOTE CRUD ==========
+  rpc CreateQuote(CreateQuoteRequest) returns (CreateQuoteResponse);
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+  rpc UpdateQuote(UpdateQuoteRequest) returns (UpdateQuoteResponse);
+  rpc DeleteQuote(DeleteQuoteRequest) returns (google.protobuf.Empty);
+  rpc ListQuotes(ListQuotesRequest) returns (ListQuotesResponse);
+
+  // ========== UNDERWRITING DECISION CRUD ==========
+  rpc CreateUnderwritingDecision(CreateUnderwritingDecisionRequest) returns (CreateUnderwritingDecisionResponse);
+  rpc GetUnderwritingDecision(GetUnderwritingDecisionRequest) returns (GetUnderwritingDecisionResponse);
+  rpc UpdateUnderwritingDecision(UpdateUnderwritingDecisionRequest) returns (UpdateUnderwritingDecisionResponse);
+  rpc DeleteUnderwritingDecision(DeleteUnderwritingDecisionRequest) returns (google.protobuf.Empty);
+  rpc ListUnderwritingDecisions(ListUnderwritingDecisionsRequest) returns (ListUnderwritingDecisionsResponse);
+
+  // ========== HEALTH DECLARATION CRUD ==========
+  rpc CreateHealthDeclaration(CreateHealthDeclarationRequest) returns (CreateHealthDeclarationResponse);
+  rpc GetHealthDeclaration(GetHealthDeclarationRequest) returns (GetHealthDeclarationResponse);
+  rpc UpdateHealthDeclaration(UpdateHealthDeclarationRequest) returns (UpdateHealthDeclarationResponse);
+  rpc DeleteHealthDeclaration(DeleteHealthDeclarationRequest) returns (google.protobuf.Empty);
+  rpc GetHealthDeclarationByQuote(GetHealthDeclarationByQuoteRequest) returns (GetHealthDeclarationByQuoteResponse);
+
+  // ========== RENEWAL SCHEDULE CRUD ==========
+  rpc CreateRenewalSchedule(CreateRenewalScheduleRequest) returns (CreateRenewalScheduleResponse);
+  rpc GetRenewalSchedule(GetRenewalScheduleRequest) returns (GetRenewalScheduleResponse);
+  rpc UpdateRenewalSchedule(UpdateRenewalScheduleRequest) returns (UpdateRenewalScheduleResponse);
+  rpc DeleteRenewalSchedule(DeleteRenewalScheduleRequest) returns (google.protobuf.Empty);
+  rpc ListRenewalSchedules(ListRenewalSchedulesRequest) returns (ListRenewalSchedulesResponse);
+
+  // ========== RENEWAL REMINDER CRUD ==========
+  rpc CreateRenewalReminder(CreateRenewalReminderRequest) returns (CreateRenewalReminderResponse);
+  rpc GetRenewalReminder(GetRenewalReminderRequest) returns (GetRenewalReminderResponse);
+  rpc UpdateRenewalReminder(UpdateRenewalReminderRequest) returns (UpdateRenewalReminderResponse);
+  rpc DeleteRenewalReminder(DeleteRenewalReminderRequest) returns (google.protobuf.Empty);
+  rpc ListRenewalReminders(ListRenewalRemindersRequest) returns (ListRenewalRemindersResponse);
+
+  // ========== GRACE PERIOD CRUD ==========
+  rpc CreateGracePeriod(CreateGracePeriodRequest) returns (CreateGracePeriodResponse);
+  rpc GetGracePeriod(GetGracePeriodRequest) returns (GetGracePeriodResponse);
+  rpc UpdateGracePeriod(UpdateGracePeriodRequest) returns (UpdateGracePeriodResponse);
+  rpc DeleteGracePeriod(DeleteGracePeriodRequest) returns (google.protobuf.Empty);
+  rpc GetGracePeriodByPolicy(GetGracePeriodByPolicyRequest) returns (GetGracePeriodByPolicyResponse);
+  rpc ListActiveGracePeriods(ListActiveGracePeriodsRequest) returns (ListActiveGracePeriodsResponse);
+
+  // ========== INSURER CRUD ==========
+  rpc CreateInsurer(CreateInsurerRequest) returns (CreateInsurerResponse);
+  rpc GetInsurer(GetInsurerRequest) returns (GetInsurerResponse);
+  rpc UpdateInsurer(UpdateInsurerRequest) returns (UpdateInsurerResponse);
+  rpc DeleteInsurer(DeleteInsurerRequest) returns (google.protobuf.Empty);
+  rpc ListInsurers(ListInsurersRequest) returns (ListInsurersResponse);
+
+  // ========== INSURER CONFIG CRUD ==========
+  rpc CreateInsurerConfig(CreateInsurerConfigRequest) returns (CreateInsurerConfigResponse);
+  rpc GetInsurerConfig(GetInsurerConfigRequest) returns (GetInsurerConfigResponse);
+  rpc UpdateInsurerConfig(UpdateInsurerConfigRequest) returns (UpdateInsurerConfigResponse);
+  rpc DeleteInsurerConfig(DeleteInsurerConfigRequest) returns (google.protobuf.Empty);
+  rpc GetInsurerConfigByInsurer(GetInsurerConfigByInsurerRequest) returns (GetInsurerConfigByInsurerResponse);
+
+  // ========== INSURER PRODUCT CRUD ==========
+  rpc CreateInsurerProduct(CreateInsurerProductRequest) returns (CreateInsurerProductResponse);
+  rpc GetInsurerProduct(GetInsurerProductRequest) returns (GetInsurerProductResponse);
+  rpc UpdateInsurerProduct(UpdateInsurerProductRequest) returns (UpdateInsurerProductResponse);
+  rpc DeleteInsurerProduct(DeleteInsurerProductRequest) returns (google.protobuf.Empty);
+  rpc ListInsurerProducts(ListInsurerProductsRequest) returns (ListInsurerProductsResponse);
+
+  // ========== FRAUD RULE CRUD ==========
+  rpc CreateFraudRule(CreateFraudRuleRequest) returns (CreateFraudRuleResponse);
+  rpc GetFraudRule(GetFraudRuleRequest) returns (GetFraudRuleResponse);
+  rpc UpdateFraudRule(UpdateFraudRuleRequest) returns (UpdateFraudRuleResponse);
+  rpc DeleteFraudRule(DeleteFraudRuleRequest) returns (google.protobuf.Empty);
+  rpc ListFraudRules(ListFraudRulesRequest) returns (ListFraudRulesResponse);
+  rpc ListActiveFraudRules(ListActiveFraudRulesRequest) returns (ListActiveFraudRulesResponse);
+
+  // ========== FRAUD CASE CRUD ==========
+  rpc CreateFraudCase(CreateFraudCaseRequest) returns (CreateFraudCaseResponse);
+  rpc GetFraudCase(GetFraudCaseRequest) returns (GetFraudCaseResponse);
+  rpc UpdateFraudCase(UpdateFraudCaseRequest) returns (UpdateFraudCaseResponse);
+  rpc DeleteFraudCase(DeleteFraudCaseRequest) returns (google.protobuf.Empty);
+  rpc ListFraudCasesByAlert(ListFraudCasesByAlertRequest) returns (ListFraudCasesByAlertResponse);
+
+  // ========== FRAUD ALERT CRUD ==========
+  rpc CreateFraudAlert(CreateFraudAlertRequest) returns (CreateFraudAlertResponse);
+  rpc GetFraudAlert(GetFraudAlertRequest) returns (GetFraudAlertResponse);
+  rpc UpdateFraudAlert(UpdateFraudAlertRequest) returns (UpdateFraudAlertResponse);
+  rpc DeleteFraudAlert(DeleteFraudAlertRequest) returns (google.protobuf.Empty);
+  rpc ListFraudAlertsByEntity(ListFraudAlertsByEntityRequest) returns (ListFraudAlertsByEntityResponse);
+
+  // ========== BENEFICIARY CRUD ==========
+  rpc CreateBeneficiary(CreateBeneficiaryRequest) returns (CreateBeneficiaryResponse);
+  rpc GetBeneficiary(GetBeneficiaryRequest) returns (GetBeneficiaryResponse);
+  rpc UpdateBeneficiary(UpdateBeneficiaryRequest) returns (UpdateBeneficiaryResponse);
+  rpc DeleteBeneficiary(DeleteBeneficiaryRequest) returns (google.protobuf.Empty);
+  rpc ListBeneficiaries(ListBeneficiariesRequest) returns (ListBeneficiariesResponse);
+
+  // ========== INDIVIDUAL BENEFICIARY CRUD ==========
+  rpc CreateIndividualBeneficiary(CreateIndividualBeneficiaryRequest) returns (CreateIndividualBeneficiaryResponse);
+  rpc GetIndividualBeneficiary(GetIndividualBeneficiaryRequest) returns (GetIndividualBeneficiaryResponse);
+  rpc UpdateIndividualBeneficiary(UpdateIndividualBeneficiaryRequest) returns (UpdateIndividualBeneficiaryResponse);
+  rpc DeleteIndividualBeneficiary(DeleteIndividualBeneficiaryRequest) returns (google.protobuf.Empty);
+
+  // ========== BUSINESS BENEFICIARY CRUD ==========
+  rpc CreateBusinessBeneficiary(CreateBusinessBeneficiaryRequest) returns (CreateBusinessBeneficiaryResponse);
+  rpc GetBusinessBeneficiary(GetBusinessBeneficiaryRequest) returns (GetBusinessBeneficiaryResponse);
+  rpc UpdateBusinessBeneficiary(UpdateBusinessBeneficiaryRequest) returns (UpdateBusinessBeneficiaryResponse);
+  rpc DeleteBusinessBeneficiary(DeleteBusinessBeneficiaryRequest) returns (google.protobuf.Empty);
+
+  // ========== ENDORSEMENT CRUD ==========
+  rpc CreateEndorsement(CreateEndorsementRequest) returns (CreateEndorsementResponse);
+  rpc GetEndorsement(GetEndorsementRequest) returns (GetEndorsementResponse);
+  rpc UpdateEndorsement(UpdateEndorsementRequest) returns (UpdateEndorsementResponse);
+  rpc DeleteEndorsement(DeleteEndorsementRequest) returns (google.protobuf.Empty);
+  rpc ListEndorsementsByPolicy(ListEndorsementsByPolicyRequest) returns (ListEndorsementsByPolicyResponse);
+
+  // ========== QUOTATION CRUD ==========
+  rpc CreateQuotation(CreateQuotationRequest) returns (CreateQuotationResponse);
+  rpc GetQuotation(GetQuotationRequest) returns (GetQuotationResponse);
+  rpc UpdateQuotation(UpdateQuotationRequest) returns (UpdateQuotationResponse);
+  rpc DeleteQuotation(DeleteQuotationRequest) returns (google.protobuf.Empty);
+  rpc ListQuotations(ListQuotationsRequest) returns (ListQuotationsResponse);
+
+  // ========== POLICY SERVICE REQUEST CRUD ==========
+  rpc CreatePolicyServiceRequest(CreatePolicyServiceRequestRequest) returns (CreatePolicyServiceRequestResponse);
+  rpc GetPolicyServiceRequest(GetPolicyServiceRequestRequest) returns (GetPolicyServiceRequestResponse);
+  rpc UpdatePolicyServiceRequest(UpdatePolicyServiceRequestRequest) returns (UpdatePolicyServiceRequestResponse);
+  rpc DeletePolicyServiceRequest(DeletePolicyServiceRequestRequest) returns (google.protobuf.Empty);
+  rpc ListPolicyServiceRequestsByPolicy(ListPolicyServiceRequestsByPolicyRequest) returns (ListPolicyServiceRequestsByPolicyResponse);
+
+  // ========== SERVICE PROVIDER CRUD ==========
+  rpc CreateServiceProvider(CreateServiceProviderRequest) returns (CreateServiceProviderResponse);
+  rpc GetServiceProvider(GetServiceProviderRequest) returns (GetServiceProviderResponse);
+  rpc UpdateServiceProvider(UpdateServiceProviderRequest) returns (UpdateServiceProviderResponse);
+  rpc DeleteServiceProvider(DeleteServiceProviderRequest) returns (google.protobuf.Empty);
+  rpc ListServiceProviders(ListServiceProvidersRequest) returns (ListServiceProvidersResponse);
+}
+
+// ========== PRODUCT MESSAGES ==========
+message CreateProductRequest {
+  insuretech.products.entity.v1.Product product = 1;
+}
+
+message CreateProductResponse {
+  insuretech.products.entity.v1.Product product = 1;
+}
+
+message GetProductRequest {
+  string product_id = 1;
+}
+
+message GetProductResponse {
+  insuretech.products.entity.v1.Product product = 1;
+}
+
+message UpdateProductRequest {
+  insuretech.products.entity.v1.Product product = 1;
+}
+
+message UpdateProductResponse {
+  insuretech.products.entity.v1.Product product = 1;
+}
+
+message DeleteProductRequest {
+  string product_id = 1;
+}
+
+message ListProductsRequest {
+  string tenant_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message ListProductsResponse {
+  repeated insuretech.products.entity.v1.Product products = 1;
+  int32 total = 2;
+}
+
+// ========== PRODUCT PLAN MESSAGES ==========
+message CreateProductPlanRequest {
+  insuretech.products.entity.v1.ProductPlan plan = 1;
+}
+
+message CreateProductPlanResponse {
+  insuretech.products.entity.v1.ProductPlan plan = 1;
+}
+
+message GetProductPlanRequest {
+  string plan_id = 1;
+}
+
+message GetProductPlanResponse {
+  insuretech.products.entity.v1.ProductPlan plan = 1;
+}
+
+message ListProductPlansRequest {
+  string product_id = 1;
+}
+
+message ListProductPlansResponse {
+  repeated insuretech.products.entity.v1.ProductPlan plans = 1;
+}
+
+// ========== RIDER MESSAGES ==========
+message CreateRiderRequest {
+  insuretech.products.entity.v1.Rider rider = 1;
+}
+
+message CreateRiderResponse {
+  insuretech.products.entity.v1.Rider rider = 1;
+}
+
+message GetRiderRequest {
+  string rider_id = 1;
+}
+
+message GetRiderResponse {
+  insuretech.products.entity.v1.Rider rider = 1;
+}
+
+message ListRidersRequest {
+  string product_id = 1;
+}
+
+message ListRidersResponse {
+  repeated insuretech.products.entity.v1.Rider riders = 1;
+}
+
+// ========== PRICING CONFIG MESSAGES ==========
+message CreatePricingConfigRequest {
+  insuretech.products.entity.v1.PricingConfig config = 1;
+}
+
+message CreatePricingConfigResponse {
+  insuretech.products.entity.v1.PricingConfig config = 1;
+}
+
+message GetPricingConfigRequest {
+  string config_id = 1;
+}
+
+message GetPricingConfigResponse {
+  insuretech.products.entity.v1.PricingConfig config = 1;
+}
+
+// ========== POLICY MESSAGES ==========
+message CreatePolicyRequest {
+  insuretech.policy.entity.v1.Policy policy = 1;
+}
+
+message CreatePolicyResponse {
+  insuretech.policy.entity.v1.Policy policy = 1;
+}
+
+message GetPolicyRequest {
+  string policy_id = 1;
+}
+
+message GetPolicyResponse {
+  insuretech.policy.entity.v1.Policy policy = 1;
+}
+
+message UpdatePolicyRequest {
+  insuretech.policy.entity.v1.Policy policy = 1;
+}
+
+message UpdatePolicyResponse {
+  insuretech.policy.entity.v1.Policy policy = 1;
+}
+
+message ListPoliciesRequest {
+  string tenant_id = 1;
+  string customer_id = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListPoliciesResponse {
+  repeated insuretech.policy.entity.v1.Policy policies = 1;
+  int32 total = 2;
+}
+
+// ========== CLAIM MESSAGES ==========
+message CreateClaimRequest {
+  insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message CreateClaimResponse {
+  insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message GetClaimRequest {
+  string claim_id = 1;
+}
+
+message GetClaimResponse {
+  insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message UpdateClaimRequest {
+  insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message UpdateClaimResponse {
+  insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message ListClaimsRequest {
+  string policy_id = 1;
+  string customer_id = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListClaimsResponse {
+  repeated insuretech.claims.entity.v1.Claim claims = 1;
+  int32 total = 2;
+}
+
+message DeletePolicyRequest {
+  string policy_id = 1;
+}
+
+message DeleteClaimRequest {
+  string claim_id = 1;
+}
+
+// ========== QUOTE MESSAGES ==========
+message CreateQuoteRequest {
+  insuretech.underwriting.entity.v1.Quote quote = 1;
+}
+
+message CreateQuoteResponse {
+  insuretech.underwriting.entity.v1.Quote quote = 1;
+}
+
+message GetQuoteRequest {
+  string quote_id = 1;
+}
+
+message GetQuoteResponse {
+  insuretech.underwriting.entity.v1.Quote quote = 1;
+}
+
+message UpdateQuoteRequest {
+  insuretech.underwriting.entity.v1.Quote quote = 1;
+}
+
+message UpdateQuoteResponse {
+  insuretech.underwriting.entity.v1.Quote quote = 1;
+}
+
+message DeleteQuoteRequest {
+  string quote_id = 1;
+}
+
+message ListQuotesRequest {
+  string beneficiary_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message ListQuotesResponse {
+  repeated insuretech.underwriting.entity.v1.Quote quotes = 1;
+  int32 total = 2;
+}
+
+// ========== UNDERWRITING DECISION MESSAGES ==========
+message CreateUnderwritingDecisionRequest {
+  insuretech.underwriting.entity.v1.UnderwritingDecision decision = 1;
+}
+
+message CreateUnderwritingDecisionResponse {
+  insuretech.underwriting.entity.v1.UnderwritingDecision decision = 1;
+}
+
+message GetUnderwritingDecisionRequest {
+  string decision_id = 1;
+}
+
+message GetUnderwritingDecisionResponse {
+  insuretech.underwriting.entity.v1.UnderwritingDecision decision = 1;
+}
+
+message UpdateUnderwritingDecisionRequest {
+  insuretech.underwriting.entity.v1.UnderwritingDecision decision = 1;
+}
+
+message UpdateUnderwritingDecisionResponse {
+  insuretech.underwriting.entity.v1.UnderwritingDecision decision = 1;
+}
+
+message DeleteUnderwritingDecisionRequest {
+  string decision_id = 1;
+}
+
+message ListUnderwritingDecisionsRequest {
+  string quote_id = 1;
+}
+
+message ListUnderwritingDecisionsResponse {
+  repeated insuretech.underwriting.entity.v1.UnderwritingDecision decisions = 1;
+}
+
+// ========== HEALTH DECLARATION MESSAGES ==========
+message CreateHealthDeclarationRequest {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+message CreateHealthDeclarationResponse {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+message GetHealthDeclarationRequest {
+  string declaration_id = 1;
+}
+
+message GetHealthDeclarationResponse {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+message UpdateHealthDeclarationRequest {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+message UpdateHealthDeclarationResponse {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+message DeleteHealthDeclarationRequest {
+  string declaration_id = 1;
+}
+
+message GetHealthDeclarationByQuoteRequest {
+  string quote_id = 1;
+}
+
+message GetHealthDeclarationByQuoteResponse {
+  insuretech.underwriting.entity.v1.HealthDeclaration declaration = 1;
+}
+
+// ========== RENEWAL SCHEDULE MESSAGES ==========
+message CreateRenewalScheduleRequest {
+  insuretech.renewal.entity.v1.RenewalSchedule schedule = 1;
+}
+
+message CreateRenewalScheduleResponse {
+  insuretech.renewal.entity.v1.RenewalSchedule schedule = 1;
+}
+
+message GetRenewalScheduleRequest {
+  string schedule_id = 1;
+}
+
+message GetRenewalScheduleResponse {
+  insuretech.renewal.entity.v1.RenewalSchedule schedule = 1;
+}
+
+message UpdateRenewalScheduleRequest {
+  insuretech.renewal.entity.v1.RenewalSchedule schedule = 1;
+}
+
+message UpdateRenewalScheduleResponse {
+  insuretech.renewal.entity.v1.RenewalSchedule schedule = 1;
+}
+
+message DeleteRenewalScheduleRequest {
+  string schedule_id = 1;
+}
+
+message ListRenewalSchedulesRequest {
+  string policy_id = 1;
+}
+
+message ListRenewalSchedulesResponse {
+  repeated insuretech.renewal.entity.v1.RenewalSchedule schedules = 1;
+}
+
+// ========== RENEWAL REMINDER MESSAGES ==========
+message CreateRenewalReminderRequest {
+  insuretech.renewal.entity.v1.RenewalReminder reminder = 1;
+}
+
+message CreateRenewalReminderResponse {
+  insuretech.renewal.entity.v1.RenewalReminder reminder = 1;
+}
+
+message GetRenewalReminderRequest {
+  string reminder_id = 1;
+}
+
+message GetRenewalReminderResponse {
+  insuretech.renewal.entity.v1.RenewalReminder reminder = 1;
+}
+
+message UpdateRenewalReminderRequest {
+  insuretech.renewal.entity.v1.RenewalReminder reminder = 1;
+}
+
+message UpdateRenewalReminderResponse {
+  insuretech.renewal.entity.v1.RenewalReminder reminder = 1;
+}
+
+message DeleteRenewalReminderRequest {
+  string reminder_id = 1;
+}
+
+message ListRenewalRemindersRequest {
+  string schedule_id = 1;
+}
+
+message ListRenewalRemindersResponse {
+  repeated insuretech.renewal.entity.v1.RenewalReminder reminders = 1;
+}
+
+// ========== GRACE PERIOD MESSAGES ==========
+message CreateGracePeriodRequest {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message CreateGracePeriodResponse {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message GetGracePeriodRequest {
+  string grace_period_id = 1;
+}
+
+message GetGracePeriodResponse {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message UpdateGracePeriodRequest {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message UpdateGracePeriodResponse {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message DeleteGracePeriodRequest {
+  string grace_period_id = 1;
+}
+
+message GetGracePeriodByPolicyRequest {
+  string policy_id = 1;
+}
+
+message GetGracePeriodByPolicyResponse {
+  insuretech.renewal.entity.v1.GracePeriod grace_period = 1;
+}
+
+message ListActiveGracePeriodsRequest {
+}
+
+message ListActiveGracePeriodsResponse {
+  repeated insuretech.renewal.entity.v1.GracePeriod grace_periods = 1;
+}
+
+// ========== INSURER MESSAGES ==========
+message CreateInsurerRequest {
+  insuretech.insurer.entity.v1.Insurer insurer = 1;
+}
+
+message CreateInsurerResponse {
+  insuretech.insurer.entity.v1.Insurer insurer = 1;
+}
+
+message GetInsurerRequest {
+  string insurer_id = 1;
+}
+
+message GetInsurerResponse {
+  insuretech.insurer.entity.v1.Insurer insurer = 1;
+}
+
+message UpdateInsurerRequest {
+  insuretech.insurer.entity.v1.Insurer insurer = 1;
+}
+
+message UpdateInsurerResponse {
+  insuretech.insurer.entity.v1.Insurer insurer = 1;
+}
+
+message DeleteInsurerRequest {
+  string insurer_id = 1;
+}
+
+message ListInsurersRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ListInsurersResponse {
+  repeated insuretech.insurer.entity.v1.Insurer insurers = 1;
+  int32 total = 2;
+}
+
+// ========== INSURER CONFIG MESSAGES ==========
+message CreateInsurerConfigRequest {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+message CreateInsurerConfigResponse {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+message GetInsurerConfigRequest {
+  string config_id = 1;
+}
+
+message GetInsurerConfigResponse {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+message UpdateInsurerConfigRequest {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+message UpdateInsurerConfigResponse {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+message DeleteInsurerConfigRequest {
+  string config_id = 1;
+}
+
+message GetInsurerConfigByInsurerRequest {
+  string insurer_id = 1;
+}
+
+message GetInsurerConfigByInsurerResponse {
+  insuretech.insurer.entity.v1.InsurerConfig config = 1;
+}
+
+// ========== INSURER PRODUCT MESSAGES ==========
+message CreateInsurerProductRequest {
+  insuretech.insurer.entity.v1.InsurerProduct product = 1;
+}
+
+message CreateInsurerProductResponse {
+  insuretech.insurer.entity.v1.InsurerProduct product = 1;
+}
+
+message GetInsurerProductRequest {
+  string product_id = 1;
+}
+
+message GetInsurerProductResponse {
+  insuretech.insurer.entity.v1.InsurerProduct product = 1;
+}
+
+message UpdateInsurerProductRequest {
+  insuretech.insurer.entity.v1.InsurerProduct product = 1;
+}
+
+message UpdateInsurerProductResponse {
+  insuretech.insurer.entity.v1.InsurerProduct product = 1;
+}
+
+message DeleteInsurerProductRequest {
+  string product_id = 1;
+}
+
+message ListInsurerProductsRequest {
+  string insurer_id = 1;
+}
+
+message ListInsurerProductsResponse {
+  repeated insuretech.insurer.entity.v1.InsurerProduct products = 1;
+}
+
+// ========== FRAUD RULE MESSAGES ==========
+message CreateFraudRuleRequest {
+  insuretech.fraud.entity.v1.FraudRule rule = 1;
+}
+
+message CreateFraudRuleResponse {
+  insuretech.fraud.entity.v1.FraudRule rule = 1;
+}
+
+message GetFraudRuleRequest {
+  string fraud_rule_id = 1;
+}
+
+message GetFraudRuleResponse {
+  insuretech.fraud.entity.v1.FraudRule rule = 1;
+}
+
+message UpdateFraudRuleRequest {
+  insuretech.fraud.entity.v1.FraudRule rule = 1;
+}
+
+message UpdateFraudRuleResponse {
+  insuretech.fraud.entity.v1.FraudRule rule = 1;
+}
+
+message DeleteFraudRuleRequest {
+  string fraud_rule_id = 1;
+}
+
+message ListFraudRulesRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ListFraudRulesResponse {
+  repeated insuretech.fraud.entity.v1.FraudRule rules = 1;
+  int32 total = 2;
+}
+
+message ListActiveFraudRulesRequest {
+}
+
+message ListActiveFraudRulesResponse {
+  repeated insuretech.fraud.entity.v1.FraudRule rules = 1;
+}
+
+// ========== FRAUD CASE MESSAGES ==========
+message CreateFraudCaseRequest {
+  insuretech.fraud.entity.v1.FraudCase fraud_case = 1;
+}
+
+message CreateFraudCaseResponse {
+  insuretech.fraud.entity.v1.FraudCase fraud_case = 1;
+}
+
+message GetFraudCaseRequest {
+  string case_id = 1;
+}
+
+message GetFraudCaseResponse {
+  insuretech.fraud.entity.v1.FraudCase fraud_case = 1;
+}
+
+message UpdateFraudCaseRequest {
+  insuretech.fraud.entity.v1.FraudCase fraud_case = 1;
+}
+
+message UpdateFraudCaseResponse {
+  insuretech.fraud.entity.v1.FraudCase fraud_case = 1;
+}
+
+message DeleteFraudCaseRequest {
+  string case_id = 1;
+}
+
+message ListFraudCasesByAlertRequest {
+  string alert_id = 1;
+}
+
+message ListFraudCasesByAlertResponse {
+  repeated insuretech.fraud.entity.v1.FraudCase cases = 1;
+}
+
+// ========== FRAUD ALERT MESSAGES ==========
+message CreateFraudAlertRequest {
+  insuretech.fraud.entity.v1.FraudAlert alert = 1;
+}
+
+message CreateFraudAlertResponse {
+  insuretech.fraud.entity.v1.FraudAlert alert = 1;
+}
+
+message GetFraudAlertRequest {
+  string alert_id = 1;
+}
+
+message GetFraudAlertResponse {
+  insuretech.fraud.entity.v1.FraudAlert alert = 1;
+}
+
+message UpdateFraudAlertRequest {
+  insuretech.fraud.entity.v1.FraudAlert alert = 1;
+}
+
+message UpdateFraudAlertResponse {
+  insuretech.fraud.entity.v1.FraudAlert alert = 1;
+}
+
+message DeleteFraudAlertRequest {
+  string alert_id = 1;
+}
+
+message ListFraudAlertsByEntityRequest {
+  string entity_id = 1;
+}
+
+message ListFraudAlertsByEntityResponse {
+  repeated insuretech.fraud.entity.v1.FraudAlert alerts = 1;
+}
+
+// ========== BENEFICIARY MESSAGES ==========
+message CreateBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.Beneficiary beneficiary = 1;
+}
+
+message CreateBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.Beneficiary beneficiary = 1;
+}
+
+message GetBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+message GetBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.Beneficiary beneficiary = 1;
+}
+
+message UpdateBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.Beneficiary beneficiary = 1;
+}
+
+message UpdateBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.Beneficiary beneficiary = 1;
+}
+
+message DeleteBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+message ListBeneficiariesRequest {
+  int32 page = 1;
+  int32 page_size = 2;
+}
+
+message ListBeneficiariesResponse {
+  repeated insuretech.beneficiary.entity.v1.Beneficiary beneficiaries = 1;
+  int32 total = 2;
+}
+
+// ========== INDIVIDUAL BENEFICIARY MESSAGES ==========
+message CreateIndividualBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.IndividualBeneficiary individual = 1;
+}
+
+message CreateIndividualBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.IndividualBeneficiary individual = 1;
+}
+
+message GetIndividualBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+message GetIndividualBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.IndividualBeneficiary individual = 1;
+}
+
+message UpdateIndividualBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.IndividualBeneficiary individual = 1;
+}
+
+message UpdateIndividualBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.IndividualBeneficiary individual = 1;
+}
+
+message DeleteIndividualBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+// ========== BUSINESS BENEFICIARY MESSAGES ==========
+message CreateBusinessBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.BusinessBeneficiary business = 1;
+}
+
+message CreateBusinessBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.BusinessBeneficiary business = 1;
+}
+
+message GetBusinessBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+message GetBusinessBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.BusinessBeneficiary business = 1;
+}
+
+message UpdateBusinessBeneficiaryRequest {
+  insuretech.beneficiary.entity.v1.BusinessBeneficiary business = 1;
+}
+
+message UpdateBusinessBeneficiaryResponse {
+  insuretech.beneficiary.entity.v1.BusinessBeneficiary business = 1;
+}
+
+message DeleteBusinessBeneficiaryRequest {
+  string beneficiary_id = 1;
+}
+
+// ========== ENDORSEMENT MESSAGES ==========
+message CreateEndorsementRequest {
+  insuretech.endorsement.entity.v1.Endorsement endorsement = 1;
+}
+
+message CreateEndorsementResponse {
+  insuretech.endorsement.entity.v1.Endorsement endorsement = 1;
+}
+
+message GetEndorsementRequest {
+  string endorsement_id = 1;
+}
+
+message GetEndorsementResponse {
+  insuretech.endorsement.entity.v1.Endorsement endorsement = 1;
+}
+
+message UpdateEndorsementRequest {
+  insuretech.endorsement.entity.v1.Endorsement endorsement = 1;
+}
+
+message UpdateEndorsementResponse {
+  insuretech.endorsement.entity.v1.Endorsement endorsement = 1;
+}
+
+message DeleteEndorsementRequest {
+  string endorsement_id = 1;
+}
+
+message ListEndorsementsByPolicyRequest {
+  string policy_id = 1;
+}
+
+message ListEndorsementsByPolicyResponse {
+  repeated insuretech.endorsement.entity.v1.Endorsement endorsements = 1;
+}
+
+// ========== QUOTATION MESSAGES ==========
+message CreateQuotationRequest {
+  insuretech.policy.entity.v1.Quotation quotation = 1;
+}
+
+message CreateQuotationResponse {
+  insuretech.policy.entity.v1.Quotation quotation = 1;
+}
+
+message GetQuotationRequest {
+  string quotation_id = 1;
+}
+
+message GetQuotationResponse {
+  insuretech.policy.entity.v1.Quotation quotation = 1;
+}
+
+message UpdateQuotationRequest {
+  insuretech.policy.entity.v1.Quotation quotation = 1;
+}
+
+message UpdateQuotationResponse {
+  insuretech.policy.entity.v1.Quotation quotation = 1;
+}
+
+message DeleteQuotationRequest {
+  string quotation_id = 1;
+}
+
+message ListQuotationsRequest {
+  string business_id = 1;
+  int32 page = 2;
+  int32 page_size = 3;
+}
+
+message ListQuotationsResponse {
+  repeated insuretech.policy.entity.v1.Quotation quotations = 1;
+  int32 total = 2;
+}
+
+// ========== POLICY SERVICE REQUEST MESSAGES ==========
+message CreatePolicyServiceRequestRequest {
+  insuretech.policy.entity.v1.PolicyServiceRequest request = 1;
+}
+
+message CreatePolicyServiceRequestResponse {
+  insuretech.policy.entity.v1.PolicyServiceRequest request = 1;
+}
+
+message GetPolicyServiceRequestRequest {
+  string request_id = 1;
+}
+
+message GetPolicyServiceRequestResponse {
+  insuretech.policy.entity.v1.PolicyServiceRequest request = 1;
+}
+
+message UpdatePolicyServiceRequestRequest {
+  insuretech.policy.entity.v1.PolicyServiceRequest request = 1;
+}
+
+message UpdatePolicyServiceRequestResponse {
+  insuretech.policy.entity.v1.PolicyServiceRequest request = 1;
+}
+
+message DeletePolicyServiceRequestRequest {
+  string request_id = 1;
+}
+
+message ListPolicyServiceRequestsByPolicyRequest {
+  string policy_id = 1;
+}
+
+message ListPolicyServiceRequestsByPolicyResponse {
+  repeated insuretech.policy.entity.v1.PolicyServiceRequest requests = 1;
+}
+
+// ========== SERVICE PROVIDER MESSAGES ==========
+message CreateServiceProviderRequest {
+  insuretech.services.entity.v1.ServiceProvider provider = 1;
+}
+
+message CreateServiceProviderResponse {
+  insuretech.services.entity.v1.ServiceProvider provider = 1;
+}
+
+message GetServiceProviderRequest {
+  string provider_id = 1;
+}
+
+message GetServiceProviderResponse {
+  insuretech.services.entity.v1.ServiceProvider provider = 1;
+}
+
+message UpdateServiceProviderRequest {
+  insuretech.services.entity.v1.ServiceProvider provider = 1;
+}
+
+message UpdateServiceProviderResponse {
+  insuretech.services.entity.v1.ServiceProvider provider = 1;
+}
+
+message DeleteServiceProviderRequest {
+  string provider_id = 1;
+}
+
+message ListServiceProvidersRequest {
+  string provider_type = 1;
+  string city = 2;
+  int32 page = 3;
+  int32 page_size = 4;
+}
+
+message ListServiceProvidersResponse {
+  repeated insuretech.services.entity.v1.ServiceProvider providers = 1;
+  int32 total = 2;
+}

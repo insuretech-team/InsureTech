@@ -1,0 +1,64 @@
+PartnerBenefits:
+  type: object
+  properties:
+    discount_enabled:
+      type: boolean
+      description: "Discount configuration\n Enable/Disable discount"
+    discount_percentage:
+      type: number
+      format: double
+      description: Discount percentage (0-100)
+    min_discount:
+      type: number
+      format: double
+      description: Minimum discount %
+    max_discount:
+      type: number
+      format: double
+      description: Maximum discount %
+    discount_type:
+      type: string
+      description: SERVICE, PRODUCT, CONSULTATION
+    cashless_enabled:
+      type: boolean
+      description: "Cashless configuration\n Enable/Disable cashless"
+    cashless_limit:
+      type: string
+      format: int64
+      description: Maximum cashless amount in paisa
+    auto_approval_threshold:
+      type: string
+      format: int64
+      description: Auto-approve below this amount
+    pre_authorization_required:
+      type: boolean
+      description: Require pre-auth
+    authorization_validity_days:
+      type: integer
+      format: int32
+      description: Pre-auth validity period
+    required_documents:
+      type: array
+      items:
+        type: string
+        description: Documents needed for cashless
+      description: Documents needed for cashless
+    service_locations:
+      type: array
+      items:
+        type: string
+        description: "Service area\n Cities/areas covered"
+      description: "Service area\n Cities/areas covered"
+    nationwide_coverage:
+      type: boolean
+      description: Available nationwide
+    notes:
+      type: string
+      description: "Additional info\n Additional notes"
+    effective_from:
+      type: string
+      format: date-time
+    effective_to:
+      type: string
+      format: date-time
+  description: Partner Benefits Configuration (Discount & Cashless)

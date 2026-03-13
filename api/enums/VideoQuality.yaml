@@ -1,0 +1,12 @@
+VideoQuality:
+  type: string
+  enum:
+  - VIDEO_QUALITY_UNSPECIFIED
+  - VIDEO_QUALITY_LOW
+  - VIDEO_QUALITY_MEDIUM
+  - VIDEO_QUALITY_HIGH
+  - VIDEO_QUALITY_HD
+  - VIDEO_QUALITY_4K
+  description: 'Enumeration of video quality values. Valid options: VIDEO_QUALITY_UNSPECIFIED,
+    VIDEO_QUALITY_LOW, VIDEO_QUALITY_MEDIUM, VIDEO_QUALITY_HIGH, VIDEO_QUALITY_HD
+    (and 1 more).'

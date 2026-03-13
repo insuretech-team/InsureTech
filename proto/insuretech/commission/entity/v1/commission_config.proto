@@ -1,0 +1,136 @@
+syntax = "proto3";
+
+package insuretech.commission.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/commission/entity/v1;commissionv1";
+
+// Commission configuration per insurer product (FR-063)
+message CommissionConfig {
+  option (insuretech.common.v1.table) = {
+    table_name: "commission_configs"
+    schema_name: "payment_schema"
+    migration_order: 58
+    is_table: true
+    audit_fields: true
+    comment: "Commission rules per insurer product"
+  };
+  
+  string id = 1 [(insuretech.common.v1.column) = {
+    column_name: "config_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+  
+  string insurer_product_id = 2 [(insuretech.common.v1.column) = {
+    column_name: "insurer_product_id"
+    sql_type: "UUID"
+    not_null: true
+    foreign_key: {
+      references_table: "insurer_products"
+      references_column: "product_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_CASCADE
+    }
+    index: {
+      index_name: "idx_commission_configs_product"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_product_id;not null"
+  
+  RevenueModel revenue_model = 3 [(insuretech.common.v1.column) = {
+    column_name: "revenue_model"
+    sql_type: "VARCHAR(20)"
+    not_null: true
+    comment: "COMMISSION, FLAT_FEE, HYBRID, REINSURANCE"
+  }];
+  // @inject_tag: gorm:"column:revenue_model;not null;serializer:proto_enum"
+  
+  // Acquisition commission (first sale)
+  string acquisition_rate = 4 [(insuretech.common.v1.column) = {
+    column_name: "acquisition_rate"
+    sql_type: "DECIMAL(5,2)"
+    comment: "Percentage rate for acquisition (e.g., 10.00 = 10%)"
+  }];
+  // @inject_tag: gorm:"column:acquisition_rate"
+  
+  insuretech.common.v1.Money acquisition_flat_fee = 5;
+  
+  // Renewal commission (repeat sale)
+  string renewal_rate = 6 [(insuretech.common.v1.column) = {
+    column_name: "renewal_rate"
+    sql_type: "DECIMAL(5,2)"
+    comment: "Percentage rate for renewal (e.g., 5.00 = 5%)"
+  }];
+  // @inject_tag: gorm:"column:renewal_rate"
+  
+  insuretech.common.v1.Money renewal_flat_fee = 7;
+  
+  // Claims assistance commission
+  string claims_assistance_rate = 8 [(insuretech.common.v1.column) = {
+    column_name: "claims_assistance_rate"
+    sql_type: "DECIMAL(5,2)"
+    comment: "Commission for successful claim settlement assistance"
+  }];
+  // @inject_tag: gorm:"column:claims_assistance_rate"
+  
+  // Hierarchical splits (for agent networks)
+  string agent_split_config = 9 [(insuretech.common.v1.column) = {
+    column_name: "agent_split_config"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Agent hierarchy commission splits"
+  }];
+  // @inject_tag: gorm:"column:agent_split_config"
+  
+  // Performance bonuses
+  string performance_tiers = 10 [(insuretech.common.v1.column) = {
+    column_name: "performance_tiers"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Tiered bonuses based on volume"
+  }];
+  // @inject_tag: gorm:"column:performance_tiers"
+  
+  google.protobuf.Timestamp effective_from = 11 [(insuretech.common.v1.column) = {
+    column_name: "effective_from"
+    sql_type: "TIMESTAMPTZ"
+    not_null: true
+  }];
+  // @inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"
+  
+  google.protobuf.Timestamp effective_to = 12 [(insuretech.common.v1.column) = {
+    column_name: "effective_to"
+    sql_type: "TIMESTAMPTZ"
+  }];
+  // @inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"
+  
+  insuretech.common.v1.AuditInfo audit_info = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum RevenueModel {
+  REVENUE_MODEL_UNSPECIFIED = 0;
+  REVENUE_MODEL_COMMISSION = 1; // Traditional % of premium (Health, Life)
+  REVENUE_MODEL_FLAT_FEE = 2; // Fixed subscription/service fee (P&C)
+  REVENUE_MODEL_HYBRID = 3; // Premium % + operational fees (Auto)
+  REVENUE_MODEL_REINSURANCE = 4; // Risk share with reinsurer (P&C)
+}
+
+

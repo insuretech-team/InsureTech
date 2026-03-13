@@ -1,0 +1,61 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.service;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/webrtc/v1/service;webrtcservicev1";
+option csharp_namespace = "Insuretech.Webrtc.V1.Service";
+
+import "insuretech/webrtc/v1/entity/peer.proto";
+import "insuretech/webrtc/v1/entity/room.proto";
+
+service PeerService {
+  rpc JoinRoom(JoinRoomRequest) returns (JoinRoomResponse);
+  rpc LeaveRoom(LeaveRoomRequest) returns (LeaveRoomResponse);
+  rpc GetPeer(GetPeerRequest) returns (GetPeerResponse);
+  rpc UpdatePeer(UpdatePeerRequest) returns (UpdatePeerResponse);
+  rpc ListPeers(ListPeersRequest) returns (ListPeersResponse);
+}
+
+message JoinRoomRequest {
+  string room_id = 1;
+  string join_token = 2;
+  string display_name = 3;
+  map<string, string> metadata = 4;
+  repeated insuretech.webrtc.v1.entity.MediaCapability capabilities = 5;
+}
+
+message JoinRoomResponse {
+  insuretech.webrtc.v1.entity.Peer peer = 1;
+  insuretech.webrtc.v1.entity.Room room = 2;
+  repeated insuretech.webrtc.v1.entity.Peer existing_peers = 3;
+}
+
+message LeaveRoomRequest {
+  string room_id = 1;
+  string peer_id = 2;
+  string reason = 3;
+}
+
+message LeaveRoomResponse { bool success = 1; }
+
+message GetPeerRequest { string peer_id = 1; }
+message GetPeerResponse { insuretech.webrtc.v1.entity.Peer peer = 1; }
+
+message UpdatePeerRequest {
+  string peer_id = 1;
+  string display_name = 2;
+  map<string, string> metadata = 3;
+}
+
+message UpdatePeerResponse { insuretech.webrtc.v1.entity.Peer peer = 1; }
+
+message ListPeersRequest {
+  string room_id = 1;
+  insuretech.webrtc.v1.entity.PeerConnectionState state_filter = 2;
+}
+
+message ListPeersResponse {
+  repeated insuretech.webrtc.v1.entity.Peer peers = 1;
+  int32 total_count = 2;
+}
+

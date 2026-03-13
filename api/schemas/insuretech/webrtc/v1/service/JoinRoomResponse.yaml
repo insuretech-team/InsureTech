@@ -1,0 +1,13 @@
+JoinRoomResponse:
+  type: object
+  properties:
+    peer:
+      $ref: '#/components/schemas/Peer'
+    room:
+      $ref: '#/components/schemas/Room'
+    existing_peers:
+      type: array
+      items:
+        $ref: '#/components/schemas/Peer'
+  description: Response payload for join room operation. Returns operation results
+    and status.

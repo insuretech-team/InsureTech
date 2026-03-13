@@ -1,0 +1,9 @@
+OutputFormat:
+  type: string
+  enum:
+  - OUTPUT_FORMAT_UNSPECIFIED
+  - OUTPUT_FORMAT_PDF
+  - OUTPUT_FORMAT_HTML
+  - OUTPUT_FORMAT_DOCX
+  description: 'Enumeration of output format values. Valid options: OUTPUT_FORMAT_UNSPECIFIED,
+    OUTPUT_FORMAT_PDF, OUTPUT_FORMAT_HTML, OUTPUT_FORMAT_DOCX.'

@@ -1,0 +1,10 @@
+UserPermissionsRetrievalRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    domain:
+      type: string
+      description: '"portal:tenant_id"'
+  description: Request payload for retrieving user permissions retrieval information.
+    May include filters and pagination parameters.

@@ -1,0 +1,314 @@
+syntax = "proto3";
+
+package insuretech.beneficiary.entity.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/beneficiary/entity/v1;beneficiaryv1";
+
+// Business (B2B) beneficiary details
+message BusinessBeneficiary {
+  option (insuretech.common.v1.table) = {
+    table_name : "business_beneficiaries"
+    schema_name : "insurance_schema"
+    migration_order : 27
+    is_table : true
+    audit_fields : true
+    comment : "Corporate/business entity details"
+  };
+
+  string id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "beneficiary_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
+
+  string beneficiary_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "parent_beneficiary_id"
+    sql_type : "UUID"
+    not_null : true
+    unique : true
+    foreign_key : {
+      references_table : "beneficiaries"
+      references_column : "beneficiary_id"
+      references_schema : "insurance_schema"
+      on_delete : REFERENTIAL_ACTION_CASCADE
+    }
+    index : {
+      index_name : "idx_business_beneficiaries_parent_beneficiary_id"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:parent_beneficiary_id;not null"
+
+  string business_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "business_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:business_name;not null"
+
+  string business_name_bn = 4 [ (insuretech.common.v1.column) = {
+    column_name : "business_name_bn"
+    sql_type : "VARCHAR(255)"
+  } ];
+  // @inject_tag: gorm:"column:business_name_bn"
+
+  string trade_license_number = 5 [
+    (insuretech.common.v1.column) = {
+      column_name : "trade_license_number"
+      sql_type : "VARCHAR(50)"
+      not_null : true
+      unique : true
+      index : {
+        index_name : "idx_business_beneficiaries_trade_license"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true
+  ];
+  // @inject_tag: gorm:"column:trade_license_number;not null"
+
+  google.protobuf.Timestamp trade_license_issue_date = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "trade_license_issue_date"
+        sql_type : "DATE"
+      } ];
+  // @inject_tag: gorm:"column:trade_license_issue_date;serializer:proto_timestamp"
+  // gorm:"column:trade_license_issue_date;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp trade_license_expiry_date = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "trade_license_expiry_date"
+        sql_type : "DATE"
+      } ];
+  // @inject_tag: gorm:"column:trade_license_expiry_date;serializer:proto_timestamp"
+  // gorm:"column:trade_license_expiry_date;serializer:proto_timestamp"
+
+  string tin_number = 8 [
+    (insuretech.common.v1.column) = {
+      column_name : "tin_number"
+      sql_type : "VARCHAR(12)"
+      not_null : true
+      unique : true
+      index : {
+        index_name : "idx_business_beneficiaries_tin"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true
+  ];
+  // @inject_tag: gorm:"column:tin_number;not null"
+
+  string bin_number = 9 [
+    (insuretech.common.v1.column) = {
+      column_name : "bin_number"
+      sql_type : "VARCHAR(15)"
+      comment : "Business Identification Number"
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true
+  ];
+  // @inject_tag: gorm:"column:bin_number"
+
+  BusinessType business_type = 10 [ (insuretech.common.v1.column) = {
+    column_name : "business_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:business_type;not null;serializer:proto_enum"
+
+  string industry_sector = 11 [ (insuretech.common.v1.column) = {
+    column_name : "industry_sector"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:industry_sector"
+
+  int32 employee_count = 12 [ (insuretech.common.v1.column) = {
+    column_name : "employee_count"
+    sql_type : "INTEGER"
+  } ];
+  // @inject_tag: gorm:"column:employee_count"
+
+  google.protobuf.Timestamp incorporation_date = 13
+      [ (insuretech.common.v1.column) = {
+        column_name : "incorporation_date"
+        sql_type : "DATE"
+      } ];
+  // @inject_tag: gorm:"column:incorporation_date;serializer:proto_timestamp"
+
+  insuretech.common.v1.ContactInfo contact_info = 14
+      [ (insuretech.common.v1.column) = {
+        column_name : "contact_info"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Contact information stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:contact_info;not null"
+  insuretech.common.v1.Address registered_address = 15
+      [ (insuretech.common.v1.column) = {
+        column_name : "registered_address"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Address stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:registered_address;not null"
+  insuretech.common.v1.Address business_address = 16
+      [ (insuretech.common.v1.column) = {
+        column_name : "business_address"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Address stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:business_address;not null"
+
+  // Focal person (authorized signatory)
+  string focal_person_name = 17 [ (insuretech.common.v1.column) = {
+    column_name : "focal_person_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:focal_person_name;not null"
+
+  string focal_person_designation = 18 [ (insuretech.common.v1.column) = {
+    column_name : "focal_person_designation"
+    sql_type : "VARCHAR(100)"
+  } ];
+  // @inject_tag: gorm:"column:focal_person_designation"
+
+  string focal_person_nid = 19 [
+    (insuretech.common.v1.column) = {
+      column_name : "focal_person_nid"
+      sql_type : "VARCHAR(17)"
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "Identity verification for authorized signatory",
+    (insuretech.common.v1.retention_days) = 2555
+  ];
+  // @inject_tag: gorm:"column:focal_person_nid"
+
+  insuretech.common.v1.ContactInfo focal_person_contact = 20
+      [ (insuretech.common.v1.column) = {
+        column_name : "focal_person_contact"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Contact information stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:focal_person_contact;not null"
+
+  insuretech.common.v1.AuditInfo audit_info = 21
+      [ (insuretech.common.v1.column) = {
+        column_name : "audit_info"
+        sql_type : "JSONB"
+        not_null : true
+        default_value : "'{}'::jsonb"
+        is_json : true
+        comment : "Audit trail stored as JSON"
+      } ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+
+  string registration_number = 22 [ (insuretech.common.v1.column) = {
+    column_name : "registration_number"
+    sql_type : "VARCHAR(100)"
+    unique : true
+    comment : "Company registration number"
+  } ];
+  // @inject_tag: gorm:"column:registration_number"
+
+  string tax_id = 23 [ (insuretech.common.v1.column) = {
+    column_name : "tax_id"
+    sql_type : "VARCHAR(50)"
+    unique : true
+    comment : "Tax identification number (TIN)"
+  } ];
+  // @inject_tag: gorm:"column:tax_id"
+
+  PrimaryContact primary_contact = 24 [ (insuretech.common.v1.column) = {
+    column_name : "primary_contact"
+    sql_type : "JSONB"
+    comment : "Primary contact person details"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:primary_contact;serializer:proto_enum"
+
+  // Dashboard metrics (cached)
+  int32 total_employees_covered = 25 [ (insuretech.common.v1.column) = {
+    column_name : "total_employees_covered"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Cached count of employees with active coverage"
+  } ];
+  // @inject_tag: gorm:"column:total_employees_covered;not null"
+
+  int32 active_policies_count = 26 [ (insuretech.common.v1.column) = {
+    column_name : "active_policies_count"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Cached count of active group policies"
+  } ];
+  // @inject_tag: gorm:"column:active_policies_count;not null"
+
+  insuretech.common.v1.Money total_premium_amount = 27
+      [ (insuretech.common.v1.column) = {
+        column_name : "total_premium_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        default_value : "0"
+        comment : "Total premium across all policies in paisa"
+      } ];
+  // @inject_tag: gorm:"column:total_premium_amount;not null"
+
+  int32 pending_actions_count = 28 [ (insuretech.common.v1.column) = {
+    column_name : "pending_actions_count"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Count of pending approvals/actions"
+  } ];
+  // @inject_tag: gorm:"column:pending_actions_count;not null"
+}
+
+// Primary Contact Information
+message PrimaryContact {
+  string name = 1;
+  string email = 2;
+  string phone = 3;
+  string department = 4;
+}
+
+enum BusinessType {
+  BUSINESS_TYPE_UNSPECIFIED = 0;
+  BUSINESS_TYPE_SOLE_PROPRIETORSHIP = 1;
+  BUSINESS_TYPE_PARTNERSHIP = 2;
+  BUSINESS_TYPE_PRIVATE_LIMITED = 3;
+  BUSINESS_TYPE_PUBLIC_LIMITED = 4;
+  BUSINESS_TYPE_NGO = 5;
+  BUSINESS_TYPE_GOVERNMENT = 6;
+}

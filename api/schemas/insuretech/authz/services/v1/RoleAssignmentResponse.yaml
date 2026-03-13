@@ -1,0 +1,9 @@
+RoleAssignmentResponse:
+  type: object
+  properties:
+    user_role:
+      $ref: '#/components/schemas/UserRole'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for role assignment operation. Returns operation results
+    and status.

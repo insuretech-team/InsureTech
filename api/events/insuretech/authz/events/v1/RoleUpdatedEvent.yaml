@@ -1,0 +1,19 @@
+RoleUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    role_id:
+      type: string
+    updated_by:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: field_name -> new_value
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when role is updated. Published to event stream for downstream
+    processing and audit trail.

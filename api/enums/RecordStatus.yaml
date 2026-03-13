@@ -1,0 +1,10 @@
+RecordStatus:
+  type: string
+  enum:
+  - RECORD_STATUS_UNSPECIFIED
+  - RECORD_STATUS_ACTIVE
+  - RECORD_STATUS_INACTIVE
+  - RECORD_STATUS_PENDING
+  - RECORD_STATUS_SUSPENDED
+  - RECORD_STATUS_DELETED
+  description: Status tracking

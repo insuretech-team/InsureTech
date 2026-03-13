@@ -1,0 +1,7 @@
+DocumentTypesListingRequest:
+  type: object
+  properties:
+    active_only:
+      type: boolean
+  description: Request payload for listing document types listing items. Supports
+    filtering, sorting, and pagination.

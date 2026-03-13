@@ -1,0 +1,7 @@
+InsuranceInsurerUpdateRequest:
+  type: object
+  properties:
+    insurer:
+      $ref: '#/components/schemas/Insurer'
+  description: Request payload for updating an existing insurer update. Contains fields
+    to be modified.

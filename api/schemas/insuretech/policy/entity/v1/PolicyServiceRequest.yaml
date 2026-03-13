@@ -1,0 +1,33 @@
+PolicyServiceRequest:
+  type: object
+  properties:
+    request_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:request_id;not null"'
+    policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:policy_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    request_type:
+      $ref: '#/components/schemas/ServiceRequestType'
+      description: '@inject_tag: gorm:"column:request_type;not null;serializer:proto_enum"'
+    request_data:
+      type: string
+      description: '@inject_tag: gorm:"column:request_data"'
+    status:
+      $ref: '#/components/schemas/ServiceRequestStatus'
+      description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
+    processed_by:
+      type: string
+      description: '@inject_tag: gorm:"column:processed_by"'
+    created_at:
+      type: string
+      format: date-time
+    processed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"'
+  description: Request payload for policy service operation. Contains parameters required
+    to execute the operation.

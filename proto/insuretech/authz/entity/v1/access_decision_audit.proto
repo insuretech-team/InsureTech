@@ -1,0 +1,59 @@
+syntax = "proto3";
+
+package insuretech.authz.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1;authzv1";
+option csharp_namespace = "Insuretech.Authz.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/authz/entity/v1/enums.proto";
+
+// ---------------------------------------------------------------------------
+// 7. AccessDecisionAudit — immutable audit log of every Casbin enforcement call
+// ---------------------------------------------------------------------------
+message AccessDecisionAudit {
+  option (insuretech.common.v1.table) = {
+    table_name     : "access_decision_audits"
+    schema_name    : "authz_schema"
+    migration_order: 7
+    is_table       : true
+    comment        : "Immutable audit trail of every AuthZ enforcement decision"
+    soft_delete    : false
+    audit_fields   : false
+    enable_rls     : false
+  };
+
+  string audit_id    = 1 [(insuretech.common.v1.column) = {
+    column_name: "audit_id"  sql_type: "UUID"  primary_key: true  not_null: true
+    default_value: "gen_random_uuid()"
+  }];
+  string user_id     = 2 [(insuretech.common.v1.column) = {
+    column_name: "user_id"  sql_type: "UUID"  not_null: true
+    index: { index_name: "idx_ada_user_id"  index_type: INDEX_TYPE_BTREE }
+  }];
+  string session_id  = 3 [(insuretech.common.v1.column) = { column_name: "session_id"  sql_type: "UUID" }];
+  string domain      = 4 [(insuretech.common.v1.column) = {
+    column_name: "domain"  sql_type: "VARCHAR(200)"  not_null: true
+    comment: "portal:tenant_id"
+    index: { index_name: "idx_ada_domain"  index_type: INDEX_TYPE_BTREE }
+  }];
+  string subject     = 5 [(insuretech.common.v1.column) = { column_name: "subject"  sql_type: "VARCHAR(200)"  not_null: true }];
+  string object      = 6 [(insuretech.common.v1.column) = { column_name: "object"   sql_type: "VARCHAR(200)"  not_null: true }];
+  string action      = 7 [(insuretech.common.v1.column) = { column_name: "action"   sql_type: "VARCHAR(50)"   not_null: true }];
+  PolicyEffect decision = 8 [(insuretech.common.v1.column) = {
+    column_name: "decision"  sql_type: "VARCHAR(10)"  not_null: true
+    comment: "allow | deny"
+  }];
+  string matched_rule = 9 [(insuretech.common.v1.column) = {
+    column_name: "matched_rule"  sql_type: "TEXT"
+    comment: "The casbin_rule that caused this decision"
+  }];
+  string ip_address  = 10 [(insuretech.common.v1.column) = { column_name: "ip_address"  sql_type: "INET" }];
+  string user_agent  = 11 [(insuretech.common.v1.column) = { column_name: "user_agent"  sql_type: "TEXT" }];
+  google.protobuf.Timestamp decided_at = 12 [(insuretech.common.v1.column) = {
+    column_name: "decided_at"  sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true  default_value: "CURRENT_TIMESTAMP"
+    index: { index_name: "idx_ada_decided_at"  index_type: INDEX_TYPE_BTREE }
+  }];
+}

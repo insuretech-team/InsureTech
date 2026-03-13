@@ -1,0 +1,12 @@
+Portal:
+  type: string
+  enum:
+  - PORTAL_UNSPECIFIED
+  - PORTAL_SYSTEM
+  - PORTAL_BUSINESS
+  - PORTAL_B2B
+  - PORTAL_AGENT
+  - PORTAL_REGULATOR
+  - PORTAL_B2C
+  description: "Portal identifies which portal context the request comes from.\r\n\
+    \ Domain format in Casbin: \"portal:tenant_id\""

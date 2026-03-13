@@ -1,0 +1,18 @@
+AIAgentDeactivatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    agent_id:
+      type: string
+    agent_name:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: AI agent deactivated'

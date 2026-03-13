@@ -1,0 +1,385 @@
+syntax = "proto3";
+
+package insuretech.authn.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1;authnv1";
+option csharp_namespace = "Insuretech.Authn.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/security.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/authn/entity/v1/enums.proto";
+// User represents a registered user in the system
+// Maps to 'users' table in public schema
+message User {
+  option (insuretech.common.v1.table) = {
+    table_name : "users"
+    schema_name : "authn_schema"
+    migration_order : 1
+    is_table : true
+    comment : "Registered users with authentication credentials"
+    soft_delete : true
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string user_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+    comment : "Primary key - UUID v4"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:user_id;not null"
+
+  string mobile_number = 2 [
+    (insuretech.common.v1.column) = {
+      column_name : "mobile_number"
+      sql_type : "VARCHAR(20)"
+      not_null : true
+      unique : true
+      check_constraint : "mobile_number ~ '^\\+880[1][0-9]{9}$'"
+      comment : "Bangladesh mobile format: +880 1XXX XXXXXX"
+      index : {
+        index_name : "idx_users_mobile_number"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "User authentication and communication"
+  ];
+  // @inject_tag: gorm:"column:mobile_number;not null"
+
+  string email = 3 [
+    (insuretech.common.v1.column) = {
+      column_name : "email"
+      sql_type : "VARCHAR(255)"
+      unique : true
+      check_constraint : "email ~* "
+                         "'^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\\.[A-Z|a-z]{2,}$'"
+      comment : "Email address (optional, must be unique if provided)"
+      index : {
+        index_name : "idx_users_email"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+        where_clause : "email IS NOT NULL"
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.encrypted_security) = true,
+    (insuretech.common.v1.log_masked) = true,
+    (insuretech.common.v1.requires_consent) = true,
+    (insuretech.common.v1.data_purpose) =
+        "User communication and account recovery"
+  ];
+  // @inject_tag: gorm:"column:email"
+
+  string password_hash = 4 [
+    (insuretech.common.v1.column) = {
+      column_name : "password_hash"
+      sql_type : "VARCHAR(255)"
+      not_null : true
+      encrypted : true
+      comment : "bcrypt hash of password"
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.data_purpose) = "User authentication"
+  ];
+  // @inject_tag: gorm:"column:password_hash;not null"
+
+  UserStatus status = 5 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'PENDING_VERIFICATION'"
+    comment : "User account status"
+    index : {index_name : "idx_users_status" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  google.protobuf.Timestamp created_at = 6 [ (insuretech.common.v1.column) = {
+    column_name : "created_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+    exclude_from_update : true
+  } ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 7 [ (insuretech.common.v1.column) = {
+    column_name : "updated_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    not_null : true
+    default_value : "CURRENT_TIMESTAMP"
+    exclude_from_insert : true
+  } ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp last_login_at = 8
+      [ (insuretech.common.v1.column) = {
+        column_name : "last_login_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Last successful login timestamp"
+      } ];
+  // @inject_tag: gorm:"column:last_login_at;serializer:proto_timestamp"
+
+  string last_login_session_type = 9 [ (insuretech.common.v1.column) = {
+    column_name : "last_login_session_type"
+    sql_type : "VARCHAR(50)"
+    comment : "Last login session type: SERVER_SIDE or JWT"
+  } ];
+  // @inject_tag: gorm:"column:last_login_session_type"
+
+  string preferred_auth_method = 10 [ (insuretech.common.v1.column) = {
+    column_name : "preferred_auth_method"
+    sql_type : "VARCHAR(50)"
+    comment : "User's preferred authentication method"
+  } ];
+  // @inject_tag: gorm:"column:preferred_auth_method"
+
+  optional string created_by = 11 [ (insuretech.common.v1.column) = {
+    column_name : "created_by"
+    sql_type : "UUID"
+    comment : "User ID who created this record (self-registration = NULL)"
+  } ];
+  // @inject_tag: gorm:"column:created_by"
+
+  optional string updated_by = 12 [ (insuretech.common.v1.column) = {
+    column_name : "updated_by"
+    sql_type : "UUID"
+    comment : "User ID who last updated this record"
+  } ];
+  // @inject_tag: gorm:"column:updated_by"
+
+  int32 login_attempts = 13 [ (insuretech.common.v1.column) = {
+    column_name : "login_attempts"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    check_constraint : "login_attempts >= 0 AND login_attempts <= 5"
+    comment : "Failed login counter (max 5 before lockout)"
+  } ];
+  // @inject_tag: gorm:"column:login_attempts;not null"
+
+  google.protobuf.Timestamp
+      locked_until = 14 [ (insuretech.common.v1.column) = {
+    column_name : "locked_until"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Account lockout expiry time (30 minutes after 5 failed attempts)"
+    index : {
+      index_name : "idx_users_locked_until"
+      index_type : INDEX_TYPE_BTREE
+      where_clause : "locked_until IS NOT NULL"
+    }
+  } ];
+  // @inject_tag: gorm:"column:locked_until;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 15 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  string username = 16 [ (insuretech.common.v1.column) = {
+    column_name : "username"
+    sql_type : "VARCHAR(100)"
+    unique : true
+    comment : "Optional custom username"
+  } ];
+  // @inject_tag: gorm:"column:username"
+
+  string preferred_language = 17 [ (insuretech.common.v1.column) = {
+    column_name : "preferred_language"
+    sql_type : "VARCHAR(20)"
+    default_value : "'en'"
+  } ];
+  // @inject_tag: gorm:"column:preferred_language"
+
+  string notification_preference = 18 [ (insuretech.common.v1.column) = {
+    column_name : "notification_preference"
+    sql_type : "VARCHAR(50)"
+    comment : "e.g., SMS, EMAIL, PUSH"
+  } ];
+  // @inject_tag: gorm:"column:notification_preference"
+
+  string wallet_payment_method = 19 [ (insuretech.common.v1.column) = {
+    column_name : "wallet_payment_method"
+    sql_type : "VARCHAR(100)"
+    comment : "Preferred payment method/wallet"
+  } ];
+  // @inject_tag: gorm:"column:wallet_payment_method"
+
+  // UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER use
+  // email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth
+  UserType user_type = 20 [ (insuretech.common.v1.column) = {
+    column_name : "user_type"
+    sql_type : "VARCHAR(50)"
+    not_null : true
+    default_value : "'B2C_CUSTOMER'"
+    comment : "User type: B2C_CUSTOMER, AGENT, BUSINESS_BENEFICIARY, "
+              "SYSTEM_USER"
+    index : {index_name : "idx_users_user_type" index_type : INDEX_TYPE_BTREE}
+  } ];
+  // @inject_tag: gorm:"column:user_type;not null;serializer:proto_enum"
+
+  bool email_verified = 21 [ (insuretech.common.v1.column) = {
+    column_name : "email_verified"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Email address verification status"
+    index : {
+      index_name : "idx_users_email_verified"
+      index_type : INDEX_TYPE_BTREE
+      where_clause : "deleted_at IS NULL"
+    }
+  } ];
+  // @inject_tag: gorm:"column:email_verified;not null"
+
+  google.protobuf.Timestamp email_verified_at = 22
+      [ (insuretech.common.v1.column) = {
+        column_name : "email_verified_at"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Email verification timestamp"
+      } ];
+  // @inject_tag: gorm:"column:email_verified_at;serializer:proto_timestamp"
+
+  int32 email_login_attempts = 23 [ (insuretech.common.v1.column) = {
+    column_name : "email_login_attempts"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    check_constraint : "email_login_attempts >= 0 AND email_login_attempts <= 5"
+    comment : "Failed email-OTP login counter (max 5 before lockout)"
+  } ];
+  // @inject_tag: gorm:"column:email_login_attempts;not null"
+
+  google.protobuf.Timestamp email_locked_until = 24
+      [ (insuretech.common.v1.column) = {
+        column_name : "email_locked_until"
+        sql_type : "TIMESTAMP WITH TIME ZONE"
+        comment : "Email auth lockout expiry (30 min after 5 failed attempts)"
+        index : {
+          index_name : "idx_users_email_locked_until"
+          index_type : INDEX_TYPE_BTREE
+          where_clause : "email_locked_until IS NOT NULL"
+        }
+      } ];
+  // @inject_tag: gorm:"column:email_locked_until;serializer:proto_timestamp"
+
+  // biometric_token_enc: AES-256-GCM encrypted biometric token (device-side public key / FIDO attestation)
+  string biometric_token_enc = 25 [
+    (insuretech.common.v1.column) = {
+      column_name : "biometric_token_enc"
+      sql_type : "TEXT"
+      encrypted : true
+      comment : "AES-256-GCM encrypted biometric authentication token"
+    },
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_redacted) = true,
+    (insuretech.common.v1.data_purpose) = "Biometric device authentication"
+  ];
+  // @inject_tag: gorm:"column:biometric_token_enc"
+
+  // biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc equality lookup
+  string biometric_token_idx = 29 [
+    (insuretech.common.v1.column) = {
+      column_name : "biometric_token_idx"
+      sql_type : "TEXT"
+      comment : "HMAC-SHA256 blind index of biometric_token_enc. Used for device lookup."
+      index : {
+        index_name : "idx_users_biometric_token_idx"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+        where_clause : "biometric_token_idx IS NOT NULL AND deleted_at IS NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:biometric_token_idx"
+
+  // mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number equality lookup
+  string mobile_number_idx = 30 [
+    (insuretech.common.v1.column) = {
+      column_name : "mobile_number_idx"
+      sql_type : "TEXT"
+      comment : "HMAC-SHA256 blind index of encrypted mobile_number. Used for equality lookups."
+      index : {
+        index_name : "idx_users_mobile_number_idx"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+        where_clause : "mobile_number_idx IS NOT NULL AND deleted_at IS NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:mobile_number_idx"
+
+  // email_idx: HMAC-SHA256 blind index for encrypted email equality lookup
+  string email_idx = 31 [
+    (insuretech.common.v1.column) = {
+      column_name : "email_idx"
+      sql_type : "TEXT"
+      comment : "HMAC-SHA256 blind index of encrypted email. Used for equality lookups."
+      index : {
+        index_name : "idx_users_email_idx"
+        index_type : INDEX_TYPE_BTREE
+        unique : true
+        where_clause : "email_idx IS NOT NULL AND deleted_at IS NULL"
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:email_idx"
+
+  bool totp_enabled = 32 [ (insuretech.common.v1.column) = {
+    column_name : "totp_enabled"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Whether TOTP 2FA is enabled for this user"
+  } ];
+  // @inject_tag: gorm:"column:totp_enabled;not null"
+
+  string totp_secret_enc = 33 [ (insuretech.common.v1.column) = {
+    column_name : "totp_secret_enc"
+    sql_type : "TEXT"
+    comment : "AES-256-GCM encrypted TOTP secret (base32)"
+  } ];
+  // @inject_tag: gorm:"column:totp_secret_enc"
+
+  int32 active_policies_count = 26 [ (insuretech.common.v1.column) = {
+    column_name : "active_policies_count"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Cached count of active policies"
+  } ];
+  // @inject_tag: gorm:"column:active_policies_count;not null"
+
+  int32 pending_claims_count = 27 [ (insuretech.common.v1.column) = {
+    column_name : "pending_claims_count"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "0"
+    comment : "Cached count of pending claims"
+  } ];
+  // @inject_tag: gorm:"column:pending_claims_count;not null"
+
+  insuretech.common.v1.Money wallet_balance = 28
+      [ (insuretech.common.v1.column) = {
+        column_name : "wallet_balance"
+        sql_type : "BIGINT"
+        not_null : true
+        default_value : "0"
+        comment : "Wallet balance in paisa"
+      } ];
+  // @inject_tag: gorm:"column:wallet_balance;not null"
+}

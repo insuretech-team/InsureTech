@@ -1,0 +1,12 @@
+OrderStatus:
+  type: string
+  enum:
+  - ORDER_STATUS_UNSPECIFIED
+  - ORDER_STATUS_PENDING
+  - ORDER_STATUS_PAYMENT_INITIATED
+  - ORDER_STATUS_PAID
+  - ORDER_STATUS_POLICY_ISSUED
+  - ORDER_STATUS_CANCELLED
+  - ORDER_STATUS_FAILED
+  description: OrderStatus represents the primary lifecycle state of an insurance
+    purchase order.

@@ -1,0 +1,70 @@
+syntax = "proto3";
+
+package insuretech.claims.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/claims/events/v1;claimeventsv1";
+option csharp_namespace = "Insuretech.Claims.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+// Event: Claim submitted
+message ClaimSubmittedEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string claim_number = 3;
+  string policy_id = 4;
+  string customer_id = 5;
+  insuretech.common.v1.Money claimed_amount = 6;
+  string claim_type = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: Claim approved
+message ClaimApprovedEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string claim_number = 3;
+  string approver_id = 4;
+  insuretech.common.v1.Money approved_amount = 5;
+  string approval_level = 6; // L1, L2, L3, Board
+  google.protobuf.Timestamp timestamp = 7;
+  string correlation_id = 8; // CG-6: trace across services
+}
+
+// Event: Claim rejected
+message ClaimRejectedEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string claim_number = 3;
+  string approver_id = 4;
+  string reason = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7; // CG-6: trace across services
+}
+
+// Event: Claim settled
+message ClaimSettledEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string claim_number = 3;
+  string customer_id = 4;
+  insuretech.common.v1.Money settled_amount = 5;
+  string payment_method = 6;
+  string payment_reference = 7;
+  google.protobuf.Timestamp timestamp = 8;
+  string correlation_id = 9; // CG-6: trace across services
+}
+
+// Event: Fraud detected
+message FraudDetectedEvent {
+  string event_id = 1;
+  string claim_id = 2;
+  string claim_number = 3;
+  double fraud_score = 4;
+  repeated string risk_indicators = 5;
+  google.protobuf.Timestamp timestamp = 6;
+  string correlation_id = 7; // CG-6: trace across services
+}
+

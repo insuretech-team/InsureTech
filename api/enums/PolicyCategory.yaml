@@ -1,0 +1,7 @@
+PolicyCategory:
+  type: string
+  enum:
+  - POLICY_CATEGORY_UNSPECIFIED
+  - POLICY_CATEGORY_LIFE
+  - POLICY_CATEGORY_NONLIFE
+  description: Insurance categorization

@@ -1,0 +1,440 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PolicyCreationRequest Schema - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .schema-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .type-badge {
+            background: #4caf50;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .schema-name {
+            font-size: 2em;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .description {
+            color: #555;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 20px;
+        }
+        
+        .db-table-container {
+            background: white;
+            border-radius: 8px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+        }
+        
+        .db-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95em;
+        }
+        
+        .db-table thead {
+            background: #2c3e50;
+            color: white;
+        }
+        
+        .db-table th {
+            padding: 12px 15px;
+            text-align: left;
+            font-weight: 600;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .db-table tbody tr {
+            border-bottom: 1px solid #e0e0e0;
+            transition: background 0.2s;
+        }
+        
+        .db-table tbody tr:hover {
+            background: #f8f9fa;
+        }
+        
+        .db-table tbody tr:last-child {
+            border-bottom: none;
+        }
+        
+        .db-table td {
+            padding: 12px 15px;
+            vertical-align: top;
+        }
+        
+        .field-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #2c3e50;
+        }
+        
+        .field-type code {
+            background: #e8f4f8;
+            color: #0277bd;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        
+        .field-type small {
+            color: #666;
+            display: block;
+            margin-top: 4px;
+        }
+        
+        .field-nullable {
+            text-align: center;
+            font-weight: 600;
+            color: #666;
+        }
+        
+        .field-constraints {
+            color: #666;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .field-description {
+            color: #555;
+            line-height: 1.5;
+        }
+        
+        .ref-link {
+            display: inline-block;
+            margin-top: 4px;
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.9em;
+        }
+        
+        .ref-link:hover {
+            text-decoration: underline;
+        }
+        
+        .no-props {
+            color: #999;
+            font-style: italic;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+        
+        .stat-box {
+            background: #f8f9fa;
+            padding: 15px;
+            border-radius: 8px;
+            text-align: center;
+            border-left: 4px solid #667eea;
+        }
+        
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        
+        .stat-label {
+            font-size: 0.85em;
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / Schemas
+            </div>
+            <div class="schema-title">
+                <span class="type-badge">object</span>
+                <span class="schema-name">PolicyCreationRequest</span>
+            </div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card">
+            <div class="description">Request payload for creating a new policy creation. Contains all required fields and optional parameters for initialization.</div>
+        </div>
+        
+        <div class="card">
+            <div class="stats-grid">
+                <div class="stat-box">
+                    <div class="stat-value">10</div>
+                    <div class="stat-label">Total Fields</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">4</div>
+                    <div class="stat-label">Required</div>
+                </div>
+                <div class="stat-box">
+                    <div class="stat-value">6</div>
+                    <div class="stat-label">Optional</div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <h2>📋 Schema Fields</h2>
+            
+        <div class="db-table-container">
+            <table class="db-table">
+                <thead>
+                    <tr>
+                        <th style="width: 20%;">Field Name</th>
+                        <th style="width: 15%;">Type</th>
+                        <th style="width: 8%;">Nullable</th>
+                        <th style="width: 20%;">Constraints</th>
+                        <th style="width: 37%;">Description</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>product_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>customer_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>partner_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>agent_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>applicant</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>Applicant</small>
+                    <a href="schema_applicant.html" class="ref-link">→ Applicant</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>nominees</strong>
+                </td>
+                <td class="field-type">
+                    <code>array</code>
+                    <br><small>array of Nominee</small>
+                    <a href="schema_nominee.html" class="ref-link">→ Nominee[]</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>riders</strong>
+                </td>
+                <td class="field-type">
+                    <code>array</code>
+                    <br><small>array of PolicyRider</small>
+                    <a href="schema_policyrider.html" class="ref-link">→ PolicyRider[]</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>premium_amount</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>Money</small>
+                    <a href="schema_money.html" class="ref-link">→ Money</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>sum_insured</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>Money</small>
+                    <a href="schema_money.html" class="ref-link">→ Money</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>tenure_months</strong>
+                </td>
+                <td class="field-type">
+                    <code>integer</code>
+                    <br><small>int32</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+                </tbody>
+            </table>
+        </div>
+        
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,14 @@
+RiskAssessmentRequest:
+  type: object
+  properties:
+    applicant_id:
+      type: string
+    product_id:
+      type: string
+    applicant_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for risk assessment operation. Contains parameters
+    required to execute the operation.

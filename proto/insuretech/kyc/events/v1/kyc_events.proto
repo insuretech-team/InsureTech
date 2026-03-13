@@ -1,0 +1,42 @@
+syntax = "proto3";
+
+package insuretech.kyc.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/events/v1;kyceventsv1";
+
+// Kafka event: KYC verification started
+message KYCVerificationStartedEvent {
+  string event_id = 1;
+  string kyc_verification_id = 2;
+  string type = 3;
+  string entity_type = 4;
+  string entity_id = 5;
+  string method = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: KYC verified
+message KYCVerifiedEvent {
+  string event_id = 1;
+  string kyc_verification_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string verified_by = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: KYC rejected
+message KYCRejectedEvent {
+  string event_id = 1;
+  string kyc_verification_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string reason = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+

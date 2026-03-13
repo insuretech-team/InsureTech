@@ -1,0 +1,16 @@
+RenegotiationRequiredEvent:
+  type: object
+  properties:
+    room_id:
+      type: string
+      description: ULID format
+    peer_id:
+      type: string
+      description: ULID format
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: Event emitted when renegotiation undergoes required. Published to event
+    stream for downstream processing and audit trail.

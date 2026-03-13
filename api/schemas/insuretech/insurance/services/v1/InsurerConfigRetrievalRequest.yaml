@@ -1,0 +1,7 @@
+InsurerConfigRetrievalRequest:
+  type: object
+  properties:
+    config_id:
+      type: string
+  description: Request payload for retrieving insurer config retrieval information.
+    May include filters and pagination parameters.

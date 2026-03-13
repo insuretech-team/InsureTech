@@ -1,0 +1,151 @@
+syntax = "proto3";
+
+package insuretech.webrtc.v1.entity;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/entity;entity";
+option csharp_namespace = "Insuretech.Webrtc.V1.Entity";
+
+import "insuretech/common/v1/types.proto";
+import "insuretech/common/v1/db.proto";
+import "google/protobuf/timestamp.proto";
+
+// Media track published by a peer
+message Track {
+  option (insuretech.common.v1.table) = {
+    table_name: "tracks"
+    schema_name: "webrtc"
+    migration_order: 102
+    is_table: true
+    comment: "WebRTC media tracks (audio, video, screenshare)"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string track_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "track_id"
+      sql_type: "VARCHAR(255)"
+      primary_key: true
+      not_null: true
+      comment: "WebRTC track identifier (not ULID)"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:track_id;not null"
+
+  string peer_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "peer_id"
+      sql_type: "VARCHAR(26)"
+      not_null: true
+      comment: "ULID format - Foreign key to peers table"
+      foreign_key: {
+        references_table: "peers"
+        references_column: "peer_id"
+        references_schema: "webrtc"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_track_peer"
+      }
+      index: {
+        index_name: "idx_tracks_peer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:peer_id;not null"
+
+  TrackType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Track type (AUDIO, VIDEO, SCREEN)"
+      index: {
+        index_name: "idx_tracks_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  string label = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "label"
+      sql_type: "VARCHAR(255)"
+      comment: "Optional track label"
+    }
+  ];
+  // @inject_tag: gorm:"column:label"
+
+  bool muted = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "muted"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "false"
+      comment: "Whether track is muted"
+    }
+  ];
+  // @inject_tag: gorm:"column:muted;not null"
+
+  TrackState state = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "state"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'TRACK_STATE_ACTIVE'"
+      comment: "Track state"
+    }
+  ];
+  // @inject_tag: gorm:"column:state;not null;serializer:proto_enum"
+
+  map<string, string> metadata = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Flexible storage for track properties"
+    }
+  ];
+
+  TrackSettings settings = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "settings"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Track settings (width, height, frame_rate, codec, etc.)"
+    }
+  ];
+  // @inject_tag: gorm:"column:settings;not null;serializer:proto_enum"
+}
+
+message TrackSettings {
+  int32 width = 1;
+  int32 height = 2;
+  double frame_rate = 3;
+  int32 sample_rate = 4;
+  int32 channel_count = 5;
+  int32 bitrate = 6;
+  string codec = 7;
+}
+
+enum TrackType {
+  TRACK_TYPE_UNSPECIFIED = 0;
+  TRACK_TYPE_AUDIO = 1;
+  TRACK_TYPE_VIDEO = 2;
+  TRACK_TYPE_SCREEN = 3;
+  TRACK_TYPE_DATA = 4;
+}
+
+enum TrackState {
+  TRACK_STATE_UNSPECIFIED = 0;
+  TRACK_STATE_ACTIVE = 1;
+  TRACK_STATE_INACTIVE = 2;
+  TRACK_STATE_ENDED = 3;
+  TRACK_STATE_PAUSED = 4;
+}
+

@@ -1,0 +1,12 @@
+DocumentTemplateCreationResponse:
+  type: object
+  properties:
+    template_id:
+      type: string
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document template creation operation. Returns
+    operation results and status.

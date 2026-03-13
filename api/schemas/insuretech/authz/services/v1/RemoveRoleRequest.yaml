@@ -1,0 +1,13 @@
+RemoveRoleRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+    role_id:
+      type: string
+    domain:
+      type: string
+    removed_by:
+      type: string
+  description: Request payload for remove role operation. Contains parameters required
+    to execute the operation.

@@ -1,0 +1,7 @@
+InsurerProductCreationResponse:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/InsurerProduct'
+  description: Response payload for insurer product creation operation. Returns operation
+    results and status.

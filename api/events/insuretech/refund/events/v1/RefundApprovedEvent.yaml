@@ -1,0 +1,17 @@
+RefundApprovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    refund_id:
+      type: string
+    approved_by:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Refund approved'

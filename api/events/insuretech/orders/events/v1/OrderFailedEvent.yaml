@@ -1,0 +1,35 @@
+OrderFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    order_id:
+      type: string
+    payment_id:
+      type: string
+    error_code:
+      type: string
+    error_message:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+    tenant_id:
+      type: string
+      description: Extended context fields (Phase 2)
+    organisation_id:
+      type: string
+    portal:
+      type: string
+    actor_user_id:
+      type: string
+    session_id:
+      type: string
+    causation_id:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: 'Event: Order failed (payment timeout or gateway error)'

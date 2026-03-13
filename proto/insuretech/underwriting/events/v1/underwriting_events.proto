@@ -1,0 +1,83 @@
+syntax = "proto3";
+
+package insuretech.underwriting.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/underwriting/events/v1;underwritingeventsv1";
+
+// Kafka event: Quote requested
+message QuoteRequestedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string beneficiary_id = 4;
+  string insurer_product_id = 5;
+  insuretech.common.v1.Money sum_assured = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Quote generated
+message QuoteGeneratedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  insuretech.common.v1.Money total_premium = 4;
+  string valid_until = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Health declaration submitted
+message HealthDeclarationSubmittedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  bool has_pre_existing_conditions = 3;
+  bool medical_exam_required = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Underwriting approved
+message UnderwritingApprovedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string decision_id = 3;
+  string decision_method = 4; // AUTOMATIC, MANUAL, HYBRID
+  string risk_level = 5;
+  bool premium_adjusted = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Underwriting rejected
+message UnderwritingRejectedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string decision_id = 3;
+  string reason = 4;
+  string risk_level = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Quote converted to policy
+message QuoteConvertedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string policy_id = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Kafka event: Quote expired
+message QuoteExpiredEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+

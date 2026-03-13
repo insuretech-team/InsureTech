@@ -1,0 +1,17 @@
+CommissionsListingResponse:
+  type: object
+  properties:
+    commissions:
+      type: array
+      items:
+        $ref: '#/components/schemas/Commission'
+    total_count:
+      type: integer
+      format: int32
+    total_amount:
+      $ref: '#/components/schemas/Money'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for commissions listing operation. Returns operation
+    results and status.

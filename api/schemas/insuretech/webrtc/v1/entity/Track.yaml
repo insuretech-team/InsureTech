@@ -1,0 +1,41 @@
+Track:
+  type: object
+  properties:
+    track_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:track_id;not null"'
+      x-primary-key: true
+    peer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:peer_id;not null"'
+    type:
+      $ref: '#/components/schemas/TrackType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    label:
+      type: string
+      description: '@inject_tag: gorm:"column:label"'
+    muted:
+      type: boolean
+      description: '@inject_tag: gorm:"column:muted;not null"'
+      default: false
+    state:
+      allOf:
+      - $ref: '#/components/schemas/TrackState'
+      x-database-default: TRACK_STATE_ACTIVE
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    settings:
+      allOf:
+      - $ref: '#/components/schemas/TrackSettings'
+      x-database-default: '{}''::jsonb'
+  description: Media track published by a peer
+  required:
+  - track_id
+  - peer_id
+  - type
+  - muted
+  - state
+  - settings

@@ -1,0 +1,23 @@
+ClaimApprovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    claim_id:
+      type: string
+    claim_number:
+      type: string
+    approver_id:
+      type: string
+    approved_amount:
+      $ref: '#/components/schemas/Money'
+    approval_level:
+      type: string
+      description: L1, L2, L3, Board
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Claim approved'

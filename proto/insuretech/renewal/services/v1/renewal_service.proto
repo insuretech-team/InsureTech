@@ -1,0 +1,133 @@
+syntax = "proto3";
+
+package insuretech.renewal.services.v1;
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/renewal/entity/v1/renewal_schedule.proto";
+import "insuretech/renewal/entity/v1/renewal_reminder.proto";
+import "insuretech/renewal/entity/v1/grace_period.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/renewal/services/v1;renewalservicev1";
+option csharp_namespace = "Insuretech.Renewal.Services.V1";
+
+service RenewalService {
+  // Get renewal schedule
+  rpc GetRenewalSchedule(GetRenewalScheduleRequest) returns (GetRenewalScheduleResponse) {
+    option (google.api.http) = {
+      get: "/v1/policies/{policy_id}/renewal-schedule"
+    };
+  }
+  
+  // List upcoming renewals
+  rpc ListUpcomingRenewals(ListUpcomingRenewalsRequest) returns (ListUpcomingRenewalsResponse) {
+    option (google.api.http) = {
+      get: "/v1/renewals/upcoming"
+    };
+  }
+  
+  // Renew policy manually
+  rpc RenewPolicy(RenewPolicyRequest) returns (RenewPolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}?action=renew"
+      body: "*"
+    };
+  }
+  
+  // Send renewal reminder
+  rpc SendRenewalReminder(SendRenewalReminderRequest) returns (SendRenewalReminderResponse) {
+    option (google.api.http) = {
+      post: "/v1/renewal-schedules/{renewal_schedule_id}/reminders"
+      body: "*"
+    };
+  }
+  
+  // Get grace period status
+  rpc GetGracePeriod(GetGracePeriodRequest) returns (GetGracePeriodResponse) {
+    option (google.api.http) = {
+      get: "/v1/policies/{policy_id}/grace-period"
+    };
+  }
+  
+  // Revive lapsed policy
+  rpc RevivePolicy(RevivePolicyRequest) returns (RevivePolicyResponse) {
+    option (google.api.http) = {
+      post: "/v1/policies/{policy_id}?action=revive"
+      body: "*"
+    };
+  }
+}
+
+message GetRenewalScheduleRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetRenewalScheduleResponse {
+  entity.v1.RenewalSchedule renewal_schedule = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated entity.v1.RenewalReminder reminders = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ListUpcomingRenewalsRequest {
+  int32 days_ahead = 1 [(google.api.field_behavior) = OPTIONAL];
+  string status = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 3 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListUpcomingRenewalsResponse {
+  repeated entity.v1.RenewalSchedule renewal_schedules = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RenewPolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string payment_method = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_reference = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message RenewPolicyResponse {
+  string new_policy_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message SendRenewalReminderRequest {
+  string renewal_schedule_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string channel = 2 [(google.api.field_behavior) = REQUIRED];
+}
+
+message SendRenewalReminderResponse {
+  string reminder_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetGracePeriodRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetGracePeriodResponse {
+  entity.v1.GracePeriod grace_period = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message RevivePolicyRequest {
+  string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string payment_method = 2 [(google.api.field_behavior) = REQUIRED];
+  string payment_reference = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message RevivePolicyResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

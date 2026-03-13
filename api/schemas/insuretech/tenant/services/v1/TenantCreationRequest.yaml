@@ -1,0 +1,19 @@
+TenantCreationRequest:
+  type: object
+  properties:
+    code:
+      type: string
+    name:
+      type: string
+    type:
+      type: string
+    parent_tenant_id:
+      type: string
+    config:
+      type: string
+      description: JSON
+    branding:
+      type: string
+      description: JSON
+  description: Request payload for creating a new tenant creation. Contains all required
+    fields and optional parameters for initialization.

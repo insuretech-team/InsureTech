@@ -1,0 +1,53 @@
+syntax = "proto3";
+
+package insuretech.workflow.events.v1;
+
+import "google/protobuf/timestamp.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/events/v1;workfloweventsv1";
+
+// Kafka event: Workflow started
+message WorkflowStartedEvent {
+  string event_id = 1;
+  string workflow_instance_id = 2;
+  string workflow_definition_id = 3;
+  string entity_type = 4;
+  string entity_id = 5;
+  string initiated_by = 6;
+  string correlation_id = 7;
+  google.protobuf.Timestamp timestamp = 8;
+}
+
+// Kafka event: Workflow task assigned
+message WorkflowTaskAssignedEvent {
+  string event_id = 1;
+  string task_id = 2;
+  string workflow_instance_id = 3;
+  string step_name = 4;
+  string assigned_to = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Workflow task completed
+message WorkflowTaskCompletedEvent {
+  string event_id = 1;
+  string task_id = 2;
+  string workflow_instance_id = 3;
+  string decision = 4; // APPROVED, REJECTED
+  string completed_by = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Workflow completed
+message WorkflowCompletedEvent {
+  string event_id = 1;
+  string workflow_instance_id = 2;
+  string entity_type = 3;
+  string entity_id = 4;
+  string status = 5; // COMPLETED, FAILED, CANCELLED
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+

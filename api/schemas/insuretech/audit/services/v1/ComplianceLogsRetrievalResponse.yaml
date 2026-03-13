@@ -1,0 +1,15 @@
+ComplianceLogsRetrievalResponse:
+  type: object
+  properties:
+    compliance_logs:
+      type: array
+      items:
+        $ref: '#/components/schemas/ComplianceLog'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for compliance logs retrieval operation. Returns operation
+    results and status.

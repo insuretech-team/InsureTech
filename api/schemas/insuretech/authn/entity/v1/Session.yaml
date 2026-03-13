@@ -1,0 +1,94 @@
+Session:
+  type: object
+  properties:
+    session_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:session_id;not null"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id;not null"'
+    session_type:
+      $ref: '#/components/schemas/SessionType'
+      description: "Session type determines authentication method (SERVER_SIDE for\
+        \ web, JWT for\r\n mobile)\r\n @inject_tag: gorm:\"column:session_type;not\
+        \ null;serializer:proto_enum\""
+    session_token_hash:
+      type: string
+      description: "Bcrypt hash of session token for server-side sessions (web portals)\r\
+        \n Only populated when session_type = SERVER_SIDE\r\n @inject_tag: gorm:\"\
+        column:session_token_hash\""
+      x-sensitive: true
+      writeOnly: true
+      x-log-redacted: true
+    session_token_lookup:
+      type: string
+      description: "Deterministic lookup hash (sha256 hex) of the plain session token.\r\
+        \n Used to find the session row quickly, then the plain token is verified\
+        \ against\r\n bcrypt session_token_hash.\r\n Only populated when session_type\
+        \ = SERVER_SIDE.\r\n @inject_tag: gorm:\"column:session_token_lookup\"\r\n\
+        \ ========================================\r\n JWT SESSION FIELDS (Mobile/API)\r\
+        \n ========================================"
+      x-sensitive: true
+      writeOnly: true
+      x-log-redacted: true
+    access_token_jti:
+      type: string
+      description: "JWT ID for access token (only for JWT sessions)\r\n @inject_tag:\
+        \ gorm:\"column:access_token_jti\""
+    refresh_token_jti:
+      type: string
+      description: "JWT ID for refresh token (only for JWT sessions)\r\n @inject_tag:\
+        \ gorm:\"column:refresh_token_jti\""
+    access_token_expires_at:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:access_token_expires_at;serializer:proto_timestamp\"\
+        \r\n gorm:\"column:access_token_expires_at;serializer:proto_timestamp\""
+    refresh_token_expires_at:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:refresh_token_expires_at;serializer:proto_timestamp\"\
+        \r\n gorm:\"column:refresh_token_expires_at;serializer:proto_timestamp\""
+    expires_at:
+      type: string
+      format: date-time
+      description: "Session expiry: 12 hours for SERVER_SIDE, 7 days for JWT\r\n @inject_tag:\
+        \ gorm:\"column:expires_at;not null;serializer:proto_timestamp\""
+    ip_address:
+      type: string
+      description: '@inject_tag: gorm:"column:ip_address"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Security and fraud detection
+    user_agent:
+      type: string
+      description: '@inject_tag: gorm:"column:user_agent"'
+    device_id:
+      type: string
+      description: '@inject_tag: gorm:"column:device_id"'
+    device_name:
+      type: string
+      description: '@inject_tag: gorm:"column:device_name"'
+    device_type:
+      $ref: '#/components/schemas/AuthnDeviceType'
+      description: '@inject_tag: gorm:"column:device_type;not null;serializer:proto_enum"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    last_activity_at:
+      type: string
+      format: date-time
+      description: "@inject_tag: gorm:\"column:last_activity_at;not null;serializer:proto_timestamp\"\
+        \r\n null;serializer:proto_timestamp\""
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+    csrf_token:
+      type: string
+      description: "CSRF token for server-side sessions (web portals only)\r\n @inject_tag:\
+        \ gorm:\"column:csrf_token\""
+      x-sensitive: true
+      writeOnly: true
+  description: "Session represents user authentication session (HYBRID: Server-side\
+    \ + JWT)\r\n Maps to 'sessions' table in authn_schema"

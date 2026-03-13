@@ -1,0 +1,10 @@
+DocumentRetrievalResponse:
+  type: object
+  properties:
+    document:
+      $ref: '#/components/schemas/DocumentGeneration'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document retrieval operation. Returns operation
+    results and status.

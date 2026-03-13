@@ -1,0 +1,14 @@
+DocumentVerificationRequest:
+  type: object
+  properties:
+    user_document_id:
+      type: string
+    verification_status:
+      type: string
+      description: VERIFIED or REJECTED
+    verified_by:
+      type: string
+    rejection_reason:
+      type: string
+  description: Request payload for document verification operation. Contains parameters
+    required to execute the operation.

@@ -1,0 +1,7 @@
+FraudCasesByAlertListingRequest:
+  type: object
+  properties:
+    alert_id:
+      type: string
+  description: Request payload for listing fraud cases by alert listing items. Supports
+    filtering, sorting, and pagination.

@@ -1,0 +1,7 @@
+PolicyDocumentGenerationRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+  description: Request payload for policy document generation operation. Contains
+    parameters required to execute the operation.

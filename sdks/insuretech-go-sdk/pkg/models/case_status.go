@@ -1,0 +1,13 @@
+package models
+
+// CaseStatus represents a case_status
+type CaseStatus string
+
+// CaseStatus values
+const (
+	CaseStatusCASESTATUSUNSPECIFIED CaseStatus = "CASE_STATUS_UNSPECIFIED"
+	CaseStatusCASESTATUSOPEN  = "CASE_STATUS_OPEN"
+	CaseStatusCASESTATUSINVESTIGATING  = "CASE_STATUS_INVESTIGATING"
+	CaseStatusCASESTATUSPENDINGREVIEW  = "CASE_STATUS_PENDING_REVIEW"
+	CaseStatusCASESTATUSCLOSED  = "CASE_STATUS_CLOSED"
+)

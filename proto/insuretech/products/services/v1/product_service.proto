@@ -1,0 +1,198 @@
+syntax = "proto3";
+
+import "google/api/annotations.proto";
+import "google/api/field_behavior.proto";
+import "insuretech/common/v1/error.proto";
+
+package insuretech.products.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/products/services/v1;productsservicev1";
+option csharp_namespace = "Insuretech.Products.Services.V1";
+
+import "insuretech/products/entity/v1/product.proto";
+import "insuretech/common/v1/types.proto";
+
+// Product Service
+service ProductService {
+  // List all active products
+  rpc ListProducts(ListProductsRequest) returns (ListProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/products"
+    };
+  }
+  
+  // Get product details
+  rpc GetProduct(GetProductRequest) returns (GetProductResponse) {
+    option (google.api.http) = {
+      get: "/v1/products/{product_id}"
+    };
+  }
+  
+  // Calculate premium
+  rpc CalculatePremium(CalculatePremiumRequest) returns (CalculatePremiumResponse) {
+    option (google.api.http) = {
+      post: "/v1/products/{product_id}:calculatePremium"
+      body: "*"
+    };
+  }
+  
+  // Create product (admin)
+  rpc CreateProduct(CreateProductRequest) returns (CreateProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/products"
+      body: "*"
+    };
+  }
+  
+  // Update product (admin)
+  rpc UpdateProduct(UpdateProductRequest) returns (UpdateProductResponse) {
+    option (google.api.http) = {
+      patch: "/v1/products/{product_id}"
+      body: "*"
+    };
+  }
+  
+  // Search products
+  rpc SearchProducts(SearchProductsRequest) returns (SearchProductsResponse) {
+    option (google.api.http) = {
+      get: "/v1/products:search"
+    };
+  }
+  
+  // Activate product
+  rpc ActivateProduct(ActivateProductRequest) returns (ActivateProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/products/{product_id}:activate"
+      body: "*"
+    };
+  }
+  
+  // Deactivate product
+  rpc DeactivateProduct(DeactivateProductRequest) returns (DeactivateProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/products/{product_id}:deactivate"
+      body: "*"
+    };
+  }
+  
+  // Discontinue product
+  rpc DiscontinueProduct(DiscontinueProductRequest) returns (DiscontinueProductResponse) {
+    option (google.api.http) = {
+      post: "/v1/products/{product_id}:discontinue"
+      body: "*"
+    };
+  }
+}
+
+message ListProductsRequest {
+  entity.v1.ProductCategory category = 1 [(google.api.field_behavior) = OPTIONAL];
+  int32 page = 2 [(google.api.field_behavior) = OPTIONAL];
+  int32 page_size = 3 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message ListProductsResponse {
+  repeated entity.v1.Product products = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 page = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 page_size = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message GetProductRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message GetProductResponse {
+  entity.v1.Product product = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CalculatePremiumRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+  insuretech.common.v1.Money sum_insured = 2 [(google.api.field_behavior) = REQUIRED];
+  int32 tenure_months = 3 [(google.api.field_behavior) = REQUIRED];
+  repeated string rider_ids = 4 [(google.api.field_behavior) = OPTIONAL];
+  map<string, string> applicant_data = 5 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CalculatePremiumResponse {
+  insuretech.common.v1.Money base_premium = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money rider_premium = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money total_premium = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+  repeated PremiumBreakdown breakdown = 4 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 5 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message PremiumBreakdown {
+  string item = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Money amount = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string description = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message CreateProductRequest {
+  entity.v1.Product product = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message CreateProductResponse {
+  string product_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  string message = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message UpdateProductRequest {
+  entity.v1.Product product = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message UpdateProductResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message SearchProductsRequest {
+  string query = 1 [(google.api.field_behavior) = OPTIONAL];
+  entity.v1.ProductCategory category = 2 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.common.v1.Money min_premium = 3 [(google.api.field_behavior) = OPTIONAL];
+  insuretech.common.v1.Money max_premium = 4 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message SearchProductsResponse {
+  repeated entity.v1.Product products = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  int32 total_count = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message ActivateProductRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+}
+
+message ActivateProductResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message DeactivateProductRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message DeactivateProductResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+
+message DiscontinueProductRequest {
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+  string reason = 2 [(google.api.field_behavior) = OPTIONAL];
+}
+
+message DiscontinueProductResponse {
+  string message = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
+  insuretech.common.v1.Error error = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
+}
+

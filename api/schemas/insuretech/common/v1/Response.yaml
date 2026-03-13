@@ -1,0 +1,15 @@
+Response:
+  type: object
+  properties:
+    success:
+      type: boolean
+    message:
+      type: string
+    error_code:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Generic response wrapper

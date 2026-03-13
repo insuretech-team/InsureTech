@@ -1,0 +1,20 @@
+AudioConfig:
+  type: object
+  properties:
+    allowed_codecs:
+      type: array
+      items:
+        $ref: '#/components/schemas/AudioCodec'
+    default_codec:
+      $ref: '#/components/schemas/AudioCodec'
+    max_bitrate_kbps:
+      type: integer
+      format: int32
+    enable_noise_suppression:
+      type: boolean
+    enable_echo_cancellation:
+      type: boolean
+    enable_auto_gain_control:
+      type: boolean
+  description: Domain entity representing audio config. Core business object in the
+    system.

@@ -1,0 +1,15 @@
+RequestEndorsementRequest:
+  type: object
+  properties:
+    policy_id:
+      type: string
+    type:
+      type: string
+    reason:
+      type: string
+    changes:
+      type: string
+    effective_date:
+      type: string
+  description: Request payload for endorsement operation. Contains parameters required
+    to execute the operation.

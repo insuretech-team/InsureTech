@@ -1,0 +1,7 @@
+PricingConfigCreationResponse:
+  type: object
+  properties:
+    config:
+      $ref: '#/components/schemas/PricingConfig'
+  description: Response payload for pricing config creation operation. Returns operation
+    results and status.

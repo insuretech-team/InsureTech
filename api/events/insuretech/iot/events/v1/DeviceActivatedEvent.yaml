@@ -1,0 +1,15 @@
+DeviceActivatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    policy_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Event: Device activated'

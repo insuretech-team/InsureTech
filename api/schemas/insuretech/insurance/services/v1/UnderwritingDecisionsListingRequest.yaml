@@ -1,0 +1,7 @@
+UnderwritingDecisionsListingRequest:
+  type: object
+  properties:
+    quote_id:
+      type: string
+  description: Request payload for listing underwriting decisions listing items. Supports
+    filtering, sorting, and pagination.

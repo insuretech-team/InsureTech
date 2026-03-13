@@ -1,0 +1,256 @@
+syntax = "proto3";
+
+package insuretech.analytics.entity.v1;
+
+option go_package = "github.com/newage-saint/InsureTech/gen/go/insuretech/analytics/entity/v1;analyticsv1";
+option csharp_namespace = "Insuretech.Analytics.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// MetricType enum
+enum MetricType {
+  METRIC_TYPE_UNSPECIFIED = 0;
+  METRIC_TYPE_COUNTER = 1;
+  METRIC_TYPE_GAUGE = 2;
+  METRIC_TYPE_HISTOGRAM = 3;
+}
+
+// Metric definition catalog
+// Maps to 'metric_definitions' table in analytics_schema
+message MetricDefinition {
+  option (insuretech.common.v1.table) = {
+    table_name: "metric_definitions"
+    schema_name: "analytics_schema"
+    migration_order: 81
+    is_table: true
+    comment: "Catalog of available business metrics"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string metric_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:metric_id;not null"
+
+  string metric_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      unique: true
+      comment: "Unique metric name"
+      index: {
+        index_name: "idx_metric_definitions_name"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:metric_name;not null"
+
+  string description = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "description"
+      sql_type: "TEXT"
+      comment: "Metric description"
+    }
+  ];
+  // @inject_tag: gorm:"column:description"
+
+  MetricType type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Metric type"
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  string unit = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "unit"
+      sql_type: "VARCHAR(50)"
+      comment: "Unit of measurement (BDT, count, percentage)"
+    }
+  ];
+  // @inject_tag: gorm:"column:unit"
+
+  repeated string dimensions = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "dimensions"
+      sql_type: "TEXT[]"
+  // @inject_tag: gorm:"column:dimensions"
+      comment: "Dimension names array"
+    }
+  ];
+
+  google.protobuf.Timestamp created_at = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+// Aggregated metric values
+// Maps to 'aggregated_metrics' table in analytics_schema
+message AggregatedMetric {
+  option (insuretech.common.v1.table) = {
+    table_name: "aggregated_metrics"
+    schema_name: "analytics_schema"
+    migration_order: 82
+    is_table: true
+    comment: "Pre-computed metric aggregations"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+    partition_strategy: PARTITION_STRATEGY_RANGE_MONTH
+    partition_column: "timestamp"
+  };
+
+  string aggregated_metric_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "aggregated_metric_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:aggregated_metric_id;not null"
+
+  string metric_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to metric_definitions"
+      foreign_key: {
+        references_table: "metric_definitions"
+        references_column: "metric_id"
+        references_schema: "analytics_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_aggregated_metrics_metric_id"
+      }
+      index: {
+        index_name: "idx_aggregated_metrics_metric_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:metric_id;not null"
+
+  string metric_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "metric_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Denormalized metric name"
+      index: {
+        index_name: "idx_aggregated_metrics_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:metric_name;not null"
+
+  MetricAggregation aggregation = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "aggregation"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Aggregation type"
+    }
+  ];
+  // @inject_tag: gorm:"column:aggregation;not null;serializer:proto_enum"
+
+  double value = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "value"
+      sql_type: "DOUBLE PRECISION"
+      not_null: true
+      comment: "Aggregated value"
+    }
+  ];
+  // @inject_tag: gorm:"column:value;not null"
+
+  google.protobuf.Timestamp timestamp = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "timestamp"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Aggregation timestamp"
+      index: {
+        index_name: "idx_aggregated_metrics_timestamp"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+
+  map<string, string> dimensions = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "dimensions"
+      sql_type: "JSONB"
+      comment: "Dimensions as JSON"
+      is_json: true
+      index: {
+        index_name: "idx_aggregated_metrics_dimensions"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+
+  string time_bucket = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "time_bucket"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      comment: "Time bucket (hourly, daily, weekly, monthly)"
+      index: {
+        index_name: "idx_aggregated_metrics_time_bucket"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:time_bucket;not null"
+}
+
+enum MetricAggregation {
+  METRIC_AGGREGATION_UNSPECIFIED = 0;
+  METRIC_AGGREGATION_SUM = 1;
+  METRIC_AGGREGATION_AVG = 2;
+  METRIC_AGGREGATION_MIN = 3;
+  METRIC_AGGREGATION_MAX = 4;
+  METRIC_AGGREGATION_COUNT = 5;
+}
+

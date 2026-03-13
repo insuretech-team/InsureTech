@@ -1,0 +1,23 @@
+BusinessTargetAchievedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    target_name:
+      type: string
+    target_type:
+      type: string
+      description: REVENUE, POLICIES_SOLD, CLAIMS_RATIO
+    target_value:
+      type: number
+      format: double
+    achieved_value:
+      type: number
+      format: double
+    timestamp:
+      type: string
+      format: date-time
+    correlation_id:
+      type: string
+      description: 'CG-6: trace across services'
+  description: 'Event: Business target achieved'

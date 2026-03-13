@@ -1,0 +1,6 @@
+PartnerCreationRequest:
+  type: object
+  properties:
+    partner:
+      $ref: '#/components/schemas/Partner'
+  description: Request/Response Messages

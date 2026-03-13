@@ -1,0 +1,12 @@
+MFSProvider:
+  type: string
+  enum:
+  - MFS_PROVIDER_UNSPECIFIED
+  - MFS_PROVIDER_BKASH
+  - MFS_PROVIDER_NAGAD
+  - MFS_PROVIDER_ROCKET
+  - MFS_PROVIDER_UPAY
+  - MFS_PROVIDER_TAP
+  description: 'Enumeration of mfs provider values. Valid options: MFS_PROVIDER_UNSPECIFIED,
+    MFS_PROVIDER_BKASH, MFS_PROVIDER_NAGAD, MFS_PROVIDER_ROCKET, MFS_PROVIDER_UPAY
+    (and 1 more).'

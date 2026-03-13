@@ -1,0 +1,21 @@
+EmailVerificationSentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    email_masked:
+      type: string
+      description: 'Masked: u***@domain.com'
+    otp_id:
+      type: string
+    type:
+      type: string
+      description: email_verification, email_login, password_reset_email
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+  description: 'Event: Email verification OTP sent'

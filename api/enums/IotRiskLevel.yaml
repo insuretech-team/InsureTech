@@ -1,0 +1,10 @@
+IotRiskLevel:
+  type: string
+  enum:
+  - RISK_LEVEL_UNSPECIFIED
+  - RISK_LEVEL_LOW
+  - RISK_LEVEL_MEDIUM
+  - RISK_LEVEL_HIGH
+  - RISK_LEVEL_CRITICAL
+  description: 'Severity or priority levels for risk. Levels: RISK_LEVEL_UNSPECIFIED,
+    RISK_LEVEL_LOW, RISK_LEVEL_MEDIUM, RISK_LEVEL_HIGH, RISK_LEVEL_CRITICAL.'

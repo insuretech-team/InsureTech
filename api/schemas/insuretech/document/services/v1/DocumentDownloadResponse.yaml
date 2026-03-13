@@ -1,0 +1,15 @@
+DocumentDownloadResponse:
+  type: object
+  properties:
+    content:
+      type: string
+      format: byte
+    content_type:
+      type: string
+    filename:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for document download operation. Returns operation
+    results and status.

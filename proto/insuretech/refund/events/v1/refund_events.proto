@@ -1,0 +1,50 @@
+syntax = "proto3";
+
+package insuretech.refund.events.v1;
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/refund/events/v1;refundeventsv1";
+
+// Kafka event: Refund requested
+message RefundRequestedEvent {
+  string event_id = 1;
+  string refund_id = 2;
+  string refund_number = 3;
+  string policy_id = 4;
+  string reason = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+
+// Kafka event: Refund calculated
+message RefundCalculatedEvent {
+  string event_id = 1;
+  string refund_id = 2;
+  insuretech.common.v1.Money refundable_amount = 3;
+  string correlation_id = 4;
+  google.protobuf.Timestamp timestamp = 5;
+}
+
+// Kafka event: Refund approved
+message RefundApprovedEvent {
+  string event_id = 1;
+  string refund_id = 2;
+  string approved_by = 3;
+  insuretech.common.v1.Money amount = 4;
+  string correlation_id = 5;
+  google.protobuf.Timestamp timestamp = 6;
+}
+
+// Kafka event: Refund processed
+message RefundProcessedEvent {
+  string event_id = 1;
+  string refund_id = 2;
+  string payment_method = 3;
+  string payment_reference = 4;
+  insuretech.common.v1.Money amount = 5;
+  string correlation_id = 6;
+  google.protobuf.Timestamp timestamp = 7;
+}
+

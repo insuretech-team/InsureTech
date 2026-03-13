@@ -1,0 +1,153 @@
+syntax = "proto3";
+
+package insuretech.voice.entity.v1;
+
+import "insuretech/common/v1/types.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/security.proto";
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/voice/entity/v1;voicev1";
+
+// Voice interaction session (FR-170 to FR-177)
+message VoiceSession {
+  option (insuretech.common.v1.table) = {
+    table_name : "voice_sessions"
+    schema_name: "authn_schema"
+    migration_order : 67
+    is_table : true
+    audit_fields : true
+    comment : "Voice command sessions (Bengali support)"
+  };
+
+  string id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "session_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:session_id;not null"
+
+  string session_id = 2 [ (insuretech.common.v1.column) = {
+    column_name : "external_session_id"
+    sql_type : "VARCHAR(100)"
+    not_null : true
+    unique : true
+    index : {
+      index_name : "idx_voice_sessions_external_session_id"
+      index_type : INDEX_TYPE_BTREE
+      unique : true
+    }
+  } ];
+  // @inject_tag: gorm:"column:external_session_id;not null"
+
+  string user_id = 3 [ (insuretech.common.v1.column) = {
+    column_name : "user_id"
+    sql_type : "UUID"
+    foreign_key : {
+      references_table : "users"
+      references_column : "user_id"
+      references_schema: "authn_schema"
+      on_delete : REFERENTIAL_ACTION_SET_NULL
+    }
+    index : {
+      index_name : "idx_voice_sessions_user_id"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:user_id"
+
+  string phone_number = 4 [
+    (insuretech.common.v1.column) = {
+      column_name : "phone_number"
+      sql_type : "VARCHAR(20)"
+      index : {
+        index_name : "idx_voice_sessions_phone"
+        index_type : INDEX_TYPE_BTREE
+      }
+    },
+    (insuretech.common.v1.pii) = true,
+    (insuretech.common.v1.sensitive) = true,
+    (insuretech.common.v1.log_masked) = true
+  ];
+  // @inject_tag: gorm:"column:phone_number"
+
+  string language = 5 [ (insuretech.common.v1.column) = {
+    column_name : "language"
+    sql_type : "VARCHAR(10)"
+    not_null : true
+    default_value : "'bn'"
+    comment : "Bengali (bn) or English (en)"
+  } ];
+  // @inject_tag: gorm:"column:language;not null"
+
+  SessionStatus status = 6 [ (insuretech.common.v1.column) = {
+    column_name : "status"
+    sql_type : "VARCHAR(20)"
+    not_null : true
+    default_value : "'ACTIVE'"
+    index : {
+      index_name : "idx_voice_sessions_status"
+      index_type : INDEX_TYPE_BTREE
+    }
+  } ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string intent = 7 [ (insuretech.common.v1.column) = {
+    column_name : "intent"
+    sql_type : "VARCHAR(100)"
+    comment : "Detected user intent (policy_inquiry, claim_status, etc.)"
+  } ];
+  // @inject_tag: gorm:"column:intent"
+
+  string context = 8 [ (insuretech.common.v1.column) = {
+    column_name : "context"
+    sql_type : "JSONB"
+    is_json : true
+    comment : "Session context and extracted entities"
+  } ];
+  // @inject_tag: gorm:"column:context"
+
+  google.protobuf.Timestamp started_at = 9 [ (insuretech.common.v1.column) = {
+    column_name : "started_at"
+    sql_type : "TIMESTAMPTZ"
+    not_null : true
+    default_value : "now()"
+  } ];
+  // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp ended_at = 10 [ (insuretech.common.v1.column) = {
+    column_name : "ended_at"
+    sql_type : "TIMESTAMPTZ"
+  } ];
+  // @inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"
+
+  int32 duration_seconds = 11 [ (insuretech.common.v1.column) = {
+    column_name : "duration_seconds"
+    sql_type : "INTEGER"
+  } ];
+  // @inject_tag: gorm:"column:duration_seconds"
+
+  insuretech.common.v1.AuditInfo audit_info = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "audit_info"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Audit trail stored as JSON"
+    }
+  ];
+  // @inject_tag: gorm:"column:audit_info;not null"
+}
+
+enum SessionStatus {
+  SESSION_STATUS_UNSPECIFIED = 0;
+  SESSION_STATUS_ACTIVE = 1;
+  SESSION_STATUS_COMPLETED = 2;
+  SESSION_STATUS_FAILED = 3;
+  SESSION_STATUS_TIMEOUT = 4;
+}
+
+

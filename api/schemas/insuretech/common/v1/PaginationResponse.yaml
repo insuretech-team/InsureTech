@@ -1,0 +1,20 @@
+PaginationResponse:
+  type: object
+  properties:
+    total_items:
+      type: integer
+      format: int32
+    total_pages:
+      type: integer
+      format: int32
+    current_page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+    has_next:
+      type: boolean
+    has_previous:
+      type: boolean
+  description: Pagination response

@@ -1,0 +1,17 @@
+PaginationRequest:
+  type: object
+  properties:
+    page:
+      type: integer
+      format: int32
+      description: Page number (1-based)
+    page_size:
+      type: integer
+      format: int32
+      description: Items per page (max 100)
+    sort_by:
+      type: string
+      description: Field name
+    sort_order:
+      $ref: '#/components/schemas/SortOrder'
+  description: Pagination request

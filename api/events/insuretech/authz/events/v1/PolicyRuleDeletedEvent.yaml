@@ -1,0 +1,14 @@
+PolicyRuleDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    policy_id:
+      type: string
+    deleted_by:
+      type: string
+    occurred_at:
+      type: string
+      format: date-time
+  description: Event emitted when policy rule is deleted. Published to event stream
+    for downstream processing and audit trail.

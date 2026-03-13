@@ -1,0 +1,16 @@
+OTPVerifiedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    otp_id:
+      type: string
+    user_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    attempts:
+      type: integer
+      format: int32
+  description: 'Event: OTP verified'

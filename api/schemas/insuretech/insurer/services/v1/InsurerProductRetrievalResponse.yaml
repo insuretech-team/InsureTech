@@ -1,0 +1,10 @@
+InsurerInsurerProductRetrievalResponse:
+  type: object
+  properties:
+    insurer_product:
+      $ref: '#/components/schemas/InsurerProduct'
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for insurer product retrieval operation. Returns operation
+    results and status.

@@ -1,0 +1,16 @@
+ErrorInfo:
+  type: object
+  properties:
+    code:
+      type: integer
+      format: int32
+      description: application code
+    message:
+      type: string
+      description: human-readable
+    meta:
+      type: object
+      additionalProperties:
+        type: string
+      description: additional context
+  description: Standard error info when embedding inline

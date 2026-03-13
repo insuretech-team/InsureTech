@@ -1,0 +1,9 @@
+RoleCreationResponse:
+  type: object
+  properties:
+    role:
+      $ref: '#/components/schemas/Role'
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for role creation operation. Returns operation results
+    and status.

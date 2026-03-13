@@ -1,0 +1,19 @@
+OrgMemberRemovedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    member_id:
+      type: string
+    organisation_id:
+      type: string
+    user_id:
+      type: string
+    removed_by:
+      type: string
+    reason:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: OrgMemberRemovedEvent is published when a user is removed from an organisation

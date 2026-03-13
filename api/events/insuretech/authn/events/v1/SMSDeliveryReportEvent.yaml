@@ -1,0 +1,28 @@
+SMSDeliveryReportEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    otp_id:
+      type: string
+    provider_message_id:
+      type: string
+    msisdn:
+      type: string
+      description: 'Masked: 8801XXX***789'
+    status:
+      type: string
+      description: DELIVERED, FAILED, EXPIRED
+    error_code:
+      type: string
+      description: Provider-specific error code
+    delivered_at:
+      type: string
+      format: date-time
+    timestamp:
+      type: string
+      format: date-time
+    carrier:
+      type: string
+      description: GP, ROBI, BANGLALINK, TELETALK
+  description: 'Event: SMS Delivery Report received (BTRC compliance)'

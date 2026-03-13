@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+package insuretech.products.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/products/entity/v1;productsv1";
+option csharp_namespace = "Insuretech.Products.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// ProductPlan represents plan variants (e.g., Basic, Silver, Gold)
+message ProductPlan {
+  option (insuretech.common.v1.table) = {
+    table_name : "product_plans"
+    schema_name : "insurance_schema"
+    migration_order : 95
+    is_table : true
+    comment : "Plan variants for products"
+    soft_delete : false
+    audit_fields : true
+    enable_rls : true
+  };
+
+  string plan_id = 1 [ (insuretech.common.v1.column) = {
+    column_name : "plan_id"
+    sql_type : "UUID"
+    primary_key : true
+    not_null : true
+    default_value : "gen_random_uuid()"
+  } ];
+  // @inject_tag: gorm:"primaryKey;column:plan_id;not null"
+
+  string product_id = 2
+      [ (insuretech.common.v1.column) =
+            {column_name : "product_id" sql_type : "UUID" not_null : true} ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string plan_name = 3 [ (insuretech.common.v1.column) = {
+    column_name : "plan_name"
+    sql_type : "VARCHAR(255)"
+    not_null : true
+  } ];
+  // @inject_tag: gorm:"column:plan_name;not null"
+
+  string plan_description = 4 [ (insuretech.common.v1.column) = {
+    column_name : "plan_description"
+    sql_type : "TEXT"
+  } ];
+  // @inject_tag: gorm:"column:plan_description"
+
+  insuretech.common.v1.Money premium_amount = 5
+      [ (insuretech.common.v1.column) = {
+        column_name : "premium_amount"
+        sql_type : "BIGINT"
+        not_null : true
+        comment : "Plan-specific premium"
+      } ];
+  // @inject_tag: gorm:"column:premium_amount;not null"
+
+  insuretech.common.v1.Money min_sum_insured = 6
+      [ (insuretech.common.v1.column) = {
+        column_name : "min_sum_insured"
+        sql_type : "BIGINT"
+        not_null : true
+      } ];
+  // @inject_tag: gorm:"column:min_sum_insured;not null"
+
+  insuretech.common.v1.Money max_sum_insured = 7
+      [ (insuretech.common.v1.column) = {
+        column_name : "max_sum_insured"
+        sql_type : "BIGINT"
+        not_null : true
+      } ];
+  // @inject_tag: gorm:"column:max_sum_insured;not null"
+
+  // Store dynamic tier configuration
+  string attributes = 8 [ (insuretech.common.v1.column) = {
+    column_name : "attributes"
+    sql_type : "JSONB"
+    comment : "Plan-specific attributes"
+    is_json : true
+  } ];
+  // @inject_tag: gorm:"column:attributes"
+
+  google.protobuf.Timestamp created_at = 9;
+  google.protobuf.Timestamp updated_at = 10;
+}

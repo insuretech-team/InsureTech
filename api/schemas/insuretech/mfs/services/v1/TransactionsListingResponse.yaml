@@ -1,0 +1,15 @@
+TransactionsListingResponse:
+  type: object
+  properties:
+    transactions:
+      type: array
+      items:
+        $ref: '#/components/schemas/MFSTransaction'
+    total_count:
+      type: integer
+      format: int32
+    error:
+      $ref: '#/components/schemas/Error'
+      description: Error information if operation failed
+  description: Response payload for transactions listing operation. Returns operation
+    results and status.

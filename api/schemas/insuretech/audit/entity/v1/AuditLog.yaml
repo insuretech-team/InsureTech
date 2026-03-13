@@ -1,0 +1,53 @@
+AuditLog:
+  type: object
+  properties:
+    audit_log_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:audit_log_id;not null"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    action:
+      $ref: '#/components/schemas/AuditAction'
+      description: '@inject_tag: gorm:"column:action;not null;serializer:proto_enum"'
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id"'
+    user_email:
+      type: string
+      description: '@inject_tag: gorm:"column:user_email"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Audit trail
+    user_role:
+      type: string
+      description: '@inject_tag: gorm:"column:user_role"'
+    old_values:
+      type: string
+      description: '@inject_tag: gorm:"column:old_values"'
+    new_values:
+      type: string
+      description: '@inject_tag: gorm:"column:new_values"'
+    changes:
+      type: string
+      description: '@inject_tag: gorm:"column:changes"'
+    ip_address:
+      type: string
+      description: '@inject_tag: gorm:"column:ip_address"'
+      x-pii: true
+      x-log-masked: true
+      x-data-purpose: Security audit
+    user_agent:
+      type: string
+      description: '@inject_tag: gorm:"column:user_agent"'
+    trace_id:
+      type: string
+      description: '@inject_tag: gorm:"column:trace_id"'
+    timestamp:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"'
+  description: Audit log (FR-153 to FR-158)

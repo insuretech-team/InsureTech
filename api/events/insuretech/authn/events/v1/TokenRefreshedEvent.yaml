@@ -1,0 +1,28 @@
+TokenRefreshedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    user_id:
+      type: string
+    session_id:
+      type: string
+    old_access_token_jti:
+      type: string
+      description: Previous access token JTI
+    new_access_token_jti:
+      type: string
+      description: New access token JTI
+    new_refresh_token_jti:
+      type: string
+      description: New refresh token JTI (rotation)
+    timestamp:
+      type: string
+      format: date-time
+    ip_address:
+      type: string
+    device_type:
+      type: string
+    user_agent:
+      type: string
+  description: 'Event: Access token refreshed (JWT sessions only)'

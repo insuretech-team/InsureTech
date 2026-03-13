@@ -1,0 +1,7 @@
+ClaimUpdateResponse:
+  type: object
+  properties:
+    claim:
+      $ref: '#/components/schemas/Claim'
+  description: Response payload for claim update operation. Returns operation results
+    and status.

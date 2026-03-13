@@ -1,0 +1,35 @@
+PaymentVerifiedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    payment_id:
+      type: string
+    order_id:
+      type: string
+    invoice_id:
+      type: string
+    verified_by:
+      type: string
+      description: user_id or "system" for automated verification
+    tenant_id:
+      type: string
+    organisation_id:
+      type: string
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    provider:
+      type: string
+    val_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    verified_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: 'Event: Payment verified by server-side provider validation API call'

@@ -1,0 +1,20 @@
+OrdersListingRequest:
+  type: object
+  properties:
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+    customer_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrderStatus'
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+  description: Request payload for listing orders listing items. Supports filtering,
+    sorting, and pagination.

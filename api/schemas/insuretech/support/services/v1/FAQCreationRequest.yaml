@@ -1,0 +1,7 @@
+FAQCreationRequest:
+  type: object
+  properties:
+    faq:
+      $ref: '#/components/schemas/FAQ'
+  description: Request payload for creating a new faq creation. Contains all required
+    fields and optional parameters for initialization.

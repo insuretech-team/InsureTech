@@ -1,0 +1,19 @@
+DeviceOfflineEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    device_id:
+      type: string
+    device_serial:
+      type: string
+    last_seen_at:
+      type: string
+      format: date-time
+    timestamp:
+      type: string
+      format: date-time
+    offline_duration_minutes:
+      type: integer
+      format: int32
+  description: 'Event: Device offline (no data for X minutes)'

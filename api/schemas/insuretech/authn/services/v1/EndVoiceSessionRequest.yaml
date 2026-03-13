@@ -1,0 +1,13 @@
+AuthnEndVoiceSessionRequest:
+  type: object
+  properties:
+    voice_session_id:
+      type: string
+    status:
+      type: string
+      description: ENDED or FAILED
+    duration_seconds:
+      type: integer
+      format: int32
+  description: Request payload for end voice session operation. Contains parameters
+    required to execute the operation.

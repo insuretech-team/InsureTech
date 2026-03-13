@@ -1,0 +1,27 @@
+AuthnDocumentType:
+  type: object
+  properties:
+    document_type_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:document_type_id;not null"'
+    code:
+      type: string
+      description: '@inject_tag: gorm:"column:code;not null"'
+    name:
+      type: string
+      description: '@inject_tag: gorm:"column:name;not null"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+  description: DocumentType represents a catalog of required/allowed document types

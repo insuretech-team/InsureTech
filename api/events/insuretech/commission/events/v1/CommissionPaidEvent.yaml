@@ -1,0 +1,21 @@
+CommissionPaidEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    payout_id:
+      type: string
+    recipient_id:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    payment_method:
+      type: string
+    payment_reference:
+      type: string
+    correlation_id:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+  description: 'Kafka event: Commission paid'

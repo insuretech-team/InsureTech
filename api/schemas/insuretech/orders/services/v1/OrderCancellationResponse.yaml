@@ -1,0 +1,13 @@
+OrderCancellationResponse:
+  type: object
+  properties:
+    order_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrderStatus'
+    message:
+      type: string
+    error:
+      $ref: '#/components/schemas/Error'
+  description: Response payload for order cancellation operation. Returns operation
+    results and status.

@@ -1,0 +1,22 @@
+OrganisationUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    organisation_id:
+      type: string
+    name:
+      type: string
+    status:
+      $ref: '#/components/schemas/OrganisationStatus'
+    updated_by:
+      type: string
+    changed_fields:
+      type: object
+      additionalProperties:
+        type: string
+      description: field_name -> new_value
+    timestamp:
+      type: string
+      format: date-time
+  description: OrganisationUpdatedEvent is published when an organisation is updated

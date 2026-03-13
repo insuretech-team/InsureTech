@@ -1,0 +1,6 @@
+ProcessingJobRetrievalRequest:
+  type: object
+  properties:
+    job_id:
+      type: string
+  description: Get Processing Job

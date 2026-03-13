@@ -1,0 +1,38 @@
+InvoiceCancelledEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    invoice_id:
+      type: string
+    invoice_number:
+      type: string
+    order_id:
+      type: string
+    customer_id:
+      type: string
+    organisation_id:
+      type: string
+    tenant_id:
+      type: string
+    reason:
+      type: string
+    cancelled_by:
+      type: string
+    credit_note_issued:
+      type: boolean
+    credit_note_id:
+      type: string
+      description: Populated when credit_note_issued=true
+    correlation_id:
+      type: string
+    causation_id:
+      type: string
+    cancelled_at:
+      type: string
+      format: date-time
+    occurred_at:
+      type: string
+      format: date-time
+  description: "Event: Invoice cancelled \u2014 published when invoice is cancelled\
+    \ before payment"

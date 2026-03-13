@@ -1,0 +1,7 @@
+HealthDeclarationCreationResponse:
+  type: object
+  properties:
+    declaration:
+      $ref: '#/components/schemas/UnderwritingHealthDeclaration'
+  description: Response payload for health declaration creation operation. Returns
+    operation results and status.

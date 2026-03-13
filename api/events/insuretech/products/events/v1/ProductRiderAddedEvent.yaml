@@ -1,0 +1,23 @@
+ProductRiderAddedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    rider_id:
+      type: string
+    product_id:
+      type: string
+    rider_name:
+      type: string
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+    is_mandatory:
+      type: boolean
+    timestamp:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+  description: 'Event: Product rider added'

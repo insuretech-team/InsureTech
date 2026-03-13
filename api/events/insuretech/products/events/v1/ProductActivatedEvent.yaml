@@ -1,0 +1,17 @@
+ProductActivatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    product_name:
+      type: string
+    timestamp:
+      type: string
+      format: date-time
+    activated_by:
+      type: string
+  description: 'Event: Product activated (made available for sale)'

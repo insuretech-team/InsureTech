@@ -1,0 +1,7 @@
+InsuranceFraudCaseUpdateRequest:
+  type: object
+  properties:
+    fraud_case:
+      $ref: '#/components/schemas/FraudCase'
+  description: Request payload for updating an existing fraud case update. Contains
+    fields to be modified.

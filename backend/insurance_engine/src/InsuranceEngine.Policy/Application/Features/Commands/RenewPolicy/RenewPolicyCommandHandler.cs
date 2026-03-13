@@ -67,7 +67,7 @@ public class RenewPolicyCommandHandler : IRequestHandler<RenewPolicyCommand, Res
 
         var newPolicyId = await _repo.AddAsync(newPolicy);
 
-        await _eventBus.PublishAsync("policy.events", new PolicyRenewedEvent(
+        await _eventBus.PublishAsync("insurance.policy.v1", new PolicyRenewedEvent(
             OldPolicyId: oldPolicy.Id, NewPolicyId: newPolicyId,
             NewPolicyNumber: newPolicyNumber, RenewalDate: DateTime.UtcNow));
 

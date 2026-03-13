@@ -30,7 +30,7 @@ public class IssuePolicyCommandHandler : IRequestHandler<IssuePolicyCommand, Res
 
         await _repo.UpdateAsync(policy);
 
-        await _eventBus.PublishAsync("policy.events", new PolicyIssuedEvent(
+        await _eventBus.PublishAsync("insurance.policy.v1", new PolicyIssuedEvent(
             PolicyId: policy.Id, PolicyNumber: policy.PolicyNumber, IssuedAt: policy.IssuedAt!.Value));
 
         return Result.Ok();

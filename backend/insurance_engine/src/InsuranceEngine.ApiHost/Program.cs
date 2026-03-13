@@ -6,6 +6,7 @@ using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Infrastructure;
 using InsuranceEngine.Policy.Infrastructure.Persistence;
 using InsuranceEngine.Policy.Domain.Services;
+using InsuranceEngine.Policy.Infrastructure.Repositories;
 using InsuranceEngine.SharedKernel.Interfaces;
 using InsuranceEngine.SharedKernel.Messaging;
 using InsuranceEngine.SharedKernel.Services;
@@ -41,6 +42,7 @@ builder.Services.AddHealthChecks()
 // Repositories
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IUnderwritingRepository, UnderwritingRepository>();
+builder.Services.AddScoped<IClaimsRepository, ClaimsRepository>();
 builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
 builder.Services.AddScoped<QuoteNumberGenerator>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
@@ -90,6 +92,6 @@ if (app.Environment.IsDevelopment())
 // Seed Database
 await DbInitializer.Initialize(app.Services);
 
-app.MapGrpcService<InsuranceEngine.Products.GrpcServices.InsuranceGrpcService>();
+app.MapGrpcService<InsuranceEngine.ApiHost.GrpcServices.InsuranceGrpcService>();
 
 app.Run();

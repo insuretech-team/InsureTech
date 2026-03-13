@@ -30,7 +30,7 @@ public class CancelPolicyCommandHandler : IRequestHandler<CancelPolicyCommand, R
 
         await _repo.UpdateAsync(policy);
 
-        await _eventBus.PublishAsync("policy.events", new PolicyCancelledEvent(
+        await _eventBus.PublishAsync("insurance.policy.v1", new PolicyCancelledEvent(
             PolicyId: policy.Id, PolicyNumber: policy.PolicyNumber,
             CancelledAt: DateTime.UtcNow, Reason: request.Reason));
 

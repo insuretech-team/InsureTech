@@ -122,7 +122,7 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
 
         var policyId = await _policyRepository.AddAsync(policy);
 
-        await _eventBus.PublishAsync("policy.events", new PolicyCreatedEvent(
+        await _eventBus.PublishAsync("insurance.policy.v1", new PolicyCreatedEvent(
             PolicyId: policyId,
             PolicyNumber: policyNumber,
             CustomerId: policy.CustomerId,

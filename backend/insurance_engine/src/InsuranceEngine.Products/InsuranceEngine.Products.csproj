@@ -5,7 +5,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Protobuf Include="Protos\insurance_engine.proto" GrpcServices="Server" />
+    <Protobuf Include="..\..\..\..\proto\insuretech\insurance\services\v1\insurance_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
   </ItemGroup>
 
   <ItemGroup>

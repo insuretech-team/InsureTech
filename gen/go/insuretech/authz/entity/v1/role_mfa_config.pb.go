@@ -30,11 +30,11 @@ type RoleMFAConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RoleId      string                 `protobuf:"bytes,1,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty" gorm:"column:role_id"`
-	MfaRequired bool                   `protobuf:"varint,2,opt,name=mfa_required,json=mfaRequired,proto3" json:"mfa_required,omitempty" gorm:"column:mfa_required"`
-	MfaMethods  []string               `protobuf:"bytes,3,rep,name=mfa_methods,json=mfaMethods,proto3" json:"mfa_methods,omitempty" gorm:"column:mfa_methods"` // JSONB: ["totp","sms"]
-	UpdatedBy   string                 `protobuf:"bytes,4,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty" gorm:"column:updated_by"`
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	RoleId      string                 `protobuf:"bytes,1,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`
+	MfaRequired bool                   `protobuf:"varint,2,opt,name=mfa_required,json=mfaRequired,proto3" json:"mfa_required,omitempty"`
+	MfaMethods  []string               `protobuf:"bytes,3,rep,name=mfa_methods,json=mfaMethods,proto3" json:"mfa_methods,omitempty"` // JSONB: ["totp","sms"]
+	UpdatedBy   string                 `protobuf:"bytes,4,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *RoleMFAConfig) Reset() {

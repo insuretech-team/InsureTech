@@ -10,5 +10,6 @@ public enum ClaimStatus
     Rejected = 5,          // Rejected
     Settled = 6,           // Payment completed
     Disputed = 7,          // Under dispute
-    FraudCheck = 8         // Flagged for fraud check
+    FraudCheck = 8,         // Flagged for fraud check
+    UnderInvestigation = 9
 }

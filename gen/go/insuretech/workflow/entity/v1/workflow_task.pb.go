@@ -138,17 +138,17 @@ type WorkflowTask struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:task_id;not null"`
-	WorkflowInstanceId string                 `protobuf:"bytes,2,opt,name=workflow_instance_id,json=workflowInstanceId,proto3" json:"workflow_instance_id,omitempty" gorm:"column:workflow_instance_id;not null"`
-	StepName           string                 `protobuf:"bytes,3,opt,name=step_name,json=stepName,proto3" json:"step_name,omitempty" gorm:"column:step_name;not null"`
-	Type               TaskType               `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.workflow.entity.v1.TaskType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	AssignedTo         string                 `protobuf:"bytes,5,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty" gorm:"column:assigned_to"`
-	Status             TaskStatus             `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.TaskStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Decision           string                 `protobuf:"bytes,7,opt,name=decision,proto3" json:"decision,omitempty" gorm:"column:decision"`
-	Comments           string                 `protobuf:"bytes,8,opt,name=comments,proto3" json:"comments,omitempty" gorm:"column:comments"`
-	DueDate            *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty" gorm:"column:due_date;serializer:proto_timestamp"`
-	CompletedAt        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                             // @inject_tag: gorm:"primaryKey;column:task_id;not null"
+	WorkflowInstanceId string                 `protobuf:"bytes,2,opt,name=workflow_instance_id,json=workflowInstanceId,proto3" json:"workflow_instance_id,omitempty"` // @inject_tag: gorm:"column:workflow_instance_id;not null"
+	StepName           string                 `protobuf:"bytes,3,opt,name=step_name,json=stepName,proto3" json:"step_name,omitempty"`                                 // @inject_tag: gorm:"column:step_name;not null"
+	Type               TaskType               `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.workflow.entity.v1.TaskType" json:"type,omitempty"`            // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	AssignedTo         string                 `protobuf:"bytes,5,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty"`                           // @inject_tag: gorm:"column:assigned_to"
+	Status             TaskStatus             `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.TaskStatus" json:"status,omitempty"`      // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Decision           string                 `protobuf:"bytes,7,opt,name=decision,proto3" json:"decision,omitempty"`                                                 // @inject_tag: gorm:"column:decision"
+	Comments           string                 `protobuf:"bytes,8,opt,name=comments,proto3" json:"comments,omitempty"`                                                 // @inject_tag: gorm:"column:comments"
+	DueDate            *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`                                    // @inject_tag: gorm:"column:due_date;serializer:proto_timestamp"
+	CompletedAt        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                       // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                             // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *WorkflowTask) Reset() {

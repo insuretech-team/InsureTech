@@ -27,7 +27,7 @@ public class ClaimsController : ControllerBase
             request.PolicyId,
             request.CustomerId,
             request.Type,
-            request.ClaimedAmount,
+            (long)(request.ClaimedAmount * 100),
             request.IncidentDate,
             request.IncidentDescription,
             request.PlaceOfIncident

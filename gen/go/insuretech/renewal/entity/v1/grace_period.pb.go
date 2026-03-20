@@ -80,15 +80,15 @@ type GracePeriod struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:grace_period_id;not null"`
-	PolicyId       string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
-	StartDate      *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty" gorm:"column:start_date;not null;serializer:proto_timestamp"`
-	EndDate        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty" gorm:"column:end_date;not null;serializer:proto_timestamp"`
-	DaysRemaining  int32                  `protobuf:"varint,5,opt,name=days_remaining,json=daysRemaining,proto3" json:"days_remaining,omitempty" gorm:"column:days_remaining"`
-	Status         GracePeriodStatus      `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.GracePeriodStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	CoverageActive bool                   `protobuf:"varint,7,opt,name=coverage_active,json=coverageActive,proto3" json:"coverage_active,omitempty" gorm:"column:coverage_active"`
-	RevivedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=revived_at,json=revivedAt,proto3" json:"revived_at,omitempty" gorm:"column:revived_at;serializer:proto_timestamp"`
-	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                              // @inject_tag: gorm:"primaryKey;column:grace_period_id;not null"
+	PolicyId       string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                  // @inject_tag: gorm:"column:policy_id;not null"
+	StartDate      *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`                               // @inject_tag: gorm:"column:start_date;not null;serializer:proto_timestamp"
+	EndDate        *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`                                     // @inject_tag: gorm:"column:end_date;not null;serializer:proto_timestamp"
+	DaysRemaining  int32                  `protobuf:"varint,5,opt,name=days_remaining,json=daysRemaining,proto3" json:"days_remaining,omitempty"`                  // @inject_tag: gorm:"column:days_remaining"
+	Status         GracePeriodStatus      `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.GracePeriodStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	CoverageActive bool                   `protobuf:"varint,7,opt,name=coverage_active,json=coverageActive,proto3" json:"coverage_active,omitempty"`               // @inject_tag: gorm:"column:coverage_active"
+	RevivedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=revived_at,json=revivedAt,proto3" json:"revived_at,omitempty"`                               // @inject_tag: gorm:"column:revived_at;serializer:proto_timestamp"
+	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                               // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *GracePeriod) Reset() {

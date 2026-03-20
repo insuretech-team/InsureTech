@@ -6,7 +6,8 @@ public enum BeneficiaryStatus
     Active,
     Inactive,
     Suspended,
-    Blacklisted
+    Blacklisted,
+    PendingKyc
 }
 
 public enum BeneficiaryType

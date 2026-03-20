@@ -14,4 +14,5 @@ public interface IClaimsRepository
     Task UpdateAsync(Claim claim, CancellationToken cancellationToken = default);
     Task<string> GetNextClaimNumberAsync(CancellationToken cancellationToken = default);
     Task<List<Claim>> ListByCustomerAsync(Guid customerId, int page, int pageSize, CancellationToken cancellationToken = default);
+    Task<int> GetTotalCountByCustomerAsync(Guid customerId, CancellationToken cancellationToken = default);
 }

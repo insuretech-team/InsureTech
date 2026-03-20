@@ -11,5 +11,8 @@ public enum ClaimType
     TravelBaggageLoss = 6,
     DeviceDamage = 7,
     DeviceTheft = 8,
-    Death = 9
+    Death = 9,
+    Maturity = 10,
+    Surrender = 11,
+    Health = 12
 }

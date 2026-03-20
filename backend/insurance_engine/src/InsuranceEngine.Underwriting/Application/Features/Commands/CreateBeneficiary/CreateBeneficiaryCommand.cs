@@ -11,6 +11,8 @@ public record CreateBeneficiaryCommand(
     string ContactNumber,
     string Email,
     string Address,
+    Guid UserId,
+    string Code = null,
     string Nid = null,
     string Tin = null,
     IndividualBeneficiaryDto IndividualDetails = null,

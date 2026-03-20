@@ -89,33 +89,33 @@ type Quote struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:quote_id;not null"`
-	QuoteNumber      string      `protobuf:"bytes,2,opt,name=quote_number,json=quoteNumber,proto3" json:"quote_number,omitempty" gorm:"column:quote_number;not null"`
-	BeneficiaryId    string      `protobuf:"bytes,3,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty" gorm:"column:beneficiary_id;not null"`
-	InsurerProductId string      `protobuf:"bytes,4,opt,name=insurer_product_id,json=insurerProductId,proto3" json:"insurer_product_id,omitempty" gorm:"column:insurer_product_id;not null"`
-	Status           QuoteStatus `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.underwriting.entity.v1.QuoteStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	Id               string      `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                             // @inject_tag: gorm:"primaryKey;column:quote_id;not null"
+	QuoteNumber      string      `protobuf:"bytes,2,opt,name=quote_number,json=quoteNumber,proto3" json:"quote_number,omitempty"`                        // @inject_tag: gorm:"column:quote_number;not null"
+	BeneficiaryId    string      `protobuf:"bytes,3,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"`                  // @inject_tag: gorm:"column:beneficiary_id;not null"
+	InsurerProductId string      `protobuf:"bytes,4,opt,name=insurer_product_id,json=insurerProductId,proto3" json:"insurer_product_id,omitempty"`       // @inject_tag: gorm:"column:insurer_product_id;not null"
+	Status           QuoteStatus `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.underwriting.entity.v1.QuoteStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
 	// Quote details
-	SumAssured         *v1.Money `protobuf:"bytes,6,opt,name=sum_assured,json=sumAssured,proto3" json:"sum_assured,omitempty" gorm:"column:sum_assured"`
-	TermYears          int32     `protobuf:"varint,7,opt,name=term_years,json=termYears,proto3" json:"term_years,omitempty" gorm:"column:term_years;not null"`
-	PremiumPaymentMode string    `protobuf:"bytes,8,opt,name=premium_payment_mode,json=premiumPaymentMode,proto3" json:"premium_payment_mode,omitempty" gorm:"column:premium_payment_mode;not null"`
+	SumAssured         *v1.Money `protobuf:"bytes,6,opt,name=sum_assured,json=sumAssured,proto3" json:"sum_assured,omitempty"`
+	TermYears          int32     `protobuf:"varint,7,opt,name=term_years,json=termYears,proto3" json:"term_years,omitempty"`                             // @inject_tag: gorm:"column:term_years;not null"
+	PremiumPaymentMode string    `protobuf:"bytes,8,opt,name=premium_payment_mode,json=premiumPaymentMode,proto3" json:"premium_payment_mode,omitempty"` // @inject_tag: gorm:"column:premium_payment_mode;not null"
 	// Calculated premium
-	BasePremium        *v1.Money `protobuf:"bytes,9,opt,name=base_premium,json=basePremium,proto3" json:"base_premium,omitempty" gorm:"column:base_premium"`
-	RiderPremium       *v1.Money `protobuf:"bytes,10,opt,name=rider_premium,json=riderPremium,proto3" json:"rider_premium,omitempty" gorm:"column:rider_premium"`
-	TaxAmount          *v1.Money `protobuf:"bytes,11,opt,name=tax_amount,json=taxAmount,proto3" json:"tax_amount,omitempty" gorm:"column:tax_amount"`
-	TotalPremium       *v1.Money `protobuf:"bytes,12,opt,name=total_premium,json=totalPremium,proto3" json:"total_premium,omitempty" gorm:"column:total_premium"`
-	PremiumCalculation string    `protobuf:"bytes,13,opt,name=premium_calculation,json=premiumCalculation,proto3" json:"premium_calculation,omitempty" gorm:"column:premium_calculation"`
+	BasePremium        *v1.Money `protobuf:"bytes,9,opt,name=base_premium,json=basePremium,proto3" json:"base_premium,omitempty"`
+	RiderPremium       *v1.Money `protobuf:"bytes,10,opt,name=rider_premium,json=riderPremium,proto3" json:"rider_premium,omitempty"`
+	TaxAmount          *v1.Money `protobuf:"bytes,11,opt,name=tax_amount,json=taxAmount,proto3" json:"tax_amount,omitempty"`
+	TotalPremium       *v1.Money `protobuf:"bytes,12,opt,name=total_premium,json=totalPremium,proto3" json:"total_premium,omitempty"`
+	PremiumCalculation string    `protobuf:"bytes,13,opt,name=premium_calculation,json=premiumCalculation,proto3" json:"premium_calculation,omitempty"` // @inject_tag: gorm:"column:premium_calculation"
 	// Riders
-	SelectedRiders string `protobuf:"bytes,14,opt,name=selected_riders,json=selectedRiders,proto3" json:"selected_riders,omitempty" gorm:"column:selected_riders"`
+	SelectedRiders string `protobuf:"bytes,14,opt,name=selected_riders,json=selectedRiders,proto3" json:"selected_riders,omitempty"` // @inject_tag: gorm:"column:selected_riders"
 	// Applicant details (snapshot at quote time)
-	ApplicantAge        int32  `protobuf:"varint,15,opt,name=applicant_age,json=applicantAge,proto3" json:"applicant_age,omitempty" gorm:"column:applicant_age;not null"`
-	ApplicantOccupation string `protobuf:"bytes,16,opt,name=applicant_occupation,json=applicantOccupation,proto3" json:"applicant_occupation,omitempty" gorm:"column:applicant_occupation"`
-	Smoker              bool   `protobuf:"varint,17,opt,name=smoker,proto3" json:"smoker,omitempty" gorm:"column:smoker"`
+	ApplicantAge        int32  `protobuf:"varint,15,opt,name=applicant_age,json=applicantAge,proto3" json:"applicant_age,omitempty"`                     // @inject_tag: gorm:"column:applicant_age;not null"
+	ApplicantOccupation string `protobuf:"bytes,16,opt,name=applicant_occupation,json=applicantOccupation,proto3" json:"applicant_occupation,omitempty"` // @inject_tag: gorm:"column:applicant_occupation"
+	Smoker              bool   `protobuf:"varint,17,opt,name=smoker,proto3" json:"smoker,omitempty"`                                                     // @inject_tag: gorm:"column:smoker"
 	// Validity
-	ValidUntil *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty" gorm:"column:valid_until;not null;serializer:proto_timestamp"`
+	ValidUntil *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // @inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"
 	// Conversion
-	ConvertedPolicyId string                 `protobuf:"bytes,19,opt,name=converted_policy_id,json=convertedPolicyId,proto3" json:"converted_policy_id,omitempty" gorm:"column:converted_policy_id"`
-	ConvertedAt       *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=converted_at,json=convertedAt,proto3" json:"converted_at,omitempty" gorm:"column:converted_at;serializer:proto_timestamp"`
-	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,21,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	ConvertedPolicyId string                 `protobuf:"bytes,19,opt,name=converted_policy_id,json=convertedPolicyId,proto3" json:"converted_policy_id,omitempty"` // @inject_tag: gorm:"column:converted_policy_id"
+	ConvertedAt       *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=converted_at,json=convertedAt,proto3" json:"converted_at,omitempty"`                     // @inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"
+	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,21,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                           // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *Quote) Reset() {

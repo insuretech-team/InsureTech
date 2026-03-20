@@ -8,4 +8,4 @@ namespace InsuranceEngine.Claims.Application.Features.Queries.Claims;
 
 public record GetClaimByIdQuery(Guid Id) : IRequest<Result<ClaimResponseDto>>;
 
-public record ListClaimsByCustomerQuery(Guid CustomerId, int Page = 1, int PageSize = 10) : IRequest<Result<List<ClaimResponseDto>>>;
+public record ListClaimsByCustomerQuery(Guid CustomerId, int Page = 1, int PageSize = 10) : IRequest<Result<PaginatedResult<ClaimResponseDto>>>;

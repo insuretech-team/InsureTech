@@ -138,17 +138,17 @@ type RenewalSchedule struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:schedule_id;not null"`
-	PolicyId        string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
-	RenewalDueDate  *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=renewal_due_date,json=renewalDueDate,proto3" json:"renewal_due_date,omitempty" gorm:"column:renewal_due_date;not null;serializer:proto_timestamp"`
-	RenewalPremium  *v1.Money              `protobuf:"bytes,4,opt,name=renewal_premium,json=renewalPremium,proto3" json:"renewal_premium,omitempty" gorm:"column:renewal_premium"`
-	RenewalType     RenewalType            `protobuf:"varint,5,opt,name=renewal_type,json=renewalType,proto3,enum=insuretech.renewal.entity.v1.RenewalType" json:"renewal_type,omitempty" gorm:"column:renewal_type;not null;serializer:proto_enum"`
-	Status          RenewalStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.RenewalStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	GracePeriodDays int32                  `protobuf:"varint,7,opt,name=grace_period_days,json=gracePeriodDays,proto3" json:"grace_period_days,omitempty" gorm:"column:grace_period_days"`
-	GracePeriodEnd  *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=grace_period_end,json=gracePeriodEnd,proto3" json:"grace_period_end,omitempty" gorm:"column:grace_period_end;serializer:proto_timestamp"`
-	RenewedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=renewed_at,json=renewedAt,proto3" json:"renewed_at,omitempty" gorm:"column:renewed_at;serializer:proto_timestamp"`
-	RenewedPolicyId string                 `protobuf:"bytes,10,opt,name=renewed_policy_id,json=renewedPolicyId,proto3" json:"renewed_policy_id,omitempty" gorm:"column:renewed_policy_id"`
-	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                 // @inject_tag: gorm:"primaryKey;column:schedule_id;not null"
+	PolicyId        string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                     // @inject_tag: gorm:"column:policy_id;not null"
+	RenewalDueDate  *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=renewal_due_date,json=renewalDueDate,proto3" json:"renewal_due_date,omitempty"` // @inject_tag: gorm:"column:renewal_due_date;not null;serializer:proto_timestamp"
+	RenewalPremium  *v1.Money              `protobuf:"bytes,4,opt,name=renewal_premium,json=renewalPremium,proto3" json:"renewal_premium,omitempty"`
+	RenewalType     RenewalType            `protobuf:"varint,5,opt,name=renewal_type,json=renewalType,proto3,enum=insuretech.renewal.entity.v1.RenewalType" json:"renewal_type,omitempty"` // @inject_tag: gorm:"column:renewal_type;not null;serializer:proto_enum"
+	Status          RenewalStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.RenewalStatus" json:"status,omitempty"`                            // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	GracePeriodDays int32                  `protobuf:"varint,7,opt,name=grace_period_days,json=gracePeriodDays,proto3" json:"grace_period_days,omitempty"`                                 // @inject_tag: gorm:"column:grace_period_days"
+	GracePeriodEnd  *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=grace_period_end,json=gracePeriodEnd,proto3" json:"grace_period_end,omitempty"`                                     // @inject_tag: gorm:"column:grace_period_end;serializer:proto_timestamp"
+	RenewedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=renewed_at,json=renewedAt,proto3" json:"renewed_at,omitempty"`                                                      // @inject_tag: gorm:"column:renewed_at;serializer:proto_timestamp"
+	RenewedPolicyId string                 `protobuf:"bytes,10,opt,name=renewed_policy_id,json=renewedPolicyId,proto3" json:"renewed_policy_id,omitempty"`                                 // @inject_tag: gorm:"column:renewed_policy_id"
+	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                     // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *RenewalSchedule) Reset() {

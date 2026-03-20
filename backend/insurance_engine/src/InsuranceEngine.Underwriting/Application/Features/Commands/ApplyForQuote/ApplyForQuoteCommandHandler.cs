@@ -12,6 +12,7 @@ using InsuranceEngine.Underwriting.Domain.Services;
 using InsuranceEngine.Products.Application.Features.Commands.CalculatePremium;
 using InsuranceEngine.SharedKernel.CQRS;
 using InsuranceEngine.SharedKernel.Interfaces;
+using InsuranceEngine.SharedKernel.DTOs;
 using MediatR;
 
 namespace InsuranceEngine.Underwriting.Application.Features.Commands.ApplyForQuote;

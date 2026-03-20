@@ -264,19 +264,19 @@ type IoTDevice struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DeviceId     string                 `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty" gorm:"primaryKey;column:device_id;not null"`
-	DeviceSerial string                 `protobuf:"bytes,2,opt,name=device_serial,json=deviceSerial,proto3" json:"device_serial,omitempty" gorm:"column:device_serial;not null"`
-	Type         DeviceType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.iot.entity.v1.DeviceType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Manufacturer string                 `protobuf:"bytes,4,opt,name=manufacturer,proto3" json:"manufacturer,omitempty" gorm:"column:manufacturer;not null"`
-	Model        string                 `protobuf:"bytes,5,opt,name=model,proto3" json:"model,omitempty" gorm:"column:model;not null"`
-	PolicyId     string                 `protobuf:"bytes,6,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
-	OwnerId      string                 `protobuf:"bytes,7,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty" gorm:"column:owner_id;not null"`
-	Status       DeviceStatus           `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.iot.entity.v1.DeviceStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	RegisteredAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=registered_at,json=registeredAt,proto3" json:"registered_at,omitempty" gorm:"column:registered_at;not null;serializer:proto_timestamp"`
-	LastSeenAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_seen_at,json=lastSeenAt,proto3" json:"last_seen_at,omitempty" gorm:"column:last_seen_at;serializer:proto_timestamp"`
-	Metadata     map[string]string      `protobuf:"bytes,11,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:metadata"`
-	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeviceId     string                 `protobuf:"bytes,1,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`                         // @inject_tag: gorm:"primaryKey;column:device_id;not null"
+	DeviceSerial string                 `protobuf:"bytes,2,opt,name=device_serial,json=deviceSerial,proto3" json:"device_serial,omitempty"`             // @inject_tag: gorm:"column:device_serial;not null"
+	Type         DeviceType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.iot.entity.v1.DeviceType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Manufacturer string                 `protobuf:"bytes,4,opt,name=manufacturer,proto3" json:"manufacturer,omitempty"`                                 // @inject_tag: gorm:"column:manufacturer;not null"
+	Model        string                 `protobuf:"bytes,5,opt,name=model,proto3" json:"model,omitempty"`                                               // @inject_tag: gorm:"column:model;not null"
+	PolicyId     string                 `protobuf:"bytes,6,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                         // @inject_tag: gorm:"column:policy_id"
+	OwnerId      string                 `protobuf:"bytes,7,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`                            // @inject_tag: gorm:"column:owner_id;not null"
+	Status       DeviceStatus           `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.iot.entity.v1.DeviceStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	RegisteredAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=registered_at,json=registeredAt,proto3" json:"registered_at,omitempty"`             // @inject_tag: gorm:"column:registered_at;not null;serializer:proto_timestamp"
+	LastSeenAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_seen_at,json=lastSeenAt,proto3" json:"last_seen_at,omitempty"`                // @inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"
+	Metadata     map[string]string      `protobuf:"bytes,11,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
 }
 
 func (x *IoTDevice) Reset() {
@@ -409,15 +409,15 @@ type Telemetry struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TelemetryId string                 `protobuf:"bytes,1,opt,name=telemetry_id,json=telemetryId,proto3" json:"telemetry_id,omitempty" gorm:"primaryKey;column:telemetry_id;not null"`
-	DeviceId    string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty" gorm:"column:device_id;not null"`
-	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
-	Type        TelemetryType          `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.iot.entity.v1.TelemetryType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Metrics     map[string]float64     `protobuf:"bytes,5,rep,name=metrics,proto3" json:"metrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3" gorm:"column:metrics"`
-	Latitude    float64                `protobuf:"fixed64,6,opt,name=latitude,proto3" json:"latitude,omitempty" gorm:"column:latitude"`
-	Longitude   float64                `protobuf:"fixed64,7,opt,name=longitude,proto3" json:"longitude,omitempty" gorm:"column:longitude"`
-	RawData     string                 `protobuf:"bytes,8,opt,name=raw_data,json=rawData,proto3" json:"raw_data,omitempty" gorm:"column:raw_data"`
-	Location    *Location              `protobuf:"bytes,9,opt,name=location,proto3" json:"location,omitempty" gorm:"column:location"`
+	TelemetryId string                 `protobuf:"bytes,1,opt,name=telemetry_id,json=telemetryId,proto3" json:"telemetry_id,omitempty"`             // @inject_tag: gorm:"primaryKey;column:telemetry_id;not null"
+	DeviceId    string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`                      // @inject_tag: gorm:"column:device_id;not null"
+	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                    // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+	Type        TelemetryType          `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.iot.entity.v1.TelemetryType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Metrics     map[string]float64     `protobuf:"bytes,5,rep,name=metrics,proto3" json:"metrics,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"fixed64,2,opt,name=value,proto3"`
+	Latitude    float64                `protobuf:"fixed64,6,opt,name=latitude,proto3" json:"latitude,omitempty"`            // @inject_tag: gorm:"column:latitude"
+	Longitude   float64                `protobuf:"fixed64,7,opt,name=longitude,proto3" json:"longitude,omitempty"`          // @inject_tag: gorm:"column:longitude"
+	RawData     string                 `protobuf:"bytes,8,opt,name=raw_data,json=rawData,proto3" json:"raw_data,omitempty"` // @inject_tag: gorm:"column:raw_data"
+	Location    *Location              `protobuf:"bytes,9,opt,name=location,proto3" json:"location,omitempty"`
 }
 
 func (x *Telemetry) Reset() {
@@ -520,10 +520,10 @@ type Location struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Latitude  float64 `protobuf:"fixed64,1,opt,name=latitude,proto3" json:"latitude,omitempty" gorm:"column:latitude"`
-	Longitude float64 `protobuf:"fixed64,2,opt,name=longitude,proto3" json:"longitude,omitempty" gorm:"column:longitude"`
-	Altitude  float64 `protobuf:"fixed64,3,opt,name=altitude,proto3" json:"altitude,omitempty" gorm:"column:altitude"`
-	Accuracy  float64 `protobuf:"fixed64,4,opt,name=accuracy,proto3" json:"accuracy,omitempty" gorm:"column:accuracy"` // Meters
+	Latitude  float64 `protobuf:"fixed64,1,opt,name=latitude,proto3" json:"latitude,omitempty"`
+	Longitude float64 `protobuf:"fixed64,2,opt,name=longitude,proto3" json:"longitude,omitempty"`
+	Altitude  float64 `protobuf:"fixed64,3,opt,name=altitude,proto3" json:"altitude,omitempty"`
+	Accuracy  float64 `protobuf:"fixed64,4,opt,name=accuracy,proto3" json:"accuracy,omitempty"` // Meters
 }
 
 func (x *Location) Reset() {
@@ -592,14 +592,14 @@ type RiskAssessment struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AssessmentId    string                 `protobuf:"bytes,1,opt,name=assessment_id,json=assessmentId,proto3" json:"assessment_id,omitempty" gorm:"column:assessment_id"` // UUID
-	DeviceId        string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty" gorm:"column:device_id"`
-	PolicyId        string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
-	AssessedAt      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=assessed_at,json=assessedAt,proto3" json:"assessed_at,omitempty" gorm:"column:assessed_at;serializer:proto_timestamp"`
-	RiskScore       float64                `protobuf:"fixed64,5,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty" gorm:"column:risk_score"` // 0-100
-	RiskLevel       RiskLevel              `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.iot.entity.v1.RiskLevel" json:"risk_level,omitempty" gorm:"column:risk_level;serializer:proto_enum"`
-	Factors         []*RiskFactor          `protobuf:"bytes,7,rep,name=factors,proto3" json:"factors,omitempty" gorm:"column:factors"`
-	Recommendations []string               `protobuf:"bytes,8,rep,name=recommendations,proto3" json:"recommendations,omitempty" gorm:"column:recommendations"`
+	AssessmentId    string                 `protobuf:"bytes,1,opt,name=assessment_id,json=assessmentId,proto3" json:"assessment_id,omitempty"` // UUID
+	DeviceId        string                 `protobuf:"bytes,2,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`
+	PolicyId        string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	AssessedAt      *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=assessed_at,json=assessedAt,proto3" json:"assessed_at,omitempty"`
+	RiskScore       float64                `protobuf:"fixed64,5,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty"` // 0-100
+	RiskLevel       RiskLevel              `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.iot.entity.v1.RiskLevel" json:"risk_level,omitempty"`
+	Factors         []*RiskFactor          `protobuf:"bytes,7,rep,name=factors,proto3" json:"factors,omitempty"`
+	Recommendations []string               `protobuf:"bytes,8,rep,name=recommendations,proto3" json:"recommendations,omitempty"`
 }
 
 func (x *RiskAssessment) Reset() {
@@ -695,10 +695,10 @@ type RiskFactor struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FactorName      string  `protobuf:"bytes,1,opt,name=factor_name,json=factorName,proto3" json:"factor_name,omitempty" gorm:"column:factor_name"`      // e.g., "Harsh Braking"
-	ImpactScore     float64 `protobuf:"fixed64,2,opt,name=impact_score,json=impactScore,proto3" json:"impact_score,omitempty" gorm:"column:impact_score"` // Contribution to risk
-	OccurrenceCount int32   `protobuf:"varint,3,opt,name=occurrence_count,json=occurrenceCount,proto3" json:"occurrence_count,omitempty" gorm:"column:occurrence_count"`
-	Description     string  `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	FactorName      string  `protobuf:"bytes,1,opt,name=factor_name,json=factorName,proto3" json:"factor_name,omitempty"`      // e.g., "Harsh Braking"
+	ImpactScore     float64 `protobuf:"fixed64,2,opt,name=impact_score,json=impactScore,proto3" json:"impact_score,omitempty"` // Contribution to risk
+	OccurrenceCount int32   `protobuf:"varint,3,opt,name=occurrence_count,json=occurrenceCount,proto3" json:"occurrence_count,omitempty"`
+	Description     string  `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`
 }
 
 func (x *RiskFactor) Reset() {

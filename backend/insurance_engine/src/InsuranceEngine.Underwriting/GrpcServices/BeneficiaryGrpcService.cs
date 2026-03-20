@@ -37,10 +37,10 @@ public sealed class BeneficiaryGrpcService : BeneficiaryService.BeneficiaryServi
             Beneficiary = new Beneficiary
             {
                 BeneficiaryId = beneficiary.Id.ToString(),
-                BeneficiaryCode = beneficiary.Code,
+                Code = beneficiary.Code,
                 UserId = beneficiary.UserId.ToString(),
-                Type = beneficiary.Type.ToString(),
-                Status = beneficiary.Status.ToString()
+                Type = System.Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryType>(beneficiary.Type.ToString(), true),
+                Status = System.Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryStatus>(beneficiary.Status.ToString(), true)
             }
         };
     }
@@ -61,10 +61,10 @@ public sealed class BeneficiaryGrpcService : BeneficiaryService.BeneficiaryServi
         response.Beneficiaries.AddRange(items.Select(b => new Beneficiary
         {
             BeneficiaryId = b.Id.ToString(),
-            BeneficiaryCode = b.Code,
+            Code = b.Code,
             UserId = b.UserId.ToString(),
-            Type = b.Type.ToString(),
-            Status = b.Status.ToString()
+            Type = Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryType>(b.Type.ToString(), true),
+            Status = Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryStatus>(b.Status.ToString(), true)
         }));
 
         return response;

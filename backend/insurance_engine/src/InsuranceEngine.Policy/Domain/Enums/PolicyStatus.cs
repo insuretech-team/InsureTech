@@ -9,5 +9,6 @@ public enum PolicyStatus
     Lapsed = 4,
     Suspended = 5,
     Cancelled = 6,
-    Expired = 7
+    Expired = 7,
+    Draft = 8
 }

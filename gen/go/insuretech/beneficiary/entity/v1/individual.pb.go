@@ -135,23 +135,23 @@ type IndividualBeneficiary struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BeneficiaryId          string                 `protobuf:"bytes,1,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty" gorm:"primaryKey;column:beneficiary_id;not null"`
-	FullName               string                 `protobuf:"bytes,2,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" gorm:"column:full_name;not null"`
-	FullNameBn             string                 `protobuf:"bytes,3,opt,name=full_name_bn,json=fullNameBn,proto3" json:"full_name_bn,omitempty" gorm:"column:full_name_bn"`
-	DateOfBirth            *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty" gorm:"column:date_of_birth;serializer:proto_timestamp"`
-	Gender                 Gender                 `protobuf:"varint,5,opt,name=gender,proto3,enum=insuretech.beneficiary.entity.v1.Gender" json:"gender,omitempty" gorm:"column:gender;not null;serializer:proto_enum"`
-	NidNumber              string                 `protobuf:"bytes,6,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty" gorm:"column:nid_number"`
-	PassportNumber         string                 `protobuf:"bytes,7,opt,name=passport_number,json=passportNumber,proto3" json:"passport_number,omitempty" gorm:"column:passport_number"`
-	BirthCertificateNumber string                 `protobuf:"bytes,8,opt,name=birth_certificate_number,json=birthCertificateNumber,proto3" json:"birth_certificate_number,omitempty" gorm:"column:birth_certificate_number"`
-	TinNumber              string                 `protobuf:"bytes,9,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty" gorm:"column:tin_number"`
-	MaritalStatus          MaritalStatus          `protobuf:"varint,10,opt,name=marital_status,json=maritalStatus,proto3,enum=insuretech.beneficiary.entity.v1.MaritalStatus" json:"marital_status,omitempty" gorm:"column:marital_status;serializer:proto_enum"`
-	Occupation             string                 `protobuf:"bytes,11,opt,name=occupation,proto3" json:"occupation,omitempty" gorm:"column:occupation"`
-	ContactInfo            *v1.ContactInfo        `protobuf:"bytes,12,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty" gorm:"column:contact_info;not null"`
-	PermanentAddress       *v1.Address            `protobuf:"bytes,13,opt,name=permanent_address,json=permanentAddress,proto3" json:"permanent_address,omitempty" gorm:"column:permanent_address;not null"`
-	PresentAddress         *v1.Address            `protobuf:"bytes,14,opt,name=present_address,json=presentAddress,proto3" json:"present_address,omitempty" gorm:"column:present_address"`
-	NomineeName            string                 `protobuf:"bytes,15,opt,name=nominee_name,json=nomineeName,proto3" json:"nominee_name,omitempty" gorm:"column:nominee_name"`
-	NomineeRelationship    string                 `protobuf:"bytes,16,opt,name=nominee_relationship,json=nomineeRelationship,proto3" json:"nominee_relationship,omitempty" gorm:"column:nominee_relationship"`
-	AuditInfo              *v1.AuditInfo          `protobuf:"bytes,17,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	BeneficiaryId          string                 `protobuf:"bytes,1,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
+	FullName               string                 `protobuf:"bytes,2,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`                // @inject_tag: gorm:"column:full_name;not null"
+	FullNameBn             string                 `protobuf:"bytes,3,opt,name=full_name_bn,json=fullNameBn,proto3" json:"full_name_bn,omitempty"`        // @inject_tag: gorm:"column:full_name_bn"
+	DateOfBirth            *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"`
+	Gender                 Gender                 `protobuf:"varint,5,opt,name=gender,proto3,enum=insuretech.beneficiary.entity.v1.Gender" json:"gender,omitempty"`                                            // @inject_tag: gorm:"column:gender;not null;serializer:proto_enum"
+	NidNumber              string                 `protobuf:"bytes,6,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`                                                                   // @inject_tag: gorm:"column:nid_number"
+	PassportNumber         string                 `protobuf:"bytes,7,opt,name=passport_number,json=passportNumber,proto3" json:"passport_number,omitempty"`                                                    // @inject_tag: gorm:"column:passport_number"
+	BirthCertificateNumber string                 `protobuf:"bytes,8,opt,name=birth_certificate_number,json=birthCertificateNumber,proto3" json:"birth_certificate_number,omitempty"`                          // @inject_tag: gorm:"column:birth_certificate_number"
+	TinNumber              string                 `protobuf:"bytes,9,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty"`                                                                   // @inject_tag: gorm:"column:tin_number"
+	MaritalStatus          MaritalStatus          `protobuf:"varint,10,opt,name=marital_status,json=maritalStatus,proto3,enum=insuretech.beneficiary.entity.v1.MaritalStatus" json:"marital_status,omitempty"` // @inject_tag: gorm:"column:marital_status;serializer:proto_enum"
+	Occupation             string                 `protobuf:"bytes,11,opt,name=occupation,proto3" json:"occupation,omitempty"`                                                                                 // @inject_tag: gorm:"column:occupation"
+	ContactInfo            *v1.ContactInfo        `protobuf:"bytes,12,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`                                                            // @inject_tag: gorm:"column:contact_info;not null"
+	PermanentAddress       *v1.Address            `protobuf:"bytes,13,opt,name=permanent_address,json=permanentAddress,proto3" json:"permanent_address,omitempty"`                                             // @inject_tag: gorm:"column:permanent_address;not null"
+	PresentAddress         *v1.Address            `protobuf:"bytes,14,opt,name=present_address,json=presentAddress,proto3" json:"present_address,omitempty"`                                                   // @inject_tag: gorm:"column:present_address"
+	NomineeName            string                 `protobuf:"bytes,15,opt,name=nominee_name,json=nomineeName,proto3" json:"nominee_name,omitempty"`                                                            // @inject_tag: gorm:"column:nominee_name"
+	NomineeRelationship    string                 `protobuf:"bytes,16,opt,name=nominee_relationship,json=nomineeRelationship,proto3" json:"nominee_relationship,omitempty"`                                    // @inject_tag: gorm:"column:nominee_relationship"
+	AuditInfo              *v1.AuditInfo          `protobuf:"bytes,17,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                                  // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *IndividualBeneficiary) Reset() {

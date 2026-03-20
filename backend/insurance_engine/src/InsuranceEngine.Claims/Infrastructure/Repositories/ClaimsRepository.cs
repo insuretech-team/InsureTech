@@ -69,4 +69,10 @@ public class ClaimsRepository : IClaimsRepository
             .Take(pageSize)
             .ToListAsync(cancellationToken);
     }
+
+    public async Task<int> GetTotalCountByCustomerAsync(Guid customerId, CancellationToken cancellationToken = default)
+    {
+        return await _context.Claims
+            .CountAsync(c => c.CustomerId == customerId && !c.IsDeleted, cancellationToken);
+    }
 }

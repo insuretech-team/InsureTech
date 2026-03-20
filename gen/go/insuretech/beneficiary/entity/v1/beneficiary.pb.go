@@ -196,18 +196,18 @@ type Beneficiary struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	BeneficiaryId  string                 `protobuf:"bytes,1,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty" gorm:"primaryKey;column:beneficiary_id;not null"`
-	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null"`
-	Type           BeneficiaryType        `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.beneficiary.entity.v1.BeneficiaryType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Code           string                 `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null"`
-	Status         BeneficiaryStatus      `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.beneficiary.entity.v1.BeneficiaryStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	KycStatus      KYCStatus              `protobuf:"varint,6,opt,name=kyc_status,json=kycStatus,proto3,enum=insuretech.beneficiary.entity.v1.KYCStatus" json:"kyc_status,omitempty" gorm:"column:kyc_status;not null;serializer:proto_enum"`
-	KycCompletedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=kyc_completed_at,json=kycCompletedAt,proto3" json:"kyc_completed_at,omitempty" gorm:"column:kyc_completed_at;serializer:proto_timestamp"`
-	RiskScore      string                 `protobuf:"bytes,8,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty" gorm:"column:risk_score"`
-	ReferralCode   string                 `protobuf:"bytes,9,opt,name=referral_code,json=referralCode,proto3" json:"referral_code,omitempty" gorm:"column:referral_code"`
-	ReferredBy     string                 `protobuf:"bytes,10,opt,name=referred_by,json=referredBy,proto3" json:"referred_by,omitempty" gorm:"column:referred_by"`
-	PartnerId      string                 `protobuf:"bytes,11,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty" gorm:"column:partner_id"`
-	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	BeneficiaryId  string                 `protobuf:"bytes,1,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"`                                      // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
+	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                                           // @inject_tag: gorm:"column:user_id;not null"
+	Type           BeneficiaryType        `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.beneficiary.entity.v1.BeneficiaryType" json:"type,omitempty"`                      // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Code           string                 `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`                                                                             // @inject_tag: gorm:"column:code;not null"
+	Status         BeneficiaryStatus      `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.beneficiary.entity.v1.BeneficiaryStatus" json:"status,omitempty"`                // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	KycStatus      KYCStatus              `protobuf:"varint,6,opt,name=kyc_status,json=kycStatus,proto3,enum=insuretech.beneficiary.entity.v1.KYCStatus" json:"kyc_status,omitempty"` // @inject_tag: gorm:"column:kyc_status;not null;serializer:proto_enum"
+	KycCompletedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=kyc_completed_at,json=kycCompletedAt,proto3" json:"kyc_completed_at,omitempty"`                                 // @inject_tag: gorm:"column:kyc_completed_at;serializer:proto_timestamp"
+	RiskScore      string                 `protobuf:"bytes,8,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty"`                                                  // @inject_tag: gorm:"column:risk_score"
+	ReferralCode   string                 `protobuf:"bytes,9,opt,name=referral_code,json=referralCode,proto3" json:"referral_code,omitempty"`                                         // @inject_tag: gorm:"column:referral_code"
+	ReferredBy     string                 `protobuf:"bytes,10,opt,name=referred_by,json=referredBy,proto3" json:"referred_by,omitempty"`                                              // @inject_tag: gorm:"column:referred_by"
+	PartnerId      string                 `protobuf:"bytes,11,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`                                                 // @inject_tag: gorm:"column:partner_id"
+	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                 // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *Beneficiary) Reset() {

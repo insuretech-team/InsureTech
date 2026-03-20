@@ -91,21 +91,21 @@ type ServiceProvider struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ProviderId                 string                 `protobuf:"bytes,1,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty" gorm:"primaryKey;column:provider_id;not null"`
-	ProviderName               string                 `protobuf:"bytes,2,opt,name=provider_name,json=providerName,proto3" json:"provider_name,omitempty" gorm:"column:provider_name;not null"`
-	ProviderType               ServiceProviderType    `protobuf:"varint,3,opt,name=provider_type,json=providerType,proto3,enum=insuretech.services.entity.v1.ServiceProviderType" json:"provider_type,omitempty" gorm:"column:provider_type;not null;serializer:proto_enum"`
-	Address                    string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty" gorm:"column:address"`
-	City                       string                 `protobuf:"bytes,5,opt,name=city,proto3" json:"city,omitempty" gorm:"column:city"`
-	District                   string                 `protobuf:"bytes,6,opt,name=district,proto3" json:"district,omitempty" gorm:"column:district"`
-	PhoneNumber                string                 `protobuf:"bytes,7,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty" gorm:"column:phone_number"`
-	Email                      string                 `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty" gorm:"column:email"`
-	Latitude                   float64                `protobuf:"fixed64,9,opt,name=latitude,proto3" json:"latitude,omitempty" gorm:"column:latitude"`
-	Longitude                  float64                `protobuf:"fixed64,10,opt,name=longitude,proto3" json:"longitude,omitempty" gorm:"column:longitude"`
-	ServicesOffered            []string               `protobuf:"bytes,11,rep,name=services_offered,json=servicesOffered,proto3" json:"services_offered,omitempty" gorm:"column:services_offered"`
-	IsNetworkProvider          bool                   `protobuf:"varint,12,opt,name=is_network_provider,json=isNetworkProvider,proto3" json:"is_network_provider,omitempty" gorm:"column:is_network_provider;not null"`
-	SupportedProductCategories []string               `protobuf:"bytes,13,rep,name=supported_product_categories,json=supportedProductCategories,proto3" json:"supported_product_categories,omitempty" gorm:"column:supported_product_categories"`
-	CreatedAt                  *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
-	UpdatedAt                  *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	ProviderId                 string                 `protobuf:"bytes,1,opt,name=provider_id,json=providerId,proto3" json:"provider_id,omitempty"`                                                               // @inject_tag: gorm:"primaryKey;column:provider_id;not null"
+	ProviderName               string                 `protobuf:"bytes,2,opt,name=provider_name,json=providerName,proto3" json:"provider_name,omitempty"`                                                         // @inject_tag: gorm:"column:provider_name;not null"
+	ProviderType               ServiceProviderType    `protobuf:"varint,3,opt,name=provider_type,json=providerType,proto3,enum=insuretech.services.entity.v1.ServiceProviderType" json:"provider_type,omitempty"` // @inject_tag: gorm:"column:provider_type;not null;serializer:proto_enum"
+	Address                    string                 `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`                                                                                       // @inject_tag: gorm:"column:address"
+	City                       string                 `protobuf:"bytes,5,opt,name=city,proto3" json:"city,omitempty"`                                                                                             // @inject_tag: gorm:"column:city"
+	District                   string                 `protobuf:"bytes,6,opt,name=district,proto3" json:"district,omitempty"`                                                                                     // @inject_tag: gorm:"column:district"
+	PhoneNumber                string                 `protobuf:"bytes,7,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`                                                            // @inject_tag: gorm:"column:phone_number"
+	Email                      string                 `protobuf:"bytes,8,opt,name=email,proto3" json:"email,omitempty"`                                                                                           // @inject_tag: gorm:"column:email"
+	Latitude                   float64                `protobuf:"fixed64,9,opt,name=latitude,proto3" json:"latitude,omitempty"`                                                                                   // @inject_tag: gorm:"column:latitude"
+	Longitude                  float64                `protobuf:"fixed64,10,opt,name=longitude,proto3" json:"longitude,omitempty"`                                                                                // @inject_tag: gorm:"column:longitude"
+	ServicesOffered            []string               `protobuf:"bytes,11,rep,name=services_offered,json=servicesOffered,proto3" json:"services_offered,omitempty"`
+	IsNetworkProvider          bool                   `protobuf:"varint,12,opt,name=is_network_provider,json=isNetworkProvider,proto3" json:"is_network_provider,omitempty"` // @inject_tag: gorm:"column:is_network_provider;not null"
+	SupportedProductCategories []string               `protobuf:"bytes,13,rep,name=supported_product_categories,json=supportedProductCategories,proto3" json:"supported_product_categories,omitempty"`
+	CreatedAt                  *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt                  *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *ServiceProvider) Reset() {

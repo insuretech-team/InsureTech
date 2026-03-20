@@ -29,6 +29,8 @@ public class BusinessBeneficiary
     public string? FocalPersonDesignation { get; set; }
     public string? FocalPersonNid { get; set; }
     public string? FocalPersonContactJson { get; set; }
+    public string? Industry { get; set; }
+    public string? FocalPersonContact { get; set; }
 
     public string? AuditInfo { get; set; }
     public string? RegistrationNumber { get; set; }

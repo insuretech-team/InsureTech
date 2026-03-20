@@ -19,6 +19,7 @@ using InsuranceEngine.Claims;
 using InsuranceEngine.Underwriting;
 using InsuranceEngine.Claims.GrpcServices;
 using InsuranceEngine.Underwriting.GrpcServices;
+using InsuranceEngine.Fraud;
 
 var builder = WebApplication.CreateBuilder(args);
 

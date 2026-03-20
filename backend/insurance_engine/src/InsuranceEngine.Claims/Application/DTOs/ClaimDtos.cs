@@ -10,14 +10,16 @@ public record ClaimResponseDto
     public string ClaimNumber { get; init; } = string.Empty;
     public Guid PolicyId { get; init; }
     public Guid CustomerId { get; init; }
-    public string Status { get; init; } = string.Empty;
-    public string ClaimType { get; init; } = string.Empty;
+    public InsuranceEngine.Claims.Domain.Enums.ClaimType Type { get; init; }
+    public InsuranceEngine.Claims.Domain.Enums.ClaimStatus Status { get; init; }
     public decimal ClaimedAmount { get; init; }
+    public decimal ApprovedAmount { get; init; }
     public string Currency { get; init; } = "BDT";
     public DateTime IncidentDate { get; init; }
     public string IncidentDescription { get; init; } = string.Empty;
     public string PlaceOfIncident { get; init; } = string.Empty;
     public DateTime SubmittedAt { get; init; }
+    public DateTime? ProcessedAt { get; init; }
     public string? RejectionReason { get; init; }
     public List<ClaimApprovalDto> Approvals { get; init; } = new();
     public List<ClaimDocumentDto> Documents { get; init; } = new();

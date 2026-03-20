@@ -5,23 +5,30 @@ using Insuretech.Policy.Entity.V1;
 using Insuretech.Claims.Entity.V1;
 using Insuretech.Common.V1;
 using InsuranceEngine.Products.Application.Interfaces;
+using InsuranceEngine.Policy.Application.Features.Queries;
+using InsuranceEngine.Policy.Application.DTOs;
+using InsuranceEngine.Claims.Application.DTOs;
+using InsuranceEngine.Claims.Application.Features.Queries.Claims;
+using InsuranceEngine.Underwriting.Application.DTOs;
+using InsuranceEngine.Underwriting.Application.Features.Queries;
+using InsuranceEngine.Products.Application.DTOs;
+using Insuretech.Underwriting.Entity.V1;
+using MediatR;
+using System;
+using System.Collections.Generic;
+using Google.Protobuf.WellKnownTypes;
+using InsuranceEngine.Policy.Application.Features.Commands.CreatePolicy;
+using InsuranceEngine.Policy.Application.Features.Commands.IssuePolicy;
+using InsuranceEngine.Claims.Application.Features.Commands.Claims;
+using InsuranceEngine.Underwriting.Application.Features.Queries.GetQuote;
+using InsuranceEngine.Underwriting.Application.Features.Queries.ListQuotes;
+using InsuranceEngine.Underwriting.Domain.Enums;
+using InsuranceEngine.SharedKernel.DTOs;
+using InsuranceEngine.SharedKernel.CQRS;
 using Microsoft.Extensions.Logging;
 using System.Linq;
-using System.Threading.Tasks;
-using MediatR;
-using InsuranceEngine.Policy.Application.Features.Commands.IssuePolicy;
-using InsuranceEngine.Products.Application.Features.Commands.CalculatePremium;
-using InsuranceEngine.Policy.Application.Features.Commands.RenewPolicy;
-using InsuranceEngine.Policy.Application.Features.Commands.Claims;
-using InsuranceEngine.Policy.Application.Features.Commands.CreatePolicy;
-using InsuranceEngine.Policy.Domain.Enums;
-using InsuranceEngine.SharedKernel.CQRS;
-using System.Collections.Generic;
-using System;
-using Google.Protobuf.WellKnownTypes;
-using InsuranceEngine.Policy.Application.Features.Queries.GetQuote;
-using InsuranceEngine.Policy.Application.Features.Queries.ListQuotes;
-using Insuretech.Underwriting.Entity.V1;
+using QuoteProto = Insuretech.Underwriting.Entity.V1;
+using ProductProto = Insuretech.Products.Entity.V1;
 
 namespace InsuranceEngine.ApiHost.GrpcServices;
 
@@ -63,7 +70,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         }
 
         // Map domain product to proto product
-        var protoProduct = new Product
+        var protoProduct = new global::Insuretech.Products.Entity.V1.Product
         {
             ProductId = product.Id.ToString(),
             Name = product.Name,
@@ -74,6 +81,23 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         };
 
         return new GetProductResponse { Product = protoProduct };
+    }
+
+    private static ProductProto.Product MapToProtoProduct(ProductDto dto)
+    {
+        var product = new ProductProto.Product
+        {
+            ProductId = dto.Id.ToString(),
+            ProductCode = dto.Code,
+            ProductName = dto.Name,
+            Description = dto.Description,
+            Status = dto.IsActive ? ProductProto.ProductStatus.Active : ProductProto.ProductStatus.Inactive
+        };
+
+        if (dto.BasePremium != null)
+            product.BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode };
+
+        return product;
     }
 
     // ===================== POLICY CRUD =====================
@@ -100,9 +124,9 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         Guid? productId = string.IsNullOrEmpty(request.ProductId) ? null : Guid.Parse(request.ProductId);
         
         var query = new ListPoliciesQuery(
+            null, // tenantId is not in the proto request, assuming null or default
             customerId,
-            null, // Status mapping could be added if needed
-            productId,
+            string.IsNullOrEmpty(request.ProductId) ? null : Guid.Parse(request.ProductId),
             request.Page > 0 ? (int)request.Page : 1,
             request.PageSize > 0 ? (int)request.PageSize : 20
         );
@@ -111,14 +135,14 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
         var response = new ListPoliciesResponse
         {
-            TotalCount = (uint)result.TotalCount,
-            Page = (uint)result.Page,
-            PageSize = (uint)result.PageSize
+            Total = result.TotalCount,
+            Page = result.Page,
+            PageSize = result.PageSize
         };
 
         foreach (var p in result.Items)
         {
-            response.Policies.Add(new Policy
+            response.Policies.Add(new global::Insuretech.Policy.Entity.V1.Policy
             {
                 PolicyId = p.Id.ToString(),
                 PolicyNumber = p.PolicyNumber,
@@ -136,9 +160,9 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         return response;
     }
 
-    private static Policy MapToProtoPolicy(PolicyDto dto)
+    private static global::Insuretech.Policy.Entity.V1.Policy MapToProtoPolicy(PolicyDto dto)
     {
-        var policy = new Policy
+        var policy = new global::Insuretech.Policy.Entity.V1.Policy
         {
             PolicyId = dto.Id.ToString(),
             PolicyNumber = dto.PolicyNumber,
@@ -181,8 +205,10 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             {
                 policy.Nominees.Add(new Nominee
                 {
-                    NomineeId = n.Id?.ToString() ?? "",
+                    NomineeId = n.Id?.ToString() ?? Guid.NewGuid().ToString(),
+                    PolicyId = dto.Id.ToString(),
                     BeneficiaryId = n.BeneficiaryId.ToString(),
+                    FullName = "", // Should be in DTO or looked up
                     Relationship = n.Relationship,
                     SharePercentage = n.SharePercentage
                 });
@@ -193,7 +219,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         {
             foreach (var r in dto.Riders)
             {
-                policy.Riders.Add(new Rider
+                policy.Riders.Add(new Insuretech.Policy.Entity.V1.Rider
                 {
                     RiderId = r.Id.ToString(),
                     RiderName = r.RiderName,
@@ -206,20 +232,34 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         return policy;
     }
 
-    public override async Task<CreatePolicyResponse> CreatePolicy(CreatePolicyRequest request, ServerCallContext context)
+    public override async Task<global::Insuretech.Insurance.Services.V1.CreatePolicyResponse> CreatePolicy(CreatePolicyRequest request, ServerCallContext context)
     {
         _logger.LogInformation("Standardized CreatePolicy called via gRPC");
 
         if (request.Policy == null)
             throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy data is missing"));
 
-        // Map proto policy request to internal command
         var command = new CreatePolicyCommand(
             Guid.Parse(request.Policy.ProductId),
             Guid.Parse(request.Policy.CustomerId),
-            (int)request.Policy.TenureMonths,
+            string.IsNullOrEmpty(request.Policy.PartnerId) ? null : Guid.Parse(request.Policy.PartnerId),
+            string.IsNullOrEmpty(request.Policy.AgentId) ? null : Guid.Parse(request.Policy.AgentId),
+            new ApplicantDto(
+                request.Policy.ProposerDetails?.FullName ?? "",
+                request.Policy.ProposerDetails?.DateOfBirth?.ToDateTime(),
+                request.Policy.ProposerDetails?.NidNumber,
+                request.Policy.ProposerDetails?.Occupation,
+                0, // AnnualIncome not in proto
+                request.Policy.ProposerDetails?.Address,
+                null, // PhoneNumber
+                null // HealthDeclaration
+            ),
+            new List<NomineeDto>(), // Simplified Nominees mapping
+            new List<PolicyRiderDto>(), // Simplified Riders mapping
+            request.Policy.PremiumAmount?.Amount ?? 0,
             request.Policy.SumInsured?.Amount ?? 0,
-            new List<Guid>() // Riders mapping omitted for brevity in first pass
+            request.Policy.TenureMonths,
+            request.Policy.StartDate?.ToDateTime() ?? DateTime.UtcNow
         );
 
         var result = await _mediator.Send(command);
@@ -230,7 +270,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         // Fetch the created policy to return full entity
         var policyDto = await _mediator.Send(new GetPolicyQuery(result.Value.PolicyId));
         
-        return new CreatePolicyResponse { Policy = MapToProtoPolicy(policyDto) };
+        return new global::Insuretech.Insurance.Services.V1.CreatePolicyResponse { Policy = MapToProtoPolicy(policyDto) };
     }
 
     public override async Task<UpdatePolicyResponse> UpdatePolicy(UpdatePolicyRequest request, ServerCallContext context)
@@ -238,7 +278,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         _logger.LogInformation($"Standardized UpdatePolicy called for {request.Policy?.PolicyId}");
         
         // This RPC handles business transitions like "Issue" or "Renew" based on status changes in the request
-        if (request.Policy?.Status == PolicyStatus.PolicyStatusActive)
+        if (request.Policy?.Status == PolicyStatus.Active)
         {
              // Mapping to existing IssuePolicy logic
              var result = await _mediator.Send(new IssuePolicyCommand(Guid.Parse(request.Policy.PolicyId)));
@@ -285,7 +325,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Failed to list claims"));
 
         var response = new ListClaimsResponse();
-        foreach (var c in result.Value)
+        foreach (var c in result.Value.Items)
         {
             response.Claims.Add(MapToProtoClaim(c));
         }
@@ -293,21 +333,38 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         return response;
     }
 
-    private static Claim MapToProtoClaim(ClaimResponseDto dto)
+    private static global::Insuretech.Claims.Entity.V1.Claim MapToProtoClaim(InsuranceEngine.Claims.Application.DTOs.ClaimResponseDto dto)
     {
-        var claim = new Claim
+        ClaimStatus status = ClaimStatus.Unspecified;
+        if (!string.IsNullOrEmpty(dto.Status.ToString()))
+        {
+            if (System.Enum.TryParse<ClaimStatus>(dto.Status.ToString(), true, out var parsedStatus))
+                status = parsedStatus;
+        }
+
+        ClaimType type = ClaimType.Unspecified;
+        if (!string.IsNullOrEmpty(dto.Type.ToString()))
+        {
+            if (System.Enum.TryParse<ClaimType>(dto.Type.ToString(), true, out var parsedType))
+                type = parsedType;
+        }
+
+        var claim = new global::Insuretech.Claims.Entity.V1.Claim
         {
             ClaimId = dto.Id.ToString(),
             ClaimNumber = dto.ClaimNumber,
             PolicyId = dto.PolicyId.ToString(),
             CustomerId = dto.CustomerId.ToString(),
-            Status = Enum.TryParse<ClaimStatus>($"ClaimStatus{dto.Status}", out var status) ? status : ClaimStatus.ClaimStatusUnspecified,
-            Type = Enum.TryParse<ClaimType>($"ClaimType{dto.ClaimType}", out var type) ? type : ClaimType.ClaimTypeUnspecified,
-            ClaimedAmount = new Money { Amount = dto.ClaimedAmount, Currency = dto.Currency },
+            Status = status,
+            Type = type,
+            ClaimedAmount = new Money { Amount = (long)(dto.ClaimedAmount * 100), Currency = dto.Currency },
             IncidentDate = dto.IncidentDate.ToTimestamp(),
             IncidentDescription = dto.IncidentDescription,
             PlaceOfIncident = dto.PlaceOfIncident ?? "",
-            SubmittedAt = dto.SubmittedAt.ToTimestamp()
+            SubmittedAt = dto.SubmittedAt.ToTimestamp(),
+            ApprovedAt = dto.ApprovedAt?.ToTimestamp(),
+            SettledAt = dto.SettledAt?.ToTimestamp(),
+            ProcessedAt = dto.ProcessedAt?.ToTimestamp()
         };
 
         foreach (var a in dto.Approvals)
@@ -315,10 +372,10 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             claim.Approvals.Add(new ClaimApproval
             {
                 ApprovalId = a.Id.ToString(),
-                Decision = Enum.TryParse<ClaimApprovalDecision>($"ClaimApprovalDecision{a.Decision}", out var decision) ? decision : ClaimApprovalDecision.ClaimApprovalDecisionUnspecified,
-                ApprovalLevel = (uint)a.Level,
+                Decision = System.Enum.TryParse<ApprovalDecision>(a.Decision, true, out var decision) ? decision : ApprovalDecision.Unspecified,
+                ApprovalLevel = a.Level,
                 Notes = a.Notes ?? "",
-                DecidedAt = a.DecidedAt?.ToTimestamp()
+                ApprovedAt = a.DecidedAt?.ToTimestamp()
             });
         }
 
@@ -329,7 +386,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 DocumentId = d.Id.ToString(),
                 DocumentType = d.DocumentType,
                 FileUrl = d.FileUrl,
-                IsVerified = d.IsVerified,
+                Verified = d.IsVerified,
                 UploadedAt = d.UploadedAt.ToTimestamp()
             });
         }
@@ -348,7 +405,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         var command = new SubmitClaimCommand(
             Guid.Parse(request.Claim.PolicyId),
             Guid.Parse(request.Claim.CustomerId),
-            (InsuranceEngine.Policy.Domain.Enums.ClaimType)request.Claim.Type, 
+            (InsuranceEngine.Claims.Domain.Enums.ClaimType)request.Claim.Type, 
             request.Claim.ClaimedAmount?.Amount ?? 0,
             request.Claim.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
             request.Claim.IncidentDescription,
@@ -361,9 +418,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Claim submission failed"));
 
         // Fetch the created claim to return full entity
-        var claimResult = await _mediator.Send(new GetClaimByIdQuery(result.Value));
-        
-        return new CreateClaimResponse { Claim = MapToProtoClaim(claimResult.Value) };
+        return new CreateClaimResponse { Claim = MapToProtoClaim(result.Value) };
     }
 
     // ===================== QUOTE CRUD =====================
@@ -399,9 +454,9 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
         var response = new ListQuotesResponse
         {
-            TotalCount = (uint)result.TotalCount,
-            Page = (uint)result.Page,
-            PageSize = (uint)result.PageSize
+            Total = (int)result.TotalCount,
+            Page = result.Page,
+            PageSize = result.PageSize
         };
 
         foreach (var q in result.Items)
@@ -412,9 +467,9 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         return response;
     }
 
-    private static Quote MapToProtoQuote(QuoteDto dto)
+    private static global::Insuretech.Underwriting.Entity.V1.Quote MapToProtoQuote(InsuranceEngine.Underwriting.Application.DTOs.QuoteDto dto)
     {
-        return new Quote
+        return new global::Insuretech.Underwriting.Entity.V1.Quote
         {
             Id = dto.Id.ToString(),
             QuoteNumber = dto.QuoteNumber,

@@ -144,16 +144,16 @@ type ComplianceLog struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:log_id;not null"`
-	Type        ComplianceType         `protobuf:"varint,2,opt,name=type,proto3,enum=insuretech.audit.entity.v1.ComplianceType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Regulation  string                 `protobuf:"bytes,3,opt,name=regulation,proto3" json:"regulation,omitempty" gorm:"column:regulation;not null"`
-	EntityType  string                 `protobuf:"bytes,4,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
-	EntityId    string                 `protobuf:"bytes,5,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id;not null"`
-	Status      ComplianceStatus       `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.audit.entity.v1.ComplianceStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Description string                 `protobuf:"bytes,7,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description;not null"`
-	Evidence    string                 `protobuf:"bytes,8,opt,name=evidence,proto3" json:"evidence,omitempty" gorm:"column:evidence"`
-	PerformedBy string                 `protobuf:"bytes,9,opt,name=performed_by,json=performedBy,proto3" json:"performed_by,omitempty" gorm:"column:performed_by"`
-	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                           // @inject_tag: gorm:"primaryKey;column:log_id;not null"
+	Type        ComplianceType         `protobuf:"varint,2,opt,name=type,proto3,enum=insuretech.audit.entity.v1.ComplianceType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Regulation  string                 `protobuf:"bytes,3,opt,name=regulation,proto3" json:"regulation,omitempty"`                                           // @inject_tag: gorm:"column:regulation;not null"
+	EntityType  string                 `protobuf:"bytes,4,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                         // @inject_tag: gorm:"column:entity_type;not null"
+	EntityId    string                 `protobuf:"bytes,5,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                               // @inject_tag: gorm:"column:entity_id;not null"
+	Status      ComplianceStatus       `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.audit.entity.v1.ComplianceStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Description string                 `protobuf:"bytes,7,opt,name=description,proto3" json:"description,omitempty"`                                         // @inject_tag: gorm:"column:description;not null"
+	Evidence    string                 `protobuf:"bytes,8,opt,name=evidence,proto3" json:"evidence,omitempty"`                                               // @inject_tag: gorm:"column:evidence"
+	PerformedBy string                 `protobuf:"bytes,9,opt,name=performed_by,json=performedBy,proto3" json:"performed_by,omitempty"`                      // @inject_tag: gorm:"column:performed_by"
+	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                            // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
 }
 
 func (x *ComplianceLog) Reset() {

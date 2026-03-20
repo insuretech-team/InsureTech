@@ -5,6 +5,7 @@ using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Domain.Entities;
 using InsuranceEngine.Policy.Domain.Enums;
 using InsuranceEngine.SharedKernel.CQRS;
+using InsuranceEngine.SharedKernel.Interfaces;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -61,8 +62,8 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             ClaimNumber: claim.ClaimNumber,
             PolicyId: claim.PolicyId,
             CustomerId: claim.CustomerId,
-            Amount: claim.ClaimedAmount.Amount,
-            Currency: claim.ClaimedAmount.CurrencyCode,
+            Amount: claim.ClaimedAmount,
+            Currency: claim.ClaimedCurrency,
             IncidentDate: claim.IncidentDate
         ));
         

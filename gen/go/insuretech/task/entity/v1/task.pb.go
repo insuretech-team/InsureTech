@@ -196,19 +196,19 @@ type Task struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:task_id;not null"`
-	Title             string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty" gorm:"column:title;not null"`
-	Description       string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
-	Type              TaskType               `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.task.entity.v1.TaskType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Priority          TaskPriority           `protobuf:"varint,5,opt,name=priority,proto3,enum=insuretech.task.entity.v1.TaskPriority" json:"priority,omitempty" gorm:"column:priority;not null;serializer:proto_enum"`
-	Status            TaskStatus             `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.task.entity.v1.TaskStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	AssignedTo        string                 `protobuf:"bytes,7,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty" gorm:"column:assigned_to"`
-	CreatedBy         string                 `protobuf:"bytes,8,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty" gorm:"column:created_by"`
-	RelatedEntityType string                 `protobuf:"bytes,9,opt,name=related_entity_type,json=relatedEntityType,proto3" json:"related_entity_type,omitempty" gorm:"column:related_entity_type"`
-	RelatedEntityId   string                 `protobuf:"bytes,10,opt,name=related_entity_id,json=relatedEntityId,proto3" json:"related_entity_id,omitempty" gorm:"column:related_entity_id"`
-	DueDate           *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty" gorm:"column:due_date;serializer:proto_timestamp"`
-	CompletedAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
-	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                          // @inject_tag: gorm:"primaryKey;column:task_id;not null"
+	Title             string                 `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                                                    // @inject_tag: gorm:"column:title;not null"
+	Description       string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`                                        // @inject_tag: gorm:"column:description"
+	Type              TaskType               `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.task.entity.v1.TaskType" json:"type,omitempty"`             // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Priority          TaskPriority           `protobuf:"varint,5,opt,name=priority,proto3,enum=insuretech.task.entity.v1.TaskPriority" json:"priority,omitempty"` // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+	Status            TaskStatus             `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.task.entity.v1.TaskStatus" json:"status,omitempty"`       // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	AssignedTo        string                 `protobuf:"bytes,7,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty"`                        // @inject_tag: gorm:"column:assigned_to"
+	CreatedBy         string                 `protobuf:"bytes,8,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`                           // @inject_tag: gorm:"column:created_by"
+	RelatedEntityType string                 `protobuf:"bytes,9,opt,name=related_entity_type,json=relatedEntityType,proto3" json:"related_entity_type,omitempty"` // @inject_tag: gorm:"column:related_entity_type"
+	RelatedEntityId   string                 `protobuf:"bytes,10,opt,name=related_entity_id,json=relatedEntityId,proto3" json:"related_entity_id,omitempty"`      // @inject_tag: gorm:"column:related_entity_id"
+	DueDate           *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=due_date,json=dueDate,proto3" json:"due_date,omitempty"`                                // @inject_tag: gorm:"column:due_date;serializer:proto_timestamp"
+	CompletedAt       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                    // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                          // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *Task) Reset() {

@@ -86,26 +86,26 @@ type Quotation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	QuotationId       string                 `protobuf:"bytes,1,opt,name=quotation_id,json=quotationId,proto3" json:"quotation_id,omitempty" gorm:"primaryKey;column:quotation_id;not null"`
-	BusinessId        string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id"`
-	InsurerName       string                 `protobuf:"bytes,3,opt,name=insurer_name,json=insurerName,proto3" json:"insurer_name,omitempty" gorm:"column:insurer_name"`
-	PlanId            string                 `protobuf:"bytes,4,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty" gorm:"column:plan_id"`
-	InsuranceCategory v1.InsuranceType       `protobuf:"varint,5,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty" gorm:"column:insurance_category;serializer:proto_enum"`
-	DepartmentId      string                 `protobuf:"bytes,6,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty" gorm:"column:department_id"`
-	EmployeeNo        int32                  `protobuf:"varint,7,opt,name=employee_no,json=employeeNo,proto3" json:"employee_no,omitempty" gorm:"column:employee_no"`
-	EstimatedPremium  *v1.Money              `protobuf:"bytes,8,opt,name=estimated_premium,json=estimatedPremium,proto3" json:"estimated_premium,omitempty" gorm:"column:estimated_premium"`
-	QuotedAmount      *v1.Money              `protobuf:"bytes,9,opt,name=quoted_amount,json=quotedAmount,proto3" json:"quoted_amount,omitempty" gorm:"column:quoted_amount"`
-	Status            QuotationStatus        `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.policy.entity.v1.QuotationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	SubmissionDate    *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=submission_date,json=submissionDate,proto3" json:"submission_date,omitempty" gorm:"column:submission_date;serializer:proto_timestamp"`
-	ValidUntil        *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty" gorm:"column:valid_until;serializer:proto_timestamp"`
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	QuotationNumber   string                 `protobuf:"bytes,15,opt,name=quotation_number,json=quotationNumber,proto3" json:"quotation_number,omitempty" gorm:"column:quotation_number"`
-	PlanName          string                 `protobuf:"bytes,16,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty" gorm:"column:plan_name"`
-	CreatedByUserId   string                 `protobuf:"bytes,17,opt,name=created_by_user_id,json=createdByUserId,proto3" json:"created_by_user_id,omitempty" gorm:"column:created_by_user_id"`
-	ApprovedByUserId  string                 `protobuf:"bytes,18,opt,name=approved_by_user_id,json=approvedByUserId,proto3" json:"approved_by_user_id,omitempty" gorm:"column:approved_by_user_id"`
-	ApprovedAt        *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty" gorm:"column:approved_at;serializer:proto_timestamp"`
-	RejectionReason   string                 `protobuf:"bytes,20,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty" gorm:"column:rejection_reason"`
+	QuotationId       string                 `protobuf:"bytes,1,opt,name=quotation_id,json=quotationId,proto3" json:"quotation_id,omitempty"`                                                            // @inject_tag: gorm:"primaryKey;column:quotation_id;not null"
+	BusinessId        string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`                                                               // @inject_tag: gorm:"column:business_id"
+	InsurerName       string                 `protobuf:"bytes,3,opt,name=insurer_name,json=insurerName,proto3" json:"insurer_name,omitempty"`                                                            // @inject_tag: gorm:"column:insurer_name"
+	PlanId            string                 `protobuf:"bytes,4,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`                                                                           // @inject_tag: gorm:"column:plan_id"
+	InsuranceCategory v1.InsuranceType       `protobuf:"varint,5,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty"` // @inject_tag: gorm:"column:insurance_category"
+	DepartmentId      string                 `protobuf:"bytes,6,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty"`                                                         // @inject_tag: gorm:"column:department_id"
+	EmployeeNo        int32                  `protobuf:"varint,7,opt,name=employee_no,json=employeeNo,proto3" json:"employee_no,omitempty"`                                                              // @inject_tag: gorm:"column:employee_no"
+	EstimatedPremium  *v1.Money              `protobuf:"bytes,8,opt,name=estimated_premium,json=estimatedPremium,proto3" json:"estimated_premium,omitempty"`
+	QuotedAmount      *v1.Money              `protobuf:"bytes,9,opt,name=quoted_amount,json=quotedAmount,proto3" json:"quoted_amount,omitempty"`
+	Status            QuotationStatus        `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.policy.entity.v1.QuotationStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	SubmissionDate    *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=submission_date,json=submissionDate,proto3" json:"submission_date,omitempty"`             // @inject_tag: gorm:"column:submission_date;serializer:proto_timestamp"
+	ValidUntil        *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"`                         // @inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"
+	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                            // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	QuotationNumber   string                 `protobuf:"bytes,15,opt,name=quotation_number,json=quotationNumber,proto3" json:"quotation_number,omitempty"`          // @inject_tag: gorm:"column:quotation_number"
+	PlanName          string                 `protobuf:"bytes,16,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty"`                               // @inject_tag: gorm:"column:plan_name"
+	CreatedByUserId   string                 `protobuf:"bytes,17,opt,name=created_by_user_id,json=createdByUserId,proto3" json:"created_by_user_id,omitempty"`      // @inject_tag: gorm:"column:created_by_user_id"
+	ApprovedByUserId  string                 `protobuf:"bytes,18,opt,name=approved_by_user_id,json=approvedByUserId,proto3" json:"approved_by_user_id,omitempty"`   // @inject_tag: gorm:"column:approved_by_user_id"
+	ApprovedAt        *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty"`                         // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+	RejectionReason   string                 `protobuf:"bytes,20,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty"`          // @inject_tag: gorm:"column:rejection_reason"
 }
 
 func (x *Quotation) Reset() {

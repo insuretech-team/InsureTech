@@ -29,37 +29,37 @@ type Session struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	SessionId string `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty" gorm:"primaryKey;column:session_id;not null"`
-	UserId    string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null"`
+	SessionId string `protobuf:"bytes,1,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:session_id;not null"
+	UserId    string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // @inject_tag: gorm:"column:user_id;not null"
 	// Session type determines authentication method (SERVER_SIDE for web, JWT for
 	// mobile)
-	SessionType SessionType `protobuf:"varint,3,opt,name=session_type,json=sessionType,proto3,enum=insuretech.authn.entity.v1.SessionType" json:"session_type,omitempty" gorm:"column:session_type;not null;serializer:proto_enum"`
+	SessionType SessionType `protobuf:"varint,3,opt,name=session_type,json=sessionType,proto3,enum=insuretech.authn.entity.v1.SessionType" json:"session_type,omitempty"` // @inject_tag: gorm:"column:session_type;not null;serializer:proto_enum"
 	// Bcrypt hash of session token for server-side sessions (web portals)
 	// Only populated when session_type = SERVER_SIDE
-	SessionTokenHash string `protobuf:"bytes,4,opt,name=session_token_hash,json=sessionTokenHash,proto3" json:"session_token_hash,omitempty" gorm:"column:session_token_hash"`
+	SessionTokenHash string `protobuf:"bytes,4,opt,name=session_token_hash,json=sessionTokenHash,proto3" json:"session_token_hash,omitempty"` // @inject_tag: gorm:"column:session_token_hash"
 	// Deterministic lookup hash (sha256 hex) of the plain session token.
 	// Used to find the session row quickly, then the plain token is verified against
 	// bcrypt session_token_hash.
 	// Only populated when session_type = SERVER_SIDE.
-	SessionTokenLookup string `protobuf:"bytes,19,opt,name=session_token_lookup,json=sessionTokenLookup,proto3" json:"session_token_lookup,omitempty" gorm:"column:session_token_lookup"`
+	SessionTokenLookup string `protobuf:"bytes,19,opt,name=session_token_lookup,json=sessionTokenLookup,proto3" json:"session_token_lookup,omitempty"`
 	// JWT ID for access token (only for JWT sessions)
-	AccessTokenJti string `protobuf:"bytes,5,opt,name=access_token_jti,json=accessTokenJti,proto3" json:"access_token_jti,omitempty" gorm:"column:access_token_jti"`
+	AccessTokenJti string `protobuf:"bytes,5,opt,name=access_token_jti,json=accessTokenJti,proto3" json:"access_token_jti,omitempty"` // @inject_tag: gorm:"column:access_token_jti"
 	// JWT ID for refresh token (only for JWT sessions)
-	RefreshTokenJti       string                 `protobuf:"bytes,6,opt,name=refresh_token_jti,json=refreshTokenJti,proto3" json:"refresh_token_jti,omitempty" gorm:"column:refresh_token_jti"`
-	AccessTokenExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=access_token_expires_at,json=accessTokenExpiresAt,proto3" json:"access_token_expires_at,omitempty" gorm:"column:access_token_expires_at;serializer:proto_timestamp"`
-	RefreshTokenExpiresAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=refresh_token_expires_at,json=refreshTokenExpiresAt,proto3" json:"refresh_token_expires_at,omitempty" gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"`
+	RefreshTokenJti       string                 `protobuf:"bytes,6,opt,name=refresh_token_jti,json=refreshTokenJti,proto3" json:"refresh_token_jti,omitempty"` // @inject_tag: gorm:"column:refresh_token_jti"
+	AccessTokenExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=access_token_expires_at,json=accessTokenExpiresAt,proto3" json:"access_token_expires_at,omitempty"`
+	RefreshTokenExpiresAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=refresh_token_expires_at,json=refreshTokenExpiresAt,proto3" json:"refresh_token_expires_at,omitempty"`
 	// Session expiry: 12 hours for SERVER_SIDE, 7 days for JWT
-	ExpiresAt      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;not null;serializer:proto_timestamp"`
-	IpAddress      string                 `protobuf:"bytes,10,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty" gorm:"column:ip_address"`
-	UserAgent      string                 `protobuf:"bytes,11,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty" gorm:"column:user_agent"`
-	DeviceId       string                 `protobuf:"bytes,12,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty" gorm:"column:device_id"`
-	DeviceName     string                 `protobuf:"bytes,13,opt,name=device_name,json=deviceName,proto3" json:"device_name,omitempty" gorm:"column:device_name"`
-	DeviceType     DeviceType             `protobuf:"varint,14,opt,name=device_type,json=deviceType,proto3,enum=insuretech.authn.entity.v1.DeviceType" json:"device_type,omitempty" gorm:"column:device_type;not null;serializer:proto_enum"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	LastActivityAt *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=last_activity_at,json=lastActivityAt,proto3" json:"last_activity_at,omitempty" gorm:"column:last_activity_at;serializer:proto_timestamp"`
-	IsActive       bool                   `protobuf:"varint,17,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active;not null"`
+	ExpiresAt      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`                                                 // @inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"
+	IpAddress      string                 `protobuf:"bytes,10,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`                                                // @inject_tag: gorm:"column:ip_address"
+	UserAgent      string                 `protobuf:"bytes,11,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`                                                // @inject_tag: gorm:"column:user_agent"
+	DeviceId       string                 `protobuf:"bytes,12,opt,name=device_id,json=deviceId,proto3" json:"device_id,omitempty"`                                                   // @inject_tag: gorm:"column:device_id"
+	DeviceName     string                 `protobuf:"bytes,13,opt,name=device_name,json=deviceName,proto3" json:"device_name,omitempty"`                                             // @inject_tag: gorm:"column:device_name"
+	DeviceType     DeviceType             `protobuf:"varint,14,opt,name=device_type,json=deviceType,proto3,enum=insuretech.authn.entity.v1.DeviceType" json:"device_type,omitempty"` // @inject_tag: gorm:"column:device_type;not null;serializer:proto_enum"
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	LastActivityAt *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=last_activity_at,json=lastActivityAt,proto3" json:"last_activity_at,omitempty"`
+	IsActive       bool                   `protobuf:"varint,17,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"` // @inject_tag: gorm:"column:is_active;not null"
 	// CSRF token for server-side sessions (web portals only)
-	CsrfToken string `protobuf:"bytes,18,opt,name=csrf_token,json=csrfToken,proto3" json:"csrf_token,omitempty" gorm:"column:csrf_token"`
+	CsrfToken string `protobuf:"bytes,18,opt,name=csrf_token,json=csrfToken,proto3" json:"csrf_token,omitempty"` // @inject_tag: gorm:"column:csrf_token"
 }
 
 func (x *Session) Reset() {

@@ -93,47 +93,47 @@ type Policy struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PolicyId     string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"primaryKey;column:policy_id;not null"`
-	PolicyNumber string `protobuf:"bytes,2,opt,name=policy_number,json=policyNumber,proto3" json:"policy_number,omitempty" gorm:"column:policy_number"`
-	ProductId    string `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
-	CustomerId   string `protobuf:"bytes,4,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" gorm:"column:customer_id;not null"`
-	PartnerId    string `protobuf:"bytes,5,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty" gorm:"column:partner_id"`
-	AgentId      string `protobuf:"bytes,6,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"column:agent_id"`
+	PolicyId     string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:policy_id;not null"
+	PolicyNumber string `protobuf:"bytes,2,opt,name=policy_number,json=policyNumber,proto3" json:"policy_number,omitempty"`
+	ProductId    string `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`    // @inject_tag: gorm:"column:product_id;not null"
+	CustomerId   string `protobuf:"bytes,4,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"` // @inject_tag: gorm:"column:customer_id;not null"
+	PartnerId    string `protobuf:"bytes,5,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`    // @inject_tag: gorm:"column:partner_id"
+	AgentId      string `protobuf:"bytes,6,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`          // @inject_tag: gorm:"column:agent_id"
 	// Link to underwriting quote (CG-2 fix)
-	QuoteId string `protobuf:"bytes,7,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty" gorm:"column:quote_id"`
+	QuoteId string `protobuf:"bytes,7,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty"` // @inject_tag: gorm:"column:quote_id"
 	// Link to underwriting decision (CG-2 fix)
-	UnderwritingDecisionId string                 `protobuf:"bytes,8,opt,name=underwriting_decision_id,json=underwritingDecisionId,proto3" json:"underwriting_decision_id,omitempty" gorm:"column:underwriting_decision_id"`
-	Status                 PolicyStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.policy.entity.v1.PolicyStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	PremiumAmount          *v1.Money              `protobuf:"bytes,10,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty" gorm:"column:premium_amount;not null"`
-	SumInsured             *v1.Money              `protobuf:"bytes,11,opt,name=sum_insured,json=sumInsured,proto3" json:"sum_insured,omitempty" gorm:"column:sum_insured;not null"`
-	TenureMonths           int32                  `protobuf:"varint,12,opt,name=tenure_months,json=tenureMonths,proto3" json:"tenure_months,omitempty" gorm:"column:tenure_months;not null"`
-	StartDate              *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty" gorm:"column:start_date;not null;serializer:proto_timestamp"`
-	EndDate                *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty" gorm:"column:end_date;not null;serializer:proto_timestamp"`
-	IssuedAt               *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=issued_at,json=issuedAt,proto3" json:"issued_at,omitempty" gorm:"column:issued_at;serializer:proto_timestamp"`
-	CreatedAt              *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	PolicyDocumentUrl      string                 `protobuf:"bytes,18,opt,name=policy_document_url,json=policyDocumentUrl,proto3" json:"policy_document_url,omitempty" gorm:"column:policy_document_url"`
-	DeletedAt              *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
+	UnderwritingDecisionId string                 `protobuf:"bytes,8,opt,name=underwriting_decision_id,json=underwritingDecisionId,proto3" json:"underwriting_decision_id,omitempty"` // @inject_tag: gorm:"column:underwriting_decision_id"
+	Status                 PolicyStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.policy.entity.v1.PolicyStatus" json:"status,omitempty"`                  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	PremiumAmount          *v1.Money              `protobuf:"bytes,10,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty"`                             // @inject_tag: gorm:"column:premium_amount;not null"
+	SumInsured             *v1.Money              `protobuf:"bytes,11,opt,name=sum_insured,json=sumInsured,proto3" json:"sum_insured,omitempty"`                                      // @inject_tag: gorm:"column:sum_insured;not null"
+	TenureMonths           int32                  `protobuf:"varint,12,opt,name=tenure_months,json=tenureMonths,proto3" json:"tenure_months,omitempty"`                               // @inject_tag: gorm:"column:tenure_months;not null"
+	StartDate              *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=start_date,json=startDate,proto3" json:"start_date,omitempty"`                                         // @inject_tag: gorm:"column:start_date;not null;serializer:proto_timestamp"
+	EndDate                *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=end_date,json=endDate,proto3" json:"end_date,omitempty"`                                               // @inject_tag: gorm:"column:end_date;not null;serializer:proto_timestamp"
+	IssuedAt               *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=issued_at,json=issuedAt,proto3" json:"issued_at,omitempty"`                                            // @inject_tag: gorm:"column:issued_at;serializer:proto_timestamp"
+	CreatedAt              *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                         // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                         // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	PolicyDocumentUrl      string                 `protobuf:"bytes,18,opt,name=policy_document_url,json=policyDocumentUrl,proto3" json:"policy_document_url,omitempty"`               // @inject_tag: gorm:"column:policy_document_url"
+	DeletedAt              *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                         // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 	// Nominees and Riders are stored in separate tables
-	Nominees                []*Nominee             `protobuf:"bytes,20,rep,name=nominees,proto3" json:"nominees,omitempty" gorm:"column:nominees"`
-	Riders                  []*Rider               `protobuf:"bytes,21,rep,name=riders,proto3" json:"riders,omitempty" gorm:"column:riders"`
-	PaymentFrequency        string                 `protobuf:"bytes,22,opt,name=payment_frequency,json=paymentFrequency,proto3" json:"payment_frequency,omitempty" gorm:"column:payment_frequency"`
-	VatTax                  *v1.Money              `protobuf:"bytes,23,opt,name=vat_tax,json=vatTax,proto3" json:"vat_tax,omitempty" gorm:"column:vat_tax"`
-	ServiceFee              *v1.Money              `protobuf:"bytes,24,opt,name=service_fee,json=serviceFee,proto3" json:"service_fee,omitempty" gorm:"column:service_fee"`
-	TotalPayable            *v1.Money              `protobuf:"bytes,25,opt,name=total_payable,json=totalPayable,proto3" json:"total_payable,omitempty" gorm:"column:total_payable"`
-	PaymentGatewayReference string                 `protobuf:"bytes,26,opt,name=payment_gateway_reference,json=paymentGatewayReference,proto3" json:"payment_gateway_reference,omitempty" gorm:"column:payment_gateway_reference"`
-	ReceiptNumber           string                 `protobuf:"bytes,27,opt,name=receipt_number,json=receiptNumber,proto3" json:"receipt_number,omitempty" gorm:"column:receipt_number"`
-	ProposerDetails         *Applicant             `protobuf:"bytes,28,opt,name=proposer_details,json=proposerDetails,proto3" json:"proposer_details,omitempty" gorm:"column:proposer_details"`
-	OccupationRiskClass     string                 `protobuf:"bytes,29,opt,name=occupation_risk_class,json=occupationRiskClass,proto3" json:"occupation_risk_class,omitempty" gorm:"column:occupation_risk_class"`
-	HasExistingPolicies     bool                   `protobuf:"varint,30,opt,name=has_existing_policies,json=hasExistingPolicies,proto3" json:"has_existing_policies,omitempty" gorm:"column:has_existing_policies"`
-	ClaimsHistorySummary    string                 `protobuf:"bytes,31,opt,name=claims_history_summary,json=claimsHistorySummary,proto3" json:"claims_history_summary,omitempty" gorm:"column:claims_history_summary"`
-	ProviderName            string                 `protobuf:"bytes,32,opt,name=provider_name,json=providerName,proto3" json:"provider_name,omitempty" gorm:"column:provider_name"`
-	EnrollmentStartDate     *timestamppb.Timestamp `protobuf:"bytes,33,opt,name=enrollment_start_date,json=enrollmentStartDate,proto3" json:"enrollment_start_date,omitempty" gorm:"column:enrollment_start_date;serializer:proto_timestamp"`
-	EnrollmentEndDate       *timestamppb.Timestamp `protobuf:"bytes,34,opt,name=enrollment_end_date,json=enrollmentEndDate,proto3" json:"enrollment_end_date,omitempty" gorm:"column:enrollment_end_date;serializer:proto_timestamp"`
-	UnderwritingData        string                 `protobuf:"bytes,35,opt,name=underwriting_data,json=underwritingData,proto3" json:"underwriting_data,omitempty" gorm:"column:underwriting_data"`
+	Nominees                []*Nominee             `protobuf:"bytes,20,rep,name=nominees,proto3" json:"nominees,omitempty"`
+	Riders                  []*Rider               `protobuf:"bytes,21,rep,name=riders,proto3" json:"riders,omitempty"`
+	PaymentFrequency        string                 `protobuf:"bytes,22,opt,name=payment_frequency,json=paymentFrequency,proto3" json:"payment_frequency,omitempty"`                        // @inject_tag: gorm:"column:payment_frequency"
+	VatTax                  *v1.Money              `protobuf:"bytes,23,opt,name=vat_tax,json=vatTax,proto3" json:"vat_tax,omitempty"`                                                      // @inject_tag: gorm:"column:vat_tax"
+	ServiceFee              *v1.Money              `protobuf:"bytes,24,opt,name=service_fee,json=serviceFee,proto3" json:"service_fee,omitempty"`                                          // @inject_tag: gorm:"column:service_fee"
+	TotalPayable            *v1.Money              `protobuf:"bytes,25,opt,name=total_payable,json=totalPayable,proto3" json:"total_payable,omitempty"`                                    // @inject_tag: gorm:"column:total_payable"
+	PaymentGatewayReference string                 `protobuf:"bytes,26,opt,name=payment_gateway_reference,json=paymentGatewayReference,proto3" json:"payment_gateway_reference,omitempty"` // @inject_tag: gorm:"column:payment_gateway_reference"
+	ReceiptNumber           string                 `protobuf:"bytes,27,opt,name=receipt_number,json=receiptNumber,proto3" json:"receipt_number,omitempty"`                                 // @inject_tag: gorm:"column:receipt_number"
+	ProposerDetails         *Applicant             `protobuf:"bytes,28,opt,name=proposer_details,json=proposerDetails,proto3" json:"proposer_details,omitempty"`
+	OccupationRiskClass     string                 `protobuf:"bytes,29,opt,name=occupation_risk_class,json=occupationRiskClass,proto3" json:"occupation_risk_class,omitempty"`    // @inject_tag: gorm:"column:occupation_risk_class"
+	HasExistingPolicies     bool                   `protobuf:"varint,30,opt,name=has_existing_policies,json=hasExistingPolicies,proto3" json:"has_existing_policies,omitempty"`   // @inject_tag: gorm:"column:has_existing_policies"
+	ClaimsHistorySummary    string                 `protobuf:"bytes,31,opt,name=claims_history_summary,json=claimsHistorySummary,proto3" json:"claims_history_summary,omitempty"` // @inject_tag: gorm:"column:claims_history_summary"
+	ProviderName            string                 `protobuf:"bytes,32,opt,name=provider_name,json=providerName,proto3" json:"provider_name,omitempty"`                           // @inject_tag: gorm:"column:provider_name"
+	EnrollmentStartDate     *timestamppb.Timestamp `protobuf:"bytes,33,opt,name=enrollment_start_date,json=enrollmentStartDate,proto3" json:"enrollment_start_date,omitempty"`    // @inject_tag: gorm:"column:enrollment_start_date;serializer:proto_timestamp"
+	EnrollmentEndDate       *timestamppb.Timestamp `protobuf:"bytes,34,opt,name=enrollment_end_date,json=enrollmentEndDate,proto3" json:"enrollment_end_date,omitempty"`          // @inject_tag: gorm:"column:enrollment_end_date;serializer:proto_timestamp"
+	UnderwritingData        string                 `protobuf:"bytes,35,opt,name=underwriting_data,json=underwritingData,proto3" json:"underwriting_data,omitempty"`               // @inject_tag: gorm:"column:underwriting_data"
 	// Currency companion fields for Money types (flattened storage)
-	PremiumCurrency    string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty" gorm:"column:premium_currency;not null"`
-	SumInsuredCurrency string `protobuf:"bytes,10002,opt,name=sum_insured_currency,json=sumInsuredCurrency,proto3" json:"sum_insured_currency,omitempty" gorm:"column:sum_insured_currency;not null"`
+	PremiumCurrency    string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty"`            // @inject_tag: gorm:"column:premium_currency;not null"
+	SumInsuredCurrency string `protobuf:"bytes,10002,opt,name=sum_insured_currency,json=sumInsuredCurrency,proto3" json:"sum_insured_currency,omitempty"` // @inject_tag: gorm:"column:sum_insured_currency;not null"
 }
 
 func (x *Policy) Reset() {
@@ -434,18 +434,18 @@ type Nominee struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	NomineeId           string                 `protobuf:"bytes,1,opt,name=nominee_id,json=nomineeId,proto3" json:"nominee_id,omitempty" gorm:"primaryKey;column:nominee_id;not null"`
-	PolicyId            string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
-	FullName            string                 `protobuf:"bytes,3,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" gorm:"column:full_name;not null"`
-	Relationship        string                 `protobuf:"bytes,4,opt,name=relationship,proto3" json:"relationship,omitempty" gorm:"column:relationship;not null"`
-	SharePercentage     float64                `protobuf:"fixed64,5,opt,name=share_percentage,json=sharePercentage,proto3" json:"share_percentage,omitempty" gorm:"column:share_percentage;not null"`
-	DateOfBirth         *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty" gorm:"column:date_of_birth;serializer:proto_timestamp"`
-	NidNumber           string                 `protobuf:"bytes,7,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty" gorm:"column:nid_number"`
-	PhoneNumber         string                 `protobuf:"bytes,8,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty" gorm:"column:phone_number"`
-	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	NomineeDobText      string                 `protobuf:"bytes,11,opt,name=nominee_dob_text,json=nomineeDobText,proto3" json:"nominee_dob_text,omitempty" gorm:"column:nominee_dob_text"`
-	NomineeSharePercent float64                `protobuf:"fixed64,12,opt,name=nominee_share_percent,json=nomineeSharePercent,proto3" json:"nominee_share_percent,omitempty" gorm:"column:nominee_share_percent"`
+	NomineeId           string                 `protobuf:"bytes,1,opt,name=nominee_id,json=nomineeId,proto3" json:"nominee_id,omitempty"`                     // @inject_tag: gorm:"primaryKey;column:nominee_id;not null"
+	PolicyId            string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                        // @inject_tag: gorm:"column:policy_id;not null"
+	FullName            string                 `protobuf:"bytes,3,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`                        // @inject_tag: gorm:"column:full_name;not null"
+	Relationship        string                 `protobuf:"bytes,4,opt,name=relationship,proto3" json:"relationship,omitempty"`                                // @inject_tag: gorm:"column:relationship;not null"
+	SharePercentage     float64                `protobuf:"fixed64,5,opt,name=share_percentage,json=sharePercentage,proto3" json:"share_percentage,omitempty"` // @inject_tag: gorm:"column:share_percentage;not null"
+	DateOfBirth         *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"`
+	NidNumber           string                 `protobuf:"bytes,7,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`
+	PhoneNumber         string                 `protobuf:"bytes,8,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
+	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                    // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                   // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	NomineeDobText      string                 `protobuf:"bytes,11,opt,name=nominee_dob_text,json=nomineeDobText,proto3" json:"nominee_dob_text,omitempty"`                  // @inject_tag: gorm:"column:nominee_dob_text"
+	NomineeSharePercent float64                `protobuf:"fixed64,12,opt,name=nominee_share_percent,json=nomineeSharePercent,proto3" json:"nominee_share_percent,omitempty"` // @inject_tag: gorm:"column:nominee_share_percent"
 }
 
 func (x *Nominee) Reset() {
@@ -571,16 +571,16 @@ type Rider struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RiderId        string                 `protobuf:"bytes,1,opt,name=rider_id,json=riderId,proto3" json:"rider_id,omitempty" gorm:"primaryKey;column:rider_id;not null"`
-	PolicyId       string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
-	RiderName      string                 `protobuf:"bytes,3,opt,name=rider_name,json=riderName,proto3" json:"rider_name,omitempty" gorm:"column:rider_name;not null"`
-	PremiumAmount  *v1.Money              `protobuf:"bytes,4,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty" gorm:"column:premium_amount;not null"`
-	CoverageAmount *v1.Money              `protobuf:"bytes,5,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty" gorm:"column:coverage_amount;not null"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	RiderId        string                 `protobuf:"bytes,1,opt,name=rider_id,json=riderId,proto3" json:"rider_id,omitempty"`                      // @inject_tag: gorm:"primaryKey;column:rider_id;not null"
+	PolicyId       string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                   // @inject_tag: gorm:"column:policy_id;not null"
+	RiderName      string                 `protobuf:"bytes,3,opt,name=rider_name,json=riderName,proto3" json:"rider_name,omitempty"`                // @inject_tag: gorm:"column:rider_name;not null"
+	PremiumAmount  *v1.Money              `protobuf:"bytes,4,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty"`    // @inject_tag: gorm:"column:premium_amount;not null"
+	CoverageAmount *v1.Money              `protobuf:"bytes,5,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty"` // @inject_tag: gorm:"column:coverage_amount;not null"
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
 	// Currency companion fields for Money types (flattened storage)
-	PremiumCurrency  string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty" gorm:"column:premium_currency;not null"`
-	CoverageCurrency string `protobuf:"bytes,10002,opt,name=coverage_currency,json=coverageCurrency,proto3" json:"coverage_currency,omitempty" gorm:"column:coverage_currency;not null"`
+	PremiumCurrency  string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty"`    // @inject_tag: gorm:"column:premium_currency;not null"
+	CoverageCurrency string `protobuf:"bytes,10002,opt,name=coverage_currency,json=coverageCurrency,proto3" json:"coverage_currency,omitempty"` // @inject_tag: gorm:"column:coverage_currency;not null"
 }
 
 func (x *Rider) Reset() {
@@ -684,13 +684,13 @@ type Applicant struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FullName          string                 `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" gorm:"column:full_name"`
-	DateOfBirth       *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty" gorm:"column:date_of_birth;serializer:proto_timestamp"`
-	NidNumber         string                 `protobuf:"bytes,3,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty" gorm:"column:nid_number"`
-	Occupation        string                 `protobuf:"bytes,4,opt,name=occupation,proto3" json:"occupation,omitempty" gorm:"column:occupation"`
-	AnnualIncome      *v1.Money              `protobuf:"bytes,5,opt,name=annual_income,json=annualIncome,proto3" json:"annual_income,omitempty" gorm:"column:annual_income"`
-	Address           string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty" gorm:"column:address"`
-	HealthDeclaration *HealthDeclaration     `protobuf:"bytes,7,opt,name=health_declaration,json=healthDeclaration,proto3" json:"health_declaration,omitempty" gorm:"column:health_declaration"`
+	FullName          string                 `protobuf:"bytes,1,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`
+	DateOfBirth       *timestamppb.Timestamp `protobuf:"bytes,2,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"`
+	NidNumber         string                 `protobuf:"bytes,3,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`
+	Occupation        string                 `protobuf:"bytes,4,opt,name=occupation,proto3" json:"occupation,omitempty"`
+	AnnualIncome      *v1.Money              `protobuf:"bytes,5,opt,name=annual_income,json=annualIncome,proto3" json:"annual_income,omitempty"`
+	Address           string                 `protobuf:"bytes,6,opt,name=address,proto3" json:"address,omitempty"`
+	HealthDeclaration *HealthDeclaration     `protobuf:"bytes,7,opt,name=health_declaration,json=healthDeclaration,proto3" json:"health_declaration,omitempty"`
 }
 
 func (x *Applicant) Reset() {
@@ -780,10 +780,10 @@ type HealthDeclaration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	HasPreExistingConditions bool     `protobuf:"varint,1,opt,name=has_pre_existing_conditions,json=hasPreExistingConditions,proto3" json:"has_pre_existing_conditions,omitempty" gorm:"column:has_pre_existing_conditions"`
-	Conditions               []string `protobuf:"bytes,2,rep,name=conditions,proto3" json:"conditions,omitempty" gorm:"column:conditions"`
-	IsSmoker                 bool     `protobuf:"varint,3,opt,name=is_smoker,json=isSmoker,proto3" json:"is_smoker,omitempty" gorm:"column:is_smoker"`
-	BloodGroup               string   `protobuf:"bytes,4,opt,name=blood_group,json=bloodGroup,proto3" json:"blood_group,omitempty" gorm:"column:blood_group"`
+	HasPreExistingConditions bool     `protobuf:"varint,1,opt,name=has_pre_existing_conditions,json=hasPreExistingConditions,proto3" json:"has_pre_existing_conditions,omitempty"`
+	Conditions               []string `protobuf:"bytes,2,rep,name=conditions,proto3" json:"conditions,omitempty"`
+	IsSmoker                 bool     `protobuf:"varint,3,opt,name=is_smoker,json=isSmoker,proto3" json:"is_smoker,omitempty"`
+	BloodGroup               string   `protobuf:"bytes,4,opt,name=blood_group,json=bloodGroup,proto3" json:"blood_group,omitempty"`
 }
 
 func (x *HealthDeclaration) Reset() {

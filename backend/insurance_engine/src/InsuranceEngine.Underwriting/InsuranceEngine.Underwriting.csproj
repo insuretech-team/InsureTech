@@ -9,6 +9,7 @@
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
+    <ProjectReference Include="..\..\..\polisync\src\PoliSync.Proto\PoliSync.Proto.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -16,12 +17,6 @@
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
-    <PackageReference Include="Google.Protobuf" Version="3.25.3" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.61.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.62.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="8.0.0" />
   </ItemGroup>
 

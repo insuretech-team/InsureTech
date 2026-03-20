@@ -55,7 +55,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             Error = new Insuretech.Common.V1.Error
             {
                 Code = "SUBMIT_FAILED",
-                Message = result.Error ?? "Unknown error"
+                Message = result.Error?.Message ?? "Unknown error"
             }
         };
     }
@@ -77,7 +77,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             Error = new Insuretech.Common.V1.Error
             {
                 Code = "NOT_FOUND",
-                Message = result.Error ?? "Claim not found"
+                Message = result.Error?.Message ?? "Claim not found"
             }
         };
     }
@@ -104,7 +104,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             Error = new Insuretech.Common.V1.Error
             {
                 Code = "LIST_FAILED",
-                Message = result.Error ?? "Unknown error"
+                Message = result.Error?.Message ?? "Unknown error"
             }
         };
     }
@@ -119,8 +119,8 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             CustomerId = dto.CustomerId.ToString(),
             Type = MapToProtoClaimType(dto.Type),
             Status = MapToProtoClaimStatus(dto.Status),
-            ClaimedAmount = new Insuretech.Common.V1.Money { Amount = dto.ClaimedAmount, Currency = "BDT" },
-            ApprovedAmount = new Insuretech.Common.V1.Money { Amount = dto.ApprovedAmount, Currency = "BDT" },
+            ClaimedAmount = new Insuretech.Common.V1.Money { Amount = (long)(dto.ClaimedAmount * 100), Currency = "BDT" },
+            ApprovedAmount = new Insuretech.Common.V1.Money { Amount = (long)(dto.ApprovedAmount * 100), Currency = "BDT" },
             IncidentDate = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.IncidentDate, DateTimeKind.Utc)),
             IncidentDescription = dto.IncidentDescription,
             SubmittedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.SubmittedAt, DateTimeKind.Utc)),

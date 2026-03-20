@@ -279,22 +279,22 @@ type Notification struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	NotificationId string                 `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty" gorm:"primaryKey;column:notification_id;not null"`
-	RecipientId    string                 `protobuf:"bytes,2,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty" gorm:"column:recipient_id;not null"`
-	Type           NotificationType       `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Channel        NotificationChannel    `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty" gorm:"column:channel;not null;serializer:proto_enum"`
-	Subject        string                 `protobuf:"bytes,5,opt,name=subject,proto3" json:"subject,omitempty" gorm:"column:subject"`
-	Message        string                 `protobuf:"bytes,6,opt,name=message,proto3" json:"message,omitempty" gorm:"column:message;not null"`
-	TemplateData   map[string]string      `protobuf:"bytes,7,rep,name=template_data,json=templateData,proto3" json:"template_data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:template_data"`
-	Priority       NotificationPriority   `protobuf:"varint,8,opt,name=priority,proto3,enum=insuretech.notification.entity.v1.NotificationPriority" json:"priority,omitempty" gorm:"column:priority;not null;serializer:proto_enum"`
-	Status         NotificationStatus     `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.notification.entity.v1.NotificationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ScheduledAt    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=scheduled_at,json=scheduledAt,proto3" json:"scheduled_at,omitempty" gorm:"column:scheduled_at;serializer:proto_timestamp"`
-	SentAt         *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty" gorm:"column:sent_at;serializer:proto_timestamp"`
-	DeliveredAt    *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=delivered_at,json=deliveredAt,proto3" json:"delivered_at,omitempty" gorm:"column:delivered_at;serializer:proto_timestamp"`
-	ReadAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=read_at,json=readAt,proto3" json:"read_at,omitempty" gorm:"column:read_at;serializer:proto_timestamp"`
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	RetryCount     int32                  `protobuf:"varint,15,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty" gorm:"column:retry_count;not null"`
-	ErrorMessage   string                 `protobuf:"bytes,16,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty" gorm:"column:error_message"`
+	NotificationId string                 `protobuf:"bytes,1,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`                         // @inject_tag: gorm:"primaryKey;column:notification_id;not null"
+	RecipientId    string                 `protobuf:"bytes,2,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"`                                  // @inject_tag: gorm:"column:recipient_id;not null"
+	Type           NotificationType       `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"type,omitempty"`          // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Channel        NotificationChannel    `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty"` // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+	Subject        string                 `protobuf:"bytes,5,opt,name=subject,proto3" json:"subject,omitempty"`                                                             // @inject_tag: gorm:"column:subject"
+	Message        string                 `protobuf:"bytes,6,opt,name=message,proto3" json:"message,omitempty"`                                                             // @inject_tag: gorm:"column:message;not null"
+	TemplateData   map[string]string      `protobuf:"bytes,7,rep,name=template_data,json=templateData,proto3" json:"template_data,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	Priority       NotificationPriority   `protobuf:"varint,8,opt,name=priority,proto3,enum=insuretech.notification.entity.v1.NotificationPriority" json:"priority,omitempty"` // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+	Status         NotificationStatus     `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.notification.entity.v1.NotificationStatus" json:"status,omitempty"`       // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ScheduledAt    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=scheduled_at,json=scheduledAt,proto3" json:"scheduled_at,omitempty"`                                    // @inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"
+	SentAt         *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty"`                                                   // @inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"
+	DeliveredAt    *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=delivered_at,json=deliveredAt,proto3" json:"delivered_at,omitempty"`                                    // @inject_tag: gorm:"column:delivered_at;serializer:proto_timestamp"
+	ReadAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=read_at,json=readAt,proto3" json:"read_at,omitempty"`                                                   // @inject_tag: gorm:"column:read_at;serializer:proto_timestamp"
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                          // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	RetryCount     int32                  `protobuf:"varint,15,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty"`                                      // @inject_tag: gorm:"column:retry_count;not null"
+	ErrorMessage   string                 `protobuf:"bytes,16,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`                                 // @inject_tag: gorm:"column:error_message"
 }
 
 func (x *Notification) Reset() {
@@ -448,16 +448,16 @@ type NotificationTemplate struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TemplateId      string                 `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty" gorm:"primaryKey;column:template_id;not null"`
-	TemplateName    string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty" gorm:"column:template_name;not null"`
-	Type            NotificationType       `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Channel         NotificationChannel    `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty" gorm:"column:channel;not null;serializer:proto_enum"`
-	SubjectTemplate string                 `protobuf:"bytes,5,opt,name=subject_template,json=subjectTemplate,proto3" json:"subject_template,omitempty" gorm:"column:subject_template"`
-	BodyTemplate    string                 `protobuf:"bytes,6,opt,name=body_template,json=bodyTemplate,proto3" json:"body_template,omitempty" gorm:"column:body_template;not null"`
-	Language        string                 `protobuf:"bytes,7,opt,name=language,proto3" json:"language,omitempty" gorm:"column:language;not null"`
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	IsActive        bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active;not null"`
+	TemplateId      string                 `protobuf:"bytes,1,opt,name=template_id,json=templateId,proto3" json:"template_id,omitempty"`                                     // @inject_tag: gorm:"primaryKey;column:template_id;not null"
+	TemplateName    string                 `protobuf:"bytes,2,opt,name=template_name,json=templateName,proto3" json:"template_name,omitempty"`                               // @inject_tag: gorm:"column:template_name;not null"
+	Type            NotificationType       `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"type,omitempty"`          // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Channel         NotificationChannel    `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty"` // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+	SubjectTemplate string                 `protobuf:"bytes,5,opt,name=subject_template,json=subjectTemplate,proto3" json:"subject_template,omitempty"`                      // @inject_tag: gorm:"column:subject_template"
+	BodyTemplate    string                 `protobuf:"bytes,6,opt,name=body_template,json=bodyTemplate,proto3" json:"body_template,omitempty"`                               // @inject_tag: gorm:"column:body_template;not null"
+	Language        string                 `protobuf:"bytes,7,opt,name=language,proto3" json:"language,omitempty"`                                                           // @inject_tag: gorm:"column:language;not null"
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                        // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                        // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	IsActive        bool                   `protobuf:"varint,10,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                                         // @inject_tag: gorm:"column:is_active;not null"
 }
 
 func (x *NotificationTemplate) Reset() {
@@ -568,11 +568,11 @@ type NotificationPreference struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId             string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	ChannelPreferences []*ChannelPreference   `protobuf:"bytes,2,rep,name=channel_preferences,json=channelPreferences,proto3" json:"channel_preferences,omitempty" gorm:"column:channel_preferences"`
-	MarketingOptIn     bool                   `protobuf:"varint,3,opt,name=marketing_opt_in,json=marketingOptIn,proto3" json:"marketing_opt_in,omitempty" gorm:"column:marketing_opt_in"`
-	TransactionalOptIn bool                   `protobuf:"varint,4,opt,name=transactional_opt_in,json=transactionalOptIn,proto3" json:"transactional_opt_in,omitempty" gorm:"column:transactional_opt_in"` // Always true for critical notifications
-	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	UserId             string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	ChannelPreferences []*ChannelPreference   `protobuf:"bytes,2,rep,name=channel_preferences,json=channelPreferences,proto3" json:"channel_preferences,omitempty"`
+	MarketingOptIn     bool                   `protobuf:"varint,3,opt,name=marketing_opt_in,json=marketingOptIn,proto3" json:"marketing_opt_in,omitempty"`
+	TransactionalOptIn bool                   `protobuf:"varint,4,opt,name=transactional_opt_in,json=transactionalOptIn,proto3" json:"transactional_opt_in,omitempty"` // Always true for critical notifications
+	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *NotificationPreference) Reset() {
@@ -647,9 +647,9 @@ type ChannelPreference struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Channel       NotificationChannel `protobuf:"varint,1,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty" gorm:"column:channel;serializer:proto_enum"`
-	Enabled       bool                `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty" gorm:"column:enabled"`
-	ExcludedTypes []NotificationType  `protobuf:"varint,3,rep,packed,name=excluded_types,json=excludedTypes,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"excluded_types,omitempty" gorm:"column:excluded_types;serializer:proto_enum"` // Types to not receive on this channel
+	Channel       NotificationChannel `protobuf:"varint,1,opt,name=channel,proto3,enum=insuretech.notification.entity.v1.NotificationChannel" json:"channel,omitempty"`
+	Enabled       bool                `protobuf:"varint,2,opt,name=enabled,proto3" json:"enabled,omitempty"`
+	ExcludedTypes []NotificationType  `protobuf:"varint,3,rep,packed,name=excluded_types,json=excludedTypes,proto3,enum=insuretech.notification.entity.v1.NotificationType" json:"excluded_types,omitempty"` // Types to not receive on this channel
 }
 
 func (x *ChannelPreference) Reset() {

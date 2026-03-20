@@ -23,10 +23,11 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-// 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
-//    Casbin gorm-adapter reads/writes this table directly.
-//    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
-//    g-type rows: ptype="g"  → role assignment: sub, dom, role
+//  1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+//     Casbin gorm-adapter reads/writes this table directly.
+//     p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+//     g-type rows: ptype="g"  → role assignment: sub, dom, role
+//
 // ---------------------------------------------------------------------------
 type CasbinRule struct {
 	state         protoimpl.MessageState
@@ -34,28 +35,28 @@ type CasbinRule struct {
 	unknownFields protoimpl.UnknownFields
 
 	// @inject_tag: gorm:"primarykey;autoIncrement"
-	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty" gorm:"column:id;primarykey;autoIncrement"`
+	Id int64 `protobuf:"varint,1,opt,name=id,proto3" json:"id,omitempty"`
 	// ptype: "p" = policy line, "g" = role-inheritance line
 	// @inject_tag: gorm:"size:10;uniqueIndex:unique_index"
-	Ptype string `protobuf:"bytes,2,opt,name=ptype,proto3" json:"ptype,omitempty" gorm:"column:ptype;size:10;uniqueIndex:unique_index"`
+	Ptype string `protobuf:"bytes,2,opt,name=ptype,proto3" json:"ptype,omitempty"`
 	// v0: subject  (p-line) | member (g-line)
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V0 string `protobuf:"bytes,3,opt,name=v0,proto3" json:"v0,omitempty" gorm:"column:v0;size:256;uniqueIndex:unique_index"`
+	V0 string `protobuf:"bytes,3,opt,name=v0,proto3" json:"v0,omitempty"`
 	// v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V1 string `protobuf:"bytes,4,opt,name=v1,proto3" json:"v1,omitempty" gorm:"column:v1;size:256;uniqueIndex:unique_index"`
+	V1 string `protobuf:"bytes,4,opt,name=v1,proto3" json:"v1,omitempty"`
 	// v2: object   (p-line: svc:resource) | role (g-line: role:<name>)
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V2 string `protobuf:"bytes,5,opt,name=v2,proto3" json:"v2,omitempty" gorm:"column:v2;size:256;uniqueIndex:unique_index"`
+	V2 string `protobuf:"bytes,5,opt,name=v2,proto3" json:"v2,omitempty"`
 	// v3: action   (p-line: HTTP verb / domain action)
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V3 string `protobuf:"bytes,6,opt,name=v3,proto3" json:"v3,omitempty" gorm:"column:v3;size:256;uniqueIndex:unique_index"`
+	V3 string `protobuf:"bytes,6,opt,name=v3,proto3" json:"v3,omitempty"`
 	// v4: effect   (p-line: allow | deny)
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V4 string `protobuf:"bytes,7,opt,name=v4,proto3" json:"v4,omitempty" gorm:"column:v4;size:256;uniqueIndex:unique_index"`
+	V4 string `protobuf:"bytes,7,opt,name=v4,proto3" json:"v4,omitempty"`
 	// v5: reserved for future ABAC conditions / attribute matchers
 	// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
-	V5 string `protobuf:"bytes,8,opt,name=v5,proto3" json:"v5,omitempty" gorm:"column:v5;size:256;uniqueIndex:unique_index"`
+	V5 string `protobuf:"bytes,8,opt,name=v5,proto3" json:"v5,omitempty"`
 }
 
 func (x *CasbinRule) Reset() {

@@ -82,14 +82,14 @@ type TicketMessage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:message_id;not null"`
-	TicketId    string        `protobuf:"bytes,2,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty" gorm:"column:ticket_id;not null"`
-	SenderId    string        `protobuf:"bytes,3,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty" gorm:"column:sender_id;not null"`
-	Type        MessageType   `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.support.entity.v1.MessageType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Content     string        `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty" gorm:"column:content;not null"`
-	Attachments string        `protobuf:"bytes,6,opt,name=attachments,proto3" json:"attachments,omitempty" gorm:"column:attachments"`
-	IsInternal  bool          `protobuf:"varint,7,opt,name=is_internal,json=isInternal,proto3" json:"is_internal,omitempty" gorm:"column:is_internal"`
-	AuditInfo   *v1.AuditInfo `protobuf:"bytes,8,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id          string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                    // @inject_tag: gorm:"primaryKey;column:message_id;not null"
+	TicketId    string        `protobuf:"bytes,2,opt,name=ticket_id,json=ticketId,proto3" json:"ticket_id,omitempty"`                        // @inject_tag: gorm:"column:ticket_id;not null"
+	SenderId    string        `protobuf:"bytes,3,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`                        // @inject_tag: gorm:"column:sender_id;not null"
+	Type        MessageType   `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.support.entity.v1.MessageType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Content     string        `protobuf:"bytes,5,opt,name=content,proto3" json:"content,omitempty"`                                          // @inject_tag: gorm:"column:content;not null"
+	Attachments string        `protobuf:"bytes,6,opt,name=attachments,proto3" json:"attachments,omitempty"`                                  // @inject_tag: gorm:"column:attachments"
+	IsInternal  bool          `protobuf:"varint,7,opt,name=is_internal,json=isInternal,proto3" json:"is_internal,omitempty"`                 // @inject_tag: gorm:"column:is_internal"
+	AuditInfo   *v1.AuditInfo `protobuf:"bytes,8,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                     // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *TicketMessage) Reset() {

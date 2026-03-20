@@ -8,25 +8,11 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Protobuf Include="..\..\..\..\proto\insuretech\insurance\services\v1\insurance_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
-    <Protobuf Include="..\..\..\..\proto\insuretech\underwriting\services\v1\underwriting_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
-    <Protobuf Include="..\..\..\..\proto\insuretech\claims\services\v1\claim_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
-    <Protobuf Include="..\..\..\..\proto\insuretech\beneficiary\services\v1\beneficiary_service.proto" GrpcServices="Server" ProtoRoot="..\..\..\..\proto" />
-    
-    <Protobuf Include="..\..\..\..\proto\**\*.proto" GrpcServices="None" ProtoRoot="..\..\..\..\proto" />
+    <ProjectReference Include="..\..\..\polisync\src\PoliSync.Proto\PoliSync.Proto.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="11.9.0" />
-    <PackageReference Include="Google.Protobuf" Version="3.25.3" />
-    <PackageReference Include="Grpc.AspNetCore.Server" Version="2.61.0" />
-    <PackageReference Include="Grpc.Tools" Version="2.62.0">
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-      <PrivateAssets>all</PrivateAssets>
-    </PackageReference>
     <PackageReference Include="MediatR" Version="12.2.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.0" />
   </ItemGroup>

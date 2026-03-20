@@ -148,31 +148,31 @@ type Product struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ProductId       string                 `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"primaryKey;column:product_id;not null"`
-	ProductCode     string                 `protobuf:"bytes,2,opt,name=product_code,json=productCode,proto3" json:"product_code,omitempty" gorm:"column:product_code"`
-	ProductName     string                 `protobuf:"bytes,3,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty" gorm:"column:product_name;not null"`
-	Category        ProductCategory        `protobuf:"varint,4,opt,name=category,proto3,enum=insuretech.products.entity.v1.ProductCategory" json:"category,omitempty" gorm:"column:category;not null;serializer:proto_enum"`
-	Description     string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
-	BasePremium     *v1.Money              `protobuf:"bytes,6,opt,name=base_premium,json=basePremium,proto3" json:"base_premium,omitempty" gorm:"column:base_premium;not null"`
-	MinSumInsured   *v1.Money              `protobuf:"bytes,7,opt,name=min_sum_insured,json=minSumInsured,proto3" json:"min_sum_insured,omitempty" gorm:"column:min_sum_insured;not null"`
-	MaxSumInsured   *v1.Money              `protobuf:"bytes,8,opt,name=max_sum_insured,json=maxSumInsured,proto3" json:"max_sum_insured,omitempty" gorm:"column:max_sum_insured;not null"`
-	MinTenureMonths int32                  `protobuf:"varint,9,opt,name=min_tenure_months,json=minTenureMonths,proto3" json:"min_tenure_months,omitempty" gorm:"column:min_tenure_months;not null"`
-	MaxTenureMonths int32                  `protobuf:"varint,10,opt,name=max_tenure_months,json=maxTenureMonths,proto3" json:"max_tenure_months,omitempty" gorm:"column:max_tenure_months;not null"`
-	Exclusions      []string               `protobuf:"bytes,11,rep,name=exclusions,proto3" json:"exclusions,omitempty" gorm:"column:exclusions"`
-	Status          ProductStatus          `protobuf:"varint,12,opt,name=status,proto3,enum=insuretech.products.entity.v1.ProductStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	CreatedBy       string                 `protobuf:"bytes,15,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty" gorm:"column:created_by;not null"`
-	DeletedAt       *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
+	ProductId       string                 `protobuf:"bytes,1,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:product_id;not null"
+	ProductCode     string                 `protobuf:"bytes,2,opt,name=product_code,json=productCode,proto3" json:"product_code,omitempty"`
+	ProductName     string                 `protobuf:"bytes,3,opt,name=product_name,json=productName,proto3" json:"product_name,omitempty"`                            // @inject_tag: gorm:"column:product_name;not null"
+	Category        ProductCategory        `protobuf:"varint,4,opt,name=category,proto3,enum=insuretech.products.entity.v1.ProductCategory" json:"category,omitempty"` // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+	Description     string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`                                               // @inject_tag: gorm:"column:description"
+	BasePremium     *v1.Money              `protobuf:"bytes,6,opt,name=base_premium,json=basePremium,proto3" json:"base_premium,omitempty"`                            // @inject_tag: gorm:"column:base_premium;not null"
+	MinSumInsured   *v1.Money              `protobuf:"bytes,7,opt,name=min_sum_insured,json=minSumInsured,proto3" json:"min_sum_insured,omitempty"`                    // @inject_tag: gorm:"column:min_sum_insured;not null"
+	MaxSumInsured   *v1.Money              `protobuf:"bytes,8,opt,name=max_sum_insured,json=maxSumInsured,proto3" json:"max_sum_insured,omitempty"`                    // @inject_tag: gorm:"column:max_sum_insured;not null"
+	MinTenureMonths int32                  `protobuf:"varint,9,opt,name=min_tenure_months,json=minTenureMonths,proto3" json:"min_tenure_months,omitempty"`             // @inject_tag: gorm:"column:min_tenure_months;not null"
+	MaxTenureMonths int32                  `protobuf:"varint,10,opt,name=max_tenure_months,json=maxTenureMonths,proto3" json:"max_tenure_months,omitempty"`            // @inject_tag: gorm:"column:max_tenure_months;not null"
+	Exclusions      []string               `protobuf:"bytes,11,rep,name=exclusions,proto3" json:"exclusions,omitempty"`
+	Status          ProductStatus          `protobuf:"varint,12,opt,name=status,proto3,enum=insuretech.products.entity.v1.ProductStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                            // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	CreatedBy       string                 `protobuf:"bytes,15,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`                            // @inject_tag: gorm:"column:created_by;not null"
+	DeletedAt       *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                            // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 	// Related entities
-	AvailableRiders   []*Rider       `protobuf:"bytes,17,rep,name=available_riders,json=availableRiders,proto3" json:"available_riders,omitempty" gorm:"column:available_riders"`
-	PricingConfig     *PricingConfig `protobuf:"bytes,18,opt,name=pricing_config,json=pricingConfig,proto3" json:"pricing_config,omitempty" gorm:"column:pricing_config"`
-	ProductAttributes string         `protobuf:"bytes,19,opt,name=product_attributes,json=productAttributes,proto3" json:"product_attributes,omitempty" gorm:"column:product_attributes"`
-	Plans             []*ProductPlan `protobuf:"bytes,20,rep,name=plans,proto3" json:"plans,omitempty" gorm:"column:plans"`
+	AvailableRiders   []*Rider       `protobuf:"bytes,17,rep,name=available_riders,json=availableRiders,proto3" json:"available_riders,omitempty"`
+	PricingConfig     *PricingConfig `protobuf:"bytes,18,opt,name=pricing_config,json=pricingConfig,proto3" json:"pricing_config,omitempty"`
+	ProductAttributes string         `protobuf:"bytes,19,opt,name=product_attributes,json=productAttributes,proto3" json:"product_attributes,omitempty"` // @inject_tag: gorm:"column:product_attributes"
+	Plans             []*ProductPlan `protobuf:"bytes,20,rep,name=plans,proto3" json:"plans,omitempty"`
 	// Currency companion fields for Money types (flattened storage)
-	BasePremiumCurrency   string `protobuf:"bytes,10001,opt,name=base_premium_currency,json=basePremiumCurrency,proto3" json:"base_premium_currency,omitempty" gorm:"column:base_premium_currency;not null"`
-	MinSumInsuredCurrency string `protobuf:"bytes,10002,opt,name=min_sum_insured_currency,json=minSumInsuredCurrency,proto3" json:"min_sum_insured_currency,omitempty" gorm:"column:min_sum_insured_currency;not null"`
-	MaxSumInsuredCurrency string `protobuf:"bytes,10003,opt,name=max_sum_insured_currency,json=maxSumInsuredCurrency,proto3" json:"max_sum_insured_currency,omitempty" gorm:"column:max_sum_insured_currency;not null"`
+	BasePremiumCurrency   string `protobuf:"bytes,10001,opt,name=base_premium_currency,json=basePremiumCurrency,proto3" json:"base_premium_currency,omitempty"`         // @inject_tag: gorm:"column:base_premium_currency;not null"
+	MinSumInsuredCurrency string `protobuf:"bytes,10002,opt,name=min_sum_insured_currency,json=minSumInsuredCurrency,proto3" json:"min_sum_insured_currency,omitempty"` // @inject_tag: gorm:"column:min_sum_insured_currency;not null"
+	MaxSumInsuredCurrency string `protobuf:"bytes,10003,opt,name=max_sum_insured_currency,json=maxSumInsuredCurrency,proto3" json:"max_sum_insured_currency,omitempty"` // @inject_tag: gorm:"column:max_sum_insured_currency;not null"
 }
 
 func (x *Product) Reset() {

@@ -9,7 +9,7 @@ public class FraudDbContext : DbContext
 
     public DbSet<FraudCheck> FraudChecks => Set<FraudCheck>();
 
-    protected override void OnModelCreating(ModelCreatingBuilder modelBuilder)
+    protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.HasDefaultSchema("insurance_schema");
 

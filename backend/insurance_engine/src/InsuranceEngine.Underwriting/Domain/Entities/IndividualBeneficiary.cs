@@ -5,6 +5,7 @@ namespace InsuranceEngine.Underwriting.Domain.Entities;
 
 public class IndividualBeneficiary
 {
+    public Guid Id { get; set; }
     public Guid BeneficiaryId { get; set; }
     public Beneficiary? Beneficiary { get; set; }
 
@@ -20,6 +21,9 @@ public class IndividualBeneficiary
     
     public MaritalStatus MaritalStatus { get; set; }
     public string? Occupation { get; set; }
+    public string? FatherName { get; set; }
+    public string? MotherName { get; set; }
+    public decimal MonthlyIncome { get; set; }
 
     public string? ContactInfoJson { get; set; }
     public string? PermanentAddressJson { get; set; }

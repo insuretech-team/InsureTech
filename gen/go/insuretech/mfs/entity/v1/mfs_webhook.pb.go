@@ -80,17 +80,17 @@ type MFSWebhook struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:webhook_id;not null"`
-	Provider         string                 `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty" gorm:"column:provider;not null"`
-	EventType        string                 `protobuf:"bytes,3,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty" gorm:"column:event_type;not null"`
-	Payload          string                 `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty" gorm:"column:payload;not null"`
-	Headers          string                 `protobuf:"bytes,5,opt,name=headers,proto3" json:"headers,omitempty" gorm:"column:headers"`
-	Status           WebhookStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.mfs.entity.v1.WebhookStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	SignatureValid   bool                   `protobuf:"varint,7,opt,name=signature_valid,json=signatureValid,proto3" json:"signature_valid,omitempty" gorm:"column:signature_valid"`
-	MfsTransactionId string                 `protobuf:"bytes,8,opt,name=mfs_transaction_id,json=mfsTransactionId,proto3" json:"mfs_transaction_id,omitempty" gorm:"column:mfs_transaction_id"`
-	ErrorMessage     string                 `protobuf:"bytes,9,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty" gorm:"column:error_message"`
-	ProcessedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty" gorm:"column:processed_at;serializer:proto_timestamp"`
-	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                       // @inject_tag: gorm:"primaryKey;column:webhook_id;not null"
+	Provider         string                 `protobuf:"bytes,2,opt,name=provider,proto3" json:"provider,omitempty"`                                           // @inject_tag: gorm:"column:provider;not null"
+	EventType        string                 `protobuf:"bytes,3,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`                        // @inject_tag: gorm:"column:event_type;not null"
+	Payload          string                 `protobuf:"bytes,4,opt,name=payload,proto3" json:"payload,omitempty"`                                             // @inject_tag: gorm:"column:payload;not null"
+	Headers          string                 `protobuf:"bytes,5,opt,name=headers,proto3" json:"headers,omitempty"`                                             // @inject_tag: gorm:"column:headers"
+	Status           WebhookStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.mfs.entity.v1.WebhookStatus" json:"status,omitempty"`  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	SignatureValid   bool                   `protobuf:"varint,7,opt,name=signature_valid,json=signatureValid,proto3" json:"signature_valid,omitempty"`        // @inject_tag: gorm:"column:signature_valid"
+	MfsTransactionId string                 `protobuf:"bytes,8,opt,name=mfs_transaction_id,json=mfsTransactionId,proto3" json:"mfs_transaction_id,omitempty"` // @inject_tag: gorm:"column:mfs_transaction_id"
+	ErrorMessage     string                 `protobuf:"bytes,9,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`               // @inject_tag: gorm:"column:error_message"
+	ProcessedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty"`                 // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                       // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *MFSWebhook) Reset() {

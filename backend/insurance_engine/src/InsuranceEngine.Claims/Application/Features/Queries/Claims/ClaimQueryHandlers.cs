@@ -12,7 +12,7 @@ namespace InsuranceEngine.Claims.Application.Features.Queries.Claims;
 
 public class ClaimQueryHandlers : 
     IRequestHandler<GetClaimByIdQuery, Result<ClaimResponseDto>>,
-    IRequestHandler<ListClaimsByCustomerQuery, Result<List<ClaimResponseDto>>>
+    IRequestHandler<ListClaimsByCustomerQuery, Result<PaginatedResult<ClaimResponseDto>>>
 {
     private readonly IClaimsRepository _claimsRepository;
 
@@ -25,15 +25,22 @@ public class ClaimQueryHandlers :
     {
         var claim = await _claimsRepository.GetByIdAsync(request.Id, cancellationToken);
         if (claim == null)
-            return Result<ClaimResponseDto>.Failure(Error.NotFound("Claim", request.Id));
+            return Result<ClaimResponseDto>.Fail(Error.NotFound("Claim", request.Id.ToString()));
 
         return Result<ClaimResponseDto>.Success(MapToDto(claim));
     }
 
-    public async Task<Result<List<ClaimResponseDto>>> Handle(ListClaimsByCustomerQuery request, CancellationToken cancellationToken)
+    public async Task<Result<PaginatedResult<ClaimResponseDto>>> Handle(ListClaimsByCustomerQuery request, CancellationToken cancellationToken)
     {
         var claims = await _claimsRepository.ListByCustomerAsync(request.CustomerId, request.Page, request.PageSize, cancellationToken);
-        return Result<List<ClaimResponseDto>>.Success(claims.Select(MapToDto).ToList());
+        var total = await _claimsRepository.GetTotalCountByCustomerAsync(request.CustomerId, cancellationToken);
+        
+        return Result<PaginatedResult<ClaimResponseDto>>.Success(new PaginatedResult<ClaimResponseDto>(
+            claims.Select(MapToDto).ToList(),
+            total,
+            request.Page,
+            request.PageSize
+        ));
     }
 
     private static ClaimResponseDto MapToDto(Claim claim)
@@ -44,9 +51,10 @@ public class ClaimQueryHandlers :
             ClaimNumber = claim.ClaimNumber,
             PolicyId = claim.PolicyId,
             CustomerId = claim.CustomerId,
-            Status = claim.Status.ToString(),
-            ClaimType = claim.Type.ToString(),
-            ClaimedAmount = (decimal)claim.ClaimedAmount / 100, // Assuming paisa conversion if using decimal DTO
+            Status = claim.Status,
+            Type = claim.Type,
+            ClaimedAmount = (decimal)claim.ClaimedAmount / 100,
+            ApprovedAmount = (decimal)claim.ApprovedAmount / 100,
             Currency = claim.ClaimedCurrency,
             IncidentDate = claim.IncidentDate,
             IncidentDescription = claim.IncidentDescription,

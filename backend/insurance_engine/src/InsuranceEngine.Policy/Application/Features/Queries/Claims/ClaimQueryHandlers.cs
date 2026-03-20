@@ -24,7 +24,7 @@ public class ClaimQueryHandlers :
     {
         var claim = await _claimsRepository.GetByIdAsync(request.Id, cancellationToken);
         if (claim == null)
-            return Result<ClaimResponseDto>.Failure(Error.NotFound("Claim", request.Id));
+            return Result<ClaimResponseDto>.Fail(Error.NotFound("Claim", request.Id.ToString()));
 
         return Result<ClaimResponseDto>.Success(MapToDto(claim));
     }
@@ -45,8 +45,8 @@ public class ClaimQueryHandlers :
             CustomerId = claim.CustomerId,
             Status = claim.Status.ToString(),
             ClaimType = claim.Type.ToString(),
-            ClaimedAmount = claim.ClaimedAmount.Amount,
-            Currency = claim.ClaimedAmount.CurrencyCode,
+            ClaimedAmount = claim.ClaimedAmount / 100.0m,
+            Currency = claim.ClaimedCurrency,
             IncidentDate = claim.IncidentDate,
             IncidentDescription = claim.IncidentDescription,
             PlaceOfIncident = claim.PlaceOfIncident ?? "",

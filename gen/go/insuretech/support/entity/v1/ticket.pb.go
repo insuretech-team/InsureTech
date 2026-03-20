@@ -269,21 +269,21 @@ type Ticket struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:ticket_id;not null"`
-	TicketNumber      string                 `protobuf:"bytes,2,opt,name=ticket_number,json=ticketNumber,proto3" json:"ticket_number,omitempty" gorm:"column:ticket_number;not null"`
-	BeneficiaryId     string                 `protobuf:"bytes,3,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty" gorm:"column:beneficiary_id;not null"`
-	Type              TicketType             `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.support.entity.v1.TicketType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Category          TicketCategory         `protobuf:"varint,5,opt,name=category,proto3,enum=insuretech.support.entity.v1.TicketCategory" json:"category,omitempty" gorm:"column:category;not null;serializer:proto_enum"`
-	Priority          TicketPriority         `protobuf:"varint,6,opt,name=priority,proto3,enum=insuretech.support.entity.v1.TicketPriority" json:"priority,omitempty" gorm:"column:priority;not null;serializer:proto_enum"`
-	Subject           string                 `protobuf:"bytes,7,opt,name=subject,proto3" json:"subject,omitempty" gorm:"column:subject;not null"`
-	Description       string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description;not null"`
-	Status            TicketStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.support.entity.v1.TicketStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	RelatedEntityType string                 `protobuf:"bytes,10,opt,name=related_entity_type,json=relatedEntityType,proto3" json:"related_entity_type,omitempty" gorm:"column:related_entity_type"`
-	RelatedEntityId   string                 `protobuf:"bytes,11,opt,name=related_entity_id,json=relatedEntityId,proto3" json:"related_entity_id,omitempty" gorm:"column:related_entity_id"`
-	AssignedTo        string                 `protobuf:"bytes,12,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty" gorm:"column:assigned_to"`
-	ResolvedAt        *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=resolved_at,json=resolvedAt,proto3" json:"resolved_at,omitempty" gorm:"column:resolved_at;serializer:proto_timestamp"`
-	ClosedAt          *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=closed_at,json=closedAt,proto3" json:"closed_at,omitempty" gorm:"column:closed_at;serializer:proto_timestamp"`
-	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                               // @inject_tag: gorm:"primaryKey;column:ticket_id;not null"
+	TicketNumber      string                 `protobuf:"bytes,2,opt,name=ticket_number,json=ticketNumber,proto3" json:"ticket_number,omitempty"`                       // @inject_tag: gorm:"column:ticket_number;not null"
+	BeneficiaryId     string                 `protobuf:"bytes,3,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"`                    // @inject_tag: gorm:"column:beneficiary_id;not null"
+	Type              TicketType             `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.support.entity.v1.TicketType" json:"type,omitempty"`             // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Category          TicketCategory         `protobuf:"varint,5,opt,name=category,proto3,enum=insuretech.support.entity.v1.TicketCategory" json:"category,omitempty"` // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
+	Priority          TicketPriority         `protobuf:"varint,6,opt,name=priority,proto3,enum=insuretech.support.entity.v1.TicketPriority" json:"priority,omitempty"` // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+	Subject           string                 `protobuf:"bytes,7,opt,name=subject,proto3" json:"subject,omitempty"`                                                     // @inject_tag: gorm:"column:subject;not null"
+	Description       string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`                                             // @inject_tag: gorm:"column:description;not null"
+	Status            TicketStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.support.entity.v1.TicketStatus" json:"status,omitempty"`       // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	RelatedEntityType string                 `protobuf:"bytes,10,opt,name=related_entity_type,json=relatedEntityType,proto3" json:"related_entity_type,omitempty"`     // @inject_tag: gorm:"column:related_entity_type"
+	RelatedEntityId   string                 `protobuf:"bytes,11,opt,name=related_entity_id,json=relatedEntityId,proto3" json:"related_entity_id,omitempty"`           // @inject_tag: gorm:"column:related_entity_id"
+	AssignedTo        string                 `protobuf:"bytes,12,opt,name=assigned_to,json=assignedTo,proto3" json:"assigned_to,omitempty"`                            // @inject_tag: gorm:"column:assigned_to"
+	ResolvedAt        *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=resolved_at,json=resolvedAt,proto3" json:"resolved_at,omitempty"`                            // @inject_tag: gorm:"column:resolved_at;serializer:proto_timestamp"
+	ClosedAt          *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=closed_at,json=closedAt,proto3" json:"closed_at,omitempty"`                                  // @inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"
+	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                               // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *Ticket) Reset() {

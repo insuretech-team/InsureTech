@@ -62,7 +62,7 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
             Error = new Insuretech.Common.V1.Error
             {
                 Code = "QUOTE_FAILED",
-                Message = result.Error ?? "Unknown error"
+                Message = result.Error?.Message ?? "Unknown error"
             }
         };
     }
@@ -84,7 +84,7 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
             Error = new Insuretech.Common.V1.Error
             {
                 Code = "NOT_FOUND",
-                Message = result.Error ?? "Quote not found"
+                Message = result.Error?.Message ?? "Quote not found"
             }
         };
     }
@@ -93,17 +93,17 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
     {
         return new Quote
         {
-            QuoteId = dto.Id.ToString(),
+            Id = dto.Id.ToString(),
             QuoteNumber = dto.QuoteNumber,
             BeneficiaryId = dto.BeneficiaryId.ToString(),
             InsurerProductId = dto.InsurerProductId.ToString(),
-            Status = dto.Status.ToString(),
+            Status = System.Enum.Parse<QuoteStatus>(dto.Status.ToString(), true),
             SumAssured = new Insuretech.Common.V1.Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.CurrencyCode },
             TermYears = dto.TermYears,
             PremiumPaymentMode = dto.PremiumPaymentMode,
             BasePremium = new Insuretech.Common.V1.Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode },
             TotalPremium = new Insuretech.Common.V1.Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.CurrencyCode },
-            CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.CreatedAt, DateTimeKind.Utc))
+            // AuditInfo mapping if needed
         };
     }
 }

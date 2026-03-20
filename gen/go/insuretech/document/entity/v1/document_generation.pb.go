@@ -83,18 +83,18 @@ type DocumentGeneration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:generation_id;not null"`
-	DocumentTemplateId string                 `protobuf:"bytes,2,opt,name=document_template_id,json=documentTemplateId,proto3" json:"document_template_id,omitempty" gorm:"column:document_template_id;not null"`
-	EntityType         string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
-	EntityId           string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id;not null"`
-	Data               string                 `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty" gorm:"column:data;not null"`
-	Status             GenerationStatus       `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.document.entity.v1.GenerationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	FileUrl            string                 `protobuf:"bytes,7,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty" gorm:"column:file_url"`
-	FileSizeBytes      int64                  `protobuf:"varint,8,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty" gorm:"column:file_size_bytes"`
-	QrCodeData         string                 `protobuf:"bytes,9,opt,name=qr_code_data,json=qrCodeData,proto3" json:"qr_code_data,omitempty" gorm:"column:qr_code_data"`
-	GeneratedBy        string                 `protobuf:"bytes,10,opt,name=generated_by,json=generatedBy,proto3" json:"generated_by,omitempty" gorm:"column:generated_by"`
-	GeneratedAt        *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=generated_at,json=generatedAt,proto3" json:"generated_at,omitempty" gorm:"column:generated_at;serializer:proto_timestamp"`
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                              // @inject_tag: gorm:"primaryKey;column:generation_id;not null"
+	DocumentTemplateId string                 `protobuf:"bytes,2,opt,name=document_template_id,json=documentTemplateId,proto3" json:"document_template_id,omitempty"`  // @inject_tag: gorm:"column:document_template_id;not null"
+	EntityType         string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                            // @inject_tag: gorm:"column:entity_type;not null"
+	EntityId           string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                                  // @inject_tag: gorm:"column:entity_id;not null"
+	Data               string                 `protobuf:"bytes,5,opt,name=data,proto3" json:"data,omitempty"`                                                          // @inject_tag: gorm:"column:data;not null"
+	Status             GenerationStatus       `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.document.entity.v1.GenerationStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	FileUrl            string                 `protobuf:"bytes,7,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`                                     // @inject_tag: gorm:"column:file_url"
+	FileSizeBytes      int64                  `protobuf:"varint,8,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty"`                // @inject_tag: gorm:"column:file_size_bytes"
+	QrCodeData         string                 `protobuf:"bytes,9,opt,name=qr_code_data,json=qrCodeData,proto3" json:"qr_code_data,omitempty"`                          // @inject_tag: gorm:"column:qr_code_data"
+	GeneratedBy        string                 `protobuf:"bytes,10,opt,name=generated_by,json=generatedBy,proto3" json:"generated_by,omitempty"`                        // @inject_tag: gorm:"column:generated_by"
+	GeneratedAt        *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=generated_at,json=generatedAt,proto3" json:"generated_at,omitempty"`                        // @inject_tag: gorm:"column:generated_at;serializer:proto_timestamp"
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                              // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *DocumentGeneration) Reset() {

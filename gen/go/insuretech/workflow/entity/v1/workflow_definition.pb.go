@@ -137,16 +137,16 @@ type WorkflowDefinition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	WorkflowDefinitionId string         `protobuf:"bytes,1,opt,name=workflow_definition_id,json=workflowDefinitionId,proto3" json:"workflow_definition_id,omitempty" gorm:"primaryKey;column:workflow_definition_id;not null"`
-	Name                 string         `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
-	Description          string         `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
-	Type                 WorkflowType   `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.workflow.entity.v1.WorkflowType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	EntityType           string         `protobuf:"bytes,5,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
-	Steps                string         `protobuf:"bytes,6,opt,name=steps,proto3" json:"steps,omitempty" gorm:"column:steps;not null"`
-	Conditions           string         `protobuf:"bytes,7,opt,name=conditions,proto3" json:"conditions,omitempty" gorm:"column:conditions"`
-	Version              int32          `protobuf:"varint,8,opt,name=version,proto3" json:"version,omitempty" gorm:"column:version;not null"`
-	Status               WorkflowStatus `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.WorkflowStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	AuditInfo            *v1.AuditInfo  `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	WorkflowDefinitionId string         `protobuf:"bytes,1,opt,name=workflow_definition_id,json=workflowDefinitionId,proto3" json:"workflow_definition_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:workflow_definition_id;not null"
+	Name                 string         `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                               // @inject_tag: gorm:"column:name;not null"
+	Description          string         `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`                                                 // @inject_tag: gorm:"column:description"
+	Type                 WorkflowType   `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.workflow.entity.v1.WorkflowType" json:"type,omitempty"`              // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	EntityType           string         `protobuf:"bytes,5,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                                 // @inject_tag: gorm:"column:entity_type;not null"
+	Steps                string         `protobuf:"bytes,6,opt,name=steps,proto3" json:"steps,omitempty"`                                                             // @inject_tag: gorm:"column:steps;not null"
+	Conditions           string         `protobuf:"bytes,7,opt,name=conditions,proto3" json:"conditions,omitempty"`                                                   // @inject_tag: gorm:"column:conditions"
+	Version              int32          `protobuf:"varint,8,opt,name=version,proto3" json:"version,omitempty"`                                                        // @inject_tag: gorm:"column:version;not null"
+	Status               WorkflowStatus `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.WorkflowStatus" json:"status,omitempty"`        // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	AuditInfo            *v1.AuditInfo  `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                   // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *WorkflowDefinition) Reset() {

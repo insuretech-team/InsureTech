@@ -25,13 +25,14 @@ public class CreateBeneficiaryCommandHandler : IRequestHandler<CreateBeneficiary
         var beneficiary = new Beneficiary
         {
             Id = Guid.NewGuid(),
-            Code = code,
-            Name = request.Name,
+            Code = request.Code,
+            UserId = request.UserId,
             Type = request.Type,
+            Status = BeneficiaryStatus.PendingKyc,
+            Name = request.Name,
             ContactNumber = request.ContactNumber,
             Email = request.Email,
             Address = request.Address,
-            Status = BeneficiaryStatus.Active,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -46,7 +47,7 @@ public class CreateBeneficiaryCommandHandler : IRequestHandler<CreateBeneficiary
                 MotherName = request.IndividualDetails.MotherName,
                 DateOfBirth = request.IndividualDetails.DateOfBirth,
                 Occupation = request.IndividualDetails.Occupation,
-                MonthlyIncome = request.IndividualDetails.MonthlyIncome
+                MonthlyIncome = (decimal)request.IndividualDetails.MonthlyIncome
             };
         }
         else if (request.Type == BeneficiaryType.Business && request.BusinessDetails != null)

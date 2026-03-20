@@ -21,7 +21,7 @@ public class UpdateQuoteStatusCommandHandler : IRequestHandler<UpdateQuoteStatus
     {
         var quote = await _repository.GetQuoteByIdAsync(request.QuoteId);
         if (quote == null)
-            return Result.Fail("Quote not found.");
+            return Result.Failure("Quote not found.");
 
         quote.Status = request.Status;
         quote.UpdatedAt = DateTime.UtcNow;

@@ -113,8 +113,8 @@ if ($DryRun) {
 Push-Location $dbmanagerDir
 try {
     $cmdArgs = @("migrate", "--target", $Target)
-    if ($Prune) { $cmdArgs += "prune" }
-    if ($Strict) { $cmdArgs += "strict" }
+    if ($Prune) { $cmdArgs += "--prune" }
+    if ($Strict) { $cmdArgs += "--strict" }
     
     Write-Host "Executing: go run . $($cmdArgs -join ' ')`n" -ForegroundColor Cyan
     & go run . $cmdArgs

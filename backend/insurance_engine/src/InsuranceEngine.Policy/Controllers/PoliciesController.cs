@@ -108,7 +108,8 @@ public class PoliciesController : ControllerBase
     [HttpPost("{policyId}/nominees")]
     public async Task<IActionResult> AddNominee(Guid policyId, [FromBody] AddNomineeRequest request)
     {
-        var command = new AddNomineeCommand(policyId, request.BeneficiaryId, request.Relationship, request.SharePercentage);
+        var command = new AddNomineeCommand(policyId, request.BeneficiaryId, request.FullName, request.Relationship, request.SharePercentage,
+            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         var result = await _mediator.Send(command);
         return result.Match<IActionResult>(
             onSuccess: id => Created($"api/policies/{policyId}/nominees/{id}",
@@ -120,7 +121,8 @@ public class PoliciesController : ControllerBase
     [HttpPut("{policyId}/nominees/{nomineeId}")]
     public async Task<IActionResult> UpdateNominee(Guid policyId, Guid nomineeId, [FromBody] UpdateNomineeRequest request)
     {
-        var command = new UpdateNomineeCommand(policyId, nomineeId, request.Relationship, request.SharePercentage);
+        var command = new UpdateNomineeCommand(policyId, nomineeId, request.FullName, request.Relationship, request.SharePercentage,
+            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         var result = await _mediator.Send(command);
         return HandleResult(result, "Nominee updated successfully.");
     }
@@ -156,6 +158,8 @@ public class PoliciesController : ControllerBase
 public record CancelPolicyRequest(string Reason);
 public record RenewPolicyRequest(int TenureMonths);
 public record AddNomineeRequest(
-    Guid BeneficiaryId, string Relationship, double SharePercentage);
+    Guid? BeneficiaryId, string FullName, string Relationship, double SharePercentage,
+    DateTime? DateOfBirth = null, string? NidNumber = null, string? PhoneNumber = null, string? NomineeDobText = null);
 public record UpdateNomineeRequest(
-    string Relationship, double SharePercentage);
+    string? FullName = null, string? Relationship = null, double? SharePercentage = null,
+    DateTime? DateOfBirth = null, string? NidNumber = null, string? PhoneNumber = null, string? NomineeDobText = null);

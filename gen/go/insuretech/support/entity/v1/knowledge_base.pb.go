@@ -27,18 +27,18 @@ type KnowledgeBaseArticle struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                // @inject_tag: gorm:"primaryKey;column:article_id;not null"
-	Title        string        `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty"`                          // @inject_tag: gorm:"column:title;not null"
-	TitleBn      string        `protobuf:"bytes,3,opt,name=title_bn,json=titleBn,proto3" json:"title_bn,omitempty"`       // @inject_tag: gorm:"column:title_bn"
-	Slug         string        `protobuf:"bytes,4,opt,name=slug,proto3" json:"slug,omitempty"`                            // @inject_tag: gorm:"column:slug;not null"
-	Category     string        `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty"`                    // @inject_tag: gorm:"column:category;not null"
-	Content      string        `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty"`                      // @inject_tag: gorm:"column:content;not null"
-	ContentBn    string        `protobuf:"bytes,7,opt,name=content_bn,json=contentBn,proto3" json:"content_bn,omitempty"` // @inject_tag: gorm:"column:content_bn"
-	Tags         []string      `protobuf:"bytes,8,rep,name=tags,proto3" json:"tags,omitempty"`
-	IsPublished  bool          `protobuf:"varint,9,opt,name=is_published,json=isPublished,proto3" json:"is_published,omitempty"`     // @inject_tag: gorm:"column:is_published"
-	ViewCount    int32         `protobuf:"varint,10,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty"`          // @inject_tag: gorm:"column:view_count"
-	HelpfulCount int32         `protobuf:"varint,11,opt,name=helpful_count,json=helpfulCount,proto3" json:"helpful_count,omitempty"` // @inject_tag: gorm:"column:helpful_count"
-	AuditInfo    *v1.AuditInfo `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`           // @inject_tag: gorm:"column:audit_info;not null"
+	Id           string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:article_id;not null"`
+	Title        string        `protobuf:"bytes,2,opt,name=title,proto3" json:"title,omitempty" gorm:"column:title;not null"`
+	TitleBn      string        `protobuf:"bytes,3,opt,name=title_bn,json=titleBn,proto3" json:"title_bn,omitempty" gorm:"column:title_bn"`
+	Slug         string        `protobuf:"bytes,4,opt,name=slug,proto3" json:"slug,omitempty" gorm:"column:slug;not null"`
+	Category     string        `protobuf:"bytes,5,opt,name=category,proto3" json:"category,omitempty" gorm:"column:category;not null"`
+	Content      string        `protobuf:"bytes,6,opt,name=content,proto3" json:"content,omitempty" gorm:"column:content;not null"`
+	ContentBn    string        `protobuf:"bytes,7,opt,name=content_bn,json=contentBn,proto3" json:"content_bn,omitempty" gorm:"column:content_bn"`
+	Tags         []string      `protobuf:"bytes,8,rep,name=tags,proto3" json:"tags,omitempty" gorm:"column:tags"`
+	IsPublished  bool          `protobuf:"varint,9,opt,name=is_published,json=isPublished,proto3" json:"is_published,omitempty" gorm:"column:is_published"`
+	ViewCount    int32         `protobuf:"varint,10,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty" gorm:"column:view_count"`
+	HelpfulCount int32         `protobuf:"varint,11,opt,name=helpful_count,json=helpfulCount,proto3" json:"helpful_count,omitempty" gorm:"column:helpful_count"`
+	AuditInfo    *v1.AuditInfo `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *KnowledgeBaseArticle) Reset() {

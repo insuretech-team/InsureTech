@@ -28,16 +28,16 @@ type UserDocument struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserDocumentId     string                 `protobuf:"bytes,1,opt,name=user_document_id,json=userDocumentId,proto3" json:"user_document_id,omitempty"`           // @inject_tag: gorm:"primaryKey;column:user_document_id;not null"
-	UserId             string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                     // @inject_tag: gorm:"column:user_id;not null"
-	DocumentTypeId     string                 `protobuf:"bytes,3,opt,name=document_type_id,json=documentTypeId,proto3" json:"document_type_id,omitempty"`           // @inject_tag: gorm:"column:document_type_id;not null"
-	PolicyId           string                 `protobuf:"bytes,4,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                               // @inject_tag: gorm:"column:policy_id"
-	FileUrl            string                 `protobuf:"bytes,5,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`                                  // @inject_tag: gorm:"column:file_url;not null"
-	VerificationStatus string                 `protobuf:"bytes,6,opt,name=verification_status,json=verificationStatus,proto3" json:"verification_status,omitempty"` // @inject_tag: gorm:"column:verification_status;not null"
-	VerifiedBy         string                 `protobuf:"bytes,7,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty"`                         // @inject_tag: gorm:"column:verified_by"
-	VerifiedAt         *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty"`                         // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
-	CreatedAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                           // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	UserDocumentId     string                 `protobuf:"bytes,1,opt,name=user_document_id,json=userDocumentId,proto3" json:"user_document_id,omitempty" gorm:"primaryKey;column:user_document_id;not null"`
+	UserId             string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null"`
+	DocumentTypeId     string                 `protobuf:"bytes,3,opt,name=document_type_id,json=documentTypeId,proto3" json:"document_type_id,omitempty" gorm:"column:document_type_id;not null"`
+	PolicyId           string                 `protobuf:"bytes,4,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
+	FileUrl            string                 `protobuf:"bytes,5,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty" gorm:"column:file_url;not null"`
+	VerificationStatus string                 `protobuf:"bytes,6,opt,name=verification_status,json=verificationStatus,proto3" json:"verification_status,omitempty" gorm:"column:verification_status;not null"`
+	VerifiedBy         string                 `protobuf:"bytes,7,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty" gorm:"column:verified_by"`
+	VerifiedAt         *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty" gorm:"column:verified_at;serializer:proto_timestamp"`
+	CreatedAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *UserDocument) Reset() {

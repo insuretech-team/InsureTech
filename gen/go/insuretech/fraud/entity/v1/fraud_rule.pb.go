@@ -144,17 +144,17 @@ type FraudRule struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FraudRuleId string                 `protobuf:"bytes,1,opt,name=fraud_rule_id,json=fraudRuleId,proto3" json:"fraud_rule_id,omitempty"`                                    // @inject_tag: gorm:"primaryKey;column:fraud_rule_id;not null"
-	Name        string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                                       // @inject_tag: gorm:"column:name;not null"
-	Category    RuleCategory           `protobuf:"varint,3,opt,name=category,proto3,enum=insuretech.fraud.entity.v1.RuleCategory" json:"category,omitempty"`                 // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
-	Description string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`                                                         // @inject_tag: gorm:"column:description"
-	Conditions  string                 `protobuf:"bytes,5,opt,name=conditions,proto3" json:"conditions,omitempty"`                                                           // @inject_tag: gorm:"column:conditions;not null"
-	RiskLevel   RiskLevel              `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.fraud.entity.v1.RiskLevel" json:"risk_level,omitempty"` // @inject_tag: gorm:"column:risk_level;not null;serializer:proto_enum"
-	ScoreWeight int32                  `protobuf:"varint,7,opt,name=score_weight,json=scoreWeight,proto3" json:"score_weight,omitempty"`                                     // @inject_tag: gorm:"column:score_weight;not null"
-	IsActive    bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                                              // @inject_tag: gorm:"column:is_active"
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                           // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	DeletedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                           // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	FraudRuleId string                 `protobuf:"bytes,1,opt,name=fraud_rule_id,json=fraudRuleId,proto3" json:"fraud_rule_id,omitempty" gorm:"primaryKey;column:fraud_rule_id;not null"`
+	Name        string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	Category    RuleCategory           `protobuf:"varint,3,opt,name=category,proto3,enum=insuretech.fraud.entity.v1.RuleCategory" json:"category,omitempty" gorm:"column:category;not null;serializer:proto_enum"`
+	Description string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	Conditions  string                 `protobuf:"bytes,5,opt,name=conditions,proto3" json:"conditions,omitempty" gorm:"column:conditions;not null"`
+	RiskLevel   RiskLevel              `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.fraud.entity.v1.RiskLevel" json:"risk_level,omitempty" gorm:"column:risk_level;not null;serializer:proto_enum"`
+	ScoreWeight int32                  `protobuf:"varint,7,opt,name=score_weight,json=scoreWeight,proto3" json:"score_weight,omitempty" gorm:"column:score_weight;not null"`
+	IsActive    bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeletedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *FraudRule) Reset() {

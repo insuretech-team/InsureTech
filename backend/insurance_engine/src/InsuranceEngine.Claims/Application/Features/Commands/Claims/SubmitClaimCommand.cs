@@ -12,5 +12,6 @@ public record SubmitClaimCommand(
     long ClaimedAmount,
     DateTime IncidentDate,
     string IncidentDescription,
-    string? PlaceOfIncident
+    string? PlaceOfIncident,
+    string? BankDetailsForPayout
 ) : IRequest<Result<Guid>>;

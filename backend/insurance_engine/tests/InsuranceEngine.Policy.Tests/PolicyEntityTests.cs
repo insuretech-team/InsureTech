@@ -44,7 +44,7 @@ public class PolicyEntityTests
         var policy = new PolicyEntity { Id = Guid.NewGuid() };
 
         // Act
-        var result = policy.AddNominee(Guid.NewGuid(), "Spouse", 100);
+        var result = policy.AddNominee(null, "Test Spouse", "Spouse", 100);
 
         // Assert
         result.IsSuccess.Should().BeTrue();
@@ -58,7 +58,7 @@ public class PolicyEntityTests
         var policy = new PolicyEntity { Id = Guid.NewGuid() };
 
         // Act
-        var result = policy.AddNominee(Guid.NewGuid(), "Spouse", 50);
+        var result = policy.AddNominee(null, "Test Spouse", "Spouse", 50);
 
         // Assert
         result.IsSuccess.Should().BeFalse();

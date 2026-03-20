@@ -29,18 +29,18 @@ type Rider struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RiderId        string                 `protobuf:"bytes,1,opt,name=rider_id,json=riderId,proto3" json:"rider_id,omitempty"`                      // @inject_tag: gorm:"primaryKey;column:rider_id;not null"
-	ProductId      string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                // @inject_tag: gorm:"column:product_id;not null"
-	RiderName      string                 `protobuf:"bytes,3,opt,name=rider_name,json=riderName,proto3" json:"rider_name,omitempty"`                // @inject_tag: gorm:"column:rider_name;not null"
-	Description    string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`                             // @inject_tag: gorm:"column:description"
-	PremiumAmount  *v1.Money              `protobuf:"bytes,5,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty"`    // @inject_tag: gorm:"column:premium_amount;not null"
-	CoverageAmount *v1.Money              `protobuf:"bytes,6,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty"` // @inject_tag: gorm:"column:coverage_amount;not null"
-	IsMandatory    bool                   `protobuf:"varint,7,opt,name=is_mandatory,json=isMandatory,proto3" json:"is_mandatory,omitempty"`         // @inject_tag: gorm:"column:is_mandatory;not null"
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	RiderId        string                 `protobuf:"bytes,1,opt,name=rider_id,json=riderId,proto3" json:"rider_id,omitempty" gorm:"primaryKey;column:rider_id;not null"`
+	ProductId      string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
+	RiderName      string                 `protobuf:"bytes,3,opt,name=rider_name,json=riderName,proto3" json:"rider_name,omitempty" gorm:"column:rider_name;not null"`
+	Description    string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	PremiumAmount  *v1.Money              `protobuf:"bytes,5,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty" gorm:"column:premium_amount;not null"`
+	CoverageAmount *v1.Money              `protobuf:"bytes,6,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty" gorm:"column:coverage_amount;not null"`
+	IsMandatory    bool                   `protobuf:"varint,7,opt,name=is_mandatory,json=isMandatory,proto3" json:"is_mandatory,omitempty" gorm:"column:is_mandatory;not null"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 	// Currency companion fields for Money types (flattened storage)
-	PremiumCurrency  string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty"`    // @inject_tag: gorm:"column:premium_currency;not null"
-	CoverageCurrency string `protobuf:"bytes,10002,opt,name=coverage_currency,json=coverageCurrency,proto3" json:"coverage_currency,omitempty"` // @inject_tag: gorm:"column:coverage_currency;not null"
+	PremiumCurrency  string `protobuf:"bytes,10001,opt,name=premium_currency,json=premiumCurrency,proto3" json:"premium_currency,omitempty" gorm:"column:premium_currency;not null"`
+	CoverageCurrency string `protobuf:"bytes,10002,opt,name=coverage_currency,json=coverageCurrency,proto3" json:"coverage_currency,omitempty" gorm:"column:coverage_currency;not null"`
 }
 
 func (x *Rider) Reset() {

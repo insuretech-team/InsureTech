@@ -65,9 +65,14 @@ public record HealthDeclarationDto(
 
 public record NomineeDto(
     Guid? Id,
-    Guid BeneficiaryId,
+    Guid? BeneficiaryId,
+    string FullName,
     string Relationship,
-    double SharePercentage
+    double SharePercentage,
+    DateTime? DateOfBirth,
+    string? NomineeDobText,
+    string? NidNumber,
+    string? PhoneNumber
 );
 
 public record PolicyRiderDto(

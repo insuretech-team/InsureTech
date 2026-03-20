@@ -86,17 +86,17 @@ type WorkflowInstance struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                   // @inject_tag: gorm:"primaryKey;column:instance_id;not null"
-	WorkflowDefinitionId string                 `protobuf:"bytes,2,opt,name=workflow_definition_id,json=workflowDefinitionId,proto3" json:"workflow_definition_id,omitempty"` // @inject_tag: gorm:"column:workflow_definition_id;not null"
-	EntityType           string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                                 // @inject_tag: gorm:"column:entity_type;not null"
-	EntityId             string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                                       // @inject_tag: gorm:"column:entity_id;not null"
-	Status               InstanceStatus         `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.InstanceStatus" json:"status,omitempty"`        // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	CurrentStep          string                 `protobuf:"bytes,6,opt,name=current_step,json=currentStep,proto3" json:"current_step,omitempty"`                              // @inject_tag: gorm:"column:current_step"
-	Context              string                 `protobuf:"bytes,7,opt,name=context,proto3" json:"context,omitempty"`                                                         // @inject_tag: gorm:"column:context"
-	InitiatedBy          string                 `protobuf:"bytes,8,opt,name=initiated_by,json=initiatedBy,proto3" json:"initiated_by,omitempty"`                              // @inject_tag: gorm:"column:initiated_by;not null"
-	StartedAt            *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`                                    // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
-	CompletedAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                             // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
-	AuditInfo            *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                   // @inject_tag: gorm:"column:audit_info;not null"
+	Id                   string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:instance_id;not null"`
+	WorkflowDefinitionId string                 `protobuf:"bytes,2,opt,name=workflow_definition_id,json=workflowDefinitionId,proto3" json:"workflow_definition_id,omitempty" gorm:"column:workflow_definition_id;not null"`
+	EntityType           string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
+	EntityId             string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id;not null"`
+	Status               InstanceStatus         `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.workflow.entity.v1.InstanceStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	CurrentStep          string                 `protobuf:"bytes,6,opt,name=current_step,json=currentStep,proto3" json:"current_step,omitempty" gorm:"column:current_step"`
+	Context              string                 `protobuf:"bytes,7,opt,name=context,proto3" json:"context,omitempty" gorm:"column:context"`
+	InitiatedBy          string                 `protobuf:"bytes,8,opt,name=initiated_by,json=initiatedBy,proto3" json:"initiated_by,omitempty" gorm:"column:initiated_by;not null"`
+	StartedAt            *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty" gorm:"column:started_at;not null;serializer:proto_timestamp"`
+	CompletedAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
+	AuditInfo            *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *WorkflowInstance) Reset() {

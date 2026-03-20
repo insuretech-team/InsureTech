@@ -33,9 +33,10 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             Guid.Parse(request.CustomerId),
             MapToDomainClaimType(request.Type),
             request.ClaimedAmount?.Amount ?? 0,
-            request.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
+            DateTime.TryParse(request.IncidentDate, out var incDate) ? incDate : DateTime.UtcNow,
             request.IncidentDescription,
-            request.PlaceOfIncident
+            null, // PlaceOfIncident — not on gRPC request, set via REST only
+            null  // BankDetailsForPayout — not on gRPC request, set via REST only
         );
 
         var result = await _mediator.Send(command);
@@ -45,7 +46,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             return new SubmitClaimResponse
             {
                 ClaimId = result.Value.ToString(),
-                ClaimNumber = $"CLM-{DateTime.UtcNow:yyyyMMdd}-{result.Value.ToString()[..4]}", // Example
+                ClaimNumber = $"CLM-{DateTime.UtcNow:yyyyMMdd}-{result.Value.ToString()[..4]}",
                 Message = "Claim submitted successfully"
             };
         }
@@ -111,7 +112,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
 
     private static Claim MapToProtoClaim(ClaimResponseDto dto)
     {
-        return new Claim
+        var claim = new Claim
         {
             ClaimId = dto.Id.ToString(),
             ClaimNumber = dto.ClaimNumber,
@@ -119,38 +120,48 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             CustomerId = dto.CustomerId.ToString(),
             Type = MapToProtoClaimType(dto.Type),
             Status = MapToProtoClaimStatus(dto.Status),
-            ClaimedAmount = new Insuretech.Common.V1.Money { Amount = (long)(dto.ClaimedAmount * 100), Currency = "BDT" },
-            ApprovedAmount = new Insuretech.Common.V1.Money { Amount = (long)(dto.ApprovedAmount * 100), Currency = "BDT" },
+            ClaimedAmount = new Insuretech.Common.V1.Money { Amount = dto.ClaimedAmount.Amount, Currency = dto.ClaimedAmount.CurrencyCode },
+            ApprovedAmount = new Insuretech.Common.V1.Money { Amount = dto.ApprovedAmount.Amount, Currency = dto.ApprovedAmount.CurrencyCode },
             IncidentDate = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.IncidentDate, DateTimeKind.Utc)),
-            IncidentDescription = dto.IncidentDescription,
+            IncidentDescription = dto.IncidentDescription ?? string.Empty,
             SubmittedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.SubmittedAt, DateTimeKind.Utc)),
-            ProcessedAt = dto.ProcessedAt.HasValue ? Timestamp.FromDateTime(DateTime.SpecifyKind(dto.ProcessedAt.Value, DateTimeKind.Utc)) : null
         };
+
+        if (dto.ApprovedAt.HasValue)
+            claim.ApprovedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(dto.ApprovedAt.Value, DateTimeKind.Utc));
+
+        return claim;
     }
 
     private static InsuranceEngine.Claims.Domain.Enums.ClaimType MapToDomainClaimType(ClaimType type) => type switch
     {
         ClaimType.Death => InsuranceEngine.Claims.Domain.Enums.ClaimType.Death,
-        ClaimType.Maturity => InsuranceEngine.Claims.Domain.Enums.ClaimType.Maturity,
-        ClaimType.Surrender => InsuranceEngine.Claims.Domain.Enums.ClaimType.Surrender,
-        ClaimType.Health => InsuranceEngine.Claims.Domain.Enums.ClaimType.Health,
+        ClaimType.HealthHospitalization => InsuranceEngine.Claims.Domain.Enums.ClaimType.HealthHospitalization,
+        ClaimType.HealthSurgery => InsuranceEngine.Claims.Domain.Enums.ClaimType.HealthSurgery,
+        ClaimType.MotorAccident => InsuranceEngine.Claims.Domain.Enums.ClaimType.MotorAccident,
+        ClaimType.MotorTheft => InsuranceEngine.Claims.Domain.Enums.ClaimType.MotorTheft,
+        ClaimType.DeviceDamage => InsuranceEngine.Claims.Domain.Enums.ClaimType.DeviceDamage,
+        ClaimType.DeviceTheft => InsuranceEngine.Claims.Domain.Enums.ClaimType.DeviceTheft,
         _ => InsuranceEngine.Claims.Domain.Enums.ClaimType.Unspecified
     };
 
     private static ClaimType MapToProtoClaimType(InsuranceEngine.Claims.Domain.Enums.ClaimType type) => type switch
     {
         InsuranceEngine.Claims.Domain.Enums.ClaimType.Death => ClaimType.Death,
-        InsuranceEngine.Claims.Domain.Enums.ClaimType.Maturity => ClaimType.Maturity,
-        InsuranceEngine.Claims.Domain.Enums.ClaimType.Surrender => ClaimType.Surrender,
-        InsuranceEngine.Claims.Domain.Enums.ClaimType.Health => ClaimType.Health,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.HealthHospitalization => ClaimType.HealthHospitalization,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.HealthSurgery => ClaimType.HealthSurgery,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.MotorAccident => ClaimType.MotorAccident,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.MotorTheft => ClaimType.MotorTheft,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.DeviceDamage => ClaimType.DeviceDamage,
+        InsuranceEngine.Claims.Domain.Enums.ClaimType.DeviceTheft => ClaimType.DeviceTheft,
         _ => ClaimType.Unspecified
     };
 
     private static ClaimStatus MapToProtoClaimStatus(InsuranceEngine.Claims.Domain.Enums.ClaimStatus status) => status switch
     {
         InsuranceEngine.Claims.Domain.Enums.ClaimStatus.Submitted => ClaimStatus.Submitted,
+        InsuranceEngine.Claims.Domain.Enums.ClaimStatus.UnderReview => ClaimStatus.UnderReview,
         InsuranceEngine.Claims.Domain.Enums.ClaimStatus.PendingDocuments => ClaimStatus.PendingDocuments,
-        InsuranceEngine.Claims.Domain.Enums.ClaimStatus.UnderInvestigation => ClaimStatus.UnderInvestigation,
         InsuranceEngine.Claims.Domain.Enums.ClaimStatus.Approved => ClaimStatus.Approved,
         InsuranceEngine.Claims.Domain.Enums.ClaimStatus.Rejected => ClaimStatus.Rejected,
         InsuranceEngine.Claims.Domain.Enums.ClaimStatus.Settled => ClaimStatus.Settled,
@@ -158,3 +169,4 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
         _ => ClaimStatus.Unspecified
     };
 }
+

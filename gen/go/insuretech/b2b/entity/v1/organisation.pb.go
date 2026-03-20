@@ -185,27 +185,27 @@ type Organisation struct {
 	unknownFields protoimpl.UnknownFields
 
 	// UUID primary key — used as business_id across all B2B tables
-	OrganisationId string `protobuf:"bytes,1,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:organisation_id;not null"
+	OrganisationId string `protobuf:"bytes,1,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty" gorm:"primaryKey;column:organisation_id;not null"`
 	// Parent InsureTech tenant (top-level partner/reseller)
-	TenantId string `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"` // @inject_tag: gorm:"column:tenant_id;not null"
+	TenantId string `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id;not null"`
 	// Human-readable display name (e.g. "Labaid Group")
-	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"` // @inject_tag: gorm:"column:name;not null"
+	Name string `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
 	// Short code for display and lookup (e.g. "LABAID")
-	Code string `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"` // @inject_tag: gorm:"column:code;not null;uniqueIndex"
+	Code string `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null;uniqueIndex"`
 	// Industry / sector (e.g. "Healthcare", "Finance", "Manufacturing")
-	Industry string `protobuf:"bytes,5,opt,name=industry,proto3" json:"industry,omitempty"` // @inject_tag: gorm:"column:industry"
+	Industry string `protobuf:"bytes,5,opt,name=industry,proto3" json:"industry,omitempty" gorm:"column:industry"`
 	// Primary contact email for the organisation
-	ContactEmail string `protobuf:"bytes,6,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty"` // @inject_tag: gorm:"column:contact_email"
+	ContactEmail string `protobuf:"bytes,6,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" gorm:"column:contact_email"`
 	// Primary contact phone
-	ContactPhone string `protobuf:"bytes,7,opt,name=contact_phone,json=contactPhone,proto3" json:"contact_phone,omitempty"` // @inject_tag: gorm:"column:contact_phone"
+	ContactPhone string `protobuf:"bytes,7,opt,name=contact_phone,json=contactPhone,proto3" json:"contact_phone,omitempty" gorm:"column:contact_phone"`
 	// Physical address (free-text for now)
-	Address string             `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty"`                                                 // @inject_tag: gorm:"column:address"
-	Status  OrganisationStatus `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.OrganisationStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null"
+	Address string             `protobuf:"bytes,8,opt,name=address,proto3" json:"address,omitempty" gorm:"column:address"`
+	Status  OrganisationStatus `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.OrganisationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
 	// Total number of enrolled employees (denormalised for fast reads)
-	TotalEmployees int32                  `protobuf:"varint,10,opt,name=total_employees,json=totalEmployees,proto3" json:"total_employees,omitempty"` // @inject_tag: gorm:"column:total_employees;not null"
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                 // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                 // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	DeletedAt      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                 // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	TotalEmployees int32                  `protobuf:"varint,10,opt,name=total_employees,json=totalEmployees,proto3" json:"total_employees,omitempty" gorm:"column:total_employees;not null"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeletedAt      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *Organisation) Reset() {
@@ -340,18 +340,18 @@ type OrgMember struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MemberId string `protobuf:"bytes,1,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:member_id;not null"
+	MemberId string `protobuf:"bytes,1,opt,name=member_id,json=memberId,proto3" json:"member_id,omitempty" gorm:"primaryKey;column:member_id;not null"`
 	// The organisation this member belongs to
-	OrganisationId string `protobuf:"bytes,2,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty"` // @inject_tag: gorm:"column:organisation_id;not null;index"
+	OrganisationId string `protobuf:"bytes,2,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty" gorm:"column:organisation_id;not null;index"`
 	// The platform user ID (from authn_schema.users.user_id)
-	UserId string `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"` // @inject_tag: gorm:"column:user_id;not null;index"
+	UserId string `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null;index"`
 	// Role within the organisation (BUSINESS_ADMIN, HR_MANAGER, VIEWER)
-	Role      OrgMemberRole          `protobuf:"varint,4,opt,name=role,proto3,enum=insuretech.b2b.entity.v1.OrgMemberRole" json:"role,omitempty"`       // @inject_tag: gorm:"column:role;not null"
-	Status    OrgMemberStatus        `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.OrgMemberStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null"
-	JoinedAt  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`                            // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                         // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                         // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	DeletedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                         // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	Role      OrgMemberRole          `protobuf:"varint,4,opt,name=role,proto3,enum=insuretech.b2b.entity.v1.OrgMemberRole" json:"role,omitempty" gorm:"column:role;not null;serializer:proto_enum"`
+	Status    OrgMemberStatus        `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.OrgMemberStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	JoinedAt  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty" gorm:"column:joined_at;not null;serializer:proto_timestamp"`
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeletedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *OrgMember) Reset() {

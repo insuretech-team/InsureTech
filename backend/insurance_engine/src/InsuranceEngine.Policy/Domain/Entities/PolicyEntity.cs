@@ -142,15 +142,21 @@ public class PolicyEntity
 
     // --- Nominee share invariant ---
 
-    public Result AddNominee(Guid beneficiaryId, string relationship, double sharePercentage)
+    public Result AddNominee(Guid? beneficiaryId, string fullName, string relationship, double sharePercentage,
+        DateTime? dateOfBirth = null, string? nidNumber = null, string? phoneNumber = null, string? nomineeDobText = null)
     {
         var nominee = new Nominee
         {
             Id = Guid.NewGuid(),
             PolicyId = Id,
             BeneficiaryId = beneficiaryId,
+            FullName = fullName,
             Relationship = relationship,
             SharePercentage = sharePercentage,
+            DateOfBirth = dateOfBirth,
+            NidNumber = nidNumber,
+            PhoneNumber = phoneNumber,
+            NomineeDobText = nomineeDobText,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
@@ -158,14 +164,20 @@ public class PolicyEntity
         return ValidateNomineeShares();
     }
 
-    public Result UpdateNominee(Guid nomineeId, string relationship, double sharePercentage)
+    public Result UpdateNominee(Guid nomineeId, string? fullName, string? relationship, double? sharePercentage,
+        DateTime? dateOfBirth = null, string? nidNumber = null, string? phoneNumber = null, string? nomineeDobText = null)
     {
         var nominee = Nominees.FirstOrDefault(n => n.Id == nomineeId && !n.IsDeleted);
         if (nominee == null)
             return Result.Fail(Error.NotFound("Nominee", nomineeId.ToString()));
 
-        nominee.Relationship = relationship;
-        nominee.SharePercentage = sharePercentage;
+        if (fullName != null) nominee.FullName = fullName;
+        if (relationship != null) nominee.Relationship = relationship;
+        if (sharePercentage != null) nominee.SharePercentage = sharePercentage.Value;
+        if (dateOfBirth != null) nominee.DateOfBirth = dateOfBirth;
+        if (nidNumber != null) nominee.NidNumber = nidNumber;
+        if (phoneNumber != null) nominee.PhoneNumber = phoneNumber;
+        if (nomineeDobText != null) nominee.NomineeDobText = nomineeDobText;
         nominee.UpdatedAt = DateTime.UtcNow;
 
         return ValidateNomineeShares();

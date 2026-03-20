@@ -28,18 +28,18 @@ type ApiKeyUsage struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                   // @inject_tag: gorm:"primaryKey;column:usage_id;not null"
-	ApiKeyId        string                 `protobuf:"bytes,2,opt,name=api_key_id,json=apiKeyId,proto3" json:"api_key_id,omitempty"`                     // @inject_tag: gorm:"column:api_key_id;not null"
-	Endpoint        string                 `protobuf:"bytes,3,opt,name=endpoint,proto3" json:"endpoint,omitempty"`                                       // @inject_tag: gorm:"column:endpoint;not null"
-	HttpMethod      string                 `protobuf:"bytes,4,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty"`                 // @inject_tag: gorm:"column:http_method;not null"
-	StatusCode      int32                  `protobuf:"varint,5,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty"`                // @inject_tag: gorm:"column:status_code;not null"
-	ResponseTimeMs  int32                  `protobuf:"varint,6,opt,name=response_time_ms,json=responseTimeMs,proto3" json:"response_time_ms,omitempty"`  // @inject_tag: gorm:"column:response_time_ms"
-	RequestIp       string                 `protobuf:"bytes,7,opt,name=request_ip,json=requestIp,proto3" json:"request_ip,omitempty"`                    // @inject_tag: gorm:"column:request_ip"
-	UserAgent       string                 `protobuf:"bytes,8,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`                    // @inject_tag: gorm:"column:user_agent"
-	RequestPayload  string                 `protobuf:"bytes,9,opt,name=request_payload,json=requestPayload,proto3" json:"request_payload,omitempty"`     // @inject_tag: gorm:"column:request_payload"
-	ResponsePayload string                 `protobuf:"bytes,10,opt,name=response_payload,json=responsePayload,proto3" json:"response_payload,omitempty"` // @inject_tag: gorm:"column:response_payload"
-	TraceId         string                 `protobuf:"bytes,11,opt,name=trace_id,json=traceId,proto3" json:"trace_id,omitempty"`                         // @inject_tag: gorm:"column:trace_id"
-	Timestamp       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                    // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:usage_id;not null"`
+	ApiKeyId        string                 `protobuf:"bytes,2,opt,name=api_key_id,json=apiKeyId,proto3" json:"api_key_id,omitempty" gorm:"column:api_key_id;not null"`
+	Endpoint        string                 `protobuf:"bytes,3,opt,name=endpoint,proto3" json:"endpoint,omitempty" gorm:"column:endpoint;not null"`
+	HttpMethod      string                 `protobuf:"bytes,4,opt,name=http_method,json=httpMethod,proto3" json:"http_method,omitempty" gorm:"column:http_method;not null"`
+	StatusCode      int32                  `protobuf:"varint,5,opt,name=status_code,json=statusCode,proto3" json:"status_code,omitempty" gorm:"column:status_code;not null"`
+	ResponseTimeMs  int32                  `protobuf:"varint,6,opt,name=response_time_ms,json=responseTimeMs,proto3" json:"response_time_ms,omitempty" gorm:"column:response_time_ms"`
+	RequestIp       string                 `protobuf:"bytes,7,opt,name=request_ip,json=requestIp,proto3" json:"request_ip,omitempty" gorm:"column:request_ip"`
+	UserAgent       string                 `protobuf:"bytes,8,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty" gorm:"column:user_agent"`
+	RequestPayload  string                 `protobuf:"bytes,9,opt,name=request_payload,json=requestPayload,proto3" json:"request_payload,omitempty" gorm:"column:request_payload"`
+	ResponsePayload string                 `protobuf:"bytes,10,opt,name=response_payload,json=responsePayload,proto3" json:"response_payload,omitempty" gorm:"column:response_payload"`
+	TraceId         string                 `protobuf:"bytes,11,opt,name=trace_id,json=traceId,proto3" json:"trace_id,omitempty" gorm:"column:trace_id"`
+	Timestamp       *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
 }
 
 func (x *ApiKeyUsage) Reset() {

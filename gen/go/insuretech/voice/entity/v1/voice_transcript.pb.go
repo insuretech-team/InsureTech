@@ -80,15 +80,15 @@ type VoiceTranscript struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                        // @inject_tag: gorm:"primaryKey;column:transcript_id;not null"
-	VoiceSessionId string                 `protobuf:"bytes,2,opt,name=voice_session_id,json=voiceSessionId,proto3" json:"voice_session_id,omitempty"`        // @inject_tag: gorm:"column:voice_session_id;not null"
-	Speaker        SpeakerType            `protobuf:"varint,3,opt,name=speaker,proto3,enum=insuretech.voice.entity.v1.SpeakerType" json:"speaker,omitempty"` // @inject_tag: gorm:"column:speaker;not null;serializer:proto_enum"
-	Text           string                 `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty"`                                                    // @inject_tag: gorm:"column:text;not null"
-	Language       string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty"`                                            // @inject_tag: gorm:"column:language;not null"
-	Confidence     float32                `protobuf:"fixed32,6,opt,name=confidence,proto3" json:"confidence,omitempty"`                                      // @inject_tag: gorm:"column:confidence"
-	SequenceNumber int32                  `protobuf:"varint,7,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty"`         // @inject_tag: gorm:"column:sequence_number;not null"
-	Timestamp      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                          // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
-	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                         // @inject_tag: gorm:"column:audit_info;not null"
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:transcript_id;not null"`
+	VoiceSessionId string                 `protobuf:"bytes,2,opt,name=voice_session_id,json=voiceSessionId,proto3" json:"voice_session_id,omitempty" gorm:"column:voice_session_id;not null"`
+	Speaker        SpeakerType            `protobuf:"varint,3,opt,name=speaker,proto3,enum=insuretech.voice.entity.v1.SpeakerType" json:"speaker,omitempty" gorm:"column:speaker;not null;serializer:proto_enum"`
+	Text           string                 `protobuf:"bytes,4,opt,name=text,proto3" json:"text,omitempty" gorm:"column:text;not null"`
+	Language       string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty" gorm:"column:language;not null"`
+	Confidence     float32                `protobuf:"fixed32,6,opt,name=confidence,proto3" json:"confidence,omitempty" gorm:"column:confidence"`
+	SequenceNumber int32                  `protobuf:"varint,7,opt,name=sequence_number,json=sequenceNumber,proto3" json:"sequence_number,omitempty" gorm:"column:sequence_number;not null"`
+	Timestamp      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
+	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *VoiceTranscript) Reset() {

@@ -23,33 +23,32 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-//  4. PolicyRule — human-readable view of a Casbin policy line.
-//     Writes sync to casbin_rules via the authz service.
-//
+// 4. PolicyRule — human-readable view of a Casbin policy line.
+//    Writes sync to casbin_rules via the authz service.
 // ---------------------------------------------------------------------------
 type PolicyRule struct {
 	state         protoimpl.MessageState
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PolicyId string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`
+	PolicyId string `protobuf:"bytes,1,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
 	// Subject: "role:<name>" or "user:<uuid>"
-	Subject string `protobuf:"bytes,2,opt,name=subject,proto3" json:"subject,omitempty"`
+	Subject string `protobuf:"bytes,2,opt,name=subject,proto3" json:"subject,omitempty" gorm:"column:subject"`
 	// Domain: "portal:tenant_id"
-	Domain string `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty"`
+	Domain string `protobuf:"bytes,3,opt,name=domain,proto3" json:"domain,omitempty" gorm:"column:domain"`
 	// Object: "svc:<service>/<resource>"
-	Object string `protobuf:"bytes,4,opt,name=object,proto3" json:"object,omitempty"`
+	Object string `protobuf:"bytes,4,opt,name=object,proto3" json:"object,omitempty" gorm:"column:object"`
 	// Action: HTTP verb or domain verb
-	Action string       `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty"`
-	Effect PolicyEffect `protobuf:"varint,6,opt,name=effect,proto3,enum=insuretech.authz.entity.v1.PolicyEffect" json:"effect,omitempty"`
+	Action string       `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty" gorm:"column:action"`
+	Effect PolicyEffect `protobuf:"varint,6,opt,name=effect,proto3,enum=insuretech.authz.entity.v1.PolicyEffect" json:"effect,omitempty" gorm:"column:effect;serializer:proto_enum"`
 	// Optional ABAC condition expression (evaluated by custom matcher)
-	Condition   string                 `protobuf:"bytes,7,opt,name=condition,proto3" json:"condition,omitempty"`
-	Description string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty"`
-	IsActive    bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
-	CreatedBy   string                 `protobuf:"bytes,10,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty"`
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
-	DeletedAt   *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`
+	Condition   string                 `protobuf:"bytes,7,opt,name=condition,proto3" json:"condition,omitempty" gorm:"column:condition"`
+	Description string                 `protobuf:"bytes,8,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	IsActive    bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
+	CreatedBy   string                 `protobuf:"bytes,10,opt,name=created_by,json=createdBy,proto3" json:"created_by,omitempty" gorm:"column:created_by"`
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	DeletedAt   *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *PolicyRule) Reset() {

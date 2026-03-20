@@ -17,13 +17,13 @@ export const file_insuretech_authz_services_v1_authz_service: GenFile = /*@__PUR
 /**
  * ============================================================================
  * AuthZ Service — Fine-grained access control via Casbin PERM model
- *
+ * 
  * Domain format: "portal:tenant_id"   e.g. "system:root", "agent:tenant-abc"
  * Subject:       "user:<uuid>"        e.g. "user:550e8400-e29b-41d4-a716-446655440000"
  * Object:        "svc:<svc>/<res>"   e.g. "svc:policy/create", "svc:claim/*"
  * Action:        HTTP verb or domain action: GET|POST|PUT|PATCH|DELETE|*
  * Effect:        allow | deny  (deny-by-default — missing rule = deny)
- *
+ * 
  * Gateway call order:
  *   1. AuthN.ValidateToken  → get user_id, portal, tenant_id, token_id
  *   2. AuthZ.CheckAccess    → enforce Casbin rule → allow or deny

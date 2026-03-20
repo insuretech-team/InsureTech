@@ -190,28 +190,28 @@ type UnderwritingDecision struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id       string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                  // @inject_tag: gorm:"primaryKey;column:decision_id;not null"
-	QuoteId  string         `protobuf:"bytes,2,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty"`                                         // @inject_tag: gorm:"column:quote_id;not null"
-	Decision DecisionType   `protobuf:"varint,3,opt,name=decision,proto3,enum=insuretech.underwriting.entity.v1.DecisionType" json:"decision,omitempty"` // @inject_tag: gorm:"column:decision;not null;serializer:proto_enum"
-	Method   DecisionMethod `protobuf:"varint,4,opt,name=method,proto3,enum=insuretech.underwriting.entity.v1.DecisionMethod" json:"method,omitempty"`   // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
+	Id       string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:decision_id;not null"`
+	QuoteId  string         `protobuf:"bytes,2,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty" gorm:"column:quote_id;not null"`
+	Decision DecisionType   `protobuf:"varint,3,opt,name=decision,proto3,enum=insuretech.underwriting.entity.v1.DecisionType" json:"decision,omitempty" gorm:"column:decision;not null;serializer:proto_enum"`
+	Method   DecisionMethod `protobuf:"varint,4,opt,name=method,proto3,enum=insuretech.underwriting.entity.v1.DecisionMethod" json:"method,omitempty" gorm:"column:method;not null;serializer:proto_enum"`
 	// Risk assessment
-	RiskScore   string    `protobuf:"bytes,5,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty"`                                                   // @inject_tag: gorm:"column:risk_score"
-	RiskLevel   RiskLevel `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.underwriting.entity.v1.RiskLevel" json:"risk_level,omitempty"` // @inject_tag: gorm:"column:risk_level;serializer:proto_enum"
-	RiskFactors string    `protobuf:"bytes,7,opt,name=risk_factors,json=riskFactors,proto3" json:"risk_factors,omitempty"`                                             // @inject_tag: gorm:"column:risk_factors"
+	RiskScore   string    `protobuf:"bytes,5,opt,name=risk_score,json=riskScore,proto3" json:"risk_score,omitempty" gorm:"column:risk_score"`
+	RiskLevel   RiskLevel `protobuf:"varint,6,opt,name=risk_level,json=riskLevel,proto3,enum=insuretech.underwriting.entity.v1.RiskLevel" json:"risk_level,omitempty" gorm:"column:risk_level;serializer:proto_enum"`
+	RiskFactors string    `protobuf:"bytes,7,opt,name=risk_factors,json=riskFactors,proto3" json:"risk_factors,omitempty" gorm:"column:risk_factors"`
 	// Decision details
-	Reason     string `protobuf:"bytes,8,opt,name=reason,proto3" json:"reason,omitempty"`         // @inject_tag: gorm:"column:reason"
-	Conditions string `protobuf:"bytes,9,opt,name=conditions,proto3" json:"conditions,omitempty"` // @inject_tag: gorm:"column:conditions"
+	Reason     string `protobuf:"bytes,8,opt,name=reason,proto3" json:"reason,omitempty" gorm:"column:reason"`
+	Conditions string `protobuf:"bytes,9,opt,name=conditions,proto3" json:"conditions,omitempty" gorm:"column:conditions"`
 	// Premium adjustment
-	PremiumAdjusted  bool      `protobuf:"varint,10,opt,name=premium_adjusted,json=premiumAdjusted,proto3" json:"premium_adjusted,omitempty"` // @inject_tag: gorm:"column:premium_adjusted"
-	AdjustedPremium  *v1.Money `protobuf:"bytes,11,opt,name=adjusted_premium,json=adjustedPremium,proto3" json:"adjusted_premium,omitempty"`
-	AdjustmentReason string    `protobuf:"bytes,12,opt,name=adjustment_reason,json=adjustmentReason,proto3" json:"adjustment_reason,omitempty"` // @inject_tag: gorm:"column:adjustment_reason"
+	PremiumAdjusted  bool      `protobuf:"varint,10,opt,name=premium_adjusted,json=premiumAdjusted,proto3" json:"premium_adjusted,omitempty" gorm:"column:premium_adjusted"`
+	AdjustedPremium  *v1.Money `protobuf:"bytes,11,opt,name=adjusted_premium,json=adjustedPremium,proto3" json:"adjusted_premium,omitempty" gorm:"column:adjusted_premium"`
+	AdjustmentReason string    `protobuf:"bytes,12,opt,name=adjustment_reason,json=adjustmentReason,proto3" json:"adjustment_reason,omitempty" gorm:"column:adjustment_reason"`
 	// Underwriter info
-	UnderwriterId       string                 `protobuf:"bytes,13,opt,name=underwriter_id,json=underwriterId,proto3" json:"underwriter_id,omitempty"`                   // @inject_tag: gorm:"column:underwriter_id"
-	UnderwriterComments string                 `protobuf:"bytes,14,opt,name=underwriter_comments,json=underwriterComments,proto3" json:"underwriter_comments,omitempty"` // @inject_tag: gorm:"column:underwriter_comments"
-	DecidedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=decided_at,json=decidedAt,proto3" json:"decided_at,omitempty"`                               // @inject_tag: gorm:"column:decided_at;not null;serializer:proto_timestamp"
+	UnderwriterId       string                 `protobuf:"bytes,13,opt,name=underwriter_id,json=underwriterId,proto3" json:"underwriter_id,omitempty" gorm:"column:underwriter_id"`
+	UnderwriterComments string                 `protobuf:"bytes,14,opt,name=underwriter_comments,json=underwriterComments,proto3" json:"underwriter_comments,omitempty" gorm:"column:underwriter_comments"`
+	DecidedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=decided_at,json=decidedAt,proto3" json:"decided_at,omitempty" gorm:"column:decided_at;not null;serializer:proto_timestamp"`
 	// Approval validity
-	ValidUntil *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty"` // @inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"
-	AuditInfo  *v1.AuditInfo          `protobuf:"bytes,17,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`    // @inject_tag: gorm:"column:audit_info;not null"
+	ValidUntil *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=valid_until,json=validUntil,proto3" json:"valid_until,omitempty" gorm:"column:valid_until;serializer:proto_timestamp"`
+	AuditInfo  *v1.AuditInfo          `protobuf:"bytes,17,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *UnderwritingDecision) Reset() {

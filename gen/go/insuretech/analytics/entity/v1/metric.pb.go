@@ -140,14 +140,14 @@ type MetricDefinition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MetricId    string                 `protobuf:"bytes,1,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty"`                         // @inject_tag: gorm:"primaryKey;column:metric_id;not null"
-	MetricName  string                 `protobuf:"bytes,2,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty"`                   // @inject_tag: gorm:"column:metric_name;not null"
-	Description string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`                                   // @inject_tag: gorm:"column:description"
-	Type        MetricType             `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.MetricType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Unit        string                 `protobuf:"bytes,5,opt,name=unit,proto3" json:"unit,omitempty"`                                                 // @inject_tag: gorm:"column:unit"
-	Dimensions  []string               `protobuf:"bytes,6,rep,name=dimensions,proto3" json:"dimensions,omitempty"`
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	MetricId    string                 `protobuf:"bytes,1,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty" gorm:"primaryKey;column:metric_id;not null"`
+	MetricName  string                 `protobuf:"bytes,2,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty" gorm:"column:metric_name;not null"`
+	Description string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	Type        MetricType             `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.MetricType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Unit        string                 `protobuf:"bytes,5,opt,name=unit,proto3" json:"unit,omitempty" gorm:"column:unit"`
+	Dimensions  []string               `protobuf:"bytes,6,rep,name=dimensions,proto3" json:"dimensions,omitempty" gorm:"column:dimensions"`
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *MetricDefinition) Reset() {
@@ -245,14 +245,14 @@ type AggregatedMetric struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AggregatedMetricId string                 `protobuf:"bytes,1,opt,name=aggregated_metric_id,json=aggregatedMetricId,proto3" json:"aggregated_metric_id,omitempty"`              // @inject_tag: gorm:"primaryKey;column:aggregated_metric_id;not null"
-	MetricId           string                 `protobuf:"bytes,2,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty"`                                              // @inject_tag: gorm:"column:metric_id;not null"
-	MetricName         string                 `protobuf:"bytes,3,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty"`                                        // @inject_tag: gorm:"column:metric_name;not null"
-	Aggregation        MetricAggregation      `protobuf:"varint,4,opt,name=aggregation,proto3,enum=insuretech.analytics.entity.v1.MetricAggregation" json:"aggregation,omitempty"` // @inject_tag: gorm:"column:aggregation;not null;serializer:proto_enum"
-	Value              float64                `protobuf:"fixed64,5,opt,name=value,proto3" json:"value,omitempty"`                                                                  // @inject_tag: gorm:"column:value;not null"
-	Timestamp          *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                                            // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
-	Dimensions         map[string]string      `protobuf:"bytes,7,rep,name=dimensions,proto3" json:"dimensions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	TimeBucket         string                 `protobuf:"bytes,8,opt,name=time_bucket,json=timeBucket,proto3" json:"time_bucket,omitempty"` // @inject_tag: gorm:"column:time_bucket;not null"
+	AggregatedMetricId string                 `protobuf:"bytes,1,opt,name=aggregated_metric_id,json=aggregatedMetricId,proto3" json:"aggregated_metric_id,omitempty" gorm:"primaryKey;column:aggregated_metric_id;not null"`
+	MetricId           string                 `protobuf:"bytes,2,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty" gorm:"column:metric_id;not null"`
+	MetricName         string                 `protobuf:"bytes,3,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty" gorm:"column:metric_name;not null"`
+	Aggregation        MetricAggregation      `protobuf:"varint,4,opt,name=aggregation,proto3,enum=insuretech.analytics.entity.v1.MetricAggregation" json:"aggregation,omitempty" gorm:"column:aggregation;not null;serializer:proto_enum"`
+	Value              float64                `protobuf:"fixed64,5,opt,name=value,proto3" json:"value,omitempty" gorm:"column:value;not null"`
+	Timestamp          *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
+	Dimensions         map[string]string      `protobuf:"bytes,7,rep,name=dimensions,proto3" json:"dimensions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:dimensions"`
+	TimeBucket         string                 `protobuf:"bytes,8,opt,name=time_bucket,json=timeBucket,proto3" json:"time_bucket,omitempty" gorm:"column:time_bucket;not null"`
 }
 
 func (x *AggregatedMetric) Reset() {

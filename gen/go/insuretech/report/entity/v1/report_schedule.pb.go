@@ -86,17 +86,17 @@ type ReportSchedule struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                   // @inject_tag: gorm:"primaryKey;column:schedule_id;not null"
-	ReportDefinitionId string                 `protobuf:"bytes,2,opt,name=report_definition_id,json=reportDefinitionId,proto3" json:"report_definition_id,omitempty"`       // @inject_tag: gorm:"column:report_definition_id;not null"
-	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                                                               // @inject_tag: gorm:"column:name;not null"
-	Frequency          ScheduleFrequency      `protobuf:"varint,4,opt,name=frequency,proto3,enum=insuretech.report.entity.v1.ScheduleFrequency" json:"frequency,omitempty"` // @inject_tag: gorm:"column:frequency;not null;serializer:proto_enum"
-	CronExpression     string                 `protobuf:"bytes,5,opt,name=cron_expression,json=cronExpression,proto3" json:"cron_expression,omitempty"`                     // @inject_tag: gorm:"column:cron_expression"
-	Parameters         string                 `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty"`                                                   // @inject_tag: gorm:"column:parameters"
-	Recipients         []string               `protobuf:"bytes,7,rep,name=recipients,proto3" json:"recipients,omitempty"`
-	IsActive           bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`      // @inject_tag: gorm:"column:is_active"
-	NextRunAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=next_run_at,json=nextRunAt,proto3" json:"next_run_at,omitempty"`  // @inject_tag: gorm:"column:next_run_at;serializer:proto_timestamp"
-	LastRunAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_run_at,json=lastRunAt,proto3" json:"last_run_at,omitempty"` // @inject_tag: gorm:"column:last_run_at;serializer:proto_timestamp"
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`   // @inject_tag: gorm:"column:audit_info;not null"
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:schedule_id;not null"`
+	ReportDefinitionId string                 `protobuf:"bytes,2,opt,name=report_definition_id,json=reportDefinitionId,proto3" json:"report_definition_id,omitempty" gorm:"column:report_definition_id;not null"`
+	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	Frequency          ScheduleFrequency      `protobuf:"varint,4,opt,name=frequency,proto3,enum=insuretech.report.entity.v1.ScheduleFrequency" json:"frequency,omitempty" gorm:"column:frequency;not null;serializer:proto_enum"`
+	CronExpression     string                 `protobuf:"bytes,5,opt,name=cron_expression,json=cronExpression,proto3" json:"cron_expression,omitempty" gorm:"column:cron_expression"`
+	Parameters         string                 `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty" gorm:"column:parameters"`
+	Recipients         []string               `protobuf:"bytes,7,rep,name=recipients,proto3" json:"recipients,omitempty" gorm:"column:recipients"`
+	IsActive           bool                   `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
+	NextRunAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=next_run_at,json=nextRunAt,proto3" json:"next_run_at,omitempty" gorm:"column:next_run_at;serializer:proto_timestamp"`
+	LastRunAt          *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_run_at,json=lastRunAt,proto3" json:"last_run_at,omitempty" gorm:"column:last_run_at;serializer:proto_timestamp"`
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,11,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *ReportSchedule) Reset() {

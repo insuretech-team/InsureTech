@@ -87,23 +87,23 @@ type PurchaseOrder struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PurchaseOrderId     string                 `protobuf:"bytes,1,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty"`                                              // @inject_tag: gorm:"primaryKey;column:purchase_order_id;not null"
-	PurchaseOrderNumber string                 `protobuf:"bytes,2,opt,name=purchase_order_number,json=purchaseOrderNumber,proto3" json:"purchase_order_number,omitempty"`                                  // @inject_tag: gorm:"column:purchase_order_number;not null"
-	BusinessId          string                 `protobuf:"bytes,3,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`                                                               // @inject_tag: gorm:"column:business_id;not null"
-	DepartmentId        string                 `protobuf:"bytes,4,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty"`                                                         // @inject_tag: gorm:"column:department_id;not null"
-	ProductId           string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                                                                  // @inject_tag: gorm:"column:product_id;not null"
-	PlanId              string                 `protobuf:"bytes,6,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`                                                                           // @inject_tag: gorm:"column:plan_id;not null"
-	InsuranceCategory   v1.InsuranceType       `protobuf:"varint,7,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty"` // @inject_tag: gorm:"column:insurance_category;not null"
-	EmployeeCount       int32                  `protobuf:"varint,8,opt,name=employee_count,json=employeeCount,proto3" json:"employee_count,omitempty"`                                                     // @inject_tag: gorm:"column:employee_count;not null"
-	NumberOfDependents  int32                  `protobuf:"varint,9,opt,name=number_of_dependents,json=numberOfDependents,proto3" json:"number_of_dependents,omitempty"`                                    // @inject_tag: gorm:"column:number_of_dependents;not null"
-	CoverageAmount      *v1.Money              `protobuf:"bytes,10,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty"`
-	EstimatedPremium    *v1.Money              `protobuf:"bytes,11,opt,name=estimated_premium,json=estimatedPremium,proto3" json:"estimated_premium,omitempty"`
-	Status              PurchaseOrderStatus    `protobuf:"varint,12,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.PurchaseOrderStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	RequestedBy         string                 `protobuf:"bytes,13,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty"`                       // @inject_tag: gorm:"column:requested_by"
-	Notes               string                 `protobuf:"bytes,14,opt,name=notes,proto3" json:"notes,omitempty"`                                                      // @inject_tag: gorm:"column:notes"
-	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                             // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                             // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	DeletedAt           *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                             // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	PurchaseOrderId     string                 `protobuf:"bytes,1,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty" gorm:"primaryKey;column:purchase_order_id;not null"`
+	PurchaseOrderNumber string                 `protobuf:"bytes,2,opt,name=purchase_order_number,json=purchaseOrderNumber,proto3" json:"purchase_order_number,omitempty" gorm:"column:purchase_order_number;not null"`
+	BusinessId          string                 `protobuf:"bytes,3,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id;not null"`
+	DepartmentId        string                 `protobuf:"bytes,4,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty" gorm:"column:department_id;not null"`
+	ProductId           string                 `protobuf:"bytes,5,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
+	PlanId              string                 `protobuf:"bytes,6,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty" gorm:"column:plan_id;not null"`
+	InsuranceCategory   v1.InsuranceType       `protobuf:"varint,7,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty" gorm:"column:insurance_category;not null;serializer:proto_enum"`
+	EmployeeCount       int32                  `protobuf:"varint,8,opt,name=employee_count,json=employeeCount,proto3" json:"employee_count,omitempty" gorm:"column:employee_count;not null"`
+	NumberOfDependents  int32                  `protobuf:"varint,9,opt,name=number_of_dependents,json=numberOfDependents,proto3" json:"number_of_dependents,omitempty" gorm:"column:number_of_dependents;not null"`
+	CoverageAmount      *v1.Money              `protobuf:"bytes,10,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty" gorm:"column:coverage_amount"`
+	EstimatedPremium    *v1.Money              `protobuf:"bytes,11,opt,name=estimated_premium,json=estimatedPremium,proto3" json:"estimated_premium,omitempty" gorm:"column:estimated_premium"`
+	Status              PurchaseOrderStatus    `protobuf:"varint,12,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.PurchaseOrderStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	RequestedBy         string                 `protobuf:"bytes,13,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty" gorm:"column:requested_by"`
+	Notes               string                 `protobuf:"bytes,14,opt,name=notes,proto3" json:"notes,omitempty" gorm:"column:notes"`
+	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeletedAt           *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *PurchaseOrder) Reset() {

@@ -15,7 +15,7 @@ public class Claim
     public Guid CustomerId { get; set; }
     public ClaimStatus Status { get; set; }
     public ClaimType Type { get; set; }
-    
+
     // Money fields (paisa)
     public long ClaimedAmount { get; set; }
     public string ClaimedCurrency { get; set; } = "BDT";
@@ -23,27 +23,73 @@ public class Claim
     public string ApprovedCurrency { get; set; } = "BDT";
     public long SettledAmount { get; set; }
     public string SettledCurrency { get; set; } = "BDT";
-    
+
     public DateTime IncidentDate { get; set; }
     public string IncidentDescription { get; set; } = string.Empty;
     public string? PlaceOfIncident { get; set; }
-    
+
     public DateTime SubmittedAt { get; set; }
     public DateTime? ApprovedAt { get; set; }
     public DateTime? SettledAt { get; set; }
     public string? RejectionReason { get; set; }
-    
+
     public ClaimProcessingType ProcessingType { get; set; }
-    public double FraudScore { get; set; }
-    public string? FraudCheckData { get; set; } // JSONB
-    
+
+    // --- Proto-aligned fields (FR-100, FR-101) ---
+
+    /// <summary>
+    /// Deductible amount in paisa (BDT minor units). Proto: deductible_amount
+    /// </summary>
+    public long DeductibleAmount { get; set; }
+    public string DeductibleCurrency { get; set; } = "BDT";
+
+    /// <summary>
+    /// Co-payment amount in paisa (BDT minor units). Proto: co_pay_amount
+    /// </summary>
+    public long CoPayAmount { get; set; }
+    public string CoPayCurrency { get; set; } = "BDT";
+
+    /// <summary>
+    /// Encrypted bank details or ref to linked bank for payout. Proto: bank_details_for_payout
+    /// PII — must be encrypted at rest (AES-256).
+    /// </summary>
+    public string? BankDetailsForPayout { get; set; }
+
+    /// <summary>
+    /// Whether the claimant can appeal a rejected claim. Proto: appeal_option_available
+    /// </summary>
+    public bool AppealOptionAvailable { get; set; }
+
+    /// <summary>
+    /// JSON array of in-app messages related to this claim. Proto: in_app_messages (JSONB)
+    /// </summary>
+    public string? InAppMessages { get; set; }
+
+    /// <summary>
+    /// Internal notes from claim processor. Proto: processor_notes
+    /// </summary>
+    public string? ProcessorNotes { get; set; }
+
+    // --- Fraud check reference ---
+    public Guid? FraudCheckId { get; set; }
+    public FraudCheckResult? FraudCheck { get; set; }
+
+    // --- Navigation properties ---
     public List<ClaimApproval> Approvals { get; set; } = new();
     public List<ClaimDocument> Documents { get; set; } = new();
-    
+
     // Audit
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
+    public DateTime? DeletedAt { get; set; }
     public bool IsDeleted { get; set; }
+
+    // Money convenience accessors
+    public Money ClaimedMoney => new(ClaimedAmount, ClaimedCurrency);
+    public Money ApprovedMoney => new(ApprovedAmount, ApprovedCurrency);
+    public Money SettledMoney => new(SettledAmount, SettledCurrency);
+    public Money DeductibleMoney => new(DeductibleAmount, DeductibleCurrency);
+    public Money CoPayMoney => new(CoPayAmount, CoPayCurrency);
 
     // Constants for approval matrix based on BDT amounts (converted to paisa)
     private const long L1_THRESHOLD = 1_000_000;      // 10,000 BDT (Threshold for L2)
@@ -73,7 +119,7 @@ public class Claim
             ApprovedAt = DateTime.UtcNow,
             CreatedAt = DateTime.UtcNow
         };
-        
+
         Approvals.Add(approval);
 
         if (decision == ApprovalDecision.Approved)
@@ -95,9 +141,11 @@ public class Claim
             Status = ClaimStatus.Rejected;
             RejectionReason = notes;
         }
-        else if (decision == ApprovalDecision.Escalated)
+        else if (decision == ApprovalDecision.Escalated || decision == ApprovalDecision.NeedsMoreInfo)
         {
-            Status = ClaimStatus.UnderReview;
+            Status = decision == ApprovalDecision.NeedsMoreInfo
+                ? ClaimStatus.PendingDocuments
+                : ClaimStatus.UnderReview;
         }
 
         UpdatedAt = DateTime.UtcNow;

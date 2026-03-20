@@ -138,27 +138,27 @@ type Insurer struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                             // @inject_tag: gorm:"primaryKey;column:insurer_id;not null"
-	Code               string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                                         // @inject_tag: gorm:"column:code;not null"
-	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                                                         // @inject_tag: gorm:"column:name;not null"
-	NameBn             string                 `protobuf:"bytes,4,opt,name=name_bn,json=nameBn,proto3" json:"name_bn,omitempty"`                                       // @inject_tag: gorm:"column:name_bn"
-	Type               InsurerType            `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.insurer.entity.v1.InsurerType" json:"type,omitempty"`          // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Status             InsurerStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.insurer.entity.v1.InsurerStatus" json:"status,omitempty"`    // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	TradeLicenseNumber string                 `protobuf:"bytes,7,opt,name=trade_license_number,json=tradeLicenseNumber,proto3" json:"trade_license_number,omitempty"` // @inject_tag: gorm:"column:trade_license_number"
-	TinNumber          string                 `protobuf:"bytes,8,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty"`                              // @inject_tag: gorm:"column:tin_number"
-	IdraLicenseNumber  string                 `protobuf:"bytes,9,opt,name=idra_license_number,json=idraLicenseNumber,proto3" json:"idra_license_number,omitempty"`    // @inject_tag: gorm:"column:idra_license_number"
-	IdraLicenseExpiry  *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=idra_license_expiry,json=idraLicenseExpiry,proto3" json:"idra_license_expiry,omitempty"`   // @inject_tag: gorm:"column:idra_license_expiry;serializer:proto_timestamp"
-	ContactInfo        *v1.ContactInfo        `protobuf:"bytes,11,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:insurer_id;not null"`
+	Code               string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null"`
+	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	NameBn             string                 `protobuf:"bytes,4,opt,name=name_bn,json=nameBn,proto3" json:"name_bn,omitempty" gorm:"column:name_bn"`
+	Type               InsurerType            `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.insurer.entity.v1.InsurerType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Status             InsurerStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.insurer.entity.v1.InsurerStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	TradeLicenseNumber string                 `protobuf:"bytes,7,opt,name=trade_license_number,json=tradeLicenseNumber,proto3" json:"trade_license_number,omitempty" gorm:"column:trade_license_number"`
+	TinNumber          string                 `protobuf:"bytes,8,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty" gorm:"column:tin_number"`
+	IdraLicenseNumber  string                 `protobuf:"bytes,9,opt,name=idra_license_number,json=idraLicenseNumber,proto3" json:"idra_license_number,omitempty" gorm:"column:idra_license_number"`
+	IdraLicenseExpiry  *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=idra_license_expiry,json=idraLicenseExpiry,proto3" json:"idra_license_expiry,omitempty" gorm:"column:idra_license_expiry;serializer:proto_timestamp"`
+	ContactInfo        *v1.ContactInfo        `protobuf:"bytes,11,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty" gorm:"column:contact_info"`
 	// @inject_tag: gorm:"column:contact_info;not null"
-	RegisteredAddress *v1.Address `protobuf:"bytes,12,opt,name=registered_address,json=registeredAddress,proto3" json:"registered_address,omitempty"`
+	RegisteredAddress *v1.Address `protobuf:"bytes,12,opt,name=registered_address,json=registeredAddress,proto3" json:"registered_address,omitempty" gorm:"column:contact_info;not null"`
 	// @inject_tag: gorm:"column:registered_address;not null"
-	HeadOfficeAddress *v1.Address `protobuf:"bytes,13,opt,name=head_office_address,json=headOfficeAddress,proto3" json:"head_office_address,omitempty"` // @inject_tag: gorm:"column:head_office_address;not null"
-	LogoUrl           string      `protobuf:"bytes,14,opt,name=logo_url,json=logoUrl,proto3" json:"logo_url,omitempty"`                                 // @inject_tag: gorm:"column:logo_url"
-	WebsiteUrl        string      `protobuf:"bytes,15,opt,name=website_url,json=websiteUrl,proto3" json:"website_url,omitempty"`                        // @inject_tag: gorm:"column:website_url"
+	HeadOfficeAddress *v1.Address `protobuf:"bytes,13,opt,name=head_office_address,json=headOfficeAddress,proto3" json:"head_office_address,omitempty" gorm:"column:head_office_address;not null"`
+	LogoUrl           string      `protobuf:"bytes,14,opt,name=logo_url,json=logoUrl,proto3" json:"logo_url,omitempty" gorm:"column:logo_url"`
+	WebsiteUrl        string      `protobuf:"bytes,15,opt,name=website_url,json=websiteUrl,proto3" json:"website_url,omitempty" gorm:"column:website_url"`
 	// Financial strength
-	FinancialRating string        `protobuf:"bytes,16,opt,name=financial_rating,json=financialRating,proto3" json:"financial_rating,omitempty"` // @inject_tag: gorm:"column:financial_rating"
-	PaidUpCapital   *v1.Money     `protobuf:"bytes,17,opt,name=paid_up_capital,json=paidUpCapital,proto3" json:"paid_up_capital,omitempty"`
-	AuditInfo       *v1.AuditInfo `protobuf:"bytes,18,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"` // @inject_tag: gorm:"column:audit_info;not null"
+	FinancialRating string        `protobuf:"bytes,16,opt,name=financial_rating,json=financialRating,proto3" json:"financial_rating,omitempty" gorm:"column:financial_rating"`
+	PaidUpCapital   *v1.Money     `protobuf:"bytes,17,opt,name=paid_up_capital,json=paidUpCapital,proto3" json:"paid_up_capital,omitempty" gorm:"column:paid_up_capital"`
+	AuditInfo       *v1.AuditInfo `protobuf:"bytes,18,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *Insurer) Reset() {

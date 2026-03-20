@@ -83,24 +83,24 @@ type CommissionConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                            // @inject_tag: gorm:"primaryKey;column:config_id;not null"
-	InsurerProductId string       `protobuf:"bytes,2,opt,name=insurer_product_id,json=insurerProductId,proto3" json:"insurer_product_id,omitempty"`                                      // @inject_tag: gorm:"column:insurer_product_id;not null"
-	RevenueModel     RevenueModel `protobuf:"varint,3,opt,name=revenue_model,json=revenueModel,proto3,enum=insuretech.commission.entity.v1.RevenueModel" json:"revenue_model,omitempty"` // @inject_tag: gorm:"column:revenue_model;not null;serializer:proto_enum"
+	Id               string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:config_id;not null"`
+	InsurerProductId string       `protobuf:"bytes,2,opt,name=insurer_product_id,json=insurerProductId,proto3" json:"insurer_product_id,omitempty" gorm:"column:insurer_product_id;not null"`
+	RevenueModel     RevenueModel `protobuf:"varint,3,opt,name=revenue_model,json=revenueModel,proto3,enum=insuretech.commission.entity.v1.RevenueModel" json:"revenue_model,omitempty" gorm:"column:revenue_model;not null;serializer:proto_enum"`
 	// Acquisition commission (first sale)
-	AcquisitionRate    string    `protobuf:"bytes,4,opt,name=acquisition_rate,json=acquisitionRate,proto3" json:"acquisition_rate,omitempty"` // @inject_tag: gorm:"column:acquisition_rate"
-	AcquisitionFlatFee *v1.Money `protobuf:"bytes,5,opt,name=acquisition_flat_fee,json=acquisitionFlatFee,proto3" json:"acquisition_flat_fee,omitempty"`
+	AcquisitionRate    string    `protobuf:"bytes,4,opt,name=acquisition_rate,json=acquisitionRate,proto3" json:"acquisition_rate,omitempty" gorm:"column:acquisition_rate"`
+	AcquisitionFlatFee *v1.Money `protobuf:"bytes,5,opt,name=acquisition_flat_fee,json=acquisitionFlatFee,proto3" json:"acquisition_flat_fee,omitempty" gorm:"column:acquisition_flat_fee"`
 	// Renewal commission (repeat sale)
-	RenewalRate    string    `protobuf:"bytes,6,opt,name=renewal_rate,json=renewalRate,proto3" json:"renewal_rate,omitempty"` // @inject_tag: gorm:"column:renewal_rate"
-	RenewalFlatFee *v1.Money `protobuf:"bytes,7,opt,name=renewal_flat_fee,json=renewalFlatFee,proto3" json:"renewal_flat_fee,omitempty"`
+	RenewalRate    string    `protobuf:"bytes,6,opt,name=renewal_rate,json=renewalRate,proto3" json:"renewal_rate,omitempty" gorm:"column:renewal_rate"`
+	RenewalFlatFee *v1.Money `protobuf:"bytes,7,opt,name=renewal_flat_fee,json=renewalFlatFee,proto3" json:"renewal_flat_fee,omitempty" gorm:"column:renewal_flat_fee"`
 	// Claims assistance commission
-	ClaimsAssistanceRate string `protobuf:"bytes,8,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty"` // @inject_tag: gorm:"column:claims_assistance_rate"
+	ClaimsAssistanceRate string `protobuf:"bytes,8,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty" gorm:"column:claims_assistance_rate"`
 	// Hierarchical splits (for agent networks)
-	AgentSplitConfig string `protobuf:"bytes,9,opt,name=agent_split_config,json=agentSplitConfig,proto3" json:"agent_split_config,omitempty"` // @inject_tag: gorm:"column:agent_split_config"
+	AgentSplitConfig string `protobuf:"bytes,9,opt,name=agent_split_config,json=agentSplitConfig,proto3" json:"agent_split_config,omitempty" gorm:"column:agent_split_config"`
 	// Performance bonuses
-	PerformanceTiers string                 `protobuf:"bytes,10,opt,name=performance_tiers,json=performanceTiers,proto3" json:"performance_tiers,omitempty"` // @inject_tag: gorm:"column:performance_tiers"
-	EffectiveFrom    *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"`          // @inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"
-	EffectiveTo      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty"`                // @inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"
-	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                      // @inject_tag: gorm:"column:audit_info;not null"
+	PerformanceTiers string                 `protobuf:"bytes,10,opt,name=performance_tiers,json=performanceTiers,proto3" json:"performance_tiers,omitempty" gorm:"column:performance_tiers"`
+	EffectiveFrom    *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty" gorm:"column:effective_from;not null;serializer:proto_timestamp"`
+	EffectiveTo      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty" gorm:"column:effective_to;serializer:proto_timestamp"`
+	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *CommissionConfig) Reset() {

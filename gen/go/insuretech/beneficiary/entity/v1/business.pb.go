@@ -89,38 +89,38 @@ type BusinessBeneficiary struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                     string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                             // @inject_tag: gorm:"primaryKey;column:beneficiary_id;not null"
-	BeneficiaryId          string                 `protobuf:"bytes,2,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"`                  // @inject_tag: gorm:"column:parent_beneficiary_id;not null"
-	BusinessName           string                 `protobuf:"bytes,3,opt,name=business_name,json=businessName,proto3" json:"business_name,omitempty"`                     // @inject_tag: gorm:"column:business_name;not null"
-	BusinessNameBn         string                 `protobuf:"bytes,4,opt,name=business_name_bn,json=businessNameBn,proto3" json:"business_name_bn,omitempty"`             // @inject_tag: gorm:"column:business_name_bn"
-	TradeLicenseNumber     string                 `protobuf:"bytes,5,opt,name=trade_license_number,json=tradeLicenseNumber,proto3" json:"trade_license_number,omitempty"` // @inject_tag: gorm:"column:trade_license_number;not null"
-	TradeLicenseIssueDate  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=trade_license_issue_date,json=tradeLicenseIssueDate,proto3" json:"trade_license_issue_date,omitempty"`
-	TradeLicenseExpiryDate *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=trade_license_expiry_date,json=tradeLicenseExpiryDate,proto3" json:"trade_license_expiry_date,omitempty"`
-	TinNumber              string                 `protobuf:"bytes,8,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty"`                                                               // @inject_tag: gorm:"column:tin_number;not null"
-	BinNumber              string                 `protobuf:"bytes,9,opt,name=bin_number,json=binNumber,proto3" json:"bin_number,omitempty"`                                                               // @inject_tag: gorm:"column:bin_number"
-	BusinessType           BusinessType           `protobuf:"varint,10,opt,name=business_type,json=businessType,proto3,enum=insuretech.beneficiary.entity.v1.BusinessType" json:"business_type,omitempty"` // @inject_tag: gorm:"column:business_type;not null;serializer:proto_enum"
-	IndustrySector         string                 `protobuf:"bytes,11,opt,name=industry_sector,json=industrySector,proto3" json:"industry_sector,omitempty"`                                               // @inject_tag: gorm:"column:industry_sector"
-	EmployeeCount          int32                  `protobuf:"varint,12,opt,name=employee_count,json=employeeCount,proto3" json:"employee_count,omitempty"`                                                 // @inject_tag: gorm:"column:employee_count"
-	IncorporationDate      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=incorporation_date,json=incorporationDate,proto3" json:"incorporation_date,omitempty"`                                      // @inject_tag: gorm:"column:incorporation_date;serializer:proto_timestamp"
-	ContactInfo            *v1.ContactInfo        `protobuf:"bytes,14,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty"`
+	Id                     string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:beneficiary_id;not null"`
+	BeneficiaryId          string                 `protobuf:"bytes,2,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty" gorm:"column:parent_beneficiary_id;not null"`
+	BusinessName           string                 `protobuf:"bytes,3,opt,name=business_name,json=businessName,proto3" json:"business_name,omitempty" gorm:"column:business_name;not null"`
+	BusinessNameBn         string                 `protobuf:"bytes,4,opt,name=business_name_bn,json=businessNameBn,proto3" json:"business_name_bn,omitempty" gorm:"column:business_name_bn"`
+	TradeLicenseNumber     string                 `protobuf:"bytes,5,opt,name=trade_license_number,json=tradeLicenseNumber,proto3" json:"trade_license_number,omitempty" gorm:"column:trade_license_number;not null"`
+	TradeLicenseIssueDate  *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=trade_license_issue_date,json=tradeLicenseIssueDate,proto3" json:"trade_license_issue_date,omitempty" gorm:"column:trade_license_issue_date;serializer:proto_timestamp"`
+	TradeLicenseExpiryDate *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=trade_license_expiry_date,json=tradeLicenseExpiryDate,proto3" json:"trade_license_expiry_date,omitempty" gorm:"column:trade_license_expiry_date;serializer:proto_timestamp"`
+	TinNumber              string                 `protobuf:"bytes,8,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty" gorm:"column:tin_number;not null"`
+	BinNumber              string                 `protobuf:"bytes,9,opt,name=bin_number,json=binNumber,proto3" json:"bin_number,omitempty" gorm:"column:bin_number"`
+	BusinessType           BusinessType           `protobuf:"varint,10,opt,name=business_type,json=businessType,proto3,enum=insuretech.beneficiary.entity.v1.BusinessType" json:"business_type,omitempty" gorm:"column:business_type;not null;serializer:proto_enum"`
+	IndustrySector         string                 `protobuf:"bytes,11,opt,name=industry_sector,json=industrySector,proto3" json:"industry_sector,omitempty" gorm:"column:industry_sector"`
+	EmployeeCount          int32                  `protobuf:"varint,12,opt,name=employee_count,json=employeeCount,proto3" json:"employee_count,omitempty" gorm:"column:employee_count"`
+	IncorporationDate      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=incorporation_date,json=incorporationDate,proto3" json:"incorporation_date,omitempty" gorm:"column:incorporation_date;serializer:proto_timestamp"`
+	ContactInfo            *v1.ContactInfo        `protobuf:"bytes,14,opt,name=contact_info,json=contactInfo,proto3" json:"contact_info,omitempty" gorm:"column:contact_info"`
 	// @inject_tag: gorm:"column:contact_info;not null"
-	RegisteredAddress *v1.Address `protobuf:"bytes,15,opt,name=registered_address,json=registeredAddress,proto3" json:"registered_address,omitempty"`
+	RegisteredAddress *v1.Address `protobuf:"bytes,15,opt,name=registered_address,json=registeredAddress,proto3" json:"registered_address,omitempty" gorm:"column:contact_info;not null"`
 	// @inject_tag: gorm:"column:registered_address;not null"
-	BusinessAddress *v1.Address `protobuf:"bytes,16,opt,name=business_address,json=businessAddress,proto3" json:"business_address,omitempty"` // @inject_tag: gorm:"column:business_address;not null"
+	BusinessAddress *v1.Address `protobuf:"bytes,16,opt,name=business_address,json=businessAddress,proto3" json:"business_address,omitempty" gorm:"column:business_address;not null"`
 	// Focal person (authorized signatory)
-	FocalPersonName        string          `protobuf:"bytes,17,opt,name=focal_person_name,json=focalPersonName,proto3" json:"focal_person_name,omitempty"`                      // @inject_tag: gorm:"column:focal_person_name;not null"
-	FocalPersonDesignation string          `protobuf:"bytes,18,opt,name=focal_person_designation,json=focalPersonDesignation,proto3" json:"focal_person_designation,omitempty"` // @inject_tag: gorm:"column:focal_person_designation"
-	FocalPersonNid         string          `protobuf:"bytes,19,opt,name=focal_person_nid,json=focalPersonNid,proto3" json:"focal_person_nid,omitempty"`                         // @inject_tag: gorm:"column:focal_person_nid"
-	FocalPersonContact     *v1.ContactInfo `protobuf:"bytes,20,opt,name=focal_person_contact,json=focalPersonContact,proto3" json:"focal_person_contact,omitempty"`             // @inject_tag: gorm:"column:focal_person_contact;not null"
-	AuditInfo              *v1.AuditInfo   `protobuf:"bytes,21,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                          // @inject_tag: gorm:"column:audit_info;not null"
-	RegistrationNumber     string          `protobuf:"bytes,22,opt,name=registration_number,json=registrationNumber,proto3" json:"registration_number,omitempty"`               // @inject_tag: gorm:"column:registration_number"
-	TaxId                  string          `protobuf:"bytes,23,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty"`                                                      // @inject_tag: gorm:"column:tax_id"
-	PrimaryContact         *PrimaryContact `protobuf:"bytes,24,opt,name=primary_contact,json=primaryContact,proto3" json:"primary_contact,omitempty"`                           // @inject_tag: gorm:"column:primary_contact;serializer:proto_enum"
+	FocalPersonName        string          `protobuf:"bytes,17,opt,name=focal_person_name,json=focalPersonName,proto3" json:"focal_person_name,omitempty" gorm:"column:focal_person_name;not null"`
+	FocalPersonDesignation string          `protobuf:"bytes,18,opt,name=focal_person_designation,json=focalPersonDesignation,proto3" json:"focal_person_designation,omitempty" gorm:"column:focal_person_designation"`
+	FocalPersonNid         string          `protobuf:"bytes,19,opt,name=focal_person_nid,json=focalPersonNid,proto3" json:"focal_person_nid,omitempty" gorm:"column:focal_person_nid"`
+	FocalPersonContact     *v1.ContactInfo `protobuf:"bytes,20,opt,name=focal_person_contact,json=focalPersonContact,proto3" json:"focal_person_contact,omitempty" gorm:"column:focal_person_contact;not null"`
+	AuditInfo              *v1.AuditInfo   `protobuf:"bytes,21,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	RegistrationNumber     string          `protobuf:"bytes,22,opt,name=registration_number,json=registrationNumber,proto3" json:"registration_number,omitempty" gorm:"column:registration_number"`
+	TaxId                  string          `protobuf:"bytes,23,opt,name=tax_id,json=taxId,proto3" json:"tax_id,omitempty" gorm:"column:tax_id"`
+	PrimaryContact         *PrimaryContact `protobuf:"bytes,24,opt,name=primary_contact,json=primaryContact,proto3" json:"primary_contact,omitempty" gorm:"column:primary_contact;serializer:proto_enum"`
 	// Dashboard metrics (cached)
-	TotalEmployeesCovered int32     `protobuf:"varint,25,opt,name=total_employees_covered,json=totalEmployeesCovered,proto3" json:"total_employees_covered,omitempty"` // @inject_tag: gorm:"column:total_employees_covered;not null"
-	ActivePoliciesCount   int32     `protobuf:"varint,26,opt,name=active_policies_count,json=activePoliciesCount,proto3" json:"active_policies_count,omitempty"`       // @inject_tag: gorm:"column:active_policies_count;not null"
-	TotalPremiumAmount    *v1.Money `protobuf:"bytes,27,opt,name=total_premium_amount,json=totalPremiumAmount,proto3" json:"total_premium_amount,omitempty"`           // @inject_tag: gorm:"column:total_premium_amount;not null"
-	PendingActionsCount   int32     `protobuf:"varint,28,opt,name=pending_actions_count,json=pendingActionsCount,proto3" json:"pending_actions_count,omitempty"`       // @inject_tag: gorm:"column:pending_actions_count;not null"
+	TotalEmployeesCovered int32     `protobuf:"varint,25,opt,name=total_employees_covered,json=totalEmployeesCovered,proto3" json:"total_employees_covered,omitempty" gorm:"column:total_employees_covered;not null"`
+	ActivePoliciesCount   int32     `protobuf:"varint,26,opt,name=active_policies_count,json=activePoliciesCount,proto3" json:"active_policies_count,omitempty" gorm:"column:active_policies_count;not null"`
+	TotalPremiumAmount    *v1.Money `protobuf:"bytes,27,opt,name=total_premium_amount,json=totalPremiumAmount,proto3" json:"total_premium_amount,omitempty" gorm:"column:total_premium_amount;not null"`
+	PendingActionsCount   int32     `protobuf:"varint,28,opt,name=pending_actions_count,json=pendingActionsCount,proto3" json:"pending_actions_count,omitempty" gorm:"column:pending_actions_count;not null"`
 }
 
 func (x *BusinessBeneficiary) Reset() {
@@ -357,10 +357,10 @@ type PrimaryContact struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Name       string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
-	Email      string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
-	Phone      string `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty"`
-	Department string `protobuf:"bytes,4,opt,name=department,proto3" json:"department,omitempty"`
+	Name       string `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name"`
+	Email      string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty" gorm:"column:email"`
+	Phone      string `protobuf:"bytes,3,opt,name=phone,proto3" json:"phone,omitempty" gorm:"column:phone"`
+	Department string `protobuf:"bytes,4,opt,name=department,proto3" json:"department,omitempty" gorm:"column:department"`
 }
 
 func (x *PrimaryContact) Reset() {

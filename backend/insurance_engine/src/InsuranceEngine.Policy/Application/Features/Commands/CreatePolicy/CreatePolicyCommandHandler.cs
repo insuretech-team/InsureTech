@@ -94,7 +94,8 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
         {
             foreach (var n in request.Nominees)
             {
-                var addResult = policy.AddNominee(n.BeneficiaryId, n.Relationship, n.SharePercentage);
+                var addResult = policy.AddNominee(n.BeneficiaryId, n.FullName, n.Relationship, n.SharePercentage,
+                    n.DateOfBirth, n.NidNumber, n.PhoneNumber, n.NomineeDobText);
                 if (addResult.IsFailure)
                     return Result<CreatePolicyResponse>.Fail(addResult.Error!);
             }

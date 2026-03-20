@@ -138,16 +138,16 @@ type AuditEvent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                            // @inject_tag: gorm:"primaryKey;column:event_id;not null"
-	Category    EventCategory          `protobuf:"varint,2,opt,name=category,proto3,enum=insuretech.audit.entity.v1.EventCategory" json:"category,omitempty"` // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
-	EventType   string                 `protobuf:"bytes,3,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty"`                             // @inject_tag: gorm:"column:event_type;not null"
-	Severity    EventSeverity          `protobuf:"varint,4,opt,name=severity,proto3,enum=insuretech.audit.entity.v1.EventSeverity" json:"severity,omitempty"` // @inject_tag: gorm:"column:severity;not null;serializer:proto_enum"
-	Description string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`                                          // @inject_tag: gorm:"column:description;not null"
-	UserId      string                 `protobuf:"bytes,6,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                      // @inject_tag: gorm:"column:user_id"
-	EntityType  string                 `protobuf:"bytes,7,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                          // @inject_tag: gorm:"column:entity_type"
-	EntityId    string                 `protobuf:"bytes,8,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                                // @inject_tag: gorm:"column:entity_id"
-	Metadata    string                 `protobuf:"bytes,9,opt,name=metadata,proto3" json:"metadata,omitempty"`                                                // @inject_tag: gorm:"column:metadata"
-	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                             // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
+	Id          string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:event_id;not null"`
+	Category    EventCategory          `protobuf:"varint,2,opt,name=category,proto3,enum=insuretech.audit.entity.v1.EventCategory" json:"category,omitempty" gorm:"column:category;not null;serializer:proto_enum"`
+	EventType   string                 `protobuf:"bytes,3,opt,name=event_type,json=eventType,proto3" json:"event_type,omitempty" gorm:"column:event_type;not null"`
+	Severity    EventSeverity          `protobuf:"varint,4,opt,name=severity,proto3,enum=insuretech.audit.entity.v1.EventSeverity" json:"severity,omitempty" gorm:"column:severity;not null;serializer:proto_enum"`
+	Description string                 `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description;not null"`
+	UserId      string                 `protobuf:"bytes,6,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
+	EntityType  string                 `protobuf:"bytes,7,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type"`
+	EntityId    string                 `protobuf:"bytes,8,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id"`
+	Metadata    string                 `protobuf:"bytes,9,opt,name=metadata,proto3" json:"metadata,omitempty" gorm:"column:metadata"`
+	Timestamp   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
 }
 
 func (x *AuditEvent) Reset() {

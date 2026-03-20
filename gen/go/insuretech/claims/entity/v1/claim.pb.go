@@ -270,40 +270,40 @@ type Claim struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ClaimId             string                 `protobuf:"bytes,1,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:claim_id;not null"
-	ClaimNumber         string                 `protobuf:"bytes,2,opt,name=claim_number,json=claimNumber,proto3" json:"claim_number,omitempty"`
-	PolicyId            string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                           // @inject_tag: gorm:"column:policy_id;not null"
-	CustomerId          string                 `protobuf:"bytes,4,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                     // @inject_tag: gorm:"column:customer_id;not null"
-	Status              ClaimStatus            `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.claims.entity.v1.ClaimStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	Type                ClaimType              `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.claims.entity.v1.ClaimType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	ClaimedAmount       *v1.Money              `protobuf:"bytes,7,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty"`            // @inject_tag: gorm:"column:claimed_amount;not null"
-	ApprovedAmount      *v1.Money              `protobuf:"bytes,8,opt,name=approved_amount,json=approvedAmount,proto3" json:"approved_amount,omitempty"`         // @inject_tag: gorm:"column:approved_amount"
-	SettledAmount       *v1.Money              `protobuf:"bytes,9,opt,name=settled_amount,json=settledAmount,proto3" json:"settled_amount,omitempty"`            // @inject_tag: gorm:"column:settled_amount"
-	IncidentDate        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=incident_date,json=incidentDate,proto3" json:"incident_date,omitempty"`
-	IncidentDescription string                 `protobuf:"bytes,11,opt,name=incident_description,json=incidentDescription,proto3" json:"incident_description,omitempty"` // @inject_tag: gorm:"column:incident_description;not null"
-	SubmittedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=submitted_at,json=submittedAt,proto3" json:"submitted_at,omitempty"`                         // @inject_tag: gorm:"column:submitted_at;not null;serializer:proto_timestamp"
-	ApprovedAt          *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty"`                            // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
-	SettledAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=settled_at,json=settledAt,proto3" json:"settled_at,omitempty"`                               // @inject_tag: gorm:"column:settled_at;serializer:proto_timestamp"
-	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                               // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                               // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	RejectionReason     string                 `protobuf:"bytes,17,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty"`             // @inject_tag: gorm:"column:rejection_reason"
-	DeletedAt           *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                               // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	ClaimId             string                 `protobuf:"bytes,1,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty" gorm:"primaryKey;column:claim_id;not null"`
+	ClaimNumber         string                 `protobuf:"bytes,2,opt,name=claim_number,json=claimNumber,proto3" json:"claim_number,omitempty" gorm:"column:claim_number"`
+	PolicyId            string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
+	CustomerId          string                 `protobuf:"bytes,4,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" gorm:"column:customer_id;not null"`
+	Status              ClaimStatus            `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.claims.entity.v1.ClaimStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	Type                ClaimType              `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.claims.entity.v1.ClaimType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	ClaimedAmount       *v1.Money              `protobuf:"bytes,7,opt,name=claimed_amount,json=claimedAmount,proto3" json:"claimed_amount,omitempty" gorm:"column:claimed_amount;not null"`
+	ApprovedAmount      *v1.Money              `protobuf:"bytes,8,opt,name=approved_amount,json=approvedAmount,proto3" json:"approved_amount,omitempty" gorm:"column:approved_amount"`
+	SettledAmount       *v1.Money              `protobuf:"bytes,9,opt,name=settled_amount,json=settledAmount,proto3" json:"settled_amount,omitempty" gorm:"column:settled_amount"`
+	IncidentDate        *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=incident_date,json=incidentDate,proto3" json:"incident_date,omitempty" gorm:"column:incident_date;serializer:proto_timestamp"`
+	IncidentDescription string                 `protobuf:"bytes,11,opt,name=incident_description,json=incidentDescription,proto3" json:"incident_description,omitempty" gorm:"column:incident_description;not null"`
+	SubmittedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=submitted_at,json=submittedAt,proto3" json:"submitted_at,omitempty" gorm:"column:submitted_at;not null;serializer:proto_timestamp"`
+	ApprovedAt          *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty" gorm:"column:approved_at;serializer:proto_timestamp"`
+	SettledAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=settled_at,json=settledAt,proto3" json:"settled_at,omitempty" gorm:"column:settled_at;serializer:proto_timestamp"`
+	CreatedAt           *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt           *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	RejectionReason     string                 `protobuf:"bytes,17,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty" gorm:"column:rejection_reason"`
+	DeletedAt           *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 	// Related entities stored in separate tables
-	Documents             []*ClaimDocument    `protobuf:"bytes,19,rep,name=documents,proto3" json:"documents,omitempty"`
-	Approvals             []*ClaimApproval    `protobuf:"bytes,20,rep,name=approvals,proto3" json:"approvals,omitempty"`
-	FraudCheck            *FraudCheckResult   `protobuf:"bytes,21,opt,name=fraud_check,json=fraudCheck,proto3" json:"fraud_check,omitempty"`
-	PlaceOfIncident       string              `protobuf:"bytes,22,opt,name=place_of_incident,json=placeOfIncident,proto3" json:"place_of_incident,omitempty"`                                                  // @inject_tag: gorm:"column:place_of_incident"
-	BankDetailsForPayout  string              `protobuf:"bytes,23,opt,name=bank_details_for_payout,json=bankDetailsForPayout,proto3" json:"bank_details_for_payout,omitempty"`                                 // @inject_tag: gorm:"column:bank_details_for_payout"
-	AppealOptionAvailable bool                `protobuf:"varint,24,opt,name=appeal_option_available,json=appealOptionAvailable,proto3" json:"appeal_option_available,omitempty"`                               // @inject_tag: gorm:"column:appeal_option_available"
-	InAppMessages         string              `protobuf:"bytes,25,opt,name=in_app_messages,json=inAppMessages,proto3" json:"in_app_messages,omitempty"`                                                        // @inject_tag: gorm:"column:in_app_messages"
-	ProcessingType        ClaimProcessingType `protobuf:"varint,28,opt,name=processing_type,json=processingType,proto3,enum=insuretech.claims.entity.v1.ClaimProcessingType" json:"processing_type,omitempty"` // @inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"
-	DeductibleAmount      *v1.Money           `protobuf:"bytes,29,opt,name=deductible_amount,json=deductibleAmount,proto3" json:"deductible_amount,omitempty"`                                                 // @inject_tag: gorm:"column:deductible_amount"
-	CoPayAmount           *v1.Money           `protobuf:"bytes,30,opt,name=co_pay_amount,json=coPayAmount,proto3" json:"co_pay_amount,omitempty"`                                                              // @inject_tag: gorm:"column:co_pay_amount"
-	ProcessorNotes        string              `protobuf:"bytes,31,opt,name=processor_notes,json=processorNotes,proto3" json:"processor_notes,omitempty"`                                                       // @inject_tag: gorm:"column:processor_notes"
+	Documents             []*ClaimDocument    `protobuf:"bytes,19,rep,name=documents,proto3" json:"documents,omitempty" gorm:"column:documents"`
+	Approvals             []*ClaimApproval    `protobuf:"bytes,20,rep,name=approvals,proto3" json:"approvals,omitempty" gorm:"column:approvals"`
+	FraudCheck            *FraudCheckResult   `protobuf:"bytes,21,opt,name=fraud_check,json=fraudCheck,proto3" json:"fraud_check,omitempty" gorm:"column:fraud_check"`
+	PlaceOfIncident       string              `protobuf:"bytes,22,opt,name=place_of_incident,json=placeOfIncident,proto3" json:"place_of_incident,omitempty" gorm:"column:place_of_incident"`
+	BankDetailsForPayout  string              `protobuf:"bytes,23,opt,name=bank_details_for_payout,json=bankDetailsForPayout,proto3" json:"bank_details_for_payout,omitempty" gorm:"column:bank_details_for_payout"`
+	AppealOptionAvailable bool                `protobuf:"varint,24,opt,name=appeal_option_available,json=appealOptionAvailable,proto3" json:"appeal_option_available,omitempty" gorm:"column:appeal_option_available"`
+	InAppMessages         string              `protobuf:"bytes,25,opt,name=in_app_messages,json=inAppMessages,proto3" json:"in_app_messages,omitempty" gorm:"column:in_app_messages"`
+	ProcessingType        ClaimProcessingType `protobuf:"varint,28,opt,name=processing_type,json=processingType,proto3,enum=insuretech.claims.entity.v1.ClaimProcessingType" json:"processing_type,omitempty" gorm:"column:processing_type;not null;serializer:proto_enum"`
+	DeductibleAmount      *v1.Money           `protobuf:"bytes,29,opt,name=deductible_amount,json=deductibleAmount,proto3" json:"deductible_amount,omitempty" gorm:"column:deductible_amount"`
+	CoPayAmount           *v1.Money           `protobuf:"bytes,30,opt,name=co_pay_amount,json=coPayAmount,proto3" json:"co_pay_amount,omitempty" gorm:"column:co_pay_amount"`
+	ProcessorNotes        string              `protobuf:"bytes,31,opt,name=processor_notes,json=processorNotes,proto3" json:"processor_notes,omitempty" gorm:"column:processor_notes"`
 	// Currency companion fields for Money types (flattened storage)
-	ClaimedCurrency  string `protobuf:"bytes,10001,opt,name=claimed_currency,json=claimedCurrency,proto3" json:"claimed_currency,omitempty"`    // @inject_tag: gorm:"column:claimed_currency;not null"
-	ApprovedCurrency string `protobuf:"bytes,10002,opt,name=approved_currency,json=approvedCurrency,proto3" json:"approved_currency,omitempty"` // @inject_tag: gorm:"column:approved_currency;not null"
-	SettledCurrency  string `protobuf:"bytes,10003,opt,name=settled_currency,json=settledCurrency,proto3" json:"settled_currency,omitempty"`    // @inject_tag: gorm:"column:settled_currency;not null"
+	ClaimedCurrency  string `protobuf:"bytes,10001,opt,name=claimed_currency,json=claimedCurrency,proto3" json:"claimed_currency,omitempty" gorm:"column:claimed_currency;not null"`
+	ApprovedCurrency string `protobuf:"bytes,10002,opt,name=approved_currency,json=approvedCurrency,proto3" json:"approved_currency,omitempty" gorm:"column:approved_currency;not null"`
+	SettledCurrency  string `protobuf:"bytes,10003,opt,name=settled_currency,json=settledCurrency,proto3" json:"settled_currency,omitempty" gorm:"column:settled_currency;not null"`
 }
 
 func (x *Claim) Reset() {
@@ -569,16 +569,16 @@ type ClaimDocument struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DocumentId   string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty"`       // @inject_tag: gorm:"primaryKey;column:document_id;not null"
-	ClaimId      string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty"`                // @inject_tag: gorm:"column:claim_id;not null"
-	DocumentType string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty"` // @inject_tag: gorm:"column:document_type;not null"
-	FileUrl      string                 `protobuf:"bytes,4,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`                // @inject_tag: gorm:"column:file_url;not null"
-	FileHash     string                 `protobuf:"bytes,5,opt,name=file_hash,json=fileHash,proto3" json:"file_hash,omitempty"`             // @inject_tag: gorm:"column:file_hash;not null"
-	UploadedAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=uploaded_at,json=uploadedAt,proto3" json:"uploaded_at,omitempty"`       // @inject_tag: gorm:"column:uploaded_at;not null;serializer:proto_timestamp"
-	Verified     bool                   `protobuf:"varint,7,opt,name=verified,proto3" json:"verified,omitempty"`                            // @inject_tag: gorm:"column:verified;not null"
-	VerifiedBy   string                 `protobuf:"bytes,8,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty"`       // @inject_tag: gorm:"column:verified_by"
-	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`          // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`         // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	DocumentId   string                 `protobuf:"bytes,1,opt,name=document_id,json=documentId,proto3" json:"document_id,omitempty" gorm:"primaryKey;column:document_id;not null"`
+	ClaimId      string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty" gorm:"column:claim_id;not null"`
+	DocumentType string                 `protobuf:"bytes,3,opt,name=document_type,json=documentType,proto3" json:"document_type,omitempty" gorm:"column:document_type;not null"`
+	FileUrl      string                 `protobuf:"bytes,4,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty" gorm:"column:file_url;not null"`
+	FileHash     string                 `protobuf:"bytes,5,opt,name=file_hash,json=fileHash,proto3" json:"file_hash,omitempty" gorm:"column:file_hash;not null"`
+	UploadedAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=uploaded_at,json=uploadedAt,proto3" json:"uploaded_at,omitempty" gorm:"column:uploaded_at;not null;serializer:proto_timestamp"`
+	Verified     bool                   `protobuf:"varint,7,opt,name=verified,proto3" json:"verified,omitempty" gorm:"column:verified;not null"`
+	VerifiedBy   string                 `protobuf:"bytes,8,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty" gorm:"column:verified_by"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *ClaimDocument) Reset() {
@@ -690,18 +690,18 @@ type ClaimApproval struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ApprovalId     string                 `protobuf:"bytes,1,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty"`                              // @inject_tag: gorm:"primaryKey;column:approval_id;not null"
-	ClaimId        string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty"`                                       // @inject_tag: gorm:"column:claim_id;not null"
-	ApproverId     string                 `protobuf:"bytes,3,opt,name=approver_id,json=approverId,proto3" json:"approver_id,omitempty"`                              // @inject_tag: gorm:"column:approver_id;not null"
-	ApproverRole   string                 `protobuf:"bytes,4,opt,name=approver_role,json=approverRole,proto3" json:"approver_role,omitempty"`                        // @inject_tag: gorm:"column:approver_role;not null"
-	ApprovalLevel  int32                  `protobuf:"varint,5,opt,name=approval_level,json=approvalLevel,proto3" json:"approval_level,omitempty"`                    // @inject_tag: gorm:"column:approval_level;not null"
-	Decision       ApprovalDecision       `protobuf:"varint,6,opt,name=decision,proto3,enum=insuretech.claims.entity.v1.ApprovalDecision" json:"decision,omitempty"` // @inject_tag: gorm:"column:decision;not null;serializer:proto_enum"
-	ApprovedAmount *v1.Money              `protobuf:"bytes,7,opt,name=approved_amount,json=approvedAmount,proto3" json:"approved_amount,omitempty"`                  // @inject_tag: gorm:"column:approved_amount"
-	Notes          string                 `protobuf:"bytes,8,opt,name=notes,proto3" json:"notes,omitempty"`                                                          // @inject_tag: gorm:"column:notes"
-	ApprovedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty"`                              // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	ApprovalId     string                 `protobuf:"bytes,1,opt,name=approval_id,json=approvalId,proto3" json:"approval_id,omitempty" gorm:"primaryKey;column:approval_id;not null"`
+	ClaimId        string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty" gorm:"column:claim_id;not null"`
+	ApproverId     string                 `protobuf:"bytes,3,opt,name=approver_id,json=approverId,proto3" json:"approver_id,omitempty" gorm:"column:approver_id;not null"`
+	ApproverRole   string                 `protobuf:"bytes,4,opt,name=approver_role,json=approverRole,proto3" json:"approver_role,omitempty" gorm:"column:approver_role;not null"`
+	ApprovalLevel  int32                  `protobuf:"varint,5,opt,name=approval_level,json=approvalLevel,proto3" json:"approval_level,omitempty" gorm:"column:approval_level;not null"`
+	Decision       ApprovalDecision       `protobuf:"varint,6,opt,name=decision,proto3,enum=insuretech.claims.entity.v1.ApprovalDecision" json:"decision,omitempty" gorm:"column:decision;not null;serializer:proto_enum"`
+	ApprovedAmount *v1.Money              `protobuf:"bytes,7,opt,name=approved_amount,json=approvedAmount,proto3" json:"approved_amount,omitempty" gorm:"column:approved_amount"`
+	Notes          string                 `protobuf:"bytes,8,opt,name=notes,proto3" json:"notes,omitempty" gorm:"column:notes"`
+	ApprovedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty" gorm:"column:approved_at;serializer:proto_timestamp"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
 	// Currency companion field for Money type (flattened storage)
-	ApprovedCurrency string `protobuf:"bytes,10001,opt,name=approved_currency,json=approvedCurrency,proto3" json:"approved_currency,omitempty"` // @inject_tag: gorm:"column:approved_currency;not null"
+	ApprovedCurrency string `protobuf:"bytes,10001,opt,name=approved_currency,json=approvedCurrency,proto3" json:"approved_currency,omitempty" gorm:"column:approved_currency;not null"`
 }
 
 func (x *ClaimApproval) Reset() {
@@ -820,14 +820,14 @@ type FraudCheckResult struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FraudCheckId string                 `protobuf:"bytes,1,opt,name=fraud_check_id,json=fraudCheckId,proto3" json:"fraud_check_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:fraud_check_id;not null"
-	ClaimId      string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty"`                  // @inject_tag: gorm:"column:claim_id;not null"
-	FraudScore   float64                `protobuf:"fixed64,3,opt,name=fraud_score,json=fraudScore,proto3" json:"fraud_score,omitempty"`       // @inject_tag: gorm:"column:fraud_score;not null"
-	RiskFactors  []string               `protobuf:"bytes,4,rep,name=risk_factors,json=riskFactors,proto3" json:"risk_factors,omitempty"`
-	Flagged      bool                   `protobuf:"varint,5,opt,name=flagged,proto3" json:"flagged,omitempty"`                        // @inject_tag: gorm:"column:flagged;not null"
-	ReviewedBy   string                 `protobuf:"bytes,6,opt,name=reviewed_by,json=reviewedBy,proto3" json:"reviewed_by,omitempty"` // @inject_tag: gorm:"column:reviewed_by"
-	ReviewedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=reviewed_at,json=reviewedAt,proto3" json:"reviewed_at,omitempty"` // @inject_tag: gorm:"column:reviewed_at;serializer:proto_timestamp"
-	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`    // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	FraudCheckId string                 `protobuf:"bytes,1,opt,name=fraud_check_id,json=fraudCheckId,proto3" json:"fraud_check_id,omitempty" gorm:"primaryKey;column:fraud_check_id;not null"`
+	ClaimId      string                 `protobuf:"bytes,2,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty" gorm:"column:claim_id;not null"`
+	FraudScore   float64                `protobuf:"fixed64,3,opt,name=fraud_score,json=fraudScore,proto3" json:"fraud_score,omitempty" gorm:"column:fraud_score;not null"`
+	RiskFactors  []string               `protobuf:"bytes,4,rep,name=risk_factors,json=riskFactors,proto3" json:"risk_factors,omitempty" gorm:"column:risk_factors"`
+	Flagged      bool                   `protobuf:"varint,5,opt,name=flagged,proto3" json:"flagged,omitempty" gorm:"column:flagged;not null"`
+	ReviewedBy   string                 `protobuf:"bytes,6,opt,name=reviewed_by,json=reviewedBy,proto3" json:"reviewed_by,omitempty" gorm:"column:reviewed_by"`
+	ReviewedAt   *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=reviewed_at,json=reviewedAt,proto3" json:"reviewed_at,omitempty" gorm:"column:reviewed_at;serializer:proto_timestamp"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *FraudCheckResult) Reset() {

@@ -73,11 +73,13 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         var protoProduct = new global::Insuretech.Products.Entity.V1.Product
         {
             ProductId = product.Id.ToString(),
-            Name = product.Name,
-            Code = product.Code,
-            Description = product.Description,
-            BasePremium = new Money { Amount = product.BasePremium?.Amount ?? 0, Currency = product.BasePremium?.CurrencyCode ?? "BDT" },
-            IsActive = product.IsActive
+            ProductName = product.ProductName,
+            ProductCode = product.ProductCode,
+            Description = product.Description ?? "",
+            BasePremium = new Money { Amount = product.BasePremiumAmount, Currency = product.BasePremiumCurrency },
+            Status = product.Status == InsuranceEngine.Products.Domain.Enums.ProductStatus.Active 
+                ? ProductProto.ProductStatus.Active 
+                : ProductProto.ProductStatus.Inactive
         };
 
         return new GetProductResponse { Product = protoProduct };
@@ -88,10 +90,12 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         var product = new ProductProto.Product
         {
             ProductId = dto.Id.ToString(),
-            ProductCode = dto.Code,
-            ProductName = dto.Name,
-            Description = dto.Description,
-            Status = dto.IsActive ? ProductProto.ProductStatus.Active : ProductProto.ProductStatus.Inactive
+            ProductCode = dto.ProductCode,
+            ProductName = dto.ProductName,
+            Description = dto.Description ?? "",
+            Status = dto.Status == InsuranceEngine.Products.Domain.Enums.ProductStatus.Active 
+                ? ProductProto.ProductStatus.Active 
+                : ProductProto.ProductStatus.Inactive
         };
 
         if (dto.BasePremium != null)
@@ -121,12 +125,11 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         _logger.LogInformation("Standardized ListPolicies called");
 
         Guid? customerId = string.IsNullOrEmpty(request.CustomerId) ? null : Guid.Parse(request.CustomerId);
-        Guid? productId = string.IsNullOrEmpty(request.ProductId) ? null : Guid.Parse(request.ProductId);
         
         var query = new ListPoliciesQuery(
-            null, // tenantId is not in the proto request, assuming null or default
             customerId,
-            string.IsNullOrEmpty(request.ProductId) ? null : Guid.Parse(request.ProductId),
+            null, // Status filter not in proto request
+            null, // ProductId not in proto request
             request.Page > 0 ? (int)request.Page : 1,
             request.PageSize > 0 ? (int)request.PageSize : 20
         );
@@ -135,9 +138,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
         var response = new ListPoliciesResponse
         {
-            Total = result.TotalCount,
-            Page = result.Page,
-            PageSize = result.PageSize
+            Total = result.TotalCount
         };
 
         foreach (var p in result.Items)
@@ -207,8 +208,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 {
                     NomineeId = n.Id?.ToString() ?? Guid.NewGuid().ToString(),
                     PolicyId = dto.Id.ToString(),
-                    BeneficiaryId = n.BeneficiaryId.ToString(),
-                    FullName = "", // Should be in DTO or looked up
+                    FullName = n.FullName,
                     Relationship = n.Relationship,
                     SharePercentage = n.SharePercentage
                 });
@@ -357,14 +357,13 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             CustomerId = dto.CustomerId.ToString(),
             Status = status,
             Type = type,
-            ClaimedAmount = new Money { Amount = (long)(dto.ClaimedAmount * 100), Currency = dto.Currency },
+            ClaimedAmount = new Money { Amount = dto.ClaimedAmount.Amount, Currency = dto.ClaimedAmount.CurrencyCode },
             IncidentDate = dto.IncidentDate.ToTimestamp(),
-            IncidentDescription = dto.IncidentDescription,
+            IncidentDescription = dto.IncidentDescription ?? "",
             PlaceOfIncident = dto.PlaceOfIncident ?? "",
             SubmittedAt = dto.SubmittedAt.ToTimestamp(),
             ApprovedAt = dto.ApprovedAt?.ToTimestamp(),
-            SettledAt = dto.SettledAt?.ToTimestamp(),
-            ProcessedAt = dto.ProcessedAt?.ToTimestamp()
+            SettledAt = dto.SettledAt?.ToTimestamp()
         };
 
         foreach (var a in dto.Approvals)
@@ -372,10 +371,10 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             claim.Approvals.Add(new ClaimApproval
             {
                 ApprovalId = a.Id.ToString(),
-                Decision = System.Enum.TryParse<ApprovalDecision>(a.Decision, true, out var decision) ? decision : ApprovalDecision.Unspecified,
-                ApprovalLevel = a.Level,
+                Decision = System.Enum.TryParse<ApprovalDecision>(a.Decision.ToString(), true, out var decision) ? decision : ApprovalDecision.Unspecified,
+                ApprovalLevel = a.ApprovalLevel,
                 Notes = a.Notes ?? "",
-                ApprovedAt = a.DecidedAt?.ToTimestamp()
+                ApprovedAt = a.ApprovedAt.ToTimestamp()
             });
         }
 
@@ -386,7 +385,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 DocumentId = d.Id.ToString(),
                 DocumentType = d.DocumentType,
                 FileUrl = d.FileUrl,
-                Verified = d.IsVerified,
+                Verified = d.Verified,
                 UploadedAt = d.UploadedAt.ToTimestamp()
             });
         }
@@ -409,7 +408,8 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             request.Claim.ClaimedAmount?.Amount ?? 0,
             request.Claim.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
             request.Claim.IncidentDescription,
-            request.Claim.PlaceOfIncident
+            request.Claim.PlaceOfIncident,
+            null // BankDetailsForPayout — not on gRPC request
         );
 
         var result = await _mediator.Send(command);
@@ -418,7 +418,11 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             throw new RpcException(new Status(StatusCode.Internal, result.Error?.Message ?? "Claim submission failed"));
 
         // Fetch the created claim to return full entity
-        return new CreateClaimResponse { Claim = MapToProtoClaim(result.Value) };
+        var claimResult = await _mediator.Send(new GetClaimByIdQuery(result.Value));
+        if (!claimResult.IsSuccess)
+            throw new RpcException(new Status(StatusCode.Internal, "Claim created but failed to retrieve"));
+
+        return new CreateClaimResponse { Claim = MapToProtoClaim(claimResult.Value) };
     }
 
     // ===================== QUOTE CRUD =====================
@@ -454,9 +458,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
         var response = new ListQuotesResponse
         {
-            Total = (int)result.TotalCount,
-            Page = result.Page,
-            PageSize = result.PageSize
+            Total = (int)result.TotalCount
         };
 
         foreach (var q in result.Items)

@@ -8,9 +8,10 @@ public class ClaimDocument
     public Guid ClaimId { get; set; }
     public string DocumentType { get; set; } = string.Empty;
     public string FileUrl { get; set; } = string.Empty;
-    public string FileHash { get; set; } = string.Empty;
+    public string FileHash { get; set; } = string.Empty; // SHA-256
     public bool Verified { get; set; }
     public Guid? VerifiedBy { get; set; }
     public DateTime UploadedAt { get; set; }
     public DateTime CreatedAt { get; set; }
+    public DateTime UpdatedAt { get; set; }
 }

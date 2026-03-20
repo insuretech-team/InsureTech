@@ -28,30 +28,30 @@ type HealthDeclaration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                          // @inject_tag: gorm:"primaryKey;column:declaration_id;not null"
-	QuoteId string `protobuf:"bytes,2,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty"` // @inject_tag: gorm:"column:quote_id;not null"
+	Id      string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:declaration_id;not null"`
+	QuoteId string `protobuf:"bytes,2,opt,name=quote_id,json=quoteId,proto3" json:"quote_id,omitempty" gorm:"column:quote_id;not null"`
 	// Physical measurements
-	HeightCm int32  `protobuf:"varint,3,opt,name=height_cm,json=heightCm,proto3" json:"height_cm,omitempty"` // @inject_tag: gorm:"column:height_cm"
-	WeightKg string `protobuf:"bytes,4,opt,name=weight_kg,json=weightKg,proto3" json:"weight_kg,omitempty"`  // @inject_tag: gorm:"column:weight_kg"
-	Bmi      string `protobuf:"bytes,5,opt,name=bmi,proto3" json:"bmi,omitempty"`                            // @inject_tag: gorm:"column:bmi"
+	HeightCm int32  `protobuf:"varint,3,opt,name=height_cm,json=heightCm,proto3" json:"height_cm,omitempty" gorm:"column:height_cm"`
+	WeightKg string `protobuf:"bytes,4,opt,name=weight_kg,json=weightKg,proto3" json:"weight_kg,omitempty" gorm:"column:weight_kg"`
+	Bmi      string `protobuf:"bytes,5,opt,name=bmi,proto3" json:"bmi,omitempty" gorm:"column:bmi"`
 	// Medical history
-	HasPreExistingConditions bool   `protobuf:"varint,6,opt,name=has_pre_existing_conditions,json=hasPreExistingConditions,proto3" json:"has_pre_existing_conditions,omitempty"` // @inject_tag: gorm:"column:has_pre_existing_conditions"
-	PreExistingConditions    string `protobuf:"bytes,7,opt,name=pre_existing_conditions,json=preExistingConditions,proto3" json:"pre_existing_conditions,omitempty"`             // @inject_tag: gorm:"column:pre_existing_conditions"
-	IsCurrentlyHospitalized  bool   `protobuf:"varint,8,opt,name=is_currently_hospitalized,json=isCurrentlyHospitalized,proto3" json:"is_currently_hospitalized,omitempty"`      // @inject_tag: gorm:"column:is_currently_hospitalized"
-	HasFamilyHistory         bool   `protobuf:"varint,9,opt,name=has_family_history,json=hasFamilyHistory,proto3" json:"has_family_history,omitempty"`                           // @inject_tag: gorm:"column:has_family_history"
-	FamilyHistory            string `protobuf:"bytes,10,opt,name=family_history,json=familyHistory,proto3" json:"family_history,omitempty"`                                      // @inject_tag: gorm:"column:family_history"
+	HasPreExistingConditions bool   `protobuf:"varint,6,opt,name=has_pre_existing_conditions,json=hasPreExistingConditions,proto3" json:"has_pre_existing_conditions,omitempty" gorm:"column:has_pre_existing_conditions"`
+	PreExistingConditions    string `protobuf:"bytes,7,opt,name=pre_existing_conditions,json=preExistingConditions,proto3" json:"pre_existing_conditions,omitempty" gorm:"column:pre_existing_conditions"`
+	IsCurrentlyHospitalized  bool   `protobuf:"varint,8,opt,name=is_currently_hospitalized,json=isCurrentlyHospitalized,proto3" json:"is_currently_hospitalized,omitempty" gorm:"column:is_currently_hospitalized"`
+	HasFamilyHistory         bool   `protobuf:"varint,9,opt,name=has_family_history,json=hasFamilyHistory,proto3" json:"has_family_history,omitempty" gorm:"column:has_family_history"`
+	FamilyHistory            string `protobuf:"bytes,10,opt,name=family_history,json=familyHistory,proto3" json:"family_history,omitempty" gorm:"column:family_history"`
 	// Lifestyle
-	Smoker              bool   `protobuf:"varint,11,opt,name=smoker,proto3" json:"smoker,omitempty"`                                                       // @inject_tag: gorm:"column:smoker"
-	AlcoholConsumer     bool   `protobuf:"varint,12,opt,name=alcohol_consumer,json=alcoholConsumer,proto3" json:"alcohol_consumer,omitempty"`              // @inject_tag: gorm:"column:alcohol_consumer"
-	OccupationRiskLevel string `protobuf:"bytes,13,opt,name=occupation_risk_level,json=occupationRiskLevel,proto3" json:"occupation_risk_level,omitempty"` // @inject_tag: gorm:"column:occupation_risk_level"
+	Smoker              bool   `protobuf:"varint,11,opt,name=smoker,proto3" json:"smoker,omitempty" gorm:"column:smoker"`
+	AlcoholConsumer     bool   `protobuf:"varint,12,opt,name=alcohol_consumer,json=alcoholConsumer,proto3" json:"alcohol_consumer,omitempty" gorm:"column:alcohol_consumer"`
+	OccupationRiskLevel string `protobuf:"bytes,13,opt,name=occupation_risk_level,json=occupationRiskLevel,proto3" json:"occupation_risk_level,omitempty" gorm:"column:occupation_risk_level"`
 	// Medical examination
-	MedicalExamRequired  bool                   `protobuf:"varint,14,opt,name=medical_exam_required,json=medicalExamRequired,proto3" json:"medical_exam_required,omitempty"`    // @inject_tag: gorm:"column:medical_exam_required"
-	MedicalExamCompleted bool                   `protobuf:"varint,15,opt,name=medical_exam_completed,json=medicalExamCompleted,proto3" json:"medical_exam_completed,omitempty"` // @inject_tag: gorm:"column:medical_exam_completed"
-	MedicalExamResults   string                 `protobuf:"bytes,16,opt,name=medical_exam_results,json=medicalExamResults,proto3" json:"medical_exam_results,omitempty"`        // @inject_tag: gorm:"column:medical_exam_results"
-	MedicalExamDate      *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=medical_exam_date,json=medicalExamDate,proto3" json:"medical_exam_date,omitempty"`                 // @inject_tag: gorm:"column:medical_exam_date;serializer:proto_timestamp"
+	MedicalExamRequired  bool                   `protobuf:"varint,14,opt,name=medical_exam_required,json=medicalExamRequired,proto3" json:"medical_exam_required,omitempty" gorm:"column:medical_exam_required"`
+	MedicalExamCompleted bool                   `protobuf:"varint,15,opt,name=medical_exam_completed,json=medicalExamCompleted,proto3" json:"medical_exam_completed,omitempty" gorm:"column:medical_exam_completed"`
+	MedicalExamResults   string                 `protobuf:"bytes,16,opt,name=medical_exam_results,json=medicalExamResults,proto3" json:"medical_exam_results,omitempty" gorm:"column:medical_exam_results"`
+	MedicalExamDate      *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=medical_exam_date,json=medicalExamDate,proto3" json:"medical_exam_date,omitempty" gorm:"column:medical_exam_date;serializer:proto_timestamp"`
 	// Documents
-	MedicalDocuments string        `protobuf:"bytes,18,opt,name=medical_documents,json=medicalDocuments,proto3" json:"medical_documents,omitempty"` // @inject_tag: gorm:"column:medical_documents"
-	AuditInfo        *v1.AuditInfo `protobuf:"bytes,19,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                      // @inject_tag: gorm:"column:audit_info;not null"
+	MedicalDocuments string        `protobuf:"bytes,18,opt,name=medical_documents,json=medicalDocuments,proto3" json:"medical_documents,omitempty" gorm:"column:medical_documents"`
+	AuditInfo        *v1.AuditInfo `protobuf:"bytes,19,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *HealthDeclaration) Reset() {

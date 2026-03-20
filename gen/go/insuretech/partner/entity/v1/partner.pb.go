@@ -322,29 +322,29 @@ type Partner struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PartnerId                 string                 `protobuf:"bytes,1,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`                           // @inject_tag: gorm:"primaryKey;column:partner_id;not null"
-	OrganizationName          string                 `protobuf:"bytes,2,opt,name=organization_name,json=organizationName,proto3" json:"organization_name,omitempty"`      // @inject_tag: gorm:"column:organization_name;not null"
-	Type                      PartnerType            `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.partner.entity.v1.PartnerType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Status                    PartnerStatus          `protobuf:"varint,4,opt,name=status,proto3,enum=insuretech.partner.entity.v1.PartnerStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	TradeLicense              string                 `protobuf:"bytes,5,opt,name=trade_license,json=tradeLicense,proto3" json:"trade_license,omitempty"`                  // @inject_tag: gorm:"column:trade_license;not null"
-	TinNumber                 string                 `protobuf:"bytes,6,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty"`
-	BankAccount               string                 `protobuf:"bytes,7,opt,name=bank_account,json=bankAccount,proto3" json:"bank_account,omitempty"` // @inject_tag: gorm:"column:bank_account;not null"
-	BankName                  string                 `protobuf:"bytes,8,opt,name=bank_name,json=bankName,proto3" json:"bank_name,omitempty"`          // @inject_tag: gorm:"column:bank_name"
-	BankBranch                string                 `protobuf:"bytes,9,opt,name=bank_branch,json=bankBranch,proto3" json:"bank_branch,omitempty"`    // @inject_tag: gorm:"column:bank_branch"
-	ContactEmail              string                 `protobuf:"bytes,10,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty"`
-	ContactPhone              string                 `protobuf:"bytes,11,opt,name=contact_phone,json=contactPhone,proto3" json:"contact_phone,omitempty"`
-	AcquisitionCommissionRate float64                `protobuf:"fixed64,12,opt,name=acquisition_commission_rate,json=acquisitionCommissionRate,proto3" json:"acquisition_commission_rate,omitempty"` // @inject_tag: gorm:"column:acquisition_commission_rate;not null"
-	RenewalCommissionRate     float64                `protobuf:"fixed64,13,opt,name=renewal_commission_rate,json=renewalCommissionRate,proto3" json:"renewal_commission_rate,omitempty"`             // @inject_tag: gorm:"column:renewal_commission_rate;not null"
-	ClaimsAssistanceRate      float64                `protobuf:"fixed64,14,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty"`                // @inject_tag: gorm:"column:claims_assistance_rate"
-	OnboardedAt               *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=onboarded_at,json=onboardedAt,proto3" json:"onboarded_at,omitempty"`                                               // @inject_tag: gorm:"column:onboarded_at;serializer:proto_timestamp"
-	CreatedAt                 *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                     // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt                 *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                                     // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	FocalPersonId             string                 `protobuf:"bytes,18,opt,name=focal_person_id,json=focalPersonId,proto3" json:"focal_person_id,omitempty"`                                       // @inject_tag: gorm:"column:focal_person_id"
-	DeletedAt                 *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                                     // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	PartnerId                 string                 `protobuf:"bytes,1,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty" gorm:"primaryKey;column:partner_id;not null"`
+	OrganizationName          string                 `protobuf:"bytes,2,opt,name=organization_name,json=organizationName,proto3" json:"organization_name,omitempty" gorm:"column:organization_name;not null"`
+	Type                      PartnerType            `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.partner.entity.v1.PartnerType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Status                    PartnerStatus          `protobuf:"varint,4,opt,name=status,proto3,enum=insuretech.partner.entity.v1.PartnerStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	TradeLicense              string                 `protobuf:"bytes,5,opt,name=trade_license,json=tradeLicense,proto3" json:"trade_license,omitempty" gorm:"column:trade_license;not null"`
+	TinNumber                 string                 `protobuf:"bytes,6,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty" gorm:"column:tin_number"`
+	BankAccount               string                 `protobuf:"bytes,7,opt,name=bank_account,json=bankAccount,proto3" json:"bank_account,omitempty" gorm:"column:bank_account;not null"`
+	BankName                  string                 `protobuf:"bytes,8,opt,name=bank_name,json=bankName,proto3" json:"bank_name,omitempty" gorm:"column:bank_name"`
+	BankBranch                string                 `protobuf:"bytes,9,opt,name=bank_branch,json=bankBranch,proto3" json:"bank_branch,omitempty" gorm:"column:bank_branch"`
+	ContactEmail              string                 `protobuf:"bytes,10,opt,name=contact_email,json=contactEmail,proto3" json:"contact_email,omitempty" gorm:"column:contact_email"`
+	ContactPhone              string                 `protobuf:"bytes,11,opt,name=contact_phone,json=contactPhone,proto3" json:"contact_phone,omitempty" gorm:"column:contact_phone"`
+	AcquisitionCommissionRate float64                `protobuf:"fixed64,12,opt,name=acquisition_commission_rate,json=acquisitionCommissionRate,proto3" json:"acquisition_commission_rate,omitempty" gorm:"column:acquisition_commission_rate;not null"`
+	RenewalCommissionRate     float64                `protobuf:"fixed64,13,opt,name=renewal_commission_rate,json=renewalCommissionRate,proto3" json:"renewal_commission_rate,omitempty" gorm:"column:renewal_commission_rate;not null"`
+	ClaimsAssistanceRate      float64                `protobuf:"fixed64,14,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty" gorm:"column:claims_assistance_rate"`
+	OnboardedAt               *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=onboarded_at,json=onboardedAt,proto3" json:"onboarded_at,omitempty" gorm:"column:onboarded_at;serializer:proto_timestamp"`
+	CreatedAt                 *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt                 *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	FocalPersonId             string                 `protobuf:"bytes,18,opt,name=focal_person_id,json=focalPersonId,proto3" json:"focal_person_id,omitempty" gorm:"column:focal_person_id"`
+	DeletedAt                 *timestamppb.Timestamp `protobuf:"bytes,19,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 	// Commission structure stored inline
-	Commission *CommissionStructure `protobuf:"bytes,20,opt,name=commission,proto3" json:"commission,omitempty"` // @inject_tag: gorm:"column:commission;serializer:json"
+	Commission *CommissionStructure `protobuf:"bytes,20,opt,name=commission,proto3" json:"commission,omitempty" gorm:"column:commission;serializer:json"`
 	// Partner benefits (discount & cashless) stored inline
-	Benefits *PartnerBenefits `protobuf:"bytes,21,opt,name=benefits,proto3" json:"benefits,omitempty"` // @inject_tag: gorm:"column:benefits;serializer:json"
+	Benefits *PartnerBenefits `protobuf:"bytes,21,opt,name=benefits,proto3" json:"benefits,omitempty" gorm:"column:benefits;serializer:json"`
 }
 
 func (x *Partner) Reset() {
@@ -532,9 +532,9 @@ type CommissionStructure struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AcquisitionRate      float64 `protobuf:"fixed64,1,opt,name=acquisition_rate,json=acquisitionRate,proto3" json:"acquisition_rate,omitempty"`                  // 15-25%
-	RenewalRate          float64 `protobuf:"fixed64,2,opt,name=renewal_rate,json=renewalRate,proto3" json:"renewal_rate,omitempty"`                              // Renewal commission
-	ClaimsAssistanceRate float64 `protobuf:"fixed64,3,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty"` // Claims assistance fee
+	AcquisitionRate      float64 `protobuf:"fixed64,1,opt,name=acquisition_rate,json=acquisitionRate,proto3" json:"acquisition_rate,omitempty" gorm:"column:acquisition_rate"`                  // 15-25%
+	RenewalRate          float64 `protobuf:"fixed64,2,opt,name=renewal_rate,json=renewalRate,proto3" json:"renewal_rate,omitempty" gorm:"column:renewal_rate"`                              // Renewal commission
+	ClaimsAssistanceRate float64 `protobuf:"fixed64,3,opt,name=claims_assistance_rate,json=claimsAssistanceRate,proto3" json:"claims_assistance_rate,omitempty" gorm:"column:claims_assistance_rate"` // Claims assistance fee
 }
 
 func (x *CommissionStructure) Reset() {
@@ -597,25 +597,25 @@ type PartnerBenefits struct {
 	unknownFields protoimpl.UnknownFields
 
 	// Discount configuration
-	DiscountEnabled    bool    `protobuf:"varint,1,opt,name=discount_enabled,json=discountEnabled,proto3" json:"discount_enabled,omitempty"`           // Enable/Disable discount
-	DiscountPercentage float64 `protobuf:"fixed64,2,opt,name=discount_percentage,json=discountPercentage,proto3" json:"discount_percentage,omitempty"` // Discount percentage (0-100)
-	MinDiscount        float64 `protobuf:"fixed64,3,opt,name=min_discount,json=minDiscount,proto3" json:"min_discount,omitempty"`                      // Minimum discount %
-	MaxDiscount        float64 `protobuf:"fixed64,4,opt,name=max_discount,json=maxDiscount,proto3" json:"max_discount,omitempty"`                      // Maximum discount %
-	DiscountType       string  `protobuf:"bytes,5,opt,name=discount_type,json=discountType,proto3" json:"discount_type,omitempty"`                     // SERVICE, PRODUCT, CONSULTATION
+	DiscountEnabled    bool    `protobuf:"varint,1,opt,name=discount_enabled,json=discountEnabled,proto3" json:"discount_enabled,omitempty" gorm:"column:discount_enabled"`           // Enable/Disable discount
+	DiscountPercentage float64 `protobuf:"fixed64,2,opt,name=discount_percentage,json=discountPercentage,proto3" json:"discount_percentage,omitempty" gorm:"column:discount_percentage"` // Discount percentage (0-100)
+	MinDiscount        float64 `protobuf:"fixed64,3,opt,name=min_discount,json=minDiscount,proto3" json:"min_discount,omitempty" gorm:"column:min_discount"`                      // Minimum discount %
+	MaxDiscount        float64 `protobuf:"fixed64,4,opt,name=max_discount,json=maxDiscount,proto3" json:"max_discount,omitempty" gorm:"column:max_discount"`                      // Maximum discount %
+	DiscountType       string  `protobuf:"bytes,5,opt,name=discount_type,json=discountType,proto3" json:"discount_type,omitempty" gorm:"column:discount_type"`                     // SERVICE, PRODUCT, CONSULTATION
 	// Cashless configuration
-	CashlessEnabled           bool     `protobuf:"varint,6,opt,name=cashless_enabled,json=cashlessEnabled,proto3" json:"cashless_enabled,omitempty"`                                  // Enable/Disable cashless
-	CashlessLimit             int64    `protobuf:"varint,7,opt,name=cashless_limit,json=cashlessLimit,proto3" json:"cashless_limit,omitempty"`                                        // Maximum cashless amount in paisa
-	AutoApprovalThreshold     int64    `protobuf:"varint,8,opt,name=auto_approval_threshold,json=autoApprovalThreshold,proto3" json:"auto_approval_threshold,omitempty"`              // Auto-approve below this amount
-	PreAuthorizationRequired  bool     `protobuf:"varint,9,opt,name=pre_authorization_required,json=preAuthorizationRequired,proto3" json:"pre_authorization_required,omitempty"`     // Require pre-auth
-	AuthorizationValidityDays int32    `protobuf:"varint,10,opt,name=authorization_validity_days,json=authorizationValidityDays,proto3" json:"authorization_validity_days,omitempty"` // Pre-auth validity period
-	RequiredDocuments         []string `protobuf:"bytes,11,rep,name=required_documents,json=requiredDocuments,proto3" json:"required_documents,omitempty"`                            // Documents needed for cashless
+	CashlessEnabled           bool     `protobuf:"varint,6,opt,name=cashless_enabled,json=cashlessEnabled,proto3" json:"cashless_enabled,omitempty" gorm:"column:cashless_enabled"`                                  // Enable/Disable cashless
+	CashlessLimit             int64    `protobuf:"varint,7,opt,name=cashless_limit,json=cashlessLimit,proto3" json:"cashless_limit,omitempty" gorm:"column:cashless_limit"`                                        // Maximum cashless amount in paisa
+	AutoApprovalThreshold     int64    `protobuf:"varint,8,opt,name=auto_approval_threshold,json=autoApprovalThreshold,proto3" json:"auto_approval_threshold,omitempty" gorm:"column:auto_approval_threshold"`              // Auto-approve below this amount
+	PreAuthorizationRequired  bool     `protobuf:"varint,9,opt,name=pre_authorization_required,json=preAuthorizationRequired,proto3" json:"pre_authorization_required,omitempty" gorm:"column:pre_authorization_required"`     // Require pre-auth
+	AuthorizationValidityDays int32    `protobuf:"varint,10,opt,name=authorization_validity_days,json=authorizationValidityDays,proto3" json:"authorization_validity_days,omitempty" gorm:"column:authorization_validity_days"` // Pre-auth validity period
+	RequiredDocuments         []string `protobuf:"bytes,11,rep,name=required_documents,json=requiredDocuments,proto3" json:"required_documents,omitempty" gorm:"column:required_documents"`                            // Documents needed for cashless
 	// Service area
-	ServiceLocations   []string `protobuf:"bytes,12,rep,name=service_locations,json=serviceLocations,proto3" json:"service_locations,omitempty"`        // Cities/areas covered
-	NationwideCoverage bool     `protobuf:"varint,13,opt,name=nationwide_coverage,json=nationwideCoverage,proto3" json:"nationwide_coverage,omitempty"` // Available nationwide
+	ServiceLocations   []string `protobuf:"bytes,12,rep,name=service_locations,json=serviceLocations,proto3" json:"service_locations,omitempty" gorm:"column:service_locations"`        // Cities/areas covered
+	NationwideCoverage bool     `protobuf:"varint,13,opt,name=nationwide_coverage,json=nationwideCoverage,proto3" json:"nationwide_coverage,omitempty" gorm:"column:nationwide_coverage"` // Available nationwide
 	// Additional info
-	Notes         string                 `protobuf:"bytes,14,opt,name=notes,proto3" json:"notes,omitempty"` // Additional notes
-	EffectiveFrom *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"`
-	EffectiveTo   *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty"`
+	Notes         string                 `protobuf:"bytes,14,opt,name=notes,proto3" json:"notes,omitempty" gorm:"column:notes"` // Additional notes
+	EffectiveFrom *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty" gorm:"column:effective_from;serializer:proto_timestamp"`
+	EffectiveTo   *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty" gorm:"column:effective_to;serializer:proto_timestamp"`
 }
 
 func (x *PartnerBenefits) Reset() {
@@ -769,19 +769,19 @@ type Agent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AgentId        string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`       // @inject_tag: gorm:"primaryKey;column:agent_id;not null"
-	PartnerId      string                 `protobuf:"bytes,2,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"` // @inject_tag: gorm:"column:partner_id;not null"
-	UserId         string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // @inject_tag: gorm:"column:user_id"
-	FullName       string                 `protobuf:"bytes,4,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"`    // @inject_tag: gorm:"column:full_name;not null"
-	PhoneNumber    string                 `protobuf:"bytes,5,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`
-	Email          string                 `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty"`
-	Status         AgentStatus            `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.partner.entity.v1.AgentStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	CommissionRate float64                `protobuf:"fixed64,8,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`        // @inject_tag: gorm:"column:commission_rate;not null"
-	NidNumber      string                 `protobuf:"bytes,9,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`
-	JoinedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty"`    // @inject_tag: gorm:"column:joined_at;not null;serializer:proto_timestamp"
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	DeletedAt      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"` // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	AgentId        string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"primaryKey;column:agent_id;not null"`
+	PartnerId      string                 `protobuf:"bytes,2,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty" gorm:"column:partner_id;not null"`
+	UserId         string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
+	FullName       string                 `protobuf:"bytes,4,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" gorm:"column:full_name;not null"`
+	PhoneNumber    string                 `protobuf:"bytes,5,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty" gorm:"column:phone_number"`
+	Email          string                 `protobuf:"bytes,6,opt,name=email,proto3" json:"email,omitempty" gorm:"column:email"`
+	Status         AgentStatus            `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.partner.entity.v1.AgentStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	CommissionRate float64                `protobuf:"fixed64,8,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty" gorm:"column:commission_rate;not null"`
+	NidNumber      string                 `protobuf:"bytes,9,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty" gorm:"column:nid_number"`
+	JoinedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=joined_at,json=joinedAt,proto3" json:"joined_at,omitempty" gorm:"column:joined_at;not null;serializer:proto_timestamp"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	DeletedAt      *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *Agent) Reset() {
@@ -914,18 +914,18 @@ type Commission struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	CommissionId     string                 `protobuf:"bytes,1,opt,name=commission_id,json=commissionId,proto3" json:"commission_id,omitempty"`                     // @inject_tag: gorm:"primaryKey;column:commission_id;not null"
-	PolicyId         string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                 // @inject_tag: gorm:"column:policy_id;not null"
-	PartnerId        string                 `protobuf:"bytes,3,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`                              // @inject_tag: gorm:"column:partner_id"
-	AgentId          string                 `protobuf:"bytes,4,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`                                    // @inject_tag: gorm:"column:agent_id"
-	Type             CommissionType         `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.partner.entity.v1.CommissionType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	CommissionAmount *v1.Money              `protobuf:"bytes,6,opt,name=commission_amount,json=commissionAmount,proto3" json:"commission_amount,omitempty"`         // @inject_tag: gorm:"column:commission_amount;not null"
-	CommissionRate   float64                `protobuf:"fixed64,7,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty"`             // @inject_tag: gorm:"column:commission_rate;not null"
-	Status           CommissionStatus       `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.partner.entity.v1.CommissionStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	PaymentId        string                 `protobuf:"bytes,9,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                              // @inject_tag: gorm:"column:payment_id"
-	PaidAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`                                      // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
-	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                             // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt        *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                             // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	CommissionId     string                 `protobuf:"bytes,1,opt,name=commission_id,json=commissionId,proto3" json:"commission_id,omitempty" gorm:"primaryKey;column:commission_id;not null"`
+	PolicyId         string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
+	PartnerId        string                 `protobuf:"bytes,3,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty" gorm:"column:partner_id"`
+	AgentId          string                 `protobuf:"bytes,4,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"column:agent_id"`
+	Type             CommissionType         `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.partner.entity.v1.CommissionType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	CommissionAmount *v1.Money              `protobuf:"bytes,6,opt,name=commission_amount,json=commissionAmount,proto3" json:"commission_amount,omitempty" gorm:"column:commission_amount;not null"`
+	CommissionRate   float64                `protobuf:"fixed64,7,opt,name=commission_rate,json=commissionRate,proto3" json:"commission_rate,omitempty" gorm:"column:commission_rate;not null"`
+	Status           CommissionStatus       `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.partner.entity.v1.CommissionStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	PaymentId        string                 `protobuf:"bytes,9,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty" gorm:"column:payment_id"`
+	PaidAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty" gorm:"column:paid_at;serializer:proto_timestamp"`
+	CreatedAt        *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt        *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *Commission) Reset() {

@@ -156,25 +156,25 @@ type Refund struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                        // @inject_tag: gorm:"primaryKey;column:refund_id;not null"
-	RefundNumber       string       `protobuf:"bytes,2,opt,name=refund_number,json=refundNumber,proto3" json:"refund_number,omitempty"`                // @inject_tag: gorm:"column:refund_number;not null"
-	PolicyId           string       `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                            // @inject_tag: gorm:"column:policy_id;not null"
-	Reason             RefundReason `protobuf:"varint,4,opt,name=reason,proto3,enum=insuretech.refund.entity.v1.RefundReason" json:"reason,omitempty"` // @inject_tag: gorm:"column:reason;not null;serializer:proto_enum"
-	ReasonDetails      string       `protobuf:"bytes,5,opt,name=reason_details,json=reasonDetails,proto3" json:"reason_details,omitempty"`             // @inject_tag: gorm:"column:reason_details"
-	TotalPremiumPaid   *v1.Money    `protobuf:"bytes,6,opt,name=total_premium_paid,json=totalPremiumPaid,proto3" json:"total_premium_paid,omitempty"`
-	PremiumUsed        *v1.Money    `protobuf:"bytes,7,opt,name=premium_used,json=premiumUsed,proto3" json:"premium_used,omitempty"`
-	CancellationCharge *v1.Money    `protobuf:"bytes,8,opt,name=cancellation_charge,json=cancellationCharge,proto3" json:"cancellation_charge,omitempty"`
-	RefundableAmount   *v1.Money    `protobuf:"bytes,9,opt,name=refundable_amount,json=refundableAmount,proto3" json:"refundable_amount,omitempty"`
-	CalculationDetails string       `protobuf:"bytes,10,opt,name=calculation_details,json=calculationDetails,proto3" json:"calculation_details,omitempty"` // @inject_tag: gorm:"column:calculation_details"
-	Status             RefundStatus `protobuf:"varint,11,opt,name=status,proto3,enum=insuretech.refund.entity.v1.RefundStatus" json:"status,omitempty"`    // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	RequestedBy        string       `protobuf:"bytes,12,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty"`                      // @inject_tag: gorm:"column:requested_by;not null"
-	ApprovedBy         string       `protobuf:"bytes,13,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`                         // @inject_tag: gorm:"column:approved_by"
-	PaymentMethod      string       `protobuf:"bytes,14,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`                // @inject_tag: gorm:"column:payment_method"
-	PaymentReference   string       `protobuf:"bytes,15,opt,name=payment_reference,json=paymentReference,proto3" json:"payment_reference,omitempty"`       // @inject_tag: gorm:"column:payment_reference"
+	Id                 string       `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:refund_id;not null"`
+	RefundNumber       string       `protobuf:"bytes,2,opt,name=refund_number,json=refundNumber,proto3" json:"refund_number,omitempty" gorm:"column:refund_number;not null"`
+	PolicyId           string       `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
+	Reason             RefundReason `protobuf:"varint,4,opt,name=reason,proto3,enum=insuretech.refund.entity.v1.RefundReason" json:"reason,omitempty" gorm:"column:reason;not null;serializer:proto_enum"`
+	ReasonDetails      string       `protobuf:"bytes,5,opt,name=reason_details,json=reasonDetails,proto3" json:"reason_details,omitempty" gorm:"column:reason_details"`
+	TotalPremiumPaid   *v1.Money    `protobuf:"bytes,6,opt,name=total_premium_paid,json=totalPremiumPaid,proto3" json:"total_premium_paid,omitempty" gorm:"column:total_premium_paid"`
+	PremiumUsed        *v1.Money    `protobuf:"bytes,7,opt,name=premium_used,json=premiumUsed,proto3" json:"premium_used,omitempty" gorm:"column:premium_used"`
+	CancellationCharge *v1.Money    `protobuf:"bytes,8,opt,name=cancellation_charge,json=cancellationCharge,proto3" json:"cancellation_charge,omitempty" gorm:"column:cancellation_charge"`
+	RefundableAmount   *v1.Money    `protobuf:"bytes,9,opt,name=refundable_amount,json=refundableAmount,proto3" json:"refundable_amount,omitempty" gorm:"column:refundable_amount"`
+	CalculationDetails string       `protobuf:"bytes,10,opt,name=calculation_details,json=calculationDetails,proto3" json:"calculation_details,omitempty" gorm:"column:calculation_details"`
+	Status             RefundStatus `protobuf:"varint,11,opt,name=status,proto3,enum=insuretech.refund.entity.v1.RefundStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	RequestedBy        string       `protobuf:"bytes,12,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty" gorm:"column:requested_by;not null"`
+	ApprovedBy         string       `protobuf:"bytes,13,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty" gorm:"column:approved_by"`
+	PaymentMethod      string       `protobuf:"bytes,14,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty" gorm:"column:payment_method"`
+	PaymentReference   string       `protobuf:"bytes,15,opt,name=payment_reference,json=paymentReference,proto3" json:"payment_reference,omitempty" gorm:"column:payment_reference"`
 	// Link to payment refund transaction record (payment_schema.refunds)
-	PaymentRefundId string                 `protobuf:"bytes,16,opt,name=payment_refund_id,json=paymentRefundId,proto3" json:"payment_refund_id,omitempty"` // @inject_tag: gorm:"column:payment_refund_id"
-	ProcessedAt     *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty"`               // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
-	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,18,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                     // @inject_tag: gorm:"column:audit_info;not null"
+	PaymentRefundId string                 `protobuf:"bytes,16,opt,name=payment_refund_id,json=paymentRefundId,proto3" json:"payment_refund_id,omitempty" gorm:"column:payment_refund_id"`
+	ProcessedAt     *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty" gorm:"column:processed_at;serializer:proto_timestamp"`
+	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,18,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *Refund) Reset() {

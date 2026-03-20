@@ -147,18 +147,18 @@ type VoiceCommand struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                        // @inject_tag: gorm:"primaryKey;column:command_id;not null"
-	VoiceSessionId   string                 `protobuf:"bytes,2,opt,name=voice_session_id,json=voiceSessionId,proto3" json:"voice_session_id,omitempty"`        // @inject_tag: gorm:"column:voice_session_id;not null"
-	Type             CommandType            `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.voice.entity.v1.CommandType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	CommandText      string                 `protobuf:"bytes,4,opt,name=command_text,json=commandText,proto3" json:"command_text,omitempty"`                   // @inject_tag: gorm:"column:command_text"
-	AudioUrl         string                 `protobuf:"bytes,5,opt,name=audio_url,json=audioUrl,proto3" json:"audio_url,omitempty"`                            // @inject_tag: gorm:"column:audio_url"
-	Parameters       string                 `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty"`                                        // @inject_tag: gorm:"column:parameters"
-	Status           CommandStatus          `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.voice.entity.v1.CommandStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	ResponseText     string                 `protobuf:"bytes,8,opt,name=response_text,json=responseText,proto3" json:"response_text,omitempty"`                // @inject_tag: gorm:"column:response_text"
-	ResponseAudioUrl string                 `protobuf:"bytes,9,opt,name=response_audio_url,json=responseAudioUrl,proto3" json:"response_audio_url,omitempty"`  // @inject_tag: gorm:"column:response_audio_url"
-	ConfidenceScore  float32                `protobuf:"fixed32,10,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty"`    // @inject_tag: gorm:"column:confidence_score"
-	ExecutedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=executed_at,json=executedAt,proto3" json:"executed_at,omitempty"`                     // @inject_tag: gorm:"column:executed_at;not null;serializer:proto_timestamp"
-	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                        // @inject_tag: gorm:"column:audit_info;not null"
+	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:command_id;not null"`
+	VoiceSessionId   string                 `protobuf:"bytes,2,opt,name=voice_session_id,json=voiceSessionId,proto3" json:"voice_session_id,omitempty" gorm:"column:voice_session_id;not null"`
+	Type             CommandType            `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.voice.entity.v1.CommandType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	CommandText      string                 `protobuf:"bytes,4,opt,name=command_text,json=commandText,proto3" json:"command_text,omitempty" gorm:"column:command_text"`
+	AudioUrl         string                 `protobuf:"bytes,5,opt,name=audio_url,json=audioUrl,proto3" json:"audio_url,omitempty" gorm:"column:audio_url"`
+	Parameters       string                 `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty" gorm:"column:parameters"`
+	Status           CommandStatus          `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.voice.entity.v1.CommandStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	ResponseText     string                 `protobuf:"bytes,8,opt,name=response_text,json=responseText,proto3" json:"response_text,omitempty" gorm:"column:response_text"`
+	ResponseAudioUrl string                 `protobuf:"bytes,9,opt,name=response_audio_url,json=responseAudioUrl,proto3" json:"response_audio_url,omitempty" gorm:"column:response_audio_url"`
+	ConfidenceScore  float32                `protobuf:"fixed32,10,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty" gorm:"column:confidence_score"`
+	ExecutedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=executed_at,json=executedAt,proto3" json:"executed_at,omitempty" gorm:"column:executed_at;not null;serializer:proto_timestamp"`
+	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *VoiceCommand) Reset() {

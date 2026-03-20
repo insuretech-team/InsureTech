@@ -82,25 +82,25 @@ type InsurerConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                // @inject_tag: gorm:"primaryKey;column:config_id;not null"
-	InsurerId string `protobuf:"bytes,2,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty"` // @inject_tag: gorm:"column:insurer_id;not null"
+	Id        string `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:config_id;not null"`
+	InsurerId string `protobuf:"bytes,2,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty" gorm:"column:insurer_id;not null"`
 	// API Integration
-	ApiBaseUrl      string             `protobuf:"bytes,3,opt,name=api_base_url,json=apiBaseUrl,proto3" json:"api_base_url,omitempty"`                                               // @inject_tag: gorm:"column:api_base_url"
-	ApiVersion      string             `protobuf:"bytes,4,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty"`                                                 // @inject_tag: gorm:"column:api_version"
-	AuthType        AuthenticationType `protobuf:"varint,5,opt,name=auth_type,json=authType,proto3,enum=insuretech.insurer.entity.v1.AuthenticationType" json:"auth_type,omitempty"` // @inject_tag: gorm:"column:auth_type;serializer:proto_enum"
-	AuthCredentials string             `protobuf:"bytes,6,opt,name=auth_credentials,json=authCredentials,proto3" json:"auth_credentials,omitempty"`                                  // @inject_tag: gorm:"column:auth_credentials"
+	ApiBaseUrl      string             `protobuf:"bytes,3,opt,name=api_base_url,json=apiBaseUrl,proto3" json:"api_base_url,omitempty" gorm:"column:api_base_url"`
+	ApiVersion      string             `protobuf:"bytes,4,opt,name=api_version,json=apiVersion,proto3" json:"api_version,omitempty" gorm:"column:api_version"`
+	AuthType        AuthenticationType `protobuf:"varint,5,opt,name=auth_type,json=authType,proto3,enum=insuretech.insurer.entity.v1.AuthenticationType" json:"auth_type,omitempty" gorm:"column:auth_type;serializer:proto_enum"`
+	AuthCredentials string             `protobuf:"bytes,6,opt,name=auth_credentials,json=authCredentials,proto3" json:"auth_credentials,omitempty" gorm:"column:auth_credentials"`
 	// Webhook configuration
-	WebhookUrl    string `protobuf:"bytes,7,opt,name=webhook_url,json=webhookUrl,proto3" json:"webhook_url,omitempty"`          // @inject_tag: gorm:"column:webhook_url"
-	WebhookSecret string `protobuf:"bytes,8,opt,name=webhook_secret,json=webhookSecret,proto3" json:"webhook_secret,omitempty"` // @inject_tag: gorm:"column:webhook_secret"
+	WebhookUrl    string `protobuf:"bytes,7,opt,name=webhook_url,json=webhookUrl,proto3" json:"webhook_url,omitempty" gorm:"column:webhook_url"`
+	WebhookSecret string `protobuf:"bytes,8,opt,name=webhook_secret,json=webhookSecret,proto3" json:"webhook_secret,omitempty" gorm:"column:webhook_secret"`
 	// Business rules
-	BusinessModel             string `protobuf:"bytes,9,opt,name=business_model,json=businessModel,proto3" json:"business_model,omitempty"`                                           // @inject_tag: gorm:"column:business_model"
-	AutoUnderwritingEnabled   bool   `protobuf:"varint,10,opt,name=auto_underwriting_enabled,json=autoUnderwritingEnabled,proto3" json:"auto_underwriting_enabled,omitempty"`         // @inject_tag: gorm:"column:auto_underwriting_enabled"
-	UnderwritingThreshold     int32  `protobuf:"varint,11,opt,name=underwriting_threshold,json=underwritingThreshold,proto3" json:"underwriting_threshold,omitempty"`                 // @inject_tag: gorm:"column:underwriting_threshold"
-	RealTimeClaimNotification bool   `protobuf:"varint,12,opt,name=real_time_claim_notification,json=realTimeClaimNotification,proto3" json:"real_time_claim_notification,omitempty"` // @inject_tag: gorm:"column:real_time_claim_notification"
+	BusinessModel             string `protobuf:"bytes,9,opt,name=business_model,json=businessModel,proto3" json:"business_model,omitempty" gorm:"column:business_model"`
+	AutoUnderwritingEnabled   bool   `protobuf:"varint,10,opt,name=auto_underwriting_enabled,json=autoUnderwritingEnabled,proto3" json:"auto_underwriting_enabled,omitempty" gorm:"column:auto_underwriting_enabled"`
+	UnderwritingThreshold     int32  `protobuf:"varint,11,opt,name=underwriting_threshold,json=underwritingThreshold,proto3" json:"underwriting_threshold,omitempty" gorm:"column:underwriting_threshold"`
+	RealTimeClaimNotification bool   `protobuf:"varint,12,opt,name=real_time_claim_notification,json=realTimeClaimNotification,proto3" json:"real_time_claim_notification,omitempty" gorm:"column:real_time_claim_notification"`
 	// Settlement configuration
-	ClaimSettlementDays int32         `protobuf:"varint,13,opt,name=claim_settlement_days,json=claimSettlementDays,proto3" json:"claim_settlement_days,omitempty"` // @inject_tag: gorm:"column:claim_settlement_days"
-	PaymentTerms        string        `protobuf:"bytes,14,opt,name=payment_terms,json=paymentTerms,proto3" json:"payment_terms,omitempty"`                         // @inject_tag: gorm:"column:payment_terms"
-	AuditInfo           *v1.AuditInfo `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                  // @inject_tag: gorm:"column:audit_info;not null"
+	ClaimSettlementDays int32         `protobuf:"varint,13,opt,name=claim_settlement_days,json=claimSettlementDays,proto3" json:"claim_settlement_days,omitempty" gorm:"column:claim_settlement_days"`
+	PaymentTerms        string        `protobuf:"bytes,14,opt,name=payment_terms,json=paymentTerms,proto3" json:"payment_terms,omitempty" gorm:"column:payment_terms"`
+	AuditInfo           *v1.AuditInfo `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *InsurerConfig) Reset() {

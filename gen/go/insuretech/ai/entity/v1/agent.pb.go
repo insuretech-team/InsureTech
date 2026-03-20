@@ -359,15 +359,15 @@ type AIAgent struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AgentId      string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`                          // @inject_tag: gorm:"primaryKey;column:agent_id;not null"
-	AgentName    string                 `protobuf:"bytes,2,opt,name=agent_name,json=agentName,proto3" json:"agent_name,omitempty"`                    // @inject_tag: gorm:"column:agent_name;not null"
-	Type         AgentType              `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.ai.entity.v1.AgentType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	ModelName    string                 `protobuf:"bytes,4,opt,name=model_name,json=modelName,proto3" json:"model_name,omitempty"`                    // @inject_tag: gorm:"column:model_name;not null"
-	Status       AgentStatus            `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.AgentStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	Capabilities map[string]string      `protobuf:"bytes,6,rep,name=capabilities,proto3" json:"capabilities,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	LastActiveAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_active_at,json=lastActiveAt,proto3" json:"last_active_at,omitempty"` // @inject_tag: gorm:"column:last_active_at;serializer:proto_timestamp"
-	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`            // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	AgentId      string                 `protobuf:"bytes,1,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"primaryKey;column:agent_id;not null"`
+	AgentName    string                 `protobuf:"bytes,2,opt,name=agent_name,json=agentName,proto3" json:"agent_name,omitempty" gorm:"column:agent_name;not null"`
+	Type         AgentType              `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.ai.entity.v1.AgentType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	ModelName    string                 `protobuf:"bytes,4,opt,name=model_name,json=modelName,proto3" json:"model_name,omitempty" gorm:"column:model_name;not null"`
+	Status       AgentStatus            `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.AgentStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	Capabilities map[string]string      `protobuf:"bytes,6,rep,name=capabilities,proto3" json:"capabilities,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:capabilities"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	LastActiveAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_active_at,json=lastActiveAt,proto3" json:"last_active_at,omitempty" gorm:"column:last_active_at;serializer:proto_timestamp"`
+	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *AIAgent) Reset() {
@@ -472,14 +472,14 @@ type Conversation struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ConversationId string                 `protobuf:"bytes,1,opt,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty"`            // @inject_tag: gorm:"primaryKey;column:conversation_id;not null"
-	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                    // @inject_tag: gorm:"column:user_id;not null"
-	AgentId        string                 `protobuf:"bytes,3,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`                                 // @inject_tag: gorm:"column:agent_id;not null"
-	Messages       []*Message             `protobuf:"bytes,4,rep,name=messages,proto3" json:"messages,omitempty"`                                              // @inject_tag: gorm:"column:messages;not null;serializer:proto_enum"
-	Status         ConversationStatus     `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.ConversationStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	StartedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`                           // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
-	EndedAt        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`                                 // @inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"
-	Context        map[string]string      `protobuf:"bytes,8,rep,name=context,proto3" json:"context,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	ConversationId string                 `protobuf:"bytes,1,opt,name=conversation_id,json=conversationId,proto3" json:"conversation_id,omitempty" gorm:"primaryKey;column:conversation_id;not null"`
+	UserId         string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null"`
+	AgentId        string                 `protobuf:"bytes,3,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"column:agent_id;not null"`
+	Messages       []*Message             `protobuf:"bytes,4,rep,name=messages,proto3" json:"messages,omitempty" gorm:"column:messages;not null;serializer:proto_enum"`
+	Status         ConversationStatus     `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.ConversationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	StartedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty" gorm:"column:started_at;not null;serializer:proto_timestamp"`
+	EndedAt        *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty" gorm:"column:ended_at;serializer:proto_timestamp"`
+	Context        map[string]string      `protobuf:"bytes,8,rep,name=context,proto3" json:"context,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:context"`
 }
 
 func (x *Conversation) Reset() {
@@ -575,11 +575,11 @@ type Message struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MessageId string                 `protobuf:"bytes,1,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty"`
-	Role      MessageRole            `protobuf:"varint,2,opt,name=role,proto3,enum=insuretech.ai.entity.v1.MessageRole" json:"role,omitempty"`
-	Content   string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty"`
-	Timestamp *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=timestamp,proto3" json:"timestamp,omitempty"`
-	Metadata  map[string]string      `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
+	MessageId string                 `protobuf:"bytes,1,opt,name=message_id,json=messageId,proto3" json:"message_id,omitempty" gorm:"column:message_id"`
+	Role      MessageRole            `protobuf:"varint,2,opt,name=role,proto3,enum=insuretech.ai.entity.v1.MessageRole" json:"role,omitempty" gorm:"column:role;serializer:proto_enum"`
+	Content   string                 `protobuf:"bytes,3,opt,name=content,proto3" json:"content,omitempty" gorm:"column:content"`
+	Timestamp *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;serializer:proto_timestamp"`
+	Metadata  map[string]string      `protobuf:"bytes,5,rep,name=metadata,proto3" json:"metadata,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:metadata"`
 }
 
 func (x *Message) Reset() {
@@ -655,14 +655,14 @@ type AIAnalysis struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AnalysisId      string                 `protobuf:"bytes,1,opt,name=analysis_id,json=analysisId,proto3" json:"analysis_id,omitempty"` // UUID
-	AgentId         string                 `protobuf:"bytes,2,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty"`
-	Type            AnalysisType           `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.ai.entity.v1.AnalysisType" json:"type,omitempty"`
-	SubjectId       string                 `protobuf:"bytes,4,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty"`                     // Policy, claim, or document ID
-	ConfidenceScore float64                `protobuf:"fixed64,5,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty"` // 0-1
-	Result          string                 `protobuf:"bytes,6,opt,name=result,proto3" json:"result,omitempty"`                                            // JSON result
-	Recommendations []string               `protobuf:"bytes,7,rep,name=recommendations,proto3" json:"recommendations,omitempty"`
-	AnalyzedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=analyzed_at,json=analyzedAt,proto3" json:"analyzed_at,omitempty"`
+	AnalysisId      string                 `protobuf:"bytes,1,opt,name=analysis_id,json=analysisId,proto3" json:"analysis_id,omitempty" gorm:"column:analysis_id"` // UUID
+	AgentId         string                 `protobuf:"bytes,2,opt,name=agent_id,json=agentId,proto3" json:"agent_id,omitempty" gorm:"column:agent_id"`
+	Type            AnalysisType           `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.ai.entity.v1.AnalysisType" json:"type,omitempty" gorm:"column:type;serializer:proto_enum"`
+	SubjectId       string                 `protobuf:"bytes,4,opt,name=subject_id,json=subjectId,proto3" json:"subject_id,omitempty" gorm:"column:subject_id"`                     // Policy, claim, or document ID
+	ConfidenceScore float64                `protobuf:"fixed64,5,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty" gorm:"column:confidence_score"` // 0-1
+	Result          string                 `protobuf:"bytes,6,opt,name=result,proto3" json:"result,omitempty" gorm:"column:result"`                                            // JSON result
+	Recommendations []string               `protobuf:"bytes,7,rep,name=recommendations,proto3" json:"recommendations,omitempty" gorm:"column:recommendations"`
+	AnalyzedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=analyzed_at,json=analyzedAt,proto3" json:"analyzed_at,omitempty" gorm:"column:analyzed_at;serializer:proto_timestamp"`
 }
 
 func (x *AIAnalysis) Reset() {
@@ -759,12 +759,12 @@ type MCPServer struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ServerId     string                 `protobuf:"bytes,1,opt,name=server_id,json=serverId,proto3" json:"server_id,omitempty"` // UUID
-	ServerName   string                 `protobuf:"bytes,2,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty"`
-	Endpoint     string                 `protobuf:"bytes,3,opt,name=endpoint,proto3" json:"endpoint,omitempty"`         // URL or connection string
-	Capabilities []string               `protobuf:"bytes,4,rep,name=capabilities,proto3" json:"capabilities,omitempty"` // What tools this server provides
-	Status       ServerStatus           `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.ServerStatus" json:"status,omitempty"`
-	LastPingAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=last_ping_at,json=lastPingAt,proto3" json:"last_ping_at,omitempty"`
+	ServerId     string                 `protobuf:"bytes,1,opt,name=server_id,json=serverId,proto3" json:"server_id,omitempty" gorm:"column:server_id"` // UUID
+	ServerName   string                 `protobuf:"bytes,2,opt,name=server_name,json=serverName,proto3" json:"server_name,omitempty" gorm:"column:server_name"`
+	Endpoint     string                 `protobuf:"bytes,3,opt,name=endpoint,proto3" json:"endpoint,omitempty" gorm:"column:endpoint"`         // URL or connection string
+	Capabilities []string               `protobuf:"bytes,4,rep,name=capabilities,proto3" json:"capabilities,omitempty" gorm:"column:capabilities"` // What tools this server provides
+	Status       ServerStatus           `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.ai.entity.v1.ServerStatus" json:"status,omitempty" gorm:"column:status;serializer:proto_enum"`
+	LastPingAt   *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=last_ping_at,json=lastPingAt,proto3" json:"last_ping_at,omitempty" gorm:"column:last_ping_at;serializer:proto_timestamp"`
 }
 
 func (x *MCPServer) Reset() {

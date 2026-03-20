@@ -142,13 +142,13 @@ type PricingConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PricingConfigId string                 `protobuf:"bytes,1,opt,name=pricing_config_id,json=pricingConfigId,proto3" json:"pricing_config_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:pricing_config_id;not null"
-	ProductId       string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                     // @inject_tag: gorm:"column:product_id;not null"
-	Rules           []*PricingRule         `protobuf:"bytes,3,rep,name=rules,proto3" json:"rules,omitempty"`                                              // @inject_tag: gorm:"column:rules;not null;serializer:proto_enum"
-	EffectiveFrom   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"`
-	EffectiveTo     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty"` // @inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`       // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`       // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	PricingConfigId string                 `protobuf:"bytes,1,opt,name=pricing_config_id,json=pricingConfigId,proto3" json:"pricing_config_id,omitempty" gorm:"primaryKey;column:pricing_config_id;not null"`
+	ProductId       string                 `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
+	Rules           []*PricingRule         `protobuf:"bytes,3,rep,name=rules,proto3" json:"rules,omitempty" gorm:"column:rules;not null;serializer:proto_enum"`
+	EffectiveFrom   *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty" gorm:"column:effective_from;serializer:proto_timestamp"`
+	EffectiveTo     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty" gorm:"column:effective_to;serializer:proto_timestamp"`
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *PricingConfig) Reset() {
@@ -238,11 +238,11 @@ type PricingRule struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RuleId     string           `protobuf:"bytes,1,opt,name=rule_id,json=ruleId,proto3" json:"rule_id,omitempty"`
-	RuleName   string           `protobuf:"bytes,2,opt,name=rule_name,json=ruleName,proto3" json:"rule_name,omitempty"`
-	Type       RuleType         `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.products.entity.v1.RuleType" json:"type,omitempty"`
-	Conditions []*RuleCondition `protobuf:"bytes,4,rep,name=conditions,proto3" json:"conditions,omitempty"`
-	Action     *RuleAction      `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty"`
+	RuleId     string           `protobuf:"bytes,1,opt,name=rule_id,json=ruleId,proto3" json:"rule_id,omitempty" gorm:"column:rule_id"`
+	RuleName   string           `protobuf:"bytes,2,opt,name=rule_name,json=ruleName,proto3" json:"rule_name,omitempty" gorm:"column:rule_name"`
+	Type       RuleType         `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.products.entity.v1.RuleType" json:"type,omitempty" gorm:"column:type;serializer:proto_enum"`
+	Conditions []*RuleCondition `protobuf:"bytes,4,rep,name=conditions,proto3" json:"conditions,omitempty" gorm:"column:conditions"`
+	Action     *RuleAction      `protobuf:"bytes,5,opt,name=action,proto3" json:"action,omitempty" gorm:"column:action"`
 }
 
 func (x *PricingRule) Reset() {
@@ -317,9 +317,9 @@ type RuleCondition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty"`       // e.g., "age", "district", "vehicle_type"
-	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty"` // e.g., ">=", "<=", "in", "not_in"
-	Value    string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty"`       // Comparison value
+	Field    string `protobuf:"bytes,1,opt,name=field,proto3" json:"field,omitempty" gorm:"column:field"`       // e.g., "age", "district", "vehicle_type"
+	Operator string `protobuf:"bytes,2,opt,name=operator,proto3" json:"operator,omitempty" gorm:"column:operator"` // e.g., ">=", "<=", "in", "not_in"
+	Value    string `protobuf:"bytes,3,opt,name=value,proto3" json:"value,omitempty" gorm:"column:value"`       // Comparison value
 }
 
 func (x *RuleCondition) Reset() {
@@ -380,8 +380,8 @@ type RuleAction struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Type  ActionType `protobuf:"varint,1,opt,name=type,proto3,enum=insuretech.products.entity.v1.ActionType" json:"type,omitempty"`
-	Value float64    `protobuf:"fixed64,2,opt,name=value,proto3" json:"value,omitempty"` // Percentage or fixed amount
+	Type  ActionType `protobuf:"varint,1,opt,name=type,proto3,enum=insuretech.products.entity.v1.ActionType" json:"type,omitempty" gorm:"column:type;serializer:proto_enum"`
+	Value float64    `protobuf:"fixed64,2,opt,name=value,proto3" json:"value,omitempty" gorm:"column:value"` // Percentage or fixed amount
 }
 
 func (x *RuleAction) Reset() {

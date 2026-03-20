@@ -132,33 +132,33 @@ type Employee struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	EmployeeUuid string `protobuf:"bytes,1,opt,name=employee_uuid,json=employeeUuid,proto3" json:"employee_uuid,omitempty"` // @inject_tag: gorm:"primaryKey;column:employee_uuid;not null"
-	Name         string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                     // @inject_tag: gorm:"column:name;not null"
-	EmployeeId   string `protobuf:"bytes,3,opt,name=employee_id,json=employeeId,proto3" json:"employee_id,omitempty"`       // @inject_tag: gorm:"column:employee_id;not null"
-	DepartmentId string `protobuf:"bytes,4,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty"` // @inject_tag: gorm:"column:department_id;not null"
+	EmployeeUuid string `protobuf:"bytes,1,opt,name=employee_uuid,json=employeeUuid,proto3" json:"employee_uuid,omitempty" gorm:"primaryKey;column:employee_uuid;not null"`
+	Name         string `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	EmployeeId   string `protobuf:"bytes,3,opt,name=employee_id,json=employeeId,proto3" json:"employee_id,omitempty" gorm:"column:employee_id;not null"`
+	DepartmentId string `protobuf:"bytes,4,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty" gorm:"column:department_id;not null"`
 	// FK to b2b_schema.organisations.organisation_id — tenant isolation key
-	BusinessId        string                 `protobuf:"bytes,5,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`                                                               // @inject_tag: gorm:"column:business_id;not null;index"
-	InsuranceCategory v1.InsuranceType       `protobuf:"varint,6,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty"` // @inject_tag: gorm:"column:insurance_category"
-	AssignedPlanId    string                 `protobuf:"bytes,7,opt,name=assigned_plan_id,json=assignedPlanId,proto3" json:"assigned_plan_id,omitempty"`                                                 // @inject_tag: gorm:"column:assigned_plan_id"
-	CoverageAmount    *v1.Money              `protobuf:"bytes,8,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty"`
-	PremiumAmount     *v1.Money              `protobuf:"bytes,9,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty"`
-	Status            EmployeeStatus         `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.EmployeeStatus" json:"status,omitempty"`     // @inject_tag: gorm:"column:status;not null"
-	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                            // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                            // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	NumberOfDependent int32                  `protobuf:"varint,13,opt,name=number_of_dependent,json=numberOfDependent,proto3" json:"number_of_dependent,omitempty"` // @inject_tag: gorm:"column:number_of_dependent;not null"
+	BusinessId        string                 `protobuf:"bytes,5,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id;not null;index"`
+	InsuranceCategory v1.InsuranceType       `protobuf:"varint,6,opt,name=insurance_category,json=insuranceCategory,proto3,enum=insuretech.common.v1.InsuranceType" json:"insurance_category,omitempty" gorm:"column:insurance_category;serializer:proto_enum"`
+	AssignedPlanId    string                 `protobuf:"bytes,7,opt,name=assigned_plan_id,json=assignedPlanId,proto3" json:"assigned_plan_id,omitempty" gorm:"column:assigned_plan_id"`
+	CoverageAmount    *v1.Money              `protobuf:"bytes,8,opt,name=coverage_amount,json=coverageAmount,proto3" json:"coverage_amount,omitempty" gorm:"column:coverage_amount"`
+	PremiumAmount     *v1.Money              `protobuf:"bytes,9,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty" gorm:"column:premium_amount"`
+	Status            EmployeeStatus         `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.b2b.entity.v1.EmployeeStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	CreatedAt         *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	NumberOfDependent int32                  `protobuf:"varint,13,opt,name=number_of_dependent,json=numberOfDependent,proto3" json:"number_of_dependent,omitempty" gorm:"column:number_of_dependent;not null"`
 	// Work email address
-	Email string `protobuf:"bytes,14,opt,name=email,proto3" json:"email,omitempty"` // @inject_tag: gorm:"column:email"
+	Email string `protobuf:"bytes,14,opt,name=email,proto3" json:"email,omitempty" gorm:"column:email"`
 	// Mobile number (BD format: +8801XXXXXXXXX)
-	MobileNumber string `protobuf:"bytes,15,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"` // @inject_tag: gorm:"column:mobile_number"
+	MobileNumber string `protobuf:"bytes,15,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty" gorm:"column:mobile_number"`
 	// Date of birth (ISO 8601 string: YYYY-MM-DD)
-	DateOfBirth string `protobuf:"bytes,16,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"` // @inject_tag: gorm:"column:date_of_birth"
+	DateOfBirth string `protobuf:"bytes,16,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty" gorm:"column:date_of_birth"`
 	// Date of joining (ISO 8601 string: YYYY-MM-DD)
-	DateOfJoining string         `protobuf:"bytes,17,opt,name=date_of_joining,json=dateOfJoining,proto3" json:"date_of_joining,omitempty"`          // @inject_tag: gorm:"column:date_of_joining"
-	Gender        EmployeeGender `protobuf:"varint,18,opt,name=gender,proto3,enum=insuretech.b2b.entity.v1.EmployeeGender" json:"gender,omitempty"` // @inject_tag: gorm:"column:gender"
+	DateOfJoining string         `protobuf:"bytes,17,opt,name=date_of_joining,json=dateOfJoining,proto3" json:"date_of_joining,omitempty" gorm:"column:date_of_joining"`
+	Gender        EmployeeGender `protobuf:"varint,18,opt,name=gender,proto3,enum=insuretech.b2b.entity.v1.EmployeeGender" json:"gender,omitempty" gorm:"column:gender;serializer:proto_enum"`
 	// B2C portal bridge: set when portal access is granted via GrantPortalAccess
 	// RPC. Links to authn_schema.users.user_id.
-	UserId    string                 `protobuf:"bytes,19,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`          // @inject_tag: gorm:"column:user_id"
-	DeletedAt *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"` // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+	UserId    string                 `protobuf:"bytes,19,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
+	DeletedAt *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
 }
 
 func (x *Employee) Reset() {

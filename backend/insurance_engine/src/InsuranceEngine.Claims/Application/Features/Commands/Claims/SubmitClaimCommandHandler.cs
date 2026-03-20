@@ -33,7 +33,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 
     public async Task<Result<Guid>> Handle(SubmitClaimCommand request, CancellationToken cancellationToken)
     {
-        _logger.LogInformation($"Submitting claim for policy {request.PolicyId}");
+        _logger.LogInformation("Submitting claim for policy {PolicyId}", request.PolicyId);
         
         // 1. Fetch Policy Info for Fraud Check (FD-001)
         var policyQuery = new InsuranceEngine.Policy.Application.Features.Queries.GetPolicyQuery(request.PolicyId);
@@ -53,7 +53,9 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             policy.IssuedAt ?? policy.CreatedAt);
 
         var fraudResult = await _mediator.Send(fraudCommand, cancellationToken);
-        
+
+        var isFlagged = fraudResult.IsSuccess && fraudResult.Value.Status == InsuranceEngine.Fraud.Domain.Enums.FraudCheckStatus.Flagged;
+
         var claim = new Claim
         {
             Id = Guid.NewGuid(),
@@ -61,31 +63,37 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             PolicyId = request.PolicyId,
             CustomerId = request.CustomerId,
             Type = request.Type,
-            Status = (fraudResult.IsSuccess && fraudResult.Value.Status == InsuranceEngine.Fraud.Domain.Enums.FraudCheckStatus.Flagged) 
-                     ? ClaimStatus.UnderReview 
-                     : ClaimStatus.Submitted,
+            Status = isFlagged ? ClaimStatus.UnderReview : ClaimStatus.Submitted,
             ClaimedAmount = request.ClaimedAmount,
             ClaimedCurrency = "BDT",
             IncidentDate = request.IncidentDate,
             IncidentDescription = request.IncidentDescription,
             PlaceOfIncident = request.PlaceOfIncident,
+            BankDetailsForPayout = request.BankDetailsForPayout,
             SubmittedAt = DateTime.UtcNow,
             ProcessingType = ClaimProcessingType.Manual,
-            FraudScore = fraudResult.IsSuccess ? fraudResult.Value.RiskScore : 0,
-            FraudCheckData = fraudResult.IsSuccess ? System.Text.Json.JsonSerializer.Serialize(fraudResult.Value.Findings) : null,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
 
+        // Create FraudCheckResult entity (proto-aligned) instead of inline fields
         if (fraudResult.IsSuccess)
         {
-            // Update the fraud check with the actual claim ID
-            // In a more robust system, we would do this via a domain event or after persistence.
+            claim.FraudCheck = new FraudCheckResult
+            {
+                Id = Guid.NewGuid(),
+                ClaimId = claim.Id,
+                FraudScore = fraudResult.Value.RiskScore,
+                RiskFactors = fraudResult.Value.Findings ?? new(),
+                Flagged = isFlagged,
+                CreatedAt = DateTime.UtcNow
+            };
         }
 
         await _claimsRepository.CreateAsync(claim, cancellationToken);
         
-        _logger.LogInformation($"Claim {claim.ClaimNumber} created with ID {claim.Id}. Fraud Score: {claim.FraudScore}");
+        _logger.LogInformation("Claim {ClaimNumber} created with ID {ClaimId}. Fraud flagged: {IsFlagged}",
+            claim.ClaimNumber, claim.Id, isFlagged);
 
         // Publish to Kafka
         await _eventBus.PublishAsync("insurance.claims.v1", new ClaimSubmittedEvent(
@@ -101,3 +109,4 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
         return Result<Guid>.Success(claim.Id);
     }
 }
+

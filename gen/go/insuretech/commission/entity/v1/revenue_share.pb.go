@@ -28,16 +28,16 @@ type RevenueShare struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                // @inject_tag: gorm:"primaryKey;column:share_id;not null"
-	PolicyId      string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`    // @inject_tag: gorm:"column:policy_id;not null"
-	InsurerId     string                 `protobuf:"bytes,3,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty"` // @inject_tag: gorm:"column:insurer_id;not null"
-	GrossPremium  *v1.Money              `protobuf:"bytes,4,opt,name=gross_premium,json=grossPremium,proto3" json:"gross_premium,omitempty"`
-	PlatformShare *v1.Money              `protobuf:"bytes,5,opt,name=platform_share,json=platformShare,proto3" json:"platform_share,omitempty"`
-	InsurerShare  *v1.Money              `protobuf:"bytes,6,opt,name=insurer_share,json=insurerShare,proto3" json:"insurer_share,omitempty"`
-	SplitConfig   string                 `protobuf:"bytes,7,opt,name=split_config,json=splitConfig,proto3" json:"split_config,omitempty"`    // @inject_tag: gorm:"column:split_config"
-	RevenueModel  string                 `protobuf:"bytes,8,opt,name=revenue_model,json=revenueModel,proto3" json:"revenue_model,omitempty"` // @inject_tag: gorm:"column:revenue_model;not null"
-	RecordedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=recorded_at,json=recordedAt,proto3" json:"recorded_at,omitempty"`       // @inject_tag: gorm:"column:recorded_at;not null;serializer:proto_timestamp"
-	AuditInfo     *v1.AuditInfo          `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`         // @inject_tag: gorm:"column:audit_info;not null"
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:share_id;not null"`
+	PolicyId      string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
+	InsurerId     string                 `protobuf:"bytes,3,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty" gorm:"column:insurer_id;not null"`
+	GrossPremium  *v1.Money              `protobuf:"bytes,4,opt,name=gross_premium,json=grossPremium,proto3" json:"gross_premium,omitempty" gorm:"column:gross_premium"`
+	PlatformShare *v1.Money              `protobuf:"bytes,5,opt,name=platform_share,json=platformShare,proto3" json:"platform_share,omitempty" gorm:"column:platform_share"`
+	InsurerShare  *v1.Money              `protobuf:"bytes,6,opt,name=insurer_share,json=insurerShare,proto3" json:"insurer_share,omitempty" gorm:"column:insurer_share"`
+	SplitConfig   string                 `protobuf:"bytes,7,opt,name=split_config,json=splitConfig,proto3" json:"split_config,omitempty" gorm:"column:split_config"`
+	RevenueModel  string                 `protobuf:"bytes,8,opt,name=revenue_model,json=revenueModel,proto3" json:"revenue_model,omitempty" gorm:"column:revenue_model;not null"`
+	RecordedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=recorded_at,json=recordedAt,proto3" json:"recorded_at,omitempty" gorm:"column:recorded_at;not null;serializer:proto_timestamp"`
+	AuditInfo     *v1.AuditInfo          `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *RevenueShare) Reset() {

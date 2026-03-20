@@ -27,10 +27,11 @@ public class ClaimsController : ControllerBase
             request.PolicyId,
             request.CustomerId,
             request.Type,
-            (long)request.ClaimedAmount, // Convert to long for internal use
+            request.ClaimedAmount,
             request.IncidentDate,
             request.IncidentDescription,
-            request.PlaceOfIncident
+            request.PlaceOfIncident,
+            request.BankDetailsForPayout
         );
 
         var result = await _mediator.Send(command);

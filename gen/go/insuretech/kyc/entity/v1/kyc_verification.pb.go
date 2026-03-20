@@ -193,21 +193,21 @@ type KYCVerification struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                            // @inject_tag: gorm:"primaryKey;column:verification_id;not null"
-	Type               VerificationType       `protobuf:"varint,2,opt,name=type,proto3,enum=insuretech.kyc.entity.v1.VerificationType" json:"type,omitempty"`        // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	EntityType         string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                          // @inject_tag: gorm:"column:entity_type;not null"
-	EntityId           string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                                // @inject_tag: gorm:"column:entity_id;not null"
-	Method             VerificationMethod     `protobuf:"varint,5,opt,name=method,proto3,enum=insuretech.kyc.entity.v1.VerificationMethod" json:"method,omitempty"`  // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
-	Provider           string                 `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty"`                                                // @inject_tag: gorm:"column:provider"
-	ProviderReference  string                 `protobuf:"bytes,7,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty"`     // @inject_tag: gorm:"column:provider_reference"
-	Documents          string                 `protobuf:"bytes,8,opt,name=documents,proto3" json:"documents,omitempty"`                                              // @inject_tag: gorm:"column:documents"
-	Status             VerificationStatus     `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.kyc.entity.v1.VerificationStatus" json:"status,omitempty"`  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	VerificationResult string                 `protobuf:"bytes,10,opt,name=verification_result,json=verificationResult,proto3" json:"verification_result,omitempty"` // @inject_tag: gorm:"column:verification_result"
-	RejectionReason    string                 `protobuf:"bytes,11,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty"`          // @inject_tag: gorm:"column:rejection_reason"
-	VerifiedBy         string                 `protobuf:"bytes,12,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty"`                         // @inject_tag: gorm:"column:verified_by"
-	VerifiedAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty"`                         // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
-	ExpiresAt          *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`                            // @inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                            // @inject_tag: gorm:"column:audit_info;not null"
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:verification_id;not null"`
+	Type               VerificationType       `protobuf:"varint,2,opt,name=type,proto3,enum=insuretech.kyc.entity.v1.VerificationType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	EntityType         string                 `protobuf:"bytes,3,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
+	EntityId           string                 `protobuf:"bytes,4,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id;not null"`
+	Method             VerificationMethod     `protobuf:"varint,5,opt,name=method,proto3,enum=insuretech.kyc.entity.v1.VerificationMethod" json:"method,omitempty" gorm:"column:method;not null;serializer:proto_enum"`
+	Provider           string                 `protobuf:"bytes,6,opt,name=provider,proto3" json:"provider,omitempty" gorm:"column:provider"`
+	ProviderReference  string                 `protobuf:"bytes,7,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty" gorm:"column:provider_reference"`
+	Documents          string                 `protobuf:"bytes,8,opt,name=documents,proto3" json:"documents,omitempty" gorm:"column:documents"`
+	Status             VerificationStatus     `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.kyc.entity.v1.VerificationStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	VerificationResult string                 `protobuf:"bytes,10,opt,name=verification_result,json=verificationResult,proto3" json:"verification_result,omitempty" gorm:"column:verification_result"`
+	RejectionReason    string                 `protobuf:"bytes,11,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty" gorm:"column:rejection_reason"`
+	VerifiedBy         string                 `protobuf:"bytes,12,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty" gorm:"column:verified_by"`
+	VerifiedAt         *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty" gorm:"column:verified_at;serializer:proto_timestamp"`
+	ExpiresAt          *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;serializer:proto_timestamp"`
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *KYCVerification) Reset() {

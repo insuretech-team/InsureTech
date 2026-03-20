@@ -28,29 +28,29 @@ type OTP struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OtpId      string                 `protobuf:"bytes,1,opt,name=otp_id,json=otpId,proto3" json:"otp_id,omitempty"`                 // @inject_tag: gorm:"primaryKey;column:otp_id;not null"
-	UserId     string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`              // @inject_tag: gorm:"column:user_id;not null"
-	OtpHash    string                 `protobuf:"bytes,3,opt,name=otp_hash,json=otpHash,proto3" json:"otp_hash,omitempty"`           // @inject_tag: gorm:"column:otp_hash;not null"
-	Purpose    string                 `protobuf:"bytes,4,opt,name=purpose,proto3" json:"purpose,omitempty"`                          // @inject_tag: gorm:"column:purpose;not null"
-	DeviceType string                 `protobuf:"bytes,5,opt,name=device_type,json=deviceType,proto3" json:"device_type,omitempty"`  // @inject_tag: gorm:"column:device_type"
-	IpAddress  string                 `protobuf:"bytes,6,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`     // @inject_tag: gorm:"column:ip_address"
-	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`     // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	ExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`     // @inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"
-	Attempts   int32                  `protobuf:"varint,9,opt,name=attempts,proto3" json:"attempts,omitempty"`                       // @inject_tag: gorm:"column:attempts;not null"
-	Verified   bool                   `protobuf:"varint,10,opt,name=verified,proto3" json:"verified,omitempty"`                      // @inject_tag: gorm:"column:verified;not null"
-	VerifiedAt *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty"` // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+	OtpId      string                 `protobuf:"bytes,1,opt,name=otp_id,json=otpId,proto3" json:"otp_id,omitempty" gorm:"primaryKey;column:otp_id;not null"`
+	UserId     string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id;not null"`
+	OtpHash    string                 `protobuf:"bytes,3,opt,name=otp_hash,json=otpHash,proto3" json:"otp_hash,omitempty" gorm:"column:otp_hash;not null"`
+	Purpose    string                 `protobuf:"bytes,4,opt,name=purpose,proto3" json:"purpose,omitempty" gorm:"column:purpose;not null"`
+	DeviceType string                 `protobuf:"bytes,5,opt,name=device_type,json=deviceType,proto3" json:"device_type,omitempty" gorm:"column:device_type"`
+	IpAddress  string                 `protobuf:"bytes,6,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty" gorm:"column:ip_address"`
+	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	ExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;not null;serializer:proto_timestamp"`
+	Attempts   int32                  `protobuf:"varint,9,opt,name=attempts,proto3" json:"attempts,omitempty" gorm:"column:attempts;not null"`
+	Verified   bool                   `protobuf:"varint,10,opt,name=verified,proto3" json:"verified,omitempty" gorm:"column:verified;not null"`
+	VerifiedAt *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty" gorm:"column:verified_at;serializer:proto_timestamp"`
 	// BTRC Compliance Fields - SMS Delivery Tracking
-	ProviderMessageId string                 `protobuf:"bytes,12,opt,name=provider_message_id,json=providerMessageId,proto3" json:"provider_message_id,omitempty"` // @inject_tag: gorm:"column:provider_message_id"
-	DlrStatus         string                 `protobuf:"bytes,13,opt,name=dlr_status,json=dlrStatus,proto3" json:"dlr_status,omitempty"`                           // @inject_tag: gorm:"column:dlr_status"
-	SenderId          string                 `protobuf:"bytes,14,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty"`                              // @inject_tag: gorm:"column:sender_id"
-	Carrier           string                 `protobuf:"bytes,15,opt,name=carrier,proto3" json:"carrier,omitempty"`                                                // @inject_tag: gorm:"column:carrier"
-	Channel           string                 `protobuf:"bytes,16,opt,name=channel,proto3" json:"channel,omitempty"`                                                // @inject_tag: gorm:"column:channel;not null"
-	Recipient         string                 `protobuf:"bytes,17,opt,name=recipient,proto3" json:"recipient,omitempty"`                                            // @inject_tag: gorm:"column:recipient;not null"
-	DlrReceivedAt     *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=dlr_received_at,json=dlrReceivedAt,proto3" json:"dlr_received_at,omitempty"`             // @inject_tag: gorm:"column:dlr_received_at;serializer:proto_timestamp"
+	ProviderMessageId string                 `protobuf:"bytes,12,opt,name=provider_message_id,json=providerMessageId,proto3" json:"provider_message_id,omitempty" gorm:"column:provider_message_id"`
+	DlrStatus         string                 `protobuf:"bytes,13,opt,name=dlr_status,json=dlrStatus,proto3" json:"dlr_status,omitempty" gorm:"column:dlr_status"`
+	SenderId          string                 `protobuf:"bytes,14,opt,name=sender_id,json=senderId,proto3" json:"sender_id,omitempty" gorm:"column:sender_id"`
+	Carrier           string                 `protobuf:"bytes,15,opt,name=carrier,proto3" json:"carrier,omitempty" gorm:"column:carrier"`
+	Channel           string                 `protobuf:"bytes,16,opt,name=channel,proto3" json:"channel,omitempty" gorm:"column:channel;not null"`
+	Recipient         string                 `protobuf:"bytes,17,opt,name=recipient,proto3" json:"recipient,omitempty" gorm:"column:recipient;not null"`
+	DlrReceivedAt     *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=dlr_received_at,json=dlrReceivedAt,proto3" json:"dlr_received_at,omitempty" gorm:"column:dlr_received_at;serializer:proto_timestamp"`
 	// dlr_error_code: Error code returned by SSLWireless for failed deliveries
-	DlrErrorCode string `protobuf:"bytes,19,opt,name=dlr_error_code,json=dlrErrorCode,proto3" json:"dlr_error_code,omitempty"` // @inject_tag: gorm:"column:dlr_error_code"
+	DlrErrorCode string `protobuf:"bytes,19,opt,name=dlr_error_code,json=dlrErrorCode,proto3" json:"dlr_error_code,omitempty" gorm:"column:dlr_error_code"`
 	// dlr_updated_at: Timestamp of last DLR status update
-	DlrUpdatedAt *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=dlr_updated_at,json=dlrUpdatedAt,proto3" json:"dlr_updated_at,omitempty"` // @inject_tag: gorm:"column:dlr_updated_at;serializer:proto_timestamp"
+	DlrUpdatedAt *timestamppb.Timestamp `protobuf:"bytes,20,opt,name=dlr_updated_at,json=dlrUpdatedAt,proto3" json:"dlr_updated_at,omitempty" gorm:"column:dlr_updated_at;serializer:proto_timestamp"`
 }
 
 func (x *OTP) Reset() {

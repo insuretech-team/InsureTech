@@ -174,12 +174,22 @@ public class PolicyDbContext : DbContext
         {
             entity.ToTable("policy_nominees", "insurance_schema");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Relationship).IsRequired().HasMaxLength(50);
             entity.HasQueryFilter(e => !e.IsDeleted);
+
+            entity.Property(e => e.FullName).HasColumnName("full_name").HasMaxLength(200).IsRequired();
+            entity.Property(e => e.Relationship).HasMaxLength(50).IsRequired();
+            entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth");
+            entity.Property(e => e.NomineeDobText).HasColumnName("nominee_dob_text").HasMaxLength(50);
+            entity.Property(e => e.NidNumber).HasColumnName("nid_number").HasMaxLength(20);
+            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number").HasMaxLength(20);
 
             entity.HasOne(e => e.Beneficiary)
                 .WithMany()
-                .HasForeignKey(e => e.BeneficiaryId);
+                .HasForeignKey(e => e.BeneficiaryId)
+                .IsRequired(false);
+
+            entity.HasIndex(e => e.PolicyId);
+            entity.HasIndex(e => e.NidNumber);
         });
 
         modelBuilder.Entity<UnderwritingHealthDeclaration>(entity =>

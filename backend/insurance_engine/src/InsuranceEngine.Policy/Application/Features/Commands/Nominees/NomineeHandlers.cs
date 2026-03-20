@@ -28,7 +28,8 @@ public class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand, Resul
         var policy = await _repo.GetByIdWithNomineesAsync(request.PolicyId);
         if (policy == null) return Result<Guid>.Fail(Error.NotFound("Policy", request.PolicyId.ToString()));
 
-        var result = policy.AddNominee(request.BeneficiaryId, request.Relationship, request.SharePercentage);
+        var result = policy.AddNominee(request.BeneficiaryId, request.FullName, request.Relationship, request.SharePercentage,
+            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         if (result.IsFailure) return Result<Guid>.Fail(result.Error!);
 
         await _repo.UpdateAsync(policy);
@@ -53,7 +54,8 @@ public class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeCommand,
         var policy = await _repo.GetByIdWithNomineesAsync(request.PolicyId);
         if (policy == null) return Result.Fail(Error.NotFound("Policy", request.PolicyId.ToString()));
 
-        var result = policy.UpdateNominee(request.NomineeId, request.Relationship, request.SharePercentage);
+        var result = policy.UpdateNominee(request.NomineeId, request.FullName, request.Relationship, request.SharePercentage,
+            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         if (result.IsFailure) return result;
 
         await _repo.UpdateAsync(policy);
@@ -100,8 +102,13 @@ public class ListNomineesQueryHandler : IRequestHandler<ListNomineesQuery, List<
         return nominees.Select(n => new NomineeDto(
             Id: n.Id,
             BeneficiaryId: n.BeneficiaryId,
+            FullName: n.FullName,
             Relationship: n.Relationship,
-            SharePercentage: n.SharePercentage
+            SharePercentage: n.SharePercentage,
+            DateOfBirth: n.DateOfBirth,
+            NomineeDobText: n.NomineeDobText,
+            NidNumber: n.NidNumber,
+            PhoneNumber: n.PhoneNumber
         )).ToList();
     }
 }

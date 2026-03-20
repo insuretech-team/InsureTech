@@ -260,40 +260,40 @@ type Order struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	OrderId      string      `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`                              // @inject_tag: gorm:"primaryKey;column:order_id;not null"
-	OrderNumber  string      `protobuf:"bytes,2,opt,name=order_number,json=orderNumber,proto3" json:"order_number,omitempty"`                  // @inject_tag: gorm:"column:order_number;not null;uniqueIndex"
-	TenantId     string      `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                           // @inject_tag: gorm:"column:tenant_id;not null"
-	QuotationId  string      `protobuf:"bytes,4,opt,name=quotation_id,json=quotationId,proto3" json:"quotation_id,omitempty"`                  // @inject_tag: gorm:"column:quotation_id;not null"
-	CustomerId   string      `protobuf:"bytes,5,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                     // @inject_tag: gorm:"column:customer_id;not null"
-	ProductId    string      `protobuf:"bytes,6,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                        // @inject_tag: gorm:"column:product_id;not null"
-	PlanId       string      `protobuf:"bytes,7,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`                                 // @inject_tag: gorm:"column:plan_id;not null"
-	Status       OrderStatus `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.orders.entity.v1.OrderStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	TotalPayable *v1.Money   `protobuf:"bytes,9,opt,name=total_payable,json=totalPayable,proto3" json:"total_payable,omitempty"`               // @inject_tag: gorm:"column:total_payable;not null"
-	Currency     string      `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`                                          // @inject_tag: gorm:"column:currency;not null"
+	OrderId      string      `protobuf:"bytes,1,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty" gorm:"primaryKey;column:order_id;not null"`
+	OrderNumber  string      `protobuf:"bytes,2,opt,name=order_number,json=orderNumber,proto3" json:"order_number,omitempty" gorm:"column:order_number;not null;uniqueIndex"`
+	TenantId     string      `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id;not null"`
+	QuotationId  string      `protobuf:"bytes,4,opt,name=quotation_id,json=quotationId,proto3" json:"quotation_id,omitempty" gorm:"column:quotation_id;not null"`
+	CustomerId   string      `protobuf:"bytes,5,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" gorm:"column:customer_id;not null"`
+	ProductId    string      `protobuf:"bytes,6,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
+	PlanId       string      `protobuf:"bytes,7,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty" gorm:"column:plan_id;not null"`
+	Status       OrderStatus `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.orders.entity.v1.OrderStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	TotalPayable *v1.Money   `protobuf:"bytes,9,opt,name=total_payable,json=totalPayable,proto3" json:"total_payable,omitempty" gorm:"column:total_payable;not null"`
+	Currency     string      `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty" gorm:"column:currency;not null"`
 	// Payment fields — populated after InitiatePayment
-	PaymentId         string `protobuf:"bytes,11,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                           // @inject_tag: gorm:"column:payment_id"
-	PaymentGatewayRef string `protobuf:"bytes,12,opt,name=payment_gateway_ref,json=paymentGatewayRef,proto3" json:"payment_gateway_ref,omitempty"` // @inject_tag: gorm:"column:payment_gateway_ref"
+	PaymentId         string `protobuf:"bytes,11,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty" gorm:"column:payment_id"`
+	PaymentGatewayRef string `protobuf:"bytes,12,opt,name=payment_gateway_ref,json=paymentGatewayRef,proto3" json:"payment_gateway_ref,omitempty" gorm:"column:payment_gateway_ref"`
 	// Policy fields — populated after PolicyIssued
-	PolicyId             string                 `protobuf:"bytes,13,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                                                                     // @inject_tag: gorm:"column:policy_id"
-	CancellationReason   string                 `protobuf:"bytes,14,opt,name=cancellation_reason,json=cancellationReason,proto3" json:"cancellation_reason,omitempty"`                                                       // @inject_tag: gorm:"column:cancellation_reason"
-	FailureReason        string                 `protobuf:"bytes,15,opt,name=failure_reason,json=failureReason,proto3" json:"failure_reason,omitempty"`                                                                      // @inject_tag: gorm:"column:failure_reason"
-	CreatedAt            *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                                                  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt            *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                                                                  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	PaidAt               *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`                                                                                           // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
-	InvoiceId            string                 `protobuf:"bytes,19,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`                                                                                  // @inject_tag: gorm:"column:invoice_id;index:idx_orders_invoice_id"
-	OrganisationId       string                 `protobuf:"bytes,20,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty"`                                                                   // @inject_tag: gorm:"column:organisation_id;index:idx_orders_organisation_id"
-	IdempotencyKey       string                 `protobuf:"bytes,21,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`                                                                   // @inject_tag: gorm:"column:idempotency_key;uniqueIndex"
-	CorrelationId        string                 `protobuf:"bytes,22,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty"`                                                                      // @inject_tag: gorm:"column:correlation_id"
-	PaymentStatus        OrderPaymentStatus     `protobuf:"varint,23,opt,name=payment_status,json=paymentStatus,proto3,enum=insuretech.orders.entity.v1.OrderPaymentStatus" json:"payment_status,omitempty"`                 // @inject_tag: gorm:"column:payment_status;not null"
-	BillingStatus        OrderBillingStatus     `protobuf:"varint,24,opt,name=billing_status,json=billingStatus,proto3,enum=insuretech.orders.entity.v1.OrderBillingStatus" json:"billing_status,omitempty"`                 // @inject_tag: gorm:"column:billing_status;not null"
-	FulfillmentStatus    OrderFulfillmentStatus `protobuf:"varint,25,opt,name=fulfillment_status,json=fulfillmentStatus,proto3,enum=insuretech.orders.entity.v1.OrderFulfillmentStatus" json:"fulfillment_status,omitempty"` // @inject_tag: gorm:"column:fulfillment_status;not null"
-	ManualReviewRequired bool                   `protobuf:"varint,26,opt,name=manual_review_required,json=manualReviewRequired,proto3" json:"manual_review_required,omitempty"`                                              // @inject_tag: gorm:"column:manual_review_required;not null;default:false"
-	PaymentDueAt         *timestamppb.Timestamp `protobuf:"bytes,27,opt,name=payment_due_at,json=paymentDueAt,proto3" json:"payment_due_at,omitempty"`                                                                       // @inject_tag: gorm:"column:payment_due_at;serializer:proto_timestamp"
-	CoverageStartAt      *timestamppb.Timestamp `protobuf:"bytes,28,opt,name=coverage_start_at,json=coverageStartAt,proto3" json:"coverage_start_at,omitempty"`                                                              // @inject_tag: gorm:"column:coverage_start_at;serializer:proto_timestamp"
-	CoverageEndAt        *timestamppb.Timestamp `protobuf:"bytes,29,opt,name=coverage_end_at,json=coverageEndAt,proto3" json:"coverage_end_at,omitempty"`                                                                    // @inject_tag: gorm:"column:coverage_end_at;serializer:proto_timestamp"
-	ActorUserId          string                 `protobuf:"bytes,30,opt,name=actor_user_id,json=actorUserId,proto3" json:"actor_user_id,omitempty"`                                                                          // @inject_tag: gorm:"column:actor_user_id"
-	Portal               string                 `protobuf:"bytes,31,opt,name=portal,proto3" json:"portal,omitempty"`                                                                                                         // @inject_tag: gorm:"column:portal"
-	PurchaseOrderId      string                 `protobuf:"bytes,32,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty"`                                                              // @inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"
+	PolicyId             string                 `protobuf:"bytes,13,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
+	CancellationReason   string                 `protobuf:"bytes,14,opt,name=cancellation_reason,json=cancellationReason,proto3" json:"cancellation_reason,omitempty" gorm:"column:cancellation_reason"`
+	FailureReason        string                 `protobuf:"bytes,15,opt,name=failure_reason,json=failureReason,proto3" json:"failure_reason,omitempty" gorm:"column:failure_reason"`
+	CreatedAt            *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt            *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	PaidAt               *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty" gorm:"column:paid_at;serializer:proto_timestamp"`
+	InvoiceId            string                 `protobuf:"bytes,19,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty" gorm:"column:invoice_id;index:idx_orders_invoice_id"`
+	OrganisationId       string                 `protobuf:"bytes,20,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty" gorm:"column:organisation_id;index:idx_orders_organisation_id"`
+	IdempotencyKey       string                 `protobuf:"bytes,21,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty" gorm:"column:idempotency_key;uniqueIndex"`
+	CorrelationId        string                 `protobuf:"bytes,22,opt,name=correlation_id,json=correlationId,proto3" json:"correlation_id,omitempty" gorm:"column:correlation_id"`
+	PaymentStatus        OrderPaymentStatus     `protobuf:"varint,23,opt,name=payment_status,json=paymentStatus,proto3,enum=insuretech.orders.entity.v1.OrderPaymentStatus" json:"payment_status,omitempty" gorm:"column:payment_status;not null;serializer:proto_enum"`
+	BillingStatus        OrderBillingStatus     `protobuf:"varint,24,opt,name=billing_status,json=billingStatus,proto3,enum=insuretech.orders.entity.v1.OrderBillingStatus" json:"billing_status,omitempty" gorm:"column:billing_status;not null;serializer:proto_enum"`
+	FulfillmentStatus    OrderFulfillmentStatus `protobuf:"varint,25,opt,name=fulfillment_status,json=fulfillmentStatus,proto3,enum=insuretech.orders.entity.v1.OrderFulfillmentStatus" json:"fulfillment_status,omitempty" gorm:"column:fulfillment_status;not null;serializer:proto_enum"`
+	ManualReviewRequired bool                   `protobuf:"varint,26,opt,name=manual_review_required,json=manualReviewRequired,proto3" json:"manual_review_required,omitempty" gorm:"column:manual_review_required;not null;default:false"`
+	PaymentDueAt         *timestamppb.Timestamp `protobuf:"bytes,27,opt,name=payment_due_at,json=paymentDueAt,proto3" json:"payment_due_at,omitempty" gorm:"column:payment_due_at;serializer:proto_timestamp"`
+	CoverageStartAt      *timestamppb.Timestamp `protobuf:"bytes,28,opt,name=coverage_start_at,json=coverageStartAt,proto3" json:"coverage_start_at,omitempty" gorm:"column:coverage_start_at;serializer:proto_timestamp"`
+	CoverageEndAt        *timestamppb.Timestamp `protobuf:"bytes,29,opt,name=coverage_end_at,json=coverageEndAt,proto3" json:"coverage_end_at,omitempty" gorm:"column:coverage_end_at;serializer:proto_timestamp"`
+	ActorUserId          string                 `protobuf:"bytes,30,opt,name=actor_user_id,json=actorUserId,proto3" json:"actor_user_id,omitempty" gorm:"column:actor_user_id"`
+	Portal               string                 `protobuf:"bytes,31,opt,name=portal,proto3" json:"portal,omitempty" gorm:"column:portal"`
+	PurchaseOrderId      string                 `protobuf:"bytes,32,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty" gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"`
 }
 
 func (x *Order) Reset() {

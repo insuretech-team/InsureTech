@@ -29,45 +29,45 @@ type User struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId                 string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                                  // @inject_tag: gorm:"primaryKey;column:user_id;not null"
-	MobileNumber           string                 `protobuf:"bytes,2,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`                                // @inject_tag: gorm:"column:mobile_number;not null"
-	Email                  string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`                                                                  // @inject_tag: gorm:"column:email"
-	PasswordHash           string                 `protobuf:"bytes,4,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty"`                                // @inject_tag: gorm:"column:password_hash;not null"
-	Status                 UserStatus             `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.authn.entity.v1.UserStatus" json:"status,omitempty"`                    // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	CreatedAt              *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                         // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                         // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	LastLoginAt            *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3" json:"last_login_at,omitempty"`                                 // @inject_tag: gorm:"column:last_login_at;serializer:proto_timestamp"
-	LastLoginSessionType   string                 `protobuf:"bytes,9,opt,name=last_login_session_type,json=lastLoginSessionType,proto3" json:"last_login_session_type,omitempty"`    // @inject_tag: gorm:"column:last_login_session_type"
-	PreferredAuthMethod    string                 `protobuf:"bytes,10,opt,name=preferred_auth_method,json=preferredAuthMethod,proto3" json:"preferred_auth_method,omitempty"`        // @inject_tag: gorm:"column:preferred_auth_method"
-	CreatedBy              *string                `protobuf:"bytes,11,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty"`                                  // @inject_tag: gorm:"column:created_by"
-	UpdatedBy              *string                `protobuf:"bytes,12,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty"`                                  // @inject_tag: gorm:"column:updated_by"
-	LoginAttempts          int32                  `protobuf:"varint,13,opt,name=login_attempts,json=loginAttempts,proto3" json:"login_attempts,omitempty"`                           // @inject_tag: gorm:"column:login_attempts;not null"
-	LockedUntil            *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=locked_until,json=lockedUntil,proto3" json:"locked_until,omitempty"`                                  // @inject_tag: gorm:"column:locked_until;serializer:proto_timestamp"
-	DeletedAt              *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                                        // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
-	Username               string                 `protobuf:"bytes,16,opt,name=username,proto3" json:"username,omitempty"`                                                           // @inject_tag: gorm:"column:username"
-	PreferredLanguage      string                 `protobuf:"bytes,17,opt,name=preferred_language,json=preferredLanguage,proto3" json:"preferred_language,omitempty"`                // @inject_tag: gorm:"column:preferred_language"
-	NotificationPreference string                 `protobuf:"bytes,18,opt,name=notification_preference,json=notificationPreference,proto3" json:"notification_preference,omitempty"` // @inject_tag: gorm:"column:notification_preference"
-	WalletPaymentMethod    string                 `protobuf:"bytes,19,opt,name=wallet_payment_method,json=walletPaymentMethod,proto3" json:"wallet_payment_method,omitempty"`        // @inject_tag: gorm:"column:wallet_payment_method"
+	UserId                 string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"primaryKey;column:user_id;not null"`
+	MobileNumber           string                 `protobuf:"bytes,2,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty" gorm:"column:mobile_number;not null"`
+	Email                  string                 `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty" gorm:"column:email"`
+	PasswordHash           string                 `protobuf:"bytes,4,opt,name=password_hash,json=passwordHash,proto3" json:"password_hash,omitempty" gorm:"column:password_hash;not null"`
+	Status                 UserStatus             `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.authn.entity.v1.UserStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	CreatedAt              *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt              *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	LastLoginAt            *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=last_login_at,json=lastLoginAt,proto3" json:"last_login_at,omitempty" gorm:"column:last_login_at;serializer:proto_timestamp"`
+	LastLoginSessionType   string                 `protobuf:"bytes,9,opt,name=last_login_session_type,json=lastLoginSessionType,proto3" json:"last_login_session_type,omitempty" gorm:"column:last_login_session_type"`
+	PreferredAuthMethod    string                 `protobuf:"bytes,10,opt,name=preferred_auth_method,json=preferredAuthMethod,proto3" json:"preferred_auth_method,omitempty" gorm:"column:preferred_auth_method"`
+	CreatedBy              *string                `protobuf:"bytes,11,opt,name=created_by,json=createdBy,proto3,oneof" json:"created_by,omitempty" gorm:"column:created_by"`
+	UpdatedBy              *string                `protobuf:"bytes,12,opt,name=updated_by,json=updatedBy,proto3,oneof" json:"updated_by,omitempty" gorm:"column:updated_by"`
+	LoginAttempts          int32                  `protobuf:"varint,13,opt,name=login_attempts,json=loginAttempts,proto3" json:"login_attempts,omitempty" gorm:"column:login_attempts;not null"`
+	LockedUntil            *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=locked_until,json=lockedUntil,proto3" json:"locked_until,omitempty" gorm:"column:locked_until;serializer:proto_timestamp"`
+	DeletedAt              *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
+	Username               string                 `protobuf:"bytes,16,opt,name=username,proto3" json:"username,omitempty" gorm:"column:username"`
+	PreferredLanguage      string                 `protobuf:"bytes,17,opt,name=preferred_language,json=preferredLanguage,proto3" json:"preferred_language,omitempty" gorm:"column:preferred_language"`
+	NotificationPreference string                 `protobuf:"bytes,18,opt,name=notification_preference,json=notificationPreference,proto3" json:"notification_preference,omitempty" gorm:"column:notification_preference"`
+	WalletPaymentMethod    string                 `protobuf:"bytes,19,opt,name=wallet_payment_method,json=walletPaymentMethod,proto3" json:"wallet_payment_method,omitempty" gorm:"column:wallet_payment_method"`
 	// UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER use
 	// email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth
-	UserType           UserType               `protobuf:"varint,20,opt,name=user_type,json=userType,proto3,enum=insuretech.authn.entity.v1.UserType" json:"user_type,omitempty"` // @inject_tag: gorm:"column:user_type;not null;serializer:proto_enum"
-	EmailVerified      bool                   `protobuf:"varint,21,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty"`                           // @inject_tag: gorm:"column:email_verified;not null"
-	EmailVerifiedAt    *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=email_verified_at,json=emailVerifiedAt,proto3" json:"email_verified_at,omitempty"`                    // @inject_tag: gorm:"column:email_verified_at;serializer:proto_timestamp"
-	EmailLoginAttempts int32                  `protobuf:"varint,23,opt,name=email_login_attempts,json=emailLoginAttempts,proto3" json:"email_login_attempts,omitempty"`          // @inject_tag: gorm:"column:email_login_attempts;not null"
-	EmailLockedUntil   *timestamppb.Timestamp `protobuf:"bytes,24,opt,name=email_locked_until,json=emailLockedUntil,proto3" json:"email_locked_until,omitempty"`                 // @inject_tag: gorm:"column:email_locked_until;serializer:proto_timestamp"
+	UserType           UserType               `protobuf:"varint,20,opt,name=user_type,json=userType,proto3,enum=insuretech.authn.entity.v1.UserType" json:"user_type,omitempty" gorm:"column:user_type;not null;serializer:proto_enum"`
+	EmailVerified      bool                   `protobuf:"varint,21,opt,name=email_verified,json=emailVerified,proto3" json:"email_verified,omitempty" gorm:"column:email_verified;not null"`
+	EmailVerifiedAt    *timestamppb.Timestamp `protobuf:"bytes,22,opt,name=email_verified_at,json=emailVerifiedAt,proto3" json:"email_verified_at,omitempty" gorm:"column:email_verified_at;serializer:proto_timestamp"`
+	EmailLoginAttempts int32                  `protobuf:"varint,23,opt,name=email_login_attempts,json=emailLoginAttempts,proto3" json:"email_login_attempts,omitempty" gorm:"column:email_login_attempts;not null"`
+	EmailLockedUntil   *timestamppb.Timestamp `protobuf:"bytes,24,opt,name=email_locked_until,json=emailLockedUntil,proto3" json:"email_locked_until,omitempty" gorm:"column:email_locked_until;serializer:proto_timestamp"`
 	// biometric_token_enc: AES-256-GCM encrypted biometric token (device-side public key / FIDO attestation)
-	BiometricTokenEnc string `protobuf:"bytes,25,opt,name=biometric_token_enc,json=biometricTokenEnc,proto3" json:"biometric_token_enc,omitempty"` // @inject_tag: gorm:"column:biometric_token_enc"
+	BiometricTokenEnc string `protobuf:"bytes,25,opt,name=biometric_token_enc,json=biometricTokenEnc,proto3" json:"biometric_token_enc,omitempty" gorm:"column:biometric_token_enc"`
 	// biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc equality lookup
-	BiometricTokenIdx string `protobuf:"bytes,29,opt,name=biometric_token_idx,json=biometricTokenIdx,proto3" json:"biometric_token_idx,omitempty"` // @inject_tag: gorm:"column:biometric_token_idx"
+	BiometricTokenIdx string `protobuf:"bytes,29,opt,name=biometric_token_idx,json=biometricTokenIdx,proto3" json:"biometric_token_idx,omitempty" gorm:"column:biometric_token_idx"`
 	// mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number equality lookup
-	MobileNumberIdx string `protobuf:"bytes,30,opt,name=mobile_number_idx,json=mobileNumberIdx,proto3" json:"mobile_number_idx,omitempty"` // @inject_tag: gorm:"column:mobile_number_idx"
+	MobileNumberIdx string `protobuf:"bytes,30,opt,name=mobile_number_idx,json=mobileNumberIdx,proto3" json:"mobile_number_idx,omitempty" gorm:"column:mobile_number_idx"`
 	// email_idx: HMAC-SHA256 blind index for encrypted email equality lookup
-	EmailIdx            string    `protobuf:"bytes,31,opt,name=email_idx,json=emailIdx,proto3" json:"email_idx,omitempty"`                                     // @inject_tag: gorm:"column:email_idx"
-	TotpEnabled         bool      `protobuf:"varint,32,opt,name=totp_enabled,json=totpEnabled,proto3" json:"totp_enabled,omitempty"`                           // @inject_tag: gorm:"column:totp_enabled;not null"
-	TotpSecretEnc       string    `protobuf:"bytes,33,opt,name=totp_secret_enc,json=totpSecretEnc,proto3" json:"totp_secret_enc,omitempty"`                    // @inject_tag: gorm:"column:totp_secret_enc"
-	ActivePoliciesCount int32     `protobuf:"varint,26,opt,name=active_policies_count,json=activePoliciesCount,proto3" json:"active_policies_count,omitempty"` // @inject_tag: gorm:"column:active_policies_count;not null"
-	PendingClaimsCount  int32     `protobuf:"varint,27,opt,name=pending_claims_count,json=pendingClaimsCount,proto3" json:"pending_claims_count,omitempty"`    // @inject_tag: gorm:"column:pending_claims_count;not null"
-	WalletBalance       *v1.Money `protobuf:"bytes,28,opt,name=wallet_balance,json=walletBalance,proto3" json:"wallet_balance,omitempty"`                      // @inject_tag: gorm:"column:wallet_balance;not null"
+	EmailIdx            string    `protobuf:"bytes,31,opt,name=email_idx,json=emailIdx,proto3" json:"email_idx,omitempty" gorm:"column:email_idx"`
+	TotpEnabled         bool      `protobuf:"varint,32,opt,name=totp_enabled,json=totpEnabled,proto3" json:"totp_enabled,omitempty" gorm:"column:totp_enabled;not null"`
+	TotpSecretEnc       string    `protobuf:"bytes,33,opt,name=totp_secret_enc,json=totpSecretEnc,proto3" json:"totp_secret_enc,omitempty" gorm:"column:totp_secret_enc"`
+	ActivePoliciesCount int32     `protobuf:"varint,26,opt,name=active_policies_count,json=activePoliciesCount,proto3" json:"active_policies_count,omitempty" gorm:"column:active_policies_count;not null"`
+	PendingClaimsCount  int32     `protobuf:"varint,27,opt,name=pending_claims_count,json=pendingClaimsCount,proto3" json:"pending_claims_count,omitempty" gorm:"column:pending_claims_count;not null"`
+	WalletBalance       *v1.Money `protobuf:"bytes,28,opt,name=wallet_balance,json=walletBalance,proto3" json:"wallet_balance,omitempty" gorm:"column:wallet_balance;not null"`
 }
 
 func (x *User) Reset() {

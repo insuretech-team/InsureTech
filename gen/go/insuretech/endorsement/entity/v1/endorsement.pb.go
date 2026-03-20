@@ -159,20 +159,20 @@ type Endorsement struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                            // @inject_tag: gorm:"primaryKey;column:endorsement_id;not null"
-	EndorsementNumber     string                 `protobuf:"bytes,2,opt,name=endorsement_number,json=endorsementNumber,proto3" json:"endorsement_number,omitempty"`     // @inject_tag: gorm:"column:endorsement_number;not null"
-	PolicyId              string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                // @inject_tag: gorm:"column:policy_id;not null"
-	Type                  EndorsementType        `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.endorsement.entity.v1.EndorsementType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Reason                string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`                                                    // @inject_tag: gorm:"column:reason;not null"
-	Changes               string                 `protobuf:"bytes,6,opt,name=changes,proto3" json:"changes,omitempty"`                                                  // @inject_tag: gorm:"column:changes;not null"
-	PremiumAdjustment     *v1.Money              `protobuf:"bytes,7,opt,name=premium_adjustment,json=premiumAdjustment,proto3" json:"premium_adjustment,omitempty"`
-	PremiumRefundRequired bool                   `protobuf:"varint,8,opt,name=premium_refund_required,json=premiumRefundRequired,proto3" json:"premium_refund_required,omitempty"` // @inject_tag: gorm:"column:premium_refund_required"
-	Status                EndorsementStatus      `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.endorsement.entity.v1.EndorsementStatus" json:"status,omitempty"`      // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	RequestedBy           string                 `protobuf:"bytes,10,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty"`                                 // @inject_tag: gorm:"column:requested_by;not null"
-	ApprovedBy            string                 `protobuf:"bytes,11,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`                                    // @inject_tag: gorm:"column:approved_by"
-	EffectiveDate         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=effective_date,json=effectiveDate,proto3" json:"effective_date,omitempty"`                           // @inject_tag: gorm:"column:effective_date;not null;serializer:proto_timestamp"
-	ApprovedAt            *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty"`                                    // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
-	AuditInfo             *v1.AuditInfo          `protobuf:"bytes,14,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                       // @inject_tag: gorm:"column:audit_info;not null"
+	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:endorsement_id;not null"`
+	EndorsementNumber     string                 `protobuf:"bytes,2,opt,name=endorsement_number,json=endorsementNumber,proto3" json:"endorsement_number,omitempty" gorm:"column:endorsement_number;not null"`
+	PolicyId              string                 `protobuf:"bytes,3,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
+	Type                  EndorsementType        `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.endorsement.entity.v1.EndorsementType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Reason                string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty" gorm:"column:reason;not null"`
+	Changes               string                 `protobuf:"bytes,6,opt,name=changes,proto3" json:"changes,omitempty" gorm:"column:changes;not null"`
+	PremiumAdjustment     *v1.Money              `protobuf:"bytes,7,opt,name=premium_adjustment,json=premiumAdjustment,proto3" json:"premium_adjustment,omitempty" gorm:"column:premium_adjustment"`
+	PremiumRefundRequired bool                   `protobuf:"varint,8,opt,name=premium_refund_required,json=premiumRefundRequired,proto3" json:"premium_refund_required,omitempty" gorm:"column:premium_refund_required"`
+	Status                EndorsementStatus      `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.endorsement.entity.v1.EndorsementStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	RequestedBy           string                 `protobuf:"bytes,10,opt,name=requested_by,json=requestedBy,proto3" json:"requested_by,omitempty" gorm:"column:requested_by;not null"`
+	ApprovedBy            string                 `protobuf:"bytes,11,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty" gorm:"column:approved_by"`
+	EffectiveDate         *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=effective_date,json=effectiveDate,proto3" json:"effective_date,omitempty" gorm:"column:effective_date;not null;serializer:proto_timestamp"`
+	ApprovedAt            *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty" gorm:"column:approved_at;serializer:proto_timestamp"`
+	AuditInfo             *v1.AuditInfo          `protobuf:"bytes,14,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *Endorsement) Reset() {

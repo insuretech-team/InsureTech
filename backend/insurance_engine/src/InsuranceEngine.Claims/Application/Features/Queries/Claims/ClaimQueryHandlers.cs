@@ -53,30 +53,52 @@ public class ClaimQueryHandlers :
             CustomerId = claim.CustomerId,
             Status = claim.Status,
             Type = claim.Type,
-            ClaimedAmount = (decimal)claim.ClaimedAmount / 100,
-            ApprovedAmount = (decimal)claim.ApprovedAmount / 100,
-            Currency = claim.ClaimedCurrency,
+            ProcessingType = claim.ProcessingType,
+            ClaimedAmount = new MoneyDto(claim.ClaimedAmount, claim.ClaimedCurrency),
+            ApprovedAmount = new MoneyDto(claim.ApprovedAmount, claim.ApprovedCurrency),
+            SettledAmount = new MoneyDto(claim.SettledAmount, claim.SettledCurrency),
+            DeductibleAmount = new MoneyDto(claim.DeductibleAmount, claim.DeductibleCurrency),
+            CoPayAmount = new MoneyDto(claim.CoPayAmount, claim.CoPayCurrency),
             IncidentDate = claim.IncidentDate,
             IncidentDescription = claim.IncidentDescription,
-            PlaceOfIncident = claim.PlaceOfIncident ?? "",
-            SubmittedAt = claim.CreatedAt,
+            PlaceOfIncident = claim.PlaceOfIncident,
+            SubmittedAt = claim.SubmittedAt,
+            ApprovedAt = claim.ApprovedAt,
+            SettledAt = claim.SettledAt,
             RejectionReason = claim.RejectionReason,
+            AppealOptionAvailable = claim.AppealOptionAvailable,
+            FraudCheck = claim.FraudCheck != null ? new FraudCheckResultDto
+            {
+                Id = claim.FraudCheck.Id,
+                FraudScore = claim.FraudCheck.FraudScore,
+                RiskFactors = claim.FraudCheck.RiskFactors,
+                Flagged = claim.FraudCheck.Flagged,
+                ReviewedBy = claim.FraudCheck.ReviewedBy,
+                ReviewedAt = claim.FraudCheck.ReviewedAt
+            } : null,
             Approvals = claim.Approvals.Select(a => new ClaimApprovalDto
             {
                 Id = a.Id,
-                Decision = a.Decision.ToString(),
-                Level = a.ApprovalLevel,
+                ApproverId = a.ApproverId,
+                ApproverRole = a.ApproverRole,
+                ApprovalLevel = a.ApprovalLevel,
+                Decision = a.Decision,
+                ApprovedAmount = new MoneyDto(a.ApprovedAmount, a.ApprovedCurrency),
                 Notes = a.Notes,
-                DecidedAt = a.CreatedAt
+                ApprovedAt = a.ApprovedAt
             }).ToList(),
             Documents = claim.Documents.Select(d => new ClaimDocumentDto
             {
                 Id = d.Id,
                 DocumentType = d.DocumentType,
                 FileUrl = d.FileUrl,
-                IsVerified = d.Verified,
-                UploadedAt = d.CreatedAt
-            }).ToList()
+                FileHash = d.FileHash,
+                Verified = d.Verified,
+                UploadedAt = d.UploadedAt
+            }).ToList(),
+            CreatedAt = claim.CreatedAt,
+            UpdatedAt = claim.UpdatedAt
         };
     }
 }
+

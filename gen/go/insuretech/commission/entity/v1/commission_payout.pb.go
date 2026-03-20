@@ -89,19 +89,19 @@ type CommissionPayout struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                            // @inject_tag: gorm:"primaryKey;column:payout_id;not null"
-	PayoutNumber     string                 `protobuf:"bytes,2,opt,name=payout_number,json=payoutNumber,proto3" json:"payout_number,omitempty"`    // @inject_tag: gorm:"column:payout_number;not null"
-	RecipientType    string                 `protobuf:"bytes,3,opt,name=recipient_type,json=recipientType,proto3" json:"recipient_type,omitempty"` // @inject_tag: gorm:"column:recipient_type;not null"
-	RecipientId      string                 `protobuf:"bytes,4,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty"`       // @inject_tag: gorm:"column:recipient_id;not null"
-	PeriodStart      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`       // @inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"
-	PeriodEnd        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`             // @inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"
-	TotalAmount      *v1.Money              `protobuf:"bytes,7,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty"`
-	CommissionCount  int32                  `protobuf:"varint,8,opt,name=commission_count,json=commissionCount,proto3" json:"commission_count,omitempty"`          // @inject_tag: gorm:"column:commission_count;not null"
-	Status           PayoutStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.commission.entity.v1.PayoutStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	PaymentMethod    string                 `protobuf:"bytes,10,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty"`                // @inject_tag: gorm:"column:payment_method"
-	PaymentReference string                 `protobuf:"bytes,11,opt,name=payment_reference,json=paymentReference,proto3" json:"payment_reference,omitempty"`       // @inject_tag: gorm:"column:payment_reference"
-	PaidAt           *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty"`                                     // @inject_tag: gorm:"column:paid_at;serializer:proto_timestamp"
-	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                            // @inject_tag: gorm:"column:audit_info;not null"
+	Id               string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:payout_id;not null"`
+	PayoutNumber     string                 `protobuf:"bytes,2,opt,name=payout_number,json=payoutNumber,proto3" json:"payout_number,omitempty" gorm:"column:payout_number;not null"`
+	RecipientType    string                 `protobuf:"bytes,3,opt,name=recipient_type,json=recipientType,proto3" json:"recipient_type,omitempty" gorm:"column:recipient_type;not null"`
+	RecipientId      string                 `protobuf:"bytes,4,opt,name=recipient_id,json=recipientId,proto3" json:"recipient_id,omitempty" gorm:"column:recipient_id;not null"`
+	PeriodStart      *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty" gorm:"column:period_start;not null;serializer:proto_timestamp"`
+	PeriodEnd        *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty" gorm:"column:period_end;not null;serializer:proto_timestamp"`
+	TotalAmount      *v1.Money              `protobuf:"bytes,7,opt,name=total_amount,json=totalAmount,proto3" json:"total_amount,omitempty" gorm:"column:total_amount"`
+	CommissionCount  int32                  `protobuf:"varint,8,opt,name=commission_count,json=commissionCount,proto3" json:"commission_count,omitempty" gorm:"column:commission_count;not null"`
+	Status           PayoutStatus           `protobuf:"varint,9,opt,name=status,proto3,enum=insuretech.commission.entity.v1.PayoutStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	PaymentMethod    string                 `protobuf:"bytes,10,opt,name=payment_method,json=paymentMethod,proto3" json:"payment_method,omitempty" gorm:"column:payment_method"`
+	PaymentReference string                 `protobuf:"bytes,11,opt,name=payment_reference,json=paymentReference,proto3" json:"payment_reference,omitempty" gorm:"column:payment_reference"`
+	PaidAt           *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=paid_at,json=paidAt,proto3" json:"paid_at,omitempty" gorm:"column:paid_at;serializer:proto_timestamp"`
+	AuditInfo        *v1.AuditInfo          `protobuf:"bytes,13,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *CommissionPayout) Reset() {

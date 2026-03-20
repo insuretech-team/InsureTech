@@ -28,17 +28,17 @@ type ProductPlan struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PlanId          string    `protobuf:"bytes,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty"`                            // @inject_tag: gorm:"primaryKey;column:plan_id;not null"
-	ProductId       string    `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                   // @inject_tag: gorm:"column:product_id;not null"
-	PlanName        string    `protobuf:"bytes,3,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty"`                      // @inject_tag: gorm:"column:plan_name;not null"
-	PlanDescription string    `protobuf:"bytes,4,opt,name=plan_description,json=planDescription,proto3" json:"plan_description,omitempty"` // @inject_tag: gorm:"column:plan_description"
-	PremiumAmount   *v1.Money `protobuf:"bytes,5,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty"`       // @inject_tag: gorm:"column:premium_amount;not null"
-	MinSumInsured   *v1.Money `protobuf:"bytes,6,opt,name=min_sum_insured,json=minSumInsured,proto3" json:"min_sum_insured,omitempty"`     // @inject_tag: gorm:"column:min_sum_insured;not null"
-	MaxSumInsured   *v1.Money `protobuf:"bytes,7,opt,name=max_sum_insured,json=maxSumInsured,proto3" json:"max_sum_insured,omitempty"`     // @inject_tag: gorm:"column:max_sum_insured;not null"
+	PlanId          string    `protobuf:"bytes,1,opt,name=plan_id,json=planId,proto3" json:"plan_id,omitempty" gorm:"primaryKey;column:plan_id;not null"`
+	ProductId       string    `protobuf:"bytes,2,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:product_id;not null"`
+	PlanName        string    `protobuf:"bytes,3,opt,name=plan_name,json=planName,proto3" json:"plan_name,omitempty" gorm:"column:plan_name;not null"`
+	PlanDescription string    `protobuf:"bytes,4,opt,name=plan_description,json=planDescription,proto3" json:"plan_description,omitempty" gorm:"column:plan_description"`
+	PremiumAmount   *v1.Money `protobuf:"bytes,5,opt,name=premium_amount,json=premiumAmount,proto3" json:"premium_amount,omitempty" gorm:"column:premium_amount;not null"`
+	MinSumInsured   *v1.Money `protobuf:"bytes,6,opt,name=min_sum_insured,json=minSumInsured,proto3" json:"min_sum_insured,omitempty" gorm:"column:min_sum_insured;not null"`
+	MaxSumInsured   *v1.Money `protobuf:"bytes,7,opt,name=max_sum_insured,json=maxSumInsured,proto3" json:"max_sum_insured,omitempty" gorm:"column:max_sum_insured;not null"`
 	// Store dynamic tier configuration
-	Attributes string                 `protobuf:"bytes,8,opt,name=attributes,proto3" json:"attributes,omitempty"` // @inject_tag: gorm:"column:attributes"
-	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt  *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	Attributes string                 `protobuf:"bytes,8,opt,name=attributes,proto3" json:"attributes,omitempty" gorm:"column:attributes"`
+	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
+	UpdatedAt  *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
 }
 
 func (x *ProductPlan) Reset() {

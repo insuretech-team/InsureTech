@@ -146,16 +146,16 @@ type DocumentTemplate struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                          // @inject_tag: gorm:"primaryKey;column:template_id;not null"
-	Name            string        `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                                                      // @inject_tag: gorm:"column:name;not null"
-	Type            DocumentType  `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.document.entity.v1.DocumentType" json:"type,omitempty"`                                     // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Description     string        `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`                                                                        // @inject_tag: gorm:"column:description"
-	TemplateContent string        `protobuf:"bytes,5,opt,name=template_content,json=templateContent,proto3" json:"template_content,omitempty"`                                         // @inject_tag: gorm:"column:template_content;not null"
-	OutputFormat    OutputFormat  `protobuf:"varint,6,opt,name=output_format,json=outputFormat,proto3,enum=insuretech.document.entity.v1.OutputFormat" json:"output_format,omitempty"` // @inject_tag: gorm:"column:output_format;not null;serializer:proto_enum"
-	Variables       string        `protobuf:"bytes,7,opt,name=variables,proto3" json:"variables,omitempty"`                                                                            // @inject_tag: gorm:"column:variables"
-	Version         int32         `protobuf:"varint,8,opt,name=version,proto3" json:"version,omitempty"`                                                                               // @inject_tag: gorm:"column:version;not null"
-	IsActive        bool          `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                                                             // @inject_tag: gorm:"column:is_active"
-	AuditInfo       *v1.AuditInfo `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                          // @inject_tag: gorm:"column:audit_info;not null"
+	Id              string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:template_id;not null"`
+	Name            string        `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	Type            DocumentType  `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.document.entity.v1.DocumentType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Description     string        `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	TemplateContent string        `protobuf:"bytes,5,opt,name=template_content,json=templateContent,proto3" json:"template_content,omitempty" gorm:"column:template_content;not null"`
+	OutputFormat    OutputFormat  `protobuf:"varint,6,opt,name=output_format,json=outputFormat,proto3,enum=insuretech.document.entity.v1.OutputFormat" json:"output_format,omitempty" gorm:"column:output_format;not null;serializer:proto_enum"`
+	Variables       string        `protobuf:"bytes,7,opt,name=variables,proto3" json:"variables,omitempty" gorm:"column:variables"`
+	Version         int32         `protobuf:"varint,8,opt,name=version,proto3" json:"version,omitempty" gorm:"column:version;not null"`
+	IsActive        bool          `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
+	AuditInfo       *v1.AuditInfo `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *DocumentTemplate) Reset() {

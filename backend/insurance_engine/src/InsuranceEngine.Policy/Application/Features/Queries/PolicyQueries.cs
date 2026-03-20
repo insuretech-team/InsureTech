@@ -73,8 +73,13 @@ public class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, PolicyDto?>
             Nominees: p.Nominees.Where(n => !n.IsDeleted).Select(n => new NomineeDto(
                 n.Id,
                 n.BeneficiaryId,
+                n.FullName,
                 n.Relationship,
-                n.SharePercentage
+                n.SharePercentage,
+                n.DateOfBirth,
+                n.NomineeDobText,
+                n.NidNumber,
+                n.PhoneNumber
             )).ToList(),
             Riders: p.Riders.Select(r => new PolicyRiderDto(
                 r.Id, r.RiderName, new MoneyDto(r.PremiumAmount, r.PremiumCurrency),

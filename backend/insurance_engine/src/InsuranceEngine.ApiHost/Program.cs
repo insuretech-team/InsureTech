@@ -6,7 +6,7 @@ using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Infrastructure;
 using InsuranceEngine.Policy.Infrastructure.Persistence;
 using InsuranceEngine.Policy.Domain.Services;
-using InsuranceEngine.Policy.Infrastructure.Repositories;
+
 using InsuranceEngine.SharedKernel.Interfaces;
 using InsuranceEngine.SharedKernel.Messaging;
 using InsuranceEngine.SharedKernel.Services;
@@ -52,9 +52,13 @@ builder.Services.AddFraudModule(builder.Configuration);
 // Repositories (Remaining for Products/Policy until they are sliced)
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
+builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
 builder.Services.AddSingleton<PolicyNumberGenerator>();
+builder.Services.AddSingleton<EndorsementNumberGenerator>();
 builder.Services.AddSingleton<PricingEngine>();
+builder.Services.AddScoped<PolicyDuplicateDetector>();
 builder.Services.AddSingleton<IEncryptionService, AesEncryptionService>();
+
 
 // Messaging
 builder.Services.Configure<InsuranceKafkaOptions>(builder.Configuration.GetSection("Kafka"));

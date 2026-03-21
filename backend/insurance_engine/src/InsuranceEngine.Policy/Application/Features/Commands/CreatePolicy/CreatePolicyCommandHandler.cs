@@ -19,23 +19,33 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
 {
     private readonly IPolicyRepository _policyRepository;
     private readonly PolicyNumberGenerator _policyNumberGenerator;
+    private readonly PolicyDuplicateDetector _duplicateDetector;
     private readonly IEventBus _eventBus;
     private readonly IEncryptionService _encryptionService;
 
     public CreatePolicyCommandHandler(
         IPolicyRepository policyRepository,
         PolicyNumberGenerator policyNumberGenerator,
+        PolicyDuplicateDetector duplicateDetector,
         IEventBus eventBus,
         IEncryptionService encryptionService)
     {
         _policyRepository = policyRepository;
         _policyNumberGenerator = policyNumberGenerator;
+        _duplicateDetector = duplicateDetector;
         _eventBus = eventBus;
         _encryptionService = encryptionService;
     }
 
     public async Task<Result<CreatePolicyResponse>> Handle(CreatePolicyCommand request, CancellationToken cancellationToken)
     {
+        // FR-063 + FR-033: Duplicate detection & NID uniqueness
+        var duplicateCheck = await _duplicateDetector.ValidateAsync(
+            request.CustomerId, request.ProductId, request.Applicant.NidNumber);
+
+        if (!duplicateCheck.IsSuccess)
+            return Result<CreatePolicyResponse>.Fail(duplicateCheck.Error!);
+
         // Get product code for policy number generation
         var productCode = await _policyRepository.GetProductCodeAsync(request.ProductId);
         if (productCode == null)

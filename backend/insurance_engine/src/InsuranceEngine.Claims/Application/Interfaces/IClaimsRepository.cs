@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using InsuranceEngine.Claims.Domain.Entities;
+using InsuranceEngine.Claims.Domain.Enums;
 
 namespace InsuranceEngine.Claims.Application.Interfaces;
 
@@ -15,4 +16,5 @@ public interface IClaimsRepository
     Task<string> GetNextClaimNumberAsync(CancellationToken cancellationToken = default);
     Task<List<Claim>> ListByCustomerAsync(Guid customerId, int page, int pageSize, CancellationToken cancellationToken = default);
     Task<int> GetTotalCountByCustomerAsync(Guid customerId, CancellationToken cancellationToken = default);
+    Task<bool> ExistsAsync(Guid policyId, ClaimType type, DateTime incidentDate, CancellationToken cancellationToken = default);
 }

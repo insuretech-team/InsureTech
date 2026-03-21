@@ -20,15 +20,16 @@ public class PolicyRepository : IPolicyRepository
     }
 
     public async Task<PolicyEntity?> GetByIdAsync(Guid id) =>
-        await _context.Policies
-            .Include(p => p.Riders)
-            .FirstOrDefaultAsync(p => p.Id == id);
+        await _context.Policies.FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<PolicyEntity?> GetByIdWithNomineesAsync(Guid id) =>
         await _context.Policies
             .Include(p => p.Nominees)
-            .Include(p => p.Riders)
             .FirstOrDefaultAsync(p => p.Id == id);
+
+    public async Task<PolicyEntity?> GetByNumberAsync(string policyNumber) =>
+        await _context.Policies.FirstOrDefaultAsync(p => p.PolicyNumber == policyNumber);
+
 
     public async Task<(List<PolicyEntity> Items, int TotalCount)> ListAsync(
         Guid? customerId, PolicyStatus? status, Guid? productId, int page, int pageSize)
@@ -96,5 +97,29 @@ public class PolicyRepository : IPolicyRepository
 
         var result = await command.ExecuteScalarAsync();
         return result?.ToString();
+    }
+
+    public async Task<bool> ExistsByCustomerAndProductAsync(Guid customerId, Guid productId, DateTime sinceDate)
+    {
+        return await _context.Policies.AnyAsync(p =>
+            p.CustomerId == customerId &&
+            p.ProductId == productId &&
+            p.CreatedAt >= sinceDate &&
+            p.Status != PolicyStatus.Cancelled &&
+            !p.IsDeleted);
+    }
+
+    public async Task<bool> ExistsByNidAsync(string encryptedNid, Guid? excludePolicyId = null)
+    {
+        var query = _context.Policies
+            .Where(p => !p.IsDeleted &&
+                        p.Status != PolicyStatus.Cancelled &&
+                        p.ProposerDetailsJson != null &&
+                        p.ProposerDetailsJson.Contains(encryptedNid));
+
+        if (excludePolicyId.HasValue)
+            query = query.Where(p => p.Id != excludePolicyId.Value);
+
+        return await query.AnyAsync();
     }
 }

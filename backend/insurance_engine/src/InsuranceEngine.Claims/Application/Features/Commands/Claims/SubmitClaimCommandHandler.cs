@@ -5,6 +5,7 @@ using InsuranceEngine.Claims.Application.Interfaces;
 using InsuranceEngine.Claims.Domain.Entities;
 using InsuranceEngine.Claims.Domain.Enums;
 using InsuranceEngine.Claims.Domain.Events;
+using InsuranceEngine.Claims.Domain.Services;
 using InsuranceEngine.SharedKernel.CQRS;
 using InsuranceEngine.SharedKernel.Interfaces;
 using MediatR;
@@ -15,17 +16,20 @@ namespace InsuranceEngine.Claims.Application.Features.Commands.Claims;
 public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Result<Guid>>
 {
     private readonly IClaimsRepository _claimsRepository;
+    private readonly ClaimEligibilityValidator _eligibilityValidator;
     private readonly IEventBus _eventBus;
     private readonly IMediator _mediator;
     private readonly ILogger<SubmitClaimCommandHandler> _logger;
 
     public SubmitClaimCommandHandler(
-        IClaimsRepository claimsRepository, 
+        IClaimsRepository claimsRepository,
+        ClaimEligibilityValidator eligibilityValidator,
         IEventBus eventBus,
         IMediator mediator,
         ILogger<SubmitClaimCommandHandler> logger)
     {
         _claimsRepository = claimsRepository;
+        _eligibilityValidator = eligibilityValidator;
         _eventBus = eventBus;
         _mediator = mediator;
         _logger = logger;
@@ -35,16 +39,27 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
     {
         _logger.LogInformation("Submitting claim for policy {PolicyId}", request.PolicyId);
         
-        // 1. Fetch Policy Info for Fraud Check (FD-001)
+        // 1. Fetch Policy Info
         var policyQuery = new InsuranceEngine.Policy.Application.Features.Queries.GetPolicyQuery(request.PolicyId);
         var policy = await _mediator.Send(policyQuery, cancellationToken);
         
         if (policy == null)
             return Result<Guid>.Fail(Error.NotFound("Policy", request.PolicyId.ToString()));
 
+        // 2. Eligibility Validation (FR-042)
+        var eligibility = await _eligibilityValidator.ValidateAsync(
+            policy, request.Type, request.IncidentDate, cancellationToken);
+        
+        if (!eligibility.IsSuccess)
+        {
+            _logger.LogWarning("Claim eligibility failed for policy {PolicyId}: {Error}",
+                request.PolicyId, eligibility.Error?.Message);
+            return Result<Guid>.Fail(eligibility.Error!);
+        }
+
         var claimNumber = await _claimsRepository.GetNextClaimNumberAsync(cancellationToken);
         
-        // 2. Perform Synchronous Fraud Check
+        // 3. Perform Synchronous Fraud Check (FD-001)
         var fraudCommand = new InsuranceEngine.Fraud.Application.Features.Commands.CheckFraud.CheckClaimForFraudCommand(
             Guid.Empty, // Temporary ID since claim isn't persisted yet
             request.PolicyId,

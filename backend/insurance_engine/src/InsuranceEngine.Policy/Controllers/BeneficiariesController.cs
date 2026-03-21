@@ -69,12 +69,7 @@ public class BeneficiariesController : ControllerBase
         return Ok(result.Value);
     }
 
-    [HttpGet("{id}/quotes")]
-    public async Task<IActionResult> GetQuotes(Guid id)
-    {
-        var result = await _mediator.Send(new GetBeneficiaryQuotesQuery(id));
-        return result.IsSuccess ? Ok(result.Value) : BadRequest(result.Error);
-    }
+
 
     [HttpGet("{id}/audit-trail")]
     public async Task<IActionResult> GetAuditTrail(Guid id)

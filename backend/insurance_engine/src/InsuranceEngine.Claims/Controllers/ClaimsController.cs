@@ -69,4 +69,30 @@ public class ClaimsController : ControllerBase
 
         return BadRequest(result.Error);
     }
+
+    [HttpPost("{id}/approve")]
+    public async Task<IActionResult> ApproveClaim(Guid id, [FromBody] ApproveClaimRestRequest request)
+    {
+        var command = new ApproveClaimCommand(
+            id,
+            request.ApproverId,
+            request.ApproverRole,
+            request.ApprovalLevel,
+            request.Decision,
+            request.ApprovedAmount,
+            request.Notes
+        );
+
+        var result = await _mediator.Send(command);
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
+    }
 }
+
+public record ApproveClaimRestRequest(
+    Guid ApproverId,
+    string ApproverRole,
+    int ApprovalLevel,
+    Domain.Enums.ApprovalDecision Decision,
+    long ApprovedAmount,
+    string Notes
+);

@@ -75,4 +75,16 @@ public class ClaimsRepository : IClaimsRepository
         return await _context.Claims
             .CountAsync(c => c.CustomerId == customerId && !c.IsDeleted, cancellationToken);
     }
+
+    public async Task<bool> ExistsAsync(Guid policyId, Domain.Enums.ClaimType type, DateTime incidentDate, CancellationToken cancellationToken = default)
+    {
+        return await _context.Claims.AnyAsync(c =>
+            c.PolicyId == policyId &&
+            c.Type == type &&
+            c.IncidentDate.Date == incidentDate.Date &&
+            c.Status != Domain.Enums.ClaimStatus.Rejected &&
+            !c.IsDeleted,
+            cancellationToken);
+    }
+
 }

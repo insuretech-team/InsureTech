@@ -33,6 +33,11 @@ public class Product
     public List<string> Exclusions { get; set; } = new();
     public string? ProductAttributes { get; set; } // JSONB
 
+    // Co-pay / Deductible configuration (FR-100/FR-104)
+    public double DeductiblePercentage { get; set; }  // 0-100
+    public double CoPayPercentage { get; set; }       // 0-100
+    public long MaxDeductibleAmount { get; set; }     // paisa, 0 = no cap
+
     // Navigation properties
     public List<Rider> AvailableRiders { get; set; } = new();
     public List<ProductPlan> Plans { get; set; } = new();

@@ -1,12 +1,8 @@
 using System;
-using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 
-namespace InsuranceEngine.Policy.Domain.Entities;
+namespace InsuranceEngine.SharedKernel.Domain.Entities;
 
-/// <summary>
-/// Base Beneficiary entity (primary customer record).
-/// Maps to 'beneficiaries' table in insurance_schema.
-/// </summary>
 public class Beneficiary
 {
     public Guid Id { get; set; }
@@ -21,11 +17,16 @@ public class Beneficiary
     public Guid? ReferredBy { get; set; }
     public Guid? PartnerId { get; set; }
 
+    // Unified fields from Underwriting
+    public string Name { get; set; } = string.Empty;
+    public string ContactNumber { get; set; } = string.Empty;
+    public string Email { get; set; } = string.Empty;
+    public string Address { get; set; } = string.Empty;
+
     // Relationship to specialized details
     public IndividualBeneficiary? IndividualDetails { get; set; }
     public BusinessBeneficiary? BusinessDetails { get; set; }
 
-    // Audit info as JSONB (in proto) - we'll use properties here for simple mapping or a JSON string
     public string? AuditInfo { get; set; }
 
     public DateTime CreatedAt { get; set; }

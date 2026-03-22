@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using InsuranceEngine.Underwriting.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Entities;
 
 namespace InsuranceEngine.Underwriting.Application.Interfaces;
 

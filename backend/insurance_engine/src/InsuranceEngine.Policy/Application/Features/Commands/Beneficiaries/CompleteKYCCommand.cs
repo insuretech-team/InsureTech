@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.SharedKernel.CQRS;
 using MediatR;
 
@@ -32,7 +33,7 @@ public class CompleteKYCCommandHandler : IRequestHandler<CompleteKYCCommand, Res
             return Result.Fail(Error.NotFound("Beneficiary", request.BeneficiaryId.ToString()));
 
         // Simulate KYC success
-        beneficiary.KycStatus = KYCStatus.Completed;
+        beneficiary.KycStatus = KYCStatus.Verified;
         beneficiary.Status = BeneficiaryStatus.Active;
         beneficiary.KycCompletedAt = DateTime.UtcNow;
         beneficiary.UpdatedAt = DateTime.UtcNow;

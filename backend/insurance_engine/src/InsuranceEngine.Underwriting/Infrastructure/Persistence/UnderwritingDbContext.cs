@@ -1,5 +1,7 @@
 using InsuranceEngine.Underwriting.Domain.Entities;
 using InsuranceEngine.Underwriting.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceEngine.Underwriting.Infrastructure.Persistence;
@@ -55,12 +57,8 @@ public class UnderwritingDbContext : DbContext
         {
             entity.ToTable("beneficiaries", "insurance_schema");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
-            entity.Property(e => e.Type).HasConversion<string>();
-            entity.Property(e => e.Status).HasConversion<string>();
-            entity.Property(e => e.KycStatus).HasConversion<string>();
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
-            entity.HasQueryFilter(e => !e.IsDeleted);
+            entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
 
             entity.HasOne(e => e.IndividualDetails)
                 .WithOne(e => e.Beneficiary)
@@ -75,12 +73,6 @@ public class UnderwritingDbContext : DbContext
         {
             entity.ToTable("individual_beneficiaries", "insurance_schema");
             entity.HasKey(e => e.BeneficiaryId);
-            entity.Property(e => e.Gender).HasConversion<string>();
-            entity.Property(e => e.MaritalStatus).HasConversion<string>();
-            entity.Property(e => e.ContactInfoJson).HasColumnType("jsonb");
-            entity.Property(e => e.PermanentAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.PresentAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
         });
 
         modelBuilder.Entity<BusinessBeneficiary>(entity =>

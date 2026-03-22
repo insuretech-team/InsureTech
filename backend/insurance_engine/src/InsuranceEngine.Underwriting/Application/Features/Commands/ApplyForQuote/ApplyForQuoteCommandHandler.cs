@@ -8,6 +8,8 @@ using InsuranceEngine.Underwriting.Application.DTOs;
 using InsuranceEngine.Underwriting.Application.Interfaces;
 using InsuranceEngine.Underwriting.Domain.Entities;
 using InsuranceEngine.Underwriting.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.Underwriting.Domain.Services;
 using InsuranceEngine.Products.Application.Features.Commands.CalculatePremium;
 using InsuranceEngine.SharedKernel.CQRS;

@@ -23,8 +23,9 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-// 4. PolicyRule — human-readable view of a Casbin policy line.
-//    Writes sync to casbin_rules via the authz service.
+//  4. PolicyRule — human-readable view of a Casbin policy line.
+//     Writes sync to casbin_rules via the authz service.
+//
 // ---------------------------------------------------------------------------
 type PolicyRule struct {
 	state         protoimpl.MessageState

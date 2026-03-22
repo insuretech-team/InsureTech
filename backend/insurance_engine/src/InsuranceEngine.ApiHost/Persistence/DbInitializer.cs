@@ -12,12 +12,51 @@ public static class DbInitializer
 {
     public static async Task Initialize(IServiceProvider serviceProvider)
     {
-        using var scope = serviceProvider.CreateScope();
-        var productsContext = scope.ServiceProvider.GetRequiredService<ProductsDbContext>();
-
         try
         {
-            if (await productsContext.Products.AnyAsync()) return;
+            using (var scope = serviceProvider.CreateScope())
+            {
+                try {
+                    var productsContext = scope.ServiceProvider.GetRequiredService<ProductsDbContext>();
+                    await productsContext.Database.MigrateAsync();
+                } catch (Exception ex) { Console.WriteLine($"Products migration error: {ex.Message}"); }
+            }
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                try {
+                    var policyContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Policy.Infrastructure.Persistence.PolicyDbContext>();
+                    await policyContext.Database.MigrateAsync();
+                } catch (Exception ex) { Console.WriteLine($"Policy migration error: {ex.Message}"); }
+            }
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                try {
+                    var claimsContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Claims.Infrastructure.Persistence.ClaimsDbContext>();
+                    await claimsContext.Database.MigrateAsync();
+                } catch (Exception ex) { Console.WriteLine($"Claims migration error: {ex.Message}"); }
+            }
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                try {
+                    var underwritingContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Underwriting.Infrastructure.Persistence.UnderwritingDbContext>();
+                    await underwritingContext.Database.MigrateAsync();
+                } catch (Exception ex) { Console.WriteLine($"Underwriting migration error: {ex.Message}"); }
+            }
+
+            using (var scope = serviceProvider.CreateScope())
+            {
+                try {
+                    var fraudContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Fraud.Infrastructure.Persistence.FraudDbContext>();
+                    await fraudContext.Database.MigrateAsync();
+                } catch (Exception ex) { Console.WriteLine($"Fraud migration error: {ex.Message}"); }
+            }
+
+            using var seedScope = serviceProvider.CreateScope();
+            var seedContext = seedScope.ServiceProvider.GetRequiredService<ProductsDbContext>();
+            if (await seedContext.Products.AnyAsync()) return;
 
             var tenantId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var createdBy = Guid.Parse("00000000-0000-0000-0000-000000000001");
@@ -106,8 +145,8 @@ public static class DbInitializer
                 }
             };
 
-            await productsContext.Products.AddRangeAsync(products);
-            await productsContext.SaveChangesAsync();
+            await seedContext.Products.AddRangeAsync(products);
+            await seedContext.SaveChangesAsync();
         }
         catch (Exception ex)
         {

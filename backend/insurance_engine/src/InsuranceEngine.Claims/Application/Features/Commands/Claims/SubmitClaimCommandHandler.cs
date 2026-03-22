@@ -77,7 +77,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             request.PolicyId,
             request.CustomerId,
             request.ClaimedAmount,
-            policy.SumInsuredAmount,
+            policy.SumInsured.Amount,
             request.Type.ToString(),
             request.PlaceOfIncident,
             request.IncidentDate,
@@ -112,7 +112,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             BankDetailsForPayout = request.BankDetailsForPayout,
             SubmittedAt = DateTime.UtcNow,
             ApprovedAt = isZhtcEligible ? DateTime.UtcNow : null,
-            ProcessingType = isZhtcEligible ? ClaimProcessingType.Auto : ClaimProcessingType.Manual,
+            ProcessingType = isZhtcEligible ? ClaimProcessingType.AutoAdjudicated : ClaimProcessingType.Manual,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };

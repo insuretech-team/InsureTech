@@ -1,7 +1,7 @@
 using System;
 using MediatR;
 using InsuranceEngine.SharedKernel.CQRS;
-using InsuranceEngine.Underwriting.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 
 namespace InsuranceEngine.Underwriting.Application.Features.Commands.CreateBeneficiary;
 

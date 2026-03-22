@@ -23,10 +23,11 @@ const (
 )
 
 // ---------------------------------------------------------------------------
-// 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
-//    Casbin gorm-adapter reads/writes this table directly.
-//    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
-//    g-type rows: ptype="g"  → role assignment: sub, dom, role
+//  1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+//     Casbin gorm-adapter reads/writes this table directly.
+//     p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+//     g-type rows: ptype="g"  → role assignment: sub, dom, role
+//
 // ---------------------------------------------------------------------------
 type CasbinRule struct {
 	state         protoimpl.MessageState

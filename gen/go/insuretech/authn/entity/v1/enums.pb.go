@@ -135,13 +135,14 @@ func (Gender) EnumDescriptor() ([]byte, []int) {
 // session) B2C_CUSTOMER + AGENT → mobile OTP + JWT (mobile app)
 // UserType controls authentication method routing and portal assignment.
 // portal mapping:
-//   B2C_CUSTOMER          → portal: "b2c"        (mobile SMS OTP + JWT)
-//   AGENT                 → portal: "agent"      (mobile SMS OTP + JWT)
-//   BUSINESS_BENEFICIARY  → portal: "business"   (email OTP + web server-side
-//   session) SYSTEM_USER           → portal: "system"     (email OTP + web
-//   server-side session) PARTNER               → portal: "b2b"        (email
-//   OTP + web server-side session) REGULATOR             → portal: "regulator"
-//   (email OTP + web server-side session, read-only)
+//
+//	B2C_CUSTOMER          → portal: "b2c"        (mobile SMS OTP + JWT)
+//	AGENT                 → portal: "agent"      (mobile SMS OTP + JWT)
+//	BUSINESS_BENEFICIARY  → portal: "business"   (email OTP + web server-side
+//	session) SYSTEM_USER           → portal: "system"     (email OTP + web
+//	server-side session) PARTNER               → portal: "b2b"        (email
+//	OTP + web server-side session) REGULATOR             → portal: "regulator"
+//	(email OTP + web server-side session, read-only)
 type UserType int32
 
 const (

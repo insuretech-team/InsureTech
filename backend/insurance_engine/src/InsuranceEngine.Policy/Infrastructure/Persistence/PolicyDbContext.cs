@@ -1,5 +1,7 @@
 using InsuranceEngine.Policy.Domain.Entities;
 using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -95,12 +97,11 @@ public class PolicyDbContext : DbContext
         {
             entity.ToTable("beneficiaries", "insurance_schema");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Code).IsRequired().HasMaxLength(20);
-            entity.Property(e => e.Type).HasConversion<string>();
-            entity.Property(e => e.Status).HasConversion<string>();
-            entity.Property(e => e.KycStatus).HasConversion<string>();
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
-            entity.HasQueryFilter(e => !e.IsDeleted);
+            entity.Property(e => e.Code).HasMaxLength(50);
+            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
+            entity.Property(e => e.ContactNumber).HasMaxLength(20);
+            entity.Property(e => e.Email).HasMaxLength(100);
+            entity.Property(e => e.Address).HasMaxLength(500);
 
             entity.HasOne(e => e.IndividualDetails)
                 .WithOne(e => e.Beneficiary)
@@ -115,12 +116,9 @@ public class PolicyDbContext : DbContext
         {
             entity.ToTable("individual_beneficiaries", "insurance_schema");
             entity.HasKey(e => e.BeneficiaryId);
-            entity.Property(e => e.Gender).HasConversion<string>();
-            entity.Property(e => e.MaritalStatus).HasConversion<string>();
-            entity.Property(e => e.ContactInfoJson).HasColumnType("jsonb");
-            entity.Property(e => e.PermanentAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.PresentAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
+            entity.Property(e => e.FatherName).HasMaxLength(200);
+            entity.Property(e => e.MotherName).HasMaxLength(200);
+            entity.Property(e => e.Occupation).HasMaxLength(100);
         });
 
         modelBuilder.Entity<BusinessBeneficiary>(entity =>

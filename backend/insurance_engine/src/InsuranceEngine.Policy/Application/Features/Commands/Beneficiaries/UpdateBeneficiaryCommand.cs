@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using InsuranceEngine.Policy.Application.DTOs;
 using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.SharedKernel.CQRS;
 using MediatR;
 

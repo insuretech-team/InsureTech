@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using InsuranceEngine.Policy.Application.Interfaces;
-using InsuranceEngine.Policy.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Entities;
 using InsuranceEngine.Policy.Infrastructure.Persistence;
 using Microsoft.EntityFrameworkCore;
 

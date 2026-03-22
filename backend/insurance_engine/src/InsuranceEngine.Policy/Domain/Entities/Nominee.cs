@@ -1,5 +1,5 @@
-using System;
 using InsuranceEngine.SharedKernel.Domain.ValueObjects;
+using InsuranceEngine.SharedKernel.Domain.Entities;
 
 namespace InsuranceEngine.Policy.Domain.Entities;
 

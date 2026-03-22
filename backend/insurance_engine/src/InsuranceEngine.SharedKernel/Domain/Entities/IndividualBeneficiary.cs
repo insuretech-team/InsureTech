@@ -1,15 +1,11 @@
 using System;
-using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 
-namespace InsuranceEngine.Policy.Domain.Entities;
+namespace InsuranceEngine.SharedKernel.Domain.Entities;
 
-/// <summary>
-/// Individual (B2C) beneficiary details.
-/// Maps to 'individual_beneficiaries' table in insurance_schema.
-/// </summary>
 public class IndividualBeneficiary
 {
-    public Guid BeneficiaryId { get; set; } // PK and FK to Beneficiary.Id
+    public Guid BeneficiaryId { get; set; }
     public Beneficiary? Beneficiary { get; set; }
 
     public string FullName { get; set; } = string.Empty;
@@ -17,15 +13,17 @@ public class IndividualBeneficiary
     public DateTime DateOfBirth { get; set; }
     public Gender Gender { get; set; }
     
-    public string? NidNumber { get; set; } // Encrypted at rest
-    public string? PassportNumber { get; set; } // Encrypted at rest
-    public string? BirthCertificateNumber { get; set; } // Encrypted at rest
+    public string? NidNumber { get; set; }
+    public string? PassportNumber { get; set; }
+    public string? BirthCertificateNumber { get; set; }
     public string? TinNumber { get; set; }
     
     public MaritalStatus MaritalStatus { get; set; }
     public string? Occupation { get; set; }
+    public string? FatherName { get; set; }
+    public string? MotherName { get; set; }
+    public decimal MonthlyIncome { get; set; }
 
-    // JSONB in proto
     public string? ContactInfoJson { get; set; }
     public string? PermanentAddressJson { get; set; }
     public string? PresentAddressJson { get; set; }

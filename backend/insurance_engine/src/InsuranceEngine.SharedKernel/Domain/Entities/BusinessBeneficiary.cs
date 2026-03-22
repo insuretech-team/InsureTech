@@ -1,16 +1,12 @@
 using System;
-using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 
-namespace InsuranceEngine.Policy.Domain.Entities;
+namespace InsuranceEngine.SharedKernel.Domain.Entities;
 
-/// <summary>
-/// Business (B2B) beneficiary details.
-/// Maps to 'business_beneficiaries' table in insurance_schema.
-/// </summary>
 public class BusinessBeneficiary
 {
-    public Guid Id { get; set; } // PK
-    public Guid BeneficiaryId { get; set; } // Parent Beneficiary ID
+    public Guid Id { get; set; }
+    public Guid BeneficiaryId { get; set; }
     public Beneficiary? Beneficiary { get; set; }
 
     public string BusinessName { get; set; } = string.Empty;
@@ -25,25 +21,25 @@ public class BusinessBeneficiary
     public int EmployeeCount { get; set; }
     public DateTime? IncorporationDate { get; set; }
 
-    // JSONB in proto
     public string? ContactInfoJson { get; set; }
     public string? RegisteredAddressJson { get; set; }
     public string? BusinessAddressJson { get; set; }
 
     public string FocalPersonName { get; set; } = string.Empty;
     public string? FocalPersonDesignation { get; set; }
-    public string? FocalPersonNid { get; set; } // Encrypted at rest
+    public string? FocalPersonNid { get; set; }
     public string? FocalPersonContactJson { get; set; }
+    public string? Industry { get; set; }
+    public string? FocalPersonContact { get; set; }
 
     public string? AuditInfo { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? TaxId { get; set; }
     public string? PrimaryContactJson { get; set; }
 
-    // Cached metrics
     public int TotalEmployeesCovered { get; set; }
     public int ActivePoliciesCount { get; set; }
-    public long TotalPremiumAmount { get; set; } // In paisa
+    public long TotalPremiumAmount { get; set; }
     public int PendingActionsCount { get; set; }
 
     public DateTime CreatedAt { get; set; }

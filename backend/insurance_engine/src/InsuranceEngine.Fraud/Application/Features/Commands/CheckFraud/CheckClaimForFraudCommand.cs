@@ -6,6 +6,7 @@ using MediatR;
 
 namespace InsuranceEngine.Fraud.Application.Features.Commands.CheckFraud;
 
+public record CheckClaimForFraudCommand(
     Guid ClaimId, 
     Guid PolicyId, 
     Guid CustomerId,

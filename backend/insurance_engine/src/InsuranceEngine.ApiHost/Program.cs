@@ -31,7 +31,10 @@ builder.Host.UseSerilog((context, configuration) =>
 builder.Services.AddControllers();
 builder.Services.AddScoped<ITenantService, DefaultTenantService>();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+builder.Services.AddSwaggerGen(options =>
+{
+    options.CustomSchemaIds(type => type.FullName);
+});
 
 // Database Contexts
 builder.Services.AddDbContext<ProductsDbContext>(options =>
@@ -49,12 +52,13 @@ builder.Services.AddClaimsModule(builder.Configuration);
 builder.Services.AddUnderwritingModule(builder.Configuration);
 builder.Services.AddFraudModule(builder.Configuration);
 
-// Repositories (Remaining for Products/Policy until they are sliced)
+builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
-builder.Services.AddSingleton<PolicyNumberGenerator>();
-builder.Services.AddSingleton<EndorsementNumberGenerator>();
+builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
+builder.Services.AddScoped<PolicyNumberGenerator>();
+builder.Services.AddScoped<EndorsementNumberGenerator>();
 builder.Services.AddSingleton<PricingEngine>();
 builder.Services.AddScoped<PolicyDuplicateDetector>();
 builder.Services.AddSingleton<IEncryptionService, AesEncryptionService>();
@@ -87,10 +91,11 @@ builder.Services.AddGrpcReflection();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
+app.UseSwagger();
+app.UseSwaggerUI();
+
 if (app.Environment.IsDevelopment())
 {
-    app.UseSwagger();
-    app.UseSwaggerUI();
 }
 
 app.UseAuthorization();
@@ -103,7 +108,7 @@ if (app.Environment.IsDevelopment())
 }
 
 // Seed Database
-await DbInitializer.Initialize(app.Services);
+// await DbInitializer.Initialize(app.Services);
 
 app.MapGrpcService<InsuranceEngine.ApiHost.GrpcServices.InsuranceGrpcService>();
 app.MapGrpcService<ClaimsGrpcService>();

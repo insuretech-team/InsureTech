@@ -2,8 +2,8 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using InsuranceEngine.Underwriting.Application.Interfaces;
-using InsuranceEngine.Underwriting.Domain.Entities;
-using InsuranceEngine.Underwriting.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain.Entities;
+using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.SharedKernel.CQRS;
 using MediatR;
 
@@ -41,7 +41,6 @@ public class CreateBeneficiaryCommandHandler : IRequestHandler<CreateBeneficiary
         {
             beneficiary.IndividualDetails = new IndividualBeneficiary
             {
-                Id = Guid.NewGuid(),
                 BeneficiaryId = beneficiary.Id,
                 FatherName = request.IndividualDetails.FatherName,
                 MotherName = request.IndividualDetails.MotherName,

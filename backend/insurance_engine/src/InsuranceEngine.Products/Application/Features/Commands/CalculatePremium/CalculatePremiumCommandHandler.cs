@@ -4,6 +4,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.Extensions.Caching.Memory;
 using InsuranceEngine.Products.Application.DTOs;
 using InsuranceEngine.Products.Application.Interfaces;
 using InsuranceEngine.Products.Domain.Services;
@@ -15,15 +16,33 @@ public class CalculatePremiumCommandHandler : IRequestHandler<CalculatePremiumCo
 {
     private readonly IProductRepository _productRepository;
     private readonly PricingEngine _pricingEngine;
+    private readonly IMemoryCache _cache;
 
-    public CalculatePremiumCommandHandler(IProductRepository productRepository, PricingEngine pricingEngine)
+    public CalculatePremiumCommandHandler(IProductRepository productRepository, PricingEngine pricingEngine, IMemoryCache cache)
     {
         _productRepository = productRepository;
         _pricingEngine = pricingEngine;
+        _cache = cache;
     }
 
     public async Task<Result<CalculatePremiumResponse>> Handle(CalculatePremiumCommand request, CancellationToken cancellationToken)
     {
+        // Generate Cache Key for fast quote generation (FR-028)
+        var applicantDataHash = request.ApplicantData != null 
+            ? string.Join(";", request.ApplicantData.OrderBy(k => k.Key).Select(k => $"{k.Key}={k.Value}")).GetHashCode()
+            : 0;
+            
+        var ridersHash = request.RiderIds != null && request.RiderIds.Any()
+            ? string.Join(",", request.RiderIds.OrderBy(id => id)).GetHashCode()
+            : 0;
+            
+        var cacheKey = $"Quote_{request.ProductId}_{request.SumInsuredAmount}_{request.TenureMonths}_{ridersHash}_{applicantDataHash}";
+
+        if (_cache.TryGetValue(cacheKey, out CalculatePremiumResponse cachedResponse))
+        {
+            return Result<CalculatePremiumResponse>.Ok(cachedResponse);
+        }
+
         var product = await _productRepository.GetByIdWithRidersAsync(request.ProductId);
         if (product == null)
             return Result<CalculatePremiumResponse>.Fail(Error.NotFound("Product", request.ProductId.ToString()));
@@ -57,6 +76,12 @@ public class CalculatePremiumCommandHandler : IRequestHandler<CalculatePremiumCo
                 b.Description
             )).ToList()
         );
+
+        var cacheOptions = new MemoryCacheEntryOptions()
+            .SetSlidingExpiration(TimeSpan.FromMinutes(15))
+            .SetAbsoluteExpiration(TimeSpan.FromHours(1));
+            
+        _cache.Set(cacheKey, response, cacheOptions);
 
         return Result<CalculatePremiumResponse>.Ok(response);
     }

@@ -43,6 +43,22 @@ public class RenewPolicyCommandHandler : IRequestHandler<RenewPolicyCommand, Res
         var newStartDate = oldPolicy.EndDate;
         var newEndDate = newStartDate.AddMonths(request.TenureMonths);
 
+        long adjustedPremium = oldPolicy.PremiumAmount;
+        
+        // FR-067: Gamified Renewals (No Claim Bonus)
+        if (string.IsNullOrWhiteSpace(oldPolicy.ClaimsHistorySummary))
+        {
+            // 10% discount for no claims
+            adjustedPremium = (long)Math.Round(adjustedPremium * 0.90, MidpointRounding.AwayFromZero);
+        }
+
+        // FR-068: Grace Period tracking & late fee
+        if (oldPolicy.Status == PolicyStatus.GracePeriod)
+        {
+            // 5% penalty for renewing during grace period (applied after any NCB)
+            adjustedPremium = (long)Math.Round(adjustedPremium * 1.05, MidpointRounding.AwayFromZero);
+        }
+
         var newPolicy = new PolicyEntity
         {
             Id = Guid.NewGuid(),
@@ -52,7 +68,7 @@ public class RenewPolicyCommandHandler : IRequestHandler<RenewPolicyCommand, Res
             PartnerId = oldPolicy.PartnerId,
             AgentId = oldPolicy.AgentId,
             Status = PolicyStatus.PendingPayment,
-            PremiumAmount = oldPolicy.PremiumAmount,
+            PremiumAmount = adjustedPremium,
             PremiumCurrency = oldPolicy.PremiumCurrency,
             SumInsuredAmount = oldPolicy.SumInsuredAmount,
             SumInsuredCurrency = oldPolicy.SumInsuredCurrency,

@@ -71,17 +71,28 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 
         var claimNumber = await _claimsRepository.GetNextClaimNumberAsync(cancellationToken);
         
-        // 4. Perform Synchronous Fraud Check (FD-001)
+        // 4. Perform Synchronous Fraud Check (FD-001 to FD-007)
         var fraudCommand = new InsuranceEngine.Fraud.Application.Features.Commands.CheckFraud.CheckClaimForFraudCommand(
             Guid.Empty, // Temporary ID since claim isn't persisted yet
             request.PolicyId,
+            request.CustomerId,
             request.ClaimedAmount,
+            policy.SumInsuredAmount,
+            request.Type.ToString(),
+            request.PlaceOfIncident,
             request.IncidentDate,
             policy.IssuedAt ?? policy.CreatedAt);
 
         var fraudResult = await _mediator.Send(fraudCommand, cancellationToken);
 
         var isFlagged = fraudResult.IsSuccess && fraudResult.Value.Status == InsuranceEngine.Fraud.Domain.Enums.FraudCheckStatus.Flagged;
+        var fraudScore = fraudResult.IsSuccess ? fraudResult.Value.RiskScore : 100;
+
+        // FR-093: Zero Human Touch Claims (ZHTC) auto-approval logic
+        bool isZhtcEligible = !isFlagged 
+            && fraudScore <= 15 
+            && request.ClaimedAmount <= 5_000_000 // 50,000 BDT
+            && (DateTime.UtcNow - (policy.IssuedAt ?? policy.CreatedAt)).TotalDays > 365;
 
         var claim = new Claim
         {
@@ -90,18 +101,26 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             PolicyId = request.PolicyId,
             CustomerId = request.CustomerId,
             Type = request.Type,
-            Status = isFlagged ? ClaimStatus.UnderReview : ClaimStatus.Submitted,
+            Status = isZhtcEligible ? ClaimStatus.Approved : (isFlagged ? ClaimStatus.UnderReview : ClaimStatus.Submitted),
             ClaimedAmount = request.ClaimedAmount,
             ClaimedCurrency = "BDT",
+            ApprovedAmount = isZhtcEligible ? request.ClaimedAmount : 0,
+            ApprovedCurrency = "BDT",
             IncidentDate = request.IncidentDate,
             IncidentDescription = request.IncidentDescription,
             PlaceOfIncident = request.PlaceOfIncident,
             BankDetailsForPayout = request.BankDetailsForPayout,
             SubmittedAt = DateTime.UtcNow,
-            ProcessingType = ClaimProcessingType.Manual,
+            ApprovedAt = isZhtcEligible ? DateTime.UtcNow : null,
+            ProcessingType = isZhtcEligible ? ClaimProcessingType.Auto : ClaimProcessingType.Manual,
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
+
+        if (isZhtcEligible)
+        {
+            claim.ProcessorNotes = "Auto-approved via ZHTC rule (FR-093).";
+        }
 
         // Map Documents
         if (request.Documents != null)

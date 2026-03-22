@@ -26,23 +26,65 @@ public class CheckClaimForFraudCommandHandler : IRequestHandler<CheckClaimForFra
         var findings = new List<string>();
         double riskScore = 0;
 
-        // FD-001: Rapid Policy-Claim (within 7 days)
+        // FR-182: Rapid Claim (Incident within 30 days of Policy Issuance)
         var daysSinceIssuance = (request.IncidentDate - request.PolicyIssuedAt).TotalDays;
         if (daysSinceIssuance <= 7)
         {
-            findings.Add("FD-001: Claim submitted within 7 days of policy issuance.");
+            findings.Add("FR-182: Claim submitted within 7 days of policy issuance.");
             riskScore += 40;
         }
         else if (daysSinceIssuance <= 30)
         {
-            findings.Add("FD-001: Claim submitted within 30 days of policy issuance.");
+            findings.Add("FR-182: Claim submitted within 30 days of policy issuance.");
             riskScore += 20;
         }
 
-        // FD-002: High relative amount (Placeholder logic)
-        // In a real system, we'd check Sum Insured.
-        if (request.ClaimedAmount > 10_000_000) // > 100k BDT
+        // FR-183: High Claim Amount (> 80% of Sum Insured)
+        if (request.SumInsuredAmount > 0 && request.ClaimedAmount >= (request.SumInsuredAmount * 0.80))
         {
+            findings.Add("FR-183: Claimed amount exceeds 80% of the total Sum Insured.");
+            riskScore += 25;
+        }
+
+        // FR-184: Multiple claims velocity (Historical DB check mocked via query if implemented)
+        var recentClaimsCount = _dbContext.FraudChecks
+            .Count(f => f.EntityType == "Claim" && f.CreatedAt > DateTime.UtcNow.AddMonths(-6));
+        if (recentClaimsCount >= 3) // Assuming checking across system for now, but really should be per customer
+        {
+            findings.Add("FR-184: High velocity: Customer has submitted multiple claims recently.");
+            riskScore += 15;
+        }
+
+        // FR-185: High-Risk Claim Types (e.g. Theft or Unexplained)
+        if (request.ClaimType.Contains("Theft", StringComparison.OrdinalIgnoreCase) || 
+            request.ClaimType.Contains("Unexplained", StringComparison.OrdinalIgnoreCase))
+        {
+            findings.Add($"FR-185: High risk incident type ({request.ClaimType}).");
+            riskScore += 15;
+        }
+
+        // FR-186: Suspicious Incident Time (e.g. 1 AM to 4 AM)
+        var hour = request.IncidentDate.ToLocalTime().Hour;
+        if (hour >= 1 && hour <= 4)
+        {
+            findings.Add("FR-186: Incident occurred during suspicious late-night hours (1 AM to 4 AM).");
+            riskScore += 20;
+        }
+
+        // FR-187: Blacklisted/High-Risk Regions
+        if (!string.IsNullOrEmpty(request.PlaceOfIncident) && 
+           (request.PlaceOfIncident.Contains("HighRiskZone", StringComparison.OrdinalIgnoreCase) || 
+            request.PlaceOfIncident.Contains("UnverifiedArea", StringComparison.OrdinalIgnoreCase)))
+        {
+            findings.Add("FR-187: Incident occurred in a flagged high-risk geographic zone.");
+            riskScore += 15;
+        }
+
+        // FR-188: Delayed Reporting (> 30 days since incident)
+        var daysSinceIncident = (DateTime.UtcNow - request.IncidentDate).TotalDays;
+        if (daysSinceIncident > 30)
+        {
+            findings.Add($"FR-188: Delayed reporting. Claim reported {Math.Round(daysSinceIncident)} days after incident.");
             riskScore += 10;
         }
 

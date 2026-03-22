@@ -28,11 +28,32 @@ public class CancelPolicyCommandHandler : IRequestHandler<CancelPolicyCommand, R
         var result = policy.Cancel(request.Reason);
         if (result.IsFailure) return result;
 
+        // FR-053: Pro-rata refund calculation
+        long refundAmount = 0;
+        var now = DateTime.UtcNow;
+        if (policy.StartDate <= now && policy.EndDate >= now && policy.PremiumAmount > 0)
+        {
+            var totalDays = (policy.EndDate - policy.StartDate).TotalDays;
+            var daysUsed = (now - policy.StartDate).TotalDays;
+            if (totalDays > 0 && daysUsed < totalDays)
+            {
+                var remainingDays = totalDays - daysUsed;
+                var refundFactor = remainingDays / totalDays;
+                refundAmount = (long)Math.Round(policy.PremiumAmount * refundFactor, MidpointRounding.AwayFromZero);
+            }
+        }
+        else if (policy.StartDate > now)
+        {
+            // Full refund if cancelled before start
+            refundAmount = policy.PremiumAmount;
+        }
+
         await _repo.UpdateAsync(policy);
 
         await _eventBus.PublishAsync("insurance.policy.v1", new PolicyCancelledEvent(
             PolicyId: policy.Id, PolicyNumber: policy.PolicyNumber,
-            CancelledAt: DateTime.UtcNow, Reason: request.Reason));
+            CancelledAt: now, Reason: request.Reason,
+            RefundAmount: refundAmount, RefundCurrency: policy.PremiumCurrency));
 
         return Result.Ok();
     }

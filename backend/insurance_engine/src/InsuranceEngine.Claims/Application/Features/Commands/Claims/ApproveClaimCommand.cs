@@ -6,6 +6,8 @@ using InsuranceEngine.Claims.Domain.Enums;
 using InsuranceEngine.Claims.Domain.Services;
 using InsuranceEngine.Products.Application.Interfaces;
 using InsuranceEngine.SharedKernel.CQRS;
+using InsuranceEngine.SharedKernel.Interfaces;
+using InsuranceEngine.Claims.Domain.Events;
 using MediatR;
 using Microsoft.Extensions.Logging;
 
@@ -30,6 +32,7 @@ public class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, R
     private readonly IProductRepository _productRepository;
     private readonly ClaimSettlementCalculator _calculator;
     private readonly IMediator _mediator;
+    private readonly IEventBus _eventBus;
     private readonly ILogger<ApproveClaimCommandHandler> _logger;
 
     public ApproveClaimCommandHandler(
@@ -37,12 +40,14 @@ public class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, R
         IProductRepository productRepository,
         ClaimSettlementCalculator calculator,
         IMediator mediator,
+        IEventBus eventBus,
         ILogger<ApproveClaimCommandHandler> logger)
     {
         _claimsRepository = claimsRepository;
         _productRepository = productRepository;
         _calculator = calculator;
         _mediator = mediator;
+        _eventBus = eventBus;
         _logger = logger;
     }
 
@@ -101,6 +106,15 @@ public class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, R
         if (!result.IsSuccess) return result;
 
         await _claimsRepository.UpdateAsync(claim, cancellationToken);
+        
+        await _eventBus.PublishAsync("insurance.claims.v1", new ClaimProcessedEvent(
+            ClaimId: claim.Id,
+            ClaimNumber: claim.ClaimNumber,
+            NewStatus: claim.Status,
+            ApprovedAmount: claim.ApprovedAmount > 0 ? claim.ApprovedAmount : null,
+            Notes: request.Notes
+        ));
+
         return Result.Ok();
     }
 }

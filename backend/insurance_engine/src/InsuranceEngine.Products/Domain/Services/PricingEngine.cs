@@ -74,6 +74,42 @@ public class PricingEngine
             }
         }
 
+        // Pre-Existing Conditions load
+        if (applicantData.TryGetValue("pre_existing_conditions", out var hasConditionsStr) && bool.TryParse(hasConditionsStr, out var hasConditions) && hasConditions)
+        {
+            var pecFactor = 1.25; // 25% loading for pre-existing conditions
+            loadingFactor *= pecFactor;
+            breakdown.Add(new PremiumBreakdownItem(
+                "Pre-Existing Conditions Load",
+                (long)Math.Round(basePremium * (pecFactor - 1.0), MidpointRounding.AwayFromZero),
+                $"Condition flag true, factor: {pecFactor:F4}"));
+        }
+
+        // Occupational Hazards load
+        if (applicantData.TryGetValue("occupation_category", out var occupationStr))
+        {
+            var occFactor = GetOccupationalHazardsFactor(occupationStr);
+            if (Math.Abs(occFactor - 1.0) > 0.0001)
+            {
+                loadingFactor *= occFactor;
+                breakdown.Add(new PremiumBreakdownItem(
+                    "Occupational Hazards Load",
+                    (long)Math.Round(basePremium * (occFactor - 1.0), MidpointRounding.AwayFromZero),
+                    $"Occupation: {occupationStr}, factor: {occFactor:F4}"));
+            }
+        }
+
+        // Family Discount
+        if (applicantData.TryGetValue("family_discount_eligible", out var familyDiscountStr) && bool.TryParse(familyDiscountStr, out var familyDiscountEligible) && familyDiscountEligible)
+        {
+            var familyFactor = 0.90; // 10% discount for family
+            loadingFactor *= familyFactor;
+            breakdown.Add(new PremiumBreakdownItem(
+                "Family Discount",
+                (long)Math.Round(basePremium * (familyFactor - 1.0), MidpointRounding.AwayFromZero),
+                $"Family discount applied, factor: {familyFactor:F4}"));
+        }
+
         // Tenure discount
         var tenureFactor = GetTenureDiscountFactor(tenureMonths);
         if (Math.Abs(tenureFactor - 1.0) > 0.0001)
@@ -192,6 +228,20 @@ public class PricingEngine
             >= 24 => 0.90,  // 2+ years — 10% discount
             >= 12 => 0.95,  // 1+ year — 5% discount
             _ => 1.00       // Less than 1 year — no discount
+        };
+    }
+
+    private static double GetOccupationalHazardsFactor(string occupationCategory)
+    {
+        if (string.IsNullOrWhiteSpace(occupationCategory)) return 1.00;
+
+        return occupationCategory.Trim().ToLowerInvariant() switch
+        {
+            "hazardous" or "high_risk" or "manual_labor_heavy" => 1.30,   // 30% loading for hazardous
+            "moderate_risk" or "manual_labor_light" => 1.15,              // 15% loading for moderate
+            "low_risk" or "desk_job" or "academic" => 1.00,               // Standard
+            "safe" => 0.95,                                               // 5% discount for ultra-safe occupations
+            _ => 1.00
         };
     }
 }

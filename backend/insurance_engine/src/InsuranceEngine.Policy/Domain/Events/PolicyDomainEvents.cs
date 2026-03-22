@@ -29,7 +29,9 @@ public record PolicyCancelledEvent(
     Guid PolicyId,
     string PolicyNumber,
     DateTime CancelledAt,
-    string Reason
+    string Reason,
+    long RefundAmount,
+    string RefundCurrency
 ) : DomainEvent;
 
 public record PolicyEndorsedEvent(

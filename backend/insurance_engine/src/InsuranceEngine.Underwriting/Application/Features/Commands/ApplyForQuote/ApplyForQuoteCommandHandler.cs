@@ -38,6 +38,7 @@ public class ApplyForQuoteCommandHandler : IRequestHandler<ApplyForQuoteCommand,
 
     public async Task<Result<QuoteDto>> Handle(ApplyForQuoteCommand request, CancellationToken cancellationToken)
     {
+        var hdDto = request.HealthDeclaration;
         var premiumRequest = new CalculatePremiumCommand(
             request.ProductId,
             request.SumAssuredAmount,
@@ -45,9 +46,10 @@ public class ApplyForQuoteCommandHandler : IRequestHandler<ApplyForQuoteCommand,
             request.SelectedRiderIds,
             new Dictionary<string, string> 
             { 
-                { "Age", request.ApplicantAge.ToString() },
-                { "Smoker", request.IsSmoker.ToString() },
-                { "Occupation", request.ApplicantOccupation ?? "" }
+                { "age", request.ApplicantAge.ToString() },
+                { "smoker", request.IsSmoker.ToString() },
+                { "occupation_category", hdDto?.OccupationRiskLevel ?? request.ApplicantOccupation ?? "" },
+                { "pre_existing_conditions", hdDto?.HasPreExistingConditions.ToString() ?? "False" }
             }
         );
 
@@ -87,8 +89,7 @@ public class ApplyForQuoteCommandHandler : IRequestHandler<ApplyForQuoteCommand,
             UpdatedAt = DateTime.UtcNow
         };
 
-        var hdDto = request.HealthDeclaration;
-        var preExistingJson = hdDto.PreExistingConditions != null ? JsonSerializer.Serialize(hdDto.PreExistingConditions) : null;
+        var preExistingJson = hdDto?.PreExistingConditions != null ? JsonSerializer.Serialize(hdDto.PreExistingConditions) : null;
         var encryptedPreExisting = preExistingJson != null ? await _encryptionService.EncryptAsync(preExistingJson) : null;
         var familyHistoryJson = hdDto.FamilyHistory != null ? JsonSerializer.Serialize(hdDto.FamilyHistory) : null;
         var encryptedFamilyHistory = familyHistoryJson != null ? await _encryptionService.EncryptAsync(familyHistoryJson) : null;

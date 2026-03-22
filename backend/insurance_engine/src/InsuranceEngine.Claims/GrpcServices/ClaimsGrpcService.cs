@@ -36,7 +36,8 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             DateTime.TryParse(request.IncidentDate, out var incDate) ? incDate : DateTime.UtcNow,
             request.IncidentDescription,
             null, // PlaceOfIncident — not on gRPC request, set via REST only
-            null  // BankDetailsForPayout — not on gRPC request, set via REST only
+            null, // BankDetailsForPayout — not on gRPC request, set via REST only
+            new List<ClaimDocumentDto>()
         );
 
         var result = await _mediator.Send(command);

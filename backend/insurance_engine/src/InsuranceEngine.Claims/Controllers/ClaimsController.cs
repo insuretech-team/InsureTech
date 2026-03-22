@@ -31,7 +31,8 @@ public class ClaimsController : ControllerBase
             request.IncidentDate,
             request.IncidentDescription,
             request.PlaceOfIncident,
-            request.BankDetailsForPayout
+            request.BankDetailsForPayout,
+            request.Documents ?? new List<ClaimDocumentDto>()
         );
 
         var result = await _mediator.Send(command);
@@ -42,6 +43,15 @@ public class ClaimsController : ControllerBase
         }
 
         return BadRequest(result.Error);
+    }
+
+    [HttpPost("{id}/documents")]
+    public async Task<IActionResult> UploadDocuments(Guid id, [FromBody] List<ClaimDocumentDto> documents)
+    {
+        var command = new UploadClaimDocumentCommand(id, documents);
+        var result = await _mediator.Send(command);
+
+        return result.IsSuccess ? Ok() : BadRequest(result.Error);
     }
 
     [HttpGet("{id}")]

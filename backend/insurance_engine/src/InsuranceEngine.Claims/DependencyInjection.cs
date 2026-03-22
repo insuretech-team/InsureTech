@@ -19,6 +19,7 @@ public static class ClaimsModule
 
         services.AddScoped<IClaimsRepository, ClaimsRepository>();
         services.AddScoped<ClaimEligibilityValidator>();
+        services.AddScoped<ClaimDocumentValidator>();
         services.AddSingleton<ClaimSettlementCalculator>();
 
         return services;

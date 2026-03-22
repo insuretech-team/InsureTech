@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using InsuranceEngine.Claims.Application.Interfaces;
@@ -17,6 +18,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 {
     private readonly IClaimsRepository _claimsRepository;
     private readonly ClaimEligibilityValidator _eligibilityValidator;
+    private readonly ClaimDocumentValidator _documentValidator;
     private readonly IEventBus _eventBus;
     private readonly IMediator _mediator;
     private readonly ILogger<SubmitClaimCommandHandler> _logger;
@@ -24,12 +26,14 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
     public SubmitClaimCommandHandler(
         IClaimsRepository claimsRepository,
         ClaimEligibilityValidator eligibilityValidator,
+        ClaimDocumentValidator documentValidator,
         IEventBus eventBus,
         IMediator mediator,
         ILogger<SubmitClaimCommandHandler> logger)
     {
         _claimsRepository = claimsRepository;
         _eligibilityValidator = eligibilityValidator;
+        _documentValidator = documentValidator;
         _eventBus = eventBus;
         _mediator = mediator;
         _logger = logger;
@@ -46,7 +50,15 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
         if (policy == null)
             return Result<Guid>.Fail(Error.NotFound("Policy", request.PolicyId.ToString()));
 
-        // 2. Eligibility Validation (FR-042)
+        // 2. Document Validation (FR-099)
+        var docRequests = request.Documents.Select(d => new ValidateDocumentRequest(d.FileName, d.FileSize));
+        var docValidation = _documentValidator.Validate(docRequests);
+        if (!docValidation.IsSuccess)
+        {
+            return Result<Guid>.Fail(docValidation.Error!);
+        }
+
+        // 3. Eligibility Validation (FR-042)
         var eligibility = await _eligibilityValidator.ValidateAsync(
             policy, request.Type, request.IncidentDate, cancellationToken);
         
@@ -59,7 +71,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 
         var claimNumber = await _claimsRepository.GetNextClaimNumberAsync(cancellationToken);
         
-        // 3. Perform Synchronous Fraud Check (FD-001)
+        // 4. Perform Synchronous Fraud Check (FD-001)
         var fraudCommand = new InsuranceEngine.Fraud.Application.Features.Commands.CheckFraud.CheckClaimForFraudCommand(
             Guid.Empty, // Temporary ID since claim isn't persisted yet
             request.PolicyId,
@@ -90,6 +102,25 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             CreatedAt = DateTime.UtcNow,
             UpdatedAt = DateTime.UtcNow
         };
+
+        // Map Documents
+        if (request.Documents != null)
+        {
+            foreach (var d in request.Documents)
+            {
+                claim.Documents.Add(new ClaimDocument
+                {
+                    Id = Guid.NewGuid(),
+                    ClaimId = claim.Id,
+                    DocumentType = d.DocumentType,
+                    FileUrl = d.FileUrl,
+                    FileHash = d.FileHash,
+                    UploadedAt = DateTime.UtcNow,
+                    CreatedAt = DateTime.UtcNow,
+                    UpdatedAt = DateTime.UtcNow
+                });
+            }
+        }
 
         // Create FraudCheckResult entity (proto-aligned) instead of inline fields
         if (fraudResult.IsSuccess)

@@ -63,7 +63,9 @@ public record ClaimDocumentDto
 {
     public Guid Id { get; init; }
     public string DocumentType { get; init; } = string.Empty;
+    public string FileName { get; init; } = string.Empty;
     public string FileUrl { get; init; } = string.Empty;
+    public long FileSize { get; init; }
     public string FileHash { get; init; } = string.Empty;
     public bool Verified { get; init; }
     public DateTime UploadedAt { get; init; }
@@ -89,4 +91,5 @@ public record SubmitClaimRestRequest
     public string IncidentDescription { get; init; } = string.Empty;
     public string? PlaceOfIncident { get; init; }
     public string? BankDetailsForPayout { get; init; }
+    public List<ClaimDocumentDto>? Documents { get; init; }
 }

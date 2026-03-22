@@ -402,14 +402,15 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
 
         // Map proto claim to SubmitClaimCommand
         var command = new SubmitClaimCommand(
-            Guid.Parse(request.Claim.PolicyId),
-            Guid.Parse(request.Claim.CustomerId),
-            (InsuranceEngine.Claims.Domain.Enums.ClaimType)request.Claim.Type, 
-            request.Claim.ClaimedAmount?.Amount ?? 0,
-            request.Claim.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
-            request.Claim.IncidentDescription,
-            request.Claim.PlaceOfIncident,
-            null // BankDetailsForPayout — not on gRPC request
+            PolicyId: Guid.Parse(request.Claim.PolicyId),
+            CustomerId: Guid.Parse(request.Claim.CustomerId),
+            Type: (InsuranceEngine.Claims.Domain.Enums.ClaimType)request.Claim.Type, 
+            ClaimedAmount: request.Claim.ClaimedAmount?.Amount ?? 0,
+            IncidentDate: request.Claim.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
+            IncidentDescription: request.Claim.IncidentDescription,
+            PlaceOfIncident: request.Claim.PlaceOfIncident,
+            BankDetailsForPayout: null,
+            Documents: new List<ClaimDocumentDto>()
         );
 
         var result = await _mediator.Send(command);

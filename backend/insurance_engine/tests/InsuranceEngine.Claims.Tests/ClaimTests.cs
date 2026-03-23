@@ -23,10 +23,11 @@ public class ClaimTests
     }
 
     [Theory]
-    [InlineData(500_000, 1)]      // 5,000 BDT -> Level 1
-    [InlineData(1_500_000, 2)]    // 15,000 BDT -> Level 2
-    [InlineData(10_000_000, 3)]   // 100,000 BDT -> Level 3
-    [InlineData(30_000_000, 4)]   // 300,000 BDT -> Level 4
+    [InlineData(500_000, 0)]      // 5,000 BDT -> Level 0 (ZHTC)
+    [InlineData(1_500_000, 1)]    // 15,000 BDT -> Level 1
+    [InlineData(10_000_000, 2)]   // 100,000 BDT -> Level 2
+    [InlineData(30_000_000, 3)]   // 300,000 BDT -> Level 3
+    [InlineData(60_000_000, 4)]   // 600,000 BDT -> Level 4
     public void GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(long amount, int expectedLevel)
     {
         // Arrange
@@ -43,7 +44,7 @@ public class ClaimTests
     public void AddApproval_WhenLevelIsLowerThanRequired_SetsStatusToUnderReview()
     {
         // Arrange
-        var claim = CreateTestClaim(5_000_000); // Requires Level 2
+        var claim = CreateTestClaim(10_000_000); // 100,000 BDT -> Requires Level 2
         var approverId = Guid.NewGuid();
 
         // Act
@@ -58,7 +59,7 @@ public class ClaimTests
     public void AddApproval_WhenLevelMatchesRequired_SetsStatusToApproved()
     {
         // Arrange
-        var claim = CreateTestClaim(5_000_000); // Requires Level 2
+        var claim = CreateTestClaim(10_000_000); // 100,000 BDT -> Requires Level 2
         var approverId = Guid.NewGuid();
 
         // Act

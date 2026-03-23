@@ -50,7 +50,7 @@ public record ApplicantDto(
     DateTime? DateOfBirth,
     string? NidNumber,
     string? Occupation,
-    long AnnualIncome,
+    MoneyDto AnnualIncome,
     string? Address,
     string? PhoneNumber,
     HealthDeclarationDto? HealthDeclaration

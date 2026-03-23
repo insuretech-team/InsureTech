@@ -11,7 +11,7 @@ public record SubmitClaimCommand(
     Guid PolicyId,
     Guid CustomerId,
     ClaimType Type,
-    long ClaimedAmount,
+    MoneyDto ClaimedAmount,
     DateTime IncidentDate,
     string IncidentDescription,
     string? PlaceOfIncident,

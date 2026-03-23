@@ -32,7 +32,7 @@ public sealed class ClaimsGrpcService : ClaimService.ClaimServiceBase
             Guid.Parse(request.PolicyId),
             Guid.Parse(request.CustomerId),
             MapToDomainClaimType(request.Type),
-            request.ClaimedAmount?.Amount ?? 0,
+            new MoneyDto(request.ClaimedAmount?.Amount ?? 0, request.ClaimedAmount?.Currency ?? "BDT"),
             DateTime.TryParse(request.IncidentDate, out var incDate) ? incDate : DateTime.UtcNow,
             request.IncidentDescription,
             null, // PlaceOfIncident — not on gRPC request, set via REST only

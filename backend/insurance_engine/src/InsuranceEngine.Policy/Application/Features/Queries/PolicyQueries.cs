@@ -48,7 +48,7 @@ public class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, PolicyDto?>
                     applicant.DateOfBirth,
                     nid,
                     applicant.Occupation,
-                    applicant.AnnualIncome,
+                    new MoneyDto(applicant.AnnualIncome),
                     applicant.Address,
                     phone,
                     null

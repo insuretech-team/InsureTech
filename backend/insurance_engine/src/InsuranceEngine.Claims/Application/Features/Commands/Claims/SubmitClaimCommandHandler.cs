@@ -82,7 +82,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             Guid.Empty,
             request.PolicyId,
             request.CustomerId,
-            request.ClaimedAmount,
+            request.ClaimedAmount.Amount,
             policy.SumInsured.Amount,
             request.Type.ToString(),
             request.PlaceOfIncident,
@@ -98,7 +98,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             request.PolicyId,
             request.CustomerId,
             request.Type,
-            request.ClaimedAmount,
+            request.ClaimedAmount.Amount,
             request.IncidentDate,
             request.IncidentDescription,
             request.PlaceOfIncident);

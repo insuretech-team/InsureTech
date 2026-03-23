@@ -1,0 +1,88 @@
+﻿  Determining projects to restore...
+  All projects are up-to-date for restore.
+  InsuranceEngine.SharedKernel -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.SharedKernel\bin\Debug\net8.0\InsuranceEngine.SharedKernel.dll
+  PoliSync.Proto -> D:\InsureTech\backend\polisync\src\PoliSync.Proto\bin\Debug\net8.0\PoliSync.Proto.dll
+  InsuranceEngine.Products -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Products\bin\Debug\net8.0\InsuranceEngine.Products.dll
+  InsuranceEngine.Fraud -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Fraud\bin\Debug\net8.0\InsuranceEngine.Fraud.dll
+  InsuranceEngine.Beneficiary -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Beneficiary\bin\Debug\net8.0\InsuranceEngine.Beneficiary.dll
+  InsuranceEngine.Underwriting -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Underwriting\bin\Debug\net8.0\InsuranceEngine.Underwriting.dll
+  InsuranceEngine.Policy -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Policy\bin\Debug\net8.0\InsuranceEngine.Policy.dll
+  InsuranceEngine.Claims -> D:\InsureTech\backend\insurance_engine\src\InsuranceEngine.Claims\bin\Debug\net8.0\InsuranceEngine.Claims.dll
+  InsuranceEngine.Claims.Tests -> D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\bin\Debug\net8.0\InsuranceEngine.Claims.Tests.dll
+Test run for D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\bin\Debug\net8.0\InsuranceEngine.Claims.Tests.dll (.NETCoreApp,Version=v8.0)
+VSTest version 17.14.1 (x64)
+
+Starting test execution, please wait...
+A total of 1 test files matched the specified pattern.
+  Failed InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(amount: 500000, expectedLevel: 1) [53 ms]
+  Error Message:
+   Expected level to be 1, but found 0 (difference of -1).
+  Stack Trace:
+     at FluentAssertions.Execution.XUnit2TestFramework.Throw(String message)
+   at FluentAssertions.Execution.TestFrameworkProvider.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(String message, Object[] args)
+   at FluentAssertions.Numeric.NumericAssertions`2.Be(T expected, String because, Object[] becauseArgs)
+   at InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Int64 amount, Int32 expectedLevel) in D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\ClaimTests.cs:line 39
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeDirectByRefWithFewArgs(Object obj, Span`1 copyOfArgs, BindingFlags invokeAttr)
+  Failed InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(amount: 30000000, expectedLevel: 4) [1 ms]
+  Error Message:
+   Expected level to be 4, but found 3.
+  Stack Trace:
+     at FluentAssertions.Execution.XUnit2TestFramework.Throw(String message)
+   at FluentAssertions.Execution.TestFrameworkProvider.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(String message, Object[] args)
+   at FluentAssertions.Numeric.NumericAssertions`2.Be(T expected, String because, Object[] becauseArgs)
+   at InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Int64 amount, Int32 expectedLevel) in D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\ClaimTests.cs:line 39
+   at InvokeStub_ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(amount: 10000000, expectedLevel: 3) [< 1 ms]
+  Error Message:
+   Expected level to be 3, but found 2.
+  Stack Trace:
+     at FluentAssertions.Execution.XUnit2TestFramework.Throw(String message)
+   at FluentAssertions.Execution.TestFrameworkProvider.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(String message, Object[] args)
+   at FluentAssertions.Numeric.NumericAssertions`2.Be(T expected, String because, Object[] becauseArgs)
+   at InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Int64 amount, Int32 expectedLevel) in D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\ClaimTests.cs:line 39
+   at InvokeStub_ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(amount: 1500000, expectedLevel: 2) [< 1 ms]
+  Error Message:
+   Expected level to be 2, but found 1.
+  Stack Trace:
+     at FluentAssertions.Execution.XUnit2TestFramework.Throw(String message)
+   at FluentAssertions.Execution.TestFrameworkProvider.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(String message, Object[] args)
+   at FluentAssertions.Numeric.NumericAssertions`2.Be(T expected, String because, Object[] becauseArgs)
+   at InsuranceEngine.Claims.Tests.ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Int64 amount, Int32 expectedLevel) in D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\ClaimTests.cs:line 39
+   at InvokeStub_ClaimTests.GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(Object, Span`1)
+   at System.Reflection.MethodBaseInvoker.InvokeWithFewArgs(Object obj, BindingFlags invokeAttr, Binder binder, Object[] parameters, CultureInfo culture)
+  Failed InsuranceEngine.Claims.Tests.ClaimTests.AddApproval_WhenLevelIsLowerThanRequired_SetsStatusToUnderReview [2 ms]
+  Error Message:
+   Expected claim.Status to be ClaimStatus.UnderReview {value: 2}, but found ClaimStatus.Approved {value: 4}.
+  Stack Trace:
+     at FluentAssertions.Execution.XUnit2TestFramework.Throw(String message)
+   at FluentAssertions.Execution.TestFrameworkProvider.Throw(String message)
+   at FluentAssertions.Execution.DefaultAssertionStrategy.HandleFailure(String message)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(Func`1 failReasonFunc)
+   at FluentAssertions.Execution.AssertionScope.FailWith(String message, Object[] args)
+   at FluentAssertions.Primitives.EnumAssertions`2.Be(TEnum expected, String because, Object[] becauseArgs)
+   at InsuranceEngine.Claims.Tests.ClaimTests.AddApproval_WhenLevelIsLowerThanRequired_SetsStatusToUnderReview() in D:\InsureTech\backend\insurance_engine\tests\InsuranceEngine.Claims.Tests\ClaimTests.cs:line 54
+   at System.RuntimeMethodHandle.InvokeMethod(Object target, Void** arguments, Signature sig, Boolean isConstructor)
+   at System.Reflection.MethodBaseInvoker.InvokeWithNoArgs(Object obj, BindingFlags invokeAttr)
+
+Failed!  - Failed:     5, Passed:     2, Skipped:     0, Total:     7, Duration: 62 ms - InsuranceEngine.Claims.Tests.dll (net8.0)

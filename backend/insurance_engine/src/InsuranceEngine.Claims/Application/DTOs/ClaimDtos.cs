@@ -86,7 +86,7 @@ public record SubmitClaimRestRequest
     public Guid PolicyId { get; init; }
     public Guid CustomerId { get; init; }
     public ClaimType Type { get; init; }
-    public long ClaimedAmount { get; init; }
+    public MoneyDto ClaimedAmount { get; init; } = new(0);
     public DateTime IncidentDate { get; init; }
     public string IncidentDescription { get; init; } = string.Empty;
     public string? PlaceOfIncident { get; init; }

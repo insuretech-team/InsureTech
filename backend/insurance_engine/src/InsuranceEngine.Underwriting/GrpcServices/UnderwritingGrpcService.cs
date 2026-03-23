@@ -27,7 +27,7 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
         _logger = logger;
     }
 
-    public override async Task<RequestQuoteResponse> RequestQuote(RequestQuoteRequest request, ServerCallContext context)
+    public override async Task<Insuretech.Underwriting.Services.V1.RequestQuoteResponse> RequestQuote(RequestQuoteRequest request, ServerCallContext context)
     {
         var command = new ApplyForQuoteCommand(
             Guid.Parse(request.BeneficiaryId),
@@ -41,12 +41,12 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
             request.Smoker,
             new UnderwritingHealthDeclarationDto(0, 0, 0, false, null, false, false, null, false, false, null, false, false, null, null) // Default empty HD
         );
-
+ 
         var result = await _mediator.Send(command);
-
+ 
         if (result.IsSuccess)
         {
-            return new RequestQuoteResponse
+            return new Insuretech.Underwriting.Services.V1.RequestQuoteResponse
             {
                 QuoteId = result.Value.Id.ToString(),
                 QuoteNumber = result.Value.QuoteNumber,
@@ -56,8 +56,8 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
                 Message = "Quote requested successfully"
             };
         }
-
-        return new RequestQuoteResponse
+ 
+        return new Insuretech.Underwriting.Services.V1.RequestQuoteResponse
         {
             Error = new Insuretech.Common.V1.Error
             {

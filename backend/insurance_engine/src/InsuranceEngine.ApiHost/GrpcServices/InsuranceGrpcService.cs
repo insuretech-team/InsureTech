@@ -249,15 +249,15 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 request.Policy.ProposerDetails?.DateOfBirth?.ToDateTime(),
                 request.Policy.ProposerDetails?.NidNumber,
                 request.Policy.ProposerDetails?.Occupation,
-                0, // AnnualIncome not in proto
+                new InsuranceEngine.Policy.Application.DTOs.MoneyDto(0), // AnnualIncome not in proto
                 request.Policy.ProposerDetails?.Address,
                 null, // PhoneNumber
                 null // HealthDeclaration
             ),
             new List<NomineeDto>(), // Simplified Nominees mapping
             new List<PolicyRiderDto>(), // Simplified Riders mapping
-            request.Policy.PremiumAmount?.Amount ?? 0,
-            request.Policy.SumInsured?.Amount ?? 0,
+            new InsuranceEngine.Policy.Application.DTOs.MoneyDto(request.Policy.PremiumAmount?.Amount ?? 0, request.Policy.PremiumAmount?.Currency ?? "BDT"),
+            new InsuranceEngine.Policy.Application.DTOs.MoneyDto(request.Policy.SumInsured?.Amount ?? 0, request.Policy.SumInsured?.Currency ?? "BDT"),
             request.Policy.TenureMonths,
             request.Policy.StartDate?.ToDateTime() ?? DateTime.UtcNow
         );
@@ -405,7 +405,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             PolicyId: Guid.Parse(request.Claim.PolicyId),
             CustomerId: Guid.Parse(request.Claim.CustomerId),
             Type: (InsuranceEngine.Claims.Domain.Enums.ClaimType)request.Claim.Type, 
-            ClaimedAmount: request.Claim.ClaimedAmount?.Amount ?? 0,
+            ClaimedAmount: new InsuranceEngine.Claims.Application.DTOs.MoneyDto(request.Claim.ClaimedAmount?.Amount ?? 0, request.Claim.ClaimedAmount?.Currency ?? "BDT"),
             IncidentDate: request.Claim.IncidentDate?.ToDateTime() ?? DateTime.UtcNow,
             IncidentDescription: request.Claim.IncidentDescription,
             PlaceOfIncident: request.Claim.PlaceOfIncident,

@@ -14,8 +14,8 @@ public record CreatePolicyCommand(
     ApplicantDto Applicant,
     List<NomineeDto>? Nominees,
     List<PolicyRiderDto>? Riders,
-    long PremiumAmount,
-    long SumInsuredAmount,
+    MoneyDto PremiumAmount,
+    MoneyDto SumInsuredAmount,
     int TenureMonths,
     DateTime StartDate
 ) : IRequest<Result<CreatePolicyResponse>>;

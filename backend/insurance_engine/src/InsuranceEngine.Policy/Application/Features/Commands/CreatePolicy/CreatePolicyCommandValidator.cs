@@ -10,8 +10,8 @@ public class CreatePolicyCommandValidator : AbstractValidator<CreatePolicyComman
         RuleFor(x => x.ProductId).NotEmpty().WithMessage("Product ID is required.");
         RuleFor(x => x.CustomerId).NotEmpty().WithMessage("Customer ID is required.");
 
-        RuleFor(x => x.PremiumAmount).GreaterThan(0).WithMessage("Premium amount must be greater than 0.");
-        RuleFor(x => x.SumInsuredAmount).GreaterThan(0).WithMessage("Sum insured must be greater than 0.");
+        RuleFor(x => x.PremiumAmount.Amount).GreaterThan(0).WithMessage("Premium amount must be greater than 0.");
+        RuleFor(x => x.SumInsuredAmount.Amount).GreaterThan(0).WithMessage("Sum insured must be greater than 0.");
 
         RuleFor(x => x.TenureMonths)
             .GreaterThanOrEqualTo(1).WithMessage("Tenure must be at least 1 month.")

@@ -14,7 +14,7 @@ services:
       - DB_PASSWORD=${DB_PASSWORD}
       - REDIS_PASSWORD=${REDIS_PASSWORD}
       - PII_ENCRYPTION_KEY=${PII_ENCRYPTION_KEY}
-      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=insuretech;Username=app;Password=${DB_PASSWORD};SearchPath=insurance_schema
+      - ConnectionStrings__DefaultConnection=Host=postgres;Port=5432;Database=insuretech_primary;Username=app;Password=${DB_PASSWORD};SearchPath=insurance_schema
       - ConnectionStrings__Redis=redis:6379,password=${REDIS_PASSWORD}
       - Kafka__BootstrapServers=kafka:9092
     volumes:

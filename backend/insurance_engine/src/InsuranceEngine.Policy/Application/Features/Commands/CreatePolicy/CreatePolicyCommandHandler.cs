@@ -63,7 +63,7 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
             NidNumber = !string.IsNullOrEmpty(request.Applicant.NidNumber)
                 ? _encryptionService.Encrypt(request.Applicant.NidNumber) : null,
             Occupation = request.Applicant.Occupation,
-            AnnualIncome = request.Applicant.AnnualIncome,
+            AnnualIncome = request.Applicant.AnnualIncome.Amount,
             Address = request.Applicant.Address,
             PhoneNumber = !string.IsNullOrEmpty(request.Applicant.PhoneNumber)
                 ? _encryptionService.Encrypt(request.Applicant.PhoneNumber) : null,
@@ -84,8 +84,8 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
             request.ProductId,
             request.CustomerId,
             request.PartnerId,
-            request.SumInsuredAmount,
-            request.PremiumAmount,
+            request.SumInsuredAmount.Amount,
+            request.PremiumAmount.Amount,
             request.TenureMonths,
             request.StartDate);
 

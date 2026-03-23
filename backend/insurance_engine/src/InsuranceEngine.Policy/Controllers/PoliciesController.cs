@@ -11,11 +11,12 @@ using InsuranceEngine.Policy.Application.Features.Commands.Nominees;
 using InsuranceEngine.Policy.Application.Features.Queries;
 using InsuranceEngine.Policy.Application.DTOs;
 using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.DTOs;
 
 namespace InsuranceEngine.Policy.Controllers;
 
 [ApiController]
-[Route("api/[controller]")]
+[Route("v1/policies")]
 public class PoliciesController : ControllerBase
 {
     private readonly IMediator _mediator;
@@ -25,34 +26,33 @@ public class PoliciesController : ControllerBase
     // ===================== Policy CRUD =====================
 
     [HttpGet]
-    public async Task<ActionResult<PaginatedResponse<PolicyListDto>>> List(
+    public async Task<IActionResult> List(
         [FromQuery] Guid? customerId, [FromQuery] PolicyStatus? status,
         [FromQuery] Guid? productId, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
     {
-        return Ok(await _mediator.Send(new ListPoliciesQuery(customerId, status, productId, page, pageSize)));
+        var result = await _mediator.Send(new ListPoliciesQuery(customerId, status, productId, page, pageSize));
+        return Ok(new PolicyListingResponse(result.Items, result.TotalCount));
     }
 
     [HttpGet("{id}")]
-    public async Task<ActionResult<PolicyDto>> Get(Guid id)
+    public async Task<IActionResult> Get(Guid id)
     {
         var result = await _mediator.Send(new GetPolicyQuery(id));
-        return result != null ? Ok(result) : NotFound();
+        if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
+        return Ok(new PolicyRetrievalResponse(result));
     }
 
     [HttpPost]
     public async Task<IActionResult> Create([FromBody] CreatePolicyCommand command)
     {
         var result = await _mediator.Send(command);
-        return result.Match<IActionResult>(
-            onSuccess: r => CreatedAtAction(nameof(Get), new { id = r.PolicyId },
-                new { r.PolicyId, r.PolicyNumber, message = "Policy created successfully." }),
-            onFailure: error => error.Code switch
-            {
-                "NOT_FOUND" => NotFound(new { error.Code, error.Message }),
-                "VALIDATION_ERROR" => BadRequest(new { error.Code, error.Message }),
-                _ => BadRequest(new { error.Code, error.Message })
-            }
-        );
+        if (result.IsSuccess)
+        {
+            var r = result.Value!;
+            var response = new PolicyCreationResponse(r.PolicyId, r.PolicyNumber, "Policy created successfully.");
+            return CreatedAtAction(nameof(Get), new { id = r.PolicyId }, response);
+        }
+        return BadRequest(MapError(result.Error!));
     }
 
     // ===================== Lifecycle =====================
@@ -61,24 +61,28 @@ public class PoliciesController : ControllerBase
     public async Task<IActionResult> Issue(Guid id)
     {
         var result = await _mediator.Send(new IssuePolicyCommand(id));
-        return HandleResult(result, "Policy issued successfully.");
+        if (result.IsSuccess) return Ok(new PolicyIssueResponse("Policy issued successfully."));
+        return HandleErrorResult(result.Error!);
     }
 
     [HttpPost("{id}/cancel")]
     public async Task<IActionResult> Cancel(Guid id, [FromBody] CancelPolicyRequest request)
     {
         var result = await _mediator.Send(new CancelPolicyCommand(id, request.Reason));
-        return HandleResult(result, "Policy cancelled successfully.");
+        if (result.IsSuccess) return Ok(new PolicyCancelResponse("Policy cancelled successfully."));
+        return HandleErrorResult(result.Error!);
     }
 
     [HttpPost("{id}/renew")]
     public async Task<IActionResult> Renew(Guid id, [FromBody] RenewPolicyRequest request)
     {
         var result = await _mediator.Send(new RenewPolicyCommand(id, request.TenureMonths));
-        return result.Match<IActionResult>(
-            onSuccess: r => Ok(new { r.NewPolicyId, r.NewPolicyNumber, message = "Policy renewed successfully." }),
-            onFailure: error => HandleErrorResult(error)
-        );
+        if (result.IsSuccess)
+        {
+            var r = result.Value!;
+            return Ok(new PolicyRenewResponse(r.NewPolicyId, r.NewPolicyNumber, "Policy renewed successfully."));
+        }
+        return HandleErrorResult(result.Error!);
     }
 
     // ===================== Grace Period & Renewal =====================
@@ -87,22 +91,25 @@ public class PoliciesController : ControllerBase
     public async Task<IActionResult> GetGracePeriod(Guid id)
     {
         var result = await _mediator.Send(new GetGracePeriodQuery(id));
-        return result != null ? Ok(result) : NotFound();
+        if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
+        return Ok(new GracePeriodResponse(result));
     }
 
     [HttpGet("{id}/renewal-schedule")]
     public async Task<IActionResult> GetRenewalSchedule(Guid id)
     {
         var result = await _mediator.Send(new GetRenewalScheduleQuery(id));
-        return result != null ? Ok(result) : NotFound();
+        if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
+        return Ok(new RenewalScheduleResponse(result));
     }
 
     // ===================== Nominees =====================
 
     [HttpGet("{policyId}/nominees")]
-    public async Task<ActionResult<List<NomineeDto>>> ListNominees(Guid policyId)
+    public async Task<IActionResult> ListNominees(Guid policyId)
     {
-        return Ok(await _mediator.Send(new ListNomineesQuery(policyId)));
+        var items = await _mediator.Send(new ListNomineesQuery(policyId));
+        return Ok(new NomineeListingResponse(items, items.Count));
     }
 
     [HttpPost("{policyId}/nominees")]
@@ -111,11 +118,12 @@ public class PoliciesController : ControllerBase
         var command = new AddNomineeCommand(policyId, request.BeneficiaryId, request.FullName, request.Relationship, request.SharePercentage,
             request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         var result = await _mediator.Send(command);
-        return result.Match<IActionResult>(
-            onSuccess: id => Created($"api/policies/{policyId}/nominees/{id}",
-                new { nomineeId = id, message = "Nominee added successfully." }),
-            onFailure: error => HandleErrorResult(error)
-        );
+        if (result.IsSuccess)
+        {
+            return Created($"api/policies/{policyId}/nominees/{result.Value}",
+                new NomineeResponse(result.Value, "Nominee added successfully."));
+        }
+        return HandleErrorResult(result.Error!);
     }
 
     [HttpPut("{policyId}/nominees/{nomineeId}")]
@@ -124,32 +132,34 @@ public class PoliciesController : ControllerBase
         var command = new UpdateNomineeCommand(policyId, nomineeId, request.FullName, request.Relationship, request.SharePercentage,
             request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
         var result = await _mediator.Send(command);
-        return HandleResult(result, "Nominee updated successfully.");
+        if (result.IsSuccess) return Ok(new NomineeResponse(nomineeId, "Nominee updated successfully."));
+        return HandleErrorResult(result.Error!);
     }
 
     [HttpDelete("{policyId}/nominees/{nomineeId}")]
     public async Task<IActionResult> DeleteNominee(Guid policyId, Guid nomineeId)
     {
         var result = await _mediator.Send(new DeleteNomineeCommand(policyId, nomineeId));
-        return HandleResult(result, "Nominee deleted successfully.");
+        if (result.IsSuccess) return Ok(new { message = "Nominee deleted successfully." });
+        return HandleErrorResult(result.Error!);
     }
 
     // ===================== Helpers =====================
 
-    private IActionResult HandleResult(SharedKernel.CQRS.Result result, string successMessage)
+    private ErrorDto MapError(SharedKernel.CQRS.Error error)
     {
-        if (result.IsSuccess) return Ok(new { message = successMessage });
-        return HandleErrorResult(result.Error!);
+        return new ErrorDto(error.Code, error.Message);
     }
 
     private IActionResult HandleErrorResult(SharedKernel.CQRS.Error error)
     {
+        var errorDto = MapError(error);
         return error.Code switch
         {
-            "NOT_FOUND" => NotFound(new { error.Code, error.Message }),
-            "INVALID_STATE_TRANSITION" => Conflict(new { error.Code, error.Message }),
-            "VALIDATION_ERROR" => BadRequest(new { error.Code, error.Message }),
-            _ => BadRequest(new { error.Code, error.Message })
+            "NOT_FOUND" => NotFound(errorDto),
+            "INVALID_STATE_TRANSITION" => Conflict(errorDto),
+            "VALIDATION_ERROR" => BadRequest(errorDto),
+            _ => BadRequest(errorDto)
         };
     }
 }

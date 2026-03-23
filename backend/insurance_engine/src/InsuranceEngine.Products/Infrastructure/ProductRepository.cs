@@ -22,7 +22,6 @@ public class ProductRepository : IProductRepository
     public async Task<Product?> GetByIdAsync(Guid id) =>
         await _context.Products
             .Include(p => p.Plans)
-            .Include(p => p.Questions)
             .FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<Product?> GetByIdWithRidersAsync(Guid id) =>
@@ -30,7 +29,6 @@ public class ProductRepository : IProductRepository
             .Include(p => p.Plans)
             .Include(p => p.AvailableRiders)
             .Include(p => p.PricingConfig)
-            .Include(p => p.Questions)
             .FirstOrDefaultAsync(p => p.Id == id);
 
     public async Task<Product?> GetByCodeAsync(string productCode) =>

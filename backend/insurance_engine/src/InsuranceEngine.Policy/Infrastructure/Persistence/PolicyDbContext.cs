@@ -1,7 +1,5 @@
 using InsuranceEngine.Policy.Domain.Entities;
 using InsuranceEngine.Policy.Domain.Enums;
-using InsuranceEngine.SharedKernel.Domain.Entities;
-using InsuranceEngine.SharedKernel.Domain.Enums;
 using InsuranceEngine.SharedKernel.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
@@ -17,26 +15,23 @@ public class PolicyDbContext : DbContext
         _tenantId = tenantService.GetTenantId();
     }
 
-    public DbSet<PolicyEntity> Policies { get; set; } = null!;
+    public DbSet<PolicyAggregate> Policies { get; set; } = null!;
     public DbSet<Nominee> Nominees { get; set; } = null!;
-    public DbSet<PolicyRider> PolicyRiders { get; set; } = null!;
-    public DbSet<Beneficiary> Beneficiaries { get; set; } = null!;
-    public DbSet<IndividualBeneficiary> IndividualBeneficiaries { get; set; } = null!;
-    public DbSet<BusinessBeneficiary> BusinessBeneficiaries { get; set; } = null!;
+    public DbSet<PolicyRider> Riders { get; set; } = null!; // Renamed from PolicyRiders
     public DbSet<Endorsement> Endorsements { get; set; } = null!;
 
 
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
-        modelBuilder.HasDefaultSchema("insurance_schema");
+        modelBuilder.HasDefaultSchema("insurance"); // Changed schema name
 
         // --- Policy ---
-        modelBuilder.Entity<PolicyEntity>(entity =>
+        modelBuilder.Entity<PolicyAggregate>(entity => // Changed from PolicyEntity to PolicyAggregate
         {
             entity.ToTable("policies");
             entity.HasKey(e => e.Id);
-            entity.HasQueryFilter(e => !e.IsDeleted);
+            entity.HasQueryFilter(e => !e.IsDeleted); // Kept from PolicyEntity
 
             entity.Property(e => e.PolicyNumber).HasMaxLength(50).IsRequired();
             entity.HasIndex(e => e.PolicyNumber).IsUnique();
@@ -92,48 +87,6 @@ public class PolicyDbContext : DbContext
             entity.HasIndex(e => e.PolicyId);
         });
 
-        // --- PolicyRider ---
-        modelBuilder.Entity<Beneficiary>(entity =>
-        {
-            entity.ToTable("beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Code).HasMaxLength(50);
-            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-            entity.Property(e => e.ContactNumber).HasMaxLength(20);
-            entity.Property(e => e.Email).HasMaxLength(100);
-            entity.Property(e => e.Address).HasMaxLength(500);
-
-            entity.HasOne(e => e.IndividualDetails)
-                .WithOne(e => e.Beneficiary)
-                .HasForeignKey<IndividualBeneficiary>(e => e.BeneficiaryId);
-
-            entity.HasOne(e => e.BusinessDetails)
-                .WithOne(e => e.Beneficiary)
-                .HasForeignKey<BusinessBeneficiary>(e => e.BeneficiaryId);
-        });
-
-        modelBuilder.Entity<IndividualBeneficiary>(entity =>
-        {
-            entity.ToTable("individual_beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.BeneficiaryId);
-            entity.Property(e => e.FatherName).HasMaxLength(200);
-            entity.Property(e => e.MotherName).HasMaxLength(200);
-            entity.Property(e => e.Occupation).HasMaxLength(100);
-        });
-
-        modelBuilder.Entity<BusinessBeneficiary>(entity =>
-        {
-            entity.ToTable("business_beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.BusinessType).HasConversion<string>();
-            entity.Property(e => e.ContactInfoJson).HasColumnType("jsonb");
-            entity.Property(e => e.RegisteredAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.BusinessAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.FocalPersonContactJson).HasColumnType("jsonb");
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
-            entity.Property(e => e.PrimaryContactJson).HasColumnType("jsonb");
-        });
-
         modelBuilder.Entity<Nominee>(entity =>
         {
             entity.ToTable("policy_nominees", "insurance_schema");
@@ -147,10 +100,7 @@ public class PolicyDbContext : DbContext
             entity.Property(e => e.NidNumber).HasColumnName("nid_number").HasMaxLength(20);
             entity.Property(e => e.PhoneNumber).HasColumnName("phone_number").HasMaxLength(20);
 
-            entity.HasOne(e => e.Beneficiary)
-                .WithMany()
-                .HasForeignKey(e => e.BeneficiaryId)
-                .IsRequired(false);
+            // Navigation removed for decoupling
 
             entity.HasIndex(e => e.PolicyId);
             entity.HasIndex(e => e.NidNumber);

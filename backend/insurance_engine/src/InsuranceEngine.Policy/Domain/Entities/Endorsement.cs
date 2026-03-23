@@ -1,12 +1,13 @@
-using System;
 using InsuranceEngine.Policy.Domain.Enums;
+using InsuranceEngine.SharedKernel.Domain;
 using InsuranceEngine.SharedKernel.Interfaces;
 
 namespace InsuranceEngine.Policy.Domain.Entities;
 
-public class Endorsement
+public class Endorsement : Entity<Guid>
 {
-    public Guid Id { get; set; }
+    public Endorsement(Guid id) : base(id) { }
+    public Endorsement() { }
 
     public string EndorsementNumber { get; set; } = string.Empty;
     public Guid PolicyId { get; set; }

@@ -14,7 +14,8 @@ public static class DependencyInjection
 
         services.AddDbContext<FraudDbContext>(options =>
             options.UseNpgsql(connectionString,
-                b => b.MigrationsAssembly(typeof(FraudDbContext).Assembly.FullName)));
+                b => b.MigrationsAssembly(typeof(FraudDbContext).Assembly.FullName))
+                .UseSnakeCaseNamingConvention());
 
 
         return services;

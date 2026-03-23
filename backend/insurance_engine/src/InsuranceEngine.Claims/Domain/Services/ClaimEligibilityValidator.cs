@@ -24,11 +24,25 @@ public class ClaimEligibilityValidator
 
     public async Task<Result> ValidateAsync(
         PolicyDto policy,
+        InsuranceEngine.Products.Application.DTOs.ProductDto product,
         ClaimType claimType,
         DateTime incidentDate,
         CancellationToken cancellationToken = default)
     {
         var errors = new List<string>();
+
+        // 0. Claim Type Coverage Check (FR-082)
+        // Note: AllowedClaimTypes was removed from Product to align with proto.
+        // For now, skipping this check as it's targeted for M2.
+        /*
+        if (product.AllowedClaimTypes != null && product.AllowedClaimTypes.Any())
+        {
+            if (!product.AllowedClaimTypes.Contains(claimType.ToString(), StringComparer.OrdinalIgnoreCase))
+            {
+                errors.Add($"Claim type '{claimType}' is not covered by this product ({product.ProductName}).");
+            }
+        }
+        */
 
         // 1. Policy Active Check
         if (policy.Status != InsuranceEngine.Policy.Domain.Enums.PolicyStatus.Active &&

@@ -40,8 +40,7 @@ public class ClaimsDbContext : DbContext
             entity.Property(e => e.SettledCurrency).HasColumnName("settled_currency").HasMaxLength(3).HasDefaultValue("BDT");
             entity.Property(e => e.DeductibleAmount).HasColumnName("deductible_amount");
             entity.Property(e => e.DeductibleCurrency).HasColumnName("deductible_currency").HasMaxLength(3).HasDefaultValue("BDT");
-            entity.Property(e => e.CoPayAmount).HasColumnName("co_pay_amount");
-            entity.Property(e => e.CoPayCurrency).HasColumnName("co_pay_currency").HasMaxLength(3).HasDefaultValue("BDT");
+            entity.Property(e => e.CoPayPercentage).HasColumnName("co_pay_percentage");
 
             // Proto-aligned new fields
             entity.Property(e => e.BankDetailsForPayout).HasColumnName("bank_details_for_payout");
@@ -60,8 +59,8 @@ public class ClaimsDbContext : DbContext
             entity.Ignore(e => e.ApprovedMoney);
             entity.Ignore(e => e.SettledMoney);
             entity.Ignore(e => e.DeductibleMoney);
-            entity.Ignore(e => e.CoPayMoney);
-
+            // CoPayMoney ignored as per instruction
+            
             // Relationships
             entity.HasMany(e => e.Approvals)
                   .WithOne()

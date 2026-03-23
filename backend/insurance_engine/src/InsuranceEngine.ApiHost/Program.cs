@@ -20,6 +20,13 @@ using InsuranceEngine.Underwriting;
 using InsuranceEngine.Claims.GrpcServices;
 using InsuranceEngine.Underwriting.GrpcServices;
 using InsuranceEngine.Fraud;
+using InsuranceEngine.Beneficiary;
+using InsuranceEngine.Beneficiary.GrpcServices;
+using InsuranceEngine.Partners;
+using InsuranceEngine.Commission;
+using OpenTelemetry.Resources;
+using OpenTelemetry.Trace;
+using OpenTelemetry.Metrics;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -51,12 +58,15 @@ builder.Services.AddHealthChecks()
 builder.Services.AddClaimsModule(builder.Configuration);
 builder.Services.AddUnderwritingModule(builder.Configuration);
 builder.Services.AddFraudModule(builder.Configuration);
+builder.Services.AddBeneficiaryModule(builder.Configuration);
+builder.Services.AddPartnersModule(builder.Configuration);
+builder.Services.AddCommissionModule(builder.Configuration);
 
 builder.Services.AddMemoryCache();
 builder.Services.AddScoped<IProductRepository, ProductRepository>();
 builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
 builder.Services.AddScoped<IEndorsementRepository, EndorsementRepository>();
-builder.Services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
+// IBeneficiaryRepository moved to AddBeneficiaryModule
 builder.Services.AddScoped<PolicyNumberGenerator>();
 builder.Services.AddScoped<EndorsementNumberGenerator>();
 builder.Services.AddSingleton<PricingEngine>();
@@ -76,6 +86,9 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Claims.ClaimsModule).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Underwriting.UnderwritingModule).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Fraud.DependencyInjection).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Beneficiary.DependencyInjection).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Partners.DependencyInjection).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Commission.DependencyInjection).Assembly);
 
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
     cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
@@ -87,6 +100,20 @@ builder.Services.AddMediatR(cfg =>
 // gRPC
 builder.Services.AddGrpc();
 builder.Services.AddGrpcReflection();
+
+// OpenTelemetry
+builder.Services.AddOpenTelemetry()
+    .WithTracing(tracing => tracing
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("InsuranceEngine.ApiHost"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddEntityFrameworkCoreInstrumentation()
+        .AddConsoleExporter())
+    .WithMetrics(metrics => metrics
+        .SetResourceBuilder(ResourceBuilder.CreateDefault().AddService("InsuranceEngine.ApiHost"))
+        .AddAspNetCoreInstrumentation()
+        .AddHttpClientInstrumentation()
+        .AddConsoleExporter());
 
 var app = builder.Build();
 
@@ -108,11 +135,11 @@ if (app.Environment.IsDevelopment())
 }
 
 // Seed Database
-// await DbInitializer.Initialize(app.Services);
+await DbInitializer.Initialize(app.Services);
 
 app.MapGrpcService<InsuranceEngine.ApiHost.GrpcServices.InsuranceGrpcService>();
 app.MapGrpcService<ClaimsGrpcService>();
 app.MapGrpcService<UnderwritingGrpcService>();
-app.MapGrpcService<BeneficiaryGrpcService>();
+app.MapGrpcService<InsuranceEngine.Beneficiary.GrpcServices.BeneficiaryGrpcService>();
 
 app.Run();

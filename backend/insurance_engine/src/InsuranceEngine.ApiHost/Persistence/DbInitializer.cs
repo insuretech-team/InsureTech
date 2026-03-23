@@ -14,46 +14,9 @@ public static class DbInitializer
     {
         try
         {
-            using (var scope = serviceProvider.CreateScope())
-            {
-                try {
-                    var productsContext = scope.ServiceProvider.GetRequiredService<ProductsDbContext>();
-                    await productsContext.Database.MigrateAsync();
-                } catch (Exception ex) { Console.WriteLine($"Products migration error: {ex.Message}"); }
-            }
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                try {
-                    var policyContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Policy.Infrastructure.Persistence.PolicyDbContext>();
-                    await policyContext.Database.MigrateAsync();
-                } catch (Exception ex) { Console.WriteLine($"Policy migration error: {ex.Message}"); }
-            }
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                try {
-                    var claimsContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Claims.Infrastructure.Persistence.ClaimsDbContext>();
-                    await claimsContext.Database.MigrateAsync();
-                } catch (Exception ex) { Console.WriteLine($"Claims migration error: {ex.Message}"); }
-            }
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                try {
-                    var underwritingContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Underwriting.Infrastructure.Persistence.UnderwritingDbContext>();
-                    await underwritingContext.Database.MigrateAsync();
-                } catch (Exception ex) { Console.WriteLine($"Underwriting migration error: {ex.Message}"); }
-            }
-
-            using (var scope = serviceProvider.CreateScope())
-            {
-                try {
-                    var fraudContext = scope.ServiceProvider.GetRequiredService<InsuranceEngine.Fraud.Infrastructure.Persistence.FraudDbContext>();
-                    await fraudContext.Database.MigrateAsync();
-                } catch (Exception ex) { Console.WriteLine($"Fraud migration error: {ex.Message}"); }
-            }
-
+            // Migrations are now managed externally via Go/SQL scripts in backend/inscore
+            // to align with the PoliSync architectural pattern.
+            
             using var seedScope = serviceProvider.CreateScope();
             var seedContext = seedScope.ServiceProvider.GetRequiredService<ProductsDbContext>();
             if (await seedContext.Products.AnyAsync()) return;
@@ -68,14 +31,7 @@ public static class DbInitializer
                     Id = Guid.NewGuid(),
                     ProductCode = "HLT-001",
                     ProductName = "Health Guard Plus",
-                    ProductNameBn = "হেলথ গার্ড প্লাস",
                     Category = ProductCategory.Health,
-                    Status = ProductStatus.Active,
-                    BasePremiumAmount = 500000, // 5000 BDT in paisa
-                    MinSumInsuredAmount = 10000000, // 100,000 BDT
-                    MaxSumInsuredAmount = 100000000, // 1,000,000 BDT
-                    MinAge = 18,
-                    MaxAge = 65,
                     MinTenureMonths = 12,
                     MaxTenureMonths = 36,
                     CreatedBy = createdBy,
@@ -88,14 +44,7 @@ public static class DbInitializer
                     Id = Guid.NewGuid(),
                     ProductCode = "LIF-001",
                     ProductName = "LabAid Life Shield",
-                    ProductNameBn = "ল্যাবএইড লাইফ শিল্ড",
                     Category = ProductCategory.Life,
-                    Status = ProductStatus.Active,
-                    BasePremiumAmount = 1000000, // 10,000 BDT
-                    MinSumInsuredAmount = 50000000, // 500,000 BDT
-                    MaxSumInsuredAmount = 500000000, // 5,000,000 BDT
-                    MinAge = 18,
-                    MaxAge = 60,
                     MinTenureMonths = 60,
                     MaxTenureMonths = 360,
                     CreatedBy = createdBy,
@@ -108,14 +57,7 @@ public static class DbInitializer
                     Id = Guid.NewGuid(),
                     ProductCode = "TRV-001",
                     ProductName = "Travel Secure",
-                    ProductNameBn = "ট্রাভেল সিকিউর",
                     Category = ProductCategory.Travel,
-                    Status = ProductStatus.Active,
-                    BasePremiumAmount = 200000, // 2,000 BDT
-                    MinSumInsuredAmount = 5000000, // 50,000 BDT
-                    MaxSumInsuredAmount = 50000000, // 500,000 BDT
-                    MinAge = 1,
-                    MaxAge = 70,
                     MinTenureMonths = 1,
                     MaxTenureMonths = 12,
                     CreatedBy = createdBy,
@@ -128,14 +70,7 @@ public static class DbInitializer
                     Id = Guid.NewGuid(),
                     ProductCode = "MTR-001",
                     ProductName = "Motor Shield",
-                    ProductNameBn = "মোটর শিল্ড",
                     Category = ProductCategory.Motor,
-                    Status = ProductStatus.Active,
-                    BasePremiumAmount = 300000, // 3,000 BDT
-                    MinSumInsuredAmount = 20000000, // 200,000 BDT
-                    MaxSumInsuredAmount = 200000000, // 2,000,000 BDT
-                    MinAge = 18,
-                    MaxAge = 70,
                     MinTenureMonths = 12,
                     MaxTenureMonths = 12,
                     CreatedBy = createdBy,

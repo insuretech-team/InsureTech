@@ -15,6 +15,7 @@ public record PolicyCreatedEvent(
 public record PolicyIssuedEvent(
     Guid PolicyId,
     string PolicyNumber,
+    long PremiumAmount,
     DateTime IssuedAt
 ) : DomainEvent;
 
@@ -22,6 +23,7 @@ public record PolicyRenewedEvent(
     Guid OldPolicyId,
     Guid NewPolicyId,
     string NewPolicyNumber,
+    long PremiumAmount,
     DateTime RenewalDate
 ) : DomainEvent;
 

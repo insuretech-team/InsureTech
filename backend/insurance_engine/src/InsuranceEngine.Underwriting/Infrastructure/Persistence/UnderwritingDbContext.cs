@@ -1,7 +1,5 @@
 using InsuranceEngine.Underwriting.Domain.Entities;
 using InsuranceEngine.Underwriting.Domain.Enums;
-using InsuranceEngine.SharedKernel.Domain.Entities;
-using InsuranceEngine.SharedKernel.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceEngine.Underwriting.Infrastructure.Persistence;
@@ -13,9 +11,6 @@ public class UnderwritingDbContext : DbContext
     }
 
     public DbSet<Quote> Quotes { get; set; } = null!;
-    public DbSet<Beneficiary> Beneficiaries { get; set; } = null!;
-    public DbSet<IndividualBeneficiary> IndividualBeneficiaries { get; set; } = null!;
-    public DbSet<BusinessBeneficiary> BusinessBeneficiaries { get; set; } = null!;
     public DbSet<UnderwritingHealthDeclaration> HealthDeclarations { get; set; } = null!;
     public DbSet<UnderwritingDecision> UnderwritingDecisions { get; set; } = null!;
 
@@ -51,41 +46,6 @@ public class UnderwritingDbContext : DbContext
             entity.HasIndex(e => e.BeneficiaryId);
             entity.HasIndex(e => e.InsurerProductId);
             entity.HasIndex(e => e.Status);
-        });
-
-        modelBuilder.Entity<Beneficiary>(entity =>
-        {
-            entity.ToTable("beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.Code).HasMaxLength(50);
-            entity.Property(e => e.Name).IsRequired().HasMaxLength(200);
-
-            entity.HasOne(e => e.IndividualDetails)
-                .WithOne(e => e.Beneficiary)
-                .HasForeignKey<IndividualBeneficiary>(e => e.BeneficiaryId);
-
-            entity.HasOne(e => e.BusinessDetails)
-                .WithOne(e => e.Beneficiary)
-                .HasForeignKey<BusinessBeneficiary>(e => e.BeneficiaryId);
-        });
-
-        modelBuilder.Entity<IndividualBeneficiary>(entity =>
-        {
-            entity.ToTable("individual_beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.BeneficiaryId);
-        });
-
-        modelBuilder.Entity<BusinessBeneficiary>(entity =>
-        {
-            entity.ToTable("business_beneficiaries", "insurance_schema");
-            entity.HasKey(e => e.Id);
-            entity.Property(e => e.BusinessType).HasConversion<string>();
-            entity.Property(e => e.ContactInfoJson).HasColumnType("jsonb");
-            entity.Property(e => e.RegisteredAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.BusinessAddressJson).HasColumnType("jsonb");
-            entity.Property(e => e.FocalPersonContactJson).HasColumnType("jsonb");
-            entity.Property(e => e.AuditInfo).HasColumnType("jsonb");
-            entity.Property(e => e.PrimaryContactJson).HasColumnType("jsonb");
         });
 
         modelBuilder.Entity<UnderwritingHealthDeclaration>(entity =>

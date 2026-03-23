@@ -2,106 +2,193 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InsuranceEngine.Claims.Domain.Enums;
+using InsuranceEngine.Claims.Domain.Events;
 using InsuranceEngine.SharedKernel.CQRS;
+using InsuranceEngine.SharedKernel.Domain;
 using InsuranceEngine.SharedKernel.Domain.ValueObjects;
 
 namespace InsuranceEngine.Claims.Domain.Entities;
 
-public class Claim
+public class Claim : AggregateRoot<Guid>
 {
-    public Guid Id { get; set; }
-    public string ClaimNumber { get; set; } = string.Empty;
-    public Guid PolicyId { get; set; }
-    public Guid CustomerId { get; set; }
-    public ClaimStatus Status { get; set; }
-    public ClaimType Type { get; set; }
+    public string ClaimNumber { get; private set; } = string.Empty;
+    public Guid PolicyId { get; private set; }
+    public Guid CustomerId { get; private set; }
+    public ClaimStatus Status { get; private set; }
+    public ClaimType Type { get; private set; }
 
     // Money fields (paisa)
-    public long ClaimedAmount { get; set; }
-    public string ClaimedCurrency { get; set; } = "BDT";
-    public long ApprovedAmount { get; set; }
-    public string ApprovedCurrency { get; set; } = "BDT";
-    public long SettledAmount { get; set; }
-    public string SettledCurrency { get; set; } = "BDT";
+    public long ClaimedAmount { get; private set; }
+    public string ClaimedCurrency { get; private set; } = "BDT";
+    public long ApprovedAmount { get; private set; }
+    public string ApprovedCurrency { get; private set; } = "BDT";
+    public long SettledAmount { get; private set; }
+    public string SettledCurrency { get; private set; } = "BDT";
 
-    public DateTime IncidentDate { get; set; }
-    public string IncidentDescription { get; set; } = string.Empty;
-    public string? PlaceOfIncident { get; set; }
+    public DateTime IncidentDate { get; private set; }
+    public string IncidentDescription { get; private set; } = string.Empty;
+    public string? PlaceOfIncident { get; private set; }
 
-    public DateTime SubmittedAt { get; set; }
-    public DateTime? ApprovedAt { get; set; }
-    public DateTime? SettledAt { get; set; }
-    public string? RejectionReason { get; set; }
+    public DateTime SubmittedAt { get; private set; }
+    public DateTime? ApprovedAt { get; private set; }
+    public DateTime? SettledAt { get; private set; }
+    public string? RejectionReason { get; private set; }
 
-    public ClaimProcessingType ProcessingType { get; set; }
+    public ClaimProcessingType ProcessingType { get; private set; }
 
-    // --- Proto-aligned fields (FR-100, FR-101) ---
+    public long DeductibleAmount { get; private set; }
+    public string DeductibleCurrency { get; private set; } = "BDT";
+    public double CoPayPercentage { get; private set; } // e.g. 0.10 for 10%
 
-    /// <summary>
-    /// Deductible amount in paisa (BDT minor units). Proto: deductible_amount
-    /// </summary>
-    public long DeductibleAmount { get; set; }
-    public string DeductibleCurrency { get; set; } = "BDT";
-
-    /// <summary>
-    /// Co-payment amount in paisa (BDT minor units). Proto: co_pay_amount
-    /// </summary>
-    public long CoPayAmount { get; set; }
-    public string CoPayCurrency { get; set; } = "BDT";
-
-    /// <summary>
-    /// Encrypted bank details or ref to linked bank for payout. Proto: bank_details_for_payout
-    /// PII — must be encrypted at rest (AES-256).
-    /// </summary>
     public string? BankDetailsForPayout { get; set; }
-
-    /// <summary>
-    /// Whether the claimant can appeal a rejected claim. Proto: appeal_option_available
-    /// </summary>
     public bool AppealOptionAvailable { get; set; }
-
-    /// <summary>
-    /// JSON array of in-app messages related to this claim. Proto: in_app_messages (JSONB)
-    /// </summary>
     public string? InAppMessages { get; set; }
-
-    /// <summary>
-    /// Internal notes from claim processor. Proto: processor_notes
-    /// </summary>
     public string? ProcessorNotes { get; set; }
 
     // --- Fraud check reference ---
-    public Guid? FraudCheckId { get; set; }
-    public FraudCheckResult? FraudCheck { get; set; }
+    public Guid? FraudCheckId { get; private set; }
+    public FraudCheckResult? FraudCheck { get; private set; }
 
     // --- Navigation properties ---
-    public List<ClaimApproval> Approvals { get; set; } = new();
-    public List<ClaimDocument> Documents { get; set; } = new();
+    public List<ClaimApproval> Approvals { get; private set; } = new();
+    public List<ClaimDocument> Documents { get; private set; } = new();
 
     // Audit
-    public DateTime CreatedAt { get; set; }
-    public DateTime UpdatedAt { get; set; }
-    public DateTime? DeletedAt { get; set; }
-    public bool IsDeleted { get; set; }
+    public DateTime CreatedAt { get; private set; }
+    public DateTime UpdatedAt { get; private set; }
+    public DateTime? DeletedAt { get; private set; }
+    public bool IsDeleted { get; private set; }
 
-    // Money convenience accessors
+    // Constants for approval matrix based on SRS v3.11 (Appendix C) & PoliSync
+    private const long ZHTC_THRESHOLD = 1_000_000;    // 10,000 BDT
+    private const long L1_THRESHOLD = 5_000_000;      // 50,000 BDT
+    private const long L2_THRESHOLD = 20_000_000;     // 200,000 BDT
+    private const long L3_THRESHOLD = 50_000_000;     // 500,000 BDT
+    
+    private const double ZHTC_FRAUD_THRESHOLD = 0.30;
+
+    // --- Money convenience accessors ---
     public Money ClaimedMoney => new(ClaimedAmount, ClaimedCurrency);
     public Money ApprovedMoney => new(ApprovedAmount, ApprovedCurrency);
     public Money SettledMoney => new(SettledAmount, SettledCurrency);
     public Money DeductibleMoney => new(DeductibleAmount, DeductibleCurrency);
-    public Money CoPayMoney => new(CoPayAmount, CoPayCurrency);
 
-    // Constants for approval matrix based on BDT amounts (converted to paisa)
-    private const long L1_THRESHOLD = 20_000_000;      // 200,000 BDT
-    private const long L2_THRESHOLD = 50_000_000;      // 500,000 BDT
-    private const long L3_THRESHOLD = 100_000_000;     // 1,000,000 BDT
+    // EF Core constructor
+    public Claim() { }
+
+    public static Claim File(
+        string claimNumber,
+        Guid policyId,
+        Guid customerId,
+        ClaimType type,
+        long amount,
+        DateTime incidentDate,
+        string incidentDescription,
+        string? placeOfIncident)
+    {
+        var claim = new Claim
+        {
+            Id = Guid.NewGuid(),
+            ClaimNumber = claimNumber,
+            PolicyId = policyId,
+            CustomerId = customerId,
+            Type = type,
+            ClaimedAmount = amount,
+            IncidentDate = incidentDate,
+            IncidentDescription = incidentDescription,
+            PlaceOfIncident = placeOfIncident,
+            Status = ClaimStatus.Submitted,
+            ProcessingType = ClaimProcessingType.Manual,
+            SubmittedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        claim.AddDomainEvent(new ClaimSubmittedEvent(
+            claim.Id, claim.ClaimNumber, claim.PolicyId, claim.CustomerId, 
+            claim.ClaimedAmount, claim.ClaimedCurrency, claim.IncidentDate));
+
+        return claim;
+    }
+
+    public void ApplyFraudCheck(Guid fraudCheckId, double fraudScore, List<string> flags)
+    {
+        FraudCheckId = fraudCheckId;
+        FraudCheck = new FraudCheckResult 
+        { 
+            Id = fraudCheckId, 
+            ClaimId = Id, 
+            FraudScore = fraudScore, 
+            CreatedAt = DateTime.UtcNow 
+        };
+
+        // ZHTC (Zero Hassle Trust Claim) Logic - FR-093
+        if (ClaimedAmount <= ZHTC_THRESHOLD && fraudScore < ZHTC_FRAUD_THRESHOLD)
+        {
+            ProcessingType = ClaimProcessingType.AutoAdjudicated;
+            Status = ClaimStatus.Approved;
+            ApprovedAmount = ClaimedAmount; // Simplified for ZHTC; financials applied later if needed
+            ApprovedAt = DateTime.UtcNow;
+        }
+
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void CalculateFinancials(long deductible, double coPayPercentage)
+    {
+        DeductibleAmount = deductible;
+        CoPayPercentage = coPayPercentage;
+
+        // Formula: Approved = (Claimed - Deductible) * (1 - CoPay%)
+        // or as per SRS FR-100 literal interpretation: (Claim - Deductible) * CoPay%
+        // Given co-pay is usually what the insurer pays in this context (Trust claims), 
+        // we'll follow the logic where ApprovedAmount is the final payout.
+        
+        var netAmount = Math.Max(0, ClaimedAmount - DeductibleAmount);
+        ApprovedAmount = (long)(netAmount * (1.0 - CoPayPercentage));
+        
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void AddDocument(string type, string url, string hash)
+    {
+        var doc = new ClaimDocument
+        {
+            Id = Guid.NewGuid(),
+            ClaimId = Id,
+            DocumentType = type,
+            FileUrl = url,
+            FileHash = hash,
+            UploadedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+        Documents.Add(doc);
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void UpdateStatus(ClaimStatus status)
+    {
+        Status = status;
+        UpdatedAt = DateTime.UtcNow;
+    }
+
+    public void Settle(long amount, string currency)
+    {
+        SettledAmount = amount;
+        SettledCurrency = currency;
+        SettledAt = DateTime.UtcNow;
+        Status = ClaimStatus.Settled;
+        UpdatedAt = DateTime.UtcNow;
+    }
 
     public int GetRequiredApprovalLevel()
     {
-        if (ClaimedAmount <= L1_THRESHOLD) return 1;  // L1 (Officer/Auto)
-        if (ClaimedAmount <= L2_THRESHOLD) return 2;  // L2 (Manager)
-        if (ClaimedAmount <= L3_THRESHOLD) return 3;  // L3 (Head/Joint)
-        return 4;                                     // L4 (Board/Insurer)
+        if (ClaimedAmount <= ZHTC_THRESHOLD) return 0; // Level 0 (Auto/Officer ZHTC)
+        if (ClaimedAmount <= L1_THRESHOLD) return 1;   // Level 1 (Officer)
+        if (ClaimedAmount <= L2_THRESHOLD) return 2;   // Level 2 (Manager)
+        if (ClaimedAmount <= L3_THRESHOLD) return 3;   // Level 3 (Director/Head)
+        return 4;                                      // Level 4 (Board/CEO)
     }
 
     public Result AddApproval(Guid approverId, string role, int level, ApprovalDecision decision, long approvedAmount, string notes)

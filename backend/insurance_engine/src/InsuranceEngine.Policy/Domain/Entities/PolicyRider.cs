@@ -1,4 +1,5 @@
 using System;
+using InsuranceEngine.SharedKernel.Domain;
 using InsuranceEngine.SharedKernel.Domain.ValueObjects;
 
 namespace InsuranceEngine.Policy.Domain.Entities;
@@ -6,9 +7,11 @@ namespace InsuranceEngine.Policy.Domain.Entities;
 /// <summary>
 /// Policy rider/add-on attached to a policy. Maps to 'policy_riders' table.
 /// </summary>
-public class PolicyRider
+public class PolicyRider : Entity<Guid>
 {
-    public Guid Id { get; set; }
+    public PolicyRider(Guid id) : base(id) { }
+    public PolicyRider() { }
+
     public Guid PolicyId { get; set; }
 
     public string RiderName { get; set; } = string.Empty;

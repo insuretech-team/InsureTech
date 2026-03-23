@@ -19,19 +19,28 @@ public class PolicyRepository : IPolicyRepository
         _context = context;
     }
 
-    public async Task<PolicyEntity?> GetByIdAsync(Guid id) =>
-        await _context.Policies.FirstOrDefaultAsync(p => p.Id == id);
-
-    public async Task<PolicyEntity?> GetByIdWithNomineesAsync(Guid id) =>
-        await _context.Policies
+    public async Task<PolicyAggregate?> GetByIdAsync(Guid id, CancellationToken ct = default)
+    {
+        return await _context.Policies
             .Include(p => p.Nominees)
-            .FirstOrDefaultAsync(p => p.Id == id);
+            .Include(p => p.Riders)
+            .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted, ct);
+    }
 
-    public async Task<PolicyEntity?> GetByNumberAsync(string policyNumber) =>
-        await _context.Policies.FirstOrDefaultAsync(p => p.PolicyNumber == policyNumber);
+    public async Task<PolicyAggregate?> GetByPolicyNumberAsync(string policyNumber, CancellationToken ct = default)
+    {
+        return await _context.Policies
+            .Include(p => p.Nominees)
+            .Include(p => p.Riders)
+            .FirstOrDefaultAsync(p => p.PolicyNumber == policyNumber && !p.IsDeleted, ct);
+    }
 
+    public async Task<PolicyAggregate?> GetByIdWithNomineesAsync(Guid id)
+    {
+        return await GetByIdAsync(id);
+    }
 
-    public async Task<(List<PolicyEntity> Items, int TotalCount)> ListAsync(
+    public async Task<(List<PolicyAggregate> Items, int TotalCount)> ListAsync(
         Guid? customerId, PolicyStatus? status, Guid? productId, int page, int pageSize)
     {
         var query = _context.Policies.AsQueryable();
@@ -54,17 +63,24 @@ public class PolicyRepository : IPolicyRepository
         return (items, totalCount);
     }
 
-    public async Task<Guid> AddAsync(PolicyEntity policy)
+    public async Task<Guid> AddAsync(PolicyAggregate policy)
     {
         _context.Policies.Add(policy);
         await _context.SaveChangesAsync();
         return policy.Id;
     }
 
-    public async Task UpdateAsync(PolicyEntity policy)
+    public async Task UpdateAsync(PolicyAggregate policy)
     {
         _context.Policies.Update(policy);
         await _context.SaveChangesAsync();
+    }
+
+    public async Task<string> GetNextPolicyNumberAsync(CancellationToken ct = default)
+    {
+        // Simple implementation for now, or use sequence
+        var seq = await GetNextSequenceNumberAsync();
+        return $"POL-{DateTime.UtcNow:yyyyMM}-{seq:D6}";
     }
 
     public async Task<long> GetNextSequenceNumberAsync()

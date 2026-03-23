@@ -58,7 +58,7 @@ public class ClaimQueryHandlers :
             ApprovedAmount = new MoneyDto(claim.ApprovedAmount, claim.ApprovedCurrency),
             SettledAmount = new MoneyDto(claim.SettledAmount, claim.SettledCurrency),
             DeductibleAmount = new MoneyDto(claim.DeductibleAmount, claim.DeductibleCurrency),
-            CoPayAmount = new MoneyDto(claim.CoPayAmount, claim.CoPayCurrency),
+            CoPayPercentage = claim.CoPayPercentage,
             IncidentDate = claim.IncidentDate,
             IncidentDescription = claim.IncidentDescription,
             PlaceOfIncident = claim.PlaceOfIncident,

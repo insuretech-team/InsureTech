@@ -79,26 +79,19 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
 
         var endDate = request.StartDate.AddMonths(request.TenureMonths);
 
-        var policy = new PolicyEntity
-        {
-            Id = Guid.NewGuid(),
-            PolicyNumber = policyNumber,
-            ProductId = request.ProductId,
-            CustomerId = request.CustomerId,
-            PartnerId = request.PartnerId,
-            AgentId = request.AgentId,
-            Status = PolicyStatus.PendingPayment,
-            PremiumAmount = request.PremiumAmount,
-            PremiumCurrency = "BDT",
-            SumInsuredAmount = request.SumInsuredAmount,
-            SumInsuredCurrency = "BDT",
-            TenureMonths = request.TenureMonths,
-            StartDate = request.StartDate,
-            EndDate = endDate,
-            ProposerDetailsJson = JsonConvert.SerializeObject(applicant),
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        var policy = PolicyAggregate.Create(
+            policyNumber,
+            request.ProductId,
+            request.CustomerId,
+            request.PartnerId,
+            request.SumInsuredAmount,
+            request.PremiumAmount,
+            request.TenureMonths,
+            request.StartDate);
+
+        // Add additional metadata not in factory
+        policy.SetAgent(request.AgentId);
+        policy.SetProposerDetails(JsonConvert.SerializeObject(applicant));
 
         if (request.Nominees != null)
         {
@@ -111,23 +104,18 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
             }
         }
 
-        // Add riders
+        // Add riders via aggregate method or direct collection if not encapsulated yet
         if (request.Riders != null)
         {
             foreach (var r in request.Riders)
             {
-                policy.Riders.Add(new PolicyRider
-                {
-                    Id = Guid.NewGuid(),
-                    PolicyId = policy.Id,
-                    RiderName = r.RiderName,
-                    PremiumAmount = r.PremiumAmount.Amount,
-                    PremiumCurrency = r.PremiumAmount.CurrencyCode,
-                    CoverageAmount = r.CoverageAmount.Amount,
-                    CoverageCurrency = r.CoverageAmount.CurrencyCode,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                });
+                policy.AddRider(
+                    r.RiderName,
+                    r.PremiumAmount.Amount,
+                    r.PremiumAmount.CurrencyCode,
+                    r.CoverageAmount.Amount,
+                    r.CoverageAmount.CurrencyCode
+                );
             }
         }
 

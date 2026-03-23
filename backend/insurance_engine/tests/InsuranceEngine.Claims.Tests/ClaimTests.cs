@@ -1,3 +1,4 @@
+using System;
 using FluentAssertions;
 using InsuranceEngine.Claims.Domain.Entities;
 using InsuranceEngine.Claims.Domain.Enums;
@@ -7,6 +8,20 @@ namespace InsuranceEngine.Claims.Tests;
 
 public class ClaimTests
 {
+    private Claim CreateTestClaim(long amount)
+    {
+        return Claim.File(
+            "CLM-2024-TEST-001",
+            Guid.NewGuid(),
+            Guid.NewGuid(),
+            ClaimType.Health,
+            amount,
+            DateTime.UtcNow.AddDays(-1),
+            "Test incident",
+            "Dhaka"
+        );
+    }
+
     [Theory]
     [InlineData(500_000, 1)]      // 5,000 BDT -> Level 1
     [InlineData(1_500_000, 2)]    // 15,000 BDT -> Level 2
@@ -15,7 +30,7 @@ public class ClaimTests
     public void GetRequiredApprovalLevel_BasedOnAmount_ReturnsCorrectLevel(long amount, int expectedLevel)
     {
         // Arrange
-        var claim = new Claim { ClaimedAmount = amount };
+        var claim = CreateTestClaim(amount);
 
         // Act
         var level = claim.GetRequiredApprovalLevel();
@@ -28,7 +43,7 @@ public class ClaimTests
     public void AddApproval_WhenLevelIsLowerThanRequired_SetsStatusToUnderReview()
     {
         // Arrange
-        var claim = new Claim { ClaimedAmount = 5_000_000 }; // Requires Level 2
+        var claim = CreateTestClaim(5_000_000); // Requires Level 2
         var approverId = Guid.NewGuid();
 
         // Act
@@ -43,7 +58,7 @@ public class ClaimTests
     public void AddApproval_WhenLevelMatchesRequired_SetsStatusToApproved()
     {
         // Arrange
-        var claim = new Claim { ClaimedAmount = 5_000_000 }; // Requires Level 2
+        var claim = CreateTestClaim(5_000_000); // Requires Level 2
         var approverId = Guid.NewGuid();
 
         // Act
@@ -59,7 +74,7 @@ public class ClaimTests
     public void AddApproval_WhenDecisionIsRejected_SetsStatusToRejected()
     {
         // Arrange
-        var claim = new Claim { ClaimedAmount = 500_000 };
+        var claim = CreateTestClaim(500_000);
         var approverId = Guid.NewGuid();
 
         // Act

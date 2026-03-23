@@ -1,8 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using MediatR;
-using InsuranceEngine.Policy.Application.Features.Commands.Beneficiaries;
-using InsuranceEngine.Policy.Application.Features.Queries.Beneficiaries;
-using InsuranceEngine.Policy.Application.DTOs;
+using InsuranceEngine.Beneficiary.Application.Features.Commands;
+using InsuranceEngine.Beneficiary.Application.Features.Queries;
+using InsuranceEngine.Beneficiary.Application.DTOs;
+using InsuranceEngine.Underwriting.Application.Features.Queries.ListQuotes;
+using InsuranceEngine.SharedKernel.DTOs;
 
 namespace InsuranceEngine.Policy.Controllers;
 
@@ -68,8 +70,12 @@ public class BeneficiariesController : ControllerBase
         var result = await _mediator.Send(new ListBeneficiariesQuery(type, status, pageSize, page));
         return Ok(result.Value);
     }
-
-
+    [HttpGet("{id}/quotes")]
+    public async Task<IActionResult> GetQuotes(Guid id, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    {
+        var result = await _mediator.Send(new ListQuotesQuery(id, null, page, pageSize));
+        return Ok(result);
+    }
 
     [HttpGet("{id}/audit-trail")]
     public async Task<IActionResult> GetAuditTrail(Guid id)

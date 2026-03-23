@@ -10,6 +10,8 @@
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
     <ProjectReference Include="..\..\..\polisync\src\PoliSync.Proto\PoliSync.Proto.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Beneficiary\InsuranceEngine.Beneficiary.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Underwriting\InsuranceEngine.Underwriting.csproj" />
   </ItemGroup>
 
   <ItemGroup>

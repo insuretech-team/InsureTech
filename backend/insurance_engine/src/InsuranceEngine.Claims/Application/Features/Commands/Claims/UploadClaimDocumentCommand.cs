@@ -74,7 +74,7 @@ public class UploadClaimDocumentCommandHandler : IRequestHandler<UploadClaimDocu
         // 3. Auto-transition status if it was PendingDocuments
         if (claim.Status == ClaimStatus.PendingDocuments)
         {
-            claim.Status = ClaimStatus.UnderReview;
+            claim.UpdateStatus(ClaimStatus.UnderReview);
             _logger.LogInformation("Claim {ClaimId} status transitioned from PendingDocuments to UnderReview.", claim.Id);
         }
 

@@ -1,5 +1,5 @@
+using InsuranceEngine.SharedKernel.Domain;
 using InsuranceEngine.SharedKernel.Domain.ValueObjects;
-using InsuranceEngine.SharedKernel.Domain.Entities;
 
 namespace InsuranceEngine.Policy.Domain.Entities;
 
@@ -7,9 +7,11 @@ namespace InsuranceEngine.Policy.Domain.Entities;
 /// Nominee/Beneficiary. Maps to 'policy_nominees' table.
 /// Proto: insuretech.policy.entity.v1.Nominee
 /// </summary>
-public class Nominee
+public class Nominee : Entity<Guid>
 {
-    public Guid Id { get; set; }
+    public Nominee(Guid id) : base(id) { }
+    public Nominee() { }
+
     public Guid PolicyId { get; set; }
 
     /// <summary>
@@ -17,7 +19,6 @@ public class Nominee
     /// but we keep this FK for when beneficiary record exists.
     /// </summary>
     public Guid? BeneficiaryId { get; set; }
-    public Beneficiary? Beneficiary { get; set; }
 
     // --- Proto-aligned inline fields ---
 

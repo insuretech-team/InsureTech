@@ -50,8 +50,14 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
         if (policy == null)
             return Result<Guid>.Fail(Error.NotFound("Policy", request.PolicyId.ToString()));
 
+        // 1.1 Fetch Product Info
+        var productQuery = new InsuranceEngine.Products.Application.Features.Queries.GetProduct.GetProductQuery(policy.ProductId);
+        var product = await _mediator.Send(productQuery, cancellationToken);
+        if (product == null)
+            return Result<Guid>.Fail(Error.NotFound("Product", policy.ProductId.ToString()));
+
         // 2. Document Validation (FR-099)
-        var docRequests = request.Documents.Select(d => new ValidateDocumentRequest(d.FileName, d.FileSize));
+        var docRequests = request.Documents?.Select(d => new ValidateDocumentRequest(d.FileName, d.FileSize)) ?? Enumerable.Empty<ValidateDocumentRequest>();
         var docValidation = _documentValidator.Validate(docRequests);
         if (!docValidation.IsSuccess)
         {
@@ -60,7 +66,7 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 
         // 3. Eligibility Validation (FR-042)
         var eligibility = await _eligibilityValidator.ValidateAsync(
-            policy, request.Type, request.IncidentDate, cancellationToken);
+            policy, product, request.Type, request.IncidentDate, cancellationToken);
         
         if (!eligibility.IsSuccess)
         {
@@ -71,9 +77,9 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
 
         var claimNumber = await _claimsRepository.GetNextClaimNumberAsync(cancellationToken);
         
-        // 4. Perform Synchronous Fraud Check (FD-001 to FD-007)
+        // 4. Perform Synchronous Fraud Check
         var fraudCommand = new InsuranceEngine.Fraud.Application.Features.Commands.CheckFraud.CheckClaimForFraudCommand(
-            Guid.Empty, // Temporary ID since claim isn't persisted yet
+            Guid.Empty,
             request.PolicyId,
             request.CustomerId,
             request.ClaimedAmount,
@@ -84,83 +90,66 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             policy.IssuedAt ?? policy.CreatedAt);
 
         var fraudResult = await _mediator.Send(fraudCommand, cancellationToken);
+        var fraudScore = fraudResult.IsSuccess ? (double)fraudResult.Value.RiskScore / 100.0 : 1.0;
 
-        var isFlagged = fraudResult.IsSuccess && fraudResult.Value.Status == InsuranceEngine.Fraud.Domain.Enums.FraudCheckStatus.Flagged;
-        var fraudScore = fraudResult.IsSuccess ? fraudResult.Value.RiskScore : 100;
+        // 5. Create Aggregate using Factory
+        var claim = Claim.File(
+            claimNumber,
+            request.PolicyId,
+            request.CustomerId,
+            request.Type,
+            request.ClaimedAmount,
+            request.IncidentDate,
+            request.IncidentDescription,
+            request.PlaceOfIncident);
 
-        // FR-093: Zero Human Touch Claims (ZHTC) auto-approval logic
-        bool isZhtcEligible = !isFlagged 
-            && fraudScore <= 15 
-            && request.ClaimedAmount <= 5_000_000 // 50,000 BDT
-            && (DateTime.UtcNow - (policy.IssuedAt ?? policy.CreatedAt)).TotalDays > 365;
+        claim.BankDetailsForPayout = request.BankDetailsForPayout;
 
-        var claim = new Claim
+        // 5.1 Calculate Financials (FR-100)
+        // Deductible/CoPay was removed from Product to align with proto. 
+        // Defaulting to 0 for now as it's not in the canonical schema.
+        long deductible = 0; 
+        claim.CalculateFinancials(deductible, 0.0);
+
+        // 7. Apply Fraud Check (ZHTC Auto-Approve if < 10k and low risk)
+        if (fraudResult.IsSuccess)
         {
-            Id = Guid.NewGuid(),
-            ClaimNumber = claimNumber,
-            PolicyId = request.PolicyId,
-            CustomerId = request.CustomerId,
-            Type = request.Type,
-            Status = isZhtcEligible ? ClaimStatus.Approved : (isFlagged ? ClaimStatus.UnderReview : ClaimStatus.Submitted),
-            ClaimedAmount = request.ClaimedAmount,
-            ClaimedCurrency = "BDT",
-            ApprovedAmount = isZhtcEligible ? request.ClaimedAmount : 0,
-            ApprovedCurrency = "BDT",
-            IncidentDate = request.IncidentDate,
-            IncidentDescription = request.IncidentDescription,
-            PlaceOfIncident = request.PlaceOfIncident,
-            BankDetailsForPayout = request.BankDetailsForPayout,
-            SubmittedAt = DateTime.UtcNow,
-            ApprovedAt = isZhtcEligible ? DateTime.UtcNow : null,
-            ProcessingType = isZhtcEligible ? ClaimProcessingType.AutoAdjudicated : ClaimProcessingType.Manual,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-
-        if (isZhtcEligible)
-        {
-            claim.ProcessorNotes = "Auto-approved via ZHTC rule (FR-093).";
+            var riskFactors = fraudResult.Value.Findings ?? new List<string>();
+            claim.ApplyFraudCheck(
+                fraudResult.Value.CheckId,
+                fraudResult.Value.RiskScore,
+                riskFactors);
         }
 
-        // Map Documents
+        // 7. Add Documents via Aggregate
         if (request.Documents != null)
         {
             foreach (var d in request.Documents)
             {
-                claim.Documents.Add(new ClaimDocument
-                {
-                    Id = Guid.NewGuid(),
-                    ClaimId = claim.Id,
-                    DocumentType = d.DocumentType,
-                    FileUrl = d.FileUrl,
-                    FileHash = d.FileHash,
-                    UploadedAt = DateTime.UtcNow,
-                    CreatedAt = DateTime.UtcNow,
-                    UpdatedAt = DateTime.UtcNow
-                });
+                claim.AddDocument(
+                    d.DocumentType,
+                    d.FileUrl,
+                    d.FileHash
+                );
             }
         }
 
-        // Create FraudCheckResult entity (proto-aligned) instead of inline fields
-        if (fraudResult.IsSuccess)
+        // Check if flagged for review (FR-097)
+        var isFlagged = fraudResult.IsSuccess && (
+            fraudResult.Value.RiskLevel >= InsuranceEngine.Fraud.Domain.Enums.FraudRiskLevel.High || 
+            fraudResult.Value.Status == InsuranceEngine.Fraud.Domain.Enums.FraudCheckStatus.Flagged);
+        
+        if (isFlagged && claim.Status != ClaimStatus.Approved) // Don't override ZHTC if it somehow reached here
         {
-            claim.FraudCheck = new FraudCheckResult
-            {
-                Id = Guid.NewGuid(),
-                ClaimId = claim.Id,
-                FraudScore = fraudResult.Value.RiskScore,
-                RiskFactors = fraudResult.Value.Findings ?? new(),
-                Flagged = isFlagged,
-                CreatedAt = DateTime.UtcNow
-            };
+            claim.UpdateStatus(ClaimStatus.UnderReview);
         }
 
         await _claimsRepository.CreateAsync(claim, cancellationToken);
         
-        _logger.LogInformation("Claim {ClaimNumber} created with ID {ClaimId}. Fraud flagged: {IsFlagged}",
-            claim.ClaimNumber, claim.Id, isFlagged);
+        _logger.LogInformation("Claim {ClaimNumber} created with ID {ClaimId}. Status: {Status}. Processing: {Processing}",
+            claim.ClaimNumber, claim.Id, claim.Status, claim.ProcessingType);
 
-        // Publish to Kafka
+        // Publish Submission Event
         await _eventBus.PublishAsync("insurance.claims.v1", new ClaimSubmittedEvent(
             ClaimId: claim.Id,
             ClaimNumber: claim.ClaimNumber,
@@ -170,6 +159,18 @@ public class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, Res
             Currency: claim.ClaimedCurrency,
             IncidentDate: claim.IncidentDate
         ));
+
+        // Publish Approval Event for ZHTC (Instant Settlement)
+        if (claim.Status == ClaimStatus.Approved)
+        {
+            await _eventBus.PublishAsync("insurance.claims.v1", new ClaimProcessedEvent(
+                ClaimId: claim.Id,
+                ClaimNumber: claim.ClaimNumber,
+                NewStatus: claim.Status,
+                ApprovedAmount: claim.ApprovedAmount,
+                Notes: $"Auto-Approved via ZHTC. Fraud Score: {fraudScore:P2}"
+            ));
+        }
         
         return Result<Guid>.Success(claim.Id);
     }

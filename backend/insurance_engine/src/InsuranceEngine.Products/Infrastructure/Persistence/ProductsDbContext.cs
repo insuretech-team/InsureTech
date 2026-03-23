@@ -31,7 +31,7 @@ public class ProductsDbContext : DbContext
         {
             entity.ToTable("products");
             entity.HasKey(e => e.Id);
-            entity.HasQueryFilter(e => e.TenantId == _tenantId && !e.IsDeleted);
+            entity.Property(e => e.Id).HasColumnName("product_id");
 
             entity.Property(e => e.ProductCode).HasMaxLength(50).IsRequired();
             entity.HasIndex(e => e.ProductCode).IsUnique();
@@ -39,6 +39,11 @@ public class ProductsDbContext : DbContext
             entity.Property(e => e.ProductName).HasMaxLength(255).IsRequired();
             entity.Property(e => e.Category).HasConversion<string>().HasMaxLength(50).IsRequired();
             entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(50).IsRequired();
+
+            // Ignore columns not in DB
+            entity.Ignore(e => e.TenantId);
+            entity.Ignore(e => e.IsDeleted);
+            entity.Ignore(e => e.DeletedAt);
 
             // Money columns stored as bigint
             entity.Property(e => e.BasePremiumAmount).HasColumnName("base_premium").IsRequired();
@@ -74,11 +79,6 @@ public class ProductsDbContext : DbContext
                   .WithOne(pc => pc.Product)
                   .HasForeignKey<PricingConfig>(pc => pc.ProductId)
                   .OnDelete(DeleteBehavior.Cascade);
-
-            entity.HasMany(e => e.Questions)
-                  .WithOne()
-                  .HasForeignKey("ProductId")
-                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // --- Rider ---
@@ -86,6 +86,7 @@ public class ProductsDbContext : DbContext
         {
             entity.ToTable("product_riders");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("rider_id");
 
             entity.Property(e => e.RiderName).HasMaxLength(255).IsRequired();
             entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
@@ -104,6 +105,7 @@ public class ProductsDbContext : DbContext
         {
             entity.ToTable("pricing_configs");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("pricing_config_id");
 
             entity.Property(e => e.Rules)
                   .HasColumnType("jsonb")
@@ -119,6 +121,7 @@ public class ProductsDbContext : DbContext
         {
             entity.ToTable("product_plans");
             entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("plan_id");
 
             entity.Property(e => e.PlanName).HasMaxLength(255).IsRequired();
             entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
@@ -132,13 +135,6 @@ public class ProductsDbContext : DbContext
             entity.Ignore(e => e.Premium);
             entity.Ignore(e => e.MinSumInsured);
             entity.Ignore(e => e.MaxSumInsured);
-        });
-
-        // --- RiskAssessmentQuestion ---
-        modelBuilder.Entity<RiskAssessmentQuestion>(entity =>
-        {
-            entity.ToTable("risk_assessment_questions");
-            entity.HasKey(e => e.Id);
         });
     }
 }

@@ -11,9 +11,7 @@ public class Product
     public Guid Id { get; set; }
     public string ProductCode { get; set; } = string.Empty;
     public string ProductName { get; set; } = string.Empty;
-    public string? ProductNameBn { get; set; }
     public string? Description { get; set; }
-    public string? DescriptionBn { get; set; }
     public ProductCategory Category { get; set; }
     public ProductStatus Status { get; set; }
 
@@ -25,23 +23,15 @@ public class Product
     public long MaxSumInsuredAmount { get; set; }
     public string MaxSumInsuredCurrency { get; set; } = "BDT";
 
-    public int MinAge { get; set; }
-    public int MaxAge { get; set; }
     public int MinTenureMonths { get; set; }
     public int MaxTenureMonths { get; set; }
 
     public List<string> Exclusions { get; set; } = new();
     public string? ProductAttributes { get; set; } // JSONB
 
-    // Co-pay / Deductible configuration (FR-100/FR-104)
-    public double DeductiblePercentage { get; set; }  // 0-100
-    public double CoPayPercentage { get; set; }       // 0-100
-    public long MaxDeductibleAmount { get; set; }     // paisa, 0 = no cap
-
     // Navigation properties
     public List<Rider> AvailableRiders { get; set; } = new();
     public List<ProductPlan> Plans { get; set; } = new();
-    public List<RiskAssessmentQuestion> Questions { get; set; } = new();
     public PricingConfig? PricingConfig { get; set; }
 
     // Audit

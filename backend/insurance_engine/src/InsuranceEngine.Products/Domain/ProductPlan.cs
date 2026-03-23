@@ -13,9 +13,7 @@ public class ProductPlan
     public Product? Product { get; set; }
 
     public string PlanName { get; set; } = string.Empty;
-    public string? PlanNameBn { get; set; }
     public string? PlanDescription { get; set; }
-    public string? DescriptionBn { get; set; }
 
     // Money fields — stored as bigint (paisa)
     public long PremiumAmount { get; set; }

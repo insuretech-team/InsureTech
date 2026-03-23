@@ -19,7 +19,7 @@ public record ClaimResponseDto
     public MoneyDto ApprovedAmount { get; init; } = new(0);
     public MoneyDto SettledAmount { get; init; } = new(0);
     public MoneyDto DeductibleAmount { get; init; } = new(0);
-    public MoneyDto CoPayAmount { get; init; } = new(0);
+    public double CoPayPercentage { get; init; }
     public DateTime IncidentDate { get; init; }
     public string IncidentDescription { get; init; } = string.Empty;
     public string? PlaceOfIncident { get; init; }

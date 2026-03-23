@@ -72,9 +72,11 @@ public class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, R
             var product = await _productRepository.GetByIdAsync(policy.ProductId);
             if (product != null)
             {
-                deductiblePct = product.DeductiblePercentage;
-                coPayPct = product.CoPayPercentage;
-                maxDeductible = product.MaxDeductibleAmount;
+                // Note: DeductiblePercentage, CoPayPercentage, MaxDeductibleAmount 
+                // were removed to align with proto. Defaulting to 0.
+                deductiblePct = 0;
+                coPayPct = 0;
+                maxDeductible = 0;
             }
         }
 
@@ -88,14 +90,16 @@ public class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, R
                 coPayPct,
                 maxDeductible);
 
-            claim.DeductibleAmount = settlement.DeductibleAmount;
-            claim.CoPayAmount = settlement.CoPayAmount;
-            claim.SettledAmount = settlement.NetSettlementAmount;
-
+            claim.CalculateFinancials(settlement.DeductibleAmount, coPayPct / 100.0);
+            // Removed manual set of SettledAmount (private)
+            
             _logger.LogInformation(
                 "Claim {ClaimId}: Approved={Approved}, Deductible={Deductible}, CoPay={CoPay}, Net={Net}",
                 claim.Id, settlement.ApprovedAmount, settlement.DeductibleAmount,
                 settlement.CoPayAmount, settlement.NetSettlementAmount);
+
+            // Use settlement amount for the Settle call
+            claim.Settle(settlement.NetSettlementAmount, claim.ApprovedCurrency);
         }
 
         // --- Standard approval flow ---

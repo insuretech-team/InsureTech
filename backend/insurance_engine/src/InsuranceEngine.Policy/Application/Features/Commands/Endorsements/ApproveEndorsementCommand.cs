@@ -49,7 +49,8 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
         {
             EndorsementType.AddressChange or EndorsementType.ContactChange => ApplyContactChange(policy, endorsement),
             EndorsementType.NomineeChange => ApplyNomineeChange(policy, endorsement),
-            EndorsementType.SumAssuredChange => await ApplySumAssuredChange(policy, endorsement),
+            EndorsementType.SumAssuredChange or EndorsementType.CoverageChange => await ApplySumAssuredChange(policy, endorsement),
+            EndorsementType.RiderAddition or EndorsementType.RiderRemoval => await ApplyRiderEndorsement(policy, endorsement),
             _ => Result.Failure($"Endorsement type '{endorsement.Type}' implementation pending")
         };
 
@@ -67,10 +68,72 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
         return Result.Success();
     }
 
-    private Result ApplyContactChange(PolicyEntity policy, Endorsement endorsement)
+    private async Task<Result> RecomputePremium(PolicyAggregate policy, Endorsement endorsement)
     {
-        // For Address/Contact change, we just update the ProposerDetailsJson
-        // The 'ChangesJson' should contain the partial/full Applicant object
+        var product = await _productRepo.GetByIdAsync(policy.ProductId);
+        if (product == null) return Result.Failure("Product not found");
+
+        var applicantData = new Dictionary<string, string>();
+        if (!string.IsNullOrEmpty(policy.ProposerDetailsJson))
+        {
+            var applicant = JsonConvert.DeserializeObject<Applicant>(policy.ProposerDetailsJson);
+            if (applicant != null)
+            {
+                applicantData["occupation"] = applicant.Occupation ?? "";
+                applicantData["income"] = applicant.AnnualIncome.ToString();
+                var age = DateTime.UtcNow.Year - (applicant.DateOfBirth?.Year ?? DateTime.UtcNow.Year);
+                applicantData["age"] = age.ToString();
+            }
+        }
+
+        // Map PolicyRiders to Product Riders for PricingEngine
+        var selectedRiders = policy.Riders.Select(pr => new Products.Domain.Rider
+        {
+            RiderName = pr.RiderName,
+            PremiumAmount = pr.PremiumAmount,
+            CoverageAmount = pr.CoverageAmount
+        }).ToList();
+
+        var calcResult = _pricingEngine.Calculate(product, policy.SumInsuredAmount, policy.TenureMonths, selectedRiders, applicantData);
+        
+        endorsement.PremiumAdjustmentAmount = (decimal)(calcResult.TotalPremium.Amount - policy.TotalPayableAmount);
+        endorsement.PremiumRefundRequired = endorsement.PremiumAdjustmentAmount < 0;
+
+        policy.ApplyPremiumAdjustment(
+            calcResult.BasePremium.Amount,
+            calcResult.Vat.Amount,
+            calcResult.ServiceFee.Amount,
+            calcResult.TotalPremium.Amount);
+        
+        return Result.Success();
+    }
+
+    private async Task<Result> ApplyRiderEndorsement(PolicyAggregate policy, Endorsement endorsement)
+    {
+        try
+        {
+            var change = JsonConvert.DeserializeObject<RiderChange>(endorsement.ChangesJson);
+            if (change == null) return Result.Failure("Invalid rider changes data");
+
+            if (endorsement.Type == EndorsementType.RiderAddition)
+            {
+                policy.AddRider(change.RiderName, (long)change.Premium, "BDT", (long)change.Coverage, "BDT");
+            }
+            else if (endorsement.Type == EndorsementType.RiderRemoval)
+            {
+                policy.RemoveRider(change.RiderName);
+            }
+
+            return await RecomputePremium(policy, endorsement);
+        }
+        catch (Exception ex)
+        {
+            return Result.Failure($"Failed to apply rider changes: {ex.Message}");
+        }
+    }
+
+    private Result ApplyContactChange(PolicyAggregate policy, Endorsement endorsement)
+    {
         try
         {
             var newDetails = JsonConvert.DeserializeObject<Applicant>(endorsement.ChangesJson);
@@ -82,7 +145,6 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
 
             if (currentDetails == null) currentDetails = new Applicant { FullName = "", DateOfBirth = DateTime.MinValue };
 
-            // Merge logic using record 'with' expression
             currentDetails = currentDetails with
             {
                 FullName = !string.IsNullOrEmpty(newDetails.FullName) ? newDetails.FullName : currentDetails.FullName,
@@ -90,9 +152,7 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
                 PhoneNumber = !string.IsNullOrEmpty(newDetails.PhoneNumber) ? newDetails.PhoneNumber : currentDetails.PhoneNumber
             };
 
-
-            policy.ProposerDetailsJson = JsonConvert.SerializeObject(currentDetails);
-            policy.UpdatedAt = DateTime.UtcNow;
+            policy.SetProposerDetails(JsonConvert.SerializeObject(currentDetails));
             return Result.Success();
         }
         catch (Exception ex)
@@ -101,11 +161,10 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
         }
     }
 
-    private Result ApplyNomineeChange(PolicyEntity policy, Endorsement endorsement)
+    private Result ApplyNomineeChange(PolicyAggregate policy, Endorsement endorsement)
     {
         try
         {
-            // Expected format: { "Nominees": [ { "Action": "Add/Update/Remove", "Data": { ... } } ] }
             var changes = JsonConvert.DeserializeObject<NomineeChangeSet>(endorsement.ChangesJson);
             if (changes == null || changes.Items == null) return Result.Failure("Invalid nominee changes data");
 
@@ -121,7 +180,6 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
                 if (!r.IsSuccess) return r;
             }
 
-            policy.UpdatedAt = DateTime.UtcNow;
             return Result.Success();
         }
         catch (Exception ex)
@@ -130,48 +188,15 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
         }
     }
 
-    private async Task<Result> ApplySumAssuredChange(PolicyEntity policy, Endorsement endorsement)
+    private async Task<Result> ApplySumAssuredChange(PolicyAggregate policy, Endorsement endorsement)
     {
         try
         {
-            // Expected format: { "NewSumInsured": 100000 }
             var change = JsonConvert.DeserializeObject<SumAssuredChange>(endorsement.ChangesJson);
             if (change == null) return Result.Failure("Invalid sum assured changes data");
 
-            var oldSumInsured = policy.SumInsuredAmount;
-            policy.SumInsuredAmount = (long)change.NewSumInsured;
-
-            // Recalculate premium
-            var product = await _productRepo.GetByIdAsync(policy.ProductId);
-            if (product == null) return Result.Failure("Product not found for premium recalculation");
-
-            var applicantData = new Dictionary<string, string>();
-            if (!string.IsNullOrEmpty(policy.ProposerDetailsJson))
-            {
-                var applicant = JsonConvert.DeserializeObject<Applicant>(policy.ProposerDetailsJson);
-                if (applicant != null)
-                {
-                    applicantData["occupation"] = applicant.Occupation ?? "";
-                    applicantData["income"] = applicant.AnnualIncome.ToString();
-                    // Extract age if possible... (simplified for now)
-                    var age = DateTime.UtcNow.Year - (applicant.DateOfBirth?.Year ?? DateTime.UtcNow.Year);
-                    applicantData["age"] = age.ToString();
-
-                }
-            }
-
-            var calcResult = _pricingEngine.Calculate(product, policy.SumInsuredAmount, policy.TenureMonths, new(), applicantData);
-            
-            endorsement.PremiumAdjustmentAmount = calcResult.TotalPremium.Amount - policy.TotalPayableAmount;
-            endorsement.PremiumRefundRequired = endorsement.PremiumAdjustmentAmount < 0;
-
-            policy.PremiumAmount = calcResult.BasePremium.Amount;
-            policy.VatTaxAmount = calcResult.Vat.Amount;
-            policy.ServiceFeeAmount = calcResult.ServiceFee.Amount;
-            policy.TotalPayableAmount = calcResult.TotalPremium.Amount;
-            
-            policy.UpdatedAt = DateTime.UtcNow;
-            return Result.Success();
+            policy.UpdateSumInsured((long)change.NewSumInsured);
+            return await RecomputePremium(policy, endorsement);
         }
         catch (Exception ex)
         {
@@ -206,5 +231,12 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
     private class SumAssuredChange
     {
         public decimal NewSumInsured { get; set; }
+    }
+
+    private class RiderChange
+    {
+        public string RiderName { get; set; } = string.Empty;
+        public decimal Premium { get; set; }
+        public decimal Coverage { get; set; }
     }
 }

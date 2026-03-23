@@ -40,52 +40,16 @@ public class RenewPolicyCommandHandler : IRequestHandler<RenewPolicyCommand, Res
         var seqNum = await _repo.GetNextSequenceNumberAsync();
         var newPolicyNumber = _policyNumberGenerator.Generate(productCode ?? "UNK-000", seqNum);
 
-        var newStartDate = oldPolicy.EndDate;
-        var newEndDate = newStartDate.AddMonths(request.TenureMonths);
-
-        long adjustedPremium = oldPolicy.PremiumAmount;
-        
-        // FR-067: Gamified Renewals (No Claim Bonus)
-        if (string.IsNullOrWhiteSpace(oldPolicy.ClaimsHistorySummary))
-        {
-            // 10% discount for no claims
-            adjustedPremium = (long)Math.Round(adjustedPremium * 0.90, MidpointRounding.AwayFromZero);
-        }
-
-        // FR-068: Grace Period tracking & late fee
-        if (oldPolicy.Status == PolicyStatus.GracePeriod)
-        {
-            // 5% penalty for renewing during grace period (applied after any NCB)
-            adjustedPremium = (long)Math.Round(adjustedPremium * 1.05, MidpointRounding.AwayFromZero);
-        }
-
-        var newPolicy = new PolicyEntity
-        {
-            Id = Guid.NewGuid(),
-            PolicyNumber = newPolicyNumber,
-            ProductId = oldPolicy.ProductId,
-            CustomerId = oldPolicy.CustomerId,
-            PartnerId = oldPolicy.PartnerId,
-            AgentId = oldPolicy.AgentId,
-            Status = PolicyStatus.PendingPayment,
-            PremiumAmount = adjustedPremium,
-            PremiumCurrency = oldPolicy.PremiumCurrency,
-            SumInsuredAmount = oldPolicy.SumInsuredAmount,
-            SumInsuredCurrency = oldPolicy.SumInsuredCurrency,
-            TenureMonths = request.TenureMonths,
-            StartDate = newStartDate,
-            EndDate = newEndDate,
-            ProposerDetailsJson = oldPolicy.ProposerDetailsJson,
-            ProviderName = oldPolicy.ProviderName,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
+        var newPolicy = PolicyAggregate.Renew(oldPolicy, newPolicyNumber, request.TenureMonths);
 
         var newPolicyId = await _repo.AddAsync(newPolicy);
 
         await _eventBus.PublishAsync("insurance.policy.v1", new PolicyRenewedEvent(
-            OldPolicyId: oldPolicy.Id, NewPolicyId: newPolicyId,
-            NewPolicyNumber: newPolicyNumber, RenewalDate: DateTime.UtcNow));
+            OldPolicyId: oldPolicy.Id, 
+            NewPolicyId: newPolicyId,
+            NewPolicyNumber: newPolicyNumber, 
+            PremiumAmount: newPolicy.PremiumAmount,
+            RenewalDate: DateTime.UtcNow));
 
         return Result<RenewPolicyResponse>.Ok(new RenewPolicyResponse(newPolicyId, newPolicyNumber));
     }

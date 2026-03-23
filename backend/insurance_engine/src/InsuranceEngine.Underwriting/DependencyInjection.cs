@@ -2,9 +2,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Configuration;
 using Microsoft.EntityFrameworkCore;
 using InsuranceEngine.Underwriting.Infrastructure.Persistence;
+using InsuranceEngine.Underwriting.Domain.Services;
 using InsuranceEngine.Underwriting.Application.Interfaces;
 using InsuranceEngine.Underwriting.Infrastructure.Repositories;
-using InsuranceEngine.Underwriting.Domain.Services;
 
 namespace InsuranceEngine.Underwriting;
 
@@ -18,7 +18,6 @@ public static class UnderwritingModule
                 .UseSnakeCaseNamingConvention());
 
         services.AddScoped<IUnderwritingRepository, UnderwritingRepository>();
-        services.AddScoped<IBeneficiaryRepository, BeneficiaryRepository>();
         services.AddSingleton<QuoteNumberGenerator>();
 
 

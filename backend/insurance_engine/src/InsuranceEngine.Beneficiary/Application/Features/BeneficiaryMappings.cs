@@ -14,12 +14,14 @@ public static class BeneficiaryMappings
             b.UserId,
             b.Type.ToString(),
             b.Code,
-            b.Status, // BeneficiaryStatusInfo
-            b.KycStatus, // KYCStatusInfo
+            b.Status,
+            b.KycStatus,
+            b.AuditInfo.ToDto(),
             b.KycCompletedAt,
             b.RiskScore,
             b.ReferralCode,
-            b.AuditInfo.ToDto(),
+            b.ReferredBy,
+            b.PartnerId,
             b.Individual?.ToDto(),
             b.Business?.ToDto()
         );
@@ -28,47 +30,56 @@ public static class BeneficiaryMappings
     public static IndividualBeneficiaryDto ToDto(this IndividualBeneficiary i)
     {
         return new IndividualBeneficiaryDto(
+            i.BeneficiaryId,
             i.FullName,
-            i.FullNameBn,
             i.DateOfBirth,
             i.Gender.ToString(),
+            i.MaritalStatus.ToString(),
+            i.ContactInfo.ToDto(),
+            i.PermanentAddress.ToDto(),
+            i.AuditInfo.ToDto(),
+            i.FullNameBn,
             i.NidNumber,
             i.PassportNumber,
             i.BirthCertificateNumber,
             i.TinNumber,
-            i.MaritalStatus.ToString(),
             i.Occupation,
-            i.ContactInfo.ToDto(),
-            i.PermanentAddress.ToDto(),
             i.PresentAddress.ToDto(),
             i.NomineeName,
-            i.NomineeRelationship,
-            i.AuditInfo.ToDto()
+            i.NomineeRelationship
         );
     }
 
     public static BusinessBeneficiaryDto ToDto(this BusinessBeneficiary b)
     {
         return new BusinessBeneficiaryDto(
+            b.Id,
+            b.BeneficiaryId,
             b.BusinessName,
-            b.BusinessNameBn,
             b.TradeLicenseNumber,
             b.TinNumber,
-            b.BinNumber,
             b.BusinessType.ToString(),
-            b.IndustrySector,
-            b.FocalPersonName,
-            b.FocalPersonContact.ToDto(),
-            b.FocalPersonDesignation,
-            b.FocalPersonNid,
             b.ContactInfo.ToDto(),
             b.RegisteredAddress.ToDto(),
             b.BusinessAddress.ToDto(),
-            b.ActivePoliciesCount,
-            b.PendingActionsCount,
+            b.FocalPersonName,
+            b.FocalPersonContact.ToDto(),
+            b.AuditInfo.ToDto(),
+            b.BusinessNameBn,
+            b.TradeLicenseIssueDate,
+            b.TradeLicenseExpiryDate,
+            b.BinNumber,
+            b.IndustrySector,
+            b.EmployeeCount,
+            b.IncorporationDate,
+            b.FocalPersonDesignation,
+            b.FocalPersonNid,
+            b.RegistrationNumber,
+            b.TaxId,
             b.TotalEmployeesCovered,
+            b.ActivePoliciesCount,
             new MoneyDto(b.TotalPremiumAmount.Amount, b.TotalPremiumAmount.CurrencyCode),
-            b.AuditInfo.ToDto()
+            b.PendingActionsCount
         );
     }
 

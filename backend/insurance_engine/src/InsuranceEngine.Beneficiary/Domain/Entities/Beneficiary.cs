@@ -33,7 +33,7 @@ public class Beneficiary : AggregateRoot<Guid>
     // EF Core constructor
     public Beneficiary() { }
 
-    private Beneficiary(
+    public Beneficiary(
         Guid id,
         Guid userId,
         BeneficiaryType type) : base(id)
@@ -74,6 +74,31 @@ public class Beneficiary : AggregateRoot<Guid>
         return beneficiary;
     }
 
+    public static Beneficiary CreateIndividualEmpty(Guid userId, Guid partnerId)
+    {
+        var beneficiary = new Beneficiary(Guid.NewGuid(), userId, BeneficiaryType.Individual);
+        beneficiary.Individual = IndividualBeneficiary.Create(Guid.NewGuid(), beneficiary.Id);
+        beneficiary.Individual.ContactInfo = new SharedKernel.Domain.ValueObjects.ContactInfo();
+        beneficiary.Individual.PermanentAddress = new SharedKernel.Domain.ValueObjects.Address();
+        beneficiary.PartnerId = partnerId;
+        beneficiary.UpdateCode();
+        return beneficiary;
+    }
+
+    public static Beneficiary CreateBusinessEmpty(Guid userId, Guid partnerId)
+    {
+        var beneficiary = new Beneficiary(Guid.NewGuid(), userId, BeneficiaryType.Business);
+        beneficiary.Business = BusinessBeneficiary.Create(Guid.NewGuid(), beneficiary.Id);
+        beneficiary.Business.ContactInfo = new SharedKernel.Domain.ValueObjects.ContactInfo();
+        beneficiary.Business.RegisteredAddress = new SharedKernel.Domain.ValueObjects.Address();
+        beneficiary.Business.BusinessAddress = new SharedKernel.Domain.ValueObjects.Address();
+        beneficiary.Business.FocalPersonContact = new SharedKernel.Domain.ValueObjects.ContactInfo();
+        beneficiary.Business.PrimaryContact = new SharedKernel.Domain.ValueObjects.PrimaryContact();
+        beneficiary.PartnerId = partnerId;
+        beneficiary.UpdateCode();
+        return beneficiary;
+    }
+
     public void CompleteKYC(KYCStatus status)
     {
         KycStatus = new KYCStatusInfo { Status = status.ToString() };
@@ -91,7 +116,7 @@ public class Beneficiary : AggregateRoot<Guid>
         AuditInfo = AuditInfo with { UpdatedAt = DateTime.UtcNow };
     }
 
-    private void UpdateCode()
+    public void UpdateCode()
     {
         Code = $"BEN-{Id.ToString().Substring(0, 8).ToUpper()}";
     }

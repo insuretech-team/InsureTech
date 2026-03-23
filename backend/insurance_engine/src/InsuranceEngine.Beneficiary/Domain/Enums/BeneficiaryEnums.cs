@@ -14,9 +14,9 @@ public enum BeneficiaryStatus
     Unspecified = 0,
     PendingKyc = 1,
     Active = 2,
-    Inactive = 3,
-    Suspended = 4,
-    Blacklisted = 5
+    Suspended = 3,
+    Blocked = 4,
+    Closed = 5
 }
 
 public enum KYCStatus
@@ -49,10 +49,10 @@ public enum MaritalStatus
 public enum BusinessType
 {
     Unspecified = 0,
-    Proprietorship = 1,
+    SoleProprietorship = 1,
     Partnership = 2,
     PrivateLimited = 3,
     PublicLimited = 4,
-    Society = 5,
-    Trust = 6
+    NGO = 5,
+    Government = 6
 }

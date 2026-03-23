@@ -23,9 +23,9 @@ public class BeneficiaryDbContext : DbContext
         {
             entity.ToTable("individual_beneficiaries");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).HasColumnName("individual_beneficiary_id");
+            entity.Property(e => e.Id).HasColumnName("id");
             
-            entity.Property(e => e.BeneficiaryId).HasColumnName("beneficiary_id");
+            entity.Property(e => e.BeneficiaryId).HasColumnName("beneficiary_id").IsRequired();
 
             entity.Property(e => e.FullName).HasColumnName("full_name").HasMaxLength(255).IsRequired();
             entity.Property(e => e.FullNameBn).HasColumnName("full_name_bn").HasMaxLength(255);
@@ -43,6 +43,7 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.ContactInfo)
                 .HasColumnName("contact_info")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.ContactInfo>(v, (JsonSerializerOptions)null!) ?? new());
@@ -50,6 +51,7 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.PermanentAddress)
                 .HasColumnName("permanent_address")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.Address>(v, (JsonSerializerOptions)null!) ?? new());
@@ -64,6 +66,7 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.AuditInfo)
                 .HasColumnName("audit_info")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.AuditInfo>(v, (JsonSerializerOptions)null!) ?? new());
@@ -73,9 +76,9 @@ public class BeneficiaryDbContext : DbContext
         {
             entity.ToTable("business_beneficiaries");
             entity.HasKey(e => e.Id);
-            entity.Property(e => e.Id).HasColumnName("business_beneficiary_id");
+            entity.Property(e => e.Id).HasColumnName("id");
 
-            entity.Property(e => e.BeneficiaryId).HasColumnName("beneficiary_id");
+            entity.Property(e => e.BeneficiaryId).HasColumnName("beneficiary_id").IsRequired();
 
             entity.Property(e => e.BusinessName).HasColumnName("business_name").HasMaxLength(255).IsRequired();
             entity.Property(e => e.BusinessNameBn).HasColumnName("business_name_bn").HasMaxLength(255);
@@ -107,20 +110,29 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.FocalPersonContact)
                 .HasColumnName("focal_person_contact")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.ContactInfo>(v, (JsonSerializerOptions)null!) ?? new());
 
+            entity.Property(e => e.PrimaryContact)
+                .HasColumnName("primary_contact")
+                .HasColumnType("jsonb")
+                .HasConversion(
+                    v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
+                    v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.PrimaryContact>(v, (JsonSerializerOptions)null!) ?? new());
+
             entity.Property(e => e.ContactInfo)
-                .HasColumnName("registered_address") // Tag says registered_address -> contact_info? No, business_address -> registered_address.
+                .HasColumnName("contact_info")
                 .HasColumnType("jsonb")
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.ContactInfo>(v, (JsonSerializerOptions)null!) ?? new());
 
             entity.Property(e => e.RegisteredAddress)
-                .HasColumnName("contact_info") // Tag says registered_address -> contact_info
+                .HasColumnName("registered_address")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.Address>(v, (JsonSerializerOptions)null!) ?? new());
@@ -128,6 +140,7 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.BusinessAddress)
                 .HasColumnName("business_address")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.Address>(v, (JsonSerializerOptions)null!) ?? new());
@@ -135,6 +148,7 @@ public class BeneficiaryDbContext : DbContext
             entity.Property(e => e.AuditInfo)
                 .HasColumnName("audit_info")
                 .HasColumnType("jsonb")
+                .IsRequired()
                 .HasConversion(
                     v => JsonSerializer.Serialize(v, (JsonSerializerOptions)null!),
                     v => JsonSerializer.Deserialize<SharedKernel.Domain.ValueObjects.AuditInfo>(v, (JsonSerializerOptions)null!) ?? new());

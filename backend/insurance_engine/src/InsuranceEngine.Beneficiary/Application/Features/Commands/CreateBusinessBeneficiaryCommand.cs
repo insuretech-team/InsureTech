@@ -11,12 +11,12 @@ namespace InsuranceEngine.Beneficiary.Application.Features.Commands;
 
 public record CreateBusinessBeneficiaryCommand(
     Guid UserId,
-    string BusinessName,
-    string TradeLicenseNumber,
-    string TinNumber,
-    string FocalPersonName,
-    string FocalPersonMobile,
-    Guid? PartnerId = null
+    Guid PartnerId,
+    string? BusinessName = null,
+    string? TradeLicenseNumber = null,
+    string? TinNumber = null,
+    string? FocalPersonName = null,
+    string? FocalPersonMobile = null
 ) : IRequest<Result<BeneficiaryDto>>;
 
 public class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<CreateBusinessBeneficiaryCommand, Result<BeneficiaryDto>>
@@ -30,13 +30,21 @@ public class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<CreateBus
 
     public async Task<Result<BeneficiaryDto>> Handle(CreateBusinessBeneficiaryCommand request, CancellationToken cancellationToken)
     {
-        var beneficiary = Domain.Entities.Beneficiary.CreateBusiness(
-            request.UserId,
-            request.BusinessName,
-            request.TradeLicenseNumber,
-            request.TinNumber,
-            request.FocalPersonName,
-            request.FocalPersonMobile);
+        var beneficiary = Domain.Entities.Beneficiary.CreateBusinessEmpty(request.UserId, request.PartnerId);
+
+        if (beneficiary.Business != null)
+        {
+            if (!string.IsNullOrEmpty(request.BusinessName))
+                beneficiary.Business.BusinessName = request.BusinessName;
+            if (!string.IsNullOrEmpty(request.TradeLicenseNumber))
+                beneficiary.Business.TradeLicenseNumber = request.TradeLicenseNumber;
+            if (!string.IsNullOrEmpty(request.TinNumber))
+                beneficiary.Business.TinNumber = request.TinNumber;
+            if (!string.IsNullOrEmpty(request.FocalPersonName))
+                beneficiary.Business.FocalPersonName = request.FocalPersonName;
+            if (!string.IsNullOrEmpty(request.FocalPersonMobile))
+                beneficiary.Business.FocalPersonContact = new SharedKernel.Domain.ValueObjects.ContactInfo(request.FocalPersonMobile);
+        }
 
         await _repository.AddAsync(beneficiary);
 

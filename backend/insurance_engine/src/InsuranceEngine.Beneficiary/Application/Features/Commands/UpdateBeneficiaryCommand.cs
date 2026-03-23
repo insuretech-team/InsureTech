@@ -9,9 +9,8 @@ namespace InsuranceEngine.Beneficiary.Application.Features.Commands;
 
 public record UpdateBeneficiaryCommand(
     Guid BeneficiaryId,
-    string? Name = null,
+    string? MobileNumber = null,
     string? Email = null,
-    string? ContactNumber = null,
     string? Address = null
 ) : IRequest<Result<bool>>;
 
@@ -29,16 +28,42 @@ public class UpdateBeneficiaryCommandHandler : IRequestHandler<UpdateBeneficiary
         var beneficiary = await _repository.GetByIdAsync(request.BeneficiaryId);
         if (beneficiary == null) return Result<bool>.Fail(Error.NotFound("Beneficiary", request.BeneficiaryId.ToString()));
 
-        if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.Individual != null)
+        if (!string.IsNullOrEmpty(request.MobileNumber))
         {
-            // Update individual fields if provided
-        }
-        else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.Business != null)
-        {
-            // Update business fields if provided
+            if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.Individual != null)
+            {
+                beneficiary.Individual.ContactInfo = beneficiary.Individual.ContactInfo with { MobileNumber = request.MobileNumber };
+            }
+            else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.Business != null)
+            {
+                beneficiary.Business.ContactInfo = beneficiary.Business.ContactInfo with { MobileNumber = request.MobileNumber };
+            }
         }
 
-        // beneficiary.AuditInfo = beneficiary.AuditInfo with { UpdatedAt = DateTime.UtcNow }; -- Handled in domain if needed
+        if (!string.IsNullOrEmpty(request.Email))
+        {
+            if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.Individual != null)
+            {
+                beneficiary.Individual.ContactInfo = beneficiary.Individual.ContactInfo with { Email = request.Email };
+            }
+            else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.Business != null)
+            {
+                beneficiary.Business.ContactInfo = beneficiary.Business.ContactInfo with { Email = request.Email };
+            }
+        }
+
+        if (!string.IsNullOrEmpty(request.Address))
+        {
+            if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.Individual != null)
+            {
+                beneficiary.Individual.PermanentAddress = beneficiary.Individual.PermanentAddress with { AddressLine1 = request.Address };
+            }
+            else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.Business != null)
+            {
+                beneficiary.Business.RegisteredAddress = beneficiary.Business.RegisteredAddress with { AddressLine1 = request.Address };
+            }
+        }
+
         await _repository.UpdateAsync(beneficiary);
         return Result.Ok(true);
     }

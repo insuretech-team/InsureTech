@@ -26,9 +26,9 @@ public record BeneficiariesListingResponse(
 );
 
 public record BeneficiaryRetrievalResponse(
-    [property: JsonPropertyName("beneficiary")] BeneficiaryDto Beneficiary,
-    [property: JsonPropertyName("individual_details")] IndividualBeneficiaryDto? Individual = null,
-    [property: JsonPropertyName("business_details")] BusinessBeneficiaryDto? Business = null,
+    [property: JsonPropertyName("beneficiary")] BeneficiaryDto? Beneficiary = null,
+    [property: JsonPropertyName("individual_details")] IndividualBeneficiaryDto? IndividualDetails = null,
+    [property: JsonPropertyName("business_details")] BusinessBeneficiaryDto? BusinessDetails = null,
     [property: JsonPropertyName("error")] ErrorDto? Error = null
 );
 

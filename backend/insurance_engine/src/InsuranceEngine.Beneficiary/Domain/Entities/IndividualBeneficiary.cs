@@ -8,9 +8,9 @@ public class IndividualBeneficiary : Entity<Guid>
 {
     public Guid BeneficiaryId { get; private set; }
     
-    public string FullName { get; private set; } = string.Empty;
+    public string FullName { get; set; } = string.Empty;
     public string? FullNameBn { get; set; }
-    public DateTime DateOfBirth { get; private set; }
+    public DateTime DateOfBirth { get; set; }
     public BeneficiaryGender Gender { get; set; }
     
     public string? NidNumber { get; set; }
@@ -44,5 +44,15 @@ public class IndividualBeneficiary : Entity<Guid>
         DateOfBirth = dob;
         Gender = gender;
         AuditInfo = new AuditInfo();
+    }
+
+    public static IndividualBeneficiary Create(Guid id, Guid beneficiaryId)
+    {
+        return new IndividualBeneficiary
+        {
+            Id = id,
+            BeneficiaryId = beneficiaryId,
+            AuditInfo = new AuditInfo()
+        };
     }
 }

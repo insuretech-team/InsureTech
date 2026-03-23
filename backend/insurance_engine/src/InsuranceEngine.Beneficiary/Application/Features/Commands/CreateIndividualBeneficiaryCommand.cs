@@ -13,13 +13,13 @@ namespace InsuranceEngine.Beneficiary.Application.Features.Commands;
 
 public record CreateIndividualBeneficiaryCommand(
     Guid UserId,
-    string FullName,
-    DateTime DateOfBirth,
-    string Gender,
-    string NidNumber,
-    string MobileNumber,
-    string? Email = null,
-    Guid? PartnerId = null
+    string Email,
+    Guid PartnerId,
+    string? FullName = null,
+    DateTime? DateOfBirth = null,
+    string? Gender = null,
+    string? NidNumber = null,
+    string? MobileNumber = null
 ) : IRequest<Result<BeneficiaryDto>>;
 
 public class CreateIndividualBeneficiaryCommandHandler : IRequestHandler<CreateIndividualBeneficiaryCommand, Result<BeneficiaryDto>>
@@ -35,20 +35,29 @@ public class CreateIndividualBeneficiaryCommandHandler : IRequestHandler<CreateI
 
     public async Task<Result<BeneficiaryDto>> Handle(CreateIndividualBeneficiaryCommand request, CancellationToken cancellationToken)
     {
-        var gender = Enum.Parse<BeneficiaryGender>(request.Gender, true);
-        
-        var beneficiary = Domain.Entities.Beneficiary.CreateIndividual(
+        var beneficiary = new Domain.Entities.Beneficiary(
+            Guid.NewGuid(),
             request.UserId,
-            request.FullName,
-            request.DateOfBirth,
-            gender,
-            request.MobileNumber,
-            request.Email);
+            BeneficiaryType.Individual);
 
-        if (!string.IsNullOrEmpty(request.NidNumber) && beneficiary.Individual != null)
+        if (beneficiary.Individual != null)
         {
-            beneficiary.Individual.NidNumber = await _encryptionService.EncryptAsync(request.NidNumber);
+            if (!string.IsNullOrEmpty(request.FullName))
+                beneficiary.Individual.FullName = request.FullName;
+            if (request.DateOfBirth.HasValue)
+                beneficiary.Individual.DateOfBirth = request.DateOfBirth.Value;
+            if (!string.IsNullOrEmpty(request.Gender))
+                beneficiary.Individual.Gender = Enum.Parse<BeneficiaryGender>(request.Gender, true);
+            if (!string.IsNullOrEmpty(request.MobileNumber))
+                beneficiary.Individual.ContactInfo = new SharedKernel.Domain.ValueObjects.ContactInfo(request.MobileNumber);
+            if (!string.IsNullOrEmpty(request.Email))
+                beneficiary.Individual.ContactInfo = beneficiary.Individual.ContactInfo with { Email = request.Email };
+            if (!string.IsNullOrEmpty(request.NidNumber))
+                beneficiary.Individual.NidNumber = await _encryptionService.EncryptAsync(request.NidNumber);
         }
+
+        beneficiary.PartnerId = request.PartnerId;
+        beneficiary.UpdateCode();
 
         await _repository.AddAsync(beneficiary);
 

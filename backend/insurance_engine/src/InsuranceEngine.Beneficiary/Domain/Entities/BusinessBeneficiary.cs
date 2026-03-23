@@ -8,10 +8,10 @@ public class BusinessBeneficiary : Entity<Guid>
 {
     public Guid BeneficiaryId { get; private set; }
     
-    public string BusinessName { get; private set; } = string.Empty;
+    public string BusinessName { get; set; } = string.Empty;
     public string? BusinessNameBn { get; set; }
-    public string TradeLicenseNumber { get; private set; } = string.Empty;
-    public string TinNumber { get; private set; } = string.Empty;
+    public string TradeLicenseNumber { get; set; } = string.Empty;
+    public string TinNumber { get; set; } = string.Empty;
     
     public ContactInfo ContactInfo { get; set; } = new();
     public Address RegisteredAddress { get; set; } = new();
@@ -22,8 +22,8 @@ public class BusinessBeneficiary : Entity<Guid>
     public int? EmployeeCount { get; set; }
     public DateTime? IncorporationDate { get; set; }
     
-    public string? TradeLicenseIssueDate { get; set; }
-    public string? TradeLicenseExpiryDate { get; set; }
+    public DateTime? TradeLicenseIssueDate { get; set; }
+    public DateTime? TradeLicenseExpiryDate { get; set; }
     public string? BinNumber { get; set; }
     public string? RegistrationNumber { get; set; }
     public string? TaxId { get; set; }
@@ -32,6 +32,8 @@ public class BusinessBeneficiary : Entity<Guid>
     public ContactInfo FocalPersonContact { get; set; } = new();
     public string? FocalPersonDesignation { get; set; }
     public string? FocalPersonNid { get; set; }
+    
+    public PrimaryContact PrimaryContact { get; set; } = new();
     
     public int ActivePoliciesCount { get; set; }
     public int PendingActionsCount { get; set; }
@@ -63,5 +65,15 @@ public class BusinessBeneficiary : Entity<Guid>
         TradeLicenseNumber = tradeLicense;
         TinNumber = tin;
         AuditInfo = new AuditInfo();
+    }
+
+    public static BusinessBeneficiary Create(Guid id, Guid beneficiaryId)
+    {
+        return new BusinessBeneficiary
+        {
+            Id = id,
+            BeneficiaryId = beneficiaryId,
+            AuditInfo = new AuditInfo()
+        };
     }
 }

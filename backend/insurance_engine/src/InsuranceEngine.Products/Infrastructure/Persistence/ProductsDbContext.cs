@@ -1,4 +1,3 @@
-using InsuranceEngine.SharedKernel.Interfaces;
 using InsuranceEngine.Products.Domain;
 using InsuranceEngine.Products.Domain.Enums;
 using Microsoft.EntityFrameworkCore;
@@ -9,11 +8,8 @@ namespace InsuranceEngine.Products.Infrastructure.Persistence;
 
 public class ProductsDbContext : DbContext
 {
-    private readonly Guid _tenantId;
-
-    public ProductsDbContext(DbContextOptions<ProductsDbContext> options, ITenantService tenantService) : base(options)
+    public ProductsDbContext(DbContextOptions<ProductsDbContext> options) : base(options)
     {
-        _tenantId = tenantService.GetTenantId();
     }
 
     public DbSet<Product> Products { get; set; } = null!;
@@ -37,20 +33,20 @@ public class ProductsDbContext : DbContext
             entity.HasIndex(e => e.ProductCode).IsUnique();
 
             entity.Property(e => e.ProductName).HasMaxLength(255).IsRequired();
+            entity.Property(e => e.Description).HasColumnName("description");
             entity.Property(e => e.Category).HasConversion<string>().HasMaxLength(50).IsRequired();
             entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(50).IsRequired();
-
-            // Ignore columns not in DB
-            entity.Ignore(e => e.TenantId);
-            entity.Ignore(e => e.IsDeleted);
-            entity.Ignore(e => e.DeletedAt);
+            entity.Property(e => e.MinTenureMonths).HasColumnName("min_tenure_months");
+            entity.Property(e => e.MaxTenureMonths).HasColumnName("max_tenure_months");
+            entity.Property(e => e.CreatedBy).HasColumnName("created_by");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
             // Money columns stored as bigint
-            entity.Property(e => e.BasePremiumAmount).HasColumnName("base_premium").IsRequired();
+            entity.Property(e => e.BasePremium).HasColumnName("base_premium").IsRequired();
             entity.Property(e => e.BasePremiumCurrency).HasColumnName("base_premium_currency").HasMaxLength(3).IsRequired().HasDefaultValue("BDT");
-            entity.Property(e => e.MinSumInsuredAmount).HasColumnName("min_sum_insured").IsRequired();
+            entity.Property(e => e.MinSumInsured).HasColumnName("min_sum_insured").IsRequired();
             entity.Property(e => e.MinSumInsuredCurrency).HasColumnName("min_sum_insured_currency").HasMaxLength(3).IsRequired().HasDefaultValue("BDT");
-            entity.Property(e => e.MaxSumInsuredAmount).HasColumnName("max_sum_insured").IsRequired();
+            entity.Property(e => e.MaxSumInsured).HasColumnName("max_sum_insured").IsRequired();
             entity.Property(e => e.MaxSumInsuredCurrency).HasColumnName("max_sum_insured_currency").HasMaxLength(3).IsRequired().HasDefaultValue("BDT");
 
             entity.Property(e => e.Exclusions).HasColumnType("text[]");
@@ -60,9 +56,9 @@ public class ProductsDbContext : DbContext
             entity.HasIndex(e => e.Status);
 
             // Ignore computed Money properties
-            entity.Ignore(e => e.BasePremium);
-            entity.Ignore(e => e.MinSumInsured);
-            entity.Ignore(e => e.MaxSumInsured);
+            entity.Ignore(e => e.BasePremiumMoney);
+            entity.Ignore(e => e.MinSumInsuredMoney);
+            entity.Ignore(e => e.MaxSumInsuredMoney);
 
             // Relationships
             entity.HasMany(e => e.Plans)
@@ -79,6 +75,11 @@ public class ProductsDbContext : DbContext
                   .WithOne(pc => pc.Product)
                   .HasForeignKey<PricingConfig>(pc => pc.ProductId)
                   .OnDelete(DeleteBehavior.Cascade);
+
+            entity.HasMany(e => e.RiskAssessmentQuestions)
+                  .WithOne(q => q.Product)
+                  .HasForeignKey(q => q.ProductId)
+                  .OnDelete(DeleteBehavior.Cascade);
         });
 
         // --- Rider ---
@@ -89,13 +90,30 @@ public class ProductsDbContext : DbContext
             entity.Property(e => e.Id).HasColumnName("rider_id");
 
             entity.Property(e => e.RiderName).HasMaxLength(255).IsRequired();
-            entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
+            entity.Property(e => e.Premium).HasColumnName("premium").IsRequired();
             entity.Property(e => e.PremiumCurrency).HasColumnName("premium_currency").HasMaxLength(3).IsRequired().HasDefaultValue("BDT");
-            entity.Property(e => e.CoverageAmount).HasColumnName("coverage_amount").IsRequired();
+            entity.Property(e => e.Coverage).HasColumnName("coverage").IsRequired();
             entity.Property(e => e.CoverageCurrency).HasColumnName("coverage_currency").HasMaxLength(3).IsRequired().HasDefaultValue("BDT");
 
-            entity.Ignore(e => e.Premium);
-            entity.Ignore(e => e.Coverage);
+            entity.Ignore(e => e.PremiumMoney);
+            entity.Ignore(e => e.CoverageMoney);
+
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.IsMandatory).HasColumnName("is_mandatory").HasDefaultValue(false);
+
+            entity.HasIndex(e => e.ProductId);
+        });
+
+        // --- RiskAssessmentQuestion ---
+        modelBuilder.Entity<RiskAssessmentQuestion>(entity =>
+        {
+            entity.ToTable("risk_assessment_questions");
+            entity.HasKey(e => e.Id);
+            entity.Property(e => e.Id).HasColumnName("risk_assessment_question_id");
+
+            entity.Property(e => e.QuestionText).IsRequired();
+            entity.Property(e => e.OptionsJson).HasColumnType("jsonb").HasDefaultValue("[]");
+            entity.Property(e => e.Weight).IsRequired().HasDefaultValue(0);
 
             entity.HasIndex(e => e.ProductId);
         });
@@ -126,15 +144,16 @@ public class ProductsDbContext : DbContext
             entity.Property(e => e.PlanName).HasMaxLength(255).IsRequired();
             entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
             entity.Property(e => e.PremiumCurrency).HasColumnName("premium_currency").HasMaxLength(3).HasDefaultValue("BDT");
-            entity.Property(e => e.MinSumInsuredAmount).HasColumnName("min_sum_insured").IsRequired();
+            entity.Property(e => e.MinSumInsured).HasColumnName("min_sum_insured").IsRequired();
             entity.Property(e => e.MinSumInsuredCurrency).HasColumnName("min_sum_insured_currency").HasMaxLength(3).HasDefaultValue("BDT");
-            entity.Property(e => e.MaxSumInsuredAmount).HasColumnName("max_sum_insured").IsRequired();
+            entity.Property(e => e.MaxSumInsured).HasColumnName("max_sum_insured").IsRequired();
             entity.Property(e => e.MaxSumInsuredCurrency).HasColumnName("max_sum_insured_currency").HasMaxLength(3).HasDefaultValue("BDT");
+            entity.Property(e => e.PlanDescription).HasColumnName("plan_description");
             entity.Property(e => e.Attributes).HasColumnType("jsonb");
 
-            entity.Ignore(e => e.Premium);
-            entity.Ignore(e => e.MinSumInsured);
-            entity.Ignore(e => e.MaxSumInsured);
+            entity.Ignore(e => e.PremiumMoney);
+            entity.Ignore(e => e.MinSumInsuredMoney);
+            entity.Ignore(e => e.MaxSumInsuredMoney);
         });
     }
 }

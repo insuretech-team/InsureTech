@@ -1,10 +1,12 @@
 using System;
 using System.Collections.Generic;
-using InsuranceEngine.Policy.Domain.Enums;
 
 namespace InsuranceEngine.Policy.Application.DTOs;
 
-public record MoneyDto(long Amount, string CurrencyCode = "BDT");
+public record MoneyDto(long Amount, string Currency = "BDT")
+{
+    public decimal DecimalAmount => Amount / 100m;
+}
 
 public record PolicyDto(
     Guid Id,
@@ -13,7 +15,7 @@ public record PolicyDto(
     Guid CustomerId,
     Guid? PartnerId,
     Guid? AgentId,
-    PolicyStatus Status,
+    InsuranceEngine.Policy.Domain.Enums.PolicyStatus Status,
     MoneyDto PremiumAmount,
     MoneyDto SumInsured,
     MoneyDto? VatTax,
@@ -37,7 +39,7 @@ public record PolicyListDto(
     string PolicyNumber,
     Guid ProductId,
     Guid CustomerId,
-    PolicyStatus Status,
+    InsuranceEngine.Policy.Domain.Enums.PolicyStatus Status,
     MoneyDto PremiumAmount,
     MoneyDto SumInsured,
     DateTime StartDate,
@@ -58,7 +60,7 @@ public record ApplicantDto(
 
 public record HealthDeclarationDto(
     bool HasPreExistingConditions,
-    List<string> Conditions,
+    List<string>? Conditions,
     bool IsSmoker,
     string? BloodGroup
 );
@@ -76,7 +78,7 @@ public record NomineeDto(
 );
 
 public record PolicyRiderDto(
-    Guid Id,
+    Guid? Id,
     string RiderName,
     MoneyDto PremiumAmount,
     MoneyDto CoverageAmount
@@ -84,7 +86,7 @@ public record PolicyRiderDto(
 
 public record GracePeriodDto(
     Guid PolicyId,
-    PolicyStatus Status,
+    InsuranceEngine.Policy.Domain.Enums.PolicyStatus Status,
     DateTime EndDate,
     DateTime GracePeriodEndDate,
     int DaysRemaining,
@@ -100,9 +102,4 @@ public record RenewalScheduleDto(
     bool IsEligibleForRenewal
 );
 
-public record PaginatedResponse<T>(
-    List<T> Items,
-    int TotalCount,
-    int Page,
-    int PageSize
-);
+public record CreatePolicyResponse(Guid PolicyId, string PolicyNumber);

@@ -1,6 +1,6 @@
-using System;
 using InsuranceEngine.Beneficiary.Domain.Enums;
 using InsuranceEngine.SharedKernel.Domain;
+using InsuranceEngine.SharedKernel.Domain.ValueObjects;
 
 namespace InsuranceEngine.Beneficiary.Domain.Entities;
 
@@ -12,9 +12,11 @@ public class BusinessBeneficiary : Entity<Guid>
     public string? BusinessNameBn { get; set; }
     public string TradeLicenseNumber { get; private set; } = string.Empty;
     public string TinNumber { get; private set; } = string.Empty;
-    public string? ContactInfoJson { get; set; }
-    public string? RegisteredAddressJson { get; set; }
-    public string? BusinessAddressJson { get; set; }
+    
+    public ContactInfo ContactInfo { get; set; } = new();
+    public Address RegisteredAddress { get; set; } = new();
+    public Address BusinessAddress { get; set; } = new();
+    
     public BusinessType BusinessType { get; set; }
     public string? IndustrySector { get; set; }
     public int? EmployeeCount { get; set; }
@@ -26,21 +28,24 @@ public class BusinessBeneficiary : Entity<Guid>
     public string? RegistrationNumber { get; set; }
     public string? TaxId { get; set; }
 
-    public string FocalPersonName { get; private set; } = string.Empty;
-    public string? FocalPersonMobile { get; private set; }
+    public string FocalPersonName { get; set; } = string.Empty;
+    public ContactInfo FocalPersonContact { get; set; } = new();
     public string? FocalPersonDesignation { get; set; }
     public string? FocalPersonNid { get; set; }
     
-    public string? AuditInfoJson { get; set; }
-
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+    public int ActivePoliciesCount { get; set; }
+    public int PendingActionsCount { get; set; }
+    public int TotalEmployeesCovered { get; set; }
+    
+    public Money TotalPremiumAmount { get; set; } = Money.Zero;
+    
+    public AuditInfo AuditInfo { get; private set; } = new();
 
     public void UpdateFocalPerson(string name, string mobile)
     {
         FocalPersonName = name;
-        FocalPersonMobile = mobile;
-        UpdatedAt = DateTime.UtcNow;
+        FocalPersonContact = new ContactInfo(mobile);
+        AuditInfo = AuditInfo with { UpdatedAt = DateTime.UtcNow };
     }
 
     // EF Core constructor
@@ -57,7 +62,6 @@ public class BusinessBeneficiary : Entity<Guid>
         BusinessName = businessName;
         TradeLicenseNumber = tradeLicense;
         TinNumber = tin;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
+        AuditInfo = new AuditInfo();
     }
 }

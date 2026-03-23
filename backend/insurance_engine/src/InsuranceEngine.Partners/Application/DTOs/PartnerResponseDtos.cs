@@ -7,11 +7,10 @@ namespace InsuranceEngine.Partners.Application.DTOs;
 
 public record PartnerDto(
     Guid Id,
-    string Name,
+    string OrganizationName,
     string Code,
     string Email,
     string? Phone,
-    string? Address,
     string Status
 );
 

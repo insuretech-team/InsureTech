@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InsuranceEngine.Products.Domain;
 using InsuranceEngine.SharedKernel.Domain.ValueObjects;
 
 namespace InsuranceEngine.Products.Domain.Services;
@@ -29,7 +30,7 @@ public class PricingEngine
         var breakdown = new List<PremiumBreakdownItem>();
 
         // Base premium
-        long basePremium = product.BasePremiumAmount;
+        long basePremium = product.BasePremium;
         breakdown.Add(new PremiumBreakdownItem("Base Premium", basePremium, "Base premium amount"));
 
         // Apply pricing rules
@@ -125,7 +126,7 @@ public class PricingEngine
         long adjustedPremium = (long)Math.Round(basePremium * loadingFactor, MidpointRounding.AwayFromZero);
 
         // Rider surcharge
-        long riderSurcharge = selectedRiders.Sum(r => r.PremiumAmount);
+        long riderSurcharge = selectedRiders.Sum(r => r.Premium);
         if (riderSurcharge > 0)
         {
             breakdown.Add(new PremiumBreakdownItem(

@@ -20,9 +20,9 @@ public static class ProductMappings
             Description: product.Description,
             Category: product.Category,
             Status: product.Status,
-            BasePremium: new MoneyDto(product.BasePremiumAmount, product.BasePremiumCurrency),
-            MinSumInsured: new MoneyDto(product.MinSumInsuredAmount, product.MinSumInsuredCurrency),
-            MaxSumInsured: new MoneyDto(product.MaxSumInsuredAmount, product.MaxSumInsuredCurrency),
+            BasePremium: new MoneyDto(product.BasePremium, product.BasePremiumCurrency),
+            MinSumInsured: new MoneyDto(product.MinSumInsured, product.MinSumInsuredCurrency),
+            MaxSumInsured: new MoneyDto(product.MaxSumInsured, product.MaxSumInsuredCurrency),
             MinTenureMonths: product.MinTenureMonths,
             MaxTenureMonths: product.MaxTenureMonths,
             Exclusions: product.Exclusions,
@@ -43,9 +43,9 @@ public static class ProductMappings
             ProductName: product.ProductName,
             Category: product.Category,
             Status: product.Status,
-            BasePremium: new MoneyDto(product.BasePremiumAmount, product.BasePremiumCurrency),
-            MinSumInsured: new MoneyDto(product.MinSumInsuredAmount, product.MinSumInsuredCurrency),
-            MaxSumInsured: new MoneyDto(product.MaxSumInsuredAmount, product.MaxSumInsuredCurrency)
+            BasePremium: new MoneyDto(product.BasePremium, product.BasePremiumCurrency),
+            MinSumInsured: new MoneyDto(product.MinSumInsured, product.MinSumInsuredCurrency),
+            MaxSumInsured: new MoneyDto(product.MaxSumInsured, product.MaxSumInsuredCurrency)
         );
     }
 
@@ -55,8 +55,8 @@ public static class ProductMappings
             Id: rider.Id,
             RiderName: rider.RiderName,
             Description: rider.Description,
-            PremiumAmount: new MoneyDto(rider.PremiumAmount, rider.PremiumCurrency),
-            CoverageAmount: new MoneyDto(rider.CoverageAmount, rider.CoverageCurrency),
+            PremiumAmount: new MoneyDto(rider.Premium, rider.PremiumCurrency),
+            CoverageAmount: new MoneyDto(rider.Coverage, rider.CoverageCurrency),
             IsMandatory: rider.IsMandatory
         );
     }
@@ -68,8 +68,8 @@ public static class ProductMappings
             PlanName: plan.PlanName,
             PlanDescription: plan.PlanDescription,
             PremiumAmount: new MoneyDto(plan.PremiumAmount, plan.PremiumCurrency),
-            MinSumInsured: new MoneyDto(plan.MinSumInsuredAmount, plan.MinSumInsuredCurrency),
-            MaxSumInsured: new MoneyDto(plan.MaxSumInsuredAmount, plan.MaxSumInsuredCurrency),
+            MinSumInsured: new MoneyDto(plan.MinSumInsured, plan.MinSumInsuredCurrency),
+            MaxSumInsured: new MoneyDto(plan.MaxSumInsured, plan.MaxSumInsuredCurrency),
             Attributes: plan.Attributes
         );
     }

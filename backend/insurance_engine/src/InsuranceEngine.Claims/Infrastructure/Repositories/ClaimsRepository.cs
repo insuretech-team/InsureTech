@@ -63,7 +63,7 @@ public class ClaimsRepository : IClaimsRepository
     public async Task<List<Claim>> ListByCustomerAsync(Guid customerId, int page, int pageSize, CancellationToken cancellationToken = default)
     {
         return await _context.Claims
-            .Where(c => c.CustomerId == customerId && !c.IsDeleted)
+            .Where(c => c.CustomerId == customerId && c.DeletedAt == null)
             .OrderByDescending(c => c.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
@@ -73,7 +73,7 @@ public class ClaimsRepository : IClaimsRepository
     public async Task<int> GetTotalCountByCustomerAsync(Guid customerId, CancellationToken cancellationToken = default)
     {
         return await _context.Claims
-            .CountAsync(c => c.CustomerId == customerId && !c.IsDeleted, cancellationToken);
+            .CountAsync(c => c.CustomerId == customerId && c.DeletedAt == null, cancellationToken);
     }
 
     public async Task<bool> ExistsAsync(Guid policyId, Domain.Enums.ClaimType type, DateTime incidentDate, CancellationToken cancellationToken = default)
@@ -83,7 +83,7 @@ public class ClaimsRepository : IClaimsRepository
             c.Type == type &&
             c.IncidentDate.Date == incidentDate.Date &&
             c.Status != Domain.Enums.ClaimStatus.Rejected &&
-            !c.IsDeleted,
+            c.DeletedAt == null,
             cancellationToken);
     }
 

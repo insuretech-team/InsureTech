@@ -94,7 +94,7 @@ public class ListNomineesQueryHandler : IRequestHandler<ListNomineesQuery, List<
     public async Task<List<NomineeDto>> Handle(ListNomineesQuery request, CancellationToken cancellationToken)
     {
         var nominees = await _context.Nominees
-            .Where(n => n.PolicyId == request.PolicyId && !n.IsDeleted)
+            .Where(n => n.PolicyId == request.PolicyId && n.DeletedAt == null)
             .ToListAsync(cancellationToken);
 
         return nominees.Select(n => new NomineeDto(

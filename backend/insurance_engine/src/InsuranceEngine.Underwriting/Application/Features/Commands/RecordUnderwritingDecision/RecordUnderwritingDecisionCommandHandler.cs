@@ -42,7 +42,7 @@ public class RecordUnderwritingDecisionCommandHandler : IRequestHandler<RecordUn
             ConditionsJson = request.Conditions != null ? JsonSerializer.Serialize(request.Conditions) : null,
             IsPremiumAdjusted = request.IsPremiumAdjusted,
             AdjustedPremiumAmount = request.AdjustedPremiumAmount ?? 0,
-            AdjustedPremiumCurrency = quote.Currency,
+            AdjustedPremiumCurrency = quote.BasePremiumCurrency,
             AdjustmentReason = request.IsPremiumAdjusted ? "Underwriting adjustment" : null,
             UnderwriterId = request.UnderwriterId,
             UnderwriterComments = request.UnderwriterComments,

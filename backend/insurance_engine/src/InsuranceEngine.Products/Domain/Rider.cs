@@ -16,9 +16,9 @@ public class Rider
     public string? Description { get; set; }
 
     // Money fields — stored as bigint (paisa)
-    public long PremiumAmount { get; set; }
+    public long Premium { get; set; }
     public string PremiumCurrency { get; set; } = "BDT";
-    public long CoverageAmount { get; set; }
+    public long Coverage { get; set; }
     public string CoverageCurrency { get; set; } = "BDT";
 
     public bool IsMandatory { get; set; }
@@ -27,15 +27,15 @@ public class Rider
     public DateTime UpdatedAt { get; set; }
 
     // Money convenience accessors
-    public Money Premium
+    public Money PremiumMoney
     {
-        get => new(PremiumAmount, PremiumCurrency);
-        set { PremiumAmount = value.Amount; PremiumCurrency = value.CurrencyCode; }
+        get => new(Premium, PremiumCurrency);
+        set { Premium = value.Amount; PremiumCurrency = value.CurrencyCode; }
     }
 
-    public Money Coverage
+    public Money CoverageMoney
     {
-        get => new(CoverageAmount, CoverageCurrency);
-        set { CoverageAmount = value.Amount; CoverageCurrency = value.CurrencyCode; }
+        get => new(Coverage, CoverageCurrency);
+        set { Coverage = value.Amount; CoverageCurrency = value.CurrencyCode; }
     }
 }

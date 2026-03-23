@@ -139,7 +139,7 @@ public class PartnersController : ControllerBase
 
     private InsuranceEngine.Partners.Application.DTOs.PartnerDto MapToDto(InsuranceEngine.Partners.Application.Features.Queries.PartnerDto p)
     {
-        return new InsuranceEngine.Partners.Application.DTOs.PartnerDto(p.Id, p.Name, p.Code, p.Email, p.Phone, p.Address, p.Status);
+        return new InsuranceEngine.Partners.Application.DTOs.PartnerDto(p.Id, p.OrganizationName, p.Code, p.Email, p.Phone, p.Status);
     }
 
     private ErrorDto MapError(InsuranceEngine.SharedKernel.CQRS.Error error)

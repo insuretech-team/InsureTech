@@ -35,7 +35,7 @@ public class CreateIndividualBeneficiaryCommandHandler : IRequestHandler<CreateI
 
     public async Task<Result<BeneficiaryDto>> Handle(CreateIndividualBeneficiaryCommand request, CancellationToken cancellationToken)
     {
-        var gender = Enum.Parse<Gender>(request.Gender, true);
+        var gender = Enum.Parse<BeneficiaryGender>(request.Gender, true);
         
         var beneficiary = Domain.Entities.Beneficiary.CreateIndividual(
             request.UserId,
@@ -45,45 +45,13 @@ public class CreateIndividualBeneficiaryCommandHandler : IRequestHandler<CreateI
             request.MobileNumber,
             request.Email);
 
-        if (!string.IsNullOrEmpty(request.NidNumber) && beneficiary.IndividualDetails != null)
+        if (!string.IsNullOrEmpty(request.NidNumber) && beneficiary.Individual != null)
         {
-            beneficiary.IndividualDetails.NidNumber = await _encryptionService.EncryptAsync(request.NidNumber);
+            beneficiary.Individual.NidNumber = await _encryptionService.EncryptAsync(request.NidNumber);
         }
 
         await _repository.AddAsync(beneficiary);
 
-        return Result.Ok(MapToDto(beneficiary));
-    }
-
-    private BeneficiaryDto MapToDto(Domain.Entities.Beneficiary b)
-    {
-        return new BeneficiaryDto(
-            b.Id,
-            b.UserId,
-            b.Type.ToString(),
-            b.Code,
-            b.Status.ToString(),
-            b.KycStatus.ToString(),
-            b.KycCompletedAt,
-            b.RiskScore,
-            null,
-            b.IndividualDetails != null ? new IndividualBeneficiaryDto(
-                b.IndividualDetails.FullName,
-                b.IndividualDetails.FullNameBn,
-                b.IndividualDetails.DateOfBirth,
-                b.IndividualDetails.Gender.ToString(),
-                b.IndividualDetails.NidNumber, // In real app, might want to mask or keep encrypted
-                b.IndividualDetails.PassportNumber,
-                b.IndividualDetails.BirthCertificateNumber,
-                b.IndividualDetails.TinNumber,
-                b.IndividualDetails.MaritalStatus.ToString(),
-                b.IndividualDetails.Occupation,
-                b.IndividualDetails.ContactInfoJson,
-                b.IndividualDetails.PermanentAddressJson,
-                b.IndividualDetails.PresentAddressJson,
-                null,
-                null
-            ) : null
-        );
+        return Result.Ok(beneficiary.ToDto());
     }
 }

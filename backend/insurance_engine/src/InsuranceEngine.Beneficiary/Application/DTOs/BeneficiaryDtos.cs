@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using InsuranceEngine.SharedKernel.DTOs;
 
 namespace InsuranceEngine.Beneficiary.Application.DTOs;
 
@@ -7,13 +9,14 @@ public record BeneficiaryDto(
     Guid UserId,
     string Type,
     string Code,
-    string Status,
-    string KycStatus,
+    object Status,
+    object KycStatus,
     DateTime? KycCompletedAt,
     string? RiskScore,
     string? ReferralCode,
-    IndividualBeneficiaryDto? IndividualDetails = null,
-    BusinessBeneficiaryDto? BusinessDetails = null
+    AuditInfoDto AuditInfo,
+    IndividualBeneficiaryDto? Individual = null,
+    BusinessBeneficiaryDto? Business = null
 );
 
 public record IndividualBeneficiaryDto(
@@ -27,11 +30,12 @@ public record IndividualBeneficiaryDto(
     string? TinNumber,
     string MaritalStatus,
     string? Occupation,
-    string? ContactInfoJson,
-    string? PermanentAddressJson,
-    string? PresentAddressJson,
+    ContactInfoDto ContactInfo,
+    AddressDto PermanentAddress,
+    AddressDto PresentAddress,
     string? NomineeName,
-    string? NomineeRelationship
+    string? NomineeRelationship,
+    AuditInfoDto AuditInfo
 );
 
 public record BusinessBeneficiaryDto(
@@ -43,15 +47,15 @@ public record BusinessBeneficiaryDto(
     string BusinessType,
     string? IndustrySector,
     string FocalPersonName,
-    string? FocalPersonMobile,
-    string? ContactInfoJson,
-    string? RegisteredAddressJson,
-    string? BusinessAddressJson
-);
-
-public record PaginatedResponse<T>(
-    List<T> Items,
-    int TotalCount,
-    int Page,
-    int PageSize
+    ContactInfoDto FocalPersonContact,
+    string? FocalPersonDesignation,
+    string? FocalPersonNid,
+    ContactInfoDto ContactInfo,
+    AddressDto RegisteredAddress,
+    AddressDto BusinessAddress,
+    int ActivePoliciesCount,
+    int PendingActionsCount,
+    int TotalEmployeesCovered,
+    MoneyDto TotalPremiumAmount,
+    AuditInfoDto AuditInfo
 );

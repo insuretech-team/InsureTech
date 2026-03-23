@@ -40,36 +40,7 @@ public class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<CreateBus
 
         await _repository.AddAsync(beneficiary);
 
-        return Result.Ok(MapToDto(beneficiary));
+        return Result.Ok(beneficiary.ToDto());
     }
 
-    private BeneficiaryDto MapToDto(Domain.Entities.Beneficiary b)
-    {
-        return new BeneficiaryDto(
-            b.Id,
-            b.UserId,
-            b.Type.ToString(),
-            b.Code,
-            b.Status.ToString(),
-            b.KycStatus.ToString(),
-            b.KycCompletedAt,
-            b.RiskScore,
-            null,
-            null,
-            b.BusinessDetails != null ? new BusinessBeneficiaryDto(
-                b.BusinessDetails.BusinessName,
-                b.BusinessDetails.BusinessNameBn,
-                b.BusinessDetails.TradeLicenseNumber,
-                b.BusinessDetails.TinNumber,
-                null,
-                b.BusinessDetails.BusinessType.ToString(),
-                b.BusinessDetails.IndustrySector,
-                b.BusinessDetails.FocalPersonName,
-                b.BusinessDetails.FocalPersonMobile,
-                null,
-                null,
-                null
-            ) : null
-        );
-    }
 }

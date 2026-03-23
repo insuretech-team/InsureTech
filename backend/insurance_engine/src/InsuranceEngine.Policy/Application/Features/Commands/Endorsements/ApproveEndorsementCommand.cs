@@ -90,8 +90,8 @@ public class ApproveEndorsementCommandHandler : IRequestHandler<ApproveEndorseme
         var selectedRiders = policy.Riders.Select(pr => new Products.Domain.Rider
         {
             RiderName = pr.RiderName,
-            PremiumAmount = pr.PremiumAmount,
-            CoverageAmount = pr.CoverageAmount
+            Premium = pr.PremiumAmount,
+            Coverage = pr.CoverageAmount
         }).ToList();
 
         var calcResult = _pricingEngine.Calculate(product, policy.SumInsuredAmount, policy.TenureMonths, selectedRiders, applicantData);

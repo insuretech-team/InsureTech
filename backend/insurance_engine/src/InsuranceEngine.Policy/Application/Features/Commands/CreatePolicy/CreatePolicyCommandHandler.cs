@@ -1,5 +1,6 @@
 using System;
 using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
@@ -12,6 +13,7 @@ using InsuranceEngine.Policy.Domain.Services;
 using InsuranceEngine.Policy.Domain.ValueObjects;
 using InsuranceEngine.SharedKernel.CQRS;
 using InsuranceEngine.SharedKernel.Interfaces;
+using InsuranceEngine.Policy.Application.DTOs;
 
 namespace InsuranceEngine.Policy.Application.Features.Commands.CreatePolicy;
 
@@ -71,7 +73,7 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
                 ? new Domain.ValueObjects.HealthDeclaration
                 {
                     HasPreExistingConditions = request.Applicant.HealthDeclaration.HasPreExistingConditions,
-                    Conditions = request.Applicant.HealthDeclaration.Conditions,
+                    Conditions = request.Applicant.HealthDeclaration.Conditions ?? new List<string>(),
                     IsSmoker = request.Applicant.HealthDeclaration.IsSmoker,
                     BloodGroup = request.Applicant.HealthDeclaration.BloodGroup
                 } : null
@@ -112,9 +114,9 @@ public class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, R
                 policy.AddRider(
                     r.RiderName,
                     r.PremiumAmount.Amount,
-                    r.PremiumAmount.CurrencyCode,
+                    r.PremiumAmount.Currency,
                     r.CoverageAmount.Amount,
-                    r.CoverageAmount.CurrencyCode
+                    r.CoverageAmount.Currency
                 );
             }
         }

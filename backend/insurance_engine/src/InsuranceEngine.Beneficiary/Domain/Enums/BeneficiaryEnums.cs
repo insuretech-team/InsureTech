@@ -4,29 +4,32 @@ namespace InsuranceEngine.Beneficiary.Domain.Enums;
 
 public enum BeneficiaryType
 {
-    Individual = 0,
-    Business = 1
+    Unspecified = 0,
+    Individual = 1,
+    Business = 2
 }
 
 public enum BeneficiaryStatus
 {
-    PendingKyc = 0,
-    Active = 1,
-    Inactive = 2,
-    Suspended = 3,
-    Blacklisted = 4
+    Unspecified = 0,
+    PendingKyc = 1,
+    Active = 2,
+    Inactive = 3,
+    Suspended = 4,
+    Blacklisted = 5
 }
 
 public enum KYCStatus
 {
-    NotStarted = 0,
-    Pending = 1,
-    InReview = 2,
-    Verified = 3,
-    Rejected = 4
+    Unspecified = 0,
+    NotStarted = 1,
+    Pending = 2,
+    InReview = 3,
+    Verified = 4,
+    Rejected = 5
 }
 
-public enum Gender
+public enum BeneficiaryGender
 {
     Unspecified = 0,
     Male = 1,
@@ -45,10 +48,11 @@ public enum MaritalStatus
 
 public enum BusinessType
 {
-    Proprietorship = 0,
-    Partnership = 1,
-    PrivateLimited = 2,
-    PublicLimited = 3,
-    Society = 4,
-    Trust = 5
+    Unspecified = 0,
+    Proprietorship = 1,
+    Partnership = 2,
+    PrivateLimited = 3,
+    PublicLimited = 4,
+    Society = 5,
+    Trust = 6
 }

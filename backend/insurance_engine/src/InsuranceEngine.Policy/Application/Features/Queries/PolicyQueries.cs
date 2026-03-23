@@ -5,13 +5,22 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Newtonsoft.Json;
-using InsuranceEngine.Policy.Application.DTOs;
 using InsuranceEngine.Policy.Application.Interfaces;
 using InsuranceEngine.Policy.Domain.Enums;
 using InsuranceEngine.Policy.Domain.ValueObjects;
 using InsuranceEngine.SharedKernel.CQRS;
 using InsuranceEngine.SharedKernel.Interfaces;
 using InsuranceEngine.SharedKernel.Services;
+using InsuranceEngine.SharedKernel.DTOs;
+
+using MoneyDto = InsuranceEngine.Policy.Application.DTOs.MoneyDto;
+using PolicyDto = InsuranceEngine.Policy.Application.DTOs.PolicyDto;
+using PolicyListDto = InsuranceEngine.Policy.Application.DTOs.PolicyListDto;
+using ApplicantDto = InsuranceEngine.Policy.Application.DTOs.ApplicantDto;
+using NomineeDto = InsuranceEngine.Policy.Application.DTOs.NomineeDto;
+using PolicyRiderDto = InsuranceEngine.Policy.Application.DTOs.PolicyRiderDto;
+using GracePeriodDto = InsuranceEngine.Policy.Application.DTOs.GracePeriodDto;
+using RenewalScheduleDto = InsuranceEngine.Policy.Application.DTOs.RenewalScheduleDto;
 
 namespace InsuranceEngine.Policy.Application.Features.Queries;
 
@@ -44,14 +53,14 @@ public class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, PolicyDto?>
                 var phone = !string.IsNullOrEmpty(applicant.PhoneNumber) ? PiiMasker.MaskPhone(_encryptionService.Decrypt(applicant.PhoneNumber)) : null;
 
                 applicantDto = new ApplicantDto(
-                    applicant.FullName,
-                    applicant.DateOfBirth,
-                    nid,
-                    applicant.Occupation,
-                    new MoneyDto(applicant.AnnualIncome),
-                    applicant.Address,
-                    phone,
-                    null
+                    FullName: applicant.FullName,
+                    DateOfBirth: applicant.DateOfBirth,
+                    NidNumber: nid,
+                    Occupation: applicant.Occupation,
+                    AnnualIncome: new MoneyDto(applicant.AnnualIncome),
+                    Address: applicant.Address,
+                    PhoneNumber: phone,
+                    HealthDeclaration: null
                 );
             }
         }
@@ -70,16 +79,16 @@ public class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, PolicyDto?>
             PaymentFrequency: p.PaymentFrequency,
             ProviderName: p.ProviderName,
             ProposerDetails: applicantDto,
-            Nominees: p.Nominees.Where(n => !n.IsDeleted).Select(n => new NomineeDto(
-                n.Id,
-                n.BeneficiaryId,
-                n.FullName,
-                n.Relationship,
-                n.SharePercentage,
-                n.DateOfBirth,
-                n.NomineeDobText,
-                n.NidNumber,
-                n.PhoneNumber
+            Nominees: p.Nominees.Where(n => n.DeletedAt == null).Select(n => new NomineeDto(
+                Id: n.Id,
+                BeneficiaryId: n.BeneficiaryId,
+                FullName: n.FullName,
+                Relationship: n.Relationship,
+                SharePercentage: n.SharePercentage,
+                DateOfBirth: n.DateOfBirth,
+                NomineeDobText: n.NomineeDobText,
+                NidNumber: n.NidNumber,
+                PhoneNumber: n.PhoneNumber
             )).ToList(),
             Riders: p.Riders.Select(r => new PolicyRiderDto(
                 r.Id, r.RiderName, new MoneyDto(r.PremiumAmount, r.PremiumCurrency),

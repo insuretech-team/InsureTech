@@ -1,6 +1,7 @@
 using System;
 using MediatR;
 using InsuranceEngine.Products.Application.DTOs;
+using InsuranceEngine.SharedKernel.DTOs;
 using InsuranceEngine.Products.Domain.Enums;
 
 namespace InsuranceEngine.Products.Application.Features.Queries.ListProducts;

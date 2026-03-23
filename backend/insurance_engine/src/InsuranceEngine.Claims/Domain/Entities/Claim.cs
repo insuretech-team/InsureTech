@@ -38,7 +38,9 @@ public class Claim : AggregateRoot<Guid>
 
     public long DeductibleAmount { get; private set; }
     public string DeductibleCurrency { get; private set; } = "BDT";
-    public double CoPayPercentage { get; private set; } // e.g. 0.10 for 10%
+    public double CoPayPercentage { get; private set; }
+    public long CoPayAmount { get; private set; }
+    public string CoPayCurrency { get; private set; } = "BDT";
 
     public string? BankDetailsForPayout { get; set; }
     public bool AppealOptionAvailable { get; set; }
@@ -56,8 +58,8 @@ public class Claim : AggregateRoot<Guid>
     // Audit
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
+    public string? AuditInfoJson { get; set; }
     public DateTime? DeletedAt { get; private set; }
-    public bool IsDeleted { get; private set; }
 
     // Constants for approval matrix based on SRS v3.11 (Appendix C) & PoliSync
     private const long ZHTC_THRESHOLD = 1_000_000;    // 10,000 BDT

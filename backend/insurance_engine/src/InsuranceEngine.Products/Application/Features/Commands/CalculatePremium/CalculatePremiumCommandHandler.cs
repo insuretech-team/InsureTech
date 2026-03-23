@@ -7,6 +7,7 @@ using MediatR;
 using Microsoft.Extensions.Caching.Memory;
 using InsuranceEngine.Products.Application.DTOs;
 using InsuranceEngine.Products.Application.Interfaces;
+using InsuranceEngine.Products.Domain;
 using InsuranceEngine.Products.Domain.Services;
 using InsuranceEngine.SharedKernel.CQRS;
 
@@ -51,7 +52,7 @@ public class CalculatePremiumCommandHandler : IRequestHandler<CalculatePremiumCo
             return Result<CalculatePremiumResponse>.Fail(Error.Validation("Premium can only be calculated for active products."));
 
         // Get selected riders
-        var selectedRiders = new List<Domain.Rider>();
+        var selectedRiders = new List<Rider>();
         if (request.RiderIds != null && request.RiderIds.Any())
         {
             selectedRiders = await _productRepository.GetRidersByIdsAsync(request.RiderIds);
@@ -62,7 +63,8 @@ public class CalculatePremiumCommandHandler : IRequestHandler<CalculatePremiumCo
             request.SumInsuredAmount,
             request.TenureMonths,
             selectedRiders,
-            request.ApplicantData);
+            request.ApplicantData,
+            1.0);
 
         var response = new CalculatePremiumResponse(
             BasePremium: new MoneyDto(result.BasePremium.Amount, result.BasePremium.CurrencyCode),

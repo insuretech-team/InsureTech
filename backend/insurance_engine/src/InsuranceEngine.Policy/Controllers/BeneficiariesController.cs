@@ -60,8 +60,8 @@ public class BeneficiariesController : ControllerBase
         {
             var response = new BeneficiaryRetrievalResponse(
                 result.Value!,
-                result.Value!.IndividualDetails,
-                result.Value!.BusinessDetails
+                result.Value!.Individual,
+                result.Value!.Business
             );
             return Ok(response);
         }

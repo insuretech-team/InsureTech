@@ -50,8 +50,8 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
             {
                 QuoteId = result.Value.Id.ToString(),
                 QuoteNumber = result.Value.QuoteNumber,
-                BasePremium = new Insuretech.Common.V1.Money { Amount = result.Value.BasePremium.Amount, Currency = result.Value.BasePremium.CurrencyCode },
-                TotalPremium = new Insuretech.Common.V1.Money { Amount = result.Value.TotalPremium.Amount, Currency = result.Value.TotalPremium.CurrencyCode },
+                BasePremium = new Insuretech.Common.V1.Money { Amount = result.Value.BasePremium.Amount, Currency = result.Value.BasePremium.Currency },
+                TotalPremium = new Insuretech.Common.V1.Money { Amount = result.Value.TotalPremium.Amount, Currency = result.Value.TotalPremium.Currency },
                 ValidUntil = result.Value.ValidUntil.ToString("O"),
                 Message = "Quote requested successfully"
             };
@@ -98,11 +98,11 @@ public sealed class UnderwritingGrpcService : UnderwritingService.UnderwritingSe
             BeneficiaryId = dto.BeneficiaryId.ToString(),
             InsurerProductId = dto.InsurerProductId.ToString(),
             Status = System.Enum.Parse<QuoteStatus>(dto.Status.ToString(), true),
-            SumAssured = new Insuretech.Common.V1.Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.CurrencyCode },
+            SumAssured = new Insuretech.Common.V1.Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.Currency },
             TermYears = dto.TermYears,
             PremiumPaymentMode = dto.PremiumPaymentMode,
-            BasePremium = new Insuretech.Common.V1.Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode },
-            TotalPremium = new Insuretech.Common.V1.Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.CurrencyCode },
+            BasePremium = new Insuretech.Common.V1.Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.Currency },
+            TotalPremium = new Insuretech.Common.V1.Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.Currency },
             // AuditInfo mapping if needed
         };
     }

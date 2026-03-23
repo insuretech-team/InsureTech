@@ -22,8 +22,8 @@ public class ClaimsDbContext : DbContext
         modelBuilder.Entity<Claim>(entity =>
         {
             entity.ToTable("claims");
-            entity.HasKey(e => e.Id);
-            entity.HasQueryFilter(e => !e.IsDeleted);
+            entity.Property(e => e.Id).HasColumnName("claim_id");
+            entity.HasQueryFilter(e => e.DeletedAt == null);
 
             entity.Property(e => e.ClaimNumber).HasMaxLength(50).IsRequired();
             entity.HasIndex(e => e.ClaimNumber).IsUnique();
@@ -41,12 +41,16 @@ public class ClaimsDbContext : DbContext
             entity.Property(e => e.DeductibleAmount).HasColumnName("deductible_amount");
             entity.Property(e => e.DeductibleCurrency).HasColumnName("deductible_currency").HasMaxLength(3).HasDefaultValue("BDT");
             entity.Property(e => e.CoPayPercentage).HasColumnName("co_pay_percentage");
+            entity.Property(e => e.CoPayAmount).HasColumnName("co_pay_amount");
+            entity.Property(e => e.CoPayCurrency).HasColumnName("co_pay_currency").HasMaxLength(3).HasDefaultValue("BDT");
 
             // Proto-aligned new fields
             entity.Property(e => e.BankDetailsForPayout).HasColumnName("bank_details_for_payout");
             entity.Property(e => e.AppealOptionAvailable).HasColumnName("appeal_option_available").HasDefaultValue(false);
             entity.Property(e => e.InAppMessages).HasColumnType("jsonb").HasColumnName("in_app_messages");
             entity.Property(e => e.ProcessorNotes).HasColumnName("processor_notes");
+            entity.Property(e => e.AuditInfoJson).HasColumnType("jsonb").HasColumnName("audit_info");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
             // Indexes
             entity.HasIndex(e => e.PolicyId);

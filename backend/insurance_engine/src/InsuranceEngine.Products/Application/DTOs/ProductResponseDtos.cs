@@ -29,10 +29,4 @@ public record ProductUpdateResponse(
     [property: JsonPropertyName("error")] ErrorDto? Error = null
 );
 
-public record PremiumCalculationResponse(
-    [property: JsonPropertyName("base_premium")] MoneyDto BasePremium,
-    [property: JsonPropertyName("rider_premium")] MoneyDto RiderPremium,
-    [property: JsonPropertyName("total_premium")] MoneyDto TotalPremium,
-    [property: JsonPropertyName("breakdown")] List<PremiumBreakdownDto> Breakdown,
-    [property: JsonPropertyName("error")] ErrorDto? Error = null
-);
+

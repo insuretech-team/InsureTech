@@ -21,7 +21,6 @@ public static class DbInitializer
             var seedContext = seedScope.ServiceProvider.GetRequiredService<ProductsDbContext>();
             if (await seedContext.Products.AnyAsync()) return;
 
-            var tenantId = Guid.Parse("11111111-1111-1111-1111-111111111111");
             var createdBy = Guid.Parse("00000000-0000-0000-0000-000000000001");
 
             var products = new[]
@@ -35,7 +34,6 @@ public static class DbInitializer
                     MinTenureMonths = 12,
                     MaxTenureMonths = 36,
                     CreatedBy = createdBy,
-                    TenantId = tenantId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 },
@@ -48,7 +46,6 @@ public static class DbInitializer
                     MinTenureMonths = 60,
                     MaxTenureMonths = 360,
                     CreatedBy = createdBy,
-                    TenantId = tenantId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 },
@@ -61,7 +58,6 @@ public static class DbInitializer
                     MinTenureMonths = 1,
                     MaxTenureMonths = 12,
                     CreatedBy = createdBy,
-                    TenantId = tenantId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 },
@@ -74,7 +70,6 @@ public static class DbInitializer
                     MinTenureMonths = 12,
                     MaxTenureMonths = 12,
                     CreatedBy = createdBy,
-                    TenantId = tenantId,
                     CreatedAt = DateTime.UtcNow,
                     UpdatedAt = DateTime.UtcNow
                 }

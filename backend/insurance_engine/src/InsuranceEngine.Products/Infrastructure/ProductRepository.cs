@@ -75,7 +75,6 @@ public class ProductRepository : IProductRepository
         var product = await _context.Products.FindAsync(id);
         if (product != null)
         {
-            product.IsDeleted = true;
             product.DeletedAt = DateTime.UtcNow;
             await _context.SaveChangesAsync();
         }
@@ -94,10 +93,10 @@ public class ProductRepository : IProductRepository
                 (p.Description != null && p.Description.Contains(query)));
 
         if (minPremium.HasValue)
-            dbQuery = dbQuery.Where(p => p.BasePremiumAmount >= (long)(minPremium.Value * 100));
+            dbQuery = dbQuery.Where(p => p.BasePremium >= (long)(minPremium.Value * 100));
 
         if (maxPremium.HasValue)
-            dbQuery = dbQuery.Where(p => p.BasePremiumAmount <= (long)(maxPremium.Value * 100));
+            dbQuery = dbQuery.Where(p => p.BasePremium <= (long)(maxPremium.Value * 100));
 
         return await dbQuery.ToListAsync();
     }

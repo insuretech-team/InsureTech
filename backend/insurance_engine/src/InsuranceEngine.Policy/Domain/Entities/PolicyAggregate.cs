@@ -31,8 +31,11 @@ public class PolicyAggregate : AggregateRoot<Guid>
     public long SumInsuredAmount { get; private set; }
     public string SumInsuredCurrency { get; private set; } = "BDT";
     public long VatTaxAmount { get; private set; }
+    public string VatTaxCurrency { get; private set; } = "BDT";
     public long ServiceFeeAmount { get; private set; }
+    public string ServiceFeeCurrency { get; private set; } = "BDT";
     public long TotalPayableAmount { get; private set; }
+    public string TotalPayableCurrency { get; private set; } = "BDT";
 
     public int TenureMonths { get; private set; }
     public DateTime StartDate { get; private set; }
@@ -63,7 +66,6 @@ public class PolicyAggregate : AggregateRoot<Guid>
     public DateTime CreatedAt { get; private set; }
     public DateTime UpdatedAt { get; private set; }
     public DateTime? DeletedAt { get; private set; }
-    public bool IsDeleted { get; private set; }
 
     // --- Money convenience accessors ---
     public Money PremiumMoney => new(PremiumAmount, PremiumCurrency);
@@ -289,7 +291,7 @@ public class PolicyAggregate : AggregateRoot<Guid>
     public Result UpdateNominee(Guid nomineeId, string? fullName, string? relationship, double? sharePercentage,
         DateTime? dateOfBirth = null, string? nidNumber = null, string? phoneNumber = null, string? nomineeDobText = null)
     {
-        var nominee = Nominees.FirstOrDefault(n => n.Id == nomineeId && !n.IsDeleted);
+        var nominee = Nominees.FirstOrDefault(n => n.Id == nomineeId && n.DeletedAt == null);
         if (nominee == null)
             return Result.Fail(Error.NotFound("Nominee", nomineeId.ToString()));
 
@@ -307,11 +309,11 @@ public class PolicyAggregate : AggregateRoot<Guid>
 
     public Result RemoveNominee(Guid nomineeId)
     {
-        var nominee = Nominees.FirstOrDefault(n => n.Id == nomineeId && !n.IsDeleted);
+        var nominee = Nominees.FirstOrDefault(n => n.Id == nomineeId && n.DeletedAt == null);
         if (nominee == null)
             return Result.Fail(Error.NotFound("Nominee", nomineeId.ToString()));
 
-        nominee.IsDeleted = true;
+        nominee.DeletedAt = DateTime.UtcNow;
         nominee.UpdatedAt = DateTime.UtcNow;
 
         return ValidateNomineeShares();
@@ -336,7 +338,7 @@ public class PolicyAggregate : AggregateRoot<Guid>
 
     private Result ValidateNomineeShares()
     {
-        var activeNominees = Nominees.Where(n => !n.IsDeleted).ToList();
+        var activeNominees = Nominees.Where(n => n.DeletedAt == null).ToList();
         if (activeNominees.Count == 0) return Result.Ok();
 
         var totalShare = activeNominees.Sum(n => n.SharePercentage);

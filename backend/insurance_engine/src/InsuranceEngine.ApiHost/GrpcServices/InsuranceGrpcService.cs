@@ -76,7 +76,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             ProductName = product.ProductName,
             ProductCode = product.ProductCode,
             Description = product.Description ?? "",
-            BasePremium = new Money { Amount = product.BasePremiumAmount, Currency = product.BasePremiumCurrency },
+            BasePremium = new Money { Amount = product.BasePremium, Currency = product.BasePremiumCurrency },
             Status = product.Status == InsuranceEngine.Products.Domain.Enums.ProductStatus.Active 
                 ? ProductProto.ProductStatus.Active 
                 : ProductProto.ProductStatus.Inactive
@@ -99,7 +99,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
         };
 
         if (dto.BasePremium != null)
-            product.BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode };
+            product.BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.Currency };
 
         return product;
     }
@@ -150,8 +150,8 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 ProductId = p.ProductId.ToString(),
                 CustomerId = p.CustomerId.ToString(),
                 Status = (PolicyStatus)p.Status,
-                PremiumAmount = new Money { Amount = p.PremiumAmount.Amount, Currency = p.PremiumAmount.CurrencyCode },
-                SumInsured = new Money { Amount = p.SumInsured.Amount, Currency = p.SumInsured.CurrencyCode },
+                PremiumAmount = new Money { Amount = p.PremiumAmount.Amount, Currency = p.PremiumAmount.Currency },
+                SumInsured = new Money { Amount = p.SumInsured.Amount, Currency = p.SumInsured.Currency },
                 StartDate = p.StartDate.ToTimestamp(),
                 EndDate = p.EndDate.ToTimestamp(),
                 IssuedAt = p.IssuedAt?.ToTimestamp()
@@ -172,8 +172,8 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             PartnerId = dto.PartnerId?.ToString() ?? "",
             AgentId = dto.AgentId?.ToString() ?? "",
             Status = (PolicyStatus)dto.Status,
-            PremiumAmount = new Money { Amount = dto.PremiumAmount.Amount, Currency = dto.PremiumAmount.CurrencyCode },
-            SumInsured = new Money { Amount = dto.SumInsured.Amount, Currency = dto.SumInsured.CurrencyCode },
+            PremiumAmount = new Money { Amount = dto.PremiumAmount.Amount, Currency = dto.PremiumAmount.Currency },
+            SumInsured = new Money { Amount = dto.SumInsured.Amount, Currency = dto.SumInsured.Currency },
             TenureMonths = dto.TenureMonths,
             StartDate = dto.StartDate.ToTimestamp(),
             EndDate = dto.EndDate.ToTimestamp(),
@@ -184,9 +184,9 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             ProviderName = dto.ProviderName ?? ""
         };
 
-        if (dto.VatTax != null) policy.VatTax = new Money { Amount = dto.VatTax.Amount, Currency = dto.VatTax.CurrencyCode };
-        if (dto.ServiceFee != null) policy.ServiceFee = new Money { Amount = dto.ServiceFee.Amount, Currency = dto.ServiceFee.CurrencyCode };
-        if (dto.TotalPayable != null) policy.TotalPayable = new Money { Amount = dto.TotalPayable.Amount, Currency = dto.TotalPayable.CurrencyCode };
+        if (dto.VatTax != null) policy.VatTax = new Money { Amount = dto.VatTax.Amount, Currency = dto.VatTax.Currency };
+        if (dto.ServiceFee != null) policy.ServiceFee = new Money { Amount = dto.ServiceFee.Amount, Currency = dto.ServiceFee.Currency };
+        if (dto.TotalPayable != null) policy.TotalPayable = new Money { Amount = dto.TotalPayable.Amount, Currency = dto.TotalPayable.Currency };
 
         if (dto.ProposerDetails != null)
         {
@@ -223,8 +223,8 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
                 {
                     RiderId = r.Id.ToString(),
                     RiderName = r.RiderName,
-                    PremiumAmount = new Money { Amount = r.PremiumAmount.Amount, Currency = r.PremiumAmount.CurrencyCode },
-                    CoverageAmount = new Money { Amount = r.CoverageAmount.Amount, Currency = r.CoverageAmount.CurrencyCode }
+                    PremiumAmount = new Money { Amount = r.PremiumAmount.Amount, Currency = r.PremiumAmount.Currency },
+                    CoverageAmount = new Money { Amount = r.CoverageAmount.Amount, Currency = r.CoverageAmount.Currency }
                 });
             }
         }
@@ -357,7 +357,7 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             CustomerId = dto.CustomerId.ToString(),
             Status = status,
             Type = type,
-            ClaimedAmount = new Money { Amount = dto.ClaimedAmount.Amount, Currency = dto.ClaimedAmount.CurrencyCode },
+            ClaimedAmount = new Money { Amount = dto.ClaimedAmount.Amount, Currency = dto.ClaimedAmount.Currency },
             IncidentDate = dto.IncidentDate.ToTimestamp(),
             IncidentDescription = dto.IncidentDescription ?? "",
             PlaceOfIncident = dto.PlaceOfIncident ?? "",
@@ -479,12 +479,12 @@ public class InsuranceGrpcService : InsuranceService.InsuranceServiceBase
             BeneficiaryId = dto.BeneficiaryId.ToString(),
             InsurerProductId = dto.InsurerProductId.ToString(),
             Status = (Insuretech.Underwriting.Entity.V1.QuoteStatus)dto.Status,
-            SumAssured = new Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.CurrencyCode },
+            SumAssured = new Money { Amount = dto.SumAssured.Amount, Currency = dto.SumAssured.Currency },
             TermYears = dto.TermYears,
             PremiumPaymentMode = dto.PremiumPaymentMode,
-            BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.CurrencyCode },
-            RiderPremium = new Money { Amount = dto.RiderPremium.Amount, Currency = dto.RiderPremium.CurrencyCode },
-            TotalPremium = new Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.CurrencyCode },
+            BasePremium = new Money { Amount = dto.BasePremium.Amount, Currency = dto.BasePremium.Currency },
+            RiderPremium = new Money { Amount = dto.RiderPremium.Amount, Currency = dto.RiderPremium.Currency },
+            TotalPremium = new Money { Amount = dto.TotalPremium.Amount, Currency = dto.TotalPremium.Currency },
             ApplicantAge = dto.ApplicantAge,
             ApplicantOccupation = dto.ApplicantOccupation ?? "",
             Smoker = dto.IsSmoker,

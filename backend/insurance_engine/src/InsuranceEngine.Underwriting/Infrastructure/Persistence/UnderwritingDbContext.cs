@@ -22,25 +22,45 @@ public class UnderwritingDbContext : DbContext
         {
             entity.ToTable("quotes");
             entity.HasKey(e => e.Id);
-            entity.HasQueryFilter(e => !e.IsDeleted);
+            entity.Property(e => e.Id).HasColumnName("quote_id");
+            entity.HasQueryFilter(e => e.DeletedAt == null);
             entity.Property(e => e.QuoteNumber).HasMaxLength(50).IsRequired();
             entity.HasIndex(e => e.QuoteNumber).IsUnique();
             entity.Property(e => e.Status).HasConversion<string>().HasMaxLength(50).IsRequired();
             
-            entity.Property(e => e.SumAssuredAmount).HasColumnName("sum_assured_amount").IsRequired();
+            entity.Property(e => e.SumAssuredAmount).HasColumnName("sum_assured_amount");
             entity.Property(e => e.SumAssuredCurrency).HasColumnName("sum_assured_currency").HasMaxLength(3).HasDefaultValue("BDT");
-            entity.Property(e => e.BasePremiumAmount).HasColumnName("base_premium_amount").IsRequired();
+            
+            entity.Property(e => e.TermYears).HasColumnName("term_years").IsRequired();
+            entity.Property(e => e.PremiumPaymentMode).HasColumnName("premium_payment_mode").HasMaxLength(50).IsRequired();
+
+            entity.Property(e => e.BasePremiumAmount).HasColumnName("base_premium_amount");
+            entity.Property(e => e.BasePremiumCurrency).HasColumnName("base_premium_currency").HasMaxLength(3).HasDefaultValue("BDT");
             entity.Property(e => e.RiderPremiumAmount).HasColumnName("rider_premium_amount");
+            entity.Property(e => e.RiderPremiumCurrency).HasColumnName("rider_premium_currency").HasMaxLength(3).HasDefaultValue("BDT");
             entity.Property(e => e.TaxAmount).HasColumnName("tax_amount");
-            entity.Property(e => e.TotalPremiumAmount).HasColumnName("total_premium_amount").IsRequired();
-            entity.Property(e => e.Currency).HasColumnName("currency").HasMaxLength(3).HasDefaultValue("BDT");
+            entity.Property(e => e.TaxCurrency).HasColumnName("tax_currency").HasMaxLength(3).HasDefaultValue("BDT");
+            entity.Property(e => e.TotalPremiumAmount).HasColumnName("total_premium_amount");
+            entity.Property(e => e.TotalPremiumCurrency).HasColumnName("total_premium_currency").HasMaxLength(3).HasDefaultValue("BDT");
 
             entity.Property(e => e.PremiumCalculationJson).HasColumnType("jsonb").HasColumnName("premium_calculation");
             entity.Property(e => e.SelectedRidersJson).HasColumnType("jsonb").HasColumnName("selected_riders");
+            
+            entity.Property(e => e.ApplicantAge).HasColumnName("applicant_age");
+            entity.Property(e => e.ApplicantOccupation).HasColumnName("applicant_occupation").HasMaxLength(100);
+            entity.Property(e => e.IsSmoker).HasColumnName("smoker");
+
+            entity.Property(e => e.ValidUntil).HasColumnName("valid_until");
+            entity.Property(e => e.ConvertedPolicyId).HasColumnName("converted_policy_id");
+            entity.Property(e => e.ConvertedAt).HasColumnName("converted_at");
+
             entity.Property(e => e.AuditInfoJson).HasColumnType("jsonb").HasColumnName("audit_info");
+            entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
             entity.Ignore(e => e.SumAssured);
             entity.Ignore(e => e.BasePremium);
+            entity.Ignore(e => e.RiderPremium);
+            entity.Ignore(e => e.Tax);
             entity.Ignore(e => e.TotalPremium);
 
             entity.HasIndex(e => e.BeneficiaryId);

@@ -21,24 +21,24 @@ public class BeneficiaryRepository : IBeneficiaryRepository
     public async Task<Domain.Entities.Beneficiary?> GetByIdAsync(Guid id)
     {
         return await _context.Beneficiaries
-            .Include(b => b.IndividualDetails)
-            .Include(b => b.BusinessDetails)
+            .Include(b => b.Individual)
+            .Include(b => b.Business)
             .FirstOrDefaultAsync(b => b.Id == id);
     }
 
     public async Task<Domain.Entities.Beneficiary?> GetByCodeAsync(string code)
     {
         return await _context.Beneficiaries
-            .Include(b => b.IndividualDetails)
-            .Include(b => b.BusinessDetails)
+            .Include(b => b.Individual)
+            .Include(b => b.Business)
             .FirstOrDefaultAsync(b => b.Code == code);
     }
 
     public async Task<IEnumerable<Domain.Entities.Beneficiary>> ListAsync(string? type = null, string? status = null, int page = 1, int pageSize = 10)
     {
         var query = _context.Beneficiaries
-            .Include(b => b.IndividualDetails)
-            .Include(b => b.BusinessDetails)
+            .Include(b => b.Individual)
+            .Include(b => b.Business)
             .AsQueryable();
 
         if (!string.IsNullOrEmpty(type))
@@ -48,11 +48,11 @@ public class BeneficiaryRepository : IBeneficiaryRepository
 
         if (!string.IsNullOrEmpty(status))
         {
-            query = query.Where(b => b.Status.ToString().ToUpper() == status.ToUpper());
+            query = query.Where(b => b.Status.Value.ToUpper() == status.ToUpper());
         }
 
         return await query
-            .OrderByDescending(b => b.CreatedAt)
+            .OrderByDescending(b => b.AuditInfo.CreatedAt)
             .Skip((page - 1) * pageSize)
             .Take(pageSize)
             .ToListAsync();
@@ -69,7 +69,7 @@ public class BeneficiaryRepository : IBeneficiaryRepository
 
         if (!string.IsNullOrEmpty(status))
         {
-            query = query.Where(b => b.Status.ToString().ToUpper() == status.ToUpper());
+            query = query.Where(b => b.Status.Value.ToUpper() == status.ToUpper());
         }
 
         return await query.CountAsync();

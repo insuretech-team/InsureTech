@@ -24,7 +24,7 @@ public class PolicyRepository : IPolicyRepository
         return await _context.Policies
             .Include(p => p.Nominees)
             .Include(p => p.Riders)
-            .FirstOrDefaultAsync(p => p.Id == id && !p.IsDeleted, ct);
+            .FirstOrDefaultAsync(p => p.Id == id && p.DeletedAt == null, ct);
     }
 
     public async Task<PolicyAggregate?> GetByPolicyNumberAsync(string policyNumber, CancellationToken ct = default)
@@ -32,7 +32,7 @@ public class PolicyRepository : IPolicyRepository
         return await _context.Policies
             .Include(p => p.Nominees)
             .Include(p => p.Riders)
-            .FirstOrDefaultAsync(p => p.PolicyNumber == policyNumber && !p.IsDeleted, ct);
+            .FirstOrDefaultAsync(p => p.PolicyNumber == policyNumber && p.DeletedAt == null, ct);
     }
 
     public async Task<PolicyAggregate?> GetByIdWithNomineesAsync(Guid id)
@@ -122,13 +122,13 @@ public class PolicyRepository : IPolicyRepository
             p.ProductId == productId &&
             p.CreatedAt >= sinceDate &&
             p.Status != PolicyStatus.Cancelled &&
-            !p.IsDeleted);
+            p.DeletedAt == null);
     }
 
     public async Task<bool> ExistsByNidAsync(string encryptedNid, Guid? excludePolicyId = null)
     {
         var query = _context.Policies
-            .Where(p => !p.IsDeleted &&
+            .Where(p => p.DeletedAt == null &&
                         p.Status != PolicyStatus.Cancelled &&
                         p.ProposerDetailsJson != null &&
                         p.ProposerDetailsJson.Contains(encryptedNid));

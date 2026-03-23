@@ -26,11 +26,10 @@ public class ListPartnersQueryHandler : IRequestHandler<ListPartnersQuery, Resul
         
         var dtos = partners.Select(partner => new PartnerDto(
             partner.Id,
-            partner.Name,
+            partner.OrganizationName,
             partner.Code,
             partner.Email,
             partner.Phone,
-            partner.Address,
             partner.Status.ToString(),
             partner.Agents.Select(a => new AgentDto(
                 a.Id,

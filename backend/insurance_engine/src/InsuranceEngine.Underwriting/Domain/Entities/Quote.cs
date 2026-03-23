@@ -19,10 +19,13 @@ public class Quote
     public string PremiumPaymentMode { get; set; } = "YEARLY";
 
     public long BasePremiumAmount { get; set; }
+    public string BasePremiumCurrency { get; set; } = "BDT";
     public long RiderPremiumAmount { get; set; }
+    public string RiderPremiumCurrency { get; set; } = "BDT";
     public long TaxAmount { get; set; }
+    public string TaxCurrency { get; set; } = "BDT";
     public long TotalPremiumAmount { get; set; }
-    public string Currency { get; set; } = "BDT";
+    public string TotalPremiumCurrency { get; set; } = "BDT";
 
     public string? PremiumCalculationJson { get; set; }
     public string? SelectedRidersJson { get; set; }
@@ -40,9 +43,10 @@ public class Quote
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
-    public bool IsDeleted { get; set; }
 
     public Money SumAssured => new(SumAssuredAmount, SumAssuredCurrency);
-    public Money BasePremium => new(BasePremiumAmount, Currency);
-    public Money TotalPremium => new(TotalPremiumAmount, Currency);
+    public Money BasePremium => new(BasePremiumAmount, BasePremiumCurrency);
+    public Money RiderPremium => new(RiderPremiumAmount, RiderPremiumCurrency);
+    public Money Tax => new(TaxAmount, TaxCurrency);
+    public Money TotalPremium => new(TotalPremiumAmount, TotalPremiumCurrency);
 }

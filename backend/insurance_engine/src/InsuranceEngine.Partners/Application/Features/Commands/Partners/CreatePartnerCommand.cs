@@ -9,11 +9,10 @@ using MediatR;
 namespace InsuranceEngine.Partners.Application.Features.Commands.Partners;
 
 public record CreatePartnerCommand(
-    string Name,
+    string OrganizationName,
     string Code,
     string Email,
-    string? Phone = null,
-    string? Address = null
+    string? Phone = null
 ) : IRequest<Result<Guid>>;
 
 public class CreatePartnerCommandHandler : IRequestHandler<CreatePartnerCommand, Result<Guid>>
@@ -32,11 +31,10 @@ public class CreatePartnerCommandHandler : IRequestHandler<CreatePartnerCommand,
             return Result<Guid>.Fail(Error.Validation($"Partner with code {request.Code} already exists"));
 
         var partner = Partner.Create(
-            request.Name,
+            request.OrganizationName,
             request.Code,
             request.Email,
-            request.Phone,
-            request.Address);
+            request.Phone);
 
         await _partnerRepository.CreateAsync(partner, cancellationToken);
 

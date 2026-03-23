@@ -4,7 +4,10 @@ using InsuranceEngine.Claims.Domain.Enums;
 
 namespace InsuranceEngine.Claims.Application.DTOs;
 
-public record MoneyDto(long Amount, string CurrencyCode = "BDT");
+public record MoneyDto(long Amount, string Currency = "BDT")
+{
+    public decimal DecimalAmount => Amount / 100m;
+}
 
 public record ClaimResponseDto
 {

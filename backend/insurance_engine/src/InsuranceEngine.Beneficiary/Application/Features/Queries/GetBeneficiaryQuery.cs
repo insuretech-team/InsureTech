@@ -7,6 +7,7 @@ using InsuranceEngine.Beneficiary.Application.DTOs;
 using InsuranceEngine.Beneficiary.Application.Interfaces;
 using InsuranceEngine.SharedKernel.CQRS;
 using MediatR;
+using InsuranceEngine.Beneficiary.Application.Features;
 
 namespace InsuranceEngine.Beneficiary.Application.Features.Queries;
 

@@ -16,11 +16,11 @@ public class Product
     public ProductStatus Status { get; set; }
 
     // Money fields — stored as bigint (paisa)
-    public long BasePremiumAmount { get; set; }
+    public long BasePremium { get; set; }
     public string BasePremiumCurrency { get; set; } = "BDT";
-    public long MinSumInsuredAmount { get; set; }
+    public long MinSumInsured { get; set; }
     public string MinSumInsuredCurrency { get; set; } = "BDT";
-    public long MaxSumInsuredAmount { get; set; }
+    public long MaxSumInsured { get; set; }
     public string MaxSumInsuredCurrency { get; set; } = "BDT";
 
     public int MinTenureMonths { get; set; }
@@ -32,6 +32,7 @@ public class Product
     // Navigation properties
     public List<Rider> AvailableRiders { get; set; } = new();
     public List<ProductPlan> Plans { get; set; } = new();
+    public List<RiskAssessmentQuestion> RiskAssessmentQuestions { get; set; } = new();
     public PricingConfig? PricingConfig { get; set; }
 
     // Audit
@@ -39,26 +40,24 @@ public class Product
     public DateTime CreatedAt { get; set; }
     public DateTime UpdatedAt { get; set; }
     public DateTime? DeletedAt { get; set; }
-    public bool IsDeleted { get; set; }
-    public Guid TenantId { get; set; }
 
     // --- Money convenience accessors ---
-    public Money BasePremium
+    public Money BasePremiumMoney
     {
-        get => new(BasePremiumAmount, BasePremiumCurrency);
-        set { BasePremiumAmount = value.Amount; BasePremiumCurrency = value.CurrencyCode; }
+        get => new(BasePremium, BasePremiumCurrency);
+        set { BasePremium = value.Amount; BasePremiumCurrency = value.CurrencyCode; }
     }
 
-    public Money MinSumInsured
+    public Money MinSumInsuredMoney
     {
-        get => new(MinSumInsuredAmount, MinSumInsuredCurrency);
-        set { MinSumInsuredAmount = value.Amount; MinSumInsuredCurrency = value.CurrencyCode; }
+        get => new(MinSumInsured, MinSumInsuredCurrency);
+        set { MinSumInsured = value.Amount; MinSumInsuredCurrency = value.CurrencyCode; }
     }
 
-    public Money MaxSumInsured
+    public Money MaxSumInsuredMoney
     {
-        get => new(MaxSumInsuredAmount, MaxSumInsuredCurrency);
-        set { MaxSumInsuredAmount = value.Amount; MaxSumInsuredCurrency = value.CurrencyCode; }
+        get => new(MaxSumInsured, MaxSumInsuredCurrency);
+        set { MaxSumInsured = value.Amount; MaxSumInsuredCurrency = value.CurrencyCode; }
     }
 
     // --- Status transition methods ---

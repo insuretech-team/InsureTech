@@ -36,9 +36,9 @@ public class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand,
         if (product.ProductName != request.ProductName) { product.ProductName = request.ProductName; changedFields.Add("ProductName"); }
         if (product.Description != request.Description) { product.Description = request.Description; changedFields.Add("Description"); }
         if (product.Category != request.Category) { product.Category = request.Category; changedFields.Add("Category"); }
-        if (product.BasePremiumAmount != request.BasePremiumAmount) { product.BasePremiumAmount = request.BasePremiumAmount; changedFields.Add("BasePremium"); }
-        if (product.MinSumInsuredAmount != request.MinSumInsuredAmount) { product.MinSumInsuredAmount = request.MinSumInsuredAmount; changedFields.Add("MinSumInsured"); }
-        if (product.MaxSumInsuredAmount != request.MaxSumInsuredAmount) { product.MaxSumInsuredAmount = request.MaxSumInsuredAmount; changedFields.Add("MaxSumInsured"); }
+        if (product.BasePremium != request.BasePremiumAmount) { product.BasePremium = request.BasePremiumAmount; changedFields.Add("BasePremium"); }
+        if (product.MinSumInsured != request.MinSumInsuredAmount) { product.MinSumInsured = request.MinSumInsuredAmount; changedFields.Add("MinSumInsured"); }
+        if (product.MaxSumInsured != request.MaxSumInsuredAmount) { product.MaxSumInsured = request.MaxSumInsuredAmount; changedFields.Add("MaxSumInsured"); }
         if (product.MinTenureMonths != request.MinTenureMonths) { product.MinTenureMonths = request.MinTenureMonths; changedFields.Add("MinTenureMonths"); }
         if (product.MaxTenureMonths != request.MaxTenureMonths) { product.MaxTenureMonths = request.MaxTenureMonths; changedFields.Add("MaxTenureMonths"); }
         if (request.Exclusions != null) { product.Exclusions = request.Exclusions; changedFields.Add("Exclusions"); }

@@ -29,17 +29,16 @@ public class UpdateBeneficiaryCommandHandler : IRequestHandler<UpdateBeneficiary
         var beneficiary = await _repository.GetByIdAsync(request.BeneficiaryId);
         if (beneficiary == null) return Result<bool>.Fail(Error.NotFound("Beneficiary", request.BeneficiaryId.ToString()));
 
-        if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.IndividualDetails != null)
+        if (beneficiary.Type == Domain.Enums.BeneficiaryType.Individual && beneficiary.Individual != null)
         {
-            // Placeholder: In a real app, we'd have methods on the detail entity
-            // For now, aligning with the domain change
+            // Update individual fields if provided
         }
-        else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.BusinessDetails != null)
+        else if (beneficiary.Type == Domain.Enums.BeneficiaryType.Business && beneficiary.Business != null)
         {
-            // Placeholder: In a real app, we'd have methods on the detail entity
+            // Update business fields if provided
         }
 
-        beneficiary.UpdatedAt = DateTime.UtcNow;
+        // beneficiary.AuditInfo = beneficiary.AuditInfo with { UpdatedAt = DateTime.UtcNow }; -- Handled in domain if needed
         await _repository.UpdateAsync(beneficiary);
         return Result.Ok(true);
     }

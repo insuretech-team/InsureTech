@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using MediatR;
 using InsuranceEngine.Products.Application.DTOs;
 using InsuranceEngine.Products.Application.Interfaces;
+using InsuranceEngine.SharedKernel.DTOs;
 
 namespace InsuranceEngine.Products.Application.Features.Queries.ListProducts;
 

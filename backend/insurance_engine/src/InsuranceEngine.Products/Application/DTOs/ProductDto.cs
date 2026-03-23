@@ -4,10 +4,11 @@ using InsuranceEngine.Products.Domain.Enums;
 
 namespace InsuranceEngine.Products.Application.DTOs;
 
-// --- Money DTO ---
-public record MoneyDto(long Amount, string CurrencyCode = "BDT");
+public record MoneyDto(long Amount, string Currency = "BDT")
+{
+    public decimal DecimalAmount => Amount / 100m;
+}
 
-// --- Product DTOs ---
 public record ProductDto(
     Guid Id,
     string ProductCode,
@@ -20,11 +21,11 @@ public record ProductDto(
     MoneyDto MaxSumInsured,
     int MinTenureMonths,
     int MaxTenureMonths,
-    List<string> Exclusions,
+    List<string>? Exclusions,
     List<RiderDto>? AvailableRiders,
     List<ProductPlanDto>? Plans,
     PricingConfigDto? PricingConfig,
-    Guid CreatedBy,
+    Guid? CreatedBy,
     DateTime CreatedAt,
     DateTime UpdatedAt
 );
@@ -40,7 +41,6 @@ public record ProductListDto(
     MoneyDto MaxSumInsured
 );
 
-// --- Rider DTO ---
 public record RiderDto(
     Guid Id,
     string RiderName,
@@ -50,7 +50,6 @@ public record RiderDto(
     bool IsMandatory
 );
 
-// --- ProductPlan DTO ---
 public record ProductPlanDto(
     Guid Id,
     string PlanName,
@@ -61,7 +60,6 @@ public record ProductPlanDto(
     string? Attributes
 );
 
-// --- PricingConfig DTO ---
 public record PricingConfigDto(
     Guid Id,
     List<PricingRuleDto> Rules,
@@ -78,14 +76,14 @@ public record PricingRuleDto(
 );
 
 public record RuleConditionDto(string Field, string Operator, string Value);
+
 public record RuleActionDto(ActionType Type, double Value);
 
-// --- Premium Calculation DTOs ---
 public record CalculatePremiumRequest(
     long SumInsuredAmount,
     int TenureMonths,
-    List<Guid>? RiderIds,
-    Dictionary<string, string> ApplicantData
+    List<Guid>? RiderIds = null,
+    Dictionary<string, string>? ApplicantData = null
 );
 
 public record CalculatePremiumResponse(
@@ -97,12 +95,15 @@ public record CalculatePremiumResponse(
     List<PremiumBreakdownDto> Breakdown
 );
 
-public record PremiumBreakdownDto(string Item, MoneyDto Amount, string Description);
+public record PremiumCalculationResponse(
+    MoneyDto BasePremium,
+    MoneyDto RiderPremium,
+    MoneyDto TotalPremium,
+    List<PremiumBreakdownDto> Breakdown
+);
 
-// --- Paginated Response ---
-public record PaginatedResponse<T>(
-    List<T> Items,
-    int TotalCount,
-    int Page,
-    int PageSize
+public record PremiumBreakdownDto(
+    string Item,
+    MoneyDto Amount,
+    string Description
 );

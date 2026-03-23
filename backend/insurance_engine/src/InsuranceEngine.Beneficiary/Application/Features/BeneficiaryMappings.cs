@@ -1,6 +1,7 @@
 using System;
 using InsuranceEngine.Beneficiary.Application.DTOs;
 using InsuranceEngine.Beneficiary.Domain.Entities;
+using InsuranceEngine.SharedKernel.DTOs;
 
 namespace InsuranceEngine.Beneficiary.Application.Features;
 
@@ -13,42 +14,98 @@ public static class BeneficiaryMappings
             b.UserId,
             b.Type.ToString(),
             b.Code,
-            b.Status.ToString(),
-            b.KycStatus.ToString(),
+            b.Status, // BeneficiaryStatusInfo
+            b.KycStatus, // KYCStatusInfo
             b.KycCompletedAt,
             b.RiskScore,
-            null, // ReferralCode — can be added to entity later if needed
-            b.IndividualDetails != null ? new IndividualBeneficiaryDto(
-                b.IndividualDetails.FullName,
-                b.IndividualDetails.FullNameBn,
-                b.IndividualDetails.DateOfBirth,
-                b.IndividualDetails.Gender.ToString(),
-                b.IndividualDetails.NidNumber,
-                b.IndividualDetails.PassportNumber,
-                b.IndividualDetails.BirthCertificateNumber,
-                b.IndividualDetails.TinNumber,
-                b.IndividualDetails.MaritalStatus.ToString(),
-                b.IndividualDetails.Occupation,
-                b.IndividualDetails.ContactInfoJson,
-                b.IndividualDetails.PermanentAddressJson,
-                b.IndividualDetails.PresentAddressJson,
-                null,
-                null
-            ) : null,
-            b.BusinessDetails != null ? new BusinessBeneficiaryDto(
-                b.BusinessDetails.BusinessName,
-                b.BusinessDetails.BusinessNameBn,
-                b.BusinessDetails.TradeLicenseNumber,
-                b.BusinessDetails.TinNumber,
-                null,
-                b.BusinessDetails.BusinessType.ToString(),
-                b.BusinessDetails.IndustrySector,
-                b.BusinessDetails.FocalPersonName,
-                b.BusinessDetails.FocalPersonMobile,
-                null,
-                null,
-                null
-            ) : null
+            b.ReferralCode,
+            b.AuditInfo.ToDto(),
+            b.Individual?.ToDto(),
+            b.Business?.ToDto()
+        );
+    }
+
+    public static IndividualBeneficiaryDto ToDto(this IndividualBeneficiary i)
+    {
+        return new IndividualBeneficiaryDto(
+            i.FullName,
+            i.FullNameBn,
+            i.DateOfBirth,
+            i.Gender.ToString(),
+            i.NidNumber,
+            i.PassportNumber,
+            i.BirthCertificateNumber,
+            i.TinNumber,
+            i.MaritalStatus.ToString(),
+            i.Occupation,
+            i.ContactInfo.ToDto(),
+            i.PermanentAddress.ToDto(),
+            i.PresentAddress.ToDto(),
+            i.NomineeName,
+            i.NomineeRelationship,
+            i.AuditInfo.ToDto()
+        );
+    }
+
+    public static BusinessBeneficiaryDto ToDto(this BusinessBeneficiary b)
+    {
+        return new BusinessBeneficiaryDto(
+            b.BusinessName,
+            b.BusinessNameBn,
+            b.TradeLicenseNumber,
+            b.TinNumber,
+            b.BinNumber,
+            b.BusinessType.ToString(),
+            b.IndustrySector,
+            b.FocalPersonName,
+            b.FocalPersonContact.ToDto(),
+            b.FocalPersonDesignation,
+            b.FocalPersonNid,
+            b.ContactInfo.ToDto(),
+            b.RegisteredAddress.ToDto(),
+            b.BusinessAddress.ToDto(),
+            b.ActivePoliciesCount,
+            b.PendingActionsCount,
+            b.TotalEmployeesCovered,
+            new MoneyDto(b.TotalPremiumAmount.Amount, b.TotalPremiumAmount.CurrencyCode),
+            b.AuditInfo.ToDto()
+        );
+    }
+
+    public static AuditInfoDto ToDto(this InsuranceEngine.SharedKernel.Domain.ValueObjects.AuditInfo a)
+    {
+        return new AuditInfoDto(
+            a.CreatedAt,
+            a.CreatedBy,
+            a.UpdatedAt,
+            a.UpdatedBy,
+            a.DeletedAt,
+            a.DeletedBy
+        );
+    }
+
+    public static AddressDto ToDto(this InsuranceEngine.SharedKernel.Domain.ValueObjects.Address a)
+    {
+        return new AddressDto(
+            a.AddressLine1,
+            a.AddressLine2,
+            a.City,
+            a.District,
+            a.Division,
+            a.PostalCode,
+            a.Country,
+            a.Latitude,
+            a.Longitude
+        );
+    }
+
+    public static ContactInfoDto ToDto(this InsuranceEngine.SharedKernel.Domain.ValueObjects.ContactInfo c)
+    {
+        return new ContactInfoDto(
+            c.MobileNumber,
+            c.AlternateMobile,
+            c.Email,
+            c.Landline
         );
     }
 }

@@ -1,6 +1,6 @@
-using System;
 using InsuranceEngine.Beneficiary.Domain.Enums;
 using InsuranceEngine.SharedKernel.Domain;
+using InsuranceEngine.SharedKernel.Domain.ValueObjects;
 
 namespace InsuranceEngine.Beneficiary.Domain.Entities;
 
@@ -11,7 +11,7 @@ public class IndividualBeneficiary : Entity<Guid>
     public string FullName { get; private set; } = string.Empty;
     public string? FullNameBn { get; set; }
     public DateTime DateOfBirth { get; private set; }
-    public Gender Gender { get; private set; }
+    public BeneficiaryGender Gender { get; set; }
     
     public string? NidNumber { get; set; }
     public string? PassportNumber { get; set; }
@@ -23,14 +23,11 @@ public class IndividualBeneficiary : Entity<Guid>
     
     public string? NomineeName { get; set; }
     public string? NomineeRelationship { get; set; }
-
-    public string? ContactInfoJson { get; set; }
-    public string? PermanentAddressJson { get; set; }
-    public string? PresentAddressJson { get; set; }
-    public string? AuditInfoJson { get; set; }
-
-    public DateTime CreatedAt { get; private set; }
-    public DateTime UpdatedAt { get; private set; }
+ 
+    public ContactInfo ContactInfo { get; set; } = new();
+    public Address PermanentAddress { get; set; } = new();
+    public Address PresentAddress { get; set; } = new();
+    public AuditInfo AuditInfo { get; private set; } = new();
 
     // EF Core constructor
     public IndividualBeneficiary() { }
@@ -40,13 +37,12 @@ public class IndividualBeneficiary : Entity<Guid>
         Guid beneficiaryId,
         string fullName,
         DateTime dob,
-        Gender gender) : base(id)
+        BeneficiaryGender gender) : base(id)
     {
         BeneficiaryId = beneficiaryId;
         FullName = fullName;
         DateOfBirth = dob;
         Gender = gender;
-        CreatedAt = DateTime.UtcNow;
-        UpdatedAt = DateTime.UtcNow;
+        AuditInfo = new AuditInfo();
     }
 }

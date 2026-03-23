@@ -18,9 +18,9 @@ public class ProductPlan
     // Money fields — stored as bigint (paisa)
     public long PremiumAmount { get; set; }
     public string PremiumCurrency { get; set; } = "BDT";
-    public long MinSumInsuredAmount { get; set; }
+    public long MinSumInsured { get; set; }
     public string MinSumInsuredCurrency { get; set; } = "BDT";
-    public long MaxSumInsuredAmount { get; set; }
+    public long MaxSumInsured { get; set; }
     public string MaxSumInsuredCurrency { get; set; } = "BDT";
 
     public string? Attributes { get; set; } // JSONB
@@ -29,21 +29,21 @@ public class ProductPlan
     public DateTime UpdatedAt { get; set; }
 
     // Money convenience accessors
-    public Money Premium
+    public Money PremiumMoney
     {
         get => new(PremiumAmount, PremiumCurrency);
         set { PremiumAmount = value.Amount; PremiumCurrency = value.CurrencyCode; }
     }
 
-    public Money MinSumInsured
+    public Money MinSumInsuredMoney
     {
-        get => new(MinSumInsuredAmount, MinSumInsuredCurrency);
-        set { MinSumInsuredAmount = value.Amount; MinSumInsuredCurrency = value.CurrencyCode; }
+        get => new(MinSumInsured, MinSumInsuredCurrency);
+        set { MinSumInsured = value.Amount; MinSumInsuredCurrency = value.CurrencyCode; }
     }
 
-    public Money MaxSumInsured
+    public Money MaxSumInsuredMoney
     {
-        get => new(MaxSumInsuredAmount, MaxSumInsuredCurrency);
-        set { MaxSumInsuredAmount = value.Amount; MaxSumInsuredCurrency = value.CurrencyCode; }
+        get => new(MaxSumInsured, MaxSumInsuredCurrency);
+        set { MaxSumInsured = value.Amount; MaxSumInsuredCurrency = value.CurrencyCode; }
     }
 }

@@ -5,11 +5,10 @@ namespace InsuranceEngine.Partners.Application.Features.Queries;
 
 public record PartnerDto(
     Guid Id,
-    string Name,
+    string OrganizationName,
     string Code,
     string Email,
     string? Phone,
-    string? Address,
     string Status,
     List<AgentDto> Agents
 );

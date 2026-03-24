@@ -84,69 +84,69 @@ public class ProductsController : ControllerBase
     /// <summary>
     /// Full update of product in DRAFT status
     /// </summary>
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
-    {
-        if (id != command.Id) return BadRequest(new ErrorDto("VALIDATION_ERROR", "Route ID does not match body ID."));
+    //[HttpPut("{id}")]
+    //public async Task<IActionResult> Update(Guid id, [FromBody] UpdateProductCommand command)
+    //{
+    //    if (id != command.Id) return BadRequest(new ErrorDto("VALIDATION_ERROR", "Route ID does not match body ID."));
 
-        var result = await _mediator.Send(command);
-        if (result.IsSuccess) return NoContent();
+    //    var result = await _mediator.Send(command);
+    //    if (result.IsSuccess) return NoContent();
 
-        return HandleErrorResult(result.Error!);
-    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     /// <summary>
     /// Transition DRAFT → ACTIVE
     /// </summary>
-    [HttpPost("{id}/activate")]
-    public async Task<IActionResult> Activate(Guid id)
-    {
-        var result = await _mediator.Send(new ActivateProductCommand(id));
-        if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product activated successfully."));
+    //[HttpPost("{id}/activate")]
+    //public async Task<IActionResult> Activate(Guid id)
+    //{
+    //    var result = await _mediator.Send(new ActivateProductCommand(id));
+    //    if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product activated successfully."));
 
-        return HandleErrorResult(result.Error!);
-    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     /// <summary>
     /// Transition ACTIVE → INACTIVE
     /// </summary>
-    [HttpPost("{id}/deactivate")]
-    public async Task<IActionResult> Deactivate(Guid id, [FromBody] ReasonRequest? request = null)
-    {
-        var result = await _mediator.Send(new DeactivateProductCommand(id, request?.Reason));
-        if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product deactivated successfully."));
+    //[HttpPost("{id}/deactivate")]
+    //public async Task<IActionResult> Deactivate(Guid id, [FromBody] ReasonRequest? request = null)
+    //{
+    //    var result = await _mediator.Send(new DeactivateProductCommand(id, request?.Reason));
+    //    if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product deactivated successfully."));
 
-        return HandleErrorResult(result.Error!);
-    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     /// <summary>
     /// Transition any → DISCONTINUED
     /// </summary>
-    [HttpPost("{id}/discontinue")]
-    public async Task<IActionResult> Discontinue(Guid id, [FromBody] ReasonRequest? request = null)
-    {
-        var result = await _mediator.Send(new DiscontinueProductCommand(id, request?.Reason));
-        if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product discontinued successfully."));
+    //[HttpPost("{id}/discontinue")]
+    //public async Task<IActionResult> Discontinue(Guid id, [FromBody] ReasonRequest? request = null)
+    //{
+    //    var result = await _mediator.Send(new DiscontinueProductCommand(id, request?.Reason));
+    //    if (result.IsSuccess) return Ok(new ProductUpdateResponse("Product discontinued successfully."));
 
-        return HandleErrorResult(result.Error!);
-    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     /// <summary>
     /// Calculate premium for a product
     /// </summary>
-    [HttpPost("{id}/calculate-premium")]
-    public async Task<IActionResult> CalculatePremium(Guid id, [FromBody] CalculatePremiumRequest request)
-    {
-        var result = await _mediator.Send(new CalculatePremiumCommand(
-            id, request.SumInsuredAmount, request.TenureMonths, request.RiderIds, request.ApplicantData));
+    //[HttpPost("{id}/calculate-premium")]
+    //public async Task<IActionResult> CalculatePremium(Guid id, [FromBody] CalculatePremiumRequest request)
+    //{
+    //    var result = await _mediator.Send(new CalculatePremiumCommand(
+    //        id, request.SumInsuredAmount, request.TenureMonths, request.RiderIds, request.ApplicantData));
 
-        if (result.IsSuccess)
-        {
-            var r = result.Value!;
-            return Ok(new PremiumCalculationResponse(r.BasePremium, r.RiderPremium, r.TotalPremium, r.Breakdown));
-        }
-        return HandleErrorResult(result.Error!);
-    }
+    //    if (result.IsSuccess)
+    //    {
+    //        var r = result.Value!;
+    //        return Ok(new PremiumCalculationResponse(r.BasePremium, r.RiderPremium, r.TotalPremium, r.Breakdown));
+    //    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     // ===================== Helpers =====================
 
@@ -155,18 +155,18 @@ public class ProductsController : ControllerBase
         return new ErrorDto(error.Code, error.Message);
     }
 
-    private IActionResult HandleErrorResult(InsuranceEngine.SharedKernel.CQRS.Error error)
-    {
-        var errorDto = MapError(error);
-        return error.Code switch
-        {
-            "NOT_FOUND" => NotFound(errorDto),
-            "INVALID_STATE_TRANSITION" => Conflict(errorDto),
-            "CONFLICT" => Conflict(errorDto),
-            "VALIDATION_ERROR" => BadRequest(errorDto),
-            _ => BadRequest(errorDto)
-        };
-    }
+    //private IActionResult HandleErrorResult(InsuranceEngine.SharedKernel.CQRS.Error error)
+    //{
+    //    var errorDto = MapError(error);
+    //    return error.Code switch
+    //    {
+    //        "NOT_FOUND" => NotFound(errorDto),
+    //        "INVALID_STATE_TRANSITION" => Conflict(errorDto),
+    //        "CONFLICT" => Conflict(errorDto),
+    //        "VALIDATION_ERROR" => BadRequest(errorDto),
+    //        _ => BadRequest(errorDto)
+    //    };
+    //}
 }
 
 public record ReasonRequest(string? Reason);

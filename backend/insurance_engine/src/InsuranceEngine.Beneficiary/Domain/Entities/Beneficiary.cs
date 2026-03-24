@@ -20,6 +20,7 @@ public class Beneficiary : AggregateRoot<Guid>
     
     public DateTime? KycCompletedAt { get; private set; }
     public string? RiskScore { get; private set; } // LOW, MEDIUM, HIGH
+    public string? RiskScoreReason { get; private set; }
     
     public Guid? PartnerId { get; set; }
     public string? ReferralCode { get; set; }
@@ -99,9 +100,16 @@ public class Beneficiary : AggregateRoot<Guid>
         return beneficiary;
     }
 
-    public void CompleteKYC(KYCStatus status)
+    public void CompleteKYC(KYCStatus status, string? nidFrontUrl = null, string? nidBackUrl = null, string? selfieUrl = null, string? porichoyVerificationId = null)
     {
-        KycStatus = new KYCStatusInfo { Status = status.ToString() };
+        KycStatus = new KYCStatusInfo 
+        { 
+            Status = status.ToString(),
+            NidFrontUrl = nidFrontUrl,
+            NidBackUrl = nidBackUrl,
+            SelfieUrl = selfieUrl,
+            PorichoyVerificationId = porichoyVerificationId
+        };
         if (status == KYCStatus.Verified)
         {
             Status = new BeneficiaryStatusInfo { Value = BeneficiaryStatus.Active.ToString() };
@@ -110,9 +118,10 @@ public class Beneficiary : AggregateRoot<Guid>
         AuditInfo = AuditInfo with { UpdatedAt = DateTime.UtcNow };
     }
 
-    public void UpdateRiskScore(string score)
+    public void UpdateRiskScore(string score, string? reason = null)
     {
         RiskScore = score;
+        RiskScoreReason = reason;
         AuditInfo = AuditInfo with { UpdatedAt = DateTime.UtcNow };
     }
 
@@ -132,4 +141,8 @@ public class KYCStatusInfo
 {
     public string Status { get; set; } = string.Empty;
     public string? Remarks { get; set; }
+    public string? NidFrontUrl { get; set; }
+    public string? NidBackUrl { get; set; }
+    public string? SelfieUrl { get; set; }
+    public string? PorichoyVerificationId { get; set; }
 }

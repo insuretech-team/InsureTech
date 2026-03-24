@@ -10,7 +10,11 @@ namespace InsuranceEngine.Beneficiary.Application.Features.Commands;
 
 public record CompleteKYCCommand(
     Guid BeneficiaryId,
-    string Status
+    string Status,
+    string? NidFrontUrl = null,
+    string? NidBackUrl = null,
+    string? SelfieUrl = null,
+    string? PorichoyVerificationId = null
 ) : IRequest<Result<bool>>;
 
 public class CompleteKYCCommandHandler : IRequestHandler<CompleteKYCCommand, Result<bool>>
@@ -28,7 +32,7 @@ public class CompleteKYCCommandHandler : IRequestHandler<CompleteKYCCommand, Res
         if (beneficiary == null) return Result<bool>.Failure("Beneficiary not found");
 
         var status = Enum.Parse<KYCStatus>(request.Status, true);
-        beneficiary.CompleteKYC(status);
+        beneficiary.CompleteKYC(status, request.NidFrontUrl, request.NidBackUrl, request.SelfieUrl, request.PorichoyVerificationId);
 
         await _repository.UpdateAsync(beneficiary);
         return Result.Ok(true);

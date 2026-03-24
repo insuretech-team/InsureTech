@@ -51,23 +51,23 @@ public class UnderwritingController : ControllerBase
     /// <summary>
     /// Get quote by ID
     /// </summary>
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetQuote(Guid id)
-    {
-        var result = await _mediator.Send(new GetQuoteQuery(id));
-        if (result.IsSuccess) return Ok(new QuoteRetrievalResponse(result.Value!));
-        return NotFound(MapError(result.Error!));
-    }
+    //[HttpGet("{id}")]
+    //public async Task<IActionResult> GetQuote(Guid id)
+    //{
+    //    var result = await _mediator.Send(new GetQuoteQuery(id));
+    //    if (result.IsSuccess) return Ok(new QuoteRetrievalResponse(result.Value!));
+    //    return NotFound(MapError(result.Error!));
+    //}
 
     /// <summary>
     /// List quotes
     /// </summary>
-    [HttpGet]
-    public async Task<IActionResult> ListQuotes([FromQuery] Guid? beneficiaryId, [FromQuery] QuoteStatus? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
-    {
-        var result = await _mediator.Send(new ListQuotesQuery(beneficiaryId, status, page, pageSize));
-        return Ok(new QuotesListingResponse(result.Items, result.TotalCount));
-    }
+    //[HttpGet]
+    //public async Task<IActionResult> ListQuotes([FromQuery] Guid? beneficiaryId, [FromQuery] QuoteStatus? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 20)
+    //{
+    //    var result = await _mediator.Send(new ListQuotesQuery(beneficiaryId, status, page, pageSize));
+    //    return Ok(new QuotesListingResponse(result.Items, result.TotalCount));
+    //}
 
     /// <summary>
     /// Approve underwriting (manual)
@@ -118,13 +118,13 @@ public class UnderwritingController : ControllerBase
     /// <summary>
     /// Get underwriting history
     /// </summary>
-    [HttpGet("{id}/history")]
-    public async Task<IActionResult> GetHistory(Guid id)
-    {
-        var result = await _mediator.Send(new GetUnderwritingHistoryQuery(id));
-        if (result.IsSuccess) return Ok(result.Value); // Needs a response wrapper if documented
-        return BadRequest(MapError(result.Error!));
-    }
+    //[HttpGet("{id}/history")]
+    //public async Task<IActionResult> GetHistory(Guid id)
+    //{
+    //    var result = await _mediator.Send(new GetUnderwritingHistoryQuery(id));
+    //    if (result.IsSuccess) return Ok(result.Value); // Needs a response wrapper if documented
+    //    return BadRequest(MapError(result.Error!));
+    //}
 
     // ===================== Helpers =====================
 

@@ -9,7 +9,8 @@ namespace InsuranceEngine.Beneficiary.Application.Features.Commands;
 
 public record UpdateRiskScoreCommand(
     Guid BeneficiaryId,
-    string RiskScore
+    string RiskScore,
+    string? Reason = null
 ) : IRequest<Result<bool>>;
 
 public class UpdateRiskScoreCommandHandler : IRequestHandler<UpdateRiskScoreCommand, Result<bool>>
@@ -26,7 +27,7 @@ public class UpdateRiskScoreCommandHandler : IRequestHandler<UpdateRiskScoreComm
         var beneficiary = await _repository.GetByIdAsync(request.BeneficiaryId);
         if (beneficiary == null) return Result<bool>.Failure("Beneficiary not found");
 
-        beneficiary.UpdateRiskScore(request.RiskScore);
+        beneficiary.UpdateRiskScore(request.RiskScore, request.Reason);
 
         await _repository.UpdateAsync(beneficiary);
         return Result.Ok(true);

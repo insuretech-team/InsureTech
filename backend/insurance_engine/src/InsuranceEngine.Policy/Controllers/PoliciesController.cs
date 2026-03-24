@@ -73,76 +73,76 @@ public class PoliciesController : ControllerBase
         return HandleErrorResult(result.Error!);
     }
 
-    [HttpPost("{id}/renew")]
-    public async Task<IActionResult> Renew(Guid id, [FromBody] RenewPolicyRequest request)
-    {
-        var result = await _mediator.Send(new RenewPolicyCommand(id, request.TenureMonths));
-        if (result.IsSuccess)
-        {
-            var r = result.Value!;
-            return Ok(new PolicyRenewResponse(r.NewPolicyId, r.NewPolicyNumber, "Policy renewed successfully."));
-        }
-        return HandleErrorResult(result.Error!);
-    }
+    //[HttpPost("{id}/renew")]
+    //public async Task<IActionResult> Renew(Guid id, [FromBody] RenewPolicyRequest request)
+    //{
+    //    var result = await _mediator.Send(new RenewPolicyCommand(id, request.TenureMonths));
+    //    if (result.IsSuccess)
+    //    {
+    //        var r = result.Value!;
+    //        return Ok(new PolicyRenewResponse(r.NewPolicyId, r.NewPolicyNumber, "Policy renewed successfully."));
+    //    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
-    // ===================== Grace Period & Renewal =====================
+    //// ===================== Grace Period & Renewal =====================
 
-    [HttpGet("{id}/grace-period")]
-    public async Task<IActionResult> GetGracePeriod(Guid id)
-    {
-        var result = await _mediator.Send(new GetGracePeriodQuery(id));
-        if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
-        return Ok(new GracePeriodResponse(result));
-    }
+    //[HttpGet("{id}/grace-period")]
+    //public async Task<IActionResult> GetGracePeriod(Guid id)
+    //{
+    //    var result = await _mediator.Send(new GetGracePeriodQuery(id));
+    //    if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
+    //    return Ok(new GracePeriodResponse(result));
+    //}
 
-    [HttpGet("{id}/renewal-schedule")]
-    public async Task<IActionResult> GetRenewalSchedule(Guid id)
-    {
-        var result = await _mediator.Send(new GetRenewalScheduleQuery(id));
-        if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
-        return Ok(new RenewalScheduleResponse(result));
-    }
+    //[HttpGet("{id}/renewal-schedule")]
+    //public async Task<IActionResult> GetRenewalSchedule(Guid id)
+    //{
+    //    var result = await _mediator.Send(new GetRenewalScheduleQuery(id));
+    //    if (result == null) return NotFound(new ErrorDto("POLICY_NOT_FOUND", "Policy not found."));
+    //    return Ok(new RenewalScheduleResponse(result));
+    //}
 
-    // ===================== Nominees =====================
+    //// ===================== Nominees =====================
 
-    [HttpGet("{policyId}/nominees")]
-    public async Task<IActionResult> ListNominees(Guid policyId)
-    {
-        var items = await _mediator.Send(new ListNomineesQuery(policyId));
-        return Ok(new NomineeListingResponse(items, items.Count));
-    }
+    //[HttpGet("{policyId}/nominees")]
+    //public async Task<IActionResult> ListNominees(Guid policyId)
+    //{
+    //    var items = await _mediator.Send(new ListNomineesQuery(policyId));
+    //    return Ok(new NomineeListingResponse(items, items.Count));
+    //}
 
-    [HttpPost("{policyId}/nominees")]
-    public async Task<IActionResult> AddNominee(Guid policyId, [FromBody] AddNomineeRequest request)
-    {
-        var command = new AddNomineeCommand(policyId, request.BeneficiaryId, request.FullName, request.Relationship, request.SharePercentage,
-            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
-        var result = await _mediator.Send(command);
-        if (result.IsSuccess)
-        {
-            return Created($"api/policies/{policyId}/nominees/{result.Value}",
-                new NomineeResponse(result.Value, "Nominee added successfully."));
-        }
-        return HandleErrorResult(result.Error!);
-    }
+    //[HttpPost("{policyId}/nominees")]
+    //public async Task<IActionResult> AddNominee(Guid policyId, [FromBody] AddNomineeRequest request)
+    //{
+    //    var command = new AddNomineeCommand(policyId, request.BeneficiaryId, request.FullName, request.Relationship, request.SharePercentage,
+    //        request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
+    //    var result = await _mediator.Send(command);
+    //    if (result.IsSuccess)
+    //    {
+    //        return Created($"api/policies/{policyId}/nominees/{result.Value}",
+    //            new NomineeResponse(result.Value, "Nominee added successfully."));
+    //    }
+    //    return HandleErrorResult(result.Error!);
+    //}
 
-    [HttpPut("{policyId}/nominees/{nomineeId}")]
-    public async Task<IActionResult> UpdateNominee(Guid policyId, Guid nomineeId, [FromBody] UpdateNomineeRequest request)
-    {
-        var command = new UpdateNomineeCommand(policyId, nomineeId, request.FullName, request.Relationship, request.SharePercentage,
-            request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
-        var result = await _mediator.Send(command);
-        if (result.IsSuccess) return Ok(new NomineeResponse(nomineeId, "Nominee updated successfully."));
-        return HandleErrorResult(result.Error!);
-    }
+    //[HttpPut("{policyId}/nominees/{nomineeId}")]
+    //public async Task<IActionResult> UpdateNominee(Guid policyId, Guid nomineeId, [FromBody] UpdateNomineeRequest request)
+    //{
+    //    var command = new UpdateNomineeCommand(policyId, nomineeId, request.FullName, request.Relationship, request.SharePercentage,
+    //        request.DateOfBirth, request.NidNumber, request.PhoneNumber, request.NomineeDobText);
+    //    var result = await _mediator.Send(command);
+    //    if (result.IsSuccess) return Ok(new NomineeResponse(nomineeId, "Nominee updated successfully."));
+    //    return HandleErrorResult(result.Error!);
+    //}
 
-    [HttpDelete("{policyId}/nominees/{nomineeId}")]
-    public async Task<IActionResult> DeleteNominee(Guid policyId, Guid nomineeId)
-    {
-        var result = await _mediator.Send(new DeleteNomineeCommand(policyId, nomineeId));
-        if (result.IsSuccess) return Ok(new { message = "Nominee deleted successfully." });
-        return HandleErrorResult(result.Error!);
-    }
+    //[HttpDelete("{policyId}/nominees/{nomineeId}")]
+    //public async Task<IActionResult> DeleteNominee(Guid policyId, Guid nomineeId)
+    //{
+    //    var result = await _mediator.Send(new DeleteNomineeCommand(policyId, nomineeId));
+    //    if (result.IsSuccess) return Ok(new { message = "Nominee deleted successfully." });
+    //    return HandleErrorResult(result.Error!);
+    //}
 
     // ===================== Helpers =====================
 

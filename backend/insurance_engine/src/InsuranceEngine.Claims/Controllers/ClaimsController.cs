@@ -77,64 +77,64 @@ public class ClaimsController : ControllerBase
         return BadRequest(MapError(result.Error!));
     }
 
-    [HttpGet("{id}")]
-    public async Task<IActionResult> GetClaim(Guid id)
-    {
-        var result = await _mediator.Send(new GetClaimByIdQuery(id));
+    //[HttpGet("{id}")]
+    //public async Task<IActionResult> GetClaim(Guid id)
+    //{
+    //    var result = await _mediator.Send(new GetClaimByIdQuery(id));
 
-        if (result.IsSuccess)
-        {
-            return Ok(new ClaimRetrievalResponse(result.Value));
-        }
+    //    if (result.IsSuccess)
+    //    {
+    //        return Ok(new ClaimRetrievalResponse(result.Value));
+    //    }
 
-        return NotFound(MapError(result.Error!));
-    }
+    //    return NotFound(MapError(result.Error!));
+    //}
 
-    [HttpGet("/v1/users/{customerId}/claims")]
-    public async Task<IActionResult> ListByCustomer(Guid customerId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
-    {
-        var result = await _mediator.Send(new ListClaimsByCustomerQuery(customerId, page, pageSize));
+    //[HttpGet("/v1/users/{customerId}/claims")]
+    //public async Task<IActionResult> ListByCustomer(Guid customerId, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
+    //{
+    //    var result = await _mediator.Send(new ListClaimsByCustomerQuery(customerId, page, pageSize));
 
-        if (result.IsSuccess)
-        {
-            var claims = result.Value.Items.Select(c => new ClaimListDto
-            {
-                Id = c.Id,
-                ClaimNumber = c.ClaimNumber,
-                PolicyId = c.PolicyId,
-                Type = c.Type,
-                Status = c.Status,
-                ClaimedAmount = c.ClaimedAmount,
-                ApprovedAmount = c.ApprovedAmount,
-                SubmittedAt = c.SubmittedAt
-            }).ToList();
+    //    if (result.IsSuccess)
+    //    {
+    //        var claims = result.Value.Items.Select(c => new ClaimListDto
+    //        {
+    //            Id = c.Id,
+    //            ClaimNumber = c.ClaimNumber,
+    //            PolicyId = c.PolicyId,
+    //            Type = c.Type,
+    //            Status = c.Status,
+    //            ClaimedAmount = c.ClaimedAmount,
+    //            ApprovedAmount = c.ApprovedAmount,
+    //            SubmittedAt = c.SubmittedAt
+    //        }).ToList();
             
-            return Ok(new UserClaimsListingResponse(claims, result.Value.TotalCount));
-        }
+    //        return Ok(new UserClaimsListingResponse(claims, result.Value.TotalCount));
+    //    }
 
-        return BadRequest(MapError(result.Error!));
-    }
+    //    return BadRequest(MapError(result.Error!));
+    //}
 
-    [HttpPost("{id}/approve")]
-    public async Task<IActionResult> ApproveClaim(Guid id, [FromBody] ApproveClaimRestRequest request)
-    {
-        var command = new ApproveClaimCommand(
-            id,
-            request.ApproverId,
-            request.ApproverRole,
-            request.ApprovalLevel,
-            request.Decision,
-            request.ApprovedAmount,
-            request.Notes
-        );
+    //[HttpPost("{id}/approve")]
+    //public async Task<IActionResult> ApproveClaim(Guid id, [FromBody] ApproveClaimRestRequest request)
+    //{
+    //    var command = new ApproveClaimCommand(
+    //        id,
+    //        request.ApproverId,
+    //        request.ApproverRole,
+    //        request.ApprovalLevel,
+    //        request.Decision,
+    //        request.ApprovedAmount,
+    //        request.Notes
+    //    );
 
-        var result = await _mediator.Send(command);
-        if (result.IsSuccess)
-        {
-            return Ok(new ClaimApprovalResponse("Claim approved successfully."));
-        }
-        return BadRequest(MapError(result.Error!));
-    }
+    //    var result = await _mediator.Send(command);
+    //    if (result.IsSuccess)
+    //    {
+    //        return Ok(new ClaimApprovalResponse("Claim approved successfully."));
+    //    }
+    //    return BadRequest(MapError(result.Error!));
+    //}
 
     // Helper to map Domain/Application errors to documented ErrorDto
     private ErrorDto MapError(SharedKernel.CQRS.Error error)

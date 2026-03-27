@@ -30,14 +30,14 @@ type UserRole struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserRoleId string `protobuf:"bytes,1,opt,name=user_role_id,json=userRoleId,proto3" json:"user_role_id,omitempty" gorm:"column:user_role_id"`
-	UserId     string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	RoleId     string `protobuf:"bytes,3,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty" gorm:"column:role_id"`
+	UserRoleId string `protobuf:"bytes,1,opt,name=user_role_id,json=userRoleId,proto3" json:"user_role_id,omitempty"`
+	UserId     string `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	RoleId     string `protobuf:"bytes,3,opt,name=role_id,json=roleId,proto3" json:"role_id,omitempty"`
 	// domain = "portal:tenant_id"  e.g. "agent:tenant-abc-123"
-	Domain     string                 `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty" gorm:"column:domain"`
-	AssignedBy string                 `protobuf:"bytes,5,opt,name=assigned_by,json=assignedBy,proto3" json:"assigned_by,omitempty" gorm:"column:assigned_by"`
-	AssignedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=assigned_at,json=assignedAt,proto3" json:"assigned_at,omitempty" gorm:"column:assigned_at;serializer:proto_timestamp"`
-	ExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;serializer:proto_timestamp"`
+	Domain     string                 `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty"`
+	AssignedBy string                 `protobuf:"bytes,5,opt,name=assigned_by,json=assignedBy,proto3" json:"assigned_by,omitempty"`
+	AssignedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=assigned_at,json=assignedAt,proto3" json:"assigned_at,omitempty"`
+	ExpiresAt  *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`
 }
 
 func (x *UserRole) Reset() {

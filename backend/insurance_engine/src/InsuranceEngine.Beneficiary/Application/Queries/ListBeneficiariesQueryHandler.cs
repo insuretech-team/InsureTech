@@ -23,7 +23,7 @@ public class ListBeneficiariesQueryHandler : IRequestHandler<ListBeneficiariesQu
 
         string sql = @"
             SELECT 
-                beneficiary_id, code, type, status, kyc_status, risk_score, kyc_completed_at, partner_id
+                beneficiary_id, user_id, code, type, status, kyc_status, risk_score, kyc_completed_at, partner_id
             FROM insurance_schema.beneficiaries 
             WHERE 1=1";
 
@@ -60,6 +60,7 @@ public class ListBeneficiariesQueryHandler : IRequestHandler<ListBeneficiariesQu
             response.Beneficiaries.Add(new Insuretech.Beneficiary.Entity.V1.Beneficiary
             {
                 BeneficiaryId = item.beneficiary_id.ToString(),
+                UserId = item.user_id?.ToString() ?? "",
                 Code = item.code,
                 Type = System.Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryType>(item.type.ToString().Replace("BENEFICIARY_TYPE_", "").Replace("_", ""), true),
                 Status = System.Enum.Parse<Insuretech.Beneficiary.Entity.V1.BeneficiaryStatus>(item.status.ToString().Replace("BENEFICIARY_STATUS_", "").Replace("_", ""), true),

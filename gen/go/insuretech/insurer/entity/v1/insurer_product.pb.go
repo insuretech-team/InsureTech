@@ -80,38 +80,38 @@ type InsurerProduct struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id        string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:product_id;not null"`
-	InsurerId string        `protobuf:"bytes,2,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty" gorm:"column:insurer_id;not null"`
-	ProductId string        `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty" gorm:"column:base_product_id;not null"`
-	Code      string        `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null"`
-	Name      string        `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
-	Status    ProductStatus `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.insurer.entity.v1.ProductStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	Id        string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                          // @inject_tag: gorm:"primaryKey;column:product_id;not null"
+	InsurerId string        `protobuf:"bytes,2,opt,name=insurer_id,json=insurerId,proto3" json:"insurer_id,omitempty"`                           // @inject_tag: gorm:"column:insurer_id;not null"
+	ProductId string        `protobuf:"bytes,3,opt,name=product_id,json=productId,proto3" json:"product_id,omitempty"`                           // @inject_tag: gorm:"column:base_product_id;not null"
+	Code      string        `protobuf:"bytes,4,opt,name=code,proto3" json:"code,omitempty"`                                                      // @inject_tag: gorm:"column:code;not null"
+	Name      string        `protobuf:"bytes,5,opt,name=name,proto3" json:"name,omitempty"`                                                      // @inject_tag: gorm:"column:name;not null"
+	Status    ProductStatus `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.insurer.entity.v1.ProductStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
 	// Pricing
-	MinSumAssured *v1.Money `protobuf:"bytes,7,opt,name=min_sum_assured,json=minSumAssured,proto3" json:"min_sum_assured,omitempty" gorm:"column:min_sum_assured"`
-	MaxSumAssured *v1.Money `protobuf:"bytes,8,opt,name=max_sum_assured,json=maxSumAssured,proto3" json:"max_sum_assured,omitempty" gorm:"column:max_sum_assured"`
-	MinPremium    *v1.Money `protobuf:"bytes,9,opt,name=min_premium,json=minPremium,proto3" json:"min_premium,omitempty" gorm:"column:min_premium"`
-	MaxPremium    *v1.Money `protobuf:"bytes,10,opt,name=max_premium,json=maxPremium,proto3" json:"max_premium,omitempty" gorm:"column:max_premium"`
+	MinSumAssured *v1.Money `protobuf:"bytes,7,opt,name=min_sum_assured,json=minSumAssured,proto3" json:"min_sum_assured,omitempty"`
+	MaxSumAssured *v1.Money `protobuf:"bytes,8,opt,name=max_sum_assured,json=maxSumAssured,proto3" json:"max_sum_assured,omitempty"`
+	MinPremium    *v1.Money `protobuf:"bytes,9,opt,name=min_premium,json=minPremium,proto3" json:"min_premium,omitempty"`
+	MaxPremium    *v1.Money `protobuf:"bytes,10,opt,name=max_premium,json=maxPremium,proto3" json:"max_premium,omitempty"`
 	// Age limits
-	MinEntryAge    int32 `protobuf:"varint,11,opt,name=min_entry_age,json=minEntryAge,proto3" json:"min_entry_age,omitempty" gorm:"column:min_entry_age"`
-	MaxEntryAge    int32 `protobuf:"varint,12,opt,name=max_entry_age,json=maxEntryAge,proto3" json:"max_entry_age,omitempty" gorm:"column:max_entry_age"`
-	MaxMaturityAge int32 `protobuf:"varint,13,opt,name=max_maturity_age,json=maxMaturityAge,proto3" json:"max_maturity_age,omitempty" gorm:"column:max_maturity_age"`
+	MinEntryAge    int32 `protobuf:"varint,11,opt,name=min_entry_age,json=minEntryAge,proto3" json:"min_entry_age,omitempty"`          // @inject_tag: gorm:"column:min_entry_age"
+	MaxEntryAge    int32 `protobuf:"varint,12,opt,name=max_entry_age,json=maxEntryAge,proto3" json:"max_entry_age,omitempty"`          // @inject_tag: gorm:"column:max_entry_age"
+	MaxMaturityAge int32 `protobuf:"varint,13,opt,name=max_maturity_age,json=maxMaturityAge,proto3" json:"max_maturity_age,omitempty"` // @inject_tag: gorm:"column:max_maturity_age"
 	// Term
-	MinTermYears int32 `protobuf:"varint,14,opt,name=min_term_years,json=minTermYears,proto3" json:"min_term_years,omitempty" gorm:"column:min_term_years"`
-	MaxTermYears int32 `protobuf:"varint,15,opt,name=max_term_years,json=maxTermYears,proto3" json:"max_term_years,omitempty" gorm:"column:max_term_years"`
+	MinTermYears int32 `protobuf:"varint,14,opt,name=min_term_years,json=minTermYears,proto3" json:"min_term_years,omitempty"` // @inject_tag: gorm:"column:min_term_years"
+	MaxTermYears int32 `protobuf:"varint,15,opt,name=max_term_years,json=maxTermYears,proto3" json:"max_term_years,omitempty"` // @inject_tag: gorm:"column:max_term_years"
 	// Premium payment
-	PremiumPaymentModes []string `protobuf:"bytes,16,rep,name=premium_payment_modes,json=premiumPaymentModes,proto3" json:"premium_payment_modes,omitempty" gorm:"column:premium_payment_modes"`
+	PremiumPaymentModes []string `protobuf:"bytes,16,rep,name=premium_payment_modes,json=premiumPaymentModes,proto3" json:"premium_payment_modes,omitempty"`
 	// Underwriting
-	MedicalRequired    bool      `protobuf:"varint,17,opt,name=medical_required,json=medicalRequired,proto3" json:"medical_required,omitempty" gorm:"column:medical_required"`
-	MedicalThreshold   *v1.Money `protobuf:"bytes,18,opt,name=medical_threshold,json=medicalThreshold,proto3" json:"medical_threshold,omitempty" gorm:"column:medical_threshold"`
-	FreeLookPeriodDays int32     `protobuf:"varint,19,opt,name=free_look_period_days,json=freeLookPeriodDays,proto3" json:"free_look_period_days,omitempty" gorm:"column:free_look_period_days"`
+	MedicalRequired    bool      `protobuf:"varint,17,opt,name=medical_required,json=medicalRequired,proto3" json:"medical_required,omitempty"` // @inject_tag: gorm:"column:medical_required"
+	MedicalThreshold   *v1.Money `protobuf:"bytes,18,opt,name=medical_threshold,json=medicalThreshold,proto3" json:"medical_threshold,omitempty"`
+	FreeLookPeriodDays int32     `protobuf:"varint,19,opt,name=free_look_period_days,json=freeLookPeriodDays,proto3" json:"free_look_period_days,omitempty"` // @inject_tag: gorm:"column:free_look_period_days"
 	// Commission structure (links to commission_configs)
-	CommissionConfigId string `protobuf:"bytes,20,opt,name=commission_config_id,json=commissionConfigId,proto3" json:"commission_config_id,omitempty" gorm:"column:commission_config_id"`
+	CommissionConfigId string `protobuf:"bytes,20,opt,name=commission_config_id,json=commissionConfigId,proto3" json:"commission_config_id,omitempty"` // @inject_tag: gorm:"column:commission_config_id"
 	// Product features
-	Features      string                 `protobuf:"bytes,21,opt,name=features,proto3" json:"features,omitempty" gorm:"column:features"`
-	Exclusions    string                 `protobuf:"bytes,22,opt,name=exclusions,proto3" json:"exclusions,omitempty" gorm:"column:exclusions"`
-	EffectiveFrom *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty" gorm:"column:effective_from;not null;serializer:proto_timestamp"`
-	EffectiveTo   *timestamppb.Timestamp `protobuf:"bytes,24,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty" gorm:"column:effective_to;serializer:proto_timestamp"`
-	AuditInfo     *v1.AuditInfo          `protobuf:"bytes,25,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Features      string                 `protobuf:"bytes,21,opt,name=features,proto3" json:"features,omitempty"`                                // @inject_tag: gorm:"column:features"
+	Exclusions    string                 `protobuf:"bytes,22,opt,name=exclusions,proto3" json:"exclusions,omitempty"`                            // @inject_tag: gorm:"column:exclusions"
+	EffectiveFrom *timestamppb.Timestamp `protobuf:"bytes,23,opt,name=effective_from,json=effectiveFrom,proto3" json:"effective_from,omitempty"` // @inject_tag: gorm:"column:effective_from;not null;serializer:proto_timestamp"
+	EffectiveTo   *timestamppb.Timestamp `protobuf:"bytes,24,opt,name=effective_to,json=effectiveTo,proto3" json:"effective_to,omitempty"`       // @inject_tag: gorm:"column:effective_to;serializer:proto_timestamp"
+	AuditInfo     *v1.AuditInfo          `protobuf:"bytes,25,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`             // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *InsurerProduct) Reset() {

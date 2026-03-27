@@ -144,18 +144,18 @@ type ProcessingJob struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:job_id;not null"`
-	MediaId        string                 `protobuf:"bytes,2,opt,name=media_id,json=mediaId,proto3" json:"media_id,omitempty" gorm:"column:media_id;not null"`
-	ProcessingType ProcessingType         `protobuf:"varint,3,opt,name=processing_type,json=processingType,proto3,enum=insuretech.media.entity.v1.ProcessingType" json:"processing_type,omitempty" gorm:"column:processing_type;not null;serializer:proto_enum"`
-	Status         ProcessingStatus       `protobuf:"varint,4,opt,name=status,proto3,enum=insuretech.media.entity.v1.ProcessingStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Priority       int32                  `protobuf:"varint,5,opt,name=priority,proto3" json:"priority,omitempty" gorm:"column:priority;not null"`
-	RetryCount     int32                  `protobuf:"varint,6,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty" gorm:"column:retry_count;not null"`
-	MaxRetries     int32                  `protobuf:"varint,7,opt,name=max_retries,json=maxRetries,proto3" json:"max_retries,omitempty" gorm:"column:max_retries;not null"`
-	StartedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty" gorm:"column:started_at;serializer:proto_timestamp"`
-	CompletedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
-	ErrorMessage   string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty" gorm:"column:error_message"`
-	ResultData     string                 `protobuf:"bytes,11,opt,name=result_data,json=resultData,proto3" json:"result_data,omitempty" gorm:"column:result_data"`
-	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id             string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                               // @inject_tag: gorm:"primaryKey;column:job_id;not null"
+	MediaId        string                 `protobuf:"bytes,2,opt,name=media_id,json=mediaId,proto3" json:"media_id,omitempty"`                                                                      // @inject_tag: gorm:"column:media_id;not null"
+	ProcessingType ProcessingType         `protobuf:"varint,3,opt,name=processing_type,json=processingType,proto3,enum=insuretech.media.entity.v1.ProcessingType" json:"processing_type,omitempty"` // @inject_tag: gorm:"column:processing_type;not null;serializer:proto_enum"
+	Status         ProcessingStatus       `protobuf:"varint,4,opt,name=status,proto3,enum=insuretech.media.entity.v1.ProcessingStatus" json:"status,omitempty"`                                     // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Priority       int32                  `protobuf:"varint,5,opt,name=priority,proto3" json:"priority,omitempty"`                                                                                  // @inject_tag: gorm:"column:priority;not null"
+	RetryCount     int32                  `protobuf:"varint,6,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty"`                                                            // @inject_tag: gorm:"column:retry_count;not null"
+	MaxRetries     int32                  `protobuf:"varint,7,opt,name=max_retries,json=maxRetries,proto3" json:"max_retries,omitempty"`                                                            // @inject_tag: gorm:"column:max_retries;not null"
+	StartedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`                                                                // @inject_tag: gorm:"column:started_at"
+	CompletedAt    *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                                                          // @inject_tag: gorm:"column:completed_at"
+	ErrorMessage   string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`                                                      // @inject_tag: gorm:"column:error_message"
+	ResultData     string                 `protobuf:"bytes,11,opt,name=result_data,json=resultData,proto3" json:"result_data,omitempty"`                                                            // @inject_tag: gorm:"column:result_data"
+	AuditInfo      *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                               // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *ProcessingJob) Reset() {

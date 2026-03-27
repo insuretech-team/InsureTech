@@ -14,12 +14,12 @@
     <PackageReference Include="Google.Api.CommonProtos" Version="2.12.0" />
   </ItemGroup>
 
-  <!-- Include all generated proto C# files -->
+  <!-- Include all generated proto C# files from the central gen directory -->
   <ItemGroup>
     <Compile Include="..\..\..\..\gen\csharp\**\*.cs" LinkBase="Generated" />
   </ItemGroup>
 
-  <!-- Suppress duplicate member warnings since proto generates partial classes across multiple files -->
+  <!-- Suppress duplicate member warnings due to partial class merging across proto files -->
   <PropertyGroup>
     <NoWarn>$(NoWarn);CS0102;CS0111</NoWarn>
   </PropertyGroup>

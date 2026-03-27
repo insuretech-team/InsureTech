@@ -140,15 +140,15 @@ type PolicyServiceRequest struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RequestId   string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty" gorm:"primaryKey;column:request_id;not null"`
-	PolicyId    string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id;not null"`
-	CustomerId  string                 `protobuf:"bytes,3,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" gorm:"column:customer_id;not null"`
-	RequestType ServiceRequestType     `protobuf:"varint,4,opt,name=request_type,json=requestType,proto3,enum=insuretech.policy.entity.v1.ServiceRequestType" json:"request_type,omitempty" gorm:"column:request_type;not null;serializer:proto_enum"`
-	RequestData string                 `protobuf:"bytes,5,opt,name=request_data,json=requestData,proto3" json:"request_data,omitempty" gorm:"column:request_data"`
-	Status      ServiceRequestStatus   `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.policy.entity.v1.ServiceRequestStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ProcessedBy string                 `protobuf:"bytes,7,opt,name=processed_by,json=processedBy,proto3" json:"processed_by,omitempty" gorm:"column:processed_by"`
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
-	ProcessedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty" gorm:"column:processed_at;serializer:proto_timestamp"`
+	RequestId   string                 `protobuf:"bytes,1,opt,name=request_id,json=requestId,proto3" json:"request_id,omitempty"`                                                            // @inject_tag: gorm:"primaryKey;column:request_id;not null"
+	PolicyId    string                 `protobuf:"bytes,2,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                                               // @inject_tag: gorm:"column:policy_id;not null"
+	CustomerId  string                 `protobuf:"bytes,3,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                                                         // @inject_tag: gorm:"column:customer_id;not null"
+	RequestType ServiceRequestType     `protobuf:"varint,4,opt,name=request_type,json=requestType,proto3,enum=insuretech.policy.entity.v1.ServiceRequestType" json:"request_type,omitempty"` // @inject_tag: gorm:"column:request_type;not null;serializer:proto_enum"
+	RequestData string                 `protobuf:"bytes,5,opt,name=request_data,json=requestData,proto3" json:"request_data,omitempty"`                                                      // @inject_tag: gorm:"column:request_data"
+	Status      ServiceRequestStatus   `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.policy.entity.v1.ServiceRequestStatus" json:"status,omitempty"`                            // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ProcessedBy string                 `protobuf:"bytes,7,opt,name=processed_by,json=processedBy,proto3" json:"processed_by,omitempty"`                                                      // @inject_tag: gorm:"column:processed_by"
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	ProcessedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty"` // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
 }
 
 func (x *PolicyServiceRequest) Reset() {

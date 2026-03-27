@@ -193,19 +193,19 @@ type FraudCase struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:case_id;not null"`
-	CaseNumber         string                 `protobuf:"bytes,2,opt,name=case_number,json=caseNumber,proto3" json:"case_number,omitempty" gorm:"column:case_number;not null"`
-	FraudAlertId       string                 `protobuf:"bytes,3,opt,name=fraud_alert_id,json=fraudAlertId,proto3" json:"fraud_alert_id,omitempty" gorm:"column:fraud_alert_id;not null"`
-	Priority           CasePriority           `protobuf:"varint,4,opt,name=priority,proto3,enum=insuretech.fraud.entity.v1.CasePriority" json:"priority,omitempty" gorm:"column:priority;not null;serializer:proto_enum"`
-	InvestigationNotes string                 `protobuf:"bytes,5,opt,name=investigation_notes,json=investigationNotes,proto3" json:"investigation_notes,omitempty" gorm:"column:investigation_notes"`
-	Evidence           string                 `protobuf:"bytes,6,opt,name=evidence,proto3" json:"evidence,omitempty" gorm:"column:evidence"`
-	Status             CaseStatus             `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.fraud.entity.v1.CaseStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Outcome            CaseOutcome            `protobuf:"varint,8,opt,name=outcome,proto3,enum=insuretech.fraud.entity.v1.CaseOutcome" json:"outcome,omitempty" gorm:"column:outcome;serializer:proto_enum"`
-	InvestigatorId     string                 `protobuf:"bytes,9,opt,name=investigator_id,json=investigatorId,proto3" json:"investigator_id,omitempty" gorm:"column:investigator_id"`
-	ClosedAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=closed_at,json=closedAt,proto3" json:"closed_at,omitempty" gorm:"column:closed_at;serializer:proto_timestamp"`
-	CreatedAt          *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	DeletedAt          *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                           // @inject_tag: gorm:"primaryKey;column:case_id;not null"
+	CaseNumber         string                 `protobuf:"bytes,2,opt,name=case_number,json=caseNumber,proto3" json:"case_number,omitempty"`                         // @inject_tag: gorm:"column:case_number;not null"
+	FraudAlertId       string                 `protobuf:"bytes,3,opt,name=fraud_alert_id,json=fraudAlertId,proto3" json:"fraud_alert_id,omitempty"`                 // @inject_tag: gorm:"column:fraud_alert_id;not null"
+	Priority           CasePriority           `protobuf:"varint,4,opt,name=priority,proto3,enum=insuretech.fraud.entity.v1.CasePriority" json:"priority,omitempty"` // @inject_tag: gorm:"column:priority;not null;serializer:proto_enum"
+	InvestigationNotes string                 `protobuf:"bytes,5,opt,name=investigation_notes,json=investigationNotes,proto3" json:"investigation_notes,omitempty"` // @inject_tag: gorm:"column:investigation_notes"
+	Evidence           string                 `protobuf:"bytes,6,opt,name=evidence,proto3" json:"evidence,omitempty"`                                               // @inject_tag: gorm:"column:evidence"
+	Status             CaseStatus             `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.fraud.entity.v1.CaseStatus" json:"status,omitempty"`       // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Outcome            CaseOutcome            `protobuf:"varint,8,opt,name=outcome,proto3,enum=insuretech.fraud.entity.v1.CaseOutcome" json:"outcome,omitempty"`    // @inject_tag: gorm:"column:outcome;serializer:proto_enum"
+	InvestigatorId     string                 `protobuf:"bytes,9,opt,name=investigator_id,json=investigatorId,proto3" json:"investigator_id,omitempty"`             // @inject_tag: gorm:"column:investigator_id"
+	ClosedAt           *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=closed_at,json=closedAt,proto3" json:"closed_at,omitempty"`                              // @inject_tag: gorm:"column:closed_at;serializer:proto_timestamp"
+	CreatedAt          *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                           // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt          *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                           // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	DeletedAt          *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"`                           // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 }
 
 func (x *FraudCase) Reset() {

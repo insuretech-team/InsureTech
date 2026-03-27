@@ -2,7 +2,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using Insuretech.Beneficiary.Entity.V1;
+using Dapper;
+using System.Data;
+using InsuranceEngine.Beneficiary.Domain;
 
 namespace InsuranceEngine.Beneficiary.Application.Commands;
 
@@ -21,71 +23,80 @@ public sealed class CreateIndividualBeneficiaryCommandHandler : IRequestHandler<
 
     public async Task<Result<string>> Handle(CreateIndividualBeneficiaryCommand request, CancellationToken cancellationToken)
     {
+        var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open) await connection.OpenAsync(cancellationToken);
+
+        // Domain Validation: Check for uniqueness (FR-033)
+        const string checkSql = "SELECT COUNT(1) FROM insurance_schema.individual_beneficiaries WHERE nid_number = @Nid";
+        var exists = await connection.ExecuteScalarAsync<int>(checkSql, new { Nid = request.NidNumber });
+        if (exists > 0) return Result<string>.Fail("DUPLICATE_BENEFICIARY", "Beneficiary with this NID already exists");
+
+        using var transaction = await connection.BeginTransactionAsync(cancellationToken);
         try
         {
-            // 1. Validate Uniqueness (NID and Mobile)
-            // (Skipped for simplicity in this clean build)
+            // 1. Domain Logic: Create Aggregate (DDD)
+            var partnerId = string.IsNullOrEmpty(request.PartnerId) ? (Guid?)null : Guid.Parse(request.PartnerId);
+            var beneficiary = BeneficiaryAggregate.CreateIndividual(
+                userId: string.IsNullOrEmpty(request.UserId) ? (Guid?)null : Guid.Parse(request.UserId),
+                fullName: request.FullName,
+                partnerId: partnerId
+            );
 
-            // 2. Generate Beneficiary ID and Code
-            var beneficiaryId = Guid.NewGuid();
-            var individualId = Guid.NewGuid();
-            var beneficiaryCode = $"BEN-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
-
-            // 3. Insert into beneficiaries table
+            // 2. Persist Aggregate State
             var insertBeneficiarySql = @"
                 INSERT INTO insurance_schema.beneficiaries (
-                    beneficiary_id, user_id, type, code, status, kyc_status, audit_info
+                    beneficiary_id, user_id, type, code, status, kyc_status, audit_info, partner_id
                 ) VALUES (
-                    @p0, @p1, @p2, @p3, @p4, @p5, @p6::jsonb
+                    @BeneficiaryId, @UserId, @Type, @Code, @Status, @KycStatus, @AuditInfo::jsonb, @PartnerId
                 )";
 
-            var auditInfo = "{}"; // Proto expects JSONB
+            await connection.ExecuteAsync(insertBeneficiarySql, new
+            {
+                BeneficiaryId = beneficiary.Id,
+                UserId = beneficiary.UserId,
+                Type = beneficiary.Type,
+                Code = beneficiary.Code,
+                Status = beneficiary.Status,
+                KycStatus = beneficiary.KycStatus,
+                AuditInfo = "{}",
+                PartnerId = beneficiary.PartnerId
+            }, transaction);
 
-            await _dbContext.Database.ExecuteSqlRawAsync(insertBeneficiarySql,
-                new object[] {
-                    beneficiaryId,
-                    Guid.Parse(request.UserId),
-                    "INDIVIDUAL",
-                    beneficiaryCode,
-                    "PENDING_KYC",
-                    "NOT_STARTED",
-                    auditInfo
-                }, cancellationToken);
-
-            // 4. Insert into individual_beneficiaries table
             var insertIndividualSql = @"
                 INSERT INTO insurance_schema.individual_beneficiaries (
                     id, beneficiary_id, full_name, date_of_birth, gender, nid_number, contact_info, permanent_address, present_address, marital_status, occupation, audit_info
                 ) VALUES (
-                    @p0, @p1, @p2, @p3, @p4, @p5, @p6::jsonb, @p7::jsonb, @p8::jsonb, @p9, @p10, @p11::jsonb
+                    @IndividualId, @BeneficiaryId, @FullName, @DateOfBirth, @Gender, @NidNumber, @ContactInfo::jsonb, @PermanentAddress::jsonb, @PresentAddress::jsonb, @MaritalStatus, @Occupation, @AuditInfo::jsonb
                 )";
 
             var contactInfo = $"{{\"mobile_number\": \"{request.MobileNumber}\", \"email\": \"{request.Email ?? ""}\"}}";
-            var emptyAddress = "{}";
 
-            await _dbContext.Database.ExecuteSqlRawAsync(insertIndividualSql,
-                new object[] {
-                    individualId,
-                    beneficiaryId,
-                    request.FullName,
-                    request.DateOfBirth,
-                    request.Gender,
-                    request.NidNumber,
-                    contactInfo,
-                    emptyAddress,
-                    emptyAddress,
-                    "MARITAL_STATUS_SINGLE",
-                    "OTHER",
-                    auditInfo
-                }, cancellationToken);
+            await connection.ExecuteAsync(insertIndividualSql, new
+            {
+                IndividualId = Guid.NewGuid(),
+                BeneficiaryId = beneficiary.Id,
+                FullName = request.FullName,
+                DateOfBirth = DateTime.SpecifyKind(request.DateOfBirth, DateTimeKind.Utc),
+                Gender = request.Gender,
+                NidNumber = request.NidNumber,
+                ContactInfo = contactInfo,
+                PermanentAddress = "{}",
+                PresentAddress = "{}",
+                MaritalStatus = "MARITAL_STATUS_SINGLE",
+                Occupation = "OTHER",
+                AuditInfo = "{}"
+            }, transaction);
 
-            _logger.LogInformation("Beneficiary created successfully: {BeneficiaryId} ({BeneficiaryCode})", beneficiaryId, beneficiaryCode);
+            await transaction.CommitAsync(cancellationToken);
+            
+            _logger.LogInformation("Beneficiary created successfully: {BeneficiaryId} ({BeneficiaryCode})", beneficiary.Id, beneficiary.Code);
 
-            return Result<string>.Ok(beneficiaryId.ToString());
+            return Result<string>.Ok(beneficiary.Id.ToString());
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to create beneficiary for user {UserId}", request.UserId);
+            await transaction.RollbackAsync(cancellationToken);
+            _logger.LogError(ex, "Failed to create beneficiary");
             return Result<string>.Fail("BENEFICIARY_CREATION_FAILED", ex.Message);
         }
     }

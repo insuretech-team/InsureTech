@@ -17,6 +17,7 @@ public sealed class BeneficiariesController : ControllerBase
         _mediator = mediator;
     }
 
+    /*
     [HttpGet]
     public async Task<IActionResult> List([FromQuery] string? type, [FromQuery] string? status, [FromQuery] int page = 1, [FromQuery] int pageSize = 10)
     {
@@ -45,60 +46,9 @@ public sealed class BeneficiariesController : ControllerBase
         var result = await _mediator.Send(command);
 
         return result.IsSuccess 
-            ? Ok(new { beneficiary_id = result.Value, message = "Beneficiary created successfully" }) 
+            ? Ok(new { beneficiary_id = result.Value, message = "Individual beneficiary created successfully" }) 
             : BadRequest(new { error = result.Error });
     }
-
-    [HttpPost("business")]
-    public async Task<IActionResult> CreateBusiness([FromBody] CreateBusinessBeneficiaryCommand command)
-    {
-        var result = await _mediator.Send(command);
-
-        return result.IsSuccess 
-            ? Ok(new { beneficiary_id = result.Value, message = "Business beneficiary created successfully" }) 
-            : BadRequest(new { error = result.Error });
-    }
-
-    [HttpPut("{id}")]
-    public async Task<IActionResult> Update(string id, [FromBody] UpdateBeneficiaryRequest request)
-    {
-        // Ensure ID matches
-        request.BeneficiaryId = id;
-        var response = await _mediator.Send(new UpdateBeneficiaryCommand(request));
-        
-        if (response.Error != null)
-        {
-            return response.Error.HttpStatusCode == 404 ? NotFound(response) : BadRequest(response);
-        }
-        
-        return Ok(response);
-    }
-
-    [HttpPost("{id}/kyc")]
-    public async Task<IActionResult> CompleteKYC(string id, [FromBody] CompleteKYCRequest request)
-    {
-        request.BeneficiaryId = id;
-        var response = await _mediator.Send(new CompleteKYCCommand(request));
-        
-        if (response.Error != null)
-        {
-            return response.Error.HttpStatusCode == 404 ? NotFound(response) : BadRequest(response);
-        }
-        
-        return Ok(response);
-    }
-
-    [HttpPost("{id}/risk-score")]
-    public async Task<IActionResult> UpdateRiskScore(string id, [FromBody] UpdateRiskScoreRequest request)
-    {
-        request.BeneficiaryId = id;
-        var response = await _mediator.Send(new UpdateRiskScoreCommand(request));
-        
-        if (response.Error != null)
-        {
-            return response.Error.HttpStatusCode == 404 ? NotFound(response) : BadRequest(response);
-        }
-        
-        return Ok(response);
-    }
+    */
 }
+

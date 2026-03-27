@@ -144,7 +144,8 @@ message CreateProductResponse {
 }
 
 message UpdateProductRequest {
-  entity.v1.Product product = 1 [(google.api.field_behavior) = REQUIRED];
+  string product_id = 1 [(google.api.field_behavior) = REQUIRED];
+  entity.v1.Product product = 2 [(google.api.field_behavior) = REQUIRED];
 }
 
 message UpdateProductResponse {

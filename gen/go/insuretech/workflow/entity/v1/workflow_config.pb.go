@@ -83,16 +83,16 @@ type WorkflowConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ConfigId    string             `protobuf:"bytes,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty" gorm:"primaryKey;column:config_id;not null"`
-	BusinessId  string             `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id;not null"`
-	ConfigType  WorkflowConfigType `protobuf:"varint,3,opt,name=config_type,json=configType,proto3,enum=insuretech.workflow.entity.v1.WorkflowConfigType" json:"config_type,omitempty" gorm:"column:config_type;not null;serializer:proto_enum"`
-	Title       string             `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty" gorm:"column:title;not null"`
-	Description string             `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
-	IsEnabled   bool               `protobuf:"varint,6,opt,name=is_enabled,json=isEnabled,proto3" json:"is_enabled,omitempty" gorm:"column:is_enabled;not null"`
+	ConfigId    string             `protobuf:"bytes,1,opt,name=config_id,json=configId,proto3" json:"config_id,omitempty"`                                                              // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+	BusinessId  string             `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`                                                        // @inject_tag: gorm:"column:business_id;not null"
+	ConfigType  WorkflowConfigType `protobuf:"varint,3,opt,name=config_type,json=configType,proto3,enum=insuretech.workflow.entity.v1.WorkflowConfigType" json:"config_type,omitempty"` // @inject_tag: gorm:"column:config_type;not null;serializer:proto_enum"
+	Title       string             `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`                                                                                    // @inject_tag: gorm:"column:title;not null"
+	Description string             `protobuf:"bytes,5,opt,name=description,proto3" json:"description,omitempty"`                                                                        // @inject_tag: gorm:"column:description"
+	IsEnabled   bool               `protobuf:"varint,6,opt,name=is_enabled,json=isEnabled,proto3" json:"is_enabled,omitempty"`                                                          // @inject_tag: gorm:"column:is_enabled;not null"
 	// Workflow rules (stored as JSONB)
-	Rules     string                 `protobuf:"bytes,7,opt,name=rules,proto3" json:"rules,omitempty" gorm:"column:rules"`
-	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
-	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	Rules     string                 `protobuf:"bytes,7,opt,name=rules,proto3" json:"rules,omitempty"` // @inject_tag: gorm:"column:rules"
+	CreatedAt *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	UpdatedAt *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *WorkflowConfig) Reset() {

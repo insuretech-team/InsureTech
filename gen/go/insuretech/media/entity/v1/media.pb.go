@@ -184,25 +184,25 @@ type MediaFile struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id               string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:media_id;not null"`
-	FileId           string           `protobuf:"bytes,2,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty" gorm:"column:file_id;not null"`
-	TenantId         string           `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id"`
-	MediaType        MediaType        `protobuf:"varint,4,opt,name=media_type,json=mediaType,proto3,enum=insuretech.media.entity.v1.MediaType" json:"media_type,omitempty" gorm:"column:media_type;not null;serializer:proto_enum"`
-	MimeType         string           `protobuf:"bytes,5,opt,name=mime_type,json=mimeType,proto3" json:"mime_type,omitempty" gorm:"column:mime_type;not null"`
-	FileSizeBytes    int64            `protobuf:"varint,6,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty" gorm:"column:file_size_bytes;not null"`
-	Width            int32            `protobuf:"varint,7,opt,name=width,proto3" json:"width,omitempty" gorm:"column:width"`
-	Height           int32            `protobuf:"varint,8,opt,name=height,proto3" json:"height,omitempty" gorm:"column:height"`
-	Dpi              int32            `protobuf:"varint,9,opt,name=dpi,proto3" json:"dpi,omitempty" gorm:"column:dpi"`
-	OptimizedFileId  string           `protobuf:"bytes,10,opt,name=optimized_file_id,json=optimizedFileId,proto3" json:"optimized_file_id,omitempty" gorm:"column:optimized_file_id"`
-	ThumbnailFileId  string           `protobuf:"bytes,11,opt,name=thumbnail_file_id,json=thumbnailFileId,proto3" json:"thumbnail_file_id,omitempty" gorm:"column:thumbnail_file_id"`
-	EntityType       string           `protobuf:"bytes,12,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type"`
-	EntityId         string           `protobuf:"bytes,13,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id"`
-	OcrText          string           `protobuf:"bytes,14,opt,name=ocr_text,json=ocrText,proto3" json:"ocr_text,omitempty" gorm:"column:ocr_text"`
-	ValidationStatus ValidationStatus `protobuf:"varint,15,opt,name=validation_status,json=validationStatus,proto3,enum=insuretech.media.entity.v1.ValidationStatus" json:"validation_status,omitempty" gorm:"column:validation_status;not null;serializer:proto_enum"`
-	ValidationErrors string           `protobuf:"bytes,16,opt,name=validation_errors,json=validationErrors,proto3" json:"validation_errors,omitempty" gorm:"column:validation_errors"`
-	VirusScanStatus  VirusScanStatus  `protobuf:"varint,17,opt,name=virus_scan_status,json=virusScanStatus,proto3,enum=insuretech.media.entity.v1.VirusScanStatus" json:"virus_scan_status,omitempty" gorm:"column:virus_scan_status;not null;serializer:proto_enum"`
-	UploadedBy       string           `protobuf:"bytes,18,opt,name=uploaded_by,json=uploadedBy,proto3" json:"uploaded_by,omitempty" gorm:"column:uploaded_by;not null"`
-	AuditInfo        *v1.AuditInfo    `protobuf:"bytes,19,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id               string           `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                                        // @inject_tag: gorm:"primaryKey;column:media_id;not null"
+	FileId           string           `protobuf:"bytes,2,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`                                                                                  // @inject_tag: gorm:"column:file_id;not null"
+	TenantId         string           `protobuf:"bytes,3,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                                                                            // @inject_tag: gorm:"column:tenant_id"
+	MediaType        MediaType        `protobuf:"varint,4,opt,name=media_type,json=mediaType,proto3,enum=insuretech.media.entity.v1.MediaType" json:"media_type,omitempty"`                              // @inject_tag: gorm:"column:media_type;not null;serializer:proto_enum"
+	MimeType         string           `protobuf:"bytes,5,opt,name=mime_type,json=mimeType,proto3" json:"mime_type,omitempty"`                                                                            // @inject_tag: gorm:"column:mime_type;not null"
+	FileSizeBytes    int64            `protobuf:"varint,6,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty"`                                                          // @inject_tag: gorm:"column:file_size_bytes;not null"
+	Width            int32            `protobuf:"varint,7,opt,name=width,proto3" json:"width,omitempty"`                                                                                                 // @inject_tag: gorm:"column:width"
+	Height           int32            `protobuf:"varint,8,opt,name=height,proto3" json:"height,omitempty"`                                                                                               // @inject_tag: gorm:"column:height"
+	Dpi              int32            `protobuf:"varint,9,opt,name=dpi,proto3" json:"dpi,omitempty"`                                                                                                     // @inject_tag: gorm:"column:dpi"
+	OptimizedFileId  string           `protobuf:"bytes,10,opt,name=optimized_file_id,json=optimizedFileId,proto3" json:"optimized_file_id,omitempty"`                                                    // @inject_tag: gorm:"column:optimized_file_id"
+	ThumbnailFileId  string           `protobuf:"bytes,11,opt,name=thumbnail_file_id,json=thumbnailFileId,proto3" json:"thumbnail_file_id,omitempty"`                                                    // @inject_tag: gorm:"column:thumbnail_file_id"
+	EntityType       string           `protobuf:"bytes,12,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                                                                     // @inject_tag: gorm:"column:entity_type"
+	EntityId         string           `protobuf:"bytes,13,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                                                                           // @inject_tag: gorm:"column:entity_id"
+	OcrText          string           `protobuf:"bytes,14,opt,name=ocr_text,json=ocrText,proto3" json:"ocr_text,omitempty"`                                                                              // @inject_tag: gorm:"column:ocr_text"
+	ValidationStatus ValidationStatus `protobuf:"varint,15,opt,name=validation_status,json=validationStatus,proto3,enum=insuretech.media.entity.v1.ValidationStatus" json:"validation_status,omitempty"` // @inject_tag: gorm:"column:validation_status;not null;serializer:proto_enum"
+	ValidationErrors string           `protobuf:"bytes,16,opt,name=validation_errors,json=validationErrors,proto3" json:"validation_errors,omitempty"`                                                   // @inject_tag: gorm:"column:validation_errors"
+	VirusScanStatus  VirusScanStatus  `protobuf:"varint,17,opt,name=virus_scan_status,json=virusScanStatus,proto3,enum=insuretech.media.entity.v1.VirusScanStatus" json:"virus_scan_status,omitempty"`   // @inject_tag: gorm:"column:virus_scan_status;not null;serializer:proto_enum"
+	UploadedBy       string           `protobuf:"bytes,18,opt,name=uploaded_by,json=uploadedBy,proto3" json:"uploaded_by,omitempty"`                                                                     // @inject_tag: gorm:"column:uploaded_by;not null"
+	AuditInfo        *v1.AuditInfo    `protobuf:"bytes,19,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                                        // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *MediaFile) Reset() {

@@ -85,14 +85,14 @@ type MFSIntegration struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id             string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:integration_id;not null"`
-	Provider       MFSProvider   `protobuf:"varint,2,opt,name=provider,proto3,enum=insuretech.mfs.entity.v1.MFSProvider" json:"provider,omitempty" gorm:"column:provider;not null;serializer:proto_enum"`
-	ApiBaseUrl     string        `protobuf:"bytes,3,opt,name=api_base_url,json=apiBaseUrl,proto3" json:"api_base_url,omitempty" gorm:"column:api_base_url;not null"`
-	MerchantId     string        `protobuf:"bytes,4,opt,name=merchant_id,json=merchantId,proto3" json:"merchant_id,omitempty" gorm:"column:merchant_id"`
-	ApiCredentials string        `protobuf:"bytes,5,opt,name=api_credentials,json=apiCredentials,proto3" json:"api_credentials,omitempty" gorm:"column:api_credentials"`
-	IsActive       bool          `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
-	Config         string        `protobuf:"bytes,7,opt,name=config,proto3" json:"config,omitempty" gorm:"column:config"`
-	AuditInfo      *v1.AuditInfo `protobuf:"bytes,8,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id             string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                        // @inject_tag: gorm:"primaryKey;column:integration_id;not null"
+	Provider       MFSProvider   `protobuf:"varint,2,opt,name=provider,proto3,enum=insuretech.mfs.entity.v1.MFSProvider" json:"provider,omitempty"` // @inject_tag: gorm:"column:provider;not null;serializer:proto_enum"
+	ApiBaseUrl     string        `protobuf:"bytes,3,opt,name=api_base_url,json=apiBaseUrl,proto3" json:"api_base_url,omitempty"`                    // @inject_tag: gorm:"column:api_base_url;not null"
+	MerchantId     string        `protobuf:"bytes,4,opt,name=merchant_id,json=merchantId,proto3" json:"merchant_id,omitempty"`                      // @inject_tag: gorm:"column:merchant_id"
+	ApiCredentials string        `protobuf:"bytes,5,opt,name=api_credentials,json=apiCredentials,proto3" json:"api_credentials,omitempty"`          // @inject_tag: gorm:"column:api_credentials"
+	IsActive       bool          `protobuf:"varint,6,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                           // @inject_tag: gorm:"column:is_active"
+	Config         string        `protobuf:"bytes,7,opt,name=config,proto3" json:"config,omitempty"`                                                // @inject_tag: gorm:"column:config"
+	AuditInfo      *v1.AuditInfo `protobuf:"bytes,8,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                         // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *MFSIntegration) Reset() {

@@ -30,19 +30,19 @@ type PortalConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PortalConfigId string   `protobuf:"bytes,1,opt,name=portal_config_id,json=portalConfigId,proto3" json:"portal_config_id,omitempty" gorm:"column:portal_config_id"`
-	Portal         Portal   `protobuf:"varint,2,opt,name=portal,proto3,enum=insuretech.authz.entity.v1.Portal" json:"portal,omitempty" gorm:"column:portal;serializer:proto_enum"`
-	MfaRequired    bool     `protobuf:"varint,3,opt,name=mfa_required,json=mfaRequired,proto3" json:"mfa_required,omitempty" gorm:"column:mfa_required"`
-	MfaMethods     []string `protobuf:"bytes,4,rep,name=mfa_methods,json=mfaMethods,proto3" json:"mfa_methods,omitempty" gorm:"column:mfa_methods"` // stored as JSONB: ["totp","sms","email"]
+	PortalConfigId string   `protobuf:"bytes,1,opt,name=portal_config_id,json=portalConfigId,proto3" json:"portal_config_id,omitempty"`
+	Portal         Portal   `protobuf:"varint,2,opt,name=portal,proto3,enum=insuretech.authz.entity.v1.Portal" json:"portal,omitempty"`
+	MfaRequired    bool     `protobuf:"varint,3,opt,name=mfa_required,json=mfaRequired,proto3" json:"mfa_required,omitempty"`
+	MfaMethods     []string `protobuf:"bytes,4,rep,name=mfa_methods,json=mfaMethods,proto3" json:"mfa_methods,omitempty"` // stored as JSONB: ["totp","sms","email"]
 	// Token expiry in seconds — configurable, default 900 (15 min)
-	AccessTokenTtlSeconds   int32                  `protobuf:"varint,5,opt,name=access_token_ttl_seconds,json=accessTokenTtlSeconds,proto3" json:"access_token_ttl_seconds,omitempty" gorm:"column:access_token_ttl_seconds"`
-	RefreshTokenTtlSeconds  int32                  `protobuf:"varint,6,opt,name=refresh_token_ttl_seconds,json=refreshTokenTtlSeconds,proto3" json:"refresh_token_ttl_seconds,omitempty" gorm:"column:refresh_token_ttl_seconds"`
-	SessionTtlSeconds       int32                  `protobuf:"varint,7,opt,name=session_ttl_seconds,json=sessionTtlSeconds,proto3" json:"session_ttl_seconds,omitempty" gorm:"column:session_ttl_seconds"`
-	IdleTimeoutSeconds      int32                  `protobuf:"varint,8,opt,name=idle_timeout_seconds,json=idleTimeoutSeconds,proto3" json:"idle_timeout_seconds,omitempty" gorm:"column:idle_timeout_seconds"`
-	AllowConcurrentSessions bool                   `protobuf:"varint,9,opt,name=allow_concurrent_sessions,json=allowConcurrentSessions,proto3" json:"allow_concurrent_sessions,omitempty" gorm:"column:allow_concurrent_sessions"`
-	MaxConcurrentSessions   int32                  `protobuf:"varint,10,opt,name=max_concurrent_sessions,json=maxConcurrentSessions,proto3" json:"max_concurrent_sessions,omitempty" gorm:"column:max_concurrent_sessions"`
-	UpdatedBy               string                 `protobuf:"bytes,11,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty" gorm:"column:updated_by"`
-	UpdatedAt               *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
+	AccessTokenTtlSeconds   int32                  `protobuf:"varint,5,opt,name=access_token_ttl_seconds,json=accessTokenTtlSeconds,proto3" json:"access_token_ttl_seconds,omitempty"`
+	RefreshTokenTtlSeconds  int32                  `protobuf:"varint,6,opt,name=refresh_token_ttl_seconds,json=refreshTokenTtlSeconds,proto3" json:"refresh_token_ttl_seconds,omitempty"`
+	SessionTtlSeconds       int32                  `protobuf:"varint,7,opt,name=session_ttl_seconds,json=sessionTtlSeconds,proto3" json:"session_ttl_seconds,omitempty"`
+	IdleTimeoutSeconds      int32                  `protobuf:"varint,8,opt,name=idle_timeout_seconds,json=idleTimeoutSeconds,proto3" json:"idle_timeout_seconds,omitempty"`
+	AllowConcurrentSessions bool                   `protobuf:"varint,9,opt,name=allow_concurrent_sessions,json=allowConcurrentSessions,proto3" json:"allow_concurrent_sessions,omitempty"`
+	MaxConcurrentSessions   int32                  `protobuf:"varint,10,opt,name=max_concurrent_sessions,json=maxConcurrentSessions,proto3" json:"max_concurrent_sessions,omitempty"`
+	UpdatedBy               string                 `protobuf:"bytes,11,opt,name=updated_by,json=updatedBy,proto3" json:"updated_by,omitempty"`
+	UpdatedAt               *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
 }
 
 func (x *PortalConfig) Reset() {

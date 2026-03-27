@@ -30,15 +30,15 @@ type TokenConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Kid       string `protobuf:"bytes,1,opt,name=kid,proto3" json:"kid,omitempty" gorm:"column:kid"`
-	Algorithm string `protobuf:"bytes,2,opt,name=algorithm,proto3" json:"algorithm,omitempty" gorm:"column:algorithm"`
+	Kid       string `protobuf:"bytes,1,opt,name=kid,proto3" json:"kid,omitempty"`
+	Algorithm string `protobuf:"bytes,2,opt,name=algorithm,proto3" json:"algorithm,omitempty"`
 	// public_key_pem: stored in DB for JWKS endpoint serving
-	PublicKeyPem string `protobuf:"bytes,3,opt,name=public_key_pem,json=publicKeyPem,proto3" json:"public_key_pem,omitempty" gorm:"column:public_key_pem"`
+	PublicKeyPem string `protobuf:"bytes,3,opt,name=public_key_pem,json=publicKeyPem,proto3" json:"public_key_pem,omitempty"`
 	// private_key_ref: reference to secret in Vault / KMS (NEVER stored in DB)
-	PrivateKeyRef string                 `protobuf:"bytes,4,opt,name=private_key_ref,json=privateKeyRef,proto3" json:"private_key_ref,omitempty" gorm:"column:private_key_ref"`
-	IsActive      bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
-	RotatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=rotated_at,json=rotatedAt,proto3" json:"rotated_at,omitempty" gorm:"column:rotated_at;serializer:proto_timestamp"`
+	PrivateKeyRef string                 `protobuf:"bytes,4,opt,name=private_key_ref,json=privateKeyRef,proto3" json:"private_key_ref,omitempty"`
+	IsActive      bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
+	RotatedAt     *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=rotated_at,json=rotatedAt,proto3" json:"rotated_at,omitempty"`
 }
 
 func (x *TokenConfig) Reset() {

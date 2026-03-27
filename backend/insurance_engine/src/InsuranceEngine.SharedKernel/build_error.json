@@ -1,0 +1,91 @@
+{
+  "$schema": "http://json.schemastore.org/sarif-1.0.0",
+  "version": "1.0.0",
+  "runs": [
+    {
+      "tool": {
+        "name": "Microsoft (R) Visual C# Compiler",
+        "version": "5.3.0.0",
+        "fileVersion": "5.3.0-2.26153.122 (4d3023de605a78ba3e59e50c657eed70f125c68a)",
+        "semanticVersion": "5.3.0",
+        "language": "en-US"
+      },
+      "results": [
+        {
+          "ruleId": "CS1061",
+          "level": "error",
+          "message": "'ILogger<MockKafkaPublisher>' does not contain a definition for 'LogInformation' and no accessible extension method 'LogInformation' accepting a first argument of type 'ILogger<MockKafkaPublisher>' could be found (are you missing a using directive or an assembly reference?)",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///d:/InsureTech/backend/insurance_engine/src/InsuranceEngine.SharedKernel/Infrastructure/KafkaPublisher.cs",
+                "region": {
+                  "startLine": 19,
+                  "startColumn": 17,
+                  "endLine": 19,
+                  "endColumn": 31
+                }
+              }
+            }
+          ]
+        },
+        {
+          "ruleId": "CA1862",
+          "level": "note",
+          "message": "Prefer using 'string.Equals(string, StringComparison)' to perform a case-insensitive comparison, but keep in mind that this might cause subtle changes in behavior, so make sure to conduct thorough testing after applying the suggestion, or if culturally sensitive comparison is not required, consider using 'StringComparison.OrdinalIgnoreCase'",
+          "locations": [
+            {
+              "resultFile": {
+                "uri": "file:///d:/InsureTech/backend/insurance_engine/src/InsuranceEngine.SharedKernel/Domain/LocalizedString.cs",
+                "region": {
+                  "startLine": 22,
+                  "startColumn": 43,
+                  "endLine": 22,
+                  "endColumn": 69
+                }
+              }
+            }
+          ],
+          "properties": {
+            "warningLevel": 1,
+            "customProperties": {
+              "LeftOffendingMethod": "ToLower",
+              "RightOffendingMethod": null
+            }
+          }
+        }
+      ],
+      "rules": {
+        "CA1862": {
+          "id": "CA1862",
+          "shortDescription": "Use the 'StringComparison' method overloads to perform case-insensitive string comparisons",
+          "fullDescription": "Avoid calling 'ToLower', 'ToUpper', 'ToLowerInvariant' and 'ToUpperInvariant' to perform case-insensitive string comparisons, as in 'string.ToLower() == string.ToLower()', because they lead to an allocation. Instead, use 'string.Equals(string, StringComparison)' to perform case-insensitive comparisons. Switching to using an overload that takes a 'StringComparison' might cause subtle changes in behavior, so it's important to conduct thorough testing after applying the suggestion. Additionally, if a culturally sensitive comparison is not required, consider using 'StringComparison.OrdinalIgnoreCase'.",
+          "defaultLevel": "note",
+          "helpUri": "https://learn.microsoft.com/dotnet/fundamentals/code-analysis/quality-rules/ca1862",
+          "properties": {
+            "category": "Performance",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Telemetry",
+              "EnabledRuleInAggressiveMode"
+            ]
+          }
+        },
+        "CS1061": {
+          "id": "CS1061",
+          "defaultLevel": "error",
+          "helpUri": "https://msdn.microsoft.com/query/roslyn.query?appId=roslyn&k=k(CS1061)",
+          "properties": {
+            "category": "Compiler",
+            "isEnabledByDefault": true,
+            "tags": [
+              "Compiler",
+              "Telemetry",
+              "NotConfigurable"
+            ]
+          }
+        }
+      }
+    }
+  ]
+}

@@ -140,15 +140,15 @@ type DocumentVerification struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:doc_verification_id;not null"`
-	KycVerificationId string         `protobuf:"bytes,2,opt,name=kyc_verification_id,json=kycVerificationId,proto3" json:"kyc_verification_id,omitempty" gorm:"column:kyc_verification_id;not null"`
-	DocumentType      DocumentType   `protobuf:"varint,3,opt,name=document_type,json=documentType,proto3,enum=insuretech.kyc.entity.v1.DocumentType" json:"document_type,omitempty" gorm:"column:document_type;not null;serializer:proto_enum"`
-	DocumentNumber    string         `protobuf:"bytes,4,opt,name=document_number,json=documentNumber,proto3" json:"document_number,omitempty" gorm:"column:document_number;not null"`
-	DocumentUrl       string         `protobuf:"bytes,5,opt,name=document_url,json=documentUrl,proto3" json:"document_url,omitempty" gorm:"column:document_url"`
-	ExtractedData     string         `protobuf:"bytes,6,opt,name=extracted_data,json=extractedData,proto3" json:"extracted_data,omitempty" gorm:"column:extracted_data"`
-	Status            DocumentStatus `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.kyc.entity.v1.DocumentStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ConfidenceScore   float32        `protobuf:"fixed32,8,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty" gorm:"column:confidence_score"`
-	AuditInfo         *v1.AuditInfo  `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                     // @inject_tag: gorm:"primaryKey;column:doc_verification_id;not null"
+	KycVerificationId string         `protobuf:"bytes,2,opt,name=kyc_verification_id,json=kycVerificationId,proto3" json:"kyc_verification_id,omitempty"`                            // @inject_tag: gorm:"column:kyc_verification_id;not null"
+	DocumentType      DocumentType   `protobuf:"varint,3,opt,name=document_type,json=documentType,proto3,enum=insuretech.kyc.entity.v1.DocumentType" json:"document_type,omitempty"` // @inject_tag: gorm:"column:document_type;not null;serializer:proto_enum"
+	DocumentNumber    string         `protobuf:"bytes,4,opt,name=document_number,json=documentNumber,proto3" json:"document_number,omitempty"`                                       // @inject_tag: gorm:"column:document_number;not null"
+	DocumentUrl       string         `protobuf:"bytes,5,opt,name=document_url,json=documentUrl,proto3" json:"document_url,omitempty"`                                                // @inject_tag: gorm:"column:document_url"
+	ExtractedData     string         `protobuf:"bytes,6,opt,name=extracted_data,json=extractedData,proto3" json:"extracted_data,omitempty"`                                          // @inject_tag: gorm:"column:extracted_data"
+	Status            DocumentStatus `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.kyc.entity.v1.DocumentStatus" json:"status,omitempty"`                               // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ConfidenceScore   float32        `protobuf:"fixed32,8,opt,name=confidence_score,json=confidenceScore,proto3" json:"confidence_score,omitempty"`                                  // @inject_tag: gorm:"column:confidence_score"
+	AuditInfo         *v1.AuditInfo  `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                                      // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *DocumentVerification) Reset() {

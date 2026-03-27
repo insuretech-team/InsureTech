@@ -2,6 +2,9 @@ using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
+using Dapper;
+using System.Data;
+using InsuranceEngine.Beneficiary.Domain;
 
 namespace InsuranceEngine.Beneficiary.Application.Commands;
 
@@ -20,37 +23,39 @@ public sealed class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<Cr
 
     public async Task<Result<string>> Handle(CreateBusinessBeneficiaryCommand request, CancellationToken cancellationToken)
     {
-        using var transaction = await _dbContext.Database.BeginTransactionAsync(cancellationToken);
+        var connection = _dbContext.Database.GetDbConnection();
+        if (connection.State != ConnectionState.Open) await connection.OpenAsync(cancellationToken);
+
+        using var transaction = await connection.BeginTransactionAsync(cancellationToken);
         try
         {
-            // 1. Generate IDs and Code
-            var parentBeneficiaryId = Guid.NewGuid();
-            var childBeneficiaryId = Guid.NewGuid();
-            var beneficiaryCode = $"BEN-B-{Guid.NewGuid().ToString().Substring(0, 8).ToUpper()}";
+            // 1. Domain Logic: Create Aggregate (DDD)
+            var beneficiary = BeneficiaryAggregate.CreateBusiness(
+                userId: Guid.Parse(request.UserId),
+                businessName: request.BusinessName,
+                partnerId: string.IsNullOrEmpty(request.PartnerId) ? (Guid?)null : Guid.Parse(request.PartnerId)
+            );
 
-            // 2. Insert into beneficiaries table
+            // 2. Persist Aggregate State
             var insertBeneficiarySql = @"
                 INSERT INTO insurance_schema.beneficiaries (
                     beneficiary_id, user_id, type, code, status, kyc_status, audit_info, partner_id
                 ) VALUES (
-                    @p0, @p1, @p2, @p3, @p4, @p5, @p6::jsonb, @p7
+                    @BeneficiaryId, @UserId, @Type, @Code, @Status, @KycStatus, @AuditInfo::jsonb, @PartnerId
                 )";
 
-            var auditInfo = "{}";
+            await connection.ExecuteAsync(insertBeneficiarySql, new
+            {
+                BeneficiaryId = beneficiary.Id,
+                UserId = beneficiary.UserId,
+                Type = beneficiary.Type,
+                Code = beneficiary.Code,
+                Status = beneficiary.Status,
+                KycStatus = beneficiary.KycStatus,
+                AuditInfo = "{}",
+                PartnerId = beneficiary.PartnerId
+            }, transaction);
 
-            await _dbContext.Database.ExecuteSqlRawAsync(insertBeneficiarySql,
-                new object[] {
-                    parentBeneficiaryId,
-                    Guid.Parse(request.UserId),
-                    "BUSINESS",
-                    beneficiaryCode,
-                    "PENDING_KYC",
-                    "NOT_STARTED",
-                    auditInfo,
-                    string.IsNullOrEmpty(request.PartnerId) ? (Guid?)null : Guid.Parse(request.PartnerId)
-                }, cancellationToken);
-
-            // 3. Insert into business_beneficiaries table
             var insertBusinessSql = @"
                 INSERT INTO insurance_schema.business_beneficiaries (
                     id, beneficiary_id, parent_beneficiary_id, business_name, trade_license_number, tin_number, 
@@ -59,44 +64,47 @@ public sealed class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<Cr
                     total_employees_covered, active_policies_count, total_premium_amount, pending_actions_count,
                     audit_info
                 ) VALUES (
-                    @p0, @p1, @p2, @p3, @p4, @p5, @p6, @p7::jsonb, @p8::jsonb, @p9::jsonb, @p10, @p11::jsonb, @p12::jsonb, @p13, @p14, @p15, @p16, @p17::jsonb
+                    @Id, @BeneficiaryId, @ParentBeneficiaryId, @BusinessName, @TradeLicenseNumber, @TinNumber, 
+                    @BusinessType, @ContactInfo::jsonb, @RegisteredAddress::jsonb, @BusinessAddress::jsonb, 
+                    @FocalPersonName, @FocalPersonContact::jsonb, @PrimaryContact::jsonb,
+                    @TotalEmployees, @ActivePolicies, @TotalPremium, @PendingActions,
+                    @AuditInfo::jsonb
                 )";
 
             var contactInfo = $"{{\"mobile_number\": \"{request.FocalPersonMobile}\"}}";
-            var emptyJson = "{}";
 
-            await _dbContext.Database.ExecuteSqlRawAsync(insertBusinessSql,
-                new object[] {
-                    Guid.NewGuid(), // id (Child PK)
-                    parentBeneficiaryId, // beneficiary_id (FK to base)
-                    parentBeneficiaryId, // parent_beneficiary_id (Additional FK/Ref)
-                    request.BusinessName,
-                    request.TradeLicenseNumber,
-                    request.TinNumber,
-                    "BUSINESS_TYPE_SOLE_PROPRIETORSHIP", 
-                    contactInfo,
-                    emptyJson, 
-                    emptyJson, 
-                    request.FocalPersonName,
-                    contactInfo,
-                    emptyJson,
-                    0,
-                    0,
-                    0L,
-                    0,
-                    auditInfo
-                }, cancellationToken);
+            await connection.ExecuteAsync(insertBusinessSql, new
+            {
+                Id = Guid.NewGuid(),
+                BeneficiaryId = beneficiary.Id,
+                ParentBeneficiaryId = beneficiary.Id,
+                BusinessName = request.BusinessName,
+                TradeLicenseNumber = request.TradeLicenseNumber,
+                TinNumber = request.TinNumber,
+                BusinessType = "BUSINESS_TYPE_SOLE_PROPRIETORSHIP", 
+                ContactInfo = contactInfo,
+                RegisteredAddress = "{}", 
+                BusinessAddress = "{}", 
+                FocalPersonName = request.FocalPersonName,
+                FocalPersonContact = contactInfo,
+                PrimaryContact = "{}",
+                TotalEmployees = 0,
+                ActivePolicies = 0,
+                TotalPremium = 0L,
+                PendingActions = 0,
+                AuditInfo = "{}"
+            }, transaction);
 
             await transaction.CommitAsync(cancellationToken);
 
-            _logger.LogInformation("Business Beneficiary created successfully: {ParentId} ({Code})", parentBeneficiaryId, beneficiaryCode);
+            _logger.LogInformation("Business Beneficiary created successfully: {ParentId} ({Code})", beneficiary.Id, beneficiary.Code);
 
-            return Result<string>.Ok(parentBeneficiaryId.ToString());
+            return Result<string>.Ok(beneficiary.Id.ToString());
         }
         catch (Exception ex)
         {
             await transaction.RollbackAsync(cancellationToken);
-            _logger.LogError(ex, "Failed to create business beneficiary for user {UserId}", request.UserId);
+            _logger.LogError(ex, "Failed to create business beneficiary");
             return Result<string>.Fail("BUSINESS_BENEFICIARY_CREATION_FAILED", ex.Message);
         }
     }

@@ -10,10 +10,19 @@
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Beneficiary\InsuranceEngine.Beneficiary.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Policy\InsuranceEngine.Policy.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Underwriting\InsuranceEngine.Underwriting.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Claims\InsuranceEngine.Claims.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Commission\InsuranceEngine.Commission.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
+    <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.76.0" />
     <PackageReference Include="MediatR" Version="14.1.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="10.0.5" />
+    <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.10.5" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="7.3.1" />

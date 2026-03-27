@@ -34,6 +34,7 @@ public sealed class Result<T>
     public Error? Error { get; }
     public bool IsSuccess => Error is null;
     public bool IsFailure => !IsSuccess;
+    public bool IsNotFound => Error?.Code == "NOT_FOUND";
 
     private Result(T? value, Error? error)
     {
@@ -51,6 +52,9 @@ public sealed class Result<T>
         Fail("OPERATION_FAILED", message);
     
     public static Result<T> Fail(Error error) => new(default, error);
+
+    public static Result<T> NotFound(string entity, string id) => 
+        Fail(Error.NotFound(entity, id));
 
     public TResult Match<TResult>(
         Func<T, TResult> onSuccess,

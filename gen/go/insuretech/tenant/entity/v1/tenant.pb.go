@@ -134,15 +134,15 @@ type Tenant struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	TenantId       string        `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"primaryKey;column:tenant_id;not null"`
-	Code           string        `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null"`
-	Name           string        `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
-	Type           TenantType    `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.tenant.entity.v1.TenantType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Status         TenantStatus  `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.tenant.entity.v1.TenantStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ParentTenantId string        `protobuf:"bytes,6,opt,name=parent_tenant_id,json=parentTenantId,proto3" json:"parent_tenant_id,omitempty" gorm:"column:parent_tenant_id"`
-	Config         string        `protobuf:"bytes,7,opt,name=config,proto3" json:"config,omitempty" gorm:"column:config"`
-	Branding       string        `protobuf:"bytes,8,opt,name=branding,proto3" json:"branding,omitempty" gorm:"column:branding"`
-	AuditInfo      *v1.AuditInfo `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	TenantId       string        `protobuf:"bytes,1,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                            // @inject_tag: gorm:"primaryKey;column:tenant_id;not null"
+	Code           string        `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                                    // @inject_tag: gorm:"column:code;not null"
+	Name           string        `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                                                    // @inject_tag: gorm:"column:name;not null"
+	Type           TenantType    `protobuf:"varint,4,opt,name=type,proto3,enum=insuretech.tenant.entity.v1.TenantType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Status         TenantStatus  `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.tenant.entity.v1.TenantStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ParentTenantId string        `protobuf:"bytes,6,opt,name=parent_tenant_id,json=parentTenantId,proto3" json:"parent_tenant_id,omitempty"`        // @inject_tag: gorm:"column:parent_tenant_id"
+	Config         string        `protobuf:"bytes,7,opt,name=config,proto3" json:"config,omitempty"`                                                // @inject_tag: gorm:"column:config"
+	Branding       string        `protobuf:"bytes,8,opt,name=branding,proto3" json:"branding,omitempty"`                                            // @inject_tag: gorm:"column:branding"
+	AuditInfo      *v1.AuditInfo `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                         // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *Tenant) Reset() {

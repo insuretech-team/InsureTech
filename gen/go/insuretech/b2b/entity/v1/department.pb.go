@@ -28,14 +28,14 @@ type Department struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DepartmentId string                 `protobuf:"bytes,1,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty" gorm:"primaryKey;column:department_id;not null"`
-	Name         string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
-	BusinessId   string                 `protobuf:"bytes,3,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id;not null"`
-	EmployeeNo   int32                  `protobuf:"varint,4,opt,name=employee_no,json=employeeNo,proto3" json:"employee_no,omitempty" gorm:"column:employee_no;not null"`
-	TotalPremium *v1.Money              `protobuf:"bytes,5,opt,name=total_premium,json=totalPremium,proto3" json:"total_premium,omitempty" gorm:"column:total_premium"`
-	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	DeletedAt    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty" gorm:"column:deleted_at;serializer:proto_timestamp"`
+	DepartmentId string                 `protobuf:"bytes,1,opt,name=department_id,json=departmentId,proto3" json:"department_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:department_id;not null"
+	Name         string                 `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                     // @inject_tag: gorm:"column:name;not null"
+	BusinessId   string                 `protobuf:"bytes,3,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`       // @inject_tag: gorm:"column:business_id;not null"
+	EmployeeNo   int32                  `protobuf:"varint,4,opt,name=employee_no,json=employeeNo,proto3" json:"employee_no,omitempty"`      // @inject_tag: gorm:"column:employee_no;not null"
+	TotalPremium *v1.Money              `protobuf:"bytes,5,opt,name=total_premium,json=totalPremium,proto3" json:"total_premium,omitempty"`
+	CreatedAt    *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"` // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt    *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"` // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	DeletedAt    *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=deleted_at,json=deletedAt,proto3" json:"deleted_at,omitempty"` // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 }
 
 func (x *Department) Reset() {

@@ -83,18 +83,18 @@ type VoiceSession struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:session_id;not null"`
-	SessionId       string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty" gorm:"column:external_session_id;not null"`
-	UserId          string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	PhoneNumber     string                 `protobuf:"bytes,4,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty" gorm:"column:phone_number"`
-	Language        string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty" gorm:"column:language;not null"`
-	Status          SessionStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.voice.entity.v1.SessionStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Intent          string                 `protobuf:"bytes,7,opt,name=intent,proto3" json:"intent,omitempty" gorm:"column:intent"`
-	Context         string                 `protobuf:"bytes,8,opt,name=context,proto3" json:"context,omitempty" gorm:"column:context"`
-	StartedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty" gorm:"column:started_at;not null;serializer:proto_timestamp"`
-	EndedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty" gorm:"column:ended_at;serializer:proto_timestamp"`
-	DurationSeconds int32                  `protobuf:"varint,11,opt,name=duration_seconds,json=durationSeconds,proto3" json:"duration_seconds,omitempty" gorm:"column:duration_seconds"`
-	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                        // @inject_tag: gorm:"primaryKey;column:session_id;not null"
+	SessionId       string                 `protobuf:"bytes,2,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`                         // @inject_tag: gorm:"column:external_session_id;not null"
+	UserId          string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                  // @inject_tag: gorm:"column:user_id"
+	PhoneNumber     string                 `protobuf:"bytes,4,opt,name=phone_number,json=phoneNumber,proto3" json:"phone_number,omitempty"`                   // @inject_tag: gorm:"column:phone_number"
+	Language        string                 `protobuf:"bytes,5,opt,name=language,proto3" json:"language,omitempty"`                                            // @inject_tag: gorm:"column:language;not null"
+	Status          SessionStatus          `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.voice.entity.v1.SessionStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Intent          string                 `protobuf:"bytes,7,opt,name=intent,proto3" json:"intent,omitempty"`                                                // @inject_tag: gorm:"column:intent"
+	Context         string                 `protobuf:"bytes,8,opt,name=context,proto3" json:"context,omitempty"`                                              // @inject_tag: gorm:"column:context"
+	StartedAt       *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`                         // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
+	EndedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=ended_at,json=endedAt,proto3" json:"ended_at,omitempty"`                              // @inject_tag: gorm:"column:ended_at;serializer:proto_timestamp"
+	DurationSeconds int32                  `protobuf:"varint,11,opt,name=duration_seconds,json=durationSeconds,proto3" json:"duration_seconds,omitempty"`     // @inject_tag: gorm:"column:duration_seconds"
+	AuditInfo       *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                        // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *VoiceSession) Reset() {

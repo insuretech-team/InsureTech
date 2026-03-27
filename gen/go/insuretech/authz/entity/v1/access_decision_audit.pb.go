@@ -30,18 +30,18 @@ type AccessDecisionAudit struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AuditId     string                 `protobuf:"bytes,1,opt,name=audit_id,json=auditId,proto3" json:"audit_id,omitempty" gorm:"column:audit_id"`
-	UserId      string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	SessionId   string                 `protobuf:"bytes,3,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty" gorm:"column:session_id"`
-	Domain      string                 `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty" gorm:"column:domain"`
-	Subject     string                 `protobuf:"bytes,5,opt,name=subject,proto3" json:"subject,omitempty" gorm:"column:subject"`
-	Object      string                 `protobuf:"bytes,6,opt,name=object,proto3" json:"object,omitempty" gorm:"column:object"`
-	Action      string                 `protobuf:"bytes,7,opt,name=action,proto3" json:"action,omitempty" gorm:"column:action"`
-	Decision    PolicyEffect           `protobuf:"varint,8,opt,name=decision,proto3,enum=insuretech.authz.entity.v1.PolicyEffect" json:"decision,omitempty" gorm:"column:decision;serializer:proto_enum"`
-	MatchedRule string                 `protobuf:"bytes,9,opt,name=matched_rule,json=matchedRule,proto3" json:"matched_rule,omitempty" gorm:"column:matched_rule"`
-	IpAddress   string                 `protobuf:"bytes,10,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty" gorm:"column:ip_address"`
-	UserAgent   string                 `protobuf:"bytes,11,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty" gorm:"column:user_agent"`
-	DecidedAt   *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=decided_at,json=decidedAt,proto3" json:"decided_at,omitempty" gorm:"column:decided_at;serializer:proto_timestamp"`
+	AuditId     string                 `protobuf:"bytes,1,opt,name=audit_id,json=auditId,proto3" json:"audit_id,omitempty"`
+	UserId      string                 `protobuf:"bytes,2,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`
+	SessionId   string                 `protobuf:"bytes,3,opt,name=session_id,json=sessionId,proto3" json:"session_id,omitempty"`
+	Domain      string                 `protobuf:"bytes,4,opt,name=domain,proto3" json:"domain,omitempty"`
+	Subject     string                 `protobuf:"bytes,5,opt,name=subject,proto3" json:"subject,omitempty"`
+	Object      string                 `protobuf:"bytes,6,opt,name=object,proto3" json:"object,omitempty"`
+	Action      string                 `protobuf:"bytes,7,opt,name=action,proto3" json:"action,omitempty"`
+	Decision    PolicyEffect           `protobuf:"varint,8,opt,name=decision,proto3,enum=insuretech.authz.entity.v1.PolicyEffect" json:"decision,omitempty"`
+	MatchedRule string                 `protobuf:"bytes,9,opt,name=matched_rule,json=matchedRule,proto3" json:"matched_rule,omitempty"`
+	IpAddress   string                 `protobuf:"bytes,10,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`
+	UserAgent   string                 `protobuf:"bytes,11,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`
+	DecidedAt   *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=decided_at,json=decidedAt,proto3" json:"decided_at,omitempty"`
 }
 
 func (x *AccessDecisionAudit) Reset() {

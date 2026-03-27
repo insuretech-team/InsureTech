@@ -98,20 +98,20 @@ type AuditLog struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AuditLogId string                 `protobuf:"bytes,1,opt,name=audit_log_id,json=auditLogId,proto3" json:"audit_log_id,omitempty" gorm:"primaryKey;column:audit_log_id;not null"`
-	EntityType string                 `protobuf:"bytes,2,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty" gorm:"column:entity_type;not null"`
-	EntityId   string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty" gorm:"column:entity_id;not null"`
-	Action     AuditAction            `protobuf:"varint,4,opt,name=action,proto3,enum=insuretech.audit.entity.v1.AuditAction" json:"action,omitempty" gorm:"column:action;not null;serializer:proto_enum"`
-	UserId     string                 `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	UserEmail  string                 `protobuf:"bytes,6,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty" gorm:"column:user_email"`
-	UserRole   string                 `protobuf:"bytes,7,opt,name=user_role,json=userRole,proto3" json:"user_role,omitempty" gorm:"column:user_role"`
-	OldValues  string                 `protobuf:"bytes,8,opt,name=old_values,json=oldValues,proto3" json:"old_values,omitempty" gorm:"column:old_values"`
-	NewValues  string                 `protobuf:"bytes,9,opt,name=new_values,json=newValues,proto3" json:"new_values,omitempty" gorm:"column:new_values"`
-	Changes    string                 `protobuf:"bytes,10,opt,name=changes,proto3" json:"changes,omitempty" gorm:"column:changes"`
-	IpAddress  string                 `protobuf:"bytes,11,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty" gorm:"column:ip_address"`
-	UserAgent  string                 `protobuf:"bytes,12,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty" gorm:"column:user_agent"`
-	TraceId    string                 `protobuf:"bytes,13,opt,name=trace_id,json=traceId,proto3" json:"trace_id,omitempty" gorm:"column:trace_id"`
-	Timestamp  *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=timestamp,proto3" json:"timestamp,omitempty" gorm:"column:timestamp;not null;serializer:proto_timestamp"`
+	AuditLogId string                 `protobuf:"bytes,1,opt,name=audit_log_id,json=auditLogId,proto3" json:"audit_log_id,omitempty"`                  // @inject_tag: gorm:"primaryKey;column:audit_log_id;not null"
+	EntityType string                 `protobuf:"bytes,2,opt,name=entity_type,json=entityType,proto3" json:"entity_type,omitempty"`                    // @inject_tag: gorm:"column:entity_type;not null"
+	EntityId   string                 `protobuf:"bytes,3,opt,name=entity_id,json=entityId,proto3" json:"entity_id,omitempty"`                          // @inject_tag: gorm:"column:entity_id;not null"
+	Action     AuditAction            `protobuf:"varint,4,opt,name=action,proto3,enum=insuretech.audit.entity.v1.AuditAction" json:"action,omitempty"` // @inject_tag: gorm:"column:action;not null;serializer:proto_enum"
+	UserId     string                 `protobuf:"bytes,5,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                // @inject_tag: gorm:"column:user_id"
+	UserEmail  string                 `protobuf:"bytes,6,opt,name=user_email,json=userEmail,proto3" json:"user_email,omitempty"`                       // @inject_tag: gorm:"column:user_email"
+	UserRole   string                 `protobuf:"bytes,7,opt,name=user_role,json=userRole,proto3" json:"user_role,omitempty"`                          // @inject_tag: gorm:"column:user_role"
+	OldValues  string                 `protobuf:"bytes,8,opt,name=old_values,json=oldValues,proto3" json:"old_values,omitempty"`                       // @inject_tag: gorm:"column:old_values"
+	NewValues  string                 `protobuf:"bytes,9,opt,name=new_values,json=newValues,proto3" json:"new_values,omitempty"`                       // @inject_tag: gorm:"column:new_values"
+	Changes    string                 `protobuf:"bytes,10,opt,name=changes,proto3" json:"changes,omitempty"`                                           // @inject_tag: gorm:"column:changes"
+	IpAddress  string                 `protobuf:"bytes,11,opt,name=ip_address,json=ipAddress,proto3" json:"ip_address,omitempty"`                      // @inject_tag: gorm:"column:ip_address"
+	UserAgent  string                 `protobuf:"bytes,12,opt,name=user_agent,json=userAgent,proto3" json:"user_agent,omitempty"`                      // @inject_tag: gorm:"column:user_agent"
+	TraceId    string                 `protobuf:"bytes,13,opt,name=trace_id,json=traceId,proto3" json:"trace_id,omitempty"`                            // @inject_tag: gorm:"column:trace_id"
+	Timestamp  *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=timestamp,proto3" json:"timestamp,omitempty"`                                       // @inject_tag: gorm:"column:timestamp;not null;serializer:proto_timestamp"
 }
 
 func (x *AuditLog) Reset() {

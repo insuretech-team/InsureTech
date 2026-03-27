@@ -138,15 +138,15 @@ type RenewalReminder struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:reminder_id;not null"`
-	RenewalScheduleId string                 `protobuf:"bytes,2,opt,name=renewal_schedule_id,json=renewalScheduleId,proto3" json:"renewal_schedule_id,omitempty" gorm:"column:renewal_schedule_id;not null"`
-	DaysBeforeRenewal int32                  `protobuf:"varint,3,opt,name=days_before_renewal,json=daysBeforeRenewal,proto3" json:"days_before_renewal,omitempty" gorm:"column:days_before_renewal;not null"`
-	Channel           ReminderChannel        `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.renewal.entity.v1.ReminderChannel" json:"channel,omitempty" gorm:"column:channel;not null;serializer:proto_enum"`
-	Status            ReminderStatus         `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.ReminderStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ScheduledAt       *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=scheduled_at,json=scheduledAt,proto3" json:"scheduled_at,omitempty" gorm:"column:scheduled_at;not null;serializer:proto_timestamp"`
-	SentAt            *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty" gorm:"column:sent_at;serializer:proto_timestamp"`
-	NotificationId    string                 `protobuf:"bytes,8,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty" gorm:"column:notification_id"`
-	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id                string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                              // @inject_tag: gorm:"primaryKey;column:reminder_id;not null"
+	RenewalScheduleId string                 `protobuf:"bytes,2,opt,name=renewal_schedule_id,json=renewalScheduleId,proto3" json:"renewal_schedule_id,omitempty"`     // @inject_tag: gorm:"column:renewal_schedule_id;not null"
+	DaysBeforeRenewal int32                  `protobuf:"varint,3,opt,name=days_before_renewal,json=daysBeforeRenewal,proto3" json:"days_before_renewal,omitempty"`    // @inject_tag: gorm:"column:days_before_renewal;not null"
+	Channel           ReminderChannel        `protobuf:"varint,4,opt,name=channel,proto3,enum=insuretech.renewal.entity.v1.ReminderChannel" json:"channel,omitempty"` // @inject_tag: gorm:"column:channel;not null;serializer:proto_enum"
+	Status            ReminderStatus         `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.renewal.entity.v1.ReminderStatus" json:"status,omitempty"`    // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ScheduledAt       *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=scheduled_at,json=scheduledAt,proto3" json:"scheduled_at,omitempty"`                         // @inject_tag: gorm:"column:scheduled_at;not null;serializer:proto_timestamp"
+	SentAt            *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=sent_at,json=sentAt,proto3" json:"sent_at,omitempty"`                                        // @inject_tag: gorm:"column:sent_at;serializer:proto_timestamp"
+	NotificationId    string                 `protobuf:"bytes,8,opt,name=notification_id,json=notificationId,proto3" json:"notification_id,omitempty"`                // @inject_tag: gorm:"column:notification_id"
+	AuditInfo         *v1.AuditInfo          `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                               // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *RenewalReminder) Reset() {

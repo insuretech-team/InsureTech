@@ -82,13 +82,13 @@ type TenantConfig struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id          string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:config_id;not null"`
-	TenantId    string        `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id;not null"`
-	ConfigKey   string        `protobuf:"bytes,3,opt,name=config_key,json=configKey,proto3" json:"config_key,omitempty" gorm:"column:config_key;not null"`
-	ConfigValue string        `protobuf:"bytes,4,opt,name=config_value,json=configValue,proto3" json:"config_value,omitempty" gorm:"column:config_value;not null"`
-	Type        ConfigType    `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.tenant.entity.v1.ConfigType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Description string        `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
-	AuditInfo   *v1.AuditInfo `protobuf:"bytes,7,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
+	Id          string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                  // @inject_tag: gorm:"primaryKey;column:config_id;not null"
+	TenantId    string        `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                      // @inject_tag: gorm:"column:tenant_id;not null"
+	ConfigKey   string        `protobuf:"bytes,3,opt,name=config_key,json=configKey,proto3" json:"config_key,omitempty"`                   // @inject_tag: gorm:"column:config_key;not null"
+	ConfigValue string        `protobuf:"bytes,4,opt,name=config_value,json=configValue,proto3" json:"config_value,omitempty"`             // @inject_tag: gorm:"column:config_value;not null"
+	Type        ConfigType    `protobuf:"varint,5,opt,name=type,proto3,enum=insuretech.tenant.entity.v1.ConfigType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Description string        `protobuf:"bytes,6,opt,name=description,proto3" json:"description,omitempty"`                                // @inject_tag: gorm:"column:description"
+	AuditInfo   *v1.AuditInfo `protobuf:"bytes,7,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                   // @inject_tag: gorm:"column:audit_info;not null"
 }
 
 func (x *TenantConfig) Reset() {

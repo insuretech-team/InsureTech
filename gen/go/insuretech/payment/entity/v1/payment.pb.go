@@ -338,61 +338,61 @@ type Payment struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	PaymentId             string                 `protobuf:"bytes,1,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty" gorm:"primaryKey;column:payment_id;not null"`
-	TransactionId         string                 `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty" gorm:"column:transaction_id"`
-	TigerbeetleTransferId string                 `protobuf:"bytes,3,opt,name=tigerbeetle_transfer_id,json=tigerbeetleTransferId,proto3" json:"tigerbeetle_transfer_id,omitempty" gorm:"column:tigerbeetle_transfer_id"`
-	PolicyId              string                 `protobuf:"bytes,4,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty" gorm:"column:policy_id"`
-	ClaimId               string                 `protobuf:"bytes,5,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty" gorm:"column:claim_id"`
-	Type                  PaymentType            `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.payment.entity.v1.PaymentType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
-	Method                PaymentMethod          `protobuf:"varint,7,opt,name=method,proto3,enum=insuretech.payment.entity.v1.PaymentMethod" json:"method,omitempty" gorm:"column:method;not null;serializer:proto_enum"`
-	Status                PaymentStatus          `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.payment.entity.v1.PaymentStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	Amount                *v1.Money              `protobuf:"bytes,9,opt,name=amount,proto3" json:"amount,omitempty" gorm:"column:amount;not null"`
-	Currency              string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty" gorm:"column:currency;not null"`
-	PayerId               string                 `protobuf:"bytes,11,opt,name=payer_id,json=payerId,proto3" json:"payer_id,omitempty" gorm:"column:payer_id;not null"`
-	PayeeId               string                 `protobuf:"bytes,12,opt,name=payee_id,json=payeeId,proto3" json:"payee_id,omitempty" gorm:"column:payee_id"`
-	InitiatedAt           *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=initiated_at,json=initiatedAt,proto3" json:"initiated_at,omitempty" gorm:"column:initiated_at;not null;serializer:proto_timestamp"`
-	CompletedAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
-	CreatedAt             *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt             *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
-	Gateway               string                 `protobuf:"bytes,17,opt,name=gateway,proto3" json:"gateway,omitempty" gorm:"column:gateway"`
-	GatewayResponse       string                 `protobuf:"bytes,18,opt,name=gateway_response,json=gatewayResponse,proto3" json:"gateway_response,omitempty" gorm:"column:gateway_response"`
-	ReceiptUrl            string                 `protobuf:"bytes,19,opt,name=receipt_url,json=receiptUrl,proto3" json:"receipt_url,omitempty" gorm:"column:receipt_url"`
-	RetryCount            int32                  `protobuf:"varint,20,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty" gorm:"column:retry_count;not null"`
-	FailureReason         string                 `protobuf:"bytes,21,opt,name=failure_reason,json=failureReason,proto3" json:"failure_reason,omitempty" gorm:"column:failure_reason"`
+	PaymentId             string                 `protobuf:"bytes,1,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                                       // @inject_tag: gorm:"primaryKey;column:payment_id;not null"
+	TransactionId         string                 `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty"`                           // @inject_tag: gorm:"column:transaction_id"
+	TigerbeetleTransferId string                 `protobuf:"bytes,3,opt,name=tigerbeetle_transfer_id,json=tigerbeetleTransferId,proto3" json:"tigerbeetle_transfer_id,omitempty"` // @inject_tag: gorm:"column:tigerbeetle_transfer_id"
+	PolicyId              string                 `protobuf:"bytes,4,opt,name=policy_id,json=policyId,proto3" json:"policy_id,omitempty"`                                          // @inject_tag: gorm:"column:policy_id"
+	ClaimId               string                 `protobuf:"bytes,5,opt,name=claim_id,json=claimId,proto3" json:"claim_id,omitempty"`                                             // @inject_tag: gorm:"column:claim_id"
+	Type                  PaymentType            `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.payment.entity.v1.PaymentType" json:"type,omitempty"`                   // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+	Method                PaymentMethod          `protobuf:"varint,7,opt,name=method,proto3,enum=insuretech.payment.entity.v1.PaymentMethod" json:"method,omitempty"`             // @inject_tag: gorm:"column:method;not null;serializer:proto_enum"
+	Status                PaymentStatus          `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.payment.entity.v1.PaymentStatus" json:"status,omitempty"`             // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	Amount                *v1.Money              `protobuf:"bytes,9,opt,name=amount,proto3" json:"amount,omitempty"`                                                              // @inject_tag: gorm:"column:amount;not null"
+	Currency              string                 `protobuf:"bytes,10,opt,name=currency,proto3" json:"currency,omitempty"`                                                         // @inject_tag: gorm:"column:currency;not null"
+	PayerId               string                 `protobuf:"bytes,11,opt,name=payer_id,json=payerId,proto3" json:"payer_id,omitempty"`                                            // @inject_tag: gorm:"column:payer_id;not null"
+	PayeeId               string                 `protobuf:"bytes,12,opt,name=payee_id,json=payeeId,proto3" json:"payee_id,omitempty"`                                            // @inject_tag: gorm:"column:payee_id"
+	InitiatedAt           *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=initiated_at,json=initiatedAt,proto3" json:"initiated_at,omitempty"`                                // @inject_tag: gorm:"column:initiated_at;not null;serializer:proto_timestamp"
+	CompletedAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                                // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
+	CreatedAt             *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                      // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt             *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                      // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	Gateway               string                 `protobuf:"bytes,17,opt,name=gateway,proto3" json:"gateway,omitempty"`                                                           // @inject_tag: gorm:"column:gateway"
+	GatewayResponse       string                 `protobuf:"bytes,18,opt,name=gateway_response,json=gatewayResponse,proto3" json:"gateway_response,omitempty"`                    // @inject_tag: gorm:"column:gateway_response"
+	ReceiptUrl            string                 `protobuf:"bytes,19,opt,name=receipt_url,json=receiptUrl,proto3" json:"receipt_url,omitempty"`                                   // @inject_tag: gorm:"column:receipt_url"
+	RetryCount            int32                  `protobuf:"varint,20,opt,name=retry_count,json=retryCount,proto3" json:"retry_count,omitempty"`                                  // @inject_tag: gorm:"column:retry_count;not null"
+	FailureReason         string                 `protobuf:"bytes,21,opt,name=failure_reason,json=failureReason,proto3" json:"failure_reason,omitempty"`                          // @inject_tag: gorm:"column:failure_reason"
 	// Idempotency key for preventing duplicate payment operations (CG-3)
-	IdempotencyKey    string `protobuf:"bytes,22,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty" gorm:"column:idempotency_key"`
-	OrderId           string `protobuf:"bytes,23,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty" gorm:"column:order_id;index:idx_payments_order_id"`
-	InvoiceId         string `protobuf:"bytes,24,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty" gorm:"column:invoice_id;index:idx_payments_invoice_id"`
-	TenantId          string `protobuf:"bytes,25,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id;index:idx_payments_tenant_id"`
-	CustomerId        string `protobuf:"bytes,26,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty" gorm:"column:customer_id;index:idx_payments_customer_id"`
-	OrganisationId    string `protobuf:"bytes,27,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty" gorm:"column:organisation_id;index:idx_payments_organisation_id"`
-	PurchaseOrderId   string `protobuf:"bytes,28,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty" gorm:"column:purchase_order_id;index:idx_payments_purchase_order_id"`
-	Provider          string `protobuf:"bytes,29,opt,name=provider,proto3" json:"provider,omitempty" gorm:"column:provider;index:idx_payments_provider"`
-	ProviderReference string `protobuf:"bytes,30,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty" gorm:"column:provider_reference"`
+	IdempotencyKey    string `protobuf:"bytes,22,opt,name=idempotency_key,json=idempotencyKey,proto3" json:"idempotency_key,omitempty"`          // @inject_tag: gorm:"column:idempotency_key"
+	OrderId           string `protobuf:"bytes,23,opt,name=order_id,json=orderId,proto3" json:"order_id,omitempty"`                               // @inject_tag: gorm:"column:order_id;index:idx_payments_order_id"
+	InvoiceId         string `protobuf:"bytes,24,opt,name=invoice_id,json=invoiceId,proto3" json:"invoice_id,omitempty"`                         // @inject_tag: gorm:"column:invoice_id;index:idx_payments_invoice_id"
+	TenantId          string `protobuf:"bytes,25,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                            // @inject_tag: gorm:"column:tenant_id;index:idx_payments_tenant_id"
+	CustomerId        string `protobuf:"bytes,26,opt,name=customer_id,json=customerId,proto3" json:"customer_id,omitempty"`                      // @inject_tag: gorm:"column:customer_id;index:idx_payments_customer_id"
+	OrganisationId    string `protobuf:"bytes,27,opt,name=organisation_id,json=organisationId,proto3" json:"organisation_id,omitempty"`          // @inject_tag: gorm:"column:organisation_id;index:idx_payments_organisation_id"
+	PurchaseOrderId   string `protobuf:"bytes,28,opt,name=purchase_order_id,json=purchaseOrderId,proto3" json:"purchase_order_id,omitempty"`     // @inject_tag: gorm:"column:purchase_order_id;index:idx_payments_purchase_order_id"
+	Provider          string `protobuf:"bytes,29,opt,name=provider,proto3" json:"provider,omitempty"`                                            // @inject_tag: gorm:"column:provider;index:idx_payments_provider"
+	ProviderReference string `protobuf:"bytes,30,opt,name=provider_reference,json=providerReference,proto3" json:"provider_reference,omitempty"` // @inject_tag: gorm:"column:provider_reference"
 	// SSLCommerz-specific fields
-	TranId              string                 `protobuf:"bytes,31,opt,name=tran_id,json=tranId,proto3" json:"tran_id,omitempty" gorm:"column:tran_id"`
-	ValId               string                 `protobuf:"bytes,32,opt,name=val_id,json=valId,proto3" json:"val_id,omitempty" gorm:"column:val_id"`
-	SessionKey          string                 `protobuf:"bytes,33,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty" gorm:"column:session_key"`
-	BankTranId          string                 `protobuf:"bytes,34,opt,name=bank_tran_id,json=bankTranId,proto3" json:"bank_tran_id,omitempty" gorm:"column:bank_tran_id"`
-	CardType            string                 `protobuf:"bytes,35,opt,name=card_type,json=cardType,proto3" json:"card_type,omitempty" gorm:"column:card_type"`
-	CardBrand           string                 `protobuf:"bytes,36,opt,name=card_brand,json=cardBrand,proto3" json:"card_brand,omitempty" gorm:"column:card_brand"`
-	CardIssuer          string                 `protobuf:"bytes,37,opt,name=card_issuer,json=cardIssuer,proto3" json:"card_issuer,omitempty" gorm:"column:card_issuer"`
-	CardIssuerCountry   string                 `protobuf:"bytes,38,opt,name=card_issuer_country,json=cardIssuerCountry,proto3" json:"card_issuer_country,omitempty" gorm:"column:card_issuer_country"`
-	ValidatedAt         *timestamppb.Timestamp `protobuf:"bytes,39,opt,name=validated_at,json=validatedAt,proto3" json:"validated_at,omitempty" gorm:"column:validated_at;serializer:proto_timestamp"`
-	ValidationStatus    string                 `protobuf:"bytes,40,opt,name=validation_status,json=validationStatus,proto3" json:"validation_status,omitempty" gorm:"column:validation_status"`
-	RiskLevel           string                 `protobuf:"bytes,41,opt,name=risk_level,json=riskLevel,proto3" json:"risk_level,omitempty" gorm:"column:risk_level"`
-	RiskTitle           string                 `protobuf:"bytes,42,opt,name=risk_title,json=riskTitle,proto3" json:"risk_title,omitempty" gorm:"column:risk_title"`
-	CallbackReceivedAt  *timestamppb.Timestamp `protobuf:"bytes,43,opt,name=callback_received_at,json=callbackReceivedAt,proto3" json:"callback_received_at,omitempty" gorm:"column:callback_received_at;serializer:proto_timestamp"`
-	IpnReceivedAt       *timestamppb.Timestamp `protobuf:"bytes,44,opt,name=ipn_received_at,json=ipnReceivedAt,proto3" json:"ipn_received_at,omitempty" gorm:"column:ipn_received_at;serializer:proto_timestamp"`
-	ManualReviewStatus  ManualReviewStatus     `protobuf:"varint,45,opt,name=manual_review_status,json=manualReviewStatus,proto3,enum=insuretech.payment.entity.v1.ManualReviewStatus" json:"manual_review_status,omitempty" gorm:"column:manual_review_status;not null;serializer:proto_enum"`
-	ManualProofFileId   string                 `protobuf:"bytes,46,opt,name=manual_proof_file_id,json=manualProofFileId,proto3" json:"manual_proof_file_id,omitempty" gorm:"column:manual_proof_file_id"`
-	VerifiedBy          string                 `protobuf:"bytes,47,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty" gorm:"column:verified_by"`
-	VerifiedAt          *timestamppb.Timestamp `protobuf:"bytes,48,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty" gorm:"column:verified_at;serializer:proto_timestamp"`
-	RejectionReason     string                 `protobuf:"bytes,49,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty" gorm:"column:rejection_reason"`
-	ReceiptNumber       string                 `protobuf:"bytes,50,opt,name=receipt_number,json=receiptNumber,proto3" json:"receipt_number,omitempty" gorm:"column:receipt_number"`
-	ReceiptDocumentId   string                 `protobuf:"bytes,51,opt,name=receipt_document_id,json=receiptDocumentId,proto3" json:"receipt_document_id,omitempty" gorm:"column:receipt_document_id"`
-	ReceiptFileId       string                 `protobuf:"bytes,52,opt,name=receipt_file_id,json=receiptFileId,proto3" json:"receipt_file_id,omitempty" gorm:"column:receipt_file_id"`
-	LedgerTransactionId string                 `protobuf:"bytes,53,opt,name=ledger_transaction_id,json=ledgerTransactionId,proto3" json:"ledger_transaction_id,omitempty" gorm:"column:ledger_transaction_id"`
+	TranId              string                 `protobuf:"bytes,31,opt,name=tran_id,json=tranId,proto3" json:"tran_id,omitempty"`                                                                                             // @inject_tag: gorm:"column:tran_id"
+	ValId               string                 `protobuf:"bytes,32,opt,name=val_id,json=valId,proto3" json:"val_id,omitempty"`                                                                                                // @inject_tag: gorm:"column:val_id"
+	SessionKey          string                 `protobuf:"bytes,33,opt,name=session_key,json=sessionKey,proto3" json:"session_key,omitempty"`                                                                                 // @inject_tag: gorm:"column:session_key"
+	BankTranId          string                 `protobuf:"bytes,34,opt,name=bank_tran_id,json=bankTranId,proto3" json:"bank_tran_id,omitempty"`                                                                               // @inject_tag: gorm:"column:bank_tran_id"
+	CardType            string                 `protobuf:"bytes,35,opt,name=card_type,json=cardType,proto3" json:"card_type,omitempty"`                                                                                       // @inject_tag: gorm:"column:card_type"
+	CardBrand           string                 `protobuf:"bytes,36,opt,name=card_brand,json=cardBrand,proto3" json:"card_brand,omitempty"`                                                                                    // @inject_tag: gorm:"column:card_brand"
+	CardIssuer          string                 `protobuf:"bytes,37,opt,name=card_issuer,json=cardIssuer,proto3" json:"card_issuer,omitempty"`                                                                                 // @inject_tag: gorm:"column:card_issuer"
+	CardIssuerCountry   string                 `protobuf:"bytes,38,opt,name=card_issuer_country,json=cardIssuerCountry,proto3" json:"card_issuer_country,omitempty"`                                                          // @inject_tag: gorm:"column:card_issuer_country"
+	ValidatedAt         *timestamppb.Timestamp `protobuf:"bytes,39,opt,name=validated_at,json=validatedAt,proto3" json:"validated_at,omitempty"`                                                                              // @inject_tag: gorm:"column:validated_at;serializer:proto_timestamp"
+	ValidationStatus    string                 `protobuf:"bytes,40,opt,name=validation_status,json=validationStatus,proto3" json:"validation_status,omitempty"`                                                               // @inject_tag: gorm:"column:validation_status"
+	RiskLevel           string                 `protobuf:"bytes,41,opt,name=risk_level,json=riskLevel,proto3" json:"risk_level,omitempty"`                                                                                    // @inject_tag: gorm:"column:risk_level"
+	RiskTitle           string                 `protobuf:"bytes,42,opt,name=risk_title,json=riskTitle,proto3" json:"risk_title,omitempty"`                                                                                    // @inject_tag: gorm:"column:risk_title"
+	CallbackReceivedAt  *timestamppb.Timestamp `protobuf:"bytes,43,opt,name=callback_received_at,json=callbackReceivedAt,proto3" json:"callback_received_at,omitempty"`                                                       // @inject_tag: gorm:"column:callback_received_at;serializer:proto_timestamp"
+	IpnReceivedAt       *timestamppb.Timestamp `protobuf:"bytes,44,opt,name=ipn_received_at,json=ipnReceivedAt,proto3" json:"ipn_received_at,omitempty"`                                                                      // @inject_tag: gorm:"column:ipn_received_at;serializer:proto_timestamp"
+	ManualReviewStatus  ManualReviewStatus     `protobuf:"varint,45,opt,name=manual_review_status,json=manualReviewStatus,proto3,enum=insuretech.payment.entity.v1.ManualReviewStatus" json:"manual_review_status,omitempty"` // @inject_tag: gorm:"column:manual_review_status;not null;serializer:proto_enum"
+	ManualProofFileId   string                 `protobuf:"bytes,46,opt,name=manual_proof_file_id,json=manualProofFileId,proto3" json:"manual_proof_file_id,omitempty"`                                                        // @inject_tag: gorm:"column:manual_proof_file_id"
+	VerifiedBy          string                 `protobuf:"bytes,47,opt,name=verified_by,json=verifiedBy,proto3" json:"verified_by,omitempty"`                                                                                 // @inject_tag: gorm:"column:verified_by"
+	VerifiedAt          *timestamppb.Timestamp `protobuf:"bytes,48,opt,name=verified_at,json=verifiedAt,proto3" json:"verified_at,omitempty"`                                                                                 // @inject_tag: gorm:"column:verified_at;serializer:proto_timestamp"
+	RejectionReason     string                 `protobuf:"bytes,49,opt,name=rejection_reason,json=rejectionReason,proto3" json:"rejection_reason,omitempty"`                                                                  // @inject_tag: gorm:"column:rejection_reason"
+	ReceiptNumber       string                 `protobuf:"bytes,50,opt,name=receipt_number,json=receiptNumber,proto3" json:"receipt_number,omitempty"`                                                                        // @inject_tag: gorm:"column:receipt_number"
+	ReceiptDocumentId   string                 `protobuf:"bytes,51,opt,name=receipt_document_id,json=receiptDocumentId,proto3" json:"receipt_document_id,omitempty"`                                                          // @inject_tag: gorm:"column:receipt_document_id"
+	ReceiptFileId       string                 `protobuf:"bytes,52,opt,name=receipt_file_id,json=receiptFileId,proto3" json:"receipt_file_id,omitempty"`                                                                      // @inject_tag: gorm:"column:receipt_file_id"
+	LedgerTransactionId string                 `protobuf:"bytes,53,opt,name=ledger_transaction_id,json=ledgerTransactionId,proto3" json:"ledger_transaction_id,omitempty"`                                                    // @inject_tag: gorm:"column:ledger_transaction_id"
 }
 
 func (x *Payment) Reset() {
@@ -805,17 +805,17 @@ type TigerBeetleAccount struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AccountId            string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty" gorm:"primaryKey;column:account_id;not null"`
-	TigerbeetleAccountId string                 `protobuf:"bytes,2,opt,name=tigerbeetle_account_id,json=tigerbeetleAccountId,proto3" json:"tigerbeetle_account_id,omitempty" gorm:"column:tigerbeetle_account_id;not null"`
-	UserId               string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"column:user_id"`
-	AccountType          string                 `protobuf:"bytes,4,opt,name=account_type,json=accountType,proto3" json:"account_type,omitempty" gorm:"column:account_type;not null"`
-	LedgerId             int32                  `protobuf:"varint,5,opt,name=ledger_id,json=ledgerId,proto3" json:"ledger_id,omitempty" gorm:"column:ledger_id;not null"`
-	Currency             string                 `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty" gorm:"column:currency;not null"`
-	Balance              int64                  `protobuf:"varint,7,opt,name=balance,proto3" json:"balance,omitempty" gorm:"column:balance;not null"`
-	BalanceUpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=balance_updated_at,json=balanceUpdatedAt,proto3" json:"balance_updated_at,omitempty" gorm:"column:balance_updated_at;serializer:proto_timestamp"`
-	IsActive             bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active;not null"`
-	CreatedAt            *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt            *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	AccountId            string                 `protobuf:"bytes,1,opt,name=account_id,json=accountId,proto3" json:"account_id,omitempty"`                                    // @inject_tag: gorm:"primaryKey;column:account_id;not null"
+	TigerbeetleAccountId string                 `protobuf:"bytes,2,opt,name=tigerbeetle_account_id,json=tigerbeetleAccountId,proto3" json:"tigerbeetle_account_id,omitempty"` // @inject_tag: gorm:"column:tigerbeetle_account_id;not null"
+	UserId               string                 `protobuf:"bytes,3,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`                                             // @inject_tag: gorm:"column:user_id"
+	AccountType          string                 `protobuf:"bytes,4,opt,name=account_type,json=accountType,proto3" json:"account_type,omitempty"`                              // @inject_tag: gorm:"column:account_type;not null"
+	LedgerId             int32                  `protobuf:"varint,5,opt,name=ledger_id,json=ledgerId,proto3" json:"ledger_id,omitempty"`                                      // @inject_tag: gorm:"column:ledger_id;not null"
+	Currency             string                 `protobuf:"bytes,6,opt,name=currency,proto3" json:"currency,omitempty"`                                                       // @inject_tag: gorm:"column:currency;not null"
+	Balance              int64                  `protobuf:"varint,7,opt,name=balance,proto3" json:"balance,omitempty"`                                                        // @inject_tag: gorm:"column:balance;not null"
+	BalanceUpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=balance_updated_at,json=balanceUpdatedAt,proto3" json:"balance_updated_at,omitempty"`             // @inject_tag: gorm:"column:balance_updated_at;serializer:proto_timestamp"
+	IsActive             bool                   `protobuf:"varint,9,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                                      // @inject_tag: gorm:"column:is_active;not null"
+	CreatedAt            *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                   // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt            *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                   // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
 }
 
 func (x *TigerBeetleAccount) Reset() {
@@ -934,17 +934,17 @@ type PaymentRefund struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	RefundId        string                 `protobuf:"bytes,1,opt,name=refund_id,json=refundId,proto3" json:"refund_id,omitempty" gorm:"primaryKey;column:refund_id;not null"`
-	PaymentId       string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty" gorm:"column:payment_id;not null"`
-	RefundPaymentId string                 `protobuf:"bytes,3,opt,name=refund_payment_id,json=refundPaymentId,proto3" json:"refund_payment_id,omitempty" gorm:"column:refund_payment_id"`
-	RefundAmount    *v1.Money              `protobuf:"bytes,4,opt,name=refund_amount,json=refundAmount,proto3" json:"refund_amount,omitempty" gorm:"column:refund_amount;not null"`
-	Reason          string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty" gorm:"column:reason;not null"`
-	Status          PaymentRefundStatus    `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.payment.entity.v1.PaymentRefundStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
-	ApprovedBy      string                 `protobuf:"bytes,7,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty" gorm:"column:approved_by"`
-	ApprovedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty" gorm:"column:approved_at;serializer:proto_timestamp"`
-	ProcessedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty" gorm:"column:processed_at;serializer:proto_timestamp"`
-	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
-	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	RefundId        string                 `protobuf:"bytes,1,opt,name=refund_id,json=refundId,proto3" json:"refund_id,omitempty"`                                    // @inject_tag: gorm:"primaryKey;column:refund_id;not null"
+	PaymentId       string                 `protobuf:"bytes,2,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                                 // @inject_tag: gorm:"column:payment_id;not null"
+	RefundPaymentId string                 `protobuf:"bytes,3,opt,name=refund_payment_id,json=refundPaymentId,proto3" json:"refund_payment_id,omitempty"`             // @inject_tag: gorm:"column:refund_payment_id"
+	RefundAmount    *v1.Money              `protobuf:"bytes,4,opt,name=refund_amount,json=refundAmount,proto3" json:"refund_amount,omitempty"`                        // @inject_tag: gorm:"column:refund_amount;not null"
+	Reason          string                 `protobuf:"bytes,5,opt,name=reason,proto3" json:"reason,omitempty"`                                                        // @inject_tag: gorm:"column:reason;not null"
+	Status          PaymentRefundStatus    `protobuf:"varint,6,opt,name=status,proto3,enum=insuretech.payment.entity.v1.PaymentRefundStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+	ApprovedBy      string                 `protobuf:"bytes,7,opt,name=approved_by,json=approvedBy,proto3" json:"approved_by,omitempty"`                              // @inject_tag: gorm:"column:approved_by"
+	ApprovedAt      *timestamppb.Timestamp `protobuf:"bytes,8,opt,name=approved_at,json=approvedAt,proto3" json:"approved_at,omitempty"`                              // @inject_tag: gorm:"column:approved_at;serializer:proto_timestamp"
+	ProcessedAt     *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=processed_at,json=processedAt,proto3" json:"processed_at,omitempty"`                           // @inject_tag: gorm:"column:processed_at;serializer:proto_timestamp"
+	CreatedAt       *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+	UpdatedAt       *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
 }
 
 func (x *PaymentRefund) Reset() {

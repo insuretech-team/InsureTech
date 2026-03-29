@@ -46,10 +46,9 @@ public class BeneficiaryGrpcService : Insuretech.Beneficiary.Services.V1.Benefic
     {
         return await _mediator.Send(new Application.Commands.UpdateBeneficiaryCommand(
             request.BeneficiaryId,
-            request.Status,
-            request.RiskScore,
-            request.FocalPersonName,
-            request.FocalPersonMobile
+            request.MobileNumber,
+            request.Email,
+            request.Address
         ));
     }
 
@@ -57,9 +56,10 @@ public class BeneficiaryGrpcService : Insuretech.Beneficiary.Services.V1.Benefic
     {
         return await _mediator.Send(new Application.Commands.CompleteKYCCommand(
             request.BeneficiaryId,
-            request.IdType,
-            request.IdNumber,
-            request.IdUrl
+            request.NidFrontUrl,
+            request.NidBackUrl,
+            request.SelfieUrl,
+            request.PorichoyVerificationId
         ));
     }
 
@@ -78,8 +78,7 @@ public class BeneficiaryGrpcService : Insuretech.Beneficiary.Services.V1.Benefic
             request.Page,
             request.PageSize,
             request.Type,
-            request.Status,
-            request.SearchTerm
+            request.Status
         ));
     }
 }

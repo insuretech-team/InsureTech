@@ -16,6 +16,7 @@
     <ProjectReference Include="..\InsuranceEngine.Claims\InsuranceEngine.Claims.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Commission\InsuranceEngine.Commission.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Report\InsuranceEngine.Report.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />

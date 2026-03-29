@@ -51,9 +51,9 @@ public sealed class GetBeneficiaryQueryHandler : IRequestHandler<GetBeneficiaryQ
             PartnerId = e.PartnerId?.ToString() ?? ""
         };
 
-        if (Enum.TryParse<Insuretech.Beneficiary.Entity.V1.BeneficiaryType>(e.Type, true, out var bt)) b.Type = bt;
-        if (Enum.TryParse<Insuretech.Beneficiary.Entity.V1.BeneficiaryStatus>(e.Status, true, out var bs)) b.Status = bs;
-        if (Enum.TryParse<Insuretech.Beneficiary.Entity.V1.KYCStatus>(e.KycStatus, true, out var ks)) b.KycStatus = ks;
+        if (System.Enum.TryParse<Insuretech.Beneficiary.Entity.V1.BeneficiaryType>(e.Type, true, out var bt)) b.Type = bt;
+        if (System.Enum.TryParse<Insuretech.Beneficiary.Entity.V1.BeneficiaryStatus>(e.Status, true, out var bs)) b.Status = bs;
+        if (System.Enum.TryParse<Insuretech.Beneficiary.Entity.V1.KYCStatus>(e.KycStatus, true, out var ks)) b.KycStatus = ks;
         if (e.KycCompletedAt.HasValue) b.KycCompletedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.KycCompletedAt.Value, DateTimeKind.Utc));
 
         return b;

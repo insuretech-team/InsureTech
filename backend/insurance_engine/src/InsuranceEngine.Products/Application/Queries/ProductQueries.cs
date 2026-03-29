@@ -5,7 +5,7 @@ using Insuretech.Common.V1;
 
 namespace InsuranceEngine.Products.Application.Queries;
 
-public sealed record ListProductsQuery(ProductCategory Category = ProductCategory.Unspecified, string? SearchTerm = null, int Page = 1, int PageSize = 20) : IRequest<ListProductsResponse>;
+public sealed record ListProductsQuery(ProductCategory Category = ProductCategory.Unspecified, int Page = 1, int PageSize = 20) : IRequest<ListProductsResponse>;
 
 public sealed record GetProductQuery(string ProductId) : IRequest<GetProductResponse>;
 

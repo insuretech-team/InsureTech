@@ -30,7 +30,7 @@ public sealed class ListProductsQueryHandler : IRequestHandler<ListProductsQuery
 
     public async Task<ListProductsResponse> Handle(ListProductsQuery request, CancellationToken cancellationToken)
     {
-        string cacheKey = $"products_list_{request.Category}_{request.Page}_{request.PageSize}_{request.SearchTerm}";
+        string cacheKey = $"products_list_{request.Category}_{request.Page}_{request.PageSize}";
         var cachedData = await _cache.GetStringAsync(cacheKey, cancellationToken);
         
         if (!string.IsNullOrEmpty(cachedData))
@@ -55,15 +55,6 @@ public sealed class ListProductsQueryHandler : IRequestHandler<ListProductsQuery
                 predicate = p => p.Category == categoryStr;
             }
 
-            if (!string.IsNullOrWhiteSpace(request.SearchTerm))
-            {
-                var searchTerm = request.SearchTerm.ToLower();
-                var searchPredicate = (Expression<Func<ProductEntity, bool>>)(p => 
-                    p.ProductName.ToLower().Contains(searchTerm) || 
-                    p.ProductCode.ToLower().Contains(searchTerm));
-                
-                predicate = predicate == null ? searchPredicate : Combine(predicate, searchPredicate);
-            }
 
             var (items, totalCount) = await _repository.GetPagedAsync(
                 page: request.Page,

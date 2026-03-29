@@ -9,6 +9,5 @@ public record ListBeneficiariesQuery(
     int Page,
     int PageSize,
     string? Type,
-    string? Status,
-    string? SearchTerm
+    string? Status
 ) : IRequest<ListBeneficiariesResponse>;

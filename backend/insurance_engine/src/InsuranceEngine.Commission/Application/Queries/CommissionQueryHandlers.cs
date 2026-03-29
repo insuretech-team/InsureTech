@@ -30,14 +30,20 @@ public sealed class GetCommissionQueryHandler : IRequestHandler<GetCommissionQue
         {
             CommissionId = e.CommissionId.ToString(),
             PolicyId = e.PolicyId.ToString(),
-            CommissionType = e.CommissionType,
-            RecipientType = e.RecipientType,
-            RecipientId = e.RecipientId.ToString(),
-            Status = e.Status,
             CommissionRate = (double)e.CommissionRate,
-            CommissionAmount = new Money { Amount = e.CommissionAmount, Currency = e.CommissionCurrency },
-            PremiumAmount = new Money { Amount = e.PremiumAmount, Currency = e.PremiumCurrency }
+            CommissionAmount = new Money { Amount = e.CommissionAmount, Currency = e.CommissionCurrency }
         };
+
+        if (e.RecipientType == "PARTNER") c.PartnerId = e.RecipientId.ToString();
+        else if (e.RecipientType == "AGENT") c.AgentId = e.RecipientId.ToString();
+
+        if (System.Enum.TryParse<Insuretech.Partner.Entity.V1.CommissionType>(e.CommissionType, true, out var ct)) c.Type = ct;
+        if (System.Enum.TryParse<Insuretech.Partner.Entity.V1.CommissionStatus>(e.Status, true, out var cs)) c.Status = cs;
+
+        if (e.PaidAt.HasValue) c.PaidAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.PaidAt.Value, DateTimeKind.Utc));
+        c.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.CreatedAt, DateTimeKind.Utc));
+        c.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.UpdatedAt, DateTimeKind.Utc));
+
         return c;
     }
 }

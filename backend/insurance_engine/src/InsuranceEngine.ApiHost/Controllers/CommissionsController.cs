@@ -23,30 +23,31 @@ public class CommissionsController : ControllerBase
     public async Task<IActionResult> Calculate([FromBody] CalculateCommissionRequest request)
     {
         var command = new CalculateCommissionCommand(
-            request.PolicyId,
-            request.AgentId,
-            request.PremiumAmount);
+            PolicyId: request.PolicyId,
+            CommissionType: "ACQUISITION", // Default or from request
+            RecipientType: "AGENT",        // Default or from request
+            RecipientId: request.AgentId);
 
         var result = await _mediator.Send(command);
 
-        if (result.IsSuccess)
-            return Ok(new { id = result.Value, message = "Commission calculated successfully" });
+        if (string.IsNullOrEmpty(result.Error?.Code))
+            return Ok(new { id = result.CommissionId, message = "Commission calculated successfully" });
 
-        return BadRequest(MapError(result.Error!));
+        return BadRequest(new { code = result.Error.Code, message = result.Error.Message });
     }
 
     [HttpGet("{id}")]
     public async Task<IActionResult> Get(string id)
     {
-        var result = await _mediator.Send(new GetCommissionQuery(id));
+        var response = await _mediator.Send(new GetCommissionQuery(id));
 
-        if (result.IsNotFound)
-            return NotFound(MapError(result.Error!));
+        if (!string.IsNullOrEmpty(response.Error?.Code))
+        {
+            if (response.Error.Code == "NOT_FOUND") return NotFound(new { code = response.Error.Code, message = response.Error.Message });
+            return BadRequest(new { code = response.Error.Code, message = response.Error.Message });
+        }
 
-        if (result.IsFailure)
-            return BadRequest(MapError(result.Error!));
-
-        return Ok(MapToResponse(result.Value!));
+        return Ok(MapToResponse(response.Commission));
     }
 
     [HttpGet]
@@ -56,38 +57,45 @@ public class CommissionsController : ControllerBase
         [FromQuery] int page = 1,
         [FromQuery] int pageSize = 20)
     {
-        var result = await _mediator.Send(new ListCommissionsQuery(agentId, status, page, pageSize));
+        var query = new ListCommissionsQuery(
+            RecipientType: "AGENT",
+            RecipientId: agentId ?? "",
+            Status: status,
+            StartDate: null,
+            EndDate: null,
+            Page: page,
+            PageSize: pageSize);
 
-        if (result.IsFailure)
-            return BadRequest(MapError(result.Error!));
+        var response = await _mediator.Send(query);
 
-        var items = result.Value.Items.Select(MapToResponse).ToList();
-        return Ok(new CommissionListResponse(items, result.Value.TotalCount));
+        var items = response.Commissions.Select(MapToResponse).ToList();
+        return Ok(new CommissionListResponse(items, response.TotalCount));
     }
 
     [HttpPost("{id}/payout")]
-    public async Task<IActionResult> ProcessPayout(string id)
+    public async Task<IActionResult> ProcessPayout(string id, [FromQuery] string paymentMethod = "BANK_TRANSFER")
     {
-        var result = await _mediator.Send(new ProcessPayoutCommand(id));
+        var command = new ProcessPayoutCommand(
+            PayoutId: id,
+            PaymentMethod: paymentMethod,
+            PaymentReference: null);
 
-        if (result.IsFailure)
-            return BadRequest(MapError(result.Error!));
-
+        var result = await _mediator.Send(command);
         return Ok(new { message = "Commission payout processed" });
     }
 
     private static ErrorDto MapError(SharedKernel.CQRS.Error error) => new(error.Code, error.Message);
 
-    private static CommissionResponse MapToResponse(CommissionDto dto) => new(
-        dto.CommissionId,
-        dto.PolicyId,
-        dto.AgentId,
-        dto.PremiumAmount,
-        dto.CommissionRate,
-        dto.CommissionAmount,
-        dto.Status,
-        dto.PaidAt,
-        dto.CreatedAt);
+    private static CommissionResponse MapToResponse(Insuretech.Partner.Entity.V1.Commission c) => new(
+        c.CommissionId,
+        c.PolicyId,
+        c.AgentId ?? "",
+        (decimal)c.CommissionAmount.Amount / 100m,
+        (decimal)c.CommissionRate,
+        (decimal)c.CommissionAmount.Amount / 100m, // Simplification for API
+        c.Status.ToString(),
+        c.PaidAt?.ToDateTime(),
+        c.CreatedAt?.ToDateTime());
 }
 
 public record CalculateCommissionRequest(

@@ -26,17 +26,17 @@ public record CreateBusinessBeneficiaryCommand(
 
 public record UpdateBeneficiaryCommand(
     string BeneficiaryId,
-    string? Status,
-    string? RiskScore,
-    string? FocalPersonName,
-    string? FocalPersonMobile
+    string? MobileNumber,
+    string? Email,
+    string? Address
 ) : IRequest<UpdateBeneficiaryResponse>;
 
 public record CompleteKYCCommand(
     string BeneficiaryId,
-    string IdType,
-    string IdNumber,
-    string IdUrl
+    string NidFrontUrl,
+    string NidBackUrl,
+    string SelfieUrl,
+    string? PorichoyVerificationId
 ) : IRequest<CompleteKYCResponse>;
 
 public record UpdateRiskScoreCommand(

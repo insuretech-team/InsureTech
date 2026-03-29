@@ -58,7 +58,7 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(CreateIndividualBeneficiaryCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(CreatePolicyCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(CreateQuoteCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(RequestQuoteCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(SubmitClaimCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(CalculateCommissionCommand).Assembly);
 });

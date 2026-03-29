@@ -31,7 +31,7 @@ namespace Insuretech.Products.Entity.V1 {
             "cmV0ZWNoL3Byb2R1Y3RzL2VudGl0eS92MS9wcm9kdWN0X3BsYW4ucHJvdG8a",
             "KWluc3VyZXRlY2gvcHJvZHVjdHMvZW50aXR5L3YxL3JpZGVyLnByb3RvGjJp",
             "bnN1cmV0ZWNoL3Byb2R1Y3RzL2VudGl0eS92MS9wcmljaW5nX2NvbmZpZy5w",
-            "cm90byKgGQoHUHJvZHVjdBJoCgpwcm9kdWN0X2lkGAEgASgJQkmStRhFCgpw",
+            "cm90byLkGwoHUHJvZHVjdBJoCgpwcm9kdWN0X2lkGAEgASgJQkmStRhFCgpw",
             "cm9kdWN0X2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClaGlByaW1h",
             "cnkga2V5IC0gUHJvZHVjdCBVVUlEUglwcm9kdWN0SWQSxgEKDHByb2R1Y3Rf",
             "Y29kZRgCIAEoCUKiAZK1GJ0BCgxwcm9kdWN0X2NvZGUSC1ZBUkNIQVIoNTAp",
@@ -82,53 +82,77 @@ namespace Insuretech.Products.Entity.V1 {
             "byBjcmVhdGVkIHRoZSBwcm9kdWN0UgljcmVhdGVkQnkSfAoKZGVsZXRlZF9h",
             "dBgQIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCQZK1GD0KCmRl",
             "bGV0ZWRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVoVU29mdCBkZWxl",
-            "dGUgdGltZXN0YW1wUglkZWxldGVkQXQSTwoQYXZhaWxhYmxlX3JpZGVycxgR",
-            "IAMoCzIkLmluc3VyZXRlY2gucHJvZHVjdHMuZW50aXR5LnYxLlJpZGVyUg9h",
-            "dmFpbGFibGVSaWRlcnMSUwoOcHJpY2luZ19jb25maWcYEiABKAsyLC5pbnN1",
-            "cmV0ZWNoLnByb2R1Y3RzLmVudGl0eS52MS5QcmljaW5nQ29uZmlnUg1wcmlj",
-            "aW5nQ29uZmlnEm0KEnByb2R1Y3RfYXR0cmlidXRlcxgTIAEoCUI+krUYOgoS",
-            "cHJvZHVjdF9hdHRyaWJ1dGVzEgVKU09OQlobRmxleGlibGUgcHJvZHVjdCBh",
-            "dHRyaWJ1dGVzeAFSEXByb2R1Y3RBdHRyaWJ1dGVzEkAKBXBsYW5zGBQgAygL",
-            "MiouaW5zdXJldGVjaC5wcm9kdWN0cy5lbnRpdHkudjEuUHJvZHVjdFBsYW5S",
-            "BXBsYW5zEpABChViYXNlX3ByZW1pdW1fY3VycmVuY3kYkU4gASgJQluStRhX",
-            "ChViYXNlX3ByZW1pdW1fY3VycmVuY3kSClZBUkNIQVIoMykYAToFJ0JEVCda",
-            "KUN1cnJlbmN5IGNvZGUgZm9yIGJhc2VfcHJlbWl1bSAoSVNPIDQyMTcpUhNi",
-            "YXNlUHJlbWl1bUN1cnJlbmN5EpsBChhtaW5fc3VtX2luc3VyZWRfY3VycmVu",
-            "Y3kYkk4gASgJQmGStRhdChhtaW5fc3VtX2luc3VyZWRfY3VycmVuY3kSClZB",
-            "UkNIQVIoMykYAToFJ0JEVCdaLEN1cnJlbmN5IGNvZGUgZm9yIG1pbl9zdW1f",
-            "aW5zdXJlZCAoSVNPIDQyMTcpUhVtaW5TdW1JbnN1cmVkQ3VycmVuY3kSmwEK",
-            "GG1heF9zdW1faW5zdXJlZF9jdXJyZW5jeRiTTiABKAlCYZK1GF0KGG1heF9z",
-            "dW1faW5zdXJlZF9jdXJyZW5jeRIKVkFSQ0hBUigzKRgBOgUnQkRUJ1osQ3Vy",
-            "cmVuY3kgY29kZSBmb3IgbWF4X3N1bV9pbnN1cmVkIChJU08gNDIxNylSFW1h",
-            "eFN1bUluc3VyZWRDdXJyZW5jeTpxirUYbQoIcHJvZHVjdHMSEGluc3VyYW5j",
-            "ZV9zY2hlbWEYEyABKkdJbnN1cmFuY2UgcHJvZHVjdCBjYXRhbG9nIChNb3Rv",
-            "ciwgSGVhbHRoLCBUcmF2ZWwsIERldmljZSwgQWdyaWN1bHR1cmFsKTABOAEq",
-            "/wEKD1Byb2R1Y3RDYXRlZ29yeRIgChxQUk9EVUNUX0NBVEVHT1JZX1VOU1BF",
-            "Q0lGSUVEEAASGgoWUFJPRFVDVF9DQVRFR09SWV9NT1RPUhABEhsKF1BST0RV",
-            "Q1RfQ0FURUdPUllfSEVBTFRIEAISGwoXUFJPRFVDVF9DQVRFR09SWV9UUkFW",
-            "RUwQAxIZChVQUk9EVUNUX0NBVEVHT1JZX0hPTUUQBBIbChdQUk9EVUNUX0NB",
-            "VEVHT1JZX0RFVklDRRAFEiEKHVBST0RVQ1RfQ0FURUdPUllfQUdSSUNVTFRV",
-            "UkFMEAYSGQoVUFJPRFVDVF9DQVRFR09SWV9MSUZFEAcqogEKDVByb2R1Y3RT",
-            "dGF0dXMSHgoaUFJPRFVDVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIYChRQUk9E",
-            "VUNUX1NUQVRVU19EUkFGVBABEhkKFVBST0RVQ1RfU1RBVFVTX0FDVElWRRAC",
-            "EhsKF1BST0RVQ1RfU1RBVFVTX0lOQUNUSVZFEAMSHwobUFJPRFVDVF9TVEFU",
-            "VVNfRElTQ09OVElOVUVEEARCmgIKIWNvbS5pbnN1cmV0ZWNoLnByb2R1Y3Rz",
-            "LmVudGl0eS52MUIMUHJvZHVjdFByb3RvUAFaUGdpdGh1Yi5jb20vbmV3YWdl",
-            "LXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvcHJvZHVjdHMv",
-            "ZW50aXR5L3YxO2VudGl0eXYxogIDSVBFqgIdSW5zdXJldGVjaC5Qcm9kdWN0",
-            "cy5FbnRpdHkuVjHKAh1JbnN1cmV0ZWNoXFByb2R1Y3RzXEVudGl0eVxWMeIC",
-            "KUluc3VyZXRlY2hcUHJvZHVjdHNcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIg",
-            "SW5zdXJldGVjaDo6UHJvZHVjdHM6OkVudGl0eTo6VjFiBnByb3RvMw=="));
+            "dGUgdGltZXN0YW1wUglkZWxldGVkQXQSTwoHbWluX2FnZRhlIAEoBUI2krUY",
+            "MgoHbWluX2FnZRIHSU5URUdFUhgBOgIxOFoYTWluaW11bSBhZ2UgZm9yIGNv",
+            "dmVyYWdlUgZtaW5BZ2USTwoHbWF4X2FnZRhmIAEoBUI2krUYMgoHbWF4X2Fn",
+            "ZRIHSU5URUdFUhgBOgI2NVoYTWF4aW11bSBhZ2UgZm9yIGNvdmVyYWdlUgZt",
+            "YXhBZ2USSwoJdGVybXNfdXJsGGcgASgJQi6StRgqCgl0ZXJtc191cmwSDFZB",
+            "UkNIQVIoNTAwKVoPTGluayB0byBUJkMgUERGUgh0ZXJtc1VybBJTCglxdWVz",
+            "dGlvbnMYaCADKAsyNS5pbnN1cmV0ZWNoLnByb2R1Y3RzLmVudGl0eS52MS5S",
+            "aXNrQXNzZXNzbWVudFF1ZXN0aW9uUglxdWVzdGlvbnMSTwoQYXZhaWxhYmxl",
+            "X3JpZGVycxgRIAMoCzIkLmluc3VyZXRlY2gucHJvZHVjdHMuZW50aXR5LnYx",
+            "LlJpZGVyUg9hdmFpbGFibGVSaWRlcnMSUwoOcHJpY2luZ19jb25maWcYEiAB",
+            "KAsyLC5pbnN1cmV0ZWNoLnByb2R1Y3RzLmVudGl0eS52MS5QcmljaW5nQ29u",
+            "ZmlnUg1wcmljaW5nQ29uZmlnEm0KEnByb2R1Y3RfYXR0cmlidXRlcxgTIAEo",
+            "CUI+krUYOgoScHJvZHVjdF9hdHRyaWJ1dGVzEgVKU09OQlobRmxleGlibGUg",
+            "cHJvZHVjdCBhdHRyaWJ1dGVzeAFSEXByb2R1Y3RBdHRyaWJ1dGVzEkAKBXBs",
+            "YW5zGBQgAygLMiouaW5zdXJldGVjaC5wcm9kdWN0cy5lbnRpdHkudjEuUHJv",
+            "ZHVjdFBsYW5SBXBsYW5zEpABChViYXNlX3ByZW1pdW1fY3VycmVuY3kYkU4g",
+            "ASgJQluStRhXChViYXNlX3ByZW1pdW1fY3VycmVuY3kSClZBUkNIQVIoMykY",
+            "AToFJ0JEVCdaKUN1cnJlbmN5IGNvZGUgZm9yIGJhc2VfcHJlbWl1bSAoSVNP",
+            "IDQyMTcpUhNiYXNlUHJlbWl1bUN1cnJlbmN5EpsBChhtaW5fc3VtX2luc3Vy",
+            "ZWRfY3VycmVuY3kYkk4gASgJQmGStRhdChhtaW5fc3VtX2luc3VyZWRfY3Vy",
+            "cmVuY3kSClZBUkNIQVIoMykYAToFJ0JEVCdaLEN1cnJlbmN5IGNvZGUgZm9y",
+            "IG1pbl9zdW1faW5zdXJlZCAoSVNPIDQyMTcpUhVtaW5TdW1JbnN1cmVkQ3Vy",
+            "cmVuY3kSmwEKGG1heF9zdW1faW5zdXJlZF9jdXJyZW5jeRiTTiABKAlCYZK1",
+            "GF0KGG1heF9zdW1faW5zdXJlZF9jdXJyZW5jeRIKVkFSQ0hBUigzKRgBOgUn",
+            "QkRUJ1osQ3VycmVuY3kgY29kZSBmb3IgbWF4X3N1bV9pbnN1cmVkIChJU08g",
+            "NDIxNylSFW1heFN1bUluc3VyZWRDdXJyZW5jeTpxirUYbQoIcHJvZHVjdHMS",
+            "EGluc3VyYW5jZV9zY2hlbWEYFCABKkdJbnN1cmFuY2UgcHJvZHVjdCBjYXRh",
+            "bG9nIChNb3RvciwgSGVhbHRoLCBUcmF2ZWwsIERldmljZSwgQWdyaWN1bHR1",
+            "cmFsKTABOAEi9wEKFlJpc2tBc3Nlc3NtZW50UXVlc3Rpb24SHwoLcXVlc3Rp",
+            "b25faWQYASABKAlSCnF1ZXN0aW9uSWQSHwoLcXVlc3Rpb25fZW4YAiABKAlS",
+            "CnF1ZXN0aW9uRW4SHwoLcXVlc3Rpb25fYm4YAyABKAlSCnF1ZXN0aW9uQm4S",
+            "PwoEdHlwZRgEIAEoDjIrLmluc3VyZXRlY2gucHJvZHVjdHMuZW50aXR5LnYx",
+            "LlF1ZXN0aW9uVHlwZVIEdHlwZRIYCgdvcHRpb25zGAUgAygJUgdvcHRpb25z",
+            "Eh8KC2lzX3JlcXVpcmVkGAYgASgIUgppc1JlcXVpcmVkKoMBCgxRdWVzdGlv",
+            "blR5cGUSHQoZUVVFU1RJT05fVFlQRV9VTlNQRUNJRklFRBAAEhkKFVFVRVNU",
+            "SU9OX1RZUEVfQk9PTEVBThABEiEKHVFVRVNUSU9OX1RZUEVfTVVMVElQTEVf",
+            "Q0hPSUNFEAISFgoSUVVFU1RJT05fVFlQRV9URVhUEAMq/wEKD1Byb2R1Y3RD",
+            "YXRlZ29yeRIgChxQUk9EVUNUX0NBVEVHT1JZX1VOU1BFQ0lGSUVEEAASGgoW",
+            "UFJPRFVDVF9DQVRFR09SWV9NT1RPUhABEhsKF1BST0RVQ1RfQ0FURUdPUllf",
+            "SEVBTFRIEAISGwoXUFJPRFVDVF9DQVRFR09SWV9UUkFWRUwQAxIZChVQUk9E",
+            "VUNUX0NBVEVHT1JZX0hPTUUQBBIbChdQUk9EVUNUX0NBVEVHT1JZX0RFVklD",
+            "RRAFEiEKHVBST0RVQ1RfQ0FURUdPUllfQUdSSUNVTFRVUkFMEAYSGQoVUFJP",
+            "RFVDVF9DQVRFR09SWV9MSUZFEAcqogEKDVByb2R1Y3RTdGF0dXMSHgoaUFJP",
+            "RFVDVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIYChRQUk9EVUNUX1NUQVRVU19E",
+            "UkFGVBABEhkKFVBST0RVQ1RfU1RBVFVTX0FDVElWRRACEhsKF1BST0RVQ1Rf",
+            "U1RBVFVTX0lOQUNUSVZFEAMSHwobUFJPRFVDVF9TVEFUVVNfRElTQ09OVElO",
+            "VUVEEARCmgIKIWNvbS5pbnN1cmV0ZWNoLnByb2R1Y3RzLmVudGl0eS52MUIM",
+            "UHJvZHVjdFByb3RvUAFaUGdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3Vy",
+            "ZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvcHJvZHVjdHMvZW50aXR5L3YxO2Vu",
+            "dGl0eXYxogIDSVBFqgIdSW5zdXJldGVjaC5Qcm9kdWN0cy5FbnRpdHkuVjHK",
+            "Ah1JbnN1cmV0ZWNoXFByb2R1Y3RzXEVudGl0eVxWMeICKUluc3VyZXRlY2hc",
+            "UHJvZHVjdHNcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIgSW5zdXJldGVjaDo6",
+            "UHJvZHVjdHM6OkVudGl0eTo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Insuretech.Products.Entity.V1.ProductPlanReflection.Descriptor, global::Insuretech.Products.Entity.V1.RiderReflection.Descriptor, global::Insuretech.Products.Entity.V1.PricingConfigReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Products.Entity.V1.ProductCategory), typeof(global::Insuretech.Products.Entity.V1.ProductStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Products.Entity.V1.Product), global::Insuretech.Products.Entity.V1.Product.Parser, new[]{ "ProductId", "ProductCode", "ProductName", "Category", "Description", "BasePremium", "MinSumInsured", "MaxSumInsured", "MinTenureMonths", "MaxTenureMonths", "Exclusions", "Status", "CreatedAt", "UpdatedAt", "CreatedBy", "DeletedAt", "AvailableRiders", "PricingConfig", "ProductAttributes", "Plans", "BasePremiumCurrency", "MinSumInsuredCurrency", "MaxSumInsuredCurrency" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Products.Entity.V1.QuestionType), typeof(global::Insuretech.Products.Entity.V1.ProductCategory), typeof(global::Insuretech.Products.Entity.V1.ProductStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Products.Entity.V1.Product), global::Insuretech.Products.Entity.V1.Product.Parser, new[]{ "ProductId", "ProductCode", "ProductName", "Category", "Description", "BasePremium", "MinSumInsured", "MaxSumInsured", "MinTenureMonths", "MaxTenureMonths", "Exclusions", "Status", "CreatedAt", "UpdatedAt", "CreatedBy", "DeletedAt", "MinAge", "MaxAge", "TermsUrl", "Questions", "AvailableRiders", "PricingConfig", "ProductAttributes", "Plans", "BasePremiumCurrency", "MinSumInsuredCurrency", "MaxSumInsuredCurrency" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion), global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion.Parser, new[]{ "QuestionId", "QuestionEn", "QuestionBn", "Type", "Options", "IsRequired" }, null, null, null, null)
           }));
     }
     #endregion
 
   }
   #region Enums
+  public enum QuestionType {
+    [pbr::OriginalName("QUESTION_TYPE_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("QUESTION_TYPE_BOOLEAN")] Boolean = 1,
+    [pbr::OriginalName("QUESTION_TYPE_MULTIPLE_CHOICE")] MultipleChoice = 2,
+    [pbr::OriginalName("QUESTION_TYPE_TEXT")] Text = 3,
+  }
+
   public enum ProductCategory {
     [pbr::OriginalName("PRODUCT_CATEGORY_UNSPECIFIED")] Unspecified = 0,
     /// <summary>
@@ -239,6 +263,10 @@ namespace Insuretech.Products.Entity.V1 {
       updatedAt_ = other.updatedAt_ != null ? other.updatedAt_.Clone() : null;
       createdBy_ = other.createdBy_;
       deletedAt_ = other.deletedAt_ != null ? other.deletedAt_.Clone() : null;
+      minAge_ = other.minAge_;
+      maxAge_ = other.maxAge_;
+      termsUrl_ = other.termsUrl_;
+      questions_ = other.questions_.Clone();
       availableRiders_ = other.availableRiders_.Clone();
       pricingConfig_ = other.pricingConfig_ != null ? other.pricingConfig_.Clone() : null;
       productAttributes_ = other.productAttributes_;
@@ -488,6 +516,53 @@ namespace Insuretech.Products.Entity.V1 {
       }
     }
 
+    /// <summary>Field number for the "min_age" field.</summary>
+    public const int MinAgeFieldNumber = 101;
+    private int minAge_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MinAge {
+      get { return minAge_; }
+      set {
+        minAge_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "max_age" field.</summary>
+    public const int MaxAgeFieldNumber = 102;
+    private int maxAge_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MaxAge {
+      get { return maxAge_; }
+      set {
+        maxAge_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "terms_url" field.</summary>
+    public const int TermsUrlFieldNumber = 103;
+    private string termsUrl_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TermsUrl {
+      get { return termsUrl_; }
+      set {
+        termsUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "questions" field.</summary>
+    public const int QuestionsFieldNumber = 104;
+    private static readonly pb::FieldCodec<global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion> _repeated_questions_codec
+        = pb::FieldCodec.ForMessage(834, global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion.Parser);
+    private readonly pbc::RepeatedField<global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion> questions_ = new pbc::RepeatedField<global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Insuretech.Products.Entity.V1.RiskAssessmentQuestion> Questions {
+      get { return questions_; }
+    }
+
     /// <summary>Field number for the "available_riders" field.</summary>
     public const int AvailableRidersFieldNumber = 17;
     private static readonly pb::FieldCodec<global::Insuretech.Products.Entity.V1.Rider> _repeated_availableRiders_codec
@@ -616,6 +691,10 @@ namespace Insuretech.Products.Entity.V1 {
       if (!object.Equals(UpdatedAt, other.UpdatedAt)) return false;
       if (CreatedBy != other.CreatedBy) return false;
       if (!object.Equals(DeletedAt, other.DeletedAt)) return false;
+      if (MinAge != other.MinAge) return false;
+      if (MaxAge != other.MaxAge) return false;
+      if (TermsUrl != other.TermsUrl) return false;
+      if(!questions_.Equals(other.questions_)) return false;
       if(!availableRiders_.Equals(other.availableRiders_)) return false;
       if (!object.Equals(PricingConfig, other.PricingConfig)) return false;
       if (ProductAttributes != other.ProductAttributes) return false;
@@ -646,6 +725,10 @@ namespace Insuretech.Products.Entity.V1 {
       if (updatedAt_ != null) hash ^= UpdatedAt.GetHashCode();
       if (CreatedBy.Length != 0) hash ^= CreatedBy.GetHashCode();
       if (deletedAt_ != null) hash ^= DeletedAt.GetHashCode();
+      if (MinAge != 0) hash ^= MinAge.GetHashCode();
+      if (MaxAge != 0) hash ^= MaxAge.GetHashCode();
+      if (TermsUrl.Length != 0) hash ^= TermsUrl.GetHashCode();
+      hash ^= questions_.GetHashCode();
       hash ^= availableRiders_.GetHashCode();
       if (pricingConfig_ != null) hash ^= PricingConfig.GetHashCode();
       if (ProductAttributes.Length != 0) hash ^= ProductAttributes.GetHashCode();
@@ -742,6 +825,19 @@ namespace Insuretech.Products.Entity.V1 {
         output.WriteString(ProductAttributes);
       }
       plans_.WriteTo(output, _repeated_plans_codec);
+      if (MinAge != 0) {
+        output.WriteRawTag(168, 6);
+        output.WriteInt32(MinAge);
+      }
+      if (MaxAge != 0) {
+        output.WriteRawTag(176, 6);
+        output.WriteInt32(MaxAge);
+      }
+      if (TermsUrl.Length != 0) {
+        output.WriteRawTag(186, 6);
+        output.WriteString(TermsUrl);
+      }
+      questions_.WriteTo(output, _repeated_questions_codec);
       if (BasePremiumCurrency.Length != 0) {
         output.WriteRawTag(138, 241, 4);
         output.WriteString(BasePremiumCurrency);
@@ -835,6 +931,19 @@ namespace Insuretech.Products.Entity.V1 {
         output.WriteString(ProductAttributes);
       }
       plans_.WriteTo(ref output, _repeated_plans_codec);
+      if (MinAge != 0) {
+        output.WriteRawTag(168, 6);
+        output.WriteInt32(MinAge);
+      }
+      if (MaxAge != 0) {
+        output.WriteRawTag(176, 6);
+        output.WriteInt32(MaxAge);
+      }
+      if (TermsUrl.Length != 0) {
+        output.WriteRawTag(186, 6);
+        output.WriteString(TermsUrl);
+      }
+      questions_.WriteTo(ref output, _repeated_questions_codec);
       if (BasePremiumCurrency.Length != 0) {
         output.WriteRawTag(138, 241, 4);
         output.WriteString(BasePremiumCurrency);
@@ -903,6 +1012,16 @@ namespace Insuretech.Products.Entity.V1 {
       if (deletedAt_ != null) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(DeletedAt);
       }
+      if (MinAge != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(MinAge);
+      }
+      if (MaxAge != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeInt32Size(MaxAge);
+      }
+      if (TermsUrl.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(TermsUrl);
+      }
+      size += questions_.CalculateSize(_repeated_questions_codec);
       size += availableRiders_.CalculateSize(_repeated_availableRiders_codec);
       if (pricingConfig_ != null) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(PricingConfig);
@@ -996,6 +1115,16 @@ namespace Insuretech.Products.Entity.V1 {
         }
         DeletedAt.MergeFrom(other.DeletedAt);
       }
+      if (other.MinAge != 0) {
+        MinAge = other.MinAge;
+      }
+      if (other.MaxAge != 0) {
+        MaxAge = other.MaxAge;
+      }
+      if (other.TermsUrl.Length != 0) {
+        TermsUrl = other.TermsUrl;
+      }
+      questions_.Add(other.questions_);
       availableRiders_.Add(other.availableRiders_);
       if (other.pricingConfig_ != null) {
         if (pricingConfig_ == null) {
@@ -1136,6 +1265,22 @@ namespace Insuretech.Products.Entity.V1 {
             plans_.AddEntriesFrom(input, _repeated_plans_codec);
             break;
           }
+          case 808: {
+            MinAge = input.ReadInt32();
+            break;
+          }
+          case 816: {
+            MaxAge = input.ReadInt32();
+            break;
+          }
+          case 826: {
+            TermsUrl = input.ReadString();
+            break;
+          }
+          case 834: {
+            questions_.AddEntriesFrom(input, _repeated_questions_codec);
+            break;
+          }
           case 80010: {
             BasePremiumCurrency = input.ReadString();
             break;
@@ -1268,6 +1413,22 @@ namespace Insuretech.Products.Entity.V1 {
             plans_.AddEntriesFrom(ref input, _repeated_plans_codec);
             break;
           }
+          case 808: {
+            MinAge = input.ReadInt32();
+            break;
+          }
+          case 816: {
+            MaxAge = input.ReadInt32();
+            break;
+          }
+          case 826: {
+            TermsUrl = input.ReadString();
+            break;
+          }
+          case 834: {
+            questions_.AddEntriesFrom(ref input, _repeated_questions_codec);
+            break;
+          }
           case 80010: {
             BasePremiumCurrency = input.ReadString();
             break;
@@ -1278,6 +1439,378 @@ namespace Insuretech.Products.Entity.V1 {
           }
           case 80026: {
             MaxSumInsuredCurrency = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class RiskAssessmentQuestion : pb::IMessage<RiskAssessmentQuestion>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<RiskAssessmentQuestion> _parser = new pb::MessageParser<RiskAssessmentQuestion>(() => new RiskAssessmentQuestion());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<RiskAssessmentQuestion> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Products.Entity.V1.ProductReflection.Descriptor.MessageTypes[1]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RiskAssessmentQuestion() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RiskAssessmentQuestion(RiskAssessmentQuestion other) : this() {
+      questionId_ = other.questionId_;
+      questionEn_ = other.questionEn_;
+      questionBn_ = other.questionBn_;
+      type_ = other.type_;
+      options_ = other.options_.Clone();
+      isRequired_ = other.isRequired_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public RiskAssessmentQuestion Clone() {
+      return new RiskAssessmentQuestion(this);
+    }
+
+    /// <summary>Field number for the "question_id" field.</summary>
+    public const int QuestionIdFieldNumber = 1;
+    private string questionId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string QuestionId {
+      get { return questionId_; }
+      set {
+        questionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "question_en" field.</summary>
+    public const int QuestionEnFieldNumber = 2;
+    private string questionEn_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string QuestionEn {
+      get { return questionEn_; }
+      set {
+        questionEn_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "question_bn" field.</summary>
+    public const int QuestionBnFieldNumber = 3;
+    private string questionBn_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string QuestionBn {
+      get { return questionBn_; }
+      set {
+        questionBn_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "type" field.</summary>
+    public const int TypeFieldNumber = 4;
+    private global::Insuretech.Products.Entity.V1.QuestionType type_ = global::Insuretech.Products.Entity.V1.QuestionType.Unspecified;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Products.Entity.V1.QuestionType Type {
+      get { return type_; }
+      set {
+        type_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "options" field.</summary>
+    public const int OptionsFieldNumber = 5;
+    private static readonly pb::FieldCodec<string> _repeated_options_codec
+        = pb::FieldCodec.ForString(42);
+    private readonly pbc::RepeatedField<string> options_ = new pbc::RepeatedField<string>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Options {
+      get { return options_; }
+    }
+
+    /// <summary>Field number for the "is_required" field.</summary>
+    public const int IsRequiredFieldNumber = 6;
+    private bool isRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsRequired {
+      get { return isRequired_; }
+      set {
+        isRequired_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as RiskAssessmentQuestion);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(RiskAssessmentQuestion other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (QuestionId != other.QuestionId) return false;
+      if (QuestionEn != other.QuestionEn) return false;
+      if (QuestionBn != other.QuestionBn) return false;
+      if (Type != other.Type) return false;
+      if(!options_.Equals(other.options_)) return false;
+      if (IsRequired != other.IsRequired) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (QuestionId.Length != 0) hash ^= QuestionId.GetHashCode();
+      if (QuestionEn.Length != 0) hash ^= QuestionEn.GetHashCode();
+      if (QuestionBn.Length != 0) hash ^= QuestionBn.GetHashCode();
+      if (Type != global::Insuretech.Products.Entity.V1.QuestionType.Unspecified) hash ^= Type.GetHashCode();
+      hash ^= options_.GetHashCode();
+      if (IsRequired != false) hash ^= IsRequired.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (QuestionId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(QuestionId);
+      }
+      if (QuestionEn.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(QuestionEn);
+      }
+      if (QuestionBn.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(QuestionBn);
+      }
+      if (Type != global::Insuretech.Products.Entity.V1.QuestionType.Unspecified) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Type);
+      }
+      options_.WriteTo(output, _repeated_options_codec);
+      if (IsRequired != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsRequired);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (QuestionId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(QuestionId);
+      }
+      if (QuestionEn.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(QuestionEn);
+      }
+      if (QuestionBn.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(QuestionBn);
+      }
+      if (Type != global::Insuretech.Products.Entity.V1.QuestionType.Unspecified) {
+        output.WriteRawTag(32);
+        output.WriteEnum((int) Type);
+      }
+      options_.WriteTo(ref output, _repeated_options_codec);
+      if (IsRequired != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(IsRequired);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (QuestionId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(QuestionId);
+      }
+      if (QuestionEn.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(QuestionEn);
+      }
+      if (QuestionBn.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(QuestionBn);
+      }
+      if (Type != global::Insuretech.Products.Entity.V1.QuestionType.Unspecified) {
+        size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
+      }
+      size += options_.CalculateSize(_repeated_options_codec);
+      if (IsRequired != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(RiskAssessmentQuestion other) {
+      if (other == null) {
+        return;
+      }
+      if (other.QuestionId.Length != 0) {
+        QuestionId = other.QuestionId;
+      }
+      if (other.QuestionEn.Length != 0) {
+        QuestionEn = other.QuestionEn;
+      }
+      if (other.QuestionBn.Length != 0) {
+        QuestionBn = other.QuestionBn;
+      }
+      if (other.Type != global::Insuretech.Products.Entity.V1.QuestionType.Unspecified) {
+        Type = other.Type;
+      }
+      options_.Add(other.options_);
+      if (other.IsRequired != false) {
+        IsRequired = other.IsRequired;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            QuestionId = input.ReadString();
+            break;
+          }
+          case 18: {
+            QuestionEn = input.ReadString();
+            break;
+          }
+          case 26: {
+            QuestionBn = input.ReadString();
+            break;
+          }
+          case 32: {
+            Type = (global::Insuretech.Products.Entity.V1.QuestionType) input.ReadEnum();
+            break;
+          }
+          case 42: {
+            options_.AddEntriesFrom(input, _repeated_options_codec);
+            break;
+          }
+          case 48: {
+            IsRequired = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            QuestionId = input.ReadString();
+            break;
+          }
+          case 18: {
+            QuestionEn = input.ReadString();
+            break;
+          }
+          case 26: {
+            QuestionBn = input.ReadString();
+            break;
+          }
+          case 32: {
+            Type = (global::Insuretech.Products.Entity.V1.QuestionType) input.ReadEnum();
+            break;
+          }
+          case 42: {
+            options_.AddEntriesFrom(ref input, _repeated_options_codec);
+            break;
+          }
+          case 48: {
+            IsRequired = input.ReadBool();
             break;
           }
         }

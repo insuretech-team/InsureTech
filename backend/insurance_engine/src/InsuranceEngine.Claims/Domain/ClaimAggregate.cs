@@ -28,13 +28,13 @@ public sealed class ClaimAggregate : AggregateRoot<Guid>
         CreatedAt = DateTime.UtcNow;
     }
 
-    public static ClaimAggregate Submit(Guid policyId, string type, decimal amount, string description, string? documentContent = null)
+    public static ClaimAggregate Submit(Guid policyId, string type, decimal amount, string description, long sequenceNumber, string? documentContent = null)
     {
-        // FR-083: Format: CLM-YYYY-XXXX-NNNNNN
+        // FR-083: Format: CLM-YYYY-XXXX-NNNNNN (collision-safe via DB sequence)
         var year = DateTime.UtcNow.Year;
         var monthDay = DateTime.UtcNow.ToString("MMdd");
-        var sequence = new Random().Next(100000, 999999);
-        var claimNumber = $"CLM-{year}-{monthDay}-{sequence}";
+        var seq = sequenceNumber.ToString().PadLeft(6, '0');
+        var claimNumber = $"CLM-{year}-{monthDay}-{seq}";
 
         var claim = new ClaimAggregate(Guid.NewGuid(), claimNumber, policyId, type, Money.FromDecimal(amount), description);
         

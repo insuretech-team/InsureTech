@@ -1,24 +1,22 @@
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Dapper;
 using Insuretech.Products.Services.V1;
 using Insuretech.Products.Entity.V1;
 using Insuretech.Common.V1;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
+using Google.Protobuf.WellKnownTypes;
 
 namespace InsuranceEngine.Products.Application.Queries;
 
 public sealed class GetProductQueryHandler : IRequestHandler<GetProductQuery, GetProductResponse>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _repository;
     private readonly ILogger<GetProductQueryHandler> _logger;
 
-    public GetProductQueryHandler(DbContext dbContext, ILogger<GetProductQueryHandler> logger)
+    public GetProductQueryHandler(IRepository<ProductEntity> repository, ILogger<GetProductQueryHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -26,47 +24,21 @@ public sealed class GetProductQueryHandler : IRequestHandler<GetProductQuery, Ge
     {
         try
         {
-            var sql = @"
-                SELECT product_id, product_code, product_name, description, category,
-                       base_premium, min_sum_insured, max_sum_insured,
-                       min_tenure_months, max_tenure_months, status, created_at
-                FROM insurance_schema.products
-                WHERE product_id = @ProductId AND deleted_at IS NULL";
+            var entity = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
 
-            using var connection = _dbContext.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open) await connection.OpenAsync(cancellationToken);
-
-            var item = await connection.QueryFirstOrDefaultAsync<dynamic>(sql, new
+            if (entity == null)
             {
-                ProductId = Guid.Parse(request.ProductId)
-            });
-
-            if (item == null) throw new Exception("Product not found");
-
-            var product = new Insuretech.Products.Entity.V1.Product
-            {
-                ProductId = item.product_id?.ToString() ?? "",
-                ProductCode = item.product_code?.ToString() ?? "",
-                ProductName = item.product_name?.ToString() ?? "",
-                Description = item.description?.ToString() ?? ""
-            };
-
-            string categoryStr = item.category?.ToString() ?? "";
-            if (System.Enum.TryParse<ProductCategory>(categoryStr, true, out var cat)) product.Category = cat;
-
-            string statusStr = item.status?.ToString() ?? "";
-            if (System.Enum.TryParse<ProductStatus>(statusStr, true, out var stat)) product.Status = stat;
-
-            product.BasePremium = new Money { Amount = (long)((decimal)(item.base_premium ?? 0) * 100), Currency = "BDT" };
-            product.MinSumInsured = new Money { Amount = (long)((decimal)(item.min_sum_insured ?? 0) * 100), Currency = "BDT" };
-            product.MaxSumInsured = new Money { Amount = (long)((decimal)(item.max_sum_insured ?? 0) * 100), Currency = "BDT" };
-            product.MinTenureMonths = item.min_tenure_months ?? 0;
-            product.MaxTenureMonths = item.max_tenure_months ?? 0;
-
-            if (item.created_at != null)
-            {
-                product.CreatedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.SpecifyKind((DateTime)item.created_at, DateTimeKind.Utc));
+                return new GetProductResponse
+                {
+                    Error = new Insuretech.Common.V1.Error
+                    {
+                        Code = "PRODUCT_NOT_FOUND",
+                        Message = "Product not found"
+                    }
+                };
             }
+
+            var product = MapToProto(entity);
 
             return new GetProductResponse { Product = product };
         }
@@ -75,5 +47,33 @@ public sealed class GetProductQueryHandler : IRequestHandler<GetProductQuery, Ge
             _logger.LogError(ex, "Failed to get product {ProductId}", request.ProductId);
             throw;
         }
+    }
+
+    private static Insuretech.Products.Entity.V1.Product MapToProto(ProductEntity entity)
+    {
+        var product = new Insuretech.Products.Entity.V1.Product
+        {
+            ProductId = entity.ProductId.ToString(),
+            ProductCode = entity.ProductCode,
+            ProductName = entity.ProductName,
+            Description = entity.Description ?? ""
+        };
+
+        if (System.Enum.TryParse<ProductCategory>(entity.Category, true, out var cat)) product.Category = cat;
+        if (System.Enum.TryParse<ProductStatus>(entity.Status, true, out var stat)) product.Status = stat;
+
+        product.BasePremium = new Money { Amount = entity.BasePremium, Currency = entity.BasePremiumCurrency };
+        product.MinSumInsured = new Money { Amount = entity.MinSumInsured, Currency = entity.MinSumInsuredCurrency };
+        product.MaxSumInsured = new Money { Amount = entity.MaxSumInsured, Currency = entity.MaxSumInsuredCurrency };
+        product.MinTenureMonths = entity.MinTenureMonths;
+        product.MaxTenureMonths = entity.MaxTenureMonths;
+        product.MinAge = entity.MinAge;
+        product.MaxAge = entity.MaxAge;
+        product.TermsUrl = entity.TermsUrl ?? "";
+
+        product.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc));
+        product.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.UpdatedAt, DateTimeKind.Utc));
+
+        return product;
     }
 }

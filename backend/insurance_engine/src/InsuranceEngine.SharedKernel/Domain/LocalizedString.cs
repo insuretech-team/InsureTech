@@ -19,5 +19,5 @@ public class LocalizedString : ValueObject
 
     public override string ToString() => English;
     
-    public string Get(string language) => language.ToLower() == "bn" ? Bengali : English;
+    public string Get(string language) => string.Equals(language, "bn", StringComparison.OrdinalIgnoreCase) ? Bengali : English;
 }

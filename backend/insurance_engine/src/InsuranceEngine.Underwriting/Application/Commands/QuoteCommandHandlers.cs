@@ -1,209 +1,350 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Dapper;
-using InsuranceEngine.SharedKernel.CQRS;
+using Microsoft.EntityFrameworkCore;
+using Insuretech.Underwriting.Services.V1;
+using Insuretech.Common.V1;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
+using InsuranceEngine.SharedKernel.Infrastructure;
+using Google.Protobuf.WellKnownTypes;
 
 namespace InsuranceEngine.Underwriting.Application.Commands;
 
-public sealed class CreateQuoteCommandHandler : IRequestHandler<CreateQuoteCommand, Result<string>>
+// ===== RequestQuote =====
+public sealed class RequestQuoteCommandHandler : IRequestHandler<RequestQuoteCommand, RequestQuoteResponse>
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<CreateQuoteCommandHandler> _logger;
+    private readonly IRepository<QuoteEntity> _repository;
+    private readonly ILogger<RequestQuoteCommandHandler> _logger;
 
-    public CreateQuoteCommandHandler(DbContext dbContext, ILogger<CreateQuoteCommandHandler> logger)
+    public RequestQuoteCommandHandler(IRepository<QuoteEntity> repository, ILogger<RequestQuoteCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
-    public async Task<Result<string>> Handle(CreateQuoteCommand request, CancellationToken cancellationToken)
+    public async Task<RequestQuoteResponse> Handle(RequestQuoteCommand request, CancellationToken cancellationToken)
     {
         try
         {
             var quoteId = Guid.NewGuid();
             var quoteNumber = $"QT-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
-            var now = DateTime.UtcNow;
 
-            var basePremium = CalculateBasePremium(request.SumAssured, request.TermYears, request.ApplicantAge);
-            var totalPremium = basePremium;
+            var basePremium = CalculateBasePremium(request.SumAssured, request.TermYears, request.ApplicantAge, request.Smoker);
+            var riderPremium = (request.RiderCodes?.Count ?? 0) * (long)(basePremium * 0.05m);
+            var taxAmount = (long)((basePremium + riderPremium) * 0.15m);
+            var totalPremium = basePremium + riderPremium + taxAmount;
 
-            var sql = @"
-                INSERT INTO insurance_schema.quotes (
-                    quote_id, quote_number, beneficiary_id, insurer_product_id, status,
-                    sum_assured, term_years, premium_payment_mode, base_premium, 
-                    total_premium, applicant_age, smoker, valid_until, created_at
-                ) VALUES (
-                    @QuoteId, @QuoteNumber, @BeneficiaryId, @ProductId, @Status,
-                    @SumAssured, @TermYears, @PremiumPaymentMode, @BasePremium, 
-                    @TotalPremium, @ApplicantAge, @Smoker, @ValidUntil, @CreatedAt
-                )";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-
-            await connection.ExecuteAsync(sql, new
+            var entity = new QuoteEntity
             {
                 QuoteId = quoteId,
                 QuoteNumber = quoteNumber,
-                BeneficiaryId = request.BeneficiaryId,
-                ProductId = request.ProductId,
+                BeneficiaryId = Guid.Parse(request.BeneficiaryId),
+                InsurerProductId = Guid.Parse(request.InsurerProductId),
                 Status = "DRAFT",
                 SumAssured = request.SumAssured,
                 TermYears = request.TermYears,
                 PremiumPaymentMode = request.PremiumPaymentMode,
                 BasePremium = basePremium,
+                RiderPremium = riderPremium,
+                TaxAmount = taxAmount,
                 TotalPremium = totalPremium,
+                SelectedRiders = request.RiderCodes != null ? System.Text.Json.JsonSerializer.Serialize(request.RiderCodes) : null,
                 ApplicantAge = request.ApplicantAge,
                 Smoker = request.Smoker,
-                ValidUntil = now.AddDays(30),
-                CreatedAt = now
-            });
+                ValidUntil = DateTime.UtcNow.AddDays(30),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
 
-            _logger.LogInformation("Quote created: {QuoteId} ({QuoteNumber})", quoteId, quoteNumber);
-            return Result<string>.Ok(quoteId.ToString());
+            await _repository.AddAsync(entity, cancellationToken);
+
+            _logger.LogInformation("Quote created: {QuoteNumber}", quoteNumber);
+
+            return new RequestQuoteResponse
+            {
+                QuoteId = quoteId.ToString(),
+                QuoteNumber = quoteNumber,
+                BasePremium = new Money { Amount = basePremium, Currency = "BDT" },
+                TotalPremium = new Money { Amount = totalPremium, Currency = "BDT" },
+                ValidUntil = entity.ValidUntil.ToString("yyyy-MM-dd"),
+                Message = "Quote generated successfully"
+            };
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Failed to create quote");
-            return Result<string>.Fail("QUOTE_CREATION_FAILED", ex.Message);
+            return new RequestQuoteResponse { Error = new Error { Code = "QUOTE_FAILED", Message = ex.Message } };
         }
     }
 
-    private decimal CalculateBasePremium(decimal sumAssured, int termYears, int age)
+    private static long CalculateBasePremium(long sumAssured, int termYears, int age, bool smoker)
     {
         var rate = 0.005m;
-        var ageFactor = 1 + (age - 30) * 0.05m;
+        var ageFactor = 1m + (age - 30) * 0.02m;
         if (ageFactor < 0.5m) ageFactor = 0.5m;
-        return sumAssured * rate * termYears * ageFactor / 1000;
+        if (smoker) ageFactor *= 1.25m;
+        return (long)(sumAssured * rate * termYears * ageFactor / 1000m);
     }
 }
 
-public sealed class SubmitQuoteForUnderwritingCommandHandler : IRequestHandler<SubmitQuoteForUnderwritingCommand, Result<bool>>
+// ===== SubmitHealthDeclaration =====
+public sealed class SubmitHealthDeclarationCommandHandler : IRequestHandler<SubmitHealthDeclarationCommand, SubmitHealthDeclarationResponse>
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<SubmitQuoteForUnderwritingCommandHandler> _logger;
+    private readonly IRepository<QuoteEntity> _quoteRepository;
+    private readonly IRepository<HealthDeclarationEntity> _declarationRepository;
+    private readonly ILogger<SubmitHealthDeclarationCommandHandler> _logger;
 
-    public SubmitQuoteForUnderwritingCommandHandler(DbContext dbContext, ILogger<SubmitQuoteForUnderwritingCommandHandler> logger)
+    public SubmitHealthDeclarationCommandHandler(
+        IRepository<QuoteEntity> quoteRepository,
+        IRepository<HealthDeclarationEntity> declarationRepository,
+        ILogger<SubmitHealthDeclarationCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _quoteRepository = quoteRepository;
+        _declarationRepository = declarationRepository;
         _logger = logger;
     }
 
-    public async Task<Result<bool>> Handle(SubmitQuoteForUnderwritingCommand request, CancellationToken cancellationToken)
+    public async Task<SubmitHealthDeclarationResponse> Handle(SubmitHealthDeclarationCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.quotes
-                SET status = 'PENDING_UNDERWRITING', updated_at = @UpdatedAt
-                WHERE quote_id = @QuoteId::uuid AND status = 'DRAFT' AND deleted_at IS NULL";
+            var quote = await _quoteRepository.GetByIdAsync(Guid.Parse(request.QuoteId), cancellationToken);
+            if (quote == null)
+                return new SubmitHealthDeclarationResponse { Error = new Error { Code = "QUOTE_NOT_FOUND", Message = "Quote not found" } };
 
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
+            var medicalExamRequired = request.HasPreExistingConditions || request.Smoker;
+            var autoApproval = !medicalExamRequired && !request.AlcoholConsumer && request.OccupationRiskLevel != "HIGH";
 
-            var rows = await connection.ExecuteAsync(sql, new
+            var entity = new HealthDeclarationEntity
             {
-                QuoteId = request.QuoteId,
+                DeclarationId = Guid.NewGuid(),
+                QuoteId = Guid.Parse(request.QuoteId),
+                HeightCm = request.HeightCm,
+                WeightKg = request.WeightKg,
+                HasPreExistingConditions = request.HasPreExistingConditions,
+                PreExistingConditions = request.PreExistingConditions,
+                Smoker = request.Smoker,
+                AlcoholConsumer = request.AlcoholConsumer,
+                OccupationRiskLevel = request.OccupationRiskLevel,
+                MedicalExamRequired = medicalExamRequired,
+                AutoApprovalPossible = autoApproval,
+                CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
-            });
+            };
 
-            if (rows == 0)
-                return Result<bool>.Fail("QUOTE_NOT_FOUND_OR_INVALID_STATE", "Quote not found or cannot be submitted");
+            await _declarationRepository.AddAsync(entity, cancellationToken);
 
-            _logger.LogInformation("Quote submitted for underwriting: {QuoteId}", request.QuoteId);
-            return Result<bool>.Ok(true);
+            // Auto-submit for underwriting
+            quote.Status = "PENDING_UNDERWRITING";
+            quote.UpdatedAt = DateTime.UtcNow;
+            await _quoteRepository.UpdateAsync(quote, cancellationToken);
+
+            return new SubmitHealthDeclarationResponse
+            {
+                Message = "Health declaration submitted",
+                MedicalExamRequired = medicalExamRequired,
+                AutoApprovalPossible = autoApproval
+            };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to submit quote for underwriting {QuoteId}", request.QuoteId);
-            return Result<bool>.Fail("QUOTE_SUBMIT_FAILED", ex.Message);
-        }
-    }
-}
-
-public sealed class ApproveQuoteCommandHandler : IRequestHandler<ApproveQuoteCommand, Result<bool>>
-{
-    private readonly DbContext _dbContext;
-    private readonly ILogger<ApproveQuoteCommandHandler> _logger;
-
-    public ApproveQuoteCommandHandler(DbContext dbContext, ILogger<ApproveQuoteCommandHandler> logger)
-    {
-        _dbContext = dbContext;
-        _logger = logger;
-    }
-
-    public async Task<Result<bool>> Handle(ApproveQuoteCommand request, CancellationToken cancellationToken)
-    {
-        try
-        {
-            var sql = @"
-                UPDATE insurance_schema.quotes
-                SET status = 'APPROVED', updated_at = @UpdatedAt
-                WHERE quote_id = @QuoteId::uuid AND status = 'PENDING_UNDERWRITING' AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                QuoteId = request.QuoteId,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
-                return Result<bool>.Fail("QUOTE_NOT_FOUND_OR_INVALID_STATE", "Quote not found or cannot be approved");
-
-            _logger.LogInformation("Quote approved: {QuoteId}", request.QuoteId);
-            return Result<bool>.Ok(true);
-        }
-        catch (Exception ex)
-        {
-            _logger.LogError(ex, "Failed to approve quote {QuoteId}", request.QuoteId);
-            return Result<bool>.Fail("QUOTE_APPROVE_FAILED", ex.Message);
+            _logger.LogError(ex, "Failed to submit health declaration");
+            return new SubmitHealthDeclarationResponse { Error = new Error { Code = "DECLARATION_FAILED", Message = ex.Message } };
         }
     }
 }
 
-public sealed class RejectQuoteCommandHandler : IRequestHandler<RejectQuoteCommand, Result<bool>>
+// ===== ApproveUnderwriting =====
+public sealed class ApproveUnderwritingCommandHandler : IRequestHandler<ApproveUnderwritingCommand, ApproveUnderwritingResponse>
 {
-    private readonly DbContext _dbContext;
-    private readonly ILogger<RejectQuoteCommandHandler> _logger;
+    private readonly IRepository<QuoteEntity> _quoteRepository;
+    private readonly IRepository<UnderwritingDecisionEntity> _decisionRepository;
+    private readonly ILogger<ApproveUnderwritingCommandHandler> _logger;
 
-    public RejectQuoteCommandHandler(DbContext dbContext, ILogger<RejectQuoteCommandHandler> logger)
+    public ApproveUnderwritingCommandHandler(
+        IRepository<QuoteEntity> quoteRepository,
+        IRepository<UnderwritingDecisionEntity> decisionRepository,
+        ILogger<ApproveUnderwritingCommandHandler> logger)
     {
+        _quoteRepository = quoteRepository;
+        _decisionRepository = decisionRepository;
+        _logger = logger;
+    }
+
+    public async Task<ApproveUnderwritingResponse> Handle(ApproveUnderwritingCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var quote = await _quoteRepository.GetByIdAsync(Guid.Parse(request.QuoteId), cancellationToken);
+            if (quote == null)
+                return new ApproveUnderwritingResponse { Error = new Error { Code = "QUOTE_NOT_FOUND", Message = "Quote not found" } };
+
+            var decision = new UnderwritingDecisionEntity
+            {
+                DecisionId = Guid.NewGuid(),
+                QuoteId = quote.QuoteId,
+                UnderwriterId = Guid.Parse(request.UnderwriterId),
+                Decision = "APPROVED",
+                RiskLevel = request.RiskLevel,
+                PremiumAdjusted = request.PremiumAdjusted,
+                AdjustedPremium = request.AdjustedPremium,
+                Comments = request.Comments,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _decisionRepository.AddAsync(decision, cancellationToken);
+
+            quote.Status = "APPROVED";
+            if (request.PremiumAdjusted && request.AdjustedPremium.HasValue)
+                quote.TotalPremium = request.AdjustedPremium.Value;
+            quote.UpdatedAt = DateTime.UtcNow;
+            await _quoteRepository.UpdateAsync(quote, cancellationToken);
+
+            return new ApproveUnderwritingResponse { DecisionId = decision.DecisionId.ToString(), Message = "Underwriting approved" };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to approve underwriting");
+            return new ApproveUnderwritingResponse { Error = new Error { Code = "APPROVE_FAILED", Message = ex.Message } };
+        }
+    }
+}
+
+// ===== RejectUnderwriting =====
+public sealed class RejectUnderwritingCommandHandler : IRequestHandler<RejectUnderwritingCommand, RejectUnderwritingResponse>
+{
+    private readonly IRepository<QuoteEntity> _quoteRepository;
+    private readonly IRepository<UnderwritingDecisionEntity> _decisionRepository;
+    private readonly ILogger<RejectUnderwritingCommandHandler> _logger;
+
+    public RejectUnderwritingCommandHandler(
+        IRepository<QuoteEntity> quoteRepository,
+        IRepository<UnderwritingDecisionEntity> decisionRepository,
+        ILogger<RejectUnderwritingCommandHandler> logger)
+    {
+        _quoteRepository = quoteRepository;
+        _decisionRepository = decisionRepository;
+        _logger = logger;
+    }
+
+    public async Task<RejectUnderwritingResponse> Handle(RejectUnderwritingCommand request, CancellationToken cancellationToken)
+    {
+        try
+        {
+            var quote = await _quoteRepository.GetByIdAsync(Guid.Parse(request.QuoteId), cancellationToken);
+            if (quote == null)
+                return new RejectUnderwritingResponse { Error = new Error { Code = "QUOTE_NOT_FOUND", Message = "Quote not found" } };
+
+            var decision = new UnderwritingDecisionEntity
+            {
+                DecisionId = Guid.NewGuid(),
+                QuoteId = quote.QuoteId,
+                UnderwriterId = Guid.Parse(request.UnderwriterId),
+                Decision = "REJECTED",
+                RiskLevel = request.RiskLevel,
+                RejectionReason = request.Reason,
+                Comments = request.Comments,
+                CreatedAt = DateTime.UtcNow
+            };
+
+            await _decisionRepository.AddAsync(decision, cancellationToken);
+
+            quote.Status = "REJECTED";
+            quote.UpdatedAt = DateTime.UtcNow;
+            await _quoteRepository.UpdateAsync(quote, cancellationToken);
+
+            return new RejectUnderwritingResponse { DecisionId = decision.DecisionId.ToString(), Message = "Underwriting rejected" };
+        }
+        catch (Exception ex)
+        {
+            _logger.LogError(ex, "Failed to reject underwriting");
+            return new RejectUnderwritingResponse { Error = new Error { Code = "REJECT_FAILED", Message = ex.Message } };
+        }
+    }
+}
+
+// ===== ConvertQuoteToPolicy =====
+public sealed class ConvertQuoteToPolicyCommandHandler : IRequestHandler<ConvertQuoteToPolicyCommand, ConvertQuoteToPolicyResponse>
+{
+    private readonly IRepository<QuoteEntity> _quoteRepository;
+    private readonly IRepository<PolicyEntity> _policyRepository;
+    private readonly InsuranceDbContext _dbContext;
+    private readonly ILogger<ConvertQuoteToPolicyCommandHandler> _logger;
+
+    public ConvertQuoteToPolicyCommandHandler(
+        IRepository<QuoteEntity> quoteRepository,
+        IRepository<PolicyEntity> policyRepository,
+        InsuranceDbContext dbContext,
+        ILogger<ConvertQuoteToPolicyCommandHandler> logger)
+    {
+        _quoteRepository = quoteRepository;
+        _policyRepository = policyRepository;
         _dbContext = dbContext;
         _logger = logger;
     }
 
-    public async Task<Result<bool>> Handle(RejectQuoteCommand request, CancellationToken cancellationToken)
+    public async Task<ConvertQuoteToPolicyResponse> Handle(ConvertQuoteToPolicyCommand request, CancellationToken cancellationToken)
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.quotes
-                SET status = 'REJECTED', updated_at = @UpdatedAt
-                WHERE quote_id = @QuoteId::uuid AND status = 'PENDING_UNDERWRITING' AND deleted_at IS NULL";
+            var quote = await _quoteRepository.GetByIdAsync(Guid.Parse(request.QuoteId), cancellationToken);
+            if (quote == null)
+                return new ConvertQuoteToPolicyResponse { Error = new Error { Code = "QUOTE_NOT_FOUND", Message = "Quote not found" } };
 
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
+            if (quote.Status != "APPROVED")
+                return new ConvertQuoteToPolicyResponse { Error = new Error { Code = "INVALID_STATUS", Message = $"Quote must be APPROVED to convert, current: '{quote.Status}'" } };
 
-            var rows = await connection.ExecuteAsync(sql, new
+            // Get sequence number for policy
+            var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+                await connection.OpenAsync(cancellationToken);
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT nextval('insurance_schema.policy_number_seq')";
+            var seqResult = await cmd.ExecuteScalarAsync(cancellationToken);
+            var seq = Convert.ToInt64(seqResult);
+
+            var policyNumber = $"LBT-{DateTime.UtcNow.Year}-0001-{seq.ToString().PadLeft(6, '0')}";
+
+            var policy = new PolicyEntity
             {
-                QuoteId = request.QuoteId,
+                PolicyId = Guid.NewGuid(),
+                PolicyNumber = policyNumber,
+                ProductId = quote.InsurerProductId,
+                CustomerId = quote.BeneficiaryId,
+                QuoteId = quote.QuoteId,
+                Status = "PENDING_PAYMENT",
+                PremiumAmount = quote.TotalPremium,
+                PremiumCurrency = "BDT",
+                SumInsured = quote.SumAssured,
+                SumInsuredCurrency = "BDT",
+                TenureMonths = quote.TermYears * 12,
+                StartDate = DateTime.UtcNow,
+                EndDate = DateTime.UtcNow.AddYears(quote.TermYears),
+                CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow
-            });
+            };
 
-            if (rows == 0)
-                return Result<bool>.Fail("QUOTE_NOT_FOUND_OR_INVALID_STATE", "Quote not found or cannot be rejected");
+            await _policyRepository.AddAsync(policy, cancellationToken);
 
-            _logger.LogInformation("Quote rejected: {QuoteId}, Reason: {Reason}", request.QuoteId, request.Reason);
-            return Result<bool>.Ok(true);
+            quote.Status = "CONVERTED";
+            quote.ConvertedPolicyId = policy.PolicyId;
+            quote.ConvertedAt = DateTime.UtcNow;
+            quote.UpdatedAt = DateTime.UtcNow;
+            await _quoteRepository.UpdateAsync(quote, cancellationToken);
+
+            _logger.LogInformation("Quote {QuoteNumber} converted to Policy {PolicyNumber}", quote.QuoteNumber, policyNumber);
+
+            return new ConvertQuoteToPolicyResponse
+            {
+                PolicyId = policy.PolicyId.ToString(),
+                PolicyNumber = policyNumber,
+                Message = "Quote converted to policy successfully"
+            };
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to reject quote {QuoteId}", request.QuoteId);
-            return Result<bool>.Fail("QUOTE_REJECT_FAILED", ex.Message);
+            _logger.LogError(ex, "Failed to convert quote to policy");
+            return new ConvertQuoteToPolicyResponse { Error = new Error { Code = "CONVERT_FAILED", Message = ex.Message } };
         }
     }
 }

@@ -4,6 +4,7 @@ using Microsoft.Extensions.Logging;
 using Insuretech.Products.Services.V1;
 using InsuranceEngine.Products.Application.Queries;
 using InsuranceEngine.Products.Application.Commands;
+using Insuretech.Common.V1;
 
 namespace InsuranceEngine.Products.GrpcServices;
 
@@ -22,7 +23,7 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         ListProductsRequest request, ServerCallContext context)
     {
         var query = new ListProductsQuery(
-            Category: request.Category != Insuretech.Products.Entity.V1.ProductCategory.Unspecified ? request.Category : null,
+            Category: request.Category,
             Page: request.Page <= 0 ? 1 : request.Page,
             PageSize: request.PageSize <= 0 ? 10 : request.PageSize
         );
@@ -54,11 +55,13 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
             ProductName: request.Product.ProductName,
             Category: request.Product.Category.ToString(),
             Description: request.Product.Description,
-            BasePremium: (decimal)(request.Product.BasePremium?.Amount ?? 0) / 100m,
-            MinSumInsured: (decimal)(request.Product.MinSumInsured?.Amount ?? 0) / 100m,
-            MaxSumInsured: (decimal)(request.Product.MaxSumInsured?.Amount ?? 0) / 100m,
+            BasePremium: (decimal)request.Product.BasePremium.Amount / 100m,
+            MinSumInsured: (decimal)request.Product.MinSumInsured.Amount / 100m,
+            MaxSumInsured: (decimal)request.Product.MaxSumInsured.Amount / 100m,
             MinTenureMonths: request.Product.MinTenureMonths,
             MaxTenureMonths: request.Product.MaxTenureMonths,
+            MinAge: request.Product.MinAge,
+            MaxAge: request.Product.MaxAge,
             CreatedBy: "System"
         );
 
@@ -77,9 +80,9 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
             request.Product.ProductId,
             request.Product?.ProductName,
             request.Product?.Description,
-            request.Product != null ? (decimal)(request.Product.BasePremium?.Amount ?? 0) / 100m : null,
-            request.Product != null ? (decimal)(request.Product.MinSumInsured?.Amount ?? 0) / 100m : null,
-            request.Product != null ? (decimal)(request.Product.MaxSumInsured?.Amount ?? 0) / 100m : null,
+            request.Product != null && request.Product.BasePremium != null ? (decimal)request.Product.BasePremium.Amount / 100m : null,
+            request.Product != null && request.Product.MinSumInsured != null ? (decimal)request.Product.MinSumInsured.Amount / 100m : null,
+            request.Product != null && request.Product.MaxSumInsured != null ? (decimal)request.Product.MaxSumInsured.Amount / 100m : null,
             request.Product?.MinTenureMonths,
             request.Product?.MaxTenureMonths);
 
@@ -89,7 +92,7 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         {
             return new UpdateProductResponse
             {
-                Error = new Insuretech.Common.V1.Error
+                Error = new Error
                 {
                     Code = result.Error?.Code ?? "UPDATE_FAILED",
                     Message = result.Error?.Message ?? "Failed to update product"
@@ -98,6 +101,38 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         }
 
         return new UpdateProductResponse { Message = "Product updated successfully" };
+    }
+
+    public override async Task<SearchProductsResponse> SearchProducts(
+        SearchProductsRequest request, ServerCallContext context)
+    {
+        var query = new SearchProductsQuery(
+            Query: request.Query,
+            Category: request.Category,
+            MinPremium: request.MinPremium,
+            MaxPremium: request.MaxPremium
+        );
+
+        return await _mediator.Send(query, context.CancellationToken);
+    }
+
+    public override async Task<CalculatePremiumResponse> CalculatePremium(
+        CalculatePremiumRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.ProductId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Product ID is required"));
+        }
+
+        var query = new CalculatePremiumQuery(
+            ProductId: request.ProductId,
+            SumInsured: request.SumInsured,
+            TenureMonths: request.TenureMonths,
+            RiderIds: request.RiderIds,
+            ApplicantData: request.ApplicantData
+        );
+
+        return await _mediator.Send(query, context.CancellationToken);
     }
 
     public override async Task<ActivateProductResponse> ActivateProduct(
@@ -114,7 +149,7 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         {
             return new ActivateProductResponse
             {
-                Error = new Insuretech.Common.V1.Error
+                Error = new Error
                 {
                     Code = result.Error?.Code ?? "ACTIVATION_FAILED",
                     Message = result.Error?.Message ?? "Failed to activate product"
@@ -139,7 +174,7 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         {
             return new DeactivateProductResponse
             {
-                Error = new Insuretech.Common.V1.Error
+                Error = new Error
                 {
                     Code = result.Error?.Code ?? "DEACTIVATION_FAILED",
                     Message = result.Error?.Message ?? "Failed to deactivate product"
@@ -164,7 +199,7 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
         {
             return new DiscontinueProductResponse
             {
-                Error = new Insuretech.Common.V1.Error
+                Error = new Error
                 {
                     Code = result.Error?.Code ?? "DISCONTINUE_FAILED",
                     Message = result.Error?.Message ?? "Failed to discontinue product"

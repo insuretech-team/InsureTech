@@ -7,16 +7,23 @@ using InsuranceEngine.Underwriting.Application.Commands;
 using InsuranceEngine.Claims.Application.Commands; // ClaimCommands
 using InsuranceEngine.Commission.Application.Commands; // CalculateCommissionCommand
 using InsuranceEngine.Beneficiary.GrpcServices;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Infrastructure;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddDistributedMemoryCache(); // FR-028 Product caching
-builder.Services.AddSingleton<InsuranceEngine.SharedKernel.Infrastructure.IPdfGenerator, InsuranceEngine.SharedKernel.Infrastructure.MockPdfGenerator>(); // FR-035 PDF generation
-builder.Services.AddSingleton<InsuranceEngine.SharedKernel.Infrastructure.IKafkaPublisher, InsuranceEngine.SharedKernel.Infrastructure.MockKafkaPublisher>(); // FR-019 Kafka streaming
-builder.Services.AddGrpc().AddJsonTranscoding();
+builder.Services.AddDistributedMemoryCache(); // FR-028 Product caching (TODO: Replace with Redis)
+builder.Services.AddSingleton<IPdfGenerator, MockPdfGenerator>(); // FR-035 PDF generation
+builder.Services.AddSingleton<IKafkaPublisher, MockKafkaPublisher>(); // FR-019 Kafka streaming
+
+// gRPC with error interceptor
+builder.Services.AddGrpc(options =>
+{
+    options.Interceptors.Add<GlobalGrpcErrorInterceptor>();
+}).AddJsonTranscoding();
 builder.Services.AddGrpcReflection();
 builder.Services.AddGrpcSwagger();
 builder.Services.AddSwaggerGen(c =>
@@ -32,10 +39,17 @@ builder.Services.AddSwaggerGen(c =>
     c.MapType<Google.Protobuf.WellKnownTypes.ListValue>(() => new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "object", AdditionalPropertiesAllowed = true } });
 });
 
-// Database
+// Database — Full EF Core (Option A)
 var connectionString = builder.Configuration.GetConnectionString("InsuranceDb");
-builder.Services.AddDbContext<DbContext>(options =>
-    options.UseNpgsql(connectionString));
+builder.Services.AddDbContext<InsuranceDbContext>(options =>
+    options.UseNpgsql(connectionString)
+           .UseSnakeCaseNamingConvention());
+
+// Register bare DbContext for backward compatibility (handlers still reference it)
+builder.Services.AddScoped<DbContext>(sp => sp.GetRequiredService<InsuranceDbContext>());
+
+// Repository pattern
+builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
 // MediatR
 builder.Services.AddMediatR(cfg =>

@@ -18,7 +18,7 @@ message Product {
   option (insuretech.common.v1.table) = {
     table_name : "products"
     schema_name : "insurance_schema"
-    migration_order : 19
+    migration_order : 20
     is_table : true
     comment : "Insurance product catalog (Motor, Health, Travel, Device, "
               "Agricultural)"
@@ -189,6 +189,30 @@ message Product {
   } ];
   // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 
+  int32 min_age = 101 [ (insuretech.common.v1.column) = {
+    column_name : "min_age"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "18"
+    comment : "Minimum age for coverage"
+  } ];
+
+  int32 max_age = 102 [ (insuretech.common.v1.column) = {
+    column_name : "max_age"
+    sql_type : "INTEGER"
+    not_null : true
+    default_value : "65"
+    comment : "Maximum age for coverage"
+  } ];
+
+  string terms_url = 103 [ (insuretech.common.v1.column) = {
+    column_name : "terms_url"
+    sql_type : "VARCHAR(500)"
+    comment : "Link to T&C PDF"
+  } ];
+
+  repeated RiskAssessmentQuestion questions = 104;
+
   // Related entities
   repeated Rider available_riders = 17;
   PricingConfig pricing_config = 18;
@@ -230,6 +254,22 @@ message Product {
     comment : "Currency code for max_sum_insured (ISO 4217)"
   } ];
   // @inject_tag: gorm:"column:max_sum_insured_currency;not null"
+}
+
+enum QuestionType {
+  QUESTION_TYPE_UNSPECIFIED = 0;
+  QUESTION_TYPE_BOOLEAN = 1;
+  QUESTION_TYPE_MULTIPLE_CHOICE = 2;
+  QUESTION_TYPE_TEXT = 3;
+}
+
+message RiskAssessmentQuestion {
+  string question_id = 1;
+  string question_en = 2;
+  string question_bn = 3;
+  QuestionType type = 4;
+  repeated string options = 5;
+  bool is_required = 6;
 }
 
 enum ProductCategory {

@@ -8,13 +8,18 @@ public class PolicyNumber : ValueObject
 
     private PolicyNumber(string value) => Value = value;
 
-    public static PolicyNumber Generate(string insuranceType, string productCode)
+    /// <summary>
+    /// Generates a policy number using DB-provided sequence.
+    /// Format: LBT-YYYY-XXXX-NNNNNN (e.g., LBT-2026-0001-000042)
+    /// </summary>
+    /// <param name="productCode">4-char product code segment</param>
+    /// <param name="sequenceNumber">Sequential number from PostgreSQL sequence</param>
+    public static PolicyNumber Generate(string productCode, long sequenceNumber)
     {
         var year = DateTime.UtcNow.Year;
-        var sequence = new Random().Next(100000, 999999).ToString();
+        var seq = sequenceNumber.ToString().PadLeft(6, '0');
         
-        // Format: LBT-YYYY-XXXX-NNNNNN (e.g., LBT-2026-001-123456)
-        return new PolicyNumber($"LBT-{year}-{productCode}-{sequence}");
+        return new PolicyNumber($"LBT-{year}-{productCode}-{seq}");
     }
 
     public static PolicyNumber From(string value)
@@ -30,3 +35,4 @@ public class PolicyNumber : ValueObject
 
     public override string ToString() => Value;
 }
+

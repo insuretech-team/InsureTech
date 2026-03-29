@@ -1,29 +1,41 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Insuretech.Policy.Services.V1;
-using Dapper;
-using System.Data;
 using InsuranceEngine.Policy.Domain;
 using InsuranceEngine.SharedKernel.Domain;
 using InsuranceEngine.SharedKernel.Infrastructure;
 using InsuranceEngine.SharedKernel.Domain.Events;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
+using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceEngine.Policy.Application.Commands;
 
 public sealed class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCommand, CreatePolicyResponse>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyEntity> _policyRepository;
+    private readonly IRepository<ProductEntity> _productRepository;
+    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
+    private readonly IRepository<PolicyRiderEntity> _riderRepository;
+    private readonly InsuranceDbContext _dbContext;
     private readonly ILogger<CreatePolicyCommandHandler> _logger;
     private readonly IPdfGenerator _pdfGenerator;
     private readonly IKafkaPublisher _kafkaPublisher;
 
     public CreatePolicyCommandHandler(
-        DbContext dbContext, 
-        ILogger<CreatePolicyCommandHandler> logger, 
+        IRepository<PolicyEntity> policyRepository,
+        IRepository<ProductEntity> productRepository,
+        IRepository<PolicyNomineeEntity> nomineeRepository,
+        IRepository<PolicyRiderEntity> riderRepository,
+        InsuranceDbContext dbContext,
+        ILogger<CreatePolicyCommandHandler> logger,
         IPdfGenerator pdfGenerator,
         IKafkaPublisher kafkaPublisher)
     {
+        _policyRepository = policyRepository;
+        _productRepository = productRepository;
+        _nomineeRepository = nomineeRepository;
+        _riderRepository = riderRepository;
         _dbContext = dbContext;
         _logger = logger;
         _pdfGenerator = pdfGenerator;
@@ -32,78 +44,102 @@ public sealed class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCom
 
     public async Task<CreatePolicyResponse> Handle(CreatePolicyCommand request, CancellationToken cancellationToken)
     {
-        var connection = _dbContext.Database.GetDbConnection();
-        if (connection.State != ConnectionState.Open) await connection.OpenAsync(cancellationToken);
-
-        // FR-033: NID/Mobile Uniqueness Validation
-        const string checkDuplicateSql = @"
-            SELECT COUNT(1) FROM insurance_schema.policies p
-            JOIN insurance_schema.individual_beneficiaries ib ON p.customer_id = ib.beneficiary_id
-            WHERE p.product_id = @ProductId AND ib.nid_number = @Nid";
-        
-        // Note: In a production environment, we'd fetch the NID first or pass it in the command.
-        // Assuming validation is handled at the domain/service level if NID is present.
-
-        using var transaction = await connection.BeginTransactionAsync(cancellationToken);
         try
         {
-            // 1. Domain Logic: Create Policy Aggregate (DDD)
-            // In a real scenario, we'd fetch productCode/insuranceType from the Product service.
+            // 0. Validate product exists and is ACTIVE
+            var product = await _productRepository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            if (product == null)
+            {
+                return new CreatePolicyResponse
+                {
+                    Error = new Insuretech.Common.V1.Error { Code = "PRODUCT_NOT_FOUND", Message = "Product not found" }
+                };
+            }
+            if (product.Status != "ACTIVE")
+            {
+                return new CreatePolicyResponse
+                {
+                    Error = new Insuretech.Common.V1.Error { Code = "PRODUCT_INACTIVE", Message = "Cannot create policy for inactive product" }
+                };
+            }
+
+            // 1. Get sequence number from DB for collision-safe policy number (FR-034)
+            var connection = _dbContext.Database.GetDbConnection();
+            if (connection.State != System.Data.ConnectionState.Open)
+                await connection.OpenAsync(cancellationToken);
+
+            using var cmd = connection.CreateCommand();
+            cmd.CommandText = "SELECT nextval('insurance_schema.policy_number_seq')";
+            var seqResult = await cmd.ExecuteScalarAsync(cancellationToken);
+            var sequenceNumber = Convert.ToInt64(seqResult);
+
+            // 2. Create Domain Aggregate (DDD)
             var policy = PolicyAggregate.Create(
                 productId: Guid.Parse(request.ProductId),
-                productCode: "0001", // Simulated Product Code (4 digits as per LBT-YYYY-XXXX-NNNNNN format)
-                insuranceType: "HEALTH", // Simulated Type
+                productCode: product.ProductCode.Length >= 4 ? product.ProductCode[..4] : product.ProductCode.PadRight(4, '0'),
+                insuranceType: product.Category,
                 customerId: Guid.Parse(request.CustomerId),
                 premium: request.PremiumAmount,
                 sumInsured: request.SumInsured,
                 tenure: request.TenureMonths,
-                startDate: request.StartDate
+                startDate: request.StartDate,
+                sequenceNumber: sequenceNumber
             );
 
-            if (request.Nominees != null)
-            {
-                policy.AddNominees(request.Nominees);
-            }
-
-            // 2. Persist Aggregate State
-            var insertPolicySql = @"
-                INSERT INTO insurance_schema.policies (
-                    policy_id, policy_number, product_id, customer_id, partner_id, agent_id,
-                    status, premium_amount, sum_insured, tenure_months, start_date, end_date,
-                    created_at
-                ) VALUES (
-                    @PolicyId, @PolicyNumber, @ProductId, @CustomerId, @PartnerId, @AgentId,
-                    @Status, @PremiumAmount, @SumInsured, @TenureMonths, @StartDate, @EndDate,
-                    @CreatedAt
-                )";
-
-            await connection.ExecuteAsync(insertPolicySql, new
+            // 3. Persist Policy Entity
+            var policyEntity = new PolicyEntity
             {
                 PolicyId = policy.Id,
                 PolicyNumber = policy.PolicyNumber,
                 ProductId = policy.ProductId,
                 CustomerId = policy.CustomerId,
-                PartnerId = string.IsNullOrEmpty(request.PartnerId) ? (Guid?)null : Guid.Parse(request.PartnerId),
-                AgentId = string.IsNullOrEmpty(request.AgentId) ? (Guid?)null : Guid.Parse(request.AgentId),
-                Status = policy.Status,
-                PremiumAmount = policy.PremiumAmount.Amount,
-                SumInsured = policy.SumInsured.Amount,
-                TenureMonths = policy.TenureMonths,
-                StartDate = policy.StartDate,
-                EndDate = policy.EndDate,
-                CreatedAt = policy.CreatedAt
-            }, transaction);
+                PartnerId = string.IsNullOrEmpty(request.PartnerId) ? null : Guid.Parse(request.PartnerId),
+                AgentId = string.IsNullOrEmpty(request.AgentId) ? null : Guid.Parse(request.AgentId),
+                QuoteId = string.IsNullOrEmpty(request.QuoteId) ? null : Guid.Parse(request.QuoteId),
+                Status = "PENDING_PAYMENT",
+                PremiumAmount = (long)(request.PremiumAmount * 100), // Store in paisa
+                PremiumCurrency = "BDT",
+                SumInsured = (long)(request.SumInsured * 100),
+                SumInsuredCurrency = "BDT",
+                TenureMonths = request.TenureMonths,
+                StartDate = request.StartDate,
+                EndDate = request.StartDate.AddMonths(request.TenureMonths),
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
 
-            await transaction.CommitAsync(cancellationToken);
+            await _policyRepository.AddAsync(policyEntity, cancellationToken);
 
-            // FR-035: Generate PDF Document (Simulated)
+            // 4. Add Nominees
+            if (request.Nominees != null)
+            {
+                foreach (var nominee in request.Nominees)
+                {
+                    var nomineeEntity = new PolicyNomineeEntity
+                    {
+                        NomineeId = Guid.NewGuid(),
+                        PolicyId = policy.Id,
+                        FullName = nominee.FullName,
+                        Relationship = nominee.Relationship,
+                        SharePercentage = nominee.SharePercentage,
+                        DateOfBirth = nominee.DateOfBirth?.ToDateTime() ?? DateTime.UtcNow,
+                        NidNumber = nominee.NidNumber,
+                        PhoneNumber = nominee.PhoneNumber,
+                        CreatedAt = DateTime.UtcNow,
+                        UpdatedAt = DateTime.UtcNow
+                    };
+                    await _nomineeRepository.AddAsync(nomineeEntity, cancellationToken);
+                }
+            }
+
+            // 5. FR-035: Generate PDF Document (Simulated)
             await _pdfGenerator.GeneratePolicyDocumentAsync(policy.PolicyNumber, "N/A", "N/A", request.PremiumAmount);
 
-            // FR-019: Kafka Event Streaming
-            var policyEvent = new PolicyIssuedEvent(policy.Id, policy.PolicyNumber, policy.CustomerId.ToString(), policy.PremiumAmount.Amount);
-            await _kafkaPublisher.PublishAsync("insurance.policy.issued", policyEvent);
+            // 6. FR-019: Kafka Event Streaming
+            var policyEvent = new PolicyIssuedEvent(policy.Id, policy.PolicyNumber, policy.CustomerId.ToString(), (long)(request.PremiumAmount * 100));
+            await _kafkaPublisher.PublishAsync("insurance.policy.created", policyEvent);
 
-            _logger.LogInformation("Policy created and event published: {PolicyNumber}", policy.PolicyNumber);
+            _logger.LogInformation("Policy created: {PolicyNumber} for Customer: {CustomerId}", policy.PolicyNumber, request.CustomerId);
 
             return new CreatePolicyResponse
             {
@@ -114,9 +150,11 @@ public sealed class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCom
         }
         catch (Exception ex)
         {
-            await transaction.RollbackAsync(cancellationToken);
-            _logger.LogError(ex, "Failed to create policy");
-            throw;
+            _logger.LogError(ex, "Failed to create policy for customer {CustomerId}", request.CustomerId);
+            return new CreatePolicyResponse
+            {
+                Error = new Insuretech.Common.V1.Error { Code = "POLICY_CREATION_FAILED", Message = ex.Message }
+            };
         }
     }
 }

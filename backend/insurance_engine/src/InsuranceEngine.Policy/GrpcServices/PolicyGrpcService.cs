@@ -18,6 +18,33 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
         _logger = logger;
     }
 
+    // RPC 1: CreatePolicy
+    public override async Task<CreatePolicyResponse> CreatePolicy(
+        CreatePolicyRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.ProductId) || string.IsNullOrEmpty(request.CustomerId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Product ID and Customer ID are required"));
+        }
+
+        var command = new CreatePolicyCommand(
+            ProductId: request.ProductId,
+            CustomerId: request.CustomerId,
+            PartnerId: request.PartnerId,
+            AgentId: request.AgentId,
+            QuoteId: null,
+            PremiumAmount: request.PremiumAmount != null ? (decimal)request.PremiumAmount.Amount / 100m : 0m,
+            SumInsured: request.SumInsured != null ? (decimal)request.SumInsured.Amount / 100m : 0m,
+            TenureMonths: request.TenureMonths,
+            StartDate: DateTime.UtcNow,
+            ProposerDetails: null,
+            Nominees: request.Nominees.ToList()
+        );
+
+        return await _mediator.Send(command, context.CancellationToken);
+    }
+
+    // RPC 2: GetPolicy
     public override async Task<GetPolicyResponse> GetPolicy(
         GetPolicyRequest request, ServerCallContext context)
     {
@@ -29,9 +56,15 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
         return await _mediator.Send(new GetPolicyQuery(request.PolicyId), context.CancellationToken);
     }
 
+    // RPC 3: ListUserPolicies
     public override async Task<ListUserPoliciesResponse> ListUserPolicies(
         ListUserPoliciesRequest request, ServerCallContext context)
     {
+        if (string.IsNullOrEmpty(request.CustomerId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Customer ID is required"));
+        }
+
         var query = new ListUserPoliciesQuery(
             CustomerId: request.CustomerId,
             Status: request.Status != Insuretech.Policy.Entity.V1.PolicyStatus.Unspecified ? request.Status.ToString() : null,
@@ -43,29 +76,86 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
         return await _mediator.Send(query, context.CancellationToken);
     }
 
-    public override async Task<CreatePolicyResponse> CreatePolicy(
-        CreatePolicyRequest request, ServerCallContext context)
+    // RPC 4: UpdatePolicy
+    public override async Task<UpdatePolicyResponse> UpdatePolicy(
+        UpdatePolicyRequest request, ServerCallContext context)
     {
-        var command = new CreatePolicyCommand(
-            ProductId: request.ProductId,
-            CustomerId: request.CustomerId,
-            PartnerId: request.PartnerId,
-            AgentId: request.AgentId,
-            QuoteId: null,
-            PremiumAmount: (decimal)(request.PremiumAmount?.Amount ?? 0) / 100m,
-            SumInsured: (decimal)(request.SumInsured?.Amount ?? 0) / 100m,
-            TenureMonths: request.TenureMonths,
-            StartDate: DateTime.UtcNow,
-            ProposerDetails: null,
-            Nominees: request.Nominees.ToList()
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+
+        var command = new UpdatePolicyCommand(
+            PolicyId: request.PolicyId,
+            Nominees: request.Nominees.Count > 0 ? request.Nominees.ToList() : null,
+            Address: request.Address
         );
 
         return await _mediator.Send(command, context.CancellationToken);
     }
 
+    // RPC 5: CancelPolicy
+    public override async Task<CancelPolicyResponse> CancelPolicy(
+        CancelPolicyRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+        if (string.IsNullOrEmpty(request.Reason))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Cancellation reason is required"));
+        }
+
+        return await _mediator.Send(new CancelPolicyCommand(request.PolicyId, request.Reason), context.CancellationToken);
+    }
+
+    // RPC 6: RenewPolicy
+    public override async Task<RenewPolicyResponse> RenewPolicy(
+        RenewPolicyRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+        if (request.TenureMonths <= 0)
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Tenure months must be positive"));
+        }
+
+        var command = new RenewPolicyCommand(
+            PolicyId: request.PolicyId,
+            TenureMonths: request.TenureMonths,
+            UpdateNominees: request.UpdateNominees,
+            Nominees: request.Nominees.Count > 0 ? request.Nominees.ToList() : null
+        );
+
+        return await _mediator.Send(command, context.CancellationToken);
+    }
+
+    // RPC 7: GeneratePolicyDocument
+    public override async Task<GeneratePolicyDocumentResponse> GeneratePolicyDocument(
+        GeneratePolicyDocumentRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+
+        return await _mediator.Send(new GeneratePolicyDocumentCommand(request.PolicyId), context.CancellationToken);
+    }
+
+    // RPC 8: IssuePolicy
     public override async Task<IssuePolicyResponse> IssuePolicy(
         IssuePolicyRequest request, ServerCallContext context)
     {
-        return await _mediator.Send(new IssuePolicyCommand(request.PolicyId), context.CancellationToken);
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+
+        return await _mediator.Send(
+            new IssuePolicyCommand(request.PolicyId, request.QuoteId, request.PaymentId), 
+            context.CancellationToken);
     }
 }

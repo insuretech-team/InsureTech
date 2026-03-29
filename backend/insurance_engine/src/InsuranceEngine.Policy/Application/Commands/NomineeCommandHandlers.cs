@@ -1,19 +1,24 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Dapper;
 using InsuranceEngine.SharedKernel.CQRS;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
 
 namespace InsuranceEngine.Policy.Application.Commands;
 
 public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand, Result<string>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
+    private readonly IRepository<PolicyEntity> _policyRepository;
     private readonly ILogger<AddNomineeCommandHandler> _logger;
 
-    public AddNomineeCommandHandler(DbContext dbContext, ILogger<AddNomineeCommandHandler> logger)
+    public AddNomineeCommandHandler(
+        IRepository<PolicyNomineeEntity> nomineeRepository,
+        IRepository<PolicyEntity> policyRepository,
+        ILogger<AddNomineeCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _nomineeRepository = nomineeRepository;
+        _policyRepository = policyRepository;
         _logger = logger;
     }
 
@@ -21,37 +26,30 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
     {
         try
         {
-            var nomineeId = Guid.NewGuid();
-            var now = DateTime.UtcNow;
+            // Validate policy exists
+            var policy = await _policyRepository.GetByIdAsync(Guid.Parse(request.PolicyId), cancellationToken);
+            if (policy == null)
+                return Result<string>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            var sql = @"
-                INSERT INTO insurance_schema.policy_nominees (
-                    nominee_id, policy_id, full_name, relationship, share_percentage,
-                    date_of_birth, nid_number, phone_number, nominee_dob_text, created_at
-                ) VALUES (
-                    @NomineeId, @PolicyId, @FullName, @Relationship, @SharePercentage,
-                    @DateOfBirth, @NidNumber, @PhoneNumber, @NomineeDobText, @CreatedAt
-                )";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-
-            await connection.ExecuteAsync(sql, new
+            var entity = new PolicyNomineeEntity
             {
-                NomineeId = nomineeId,
-                PolicyId = request.PolicyId,
+                NomineeId = Guid.NewGuid(),
+                PolicyId = Guid.Parse(request.PolicyId),
                 FullName = request.FullName,
                 Relationship = request.Relationship,
                 SharePercentage = request.SharePercentage,
-                DateOfBirth = request.DateOfBirth,
+                DateOfBirth = request.DateOfBirth ?? DateTime.UtcNow,
                 NidNumber = request.NidNumber,
                 PhoneNumber = request.PhoneNumber,
                 NomineeDobText = request.NomineeDobText,
-                CreatedAt = now
-            });
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
 
-            _logger.LogInformation("Nominee added: {NomineeId} to Policy: {PolicyId}", nomineeId, request.PolicyId);
-            return Result<string>.Ok(nomineeId.ToString());
+            await _nomineeRepository.AddAsync(entity, cancellationToken);
+
+            _logger.LogInformation("Nominee added: {NomineeId} to Policy: {PolicyId}", entity.NomineeId, request.PolicyId);
+            return Result<string>.Ok(entity.NomineeId.ToString());
         }
         catch (Exception ex)
         {
@@ -63,12 +61,12 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
 
 public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
     private readonly ILogger<UpdateNomineeCommandHandler> _logger;
 
-    public UpdateNomineeCommandHandler(DbContext dbContext, ILogger<UpdateNomineeCommandHandler> logger)
+    public UpdateNomineeCommandHandler(IRepository<PolicyNomineeEntity> nomineeRepository, ILogger<UpdateNomineeCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _nomineeRepository = nomineeRepository;
         _logger = logger;
     }
 
@@ -76,35 +74,19 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.policy_nominees
-                SET full_name = COALESCE(@FullName, full_name),
-                    relationship = COALESCE(@Relationship, relationship),
-                    share_percentage = COALESCE(@SharePercentage, share_percentage),
-                    date_of_birth = COALESCE(@DateOfBirth, date_of_birth),
-                    nid_number = COALESCE(@NidNumber, nid_number),
-                    phone_number = COALESCE(@PhoneNumber, phone_number),
-                    updated_at = @UpdatedAt
-                WHERE nominee_id = @NomineeId::uuid AND policy_id = @PolicyId::uuid";
+            var nominee = await _nomineeRepository.GetByIdAsync(Guid.Parse(request.NomineeId), cancellationToken);
+            if (nominee == null || nominee.PolicyId != Guid.Parse(request.PolicyId))
+                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found");
 
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                NomineeId = request.NomineeId,
-                PolicyId = request.PolicyId,
-                FullName = request.FullName,
-                Relationship = request.Relationship,
-                SharePercentage = request.SharePercentage,
-                DateOfBirth = request.DateOfBirth,
-                NidNumber = request.NidNumber,
-                PhoneNumber = request.PhoneNumber,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
-                return Result<bool>.Fail("NOMINEE_NOT_FOUND", "Nominee not found");
+            if (request.FullName != null) nominee.FullName = request.FullName;
+            if (request.Relationship != null) nominee.Relationship = request.Relationship;
+            if (request.SharePercentage.HasValue) nominee.SharePercentage = request.SharePercentage.Value;
+            if (request.DateOfBirth.HasValue) nominee.DateOfBirth = request.DateOfBirth.Value;
+            if (request.NidNumber != null) nominee.NidNumber = request.NidNumber;
+            if (request.PhoneNumber != null) nominee.PhoneNumber = request.PhoneNumber;
+            
+            nominee.UpdatedAt = DateTime.UtcNow;
+            await _nomineeRepository.UpdateAsync(nominee, cancellationToken);
 
             _logger.LogInformation("Nominee updated: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);
@@ -119,12 +101,12 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
 
 public sealed class DeleteNomineeCommandHandler : IRequestHandler<DeleteNomineeCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
     private readonly ILogger<DeleteNomineeCommandHandler> _logger;
 
-    public DeleteNomineeCommandHandler(DbContext dbContext, ILogger<DeleteNomineeCommandHandler> logger)
+    public DeleteNomineeCommandHandler(IRepository<PolicyNomineeEntity> nomineeRepository, ILogger<DeleteNomineeCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _nomineeRepository = nomineeRepository;
         _logger = logger;
     }
 
@@ -132,21 +114,11 @@ public sealed class DeleteNomineeCommandHandler : IRequestHandler<DeleteNomineeC
     {
         try
         {
-            var sql = @"
-                DELETE FROM insurance_schema.policy_nominees
-                WHERE nominee_id = @NomineeId::uuid AND policy_id = @PolicyId::uuid";
+            var nominee = await _nomineeRepository.GetByIdAsync(Guid.Parse(request.NomineeId), cancellationToken);
+            if (nominee == null || nominee.PolicyId != Guid.Parse(request.PolicyId))
+                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found");
 
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                NomineeId = request.NomineeId,
-                PolicyId = request.PolicyId
-            });
-
-            if (rows == 0)
-                return Result<bool>.Fail("NOMINEE_NOT_FOUND", "Nominee not found");
+            await _nomineeRepository.DeleteAsync(nominee, cancellationToken);
 
             _logger.LogInformation("Nominee deleted: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);

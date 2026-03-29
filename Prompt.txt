@@ -1,0 +1,198 @@
+তোমাকে আমার repository এর মধ্যে শুধুমাত্র **Insurance Engine module** এর একটি deep technical audit করতে হবে।
+
+এই system টি **protobuf / gRPC contract based architecture** ব্যবহার করে তৈরি করা হয়েছে।
+
+তাই system analysis করার সময় **proto files কে communication contract হিসেবে treat করবে।**
+
+---
+
+# Primary Sources
+
+System audit করার সময় নিচের sources use করবে:
+
+1️⃣ Documentation folder -> SRS_v3 → insurance_engine_deep_dive** (Primary business documentation)
+
+2️⃣ **.proto files** (Service communication contract)
+
+3️⃣ **Generated C# classes from proto** (gen folder)
+
+4️⃣ Backend implementation 
+
+5️⃣ PostgreSQL queries / table creation scripts
+
+6️⃣ Docs folder HTML files (API reference)
+
+---
+
+# Step 1: Insurance Engine Documentation Study
+
+Documentation folder এর ভিতরে থাকা:
+
+**Documentation folder -> SRS_v3 → insurance_engine_deep_dive**
+
+এটাকে **primary business source of truth** হিসেবে treat করো।
+
+Extract করো:
+
+* modules
+* business features
+* workflows
+* domain responsibilities
+* expected APIs
+* expected integrations
+
+---
+
+# Step 2: Proto Contract Analysis
+
+Repository এর ভিতরে থাকা **.proto files analyze করো।**
+
+Identify করো:
+
+* defined services
+* RPC methods
+* request messages
+* response messages
+* message schemas
+* cross-module contracts
+
+Determine করো:
+
+* Insurance Engine কোন services expose করার কথা
+* অন্য modules কোন services call করার কথা
+
+Proto files কে **communication contract** হিসেবে treat করো।
+
+---
+
+# Step 3: Generated C# Class Analysis
+
+Proto থেকে generate হওয়া **C# classes analyze করো**।
+
+Verify করো:
+
+* proto message → C# class mapping
+* service stub generation
+* request/response mapping
+
+Check করো implementation কি generated classes ঠিকভাবে use করছে কিনা।
+
+---
+
+# Step 4: Backend Implementation Scan
+
+Insurance Engine related code analyze করো:
+
+* Controllers
+* gRPC services
+* Application services
+* Commands / Queries
+* DTOs
+* Domain entities
+* Dependency Injection registrations
+
+একটি **Insurance Engine architecture map** তৈরি করো।
+
+---
+
+# Step 5: PostgreSQL Database Analysis
+
+Repository এর ভিতরে থাকা PostgreSQL queries analyze করো।
+
+Identify করো:
+
+* Insurance Engine related tables
+* relationships
+* foreign keys
+* constraints
+* indexes
+
+Verify করো:
+
+documentation entity structure → database schema match করছে কিনা।
+
+---
+
+# Step 6: Implementation Coverage Check
+
+Documentation + Proto contract অনুযায়ী determine করো:
+
+1️⃣ fully implemented features
+2️⃣ partially implemented features
+3️⃣ missing features
+
+---
+
+# Step 7: gRPC / Contract Implementation Check
+
+Verify করো:
+
+* proto defined services implement হয়েছে কিনা
+* missing RPC methods
+* incorrect request/response mapping
+* contract mismatch
+
+---
+
+# Step 8: Cross Team Integration Analysis
+
+Analyze করো Insurance Engine কীভাবে integrate করছে:
+
+* other backend modules
+* external services
+* shared proto contracts
+
+Check করো:
+
+* contract compatibility
+* dependency issues
+* missing service implementations
+
+---
+
+# Step 9: Database vs Code Verification
+
+Verify করো:
+
+* entity to table mapping
+* property mismatch
+* foreign key correctness
+* constraint implementation
+
+---
+
+# Step 10: Generate Full Technical Audit Report
+
+Structured report তৈরি করো:
+
+1️⃣ Insurance Engine Architecture Overview
+2️⃣ Documentation Summary
+3️⃣ Proto Contract Analysis
+4️⃣ Generated Code Analysis
+5️⃣ Backend Implementation Analysis
+6️⃣ Database Structure Analysis
+7️⃣ Implemented Features
+8️⃣ Partial Features
+9️⃣ Missing Features
+🔟 gRPC Contract Issues
+1️⃣1️⃣ Integration Issues
+1️⃣2️⃣ Architecture Weaknesses
+
+---
+
+# Step 11: Completion Metrics
+
+Determine করো:
+
+* Insurance Engine implementation percentage
+* contract coverage
+* documentation coverage
+
+---
+
+# Important Rules
+
+• Proto files must be treated as service communication contracts
+• Only use repository code + proto + documentation + database queries
+• No assumptions
+• Every finding must reference file paths

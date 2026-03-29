@@ -1,19 +1,19 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using Dapper;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
 
 namespace InsuranceEngine.Products.Application.Commands;
 
 public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _repository;
     private readonly ILogger<UpdateProductCommandHandler> _logger;
 
-    public UpdateProductCommandHandler(DbContext dbContext, ILogger<UpdateProductCommandHandler> logger)
+    public UpdateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<UpdateProductCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -21,36 +21,21 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.products
-                SET product_name = COALESCE(@ProductName, product_name),
-                    description = COALESCE(@Description, description),
-                    base_premium = COALESCE(@BasePremium, base_premium),
-                    min_sum_insured = COALESCE(@MinSumInsured, min_sum_insured),
-                    max_sum_insured = COALESCE(@MaxSumInsured, max_sum_insured),
-                    min_tenure_months = COALESCE(@MinTenureMonths, min_tenure_months),
-                    max_tenure_months = COALESCE(@MaxTenureMonths, max_tenure_months),
-                    updated_at = @UpdatedAt
-                WHERE product_id = @ProductId::uuid AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-            
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                ProductId = request.ProductId,
-                request.ProductName,
-                request.Description,
-                request.BasePremium,
-                request.MinSumInsured,
-                request.MaxSumInsured,
-                request.MinTenureMonths,
-                request.MaxTenureMonths,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
+            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
+
+            // Update fields
+            if (request.ProductName != null) product.ProductName = request.ProductName;
+            if (request.Description != null) product.Description = request.Description;
+            if (request.BasePremium.HasValue) product.BasePremium = (long)(request.BasePremium.Value * 100);
+            if (request.MinSumInsured.HasValue) product.MinSumInsured = (long)(request.MinSumInsured.Value * 100);
+            if (request.MaxSumInsured.HasValue) product.MaxSumInsured = (long)(request.MaxSumInsured.Value * 100);
+            if (request.MinTenureMonths.HasValue) product.MinTenureMonths = request.MinTenureMonths.Value;
+            if (request.MaxTenureMonths.HasValue) product.MaxTenureMonths = request.MaxTenureMonths.Value;
+            
+            product.UpdatedAt = DateTime.UtcNow;
+            await _repository.UpdateAsync(product, cancellationToken);
 
             _logger.LogInformation("Product updated: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
@@ -65,12 +50,12 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
 
 public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProductCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _repository;
     private readonly ILogger<ActivateProductCommandHandler> _logger;
 
-    public ActivateProductCommandHandler(DbContext dbContext, ILogger<ActivateProductCommandHandler> logger)
+    public ActivateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<ActivateProductCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -78,22 +63,13 @@ public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProd
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.products
-                SET status = 'ACTIVE', updated_at = @UpdatedAt
-                WHERE product_id = @ProductId::uuid AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-            
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                ProductId = request.ProductId,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
+            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
+
+            product.Status = "ACTIVE";
+            product.UpdatedAt = DateTime.UtcNow;
+            await _repository.UpdateAsync(product, cancellationToken);
 
             _logger.LogInformation("Product activated: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
@@ -108,12 +84,12 @@ public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProd
 
 public sealed class DeactivateProductCommandHandler : IRequestHandler<DeactivateProductCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _repository;
     private readonly ILogger<DeactivateProductCommandHandler> _logger;
 
-    public DeactivateProductCommandHandler(DbContext dbContext, ILogger<DeactivateProductCommandHandler> logger)
+    public DeactivateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<DeactivateProductCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -121,22 +97,13 @@ public sealed class DeactivateProductCommandHandler : IRequestHandler<Deactivate
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.products
-                SET status = 'INACTIVE', updated_at = @UpdatedAt
-                WHERE product_id = @ProductId::uuid AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-            
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                ProductId = request.ProductId,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
+            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
+
+            product.Status = "INACTIVE";
+            product.UpdatedAt = DateTime.UtcNow;
+            await _repository.UpdateAsync(product, cancellationToken);
 
             _logger.LogInformation("Product deactivated: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
@@ -151,12 +118,12 @@ public sealed class DeactivateProductCommandHandler : IRequestHandler<Deactivate
 
 public sealed class DiscontinueProductCommandHandler : IRequestHandler<DiscontinueProductCommand, Result<bool>>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _repository;
     private readonly ILogger<DiscontinueProductCommandHandler> _logger;
 
-    public DiscontinueProductCommandHandler(DbContext dbContext, ILogger<DiscontinueProductCommandHandler> logger)
+    public DiscontinueProductCommandHandler(IRepository<ProductEntity> repository, ILogger<DiscontinueProductCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -164,22 +131,13 @@ public sealed class DiscontinueProductCommandHandler : IRequestHandler<Discontin
     {
         try
         {
-            var sql = @"
-                UPDATE insurance_schema.products
-                SET status = 'DISCONTINUED', updated_at = @UpdatedAt
-                WHERE product_id = @ProductId::uuid AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            await connection.OpenAsync(cancellationToken);
-            
-            var rows = await connection.ExecuteAsync(sql, new
-            {
-                ProductId = request.ProductId,
-                UpdatedAt = DateTime.UtcNow
-            });
-
-            if (rows == 0)
+            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
+
+            product.Status = "DISCONTINUED";
+            product.UpdatedAt = DateTime.UtcNow;
+            await _repository.UpdateAsync(product, cancellationToken);
 
             _logger.LogInformation("Product discontinued: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);

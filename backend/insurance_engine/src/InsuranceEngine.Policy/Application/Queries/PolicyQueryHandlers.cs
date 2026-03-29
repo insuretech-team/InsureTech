@@ -1,25 +1,23 @@
-using System;
-using System.Collections.Generic;
-using System.Threading;
-using System.Threading.Tasks;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
-using Dapper;
 using Insuretech.Policy.Services.V1;
 using Insuretech.Policy.Entity.V1;
 using Insuretech.Common.V1;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
+using Google.Protobuf.WellKnownTypes;
+using System.Linq.Expressions;
 
 namespace InsuranceEngine.Policy.Application.Queries;
 
 public sealed class ListUserPoliciesQueryHandler : IRequestHandler<ListUserPoliciesQuery, ListUserPoliciesResponse>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyEntity> _repository;
     private readonly ILogger<ListUserPoliciesQueryHandler> _logger;
 
-    public ListUserPoliciesQueryHandler(DbContext dbContext, ILogger<ListUserPoliciesQueryHandler> logger)
+    public ListUserPoliciesQueryHandler(IRepository<PolicyEntity> repository, ILogger<ListUserPoliciesQueryHandler> logger)
     {
-        _dbContext = dbContext;
+        _repository = repository;
         _logger = logger;
     }
 
@@ -27,99 +25,113 @@ public sealed class ListUserPoliciesQueryHandler : IRequestHandler<ListUserPolic
     {
         try
         {
-            var sql = @"
-                SELECT policy_id, policy_number, product_id, customer_id, partner_id, agent_id,
-                       status, premium_amount, sum_insured, tenure_months, start_date, end_date,
-                       issued_at, created_at
-                FROM insurance_schema.policies
-                WHERE (@CustomerId IS NULL OR customer_id = @CustomerId::uuid)
-                  AND (@Status IS NULL OR status = @Status)
-                  AND (@ProductId IS NULL OR product_id = @ProductId::uuid)
-                  AND deleted_at IS NULL
-                ORDER BY created_at DESC
-                LIMIT @PageSize OFFSET @Offset";
+            Expression<Func<PolicyEntity, bool>>? predicate = null;
 
-            var offset = (request.Page - 1) * request.PageSize;
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open) await connection.OpenAsync(cancellationToken);
-
-            var items = await connection.QueryAsync<dynamic>(sql, new
+            if (!string.IsNullOrEmpty(request.CustomerId))
             {
-                CustomerId = request.CustomerId,
-                Status = request.Status,
-                ProductId = request.ProductId,
-                PageSize = request.PageSize,
-                Offset = offset
-            });
-
-            var countSql = @"
-                SELECT COUNT(*) FROM insurance_schema.policies
-                WHERE (@CustomerId IS NULL OR customer_id = @CustomerId::uuid)
-                  AND (@Status IS NULL OR status = @Status)
-                  AND (@ProductId IS NULL OR product_id = @ProductId::uuid)
-                  AND deleted_at IS NULL";
-
-            var totalCount = await connection.ExecuteScalarAsync<int>(countSql, new
+                var customerId = Guid.Parse(request.CustomerId);
+                predicate = p => p.CustomerId == customerId && p.DeletedAt == null;
+            }
+            else
             {
-                CustomerId = request.CustomerId,
-                Status = request.Status,
-                ProductId = request.ProductId
-            });
+                predicate = p => p.DeletedAt == null;
+            }
 
-            var response = new ListUserPoliciesResponse
+            if (!string.IsNullOrEmpty(request.Status))
             {
-                TotalCount = totalCount
-            };
+                var status = request.Status;
+                predicate = Combine(predicate, p => p.Status == status);
+            }
 
-            foreach (var item in items)
+            if (!string.IsNullOrEmpty(request.ProductId))
             {
-                response.Policies.Add(MapToProto(item));
+                var productId = Guid.Parse(request.ProductId);
+                predicate = Combine(predicate, p => p.ProductId == productId);
+            }
+
+            var (items, totalCount) = await _repository.GetPagedAsync(
+                page: request.Page,
+                pageSize: request.PageSize,
+                predicate: predicate,
+                orderBy: p => p.CreatedAt,
+                descending: true,
+                cancellationToken: cancellationToken
+            );
+
+            var response = new ListUserPoliciesResponse { TotalCount = totalCount };
+
+            foreach (var entity in items)
+            {
+                response.Policies.Add(MapToProto(entity));
             }
 
             return response;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to list policies");
+            _logger.LogError(ex, "Failed to list policies for customer {CustomerId}", request.CustomerId);
             throw;
         }
     }
 
-    private static Insuretech.Policy.Entity.V1.Policy MapToProto(dynamic item)
+    private static Expression<Func<T, bool>> Combine<T>(Expression<Func<T, bool>> expr1, Expression<Func<T, bool>> expr2)
     {
-        var policy = new Insuretech.Policy.Entity.V1.Policy
+        var parameter = Expression.Parameter(typeof(T));
+        var leftVisitor = new ReplaceExpressionVisitor(expr1.Parameters[0], parameter);
+        var left = leftVisitor.Visit(expr1.Body);
+        var rightVisitor = new ReplaceExpressionVisitor(expr2.Parameters[0], parameter);
+        var right = rightVisitor.Visit(expr2.Body);
+        return Expression.Lambda<Func<T, bool>>(Expression.AndAlso(left!, right!), parameter);
+    }
+
+    private class ReplaceExpressionVisitor(Expression oldValue, Expression newValue) : ExpressionVisitor
+    {
+        public override Expression Visit(Expression? node) => node == oldValue ? newValue : base.Visit(node)!;
+    }
+
+    private static Insuretech.Policy.Entity.V1.Policy MapToProto(PolicyEntity e)
+    {
+        var p = new Insuretech.Policy.Entity.V1.Policy
         {
-            PolicyId = item.policy_id?.ToString() ?? "",
-            PolicyNumber = item.policy_number?.ToString() ?? "",
-            CustomerId = item.customer_id?.ToString() ?? "",
-            ProductId = item.product_id?.ToString() ?? "",
-            PartnerId = item.partner_id?.ToString() ?? "",
-            AgentId = item.agent_id?.ToString() ?? "",
-            PremiumAmount = new Money { Amount = (long)((decimal)(item.premium_amount ?? 0) * 100), Currency = "BDT" },
-            SumInsured = new Money { Amount = (long)((decimal)(item.sum_insured ?? 0) * 100), Currency = "BDT" }
+            PolicyId = e.PolicyId.ToString(),
+            PolicyNumber = e.PolicyNumber,
+            CustomerId = e.CustomerId.ToString(),
+            ProductId = e.ProductId.ToString(),
+            PartnerId = e.PartnerId?.ToString() ?? "",
+            AgentId = e.AgentId?.ToString() ?? "",
+            TenureMonths = e.TenureMonths,
+            PremiumAmount = new Money { Amount = e.PremiumAmount, Currency = e.PremiumCurrency },
+            SumInsured = new Money { Amount = e.SumInsured, Currency = e.SumInsuredCurrency },
+            PolicyDocumentUrl = e.PolicyDocumentUrl ?? ""
         };
 
-        string statusStr = item.status?.ToString() ?? "";
-        if (System.Enum.TryParse<Insuretech.Policy.Entity.V1.PolicyStatus>(statusStr, true, out var stat)) policy.Status = stat;
+        if (System.Enum.TryParse<Insuretech.Policy.Entity.V1.PolicyStatus>(e.Status, true, out var s)) p.Status = s;
 
-        if (item.created_at != null)
-        {
-            policy.CreatedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.SpecifyKind((DateTime)item.created_at, DateTimeKind.Utc));
-        }
+        p.StartDate = Timestamp.FromDateTime(DateTime.SpecifyKind(e.StartDate, DateTimeKind.Utc));
+        p.EndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(e.EndDate, DateTimeKind.Utc));
+        p.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.CreatedAt, DateTimeKind.Utc));
+        if (e.IssuedAt.HasValue) p.IssuedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.IssuedAt.Value, DateTimeKind.Utc));
 
-        return policy;
+        return p;
     }
 }
 
 public sealed class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, GetPolicyResponse>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<PolicyEntity> _policyRepository;
+    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
+    private readonly IRepository<PolicyRiderEntity> _riderRepository;
     private readonly ILogger<GetPolicyQueryHandler> _logger;
 
-    public GetPolicyQueryHandler(DbContext dbContext, ILogger<GetPolicyQueryHandler> logger)
+    public GetPolicyQueryHandler(
+        IRepository<PolicyEntity> policyRepository,
+        IRepository<PolicyNomineeEntity> nomineeRepository,
+        IRepository<PolicyRiderEntity> riderRepository,
+        ILogger<GetPolicyQueryHandler> logger)
     {
-        _dbContext = dbContext;
+        _policyRepository = policyRepository;
+        _nomineeRepository = nomineeRepository;
+        _riderRepository = riderRepository;
         _logger = logger;
     }
 
@@ -127,27 +139,49 @@ public sealed class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, GetP
     {
         try
         {
-            var sql = @"
-                SELECT policy_id, policy_number, product_id, customer_id, partner_id, agent_id,
-                       status, premium_amount, sum_insured, tenure_months, start_date, end_date,
-                       issued_at, created_at
-                FROM insurance_schema.policies
-                WHERE policy_id = @PolicyId::uuid AND deleted_at IS NULL";
-
-            using var connection = _dbContext.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open) await connection.OpenAsync(cancellationToken);
-
-            var item = await connection.QueryFirstOrDefaultAsync<dynamic>(sql, new
+            var entity = await _policyRepository.GetByIdAsync(Guid.Parse(request.PolicyId), cancellationToken);
+            if (entity == null)
             {
-                PolicyId = request.PolicyId
-            });
+                return new GetPolicyResponse
+                {
+                    Error = new Insuretech.Common.V1.Error { Code = "POLICY_NOT_FOUND", Message = "Policy not found" }
+                };
+            }
 
-            if (item == null) throw new Exception("Policy not found");
+            var policy = MapToProto(entity);
 
-            return new GetPolicyResponse
+            // Load nominees
+            var nominees = await _nomineeRepository.FindAsync(n => n.PolicyId == entity.PolicyId, cancellationToken);
+            foreach (var n in nominees)
             {
-                Policy = MapToProto(item)
-            };
+                policy.Nominees.Add(new Insuretech.Policy.Entity.V1.Nominee
+                {
+                    NomineeId = n.NomineeId.ToString(),
+                    PolicyId = n.PolicyId.ToString(),
+                    FullName = n.FullName,
+                    Relationship = n.Relationship,
+                    SharePercentage = n.SharePercentage,
+                    DateOfBirth = Timestamp.FromDateTime(DateTime.SpecifyKind(n.DateOfBirth, DateTimeKind.Utc)),
+                    NidNumber = n.NidNumber ?? "",
+                    PhoneNumber = n.PhoneNumber ?? ""
+                });
+            }
+
+            // Load riders
+            var riders = await _riderRepository.FindAsync(r => r.PolicyId == entity.PolicyId, cancellationToken);
+            foreach (var r in riders)
+            {
+                policy.Riders.Add(new Insuretech.Policy.Entity.V1.Rider
+                {
+                    RiderId = r.RiderId.ToString(),
+                    PolicyId = r.PolicyId.ToString(),
+                    RiderName = r.RiderName,
+                    PremiumAmount = new Money { Amount = r.PremiumAmount, Currency = r.PremiumCurrency },
+                    CoverageAmount = new Money { Amount = r.CoverageAmount, Currency = r.CoverageCurrency }
+                });
+            }
+
+            return new GetPolicyResponse { Policy = policy };
         }
         catch (Exception ex)
         {
@@ -156,28 +190,40 @@ public sealed class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, GetP
         }
     }
 
-    private static Insuretech.Policy.Entity.V1.Policy MapToProto(dynamic item)
+    private static Insuretech.Policy.Entity.V1.Policy MapToProto(PolicyEntity e)
     {
-        var policy = new Insuretech.Policy.Entity.V1.Policy
+        var p = new Insuretech.Policy.Entity.V1.Policy
         {
-            PolicyId = item.policy_id?.ToString() ?? "",
-            PolicyNumber = item.policy_number?.ToString() ?? "",
-            CustomerId = item.customer_id?.ToString() ?? "",
-            ProductId = item.product_id?.ToString() ?? "",
-            PartnerId = item.partner_id?.ToString() ?? "",
-            AgentId = item.agent_id?.ToString() ?? "",
-            PremiumAmount = new Money { Amount = (long)((decimal)(item.premium_amount ?? 0) * 100), Currency = "BDT" },
-            SumInsured = new Money { Amount = (long)((decimal)(item.sum_insured ?? 0) * 100), Currency = "BDT" }
+            PolicyId = e.PolicyId.ToString(),
+            PolicyNumber = e.PolicyNumber,
+            CustomerId = e.CustomerId.ToString(),
+            ProductId = e.ProductId.ToString(),
+            PartnerId = e.PartnerId?.ToString() ?? "",
+            AgentId = e.AgentId?.ToString() ?? "",
+            QuoteId = e.QuoteId?.ToString() ?? "",
+            TenureMonths = e.TenureMonths,
+            PremiumAmount = new Money { Amount = e.PremiumAmount, Currency = e.PremiumCurrency },
+            SumInsured = new Money { Amount = e.SumInsured, Currency = e.SumInsuredCurrency },
+            PolicyDocumentUrl = e.PolicyDocumentUrl ?? "",
+            PaymentFrequency = e.PaymentFrequency ?? "",
+            ProviderName = e.ProviderName ?? "",
+            OccupationRiskClass = e.OccupationRiskClass ?? "",
+            HasExistingPolicies = e.HasExistingPolicies,
+            ClaimsHistorySummary = e.ClaimsHistorySummary ?? ""
         };
 
-        string statusStr = item.status?.ToString() ?? "";
-        if (System.Enum.TryParse<Insuretech.Policy.Entity.V1.PolicyStatus>(statusStr, true, out var stat)) policy.Status = stat;
+        if (System.Enum.TryParse<Insuretech.Policy.Entity.V1.PolicyStatus>(e.Status, true, out var s)) p.Status = s;
 
-        if (item.created_at != null)
-        {
-            policy.CreatedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.SpecifyKind((DateTime)item.created_at, DateTimeKind.Utc));
-        }
+        p.StartDate = Timestamp.FromDateTime(DateTime.SpecifyKind(e.StartDate, DateTimeKind.Utc));
+        p.EndDate = Timestamp.FromDateTime(DateTime.SpecifyKind(e.EndDate, DateTimeKind.Utc));
+        p.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.CreatedAt, DateTimeKind.Utc));
+        p.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.UpdatedAt, DateTimeKind.Utc));
+        if (e.IssuedAt.HasValue) p.IssuedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(e.IssuedAt.Value, DateTimeKind.Utc));
 
-        return policy;
+        if (e.VatTax.HasValue) p.VatTax = new Money { Amount = e.VatTax.Value, Currency = "BDT" };
+        if (e.ServiceFee.HasValue) p.ServiceFee = new Money { Amount = e.ServiceFee.Value, Currency = "BDT" };
+        if (e.TotalPayable.HasValue) p.TotalPayable = new Money { Amount = e.TotalPayable.Value, Currency = "BDT" };
+
+        return p;
     }
 }

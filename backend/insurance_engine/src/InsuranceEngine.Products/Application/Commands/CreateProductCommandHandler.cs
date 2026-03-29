@@ -1,97 +1,96 @@
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Insuretech.Products.Services.V1;
-using Dapper;
-using System.Data;
 using InsuranceEngine.Products.Domain;
 using InsuranceEngine.SharedKernel.Domain;
+using InsuranceEngine.SharedKernel.Persistence;
+using InsuranceEngine.SharedKernel.Persistence.Entities;
 
 namespace InsuranceEngine.Products.Application.Commands;
 
 public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
 {
-    private readonly DbContext _dbContext;
+    private readonly IRepository<ProductEntity> _productRepository;
     private readonly ILogger<CreateProductCommandHandler> _logger;
 
     public CreateProductCommandHandler(
-        DbContext dbContext,
+        IRepository<ProductEntity> productRepository,
         ILogger<CreateProductCommandHandler> logger)
     {
-        _dbContext = dbContext;
+        _productRepository = productRepository;
         _logger = logger;
     }
 
     public async Task<CreateProductResponse> Handle(CreateProductCommand request, CancellationToken cancellationToken)
     {
-        var connection = _dbContext.Database.GetDbConnection();
-        if (connection.State != ConnectionState.Open) await connection.OpenAsync(cancellationToken);
-
-        using var transaction = await connection.BeginTransactionAsync(cancellationToken);
         try
         {
             // 1. Create Domain Aggregate (DDD)
-            var product = Product.Create(
-                code: request.ProductCode,
-                name: request.ProductName,
-                category: Enum.TryParse<Insuretech.Products.Entity.V1.ProductCategory>(request.Category, true, out var cat) ? cat : Insuretech.Products.Entity.V1.ProductCategory.Unspecified,
-                enDesc: request.Description ?? "",
-                bnDesc: "", // Default empty for now or handle from request if available
-                basePremium: Money.FromDecimal(request.BasePremium),
-                minSum: Money.FromDecimal(request.MinSumInsured),
-                maxSum: Money.FromDecimal(request.MaxSumInsured),
-                minTenure: request.MinTenureMonths,
-                maxTenure: request.MaxTenureMonths
-            );
+            // Note: In a full VSA with isolated storage, the aggregate might be used.
+            // But since we are using EF Core (Option A), we can map directly to the entity 
+            // after domain validation logic.
+            
+            var productCode = request.ProductCode;
+            if (string.IsNullOrWhiteSpace(productCode))
+                throw new ArgumentException("Product code is required");
 
-            // 2. Persist Aggregate State using Dapper
-            var insertProductSql = @"
-                INSERT INTO insurance_schema.products (
-                    product_id, product_code, product_name, category, description,
-                    base_premium, min_sum_insured, max_sum_insured,
-                    min_tenure_months, max_tenure_months,
-                    status, created_at, created_by
-                ) VALUES (
-                    @ProductId, @ProductCode, @ProductName, @Category, @Description,
-                    @BasePremium, @MinSumInsured, @MaxSumInsured,
-                    @MinTenureMonths, @MaxTenureMonths,
-                    @Status, @CreatedAt, @CreatedBy
-                )";
-
-            await connection.ExecuteAsync(insertProductSql, new
+            // Check uniqueness
+            if (await _productRepository.ExistsAsync(p => p.ProductCode == productCode, cancellationToken))
             {
-                ProductId = product.Id,
-                ProductCode = product.ProductCode,
-                ProductName = product.ProductName,
-                Category = product.Category.ToString(),
-                Description = product.Description.English,
-                BasePremium = product.BasePremium.Amount,
-                MinSumInsured = product.MinSumInsured.Amount,
-                MaxSumInsured = product.MaxSumInsured.Amount,
-                MinTenureMonths = product.MinTenureMonths,
-                MaxTenureMonths = product.MaxTenureMonths,
-                Status = product.Status.ToString(),
-                CreatedAt = product.CreatedAt,
-                CreatedBy = string.IsNullOrEmpty(request.CreatedBy) || request.CreatedBy.ToUpper() == "SYSTEM" 
-                    ? Guid.Parse("00000000-0000-0000-0000-000000000001")  // System user UUID
-                    : Guid.Parse(request.CreatedBy)
-            }, transaction);
+                return new CreateProductResponse
+                {
+                    Error = new Insuretech.Common.V1.Error
+                    {
+                        Code = "DUPLICATE_PRODUCT",
+                        Message = $"Product with code {productCode} already exists"
+                    }
+                };
+            }
 
-            await transaction.CommitAsync(cancellationToken);
+            // 2. Create Entity and Persist
+            var entity = new ProductEntity
+            {
+                ProductId = Guid.NewGuid(),
+                ProductCode = productCode,
+                ProductName = request.ProductName,
+                Category = request.Category,
+                Description = request.Description,
+                BasePremium = (long)(request.BasePremium * 100), // Store in paisa
+                BasePremiumCurrency = "BDT",
+                MinSumInsured = (long)(request.MinSumInsured * 100),
+                MaxSumInsured = (long)(request.MaxSumInsured * 100),
+                MinTenureMonths = request.MinTenureMonths,
+                MaxTenureMonths = request.MaxTenureMonths,
+                MinAge = request.MinAge,
+                MaxAge = request.MaxAge,
+                Status = "ACTIVE", // Start as ACTIVE for now or follow lifecycle
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow,
+                CreatedBy = request.CreatedBy ?? "SYSTEM",
+                Version = 1
+            };
 
-            _logger.LogInformation("Product created successfully: {ProductId} ({ProductCode})", product.Id, product.ProductCode);
+            await _productRepository.AddAsync(entity, cancellationToken);
+
+            _logger.LogInformation("Product created successfully: {ProductId} ({ProductCode})", entity.ProductId, entity.ProductCode);
 
             return new CreateProductResponse
             {
-                ProductId = product.Id.ToString(),
+                ProductId = entity.ProductId.ToString(),
                 Message = "Product created successfully"
             };
         }
         catch (Exception ex)
         {
-            await transaction.RollbackAsync(cancellationToken);
             _logger.LogError(ex, "Failed to create product {ProductCode}", request.ProductCode);
-            throw;
+            return new CreateProductResponse
+            {
+                Error = new Insuretech.Common.V1.Error
+                {
+                    Code = "PRODUCT_CREATION_FAILED",
+                    Message = ex.Message
+                }
+            };
         }
     }
 }

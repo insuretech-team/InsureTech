@@ -42,11 +42,11 @@ public sealed class PolicyAggregate : AggregateRoot<Guid>
         CreatedAt = DateTime.UtcNow;
     }
 
-    public static PolicyAggregate Create(Guid productId, string productCode, string insuranceType, Guid customerId, decimal premium, decimal sumInsured, int tenure, DateTime startDate)
+    public static PolicyAggregate Create(Guid productId, string productCode, string insuranceType, Guid customerId, decimal premium, decimal sumInsured, int tenure, DateTime startDate, long sequenceNumber)
     {
         return new PolicyAggregate(
             Guid.NewGuid(),
-            ValueObjects.PolicyNumber.Generate(insuranceType, productCode).Value,
+            ValueObjects.PolicyNumber.Generate(productCode, sequenceNumber).Value,
             productId,
             productCode,
             insuranceType,

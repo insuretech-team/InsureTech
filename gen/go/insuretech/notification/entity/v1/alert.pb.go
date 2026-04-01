@@ -141,16 +141,16 @@ type Alert struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	AlertId    string                 `protobuf:"bytes,1,opt,name=alert_id,json=alertId,proto3" json:"alert_id,omitempty"`                                                         // @inject_tag: gorm:"primaryKey;column:alert_id;not null"
-	BusinessId string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty"`                                                // @inject_tag: gorm:"column:business_id;not null"
-	AlertType  AlertType              `protobuf:"varint,3,opt,name=alert_type,json=alertType,proto3,enum=insuretech.notification.entity.v1.AlertType" json:"alert_type,omitempty"` // @inject_tag: gorm:"column:alert_type;not null;serializer:proto_enum"
-	Title      string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty"`                                                                            // @inject_tag: gorm:"column:title;not null"
-	Message    string                 `protobuf:"bytes,5,opt,name=message,proto3" json:"message,omitempty"`                                                                        // @inject_tag: gorm:"column:message;not null"
-	Severity   AlertSeverity          `protobuf:"varint,6,opt,name=severity,proto3,enum=insuretech.notification.entity.v1.AlertSeverity" json:"severity,omitempty"`                // @inject_tag: gorm:"column:severity;not null;serializer:proto_enum"
-	Count      int32                  `protobuf:"varint,7,opt,name=count,proto3" json:"count,omitempty"`                                                                           // @inject_tag: gorm:"column:count;not null"
-	IsRead     bool                   `protobuf:"varint,8,opt,name=is_read,json=isRead,proto3" json:"is_read,omitempty"`                                                           // @inject_tag: gorm:"column:is_read;not null"
-	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	ReadAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=read_at,json=readAt,proto3" json:"read_at,omitempty"`
+	AlertId    string                 `protobuf:"bytes,1,opt,name=alert_id,json=alertId,proto3" json:"alert_id,omitempty" gorm:"primaryKey;column:alert_id;not null"`
+	BusinessId string                 `protobuf:"bytes,2,opt,name=business_id,json=businessId,proto3" json:"business_id,omitempty" gorm:"column:business_id;not null"`
+	AlertType  AlertType              `protobuf:"varint,3,opt,name=alert_type,json=alertType,proto3,enum=insuretech.notification.entity.v1.AlertType" json:"alert_type,omitempty" gorm:"column:alert_type;not null;serializer:proto_enum"`
+	Title      string                 `protobuf:"bytes,4,opt,name=title,proto3" json:"title,omitempty" gorm:"column:title;not null"`
+	Message    string                 `protobuf:"bytes,5,opt,name=message,proto3" json:"message,omitempty" gorm:"column:message;not null"`
+	Severity   AlertSeverity          `protobuf:"varint,6,opt,name=severity,proto3,enum=insuretech.notification.entity.v1.AlertSeverity" json:"severity,omitempty" gorm:"column:severity;not null;serializer:proto_enum"`
+	Count      int32                  `protobuf:"varint,7,opt,name=count,proto3" json:"count,omitempty" gorm:"column:count;not null"`
+	IsRead     bool                   `protobuf:"varint,8,opt,name=is_read,json=isRead,proto3" json:"is_read,omitempty" gorm:"column:is_read;not null"`
+	CreatedAt  *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
+	ReadAt     *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=read_at,json=readAt,proto3" json:"read_at,omitempty" gorm:"column:read_at;serializer:proto_timestamp"`
 }
 
 func (x *Alert) Reset() {

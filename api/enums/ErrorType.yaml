@@ -1,0 +1,8 @@
+ErrorType:
+  type: string
+  enum:
+  - ERROR_TYPE_UNSPECIFIED
+  - ERROR_TYPE_ERROR
+  - ERROR_TYPE_WARNING
+  description: 'Type categorization for error. Options: ERROR_TYPE_UNSPECIFIED, ERROR_TYPE_ERROR,
+    ERROR_TYPE_WARNING.'

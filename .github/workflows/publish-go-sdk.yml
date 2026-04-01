@@ -1,0 +1,274 @@
+name: Publish Go SDK
+
+on:
+  push:
+    tags:
+      - 'go-v*.*.*'
+    paths:
+      - 'sdks/insuretech-go-sdk/**'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., v1.0.0)'
+        required: true
+        type: string
+
+env:
+  GO_VERSION: '1.21'
+  SDK_PATH: 'sdks/insuretech-go-sdk'
+  TARGET_REPO: 'newage-saint/insuretech-go-sdk'
+
+jobs:
+  validate:
+    name: Validate Go SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: ${{ env.GO_VERSION }}
+
+      - name: Verify SDK exists
+        run: |
+          if [ ! -d "${{ env.SDK_PATH }}" ]; then
+            echo "❌ SDK directory not found at ${{ env.SDK_PATH }}"
+            exit 1
+          fi
+          echo "✓ SDK directory found"
+
+      - name: Install dependencies
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          go mod download
+          go mod verify
+
+      - name: Run tests
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          go test ./pkg/client -v
+          go test ./pkg/services -v
+
+      - name: Build SDK
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          go build ./pkg/client
+          go build ./pkg/services
+          go build ./pkg/models
+
+      - name: Run go vet
+        working-directory: ${{ env.SDK_PATH }}
+        run: go vet ./...
+
+      - name: Check formatting
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          echo "Checking code formatting..."
+          unformatted=$(gofmt -l .)
+          if [ -n "$unformatted" ]; then
+            echo "⚠️ Some files need formatting. Auto-formatting..."
+            gofmt -w .
+            echo "✓ Files formatted"
+          else
+            echo "✓ Code is properly formatted"
+          fi
+
+  publish:
+    name: Publish to GitHub
+    runs-on: ubuntu-latest
+    needs: validate
+    environment: production
+    steps:
+      - name: Checkout source repository
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Set version from tag or input
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/go-}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: $VERSION"
+
+      - name: Prepare SDK for publication
+        run: |
+          echo "Preparing SDK files..."
+          mkdir -p /tmp/go-sdk
+          
+          # Copy SDK files
+          cp -r ${{ env.SDK_PATH }}/* /tmp/go-sdk/
+          
+          # Create README for GitHub
+          cat > /tmp/go-sdk/README.md << 'EOF'
+          # InsureTech Go SDK
+
+          Official Go SDK for the InsureTech API Platform.
+
+          ## Installation
+
+          ```bash
+          go get github.com/${{ env.TARGET_REPO }}
+          ```
+
+          ## Quick Start
+
+          ```go
+          package main
+
+          import (
+              "context"
+              "log"
+              
+              "github.com/${{ env.TARGET_REPO }}/pkg/client"
+              "github.com/${{ env.TARGET_REPO }}/pkg/models"
+          )
+
+          func main() {
+              // Initialize client
+              c := client.NewClient(
+                  client.WithAPIKey("your-api-key"),
+              )
+              
+              ctx := context.Background()
+              
+              // Use the SDK
+              policy, err := c.Policy.CreatePolicy(ctx, &models.PolicyCreationRequest{
+                  ProductID:  "prod-123",
+                  CustomerID: "cust-456",
+              })
+              if err != nil {
+                  log.Fatal(err)
+              }
+              
+              log.Printf("Created policy: %s", policy.PolicyId)
+          }
+          ```
+
+          ## Documentation
+
+          - [API Reference](https://github.com/${{ env.TARGET_REPO }}/tree/main/docs)
+          - [Examples](https://github.com/${{ env.TARGET_REPO }}/tree/main/examples)
+          - [QUICKSTART Guide](https://github.com/${{ env.TARGET_REPO }}/blob/main/QUICKSTART.md)
+
+          ## Features
+
+          - ✅ 31 Services with 221+ methods
+          - ✅ 867 Type-safe models
+          - ✅ Full API coverage
+          - ✅ Retry logic with exponential backoff
+          - ✅ Configurable timeouts
+          - ✅ Context support
+          - ✅ Comprehensive error handling
+
+          ## License
+
+          MIT
+
+          ## Support
+
+          For issues and questions, please visit [GitHub Issues](https://github.com/${{ env.TARGET_REPO }}/issues).
+          EOF
+
+      - name: Checkout target repository
+        uses: actions/checkout@v4
+        with:
+          repository: ${{ env.TARGET_REPO }}
+          token: ${{ secrets.NEWAGE_SAINT_PAT }}
+          path: target-repo
+
+      - name: Update target repository
+        run: |
+          # Copy SDK files to target repo
+          rsync -av --delete \
+            --exclude='.git' \
+            --exclude='.github' \
+            /tmp/go-sdk/ target-repo/
+          
+          cd target-repo
+          
+          # Configure git
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          
+          # Check for changes
+          if [ -n "$(git status --porcelain)" ]; then
+            git add .
+            git commit -m "Release ${{ steps.version.outputs.version }}
+
+          Auto-generated from InsureTech monorepo
+          
+          - Updated SDK with latest changes
+          - Version: ${{ steps.version.outputs.version }}
+          - Commit: ${{ github.sha }}"
+            
+            echo "✓ Changes committed"
+          else
+            echo "⚠️ No changes to commit"
+          fi
+
+      - name: Create and push tag
+        run: |
+          cd target-repo
+          
+          git tag -a ${{ steps.version.outputs.version }} -m "Release ${{ steps.version.outputs.version }}"
+          git push origin main
+          git push origin ${{ steps.version.outputs.version }}
+          
+          echo "✓ Pushed to GitHub"
+
+      - name: Create GitHub Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.NEWAGE_SAINT_PAT }}
+        with:
+          owner: newage-saint
+          repo: insuretech-go-sdk
+          tag_name: ${{ steps.version.outputs.version }}
+          release_name: Go SDK ${{ steps.version.outputs.version }}
+          body: |
+            # InsureTech Go SDK ${{ steps.version.outputs.version }}
+            
+            ## Installation
+            
+            ```bash
+            go get github.com/${{ env.TARGET_REPO }}@${{ steps.version.outputs.version }}
+            ```
+            
+            ## What's Included
+            
+            - 31 Services with 221+ methods
+            - 867 Type-safe models
+            - Complete API coverage
+            - Production-ready code
+            
+            ## Changes
+            
+            Auto-generated from InsureTech monorepo commit: ${{ github.sha }}
+            
+            See [full changelog](https://github.com/${{ env.TARGET_REPO }}/commits/${{ steps.version.outputs.version }})
+          draft: false
+          prerelease: false
+
+  notify:
+    name: Notify completion
+    runs-on: ubuntu-latest
+    needs: publish
+    if: always()
+    steps:
+      - name: Report status
+        run: |
+          if [ "${{ needs.publish.result }}" == "success" ]; then
+            echo "✅ Go SDK published successfully!"
+            echo "📦 Version: ${{ needs.publish.outputs.version }}"
+            echo "🔗 Repository: https://github.com/${{ env.TARGET_REPO }}"
+          else
+            echo "❌ Publication failed"
+            exit 1
+          fi

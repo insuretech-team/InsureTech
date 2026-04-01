@@ -493,9 +493,9 @@ message Nominee {
     (insuretech.common.v1.column) = {
       column_name : "phone_number"
       sql_type : "VARCHAR(20)"
-      check_constraint : "phone_number ~ '^\\+880[1][0-9]{9}$'"
+      check_constraint : "phone_number ~ '^\\+880(13|14|15|16|17|18|19)[0-9]{8}$'"
   // @inject_tag: gorm:"column:phone_number"
-      comment : "Bangladesh mobile format: +880 1XXX XXXXXX"
+      comment : "Nominee mobile number stored as canonical +8801XXXXXXXXX"
     },
     (insuretech.common.v1.pii) = true,
     (insuretech.common.v1.encrypted_security) = true,

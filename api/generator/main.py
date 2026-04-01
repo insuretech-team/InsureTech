@@ -6,12 +6,14 @@ import subprocess
 import yaml
 from proto_parser import ProtoParser
 from registry import ProtoRegistry
+from write_guard import write_if_changed, yaml_dump_if_changed, json_dump_if_changed, copy_if_changed
 
 def find_protos(root_dir):
     """Recursively finds all .proto files."""
     proto_files = []
-    for root, _, files in os.walk(root_dir):
-        for file in files:
+    for root, dirs, files in os.walk(root_dir):
+        dirs.sort()
+        for file in sorted(files):
             if file.endswith(".proto"):
                 full_path = os.path.join(root, file)
                 # Normalize to forward slashes for protoc consistency
@@ -193,8 +195,7 @@ def main():
         
         wrapped_schema = { key_name: sanitize_for_yaml(schema) }
         
-        with open(out_path, 'w') as f:
-            yaml.dump(wrapped_schema, f, sort_keys=False)
+        yaml_dump_if_changed(out_path, wrapped_schema, sort_keys=False)
             
     # Generate Enums
     for enum in parser.get_enums():
@@ -228,8 +229,7 @@ def main():
         
         sanitized = sanitize_for_yaml(wrapped_schema)
         
-        with open(out_path, 'w') as f:
-            yaml.dump(sanitized, f, sort_keys=False)
+        yaml_dump_if_changed(out_path, sanitized, sort_keys=False)
 
     print(f"Schemas generated in {args.api_root}/schemas")
 
@@ -240,7 +240,8 @@ def main():
     
     print("Generating paths with validation...")
     descriptions_dir = os.path.join(args.api_root, "descriptions")
-    path_gen = PathGenerator(registry, descriptions_dir=descriptions_dir)
+    schemas_dir = os.path.join(args.api_root, "schemas")
+    path_gen = PathGenerator(registry, descriptions_dir=descriptions_dir, schemas_dir=schemas_dir)
     path_validator = PathValidator()
     endpoint_mapper = EndpointMapper()
     
@@ -298,8 +299,7 @@ def main():
             os.makedirs(os.path.dirname(out_path), exist_ok=True)
             
             # Write key-value: PathURL: PathItem
-            with open(out_path, 'w') as f:
-                yaml.dump(service_paths, f, sort_keys=False)
+            yaml_dump_if_changed(out_path, service_paths, sort_keys=False)
                 
     print("Path generation complete.")
     
@@ -314,6 +314,20 @@ def main():
     endpoint_mapper.export_to_markdown(endpoint_map_file)
     print(f"\n✅ Endpoint map exported to: {endpoint_map_file}")
 
+    # 5.5. Fix schema warnings BEFORE assembly so descriptions/required fields
+    # are baked into openapi.yaml in one shot. Running fix_all_warnings AFTER
+    # assembly caused a run-to-run instability: schema YAML files changed on
+    # run N, but openapi.yaml (assembled on run N) didn't reflect them until
+    # run N+1, causing 1500+ HTML docs to regenerate every pipeline execution.
+    print("\nFixing schema warnings before assembly...")
+    import subprocess as _sp
+    _fix_script = os.path.join(os.path.dirname(os.path.abspath(__file__)), "fix_all_warnings.py")
+    _fix_result = _sp.run([sys.executable, _fix_script], capture_output=True, text=True)
+    if _fix_result.returncode != 0:
+        print(f"  WARNING: fix_all_warnings.py had issues:\n{_fix_result.stderr[-500:]}")
+    else:
+        print("  Schema warnings fixed.")
+
     # 6. Assembly
     from assembler import OpenAPIAssembler
     print("Assembling openapi.yaml...")
@@ -325,8 +339,7 @@ def main():
     root_spec = post_process_openapi_spec(root_spec)
     
     output_file = os.path.join(args.api_root, "openapi.yaml")
-    with open(output_file, 'w') as f:
-        yaml.dump(root_spec, f, sort_keys=False)
+    yaml_dump_if_changed(output_file, root_spec, sort_keys=False)
         
     print(f"OpenAPI Spec generated: {output_file}")
     
@@ -336,8 +349,7 @@ def main():
     os.makedirs(os.path.dirname(json_output_file), exist_ok=True)
     
     import json
-    with open(json_output_file, 'w', encoding='utf-8') as f:
-        json.dump(root_spec, f, indent=2, ensure_ascii=False)
+    json_dump_if_changed(json_output_file, root_spec, indent=2, ensure_ascii=False, sort_keys=True)
     
     schema_count = len(root_spec.get('components', {}).get('schemas', {}))
     print(f"✅ OpenAPI JSON generated: {json_output_file}")
@@ -360,7 +372,7 @@ def main():
         dst = os.path.join(docs_dir, js_file)
         
         if os.path.exists(src):
-            shutil.copy2(src, dst)
+            copy_if_changed(src, dst)
             print(f"   ✅ Copied {js_file}")
         else:
             print(f"   ⚠️  Warning: {js_file} not found in generator directory")
@@ -405,8 +417,7 @@ def main():
                 
                 # Export comparison
                 comparison_file = os.path.join(args.api_root, "db_proto_comparison.json")
-                with open(comparison_file, 'w') as f:
-                    json.dump(comparison, f, indent=2)
+                json_dump_if_changed(comparison_file, comparison, indent=2, sort_keys=True)
                 print(f"   Comparison exported: {comparison_file}")
             else:
                 print(f"⚠️  DB validation skipped: {comparison['error']}")
@@ -506,8 +517,7 @@ def main():
     
     # Export for doc generator
     schema_api_file = os.path.join(args.api_root, "schema_api_mapping.json")
-    with open(schema_api_file, 'w') as f:
-        json.dump(schema_api_summary, f, indent=2)
+    json_dump_if_changed(schema_api_file, schema_api_summary, indent=2, sort_keys=True)
     
     print(f"✅ API-Schema mapping complete")
     print(f"   Schema groups: {schema_api_summary['stats']['total_schemas']}")

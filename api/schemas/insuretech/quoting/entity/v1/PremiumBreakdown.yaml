@@ -1,0 +1,13 @@
+QuotingPremiumBreakdown:
+  type: object
+  properties:
+    category:
+      type: string
+    description:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    is_discount:
+      type: boolean
+  description: Domain entity representing premium breakdown. Core business object
+    in the system.

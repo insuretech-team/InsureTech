@@ -1,0 +1,12 @@
+RatingFormulaActivationRequest:
+  type: object
+  properties:
+    formula_id:
+      type: string
+    activated_by:
+      type: string
+    effective_date:
+      type: string
+      format: date-time
+  description: Request payload for rating formula activation operation. Contains parameters
+    required to execute the operation.

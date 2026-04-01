@@ -1,0 +1,12 @@
+VehiclePremiumCalculationRequest:
+  type: object
+  properties:
+    registration_id:
+      type: string
+    registration_number:
+      type: string
+      description: Alternative to registration_id
+    accidental_cover:
+      type: boolean
+  description: Request payload for premium calculation operation. Contains parameters
+    required to execute the operation.

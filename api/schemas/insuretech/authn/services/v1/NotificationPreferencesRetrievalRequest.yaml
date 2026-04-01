@@ -1,0 +1,7 @@
+NotificationPreferencesRetrievalRequest:
+  type: object
+  properties:
+    user_id:
+      type: string
+  description: "BUG-010 FIX: GetNotificationPreferences \u2014 read current preferences\
+    \ for a user."

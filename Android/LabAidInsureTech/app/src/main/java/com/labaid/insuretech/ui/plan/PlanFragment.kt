@@ -32,7 +32,7 @@ class PlanFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.planToolbar.ivBack.setOnClickListener {
+        binding.planToolbar.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
 

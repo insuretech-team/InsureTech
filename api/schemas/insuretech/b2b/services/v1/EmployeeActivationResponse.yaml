@@ -1,0 +1,12 @@
+EmployeeActivationResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    otp_id:
+      type: string
+    expires_in_seconds:
+      type: integer
+      format: int32
+  description: Response payload for employee activation operation. Returns operation
+    results and status.

@@ -1,0 +1,49 @@
+LifeProductUpdateRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    product_name:
+      type: string
+    description:
+      type: string
+    base_rate:
+      type: string
+      format: int64
+    age_addition_config:
+      $ref: '#/components/schemas/AgeAdditionConfig'
+    condition_multipliers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConditionMultiplier'
+    bonuses:
+      type: array
+      items:
+        $ref: '#/components/schemas/BonusConfig'
+    min_sum_assured:
+      type: string
+      format: int64
+    max_sum_assured:
+      type: string
+      format: int64
+    min_entry_age:
+      type: integer
+      format: int32
+    max_entry_age:
+      type: integer
+      format: int32
+    min_policy_term:
+      type: integer
+      format: int32
+    max_policy_term:
+      type: integer
+      format: int32
+    is_active:
+      type: boolean
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing life product update. Contains
+    fields to be modified.

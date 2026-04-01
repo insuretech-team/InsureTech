@@ -1,40 +1,18 @@
 // Auto-generated SDK Entry Point
 // DO NOT EDIT - This file is generated
 
-// Export main client
-export { InsureTechClient } from './client';
+// Core envelope + type guards
+export type { ApiResponse, ResponseMeta, PaginationMeta, PaginationRequest, Money, Address, Timestamp, DateString, UUID } from './types'
+export { unwrapData, isApiSuccess, isApiError } from './types'
 
-// Export configuration
-export { ClientConfig, createConfig } from './config';
+// Structured errors
+export { InsureTechApiError, ApiError } from './errors'
+export type { ApiErrorDetail, FieldViolation } from './errors'
 
-// Export errors
-export {
-  ApiError,
-  ValidationError,
-  AuthenticationError,
-  AuthorizationError,
-  NotFoundError,
-  ConflictError,
-  RateLimitError,
-  ServerError,
-  NetworkError,
-  TimeoutError,
-} from './errors';
+// Generated service functions and types from hey-api
+export * from './sdk.gen'
+export * from './types.gen'
 
-// Export base types
-export {
-  PaginationRequest,
-  PaginationResponse,
-  Money,
-  Address,
-  Timestamp,
-  DateString,
-  UUID,
-  ListResponse,
-} from './types';
-
-// Export all models
-export * from './models';
-
-// Export all services (optional - can access via client)
-export * from './services';
+// Custom client helper
+export { createInsureTechClient } from './client-wrapper'
+export type { InsureTechClientConfig } from './client-wrapper'

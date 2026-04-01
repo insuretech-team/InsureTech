@@ -1,0 +1,7 @@
+ContactUpdateResponse:
+  type: object
+  properties:
+    contact:
+      $ref: '#/components/schemas/Contact'
+  description: Response payload for contact update operation. Returns operation results
+    and status.

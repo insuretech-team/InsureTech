@@ -1,0 +1,55 @@
+PushDeviceToken:
+  type: object
+  properties:
+    token_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:token_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:user_id;not null"'
+    provider:
+      type: string
+      description: '@inject_tag: gorm:"column:provider;not null"'
+    platform:
+      type: string
+      description: '@inject_tag: gorm:"column:platform;not null"'
+    device_token:
+      type: string
+      description: '@inject_tag: gorm:"column:device_token;not null"'
+    device_id:
+      type: string
+      description: '@inject_tag: gorm:"column:device_id"'
+    app_id:
+      type: string
+      description: '@inject_tag: gorm:"column:app_id"'
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    last_seen_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: PushDeviceToken stores mobile and web push registration tokens for
+    each user.
+  required:
+  - token_id
+  - user_id
+  - provider
+  - platform
+  - device_token
+  - is_active
+  - created_at
+  - updated_at

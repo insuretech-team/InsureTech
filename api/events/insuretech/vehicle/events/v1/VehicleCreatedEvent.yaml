@@ -1,0 +1,20 @@
+VehicleCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    vehicle_id:
+      type: string
+    model:
+      type: string
+    type:
+      $ref: '#/components/schemas/VehicleType'
+    price:
+      type: string
+      format: int64
+    manufacturer:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+  description: VehicleCreatedEvent is emitted when a new vehicle model is created

@@ -1,39 +1,18 @@
-# Dockerfile for b2b microservice
-FROM golang:1.25-alpine AS builder
-
-WORKDIR /workspace
-
-# Install dependencies (if any native libs are needed)
-RUN apk add --no-cache git
-
-# Cache modules
-COPY go.mod go.sum ./
-RUN go mod download
-
-# Copy source code
-COPY . .
-# Explicitly copy generated packages, configs, and secrets so they are available
-COPY gen ./gen
-
-# Build the service
-# Build the real b2b microservice directly.
-# The wrapper at backend/inscore/cmd/b2b/main.go uses 'go run' which needs
-# source code + Go toolchain at runtime — not suitable for the final alpine image.
-RUN CGO_ENABLED=0 GOOS=linux go build -ldflags="-w -s" \
-    -o /app/server \
-    ./backend/inscore/microservices/b2b/cmd/server/main.go
-
-# Final minimal image
+# Thin image — binary pre-built via WSL: CGO_ENABLED=0 GOOS=linux go build -o bin/b2b/server
 FROM alpine:latest
 
+RUN apk add --no-cache ca-certificates tzdata
+
 WORKDIR /app
-COPY --from=builder /app/server .
-COPY .env .
-COPY go.mod .
+
+# Copy pre-built Linux binary
+COPY bin/b2b/server ./server
+
+# Copy runtime configs and secrets
 COPY ops ./ops
+COPY go.mod ./go.mod
 COPY backend/inscore/configs ./backend/inscore/configs
-COPY backend/inscore/templates ./backend/inscore/templates
+COPY backend/inscore/configs ./inscore/configs
 COPY backend/inscore/secrets ./backend/inscore/secrets
 
-# Run the server
 CMD ["./server"]

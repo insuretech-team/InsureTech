@@ -13,10 +13,17 @@ import argparse
 import os
 from pathlib import Path
 import sys
+import re
 
 sys.path.insert(0, str(Path(__file__).parent))
 
 from proto_parser import ProtoParser
+
+WORD_RE = re.compile(r'[A-Z]+(?=[A-Z][a-z0-9]|\b)|[A-Z]?[a-z]+|[0-9]+')
+UPPERCASE_TOKENS = {
+    'api', 'otp', 'totp', 'jwt', 'jwks', 'csrf', 'kyc', 'mfa', 'id', 'url', 'sms',
+    'email', 'pdf', 'uuid', 'http', 'https', 'ip', 'ui', 'db',
+}
 
 
 class DescriptionTemplateGenerator:
@@ -147,27 +154,24 @@ class DescriptionTemplateGenerator:
         """Extract operation name from DTO name"""
         # Remove Request/Response suffix
         operation = name.replace('Request', '').replace('Response', '')
-        
-        # Convert PascalCase to words
-        import re
-        words = re.findall(r'[A-Z][a-z]*', operation)
-        return ' '.join(words).lower()
+        return self._humanize_name(operation)
     
     def _event_to_description(self, name: str) -> str:
         """Convert event name to readable description"""
         # Remove Event suffix
         base = name.replace('Event', '')
-        
-        # Convert PascalCase to words
-        import re
-        words = re.findall(r'[A-Z][a-z]*', base)
-        return ' '.join(words).lower()
+        return self._humanize_name(base)
     
     def _humanize_name(self, name: str) -> str:
         """Convert schema name to human-readable form"""
-        import re
-        words = re.findall(r'[A-Z][a-z]*', name)
-        return ' '.join(words).lower()
+        normalized = name.replace('_', ' ').replace('-', ' ')
+        tokens = []
+        for chunk in normalized.split():
+            parts = WORD_RE.findall(chunk) or [chunk]
+            for part in parts:
+                lower = part.lower()
+                tokens.append(lower.upper() if lower in UPPERCASE_TOKENS else lower)
+        return ' '.join(tokens)
     
     def _generate_description_placeholder(self, name: str, category: str) -> str:
         """Generate context-specific description placeholder"""

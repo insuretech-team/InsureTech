@@ -1,0 +1,7 @@
+SaveReserveCalculationRequest:
+  type: object
+  properties:
+    reserve:
+      $ref: '#/components/schemas/ReserveCalculation'
+  description: Request payload for save reserve calculation operation. Contains parameters
+    required to execute the operation.

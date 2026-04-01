@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">8</div>
+                    <div class="stat-value">16</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">8</div>
+                    <div class="stat-value">16</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -372,7 +372,7 @@
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>message</strong>
+                    ⚪ <strong>session_state</strong>
                 </td>
                 <td class="field-type">
                     <code>string</code>
@@ -381,17 +381,130 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">"EKYC_SESSION_ACTIVE"</td>
             </tr>
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>error</strong>
+                    ⚪ <strong>step_progress</strong>
+                </td>
+                <td class="field-type">
+                    <code>number</code>
+                    <br><small>double</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">0.0–1.0</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>overall_progress</strong>
+                </td>
+                <td class="field-type">
+                    <code>number</code>
+                    <br><small>double</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">0.0–1.0</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>guidance_messages</strong>
+                </td>
+                <td class="field-type">
+                    <code>array</code>
+                    <br><small>array of string</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">all guidance strings</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>detection</strong>
                 </td>
                 <td class="field-type">
                     <code>reference</code>
-                    <br><small>Error</small>
-                    <a href="schema_error.html" class="ref-link">→ Error</a>
+                    <br><small>KYCDetection</small>
+                    <a href="schema_kycdetection.html" class="ref-link">→ KYCDetection</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">face detection box</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>head_pose</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>KYCHeadPose</small>
+                    <a href="schema_kycheadpose.html" class="ref-link">→ KYCHeadPose</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">yaw/pitch/roll</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>eye_state</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>KYCEyeState</small>
+                    <a href="schema_kyceyestate.html" class="ref-link">→ KYCEyeState</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">blink state</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>current_step_detail</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>KYCStep</small>
+                    <a href="schema_kycstep.html" class="ref-link">→ KYCStep</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">full step info</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>eye_contours_json</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">eye_contours_json: JSON-encoded FLVE eye mesh (left/right edges+points).
+ Parsed by the frontend for canvas eye contour overlay rendering.</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>step_completed</strong>
+                </td>
+                <td class="field-type">
+                    <code>boolean</code>
+                    
+                    
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>

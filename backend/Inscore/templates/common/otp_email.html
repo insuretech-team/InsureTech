@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="bn" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>ল্যাবএইড ইন্স্যুরটেক — যাচাই কোড</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Noto+Sans+Bengali:wght@400;600;700&display=swap');
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    body { margin: 0; padding: 0; background-color: #f0f4f8; font-family: 'Noto Sans Bengali', 'Segoe UI', Arial, sans-serif; }
+    table { border-collapse: collapse !important; }
+    img { border: 0; outline: none; text-decoration: none; }
+    .wrapper { width: 100%; background-color: #f0f4f8; }
+    .container { max-width: 580px; margin: 0 auto; }
+    /* Header */
+    .header { background: linear-gradient(135deg, #123f50 0%, #1a5f78 60%, #03a765 100%); border-radius: 16px 16px 0 0; padding: 0; }
+    .header-inner { padding: 32px 40px 28px; text-align: center; }
+    .logo-wrap { display: block; margin: 0 auto 16px; max-width: 240px; }
+    .header-tagline { color: rgba(255,255,255,0.82); font-size: 12px; letter-spacing: 2px; text-transform: uppercase; margin: 0; }
+    /* Body */
+    .body-wrap { background: #ffffff; padding: 40px; }
+    .greeting { font-size: 16px; color: #1a2e3b; margin: 0 0 16px; }
+    .body-text { font-size: 15px; color: #4a5568; line-height: 1.7; margin: 0 0 28px; }
+    /* OTP Box */
+    .otp-outer { background: linear-gradient(135deg, #f0faf6 0%, #e8f4fd 100%); border: 2px solid #03a765; border-radius: 14px; padding: 30px 24px; text-align: center; margin: 0 0 28px; }
+    .otp-label { font-size: 11px; color: #03a765; letter-spacing: 3px; text-transform: uppercase; font-weight: 600; margin: 0 0 14px; }
+    .otp-code { font-family: 'Courier New', 'Lucida Console', monospace; font-size: 48px; font-weight: 700; color: #123f50; letter-spacing: 14px; margin: 0 0 14px; display: block; }
+    .otp-expiry { display: inline-block; background: #fff3cd; color: #856404; border: 1px solid #ffd970; border-radius: 20px; padding: 6px 16px; font-size: 13px; font-weight: 600; }
+    /* Warning */
+    .warning-box { background: #fff5f5; border-left: 4px solid #e53e3e; border-radius: 0 8px 8px 0; padding: 14px 18px; margin: 0 0 24px; }
+    .warning-box p { margin: 0; font-size: 13px; color: #742a2a; line-height: 1.6; }
+    /* Info Note */
+    .info-note { font-size: 13px; color: #718096; line-height: 1.7; margin: 0 0 8px; }
+    /* Divider */
+    .divider { border: none; border-top: 1px solid #e2e8f0; margin: 28px 0; }
+    /* Footer */
+    .footer { background: #f7fafc; border-radius: 0 0 16px 16px; border-top: 1px solid #e2e8f0; padding: 24px 40px; text-align: center; }
+    .footer p { margin: 4px 0; font-size: 12px; color: #a0aec0; }
+    .footer a { color: #03a765; text-decoration: none; font-weight: 600; }
+    /* Responsive */
+    @media only screen and (max-width: 620px) {
+      .container { width: 100% !important; }
+      .header-inner, .body-wrap, .footer { padding-left: 20px !important; padding-right: 20px !important; }
+      .otp-code { font-size: 36px !important; letter-spacing: 10px !important; }
+    }
+  </style>
+</head>
+<body>
+<table class="wrapper" width="100%" cellpadding="0" cellspacing="0" role="presentation">
+  <tr>
+    <td align="center" style="padding: 32px 16px;">
+      <table class="container" width="580" cellpadding="0" cellspacing="0" role="presentation">
+
+        <!-- HEADER -->
+        <tr>
+          <td class="header">
+            <div class="header-inner">
+              <!-- Logo from CDN — constrained to email-safe dimensions -->
+              <!--[if mso]><table width="240" align="center"><tr><td><![endif]-->
+              <div class="logo-wrap">
+                <img src="https://lcst.sgp1.cdn.digitaloceanspaces.com/insuretech/static/Insure%20tech%20Final%20logo-01.svg"
+                     alt="Labaid InsureTech"
+                     width="220"
+                     height="80"
+                     style="display:block;margin:0 auto;width:220px;height:80px;max-width:220px;object-fit:contain;object-position:left center;border:0;outline:none;"
+                />
+              </div>
+              <!--[if mso]></td></tr></table><![endif]-->
+              <p class="header-tagline">আপনার বিশ্বস্ত বীমা অংশীদার</p>
+            </div>
+          </td>
+        </tr>
+
+        <!-- BODY -->
+        <tr>
+          <td class="body-wrap">
+            <p class="greeting">আস্সালামু আলাইকুম / নমস্কার,</p>
+            <p class="body-text">
+              আপনার ল্যাবএইড ইন্স্যুরটেক অ্যাকাউন্ট যাচাই করতে নিচের এককালীন যাচাই কোড (OTP) ব্যবহার করুন।
+            </p>
+
+            <!-- OTP BOX -->
+            <table width="100%" cellpadding="0" cellspacing="0" role="presentation">
+              <tr>
+                <td class="otp-outer">
+                  <p class="otp-label">আপনার যাচাই কোড / Your OTP</p>
+                  <span class="otp-code">{{.Code}}</span>
+                  <span class="otp-expiry">⏱ মেয়াদ: {{.ExpiryMinutes}} মিনিট</span>
+                </td>
+              </tr>
+            </table>
+
+            <!-- WARNING -->
+            <div class="warning-box">
+              <p>
+                🔒 <strong>এই কোড কাউকে শেয়ার করবেন না।</strong><br>
+                ল্যাবএইড ইন্স্যুরটেকের কোনো প্রতিনিধি, কর্মকর্তা বা গ্রাহকসেবা দল আপনার কাছে কখনও এই কোড চাইবেন না।
+              </p>
+            </div>
+
+            <hr class="divider">
+
+            <p class="info-note">
+              যদি আপনি এই অনুরোধ না করে থাকেন, তাহলে এই ইমেইলটি উপেক্ষা করুন এবং অবিলম্বে আমাদের সাথে যোগাযোগ করুন।
+            </p>
+            <p class="info-note">
+              <strong>হেল্পলাইন:</strong> <a href="tel:+880-2-XXXXXXXX" style="color:#03a765;">+880-2-XXXXXXXX</a> &nbsp;|&nbsp;
+              <strong>Email:</strong> <a href="mailto:support@labaidinsuretech.com" style="color:#03a765;">support@labaidinsuretech.com</a>
+            </p>
+          </td>
+        </tr>
+
+        <!-- FOOTER -->
+        <tr>
+          <td class="footer">
+            <p>
+              <a href="https://labaidinsuretech.com">labaidinsuretech.com</a>
+            </p>
+            <p>© {{.Year}} Labaid InsureTech Ltd. সর্বস্বত্ব সংরক্ষিত।</p>
+            <p style="margin-top:10px;font-size:11px;color:#cbd5e0;">
+              এই ইমেইলটি স্বয়ংক্রিয়ভাবে পাঠানো হয়েছে। অনুগ্রহ করে সরাসরি উত্তর দেবেন না।<br>
+              This is an automated email. Please do not reply directly.
+            </p>
+          </td>
+        </tr>
+
+      </table>
+    </td>
+  </tr>
+</table>
+</body>
+</html>

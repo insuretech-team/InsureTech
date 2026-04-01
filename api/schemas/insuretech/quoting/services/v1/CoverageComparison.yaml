@@ -1,0 +1,13 @@
+CoverageComparison:
+  type: object
+  properties:
+    coverage_id:
+      type: string
+    name:
+      type: string
+    is_included:
+      type: boolean
+    premium:
+      $ref: '#/components/schemas/Money'
+  description: Domain entity representing coverage comparison. Core business object
+    in the system.

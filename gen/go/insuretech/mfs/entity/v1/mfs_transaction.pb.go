@@ -135,21 +135,21 @@ type MFSTransaction struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                       // @inject_tag: gorm:"primaryKey;column:transaction_id;not null"
-	TransactionId         string                 `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty"`            // @inject_tag: gorm:"column:external_transaction_id;not null"
-	MfsIntegrationId      string                 `protobuf:"bytes,3,opt,name=mfs_integration_id,json=mfsIntegrationId,proto3" json:"mfs_integration_id,omitempty"` // @inject_tag: gorm:"column:mfs_integration_id;not null"
-	Provider              string                 `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty"`                                           // @inject_tag: gorm:"column:provider;not null"
-	PaymentId             string                 `protobuf:"bytes,5,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty"`                        // @inject_tag: gorm:"column:payment_id"
-	Type                  TransactionType        `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.mfs.entity.v1.TransactionType" json:"type,omitempty"`    // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Amount                *v1.Money              `protobuf:"bytes,7,opt,name=amount,proto3" json:"amount,omitempty"`
-	CustomerMsisdn        string                 `protobuf:"bytes,8,opt,name=customer_msisdn,json=customerMsisdn,proto3" json:"customer_msisdn,omitempty"`                        // @inject_tag: gorm:"column:customer_msisdn;not null"
-	ProviderTransactionId string                 `protobuf:"bytes,9,opt,name=provider_transaction_id,json=providerTransactionId,proto3" json:"provider_transaction_id,omitempty"` // @inject_tag: gorm:"column:provider_transaction_id"
-	Status                TransactionStatus      `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.mfs.entity.v1.TransactionStatus" json:"status,omitempty"`            // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	RequestPayload        string                 `protobuf:"bytes,11,opt,name=request_payload,json=requestPayload,proto3" json:"request_payload,omitempty"`                       // @inject_tag: gorm:"column:request_payload"
-	ResponsePayload       string                 `protobuf:"bytes,12,opt,name=response_payload,json=responsePayload,proto3" json:"response_payload,omitempty"`                    // @inject_tag: gorm:"column:response_payload"
-	ErrorMessage          string                 `protobuf:"bytes,13,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`                             // @inject_tag: gorm:"column:error_message"
-	CompletedAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                                // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
-	AuditInfo             *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                                      // @inject_tag: gorm:"column:audit_info;not null"
+	Id                    string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:transaction_id;not null"`
+	TransactionId         string                 `protobuf:"bytes,2,opt,name=transaction_id,json=transactionId,proto3" json:"transaction_id,omitempty" gorm:"column:external_transaction_id;not null"`
+	MfsIntegrationId      string                 `protobuf:"bytes,3,opt,name=mfs_integration_id,json=mfsIntegrationId,proto3" json:"mfs_integration_id,omitempty" gorm:"column:mfs_integration_id;not null"`
+	Provider              string                 `protobuf:"bytes,4,opt,name=provider,proto3" json:"provider,omitempty" gorm:"column:provider;not null"`
+	PaymentId             string                 `protobuf:"bytes,5,opt,name=payment_id,json=paymentId,proto3" json:"payment_id,omitempty" gorm:"column:payment_id"`
+	Type                  TransactionType        `protobuf:"varint,6,opt,name=type,proto3,enum=insuretech.mfs.entity.v1.TransactionType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Amount                *v1.Money              `protobuf:"bytes,7,opt,name=amount,proto3" json:"amount,omitempty" gorm:"column:amount"`
+	CustomerMsisdn        string                 `protobuf:"bytes,8,opt,name=customer_msisdn,json=customerMsisdn,proto3" json:"customer_msisdn,omitempty" gorm:"column:customer_msisdn;not null"`
+	ProviderTransactionId string                 `protobuf:"bytes,9,opt,name=provider_transaction_id,json=providerTransactionId,proto3" json:"provider_transaction_id,omitempty" gorm:"column:provider_transaction_id"`
+	Status                TransactionStatus      `protobuf:"varint,10,opt,name=status,proto3,enum=insuretech.mfs.entity.v1.TransactionStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	RequestPayload        string                 `protobuf:"bytes,11,opt,name=request_payload,json=requestPayload,proto3" json:"request_payload,omitempty" gorm:"column:request_payload"`
+	ResponsePayload       string                 `protobuf:"bytes,12,opt,name=response_payload,json=responsePayload,proto3" json:"response_payload,omitempty" gorm:"column:response_payload"`
+	ErrorMessage          string                 `protobuf:"bytes,13,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty" gorm:"column:error_message"`
+	CompletedAt           *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
+	AuditInfo             *v1.AuditInfo          `protobuf:"bytes,15,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *MFSTransaction) Reset() {

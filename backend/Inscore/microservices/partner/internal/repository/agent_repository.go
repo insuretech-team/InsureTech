@@ -93,8 +93,8 @@ func (r *AgentRepository) Create(ctx context.Context, agent *partnerv1.Agent) er
 	agent.UpdatedAt = timestamppb.New(now)
 	agent.JoinedAt = timestamppb.New(now)
 
-	if agent.Status == partnerv1.AgentStatus_AGENT_STATUS_UNSPECIFIED {
-		agent.Status = partnerv1.AgentStatus_AGENT_STATUS_ACTIVE
+	if agent.Status == partnerv1.InsuranceAgentStatus_AGENT_STATUS_UNSPECIFIED {
+		agent.Status = partnerv1.InsuranceAgentStatus_AGENT_STATUS_ACTIVE
 	}
 
 	encFields, err := r.encrypt(agent)
@@ -107,10 +107,10 @@ func (r *AgentRepository) Create(ctx context.Context, agent *partnerv1.Agent) er
 		"partner_id":      agent.PartnerId,
 		"user_id":         agent.UserId,
 		"full_name":       agent.FullName,
-		"phone_number":    encFields["phone_number"],
-		"email":           encFields["email"],
-		"nid_number":      encFields["nid_number"],
-		"status":          agent.Status.String(),
+		"phone_number":    nullableOptionalString(encFields["phone_number"].(string)),
+		"email":           nullableOptionalString(encFields["email"].(string)),
+		"nid_number":      nullableOptionalString(encFields["nid_number"].(string)),
+		"status":          agentStatusToDBValue(agent.Status),
 		"commission_rate": agent.CommissionRate,
 		"joined_at":       now,
 		"created_at":      now,
@@ -162,11 +162,11 @@ func (r *AgentRepository) ListByPartner(ctx context.Context, partnerID string, l
 }
 
 // UpdateStatus changes an agent's status
-func (r *AgentRepository) UpdateStatus(ctx context.Context, agentID string, status partnerv1.AgentStatus) error {
+func (r *AgentRepository) UpdateStatus(ctx context.Context, agentID string, status partnerv1.InsuranceAgentStatus) error {
 	return r.db.WithContext(ctx).Table("partner_schema.agents").
 		Where("agent_id = ?", agentID).
 		Updates(map[string]interface{}{
-			"status":     status.String(),
+			"status":     agentStatusToDBValue(status),
 			"updated_at": time.Now(),
 		}).Error
 }

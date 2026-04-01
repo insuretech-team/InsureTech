@@ -1,14 +1,9 @@
 HealthDeclarationSubmissionResponse:
   type: object
   properties:
-    message:
-      type: string
     medical_exam_required:
       type: boolean
     auto_approval_possible:
       type: boolean
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for health declaration submission operation. Returns
     operation results and status.

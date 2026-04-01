@@ -9,7 +9,5 @@ UserPermissionsRetrievalResponse:
           domain
       description: All effective (object, action) pairs the user is allowed in this
         domain
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for user permissions retrieval operation. Returns
     operation results and status.

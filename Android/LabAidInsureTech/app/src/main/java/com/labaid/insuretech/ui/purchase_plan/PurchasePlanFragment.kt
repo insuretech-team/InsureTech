@@ -75,7 +75,7 @@ class PurchasePlanFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.purchasePlanToolbar.apply {
-            ivBack.setOnClickListener {
+            backButton.setOnClickListener {
                 requireActivity().onBackPressed()
             }
             toolbarTitle.text = "Purchase Plan"

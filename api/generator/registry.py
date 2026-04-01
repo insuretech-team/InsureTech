@@ -38,9 +38,13 @@ class ProtoRegistry:
             existing_namespaced = self._create_namespaced_key(existing_full_name, message_name)
             self._type_map[existing_full_name] = f"#/components/schemas/{existing_namespaced}"
             
-            print(f"⚠️  COLLISION DETECTED: '{message_name}'")
-            print(f"    Existing: {existing_full_name} → {existing_namespaced}")
-            print(f"    New:      {full_name} → {schema_key}")
+            # Collision auto-resolved via namespace prefix — logged at debug level only.
+            # These are expected for insurance_service.proto which aggregates domain types.
+            # Only print if namespaced keys ALSO collide (truly unresolvable).
+            if existing_namespaced == schema_key:
+                print(f"❌ UNRESOLVABLE COLLISION: '{message_name}' → both resolve to '{schema_key}'")
+                print(f"    From: {existing_full_name}")
+                print(f"    From: {full_name}")
         else:
             # No collision, register normally
             self._name_to_full[schema_key] = full_name
@@ -97,24 +101,34 @@ class ProtoRegistry:
         return len(self._collisions) > 0
     
     def get_collision_report(self):
-        """Generate a human-readable collision report"""
+        """Generate a human-readable collision report — only shows unresolvable collisions."""
         if not self.has_collisions():
-            return "No schema name collisions detected."
-        
+            return "✓ No schema name collisions detected."
+
+        # Separate resolved vs unresolvable
+        unresolvable = {}
+        resolved_count = 0
+        for schema_name, full_names in self._collisions.items():
+            namespaced_keys = [self._create_namespaced_key(fn, schema_name) for fn in full_names]
+            if len(set(namespaced_keys)) < len(namespaced_keys):
+                # Two messages resolve to the same namespaced key — truly unresolvable
+                unresolvable[schema_name] = full_names
+            else:
+                resolved_count += 1
+
         report = []
-        report.append("=" * 80)
-        report.append("Schema Name Collision Report")
-        report.append("=" * 80)
-        report.append(f"\nTotal Collisions: {len(self._collisions)}")
+        if unresolvable:
+            report.append("=" * 80)
+            report.append(f"Schema Name Collision Report — {len(unresolvable)} UNRESOLVABLE")
+            report.append("=" * 80)
+            for schema_name, full_names in sorted(unresolvable.items()):
+                report.append(f"\n❌ '{schema_name}' ({len(full_names)} conflicts)")
+                for full_name in full_names:
+                    namespaced = self._create_namespaced_key(full_name, schema_name)
+                    report.append(f"   - {full_name} → {namespaced}")
+            report.append("\n" + "=" * 80)
         
-        for schema_name, full_names in sorted(self._collisions.items()):
-            report.append(f"\n❌ '{schema_name}' ({len(full_names)} conflicts)")
-            for full_name in full_names:
-                namespaced = self._create_namespaced_key(full_name, schema_name)
-                report.append(f"   - {full_name}")
-                report.append(f"     → Resolved as: {namespaced}")
-        
-        report.append("\n" + "=" * 80)
+        report.append(f"✓ {resolved_count} collision group(s) auto-resolved via namespace prefixing.")
         return "\n".join(report)
     
     def get_relative_ref(self, source_full_name, target_full_name):

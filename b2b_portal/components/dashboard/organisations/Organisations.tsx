@@ -9,29 +9,23 @@
 import { useState } from "react";
 import DashboardLayout from "../dashboard-layout";
 import { useCrudList } from "@/src/hooks/useCrudList";
-import { organisationClient } from "@lib/sdk/organisation-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import { buildOrganisationColumns } from "./data-table/columns";
 import { OrganisationDataTable } from "./data-table/data-table";
 import { OrgDetailPanel } from "@/components/organisations/org-detail-panel";
-import { authClient } from "@lib/sdk/auth-client";
-import { useEffect } from "react";
 import type { Organisation } from "@lib/types/b2b";
+import { usePortalPrincipal } from "@lib/auth/portal-session-context";
 
 export default function Organisations() {
   const { data, loading, reload } = useCrudList<Organisation>(
-    () => organisationClient.list(),
+    () => bffClient.organisations.list(),
     "organisations"
   );
 
   const [selectedOrg, setSelectedOrg] = useState<Organisation | null>(null);
   const [panelOpen, setPanelOpen] = useState(false);
-  const [currentUserRole, setCurrentUserRole] = useState("SYSTEM_ADMIN");
-
-  useEffect(() => {
-    authClient.getSession().then((res) => {
-      setCurrentUserRole(res.session?.principal.role ?? "SYSTEM_ADMIN");
-    }).catch(() => {});
-  }, []);
+  const principal = usePortalPrincipal();
+  const currentUserRole = principal?.role ?? "SYSTEM_ADMIN";
 
   function handleRowClick(org: Organisation) {
     setSelectedOrg(org);

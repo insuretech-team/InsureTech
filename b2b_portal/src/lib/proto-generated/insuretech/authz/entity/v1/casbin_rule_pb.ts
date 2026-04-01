@@ -13,7 +13,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file insuretech/authz/entity/v1/casbin_rule.proto.
  */
 export const file_insuretech_authz_entity_v1_casbin_rule: GenFile = /*@__PURE__*/
-  fileDesc("CixpbnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MS9jYXNiaW5fcnVsZS5wcm90bxIaaW5zdXJldGVjaC5hdXRoei5lbnRpdHkudjEi/QUKCkNhc2JpblJ1bGUSWgoCaWQYASABKANCTpK1GEoKAmlkEglCSUdTRVJJQUwYASgBWjVBdXRvLWluY3JlbWVudCBwcmltYXJ5IGtleSAoZ29ybS1hZGFwdGVyIHJlcXVpcmVtZW50KRJ1CgVwdHlwZRgCIAEoCUJmkrUYYgoFcHR5cGUSC1ZBUkNIQVIoMTApGAFSGgoWaWR4X2Nhc2Jpbl9ydWxlc19wdHlwZRACWi5DYXNiaW4gcG9saWN5IHR5cGU6IHAgKHBvbGljeSkgb3IgZyAoZ3JvdXBpbmcpEmQKAnYwGAMgASgJQliStRhUCgJ2MBIEVEVYVFIXChNpZHhfY2FzYmluX3J1bGVzX3YwEAJaL3A6IHN1YmplY3QgKHVzZXI6PGlkPiB8IHJvbGU6PG5hbWU+KSAgZzogbWVtYmVyElkKAnYxGAQgASgJQk2StRhJCgJ2MRIEVEVYVFIXChNpZHhfY2FzYmluX3J1bGVzX3YxEAJaJHA6IGRvbWFpbiAocG9ydGFsOnRlbmFudCkgIGc6IGRvbWFpbhJFCgJ2MhgFIAEoCUI5krUYNQoCdjISBFRFWFRaKXA6IG9iamVjdCAoc3ZjOnNlcnZpY2UvcmVzb3VyY2UpICBnOiByb2xlEkMKAnYzGAYgASgJQjeStRgzCgJ2MxIEVEVYVFoncDogYWN0aW9uIChHRVR8UE9TVHxQVVR8UEFUQ0h8REVMRVRFfCopEjQKAnY0GAcgASgJQiiStRgkCgJ2NBIEVEVYVFoYcDogZWZmZWN0IChhbGxvdyB8IGRlbnkpEjsKAnY1GAggASgJQi+StRgrCgJ2NRIEVEVYVFofcmVzZXJ2ZWQ6IEFCQUMgY29uZGl0aW9uIHN0cmluZzpcirUYWAoMY2FzYmluX3J1bGVzEgxhdXRoel9zY2hlbWEYASABKjRSYXcgQ2FzYmluIFBFUk0gbW9kZWwgcm93cyAoZ29ybS1hZGFwdGVyIGNvbXBhdGlibGUpQAFCiwIKHmNvbS5pbnN1cmV0ZWNoLmF1dGh6LmVudGl0eS52MUIPQ2FzYmluUnVsZVByb3RvUAFaTWdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvYXV0aHovZW50aXR5L3YxO2VudGl0eXYxogIDSUFFqgIaSW5zdXJldGVjaC5BdXRoei5FbnRpdHkuVjHKAhpJbnN1cmV0ZWNoXEF1dGh6XEVudGl0eVxWMeICJkluc3VyZXRlY2hcQXV0aHpcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIdSW5zdXJldGVjaDo6QXV0aHo6OkVudGl0eTo6VjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_insuretech_common_v1_db, file_insuretech_authz_entity_v1_enums]);
+  fileDesc("CixpbnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MS9jYXNiaW5fcnVsZS5wcm90bxIaaW5zdXJldGVjaC5hdXRoei5lbnRpdHkudjEimwYKCkNhc2JpblJ1bGUSWgoCaWQYASABKANCTpK1GEoKAmlkEglCSUdTRVJJQUwYASgBWjVBdXRvLWluY3JlbWVudCBwcmltYXJ5IGtleSAoZ29ybS1hZGFwdGVyIHJlcXVpcmVtZW50KRJ1CgVwdHlwZRgCIAEoCUJmkrUYYgoFcHR5cGUSC1ZBUkNIQVIoMTApGAFSGgoWaWR4X2Nhc2Jpbl9ydWxlc19wdHlwZRACWi5DYXNiaW4gcG9saWN5IHR5cGU6IHAgKHBvbGljeSkgb3IgZyAoZ3JvdXBpbmcpEmQKAnYwGAMgASgJQliStRhUCgJ2MBIEVEVYVFIXChNpZHhfY2FzYmluX3J1bGVzX3YwEAJaL3A6IHN1YmplY3QgKHVzZXI6PGlkPiB8IHJvbGU6PG5hbWU+KSAgZzogbWVtYmVyEmUKAnYxGAQgASgJQlmStRhVCgJ2MRIEVEVYVFIXChNpZHhfY2FzYmluX3J1bGVzX3YxEAJaMHA6IGRvbWFpbiAocG9ydGFsOnRlbmFudCkgIGc6IHJvbGUgKHJvbGU6PG5hbWU+KRJXCgJ2MhgFIAEoCUJLkrUYRwoCdjISBFRFWFRaO3A6IG9iamVjdCAoc3ZjOnNlcnZpY2UvcmVzb3VyY2UpICBnOiBkb21haW4gKHBvcnRhbDp0ZW5hbnQpEkMKAnYzGAYgASgJQjeStRgzCgJ2MxIEVEVYVFoncDogYWN0aW9uIChHRVR8UE9TVHxQVVR8UEFUQ0h8REVMRVRFfCopEjQKAnY0GAcgASgJQiiStRgkCgJ2NBIEVEVYVFoYcDogZWZmZWN0IChhbGxvdyB8IGRlbnkpEjsKAnY1GAggASgJQi+StRgrCgJ2NRIEVEVYVFofcmVzZXJ2ZWQ6IEFCQUMgY29uZGl0aW9uIHN0cmluZzpcirUYWAoMY2FzYmluX3J1bGVzEgxhdXRoel9zY2hlbWEYASABKjRSYXcgQ2FzYmluIFBFUk0gbW9kZWwgcm93cyAoZ29ybS1hZGFwdGVyIGNvbXBhdGlibGUpQAFCiwIKHmNvbS5pbnN1cmV0ZWNoLmF1dGh6LmVudGl0eS52MUIPQ2FzYmluUnVsZVByb3RvUAFaTWdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvYXV0aHovZW50aXR5L3YxO2VudGl0eXYxogIDSUFFqgIaSW5zdXJldGVjaC5BdXRoei5FbnRpdHkuVjHKAhpJbnN1cmV0ZWNoXEF1dGh6XEVudGl0eVxWMeICJkluc3VyZXRlY2hcQXV0aHpcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIdSW5zdXJldGVjaDo6QXV0aHo6OkVudGl0eTo6VjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_insuretech_common_v1_db, file_insuretech_authz_entity_v1_enums]);
 
 /**
  * ---------------------------------------------------------------------------
@@ -50,7 +50,9 @@ export type CasbinRule = Message<"insuretech.authz.entity.v1.CasbinRule"> & {
   v0: string;
 
   /**
-   * v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
+   * v1: domain   (p-line: portal:tenant) | role (g-line: role:<name>)
+   * NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+   *   v0 = member/user,  v1 = role,  v2 = domain
    * @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
    *
    * @generated from field: string v1 = 4;
@@ -58,7 +60,9 @@ export type CasbinRule = Message<"insuretech.authz.entity.v1.CasbinRule"> & {
   v1: string;
 
   /**
-   * v2: object   (p-line: svc:resource) | role (g-line: role:<name>)
+   * v2: object   (p-line: svc:resource) | domain (g-line: portal:tenant)
+   * NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+   *   v0 = member/user,  v1 = role,  v2 = domain
    * @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
    *
    * @generated from field: string v2 = 5;

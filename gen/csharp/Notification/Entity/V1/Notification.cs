@@ -116,56 +116,187 @@ namespace Insuretech.Notification.Entity.V1 {
             "NAoJaXNfYWN0aXZlEgdCT09MRUFOGAE6BHRydWVaFlRlbXBsYXRlIGFjdGl2",
             "ZSBzdGF0dXNSCGlzQWN0aXZlOmqKtRhmChZub3RpZmljYXRpb25fdGVtcGxh",
             "dGVzEhNub3RpZmljYXRpb25fc2NoZW1hGEAgASoxUmV1c2FibGUgbm90aWZp",
-            "Y2F0aW9uIHRlbXBsYXRlcyB3aXRoIHBsYWNlaG9sZGVyczgBIq8CChZOb3Rp",
-            "ZmljYXRpb25QcmVmZXJlbmNlEhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBJl",
-            "ChNjaGFubmVsX3ByZWZlcmVuY2VzGAIgAygLMjQuaW5zdXJldGVjaC5ub3Rp",
-            "ZmljYXRpb24uZW50aXR5LnYxLkNoYW5uZWxQcmVmZXJlbmNlUhJjaGFubmVs",
-            "UHJlZmVyZW5jZXMSKAoQbWFya2V0aW5nX29wdF9pbhgDIAEoCFIObWFya2V0",
-            "aW5nT3B0SW4SMAoUdHJhbnNhY3Rpb25hbF9vcHRfaW4YBCABKAhSEnRyYW5z",
-            "YWN0aW9uYWxPcHRJbhI5Cgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnBy",
-            "b3RvYnVmLlRpbWVzdGFtcFIJdXBkYXRlZEF0ItsBChFDaGFubmVsUHJlZmVy",
-            "ZW5jZRJQCgdjaGFubmVsGAEgASgOMjYuaW5zdXJldGVjaC5ub3RpZmljYXRp",
-            "b24uZW50aXR5LnYxLk5vdGlmaWNhdGlvbkNoYW5uZWxSB2NoYW5uZWwSGAoH",
-            "ZW5hYmxlZBgCIAEoCFIHZW5hYmxlZBJaCg5leGNsdWRlZF90eXBlcxgDIAMo",
-            "DjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmlj",
-            "YXRpb25UeXBlUg1leGNsdWRlZFR5cGVzKqYDChBOb3RpZmljYXRpb25UeXBl",
-            "EiEKHU5PVElGSUNBVElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGQoVTk9USUZJ",
-            "Q0FUSU9OX1RZUEVfT1RQEAESIwofTk9USUZJQ0FUSU9OX1RZUEVfUE9MSUNZ",
-            "X0lTU1VFRBACEioKJk5PVElGSUNBVElPTl9UWVBFX1BBWU1FTlRfQ09ORklS",
-            "TUFUSU9OEAMSJQohTk9USUZJQ0FUSU9OX1RZUEVfQ0xBSU1fU1VCTUlUVEVE",
-            "EAQSJAogTk9USUZJQ0FUSU9OX1RZUEVfQ0xBSU1fQVBQUk9WRUQQBRIkCiBO",
-            "T1RJRklDQVRJT05fVFlQRV9DTEFJTV9SRUpFQ1RFRBAGEiYKIk5PVElGSUNB",
-            "VElPTl9UWVBFX1JFTkVXQUxfUkVNSU5ERVIQBxIiCh5OT1RJRklDQVRJT05f",
-            "VFlQRV9HUkFDRV9QRVJJT0QQCBIjCh9OT1RJRklDQVRJT05fVFlQRV9QT0xJ",
-            "Q1lfTEFQU0VEEAkSHwobTk9USUZJQ0FUSU9OX1RZUEVfTUFSS0VUSU5HEAoq",
-            "3AEKE05vdGlmaWNhdGlvbkNoYW5uZWwSJAogTk9USUZJQ0FUSU9OX0NIQU5O",
-            "RUxfVU5TUEVDSUZJRUQQABIcChhOT1RJRklDQVRJT05fQ0hBTk5FTF9TTVMQ",
-            "ARIeChpOT1RJRklDQVRJT05fQ0hBTk5FTF9FTUFJTBACEh0KGU5PVElGSUNB",
-            "VElPTl9DSEFOTkVMX1BVU0gQAxIhCh1OT1RJRklDQVRJT05fQ0hBTk5FTF9X",
-            "SEFUU0FQUBAEEh8KG05PVElGSUNBVElPTl9DSEFOTkVMX0lOX0FQUBAFKsAB",
-            "ChROb3RpZmljYXRpb25Qcmlvcml0eRIlCiFOT1RJRklDQVRJT05fUFJJT1JJ",
-            "VFlfVU5TUEVDSUZJRUQQABIdChlOT1RJRklDQVRJT05fUFJJT1JJVFlfTE9X",
-            "EAESIAocTk9USUZJQ0FUSU9OX1BSSU9SSVRZX05PUk1BTBACEh4KGk5PVElG",
-            "SUNBVElPTl9QUklPUklUWV9ISUdIEAMSIAocTk9USUZJQ0FUSU9OX1BSSU9S",
-            "SVRZX1VSR0VOVBAEKpoCChJOb3RpZmljYXRpb25TdGF0dXMSIwofTk9USUZJ",
-            "Q0FUSU9OX1NUQVRVU19VTlNQRUNJRklFRBAAEh4KGk5PVElGSUNBVElPTl9T",
-            "VEFUVVNfUVVFVUVEEAESHwobTk9USUZJQ0FUSU9OX1NUQVRVU19TRU5ESU5H",
-            "EAISHAoYTk9USUZJQ0FUSU9OX1NUQVRVU19TRU5UEAMSIQodTk9USUZJQ0FU",
-            "SU9OX1NUQVRVU19ERUxJVkVSRUQQBBIcChhOT1RJRklDQVRJT05fU1RBVFVT",
-            "X1JFQUQQBRIeChpOT1RJRklDQVRJT05fU1RBVFVTX0ZBSUxFRBAGEh8KG05P",
-            "VElGSUNBVElPTl9TVEFUVVNfQk9VTkNFRBAHQrcCCiVjb20uaW5zdXJldGVj",
-            "aC5ub3RpZmljYXRpb24uZW50aXR5LnYxQhFOb3RpZmljYXRpb25Qcm90b1AB",
-            "WlRnaXRodWIuY29tL25ld2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9p",
-            "bnN1cmV0ZWNoL25vdGlmaWNhdGlvbi9lbnRpdHkvdjE7ZW50aXR5djGiAgNJ",
-            "TkWqAiFJbnN1cmV0ZWNoLk5vdGlmaWNhdGlvbi5FbnRpdHkuVjHKAiFJbnN1",
-            "cmV0ZWNoXE5vdGlmaWNhdGlvblxFbnRpdHlcVjHiAi1JbnN1cmV0ZWNoXE5v",
-            "dGlmaWNhdGlvblxFbnRpdHlcVjFcR1BCTWV0YWRhdGHqAiRJbnN1cmV0ZWNo",
-            "OjpOb3RpZmljYXRpb246OkVudGl0eTo6VjFiBnByb3RvMw=="));
+            "Y2F0aW9uIHRlbXBsYXRlcyB3aXRoIHBsYWNlaG9sZGVyczgBIsoMCg9QdXNo",
+            "RGV2aWNlVG9rZW4SZwoIdG9rZW5faWQYASABKAlCTJK1GEgKCHRva2VuX2lk",
+            "EgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClaH1ByaW1hcnkga2V5IC0g",
+            "ZGV2aWNlIHRva2VuIFVVSURSB3Rva2VuSWQSpgEKB3VzZXJfaWQYAiABKAlC",
+            "jAGStRiHAQoHdXNlcl9pZBIEVVVJRBgBSkEKBXVzZXJzEgd1c2VyX2lkGgxh",
+            "dXRobl9zY2hlbWEgAygDMh1ma19wdXNoX2RldmljZV90b2tlbnNfdXNlcl9p",
+            "ZFIiCh5pZHhfcHVzaF9kZXZpY2VfdG9rZW5zX3VzZXJfaWQQAloNT3duZXIg",
+            "dXNlciBJRFIGdXNlcklkEpUBCghwcm92aWRlchgDIAEoCUJ5krUYdQoIcHJv",
+            "dmlkZXISC1ZBUkNIQVIoMjApGAFCJnByb3ZpZGVyIElOICgnRkNNJywgJ0FQ",
+            "TlMnLCAnV0VCUFVTSCcpUiMKH2lkeF9wdXNoX2RldmljZV90b2tlbnNfcHJv",
+            "dmlkZXIQAloNUHVzaCBwcm92aWRlclIIcHJvdmlkZXISlgEKCHBsYXRmb3Jt",
+            "GAQgASgJQnqStRh2CghwbGF0Zm9ybRILVkFSQ0hBUigyMCkYAUIlcGxhdGZv",
+            "cm0gSU4gKCdhbmRyb2lkJywgJ2lvcycsICd3ZWInKVIjCh9pZHhfcHVzaF9k",
+            "ZXZpY2VfdG9rZW5zX3BsYXRmb3JtEAJaD0NsaWVudCBwbGF0Zm9ybVIIcGxh",
+            "dGZvcm0ShAEKDGRldmljZV90b2tlbhgFIAEoCUJhkrUYXQoMZGV2aWNlX3Rv",
+            "a2VuEgRURVhUGAFSJwojaWR4X3B1c2hfZGV2aWNlX3Rva2Vuc19kZXZpY2Vf",
+            "dG9rZW4QAlocUHJvdmlkZXItaXNzdWVkIGRldmljZSB0b2tlblILZGV2aWNl",
+            "VG9rZW4SWgoJZGV2aWNlX2lkGAYgASgJQj2StRg5CglkZXZpY2VfaWQSDFZB",
+            "UkNIQVIoMjU1KVoeQXBwLXNwZWNpZmljIGRldmljZSBpZGVudGlmaWVyUghk",
+            "ZXZpY2VJZBJJCgZhcHBfaWQYByABKAlCMpK1GC4KBmFwcF9pZBIMVkFSQ0hB",
+            "UigyNTUpWhZBcHBsaWNhdGlvbiBpZGVudGlmaWVyUgVhcHBJZBKZAQoJaXNf",
+            "YWN0aXZlGAggASgIQnyStRh4Cglpc19hY3RpdmUSB0JPT0xFQU4YAToEdHJ1",
+            "ZVIkCiBpZHhfcHVzaF9kZXZpY2VfdG9rZW5zX2lzX2FjdGl2ZRACWjRXaGV0",
+            "aGVyIHRoaXMgdG9rZW4gc2hvdWxkIHJlY2VpdmUgcHVzaCBub3RpZmljYXRp",
+            "b25zUghpc0FjdGl2ZRK6AQoMbGFzdF9zZWVuX2F0GAkgASgLMhouZ29vZ2xl",
+            "LnByb3RvYnVmLlRpbWVzdGFtcEJ8krUYeAoMbGFzdF9zZWVuX2F0EhhUSU1F",
+            "U1RBTVAgV0lUSCBUSU1FIFpPTkVSJwojaWR4X3B1c2hfZGV2aWNlX3Rva2Vu",
+            "c19sYXN0X3NlZW5fYXQQAlolTGFzdCBoZWFydGJlYXQvdXBkYXRlIGZyb20g",
+            "dGhlIGRldmljZVIKbGFzdFNlZW5BdBJ+CgpjcmVhdGVkX2F0GAogASgLMhou",
+            "Z29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIY",
+            "VElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1Q",
+            "YAFoAVIJY3JlYXRlZEF0EnwKCnVwZGF0ZWRfYXQYCyABKAsyGi5nb29nbGUu",
+            "cHJvdG9idWYuVGltZXN0YW1wQkGStRg9Cgp1cGRhdGVkX2F0EhhUSU1FU1RB",
+            "TVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgAVIJdXBk",
+            "YXRlZEF0Om+KtRhrChJwdXNoX2RldmljZV90b2tlbnMSE25vdGlmaWNhdGlv",
+            "bl9zY2hlbWEYQSABKjxSZWdpc3RlcmVkIHB1c2ggZGV2aWNlIHRva2VucyBm",
+            "b3IgRkNNL0FQTnMvd2ViIHB1c2ggZGVsaXZlcnki1Q0KE1dlYmhvb2tTdWJz",
+            "Y3JpcHRpb24ShAEKD3N1YnNjcmlwdGlvbl9pZBgBIAEoCUJbkrUYVwoPc3Vi",
+            "c2NyaXB0aW9uX2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClaJ1By",
+            "aW1hcnkga2V5IC0gd2ViaG9vayBzdWJzY3JpcHRpb24gVVVJRFIOc3Vic2Ny",
+            "aXB0aW9uSWQSbgoPc3Vic2NyaWJlcl9uYW1lGAIgASgJQkWStRhBCg9zdWJz",
+            "Y3JpYmVyX25hbWUSDFZBUkNIQVIoMjU1KRgBWh5IdW1hbi1yZWFkYWJsZSBz",
+            "dWJzY3JpYmVyIG5hbWVSDnN1YnNjcmliZXJOYW1lEk0KCnRhcmdldF91cmwY",
+            "AyABKAlCLpK1GCoKCnRhcmdldF91cmwSBFRFWFQYAVoUV2ViaG9vayBjYWxs",
+            "YmFjayBVUkxSCXRhcmdldFVybBJBCgZzZWNyZXQYBCABKAlCKZK1GCUKBnNl",
+            "Y3JldBIEVEVYVBgBWhNITUFDIHNpZ25pbmcgc2VjcmV0UgZzZWNyZXQSjwEK",
+            "C2V2ZW50X3R5cGVzGAUgAygJQm6StRhqCgtldmVudF90eXBlcxIGVEVYVFtd",
+            "GAFSKQolaWR4X3dlYmhvb2tfc3Vic2NyaXB0aW9uc19ldmVudF90eXBlcxAE",
+            "WiZMaWZlY3ljbGUgZXZlbnRzIHRoaXMgc3Vic2NyaWJlciB3YW50c1IKZXZl",
+            "bnRUeXBlcxKPAQoMdG9waWNfZ3JvdXBzGAYgAygJQmyStRhoCgx0b3BpY19n",
+            "cm91cHMSBlRFWFRbXRgBUioKJmlkeF93ZWJob29rX3N1YnNjcmlwdGlvbnNf",
+            "dG9waWNfZ3JvdXBzEARaIlRvcGljIGdyb3VwcyB0aGlzIHN1YnNjcmliZXIg",
+            "d2FudHNSC3RvcGljR3JvdXBzEoIBCgZ0b3BpY3MYByADKAlCapK1GGYKBnRv",
+            "cGljcxIGVEVYVFtdGAFSJAogaWR4X3dlYmhvb2tfc3Vic2NyaXB0aW9uc190",
+            "b3BpY3MQBFosU3BlY2lmaWMgc291cmNlIHRvcGljcyB0aGlzIHN1YnNjcmli",
+            "ZXIgd2FudHNSBnRvcGljcxKJAQoIY2hhbm5lbHMYCCADKAlCbZK1GGkKCGNo",
+            "YW5uZWxzEgZURVhUW10YAVImCiJpZHhfd2ViaG9va19zdWJzY3JpcHRpb25z",
+            "X2NoYW5uZWxzEARaK05vdGlmaWNhdGlvbiBjaGFubmVscyB0aGlzIHN1YnNj",
+            "cmliZXIgd2FudHNSCGNoYW5uZWxzEoIBCg90aW1lb3V0X3NlY29uZHMYCSAB",
+            "KAVCWZK1GFUKD3RpbWVvdXRfc2Vjb25kcxIHSU5URUdFUhgBOgIxMEITdGlt",
+            "ZW91dF9zZWNvbmRzID4gMFoeUGVyLXJlcXVlc3QgdGltZW91dCBpbiBzZWNv",
+            "bmRzUg50aW1lb3V0U2Vjb25kcxJwCgxtYXhfYXR0ZW1wdHMYCiABKAVCTZK1",
+            "GEkKDG1heF9hdHRlbXB0cxIHSU5URUdFUhgBOgE1QhBtYXhfYXR0ZW1wdHMg",
+            "PiAwWhlNYXhpbXVtIGRlbGl2ZXJ5IGF0dGVtcHRzUgttYXhBdHRlbXB0cxKK",
+            "AQoJaXNfYWN0aXZlGAsgASgIQm2StRhpCglpc19hY3RpdmUSB0JPT0xFQU4Y",
+            "AToEdHJ1ZVInCiNpZHhfd2ViaG9va19zdWJzY3JpcHRpb25zX2lzX2FjdGl2",
+            "ZRACWiJXaGV0aGVyIHRoZSBzdWJzY3JpcHRpb24gaXMgYWN0aXZlUghpc0Fj",
+            "dGl2ZRJ+CgpjcmVhdGVkX2F0GAwgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRp",
+            "bWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElN",
+            "RSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoAVIJY3JlYXRlZEF0EnwK",
+            "CnVwZGF0ZWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w",
+            "QkGStRg9Cgp1cGRhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUY",
+            "AToRQ1VSUkVOVF9USU1FU1RBTVBgAVIJdXBkYXRlZEF0On6KtRh6ChV3ZWJo",
+            "b29rX3N1YnNjcmlwdGlvbnMSE25vdGlmaWNhdGlvbl9zY2hlbWEYQiABKkhF",
+            "eHRlcm5hbCBzdWJzY3JpYmVycyB0aGF0IHJlY2VpdmUgc2lnbmVkIG5vdGlm",
+            "aWNhdGlvbiBsaWZlY3ljbGUgd2ViaG9va3Mi0xIKFldlYmhvb2tEZWxpdmVy",
+            "eUF0dGVtcHQScAoKYXR0ZW1wdF9pZBgBIAEoCUJRkrUYTQoKYXR0ZW1wdF9p",
+            "ZBIEVVVJRBgBKAE6EWdlbl9yYW5kb21fdXVpZCgpWiJQcmltYXJ5IGtleSAt",
+            "IHdlYmhvb2sgYXR0ZW1wdCBVVUlEUglhdHRlbXB0SWQSiQIKD3N1YnNjcmlw",
+            "dGlvbl9pZBgCIAEoCULfAZK1GNoBCg9zdWJzY3JpcHRpb25faWQSBFVVSUQY",
+            "AUpvChV3ZWJob29rX3N1YnNjcmlwdGlvbnMSD3N1YnNjcmlwdGlvbl9pZBoT",
+            "bm90aWZpY2F0aW9uX3NjaGVtYSADKAMyLGZrX3dlYmhvb2tfZGVsaXZlcnlf",
+            "YXR0ZW1wdHNfc3Vic2NyaXB0aW9uX2lkUjEKLWlkeF93ZWJob29rX2RlbGl2",
+            "ZXJ5X2F0dGVtcHRzX3N1YnNjcmlwdGlvbl9pZBACWhtUYXJnZXQgd2ViaG9v",
+            "ayBzdWJzY3JpcHRpb25SDnN1YnNjcmlwdGlvbklkEqkCCg9ub3RpZmljYXRp",
+            "b25faWQYAyABKAlC/wGStRj6AQoPbm90aWZpY2F0aW9uX2lkEgRVVUlESmcK",
+            "DW5vdGlmaWNhdGlvbnMSD25vdGlmaWNhdGlvbl9pZBoTbm90aWZpY2F0aW9u",
+            "X3NjaGVtYSADKAMyLGZrX3dlYmhvb2tfZGVsaXZlcnlfYXR0ZW1wdHNfbm90",
+            "aWZpY2F0aW9uX2lkUjEKLWlkeF93ZWJob29rX2RlbGl2ZXJ5X2F0dGVtcHRz",
+            "X25vdGlmaWNhdGlvbl9pZBACWkVSZWxhdGVkIG5vdGlmaWNhdGlvbiBJRCB3",
+            "aGVuIGRlbGl2ZXJ5IGNhbWUgZnJvbSBhIHF1ZXVlZCBub3RpZmljYXRpb25S",
+            "Dm5vdGlmaWNhdGlvbklkEpYBCg9saWZlY3ljbGVfZXZlbnQYBCABKAlCbZK1",
+            "GGkKD2xpZmVjeWNsZV9ldmVudBILVkFSQ0hBUig2NCkYAVIxCi1pZHhfd2Vi",
+            "aG9va19kZWxpdmVyeV9hdHRlbXB0c19saWZlY3ljbGVfZXZlbnQQAloUTGlm",
+            "ZWN5Y2xlIGV2ZW50IG5hbWVSDmxpZmVjeWNsZUV2ZW50EnkKDHNvdXJjZV90",
+            "b3BpYxgFIAEoCUJWkrUYUgoMc291cmNlX3RvcGljEgxWQVJDSEFSKDI1NSla",
+            "NE9yaWdpbmFsIGJ1c2luZXNzIHRvcGljIHRoYXQgbGVkIHRvIHRoZSBub3Rp",
+            "ZmljYXRpb25SC3NvdXJjZVRvcGljElsKB3BheWxvYWQYBiABKAlCQZK1GD0K",
+            "B3BheWxvYWQSBUpTT05CGAE6Cyd7fSc6Ompzb25iWhpTZXJpYWxpemVkIHdl",
+            "Ymhvb2sgcGF5bG9hZHgBUgdwYXlsb2FkErQBCgZzdGF0dXMYByABKAlCmwGS",
+            "tRiWAQoGc3RhdHVzEgtWQVJDSEFSKDIwKRgBOggnUVVFVUVEJ0Ixc3RhdHVz",
+            "IElOICgnUVVFVUVEJywgJ1NFTkRJTkcnLCAnU0VOVCcsICdGQUlMRUQnKVIo",
+            "CiRpZHhfd2ViaG9va19kZWxpdmVyeV9hdHRlbXB0c19zdGF0dXMQAloWRGVs",
+            "aXZlcnkgYXR0ZW1wdCBzdGF0ZVIGc3RhdHVzEm8KD3Jlc3BvbnNlX3N0YXR1",
+            "cxgIIAEoBUJGkrUYQgoPcmVzcG9uc2Vfc3RhdHVzEgdJTlRFR0VSWiZIVFRQ",
+            "IHN0YXR1cyByZXR1cm5lZCBieSB0aGUgc3Vic2NyaWJlclIOcmVzcG9uc2VT",
+            "dGF0dXMSZAoNcmVzcG9uc2VfYm9keRgJIAEoCUI/krUYOwoNcmVzcG9uc2Vf",
+            "Ym9keRIEVEVYVFokUmVzcG9uc2UgYm9keSBjYXB0dXJlZCBmb3IgZGVidWdn",
+            "aW5nUgxyZXNwb25zZUJvZHkSYQoLcmV0cnlfY291bnQYCiABKAVCQJK1GDwK",
+            "C3JldHJ5X2NvdW50EgdJTlRFR0VSGAE6ATBCEHJldHJ5X2NvdW50ID49IDBa",
+            "DVJldHJ5IGNvdW50ZXJSCnJldHJ5Q291bnQSUwoNZXJyb3JfbWVzc2FnZRgL",
+            "IAEoCUIukrUYKgoNZXJyb3JfbWVzc2FnZRIEVEVYVFoTTGFzdCBkZWxpdmVy",
+            "eSBlcnJvclIMZXJyb3JNZXNzYWdlErgBCgxzY2hlZHVsZWRfYXQYDCABKAsy",
+            "Gi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQnmStRh1CgxzY2hlZHVsZWRf",
+            "YXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVIuCippZHhfd2ViaG9va19k",
+            "ZWxpdmVyeV9hdHRlbXB0c19zY2hlZHVsZWRfYXQQAlobTmV4dCBzY2hlZHVs",
+            "ZWQgYXR0ZW1wdCB0aW1lUgtzY2hlZHVsZWRBdBKYAQoRbGFzdF9hdHRlbXB0",
+            "ZWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQlCStRhM",
+            "ChFsYXN0X2F0dGVtcHRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05F",
+            "Wh1MYXN0IHRpbWUgYW4gYXR0ZW1wdCB3YXMgbWFkZVIPbGFzdEF0dGVtcHRl",
+            "ZEF0En4KCmNyZWF0ZWRfYXQYDiABKAsyGi5nb29nbGUucHJvdG9idWYuVGlt",
+            "ZXN0YW1wQkOStRg/CgpjcmVhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1F",
+            "IFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgAWgBUgljcmVhdGVkQXQSfAoK",
+            "dXBkYXRlZF9hdBgPIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBC",
+            "QZK1GD0KCnVwZGF0ZWRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORRgB",
+            "OhFDVVJSRU5UX1RJTUVTVEFNUGABUgl1cGRhdGVkQXQ6gwGKtRh/Chl3ZWJo",
+            "b29rX2RlbGl2ZXJ5X2F0dGVtcHRzEhNub3RpZmljYXRpb25fc2NoZW1hGEMg",
+            "ASpJUmV0cnlhYmxlIG91dGJvdW5kIHdlYmhvb2sgZGVsaXZlcmllcyBlbWl0",
+            "dGVkIGJ5IHRoZSBub3RpZmljYXRpb24gc2VydmljZSKvAgoWTm90aWZpY2F0",
+            "aW9uUHJlZmVyZW5jZRIXCgd1c2VyX2lkGAEgASgJUgZ1c2VySWQSZQoTY2hh",
+            "bm5lbF9wcmVmZXJlbmNlcxgCIAMoCzI0Lmluc3VyZXRlY2gubm90aWZpY2F0",
+            "aW9uLmVudGl0eS52MS5DaGFubmVsUHJlZmVyZW5jZVISY2hhbm5lbFByZWZl",
+            "cmVuY2VzEigKEG1hcmtldGluZ19vcHRfaW4YAyABKAhSDm1hcmtldGluZ09w",
+            "dEluEjAKFHRyYW5zYWN0aW9uYWxfb3B0X2luGAQgASgIUhJ0cmFuc2FjdGlv",
+            "bmFsT3B0SW4SOQoKdXBkYXRlZF9hdBgFIAEoCzIaLmdvb2dsZS5wcm90b2J1",
+            "Zi5UaW1lc3RhbXBSCXVwZGF0ZWRBdCLbAQoRQ2hhbm5lbFByZWZlcmVuY2US",
+            "UAoHY2hhbm5lbBgBIAEoDjI2Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVu",
+            "dGl0eS52MS5Ob3RpZmljYXRpb25DaGFubmVsUgdjaGFubmVsEhgKB2VuYWJs",
+            "ZWQYAiABKAhSB2VuYWJsZWQSWgoOZXhjbHVkZWRfdHlwZXMYAyADKA4yMy5p",
+            "bnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9u",
+            "VHlwZVINZXhjbHVkZWRUeXBlcyqmAwoQTm90aWZpY2F0aW9uVHlwZRIhCh1O",
+            "T1RJRklDQVRJT05fVFlQRV9VTlNQRUNJRklFRBAAEhkKFU5PVElGSUNBVElP",
+            "Tl9UWVBFX09UUBABEiMKH05PVElGSUNBVElPTl9UWVBFX1BPTElDWV9JU1NV",
+            "RUQQAhIqCiZOT1RJRklDQVRJT05fVFlQRV9QQVlNRU5UX0NPTkZJUk1BVElP",
+            "ThADEiUKIU5PVElGSUNBVElPTl9UWVBFX0NMQUlNX1NVQk1JVFRFRBAEEiQK",
+            "IE5PVElGSUNBVElPTl9UWVBFX0NMQUlNX0FQUFJPVkVEEAUSJAogTk9USUZJ",
+            "Q0FUSU9OX1RZUEVfQ0xBSU1fUkVKRUNURUQQBhImCiJOT1RJRklDQVRJT05f",
+            "VFlQRV9SRU5FV0FMX1JFTUlOREVSEAcSIgoeTk9USUZJQ0FUSU9OX1RZUEVf",
+            "R1JBQ0VfUEVSSU9EEAgSIwofTk9USUZJQ0FUSU9OX1RZUEVfUE9MSUNZX0xB",
+            "UFNFRBAJEh8KG05PVElGSUNBVElPTl9UWVBFX01BUktFVElORxAKKtwBChNO",
+            "b3RpZmljYXRpb25DaGFubmVsEiQKIE5PVElGSUNBVElPTl9DSEFOTkVMX1VO",
+            "U1BFQ0lGSUVEEAASHAoYTk9USUZJQ0FUSU9OX0NIQU5ORUxfU01TEAESHgoa",
+            "Tk9USUZJQ0FUSU9OX0NIQU5ORUxfRU1BSUwQAhIdChlOT1RJRklDQVRJT05f",
+            "Q0hBTk5FTF9QVVNIEAMSIQodTk9USUZJQ0FUSU9OX0NIQU5ORUxfV0hBVFNB",
+            "UFAQBBIfChtOT1RJRklDQVRJT05fQ0hBTk5FTF9JTl9BUFAQBSrAAQoUTm90",
+            "aWZpY2F0aW9uUHJpb3JpdHkSJQohTk9USUZJQ0FUSU9OX1BSSU9SSVRZX1VO",
+            "U1BFQ0lGSUVEEAASHQoZTk9USUZJQ0FUSU9OX1BSSU9SSVRZX0xPVxABEiAK",
+            "HE5PVElGSUNBVElPTl9QUklPUklUWV9OT1JNQUwQAhIeChpOT1RJRklDQVRJ",
+            "T05fUFJJT1JJVFlfSElHSBADEiAKHE5PVElGSUNBVElPTl9QUklPUklUWV9V",
+            "UkdFTlQQBCqaAgoSTm90aWZpY2F0aW9uU3RhdHVzEiMKH05PVElGSUNBVElP",
+            "Tl9TVEFUVVNfVU5TUEVDSUZJRUQQABIeChpOT1RJRklDQVRJT05fU1RBVFVT",
+            "X1FVRVVFRBABEh8KG05PVElGSUNBVElPTl9TVEFUVVNfU0VORElORxACEhwK",
+            "GE5PVElGSUNBVElPTl9TVEFUVVNfU0VOVBADEiEKHU5PVElGSUNBVElPTl9T",
+            "VEFUVVNfREVMSVZFUkVEEAQSHAoYTk9USUZJQ0FUSU9OX1NUQVRVU19SRUFE",
+            "EAUSHgoaTk9USUZJQ0FUSU9OX1NUQVRVU19GQUlMRUQQBhIfChtOT1RJRklD",
+            "QVRJT05fU1RBVFVTX0JPVU5DRUQQB0K3AgolY29tLmluc3VyZXRlY2gubm90",
+            "aWZpY2F0aW9uLmVudGl0eS52MUIRTm90aWZpY2F0aW9uUHJvdG9QAVpUZ2l0",
+            "aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJl",
+            "dGVjaC9ub3RpZmljYXRpb24vZW50aXR5L3YxO2VudGl0eXYxogIDSU5FqgIh",
+            "SW5zdXJldGVjaC5Ob3RpZmljYXRpb24uRW50aXR5LlYxygIhSW5zdXJldGVj",
+            "aFxOb3RpZmljYXRpb25cRW50aXR5XFYx4gItSW5zdXJldGVjaFxOb3RpZmlj",
+            "YXRpb25cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIkSW5zdXJldGVjaDo6Tm90",
+            "aWZpY2F0aW9uOjpFbnRpdHk6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.SecurityReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Notification.Entity.V1.NotificationType), typeof(global::Insuretech.Notification.Entity.V1.NotificationChannel), typeof(global::Insuretech.Notification.Entity.V1.NotificationPriority), typeof(global::Insuretech.Notification.Entity.V1.NotificationStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.Notification), global::Insuretech.Notification.Entity.V1.Notification.Parser, new[]{ "NotificationId", "RecipientId", "Type", "Channel", "Subject", "Message", "TemplateData", "Priority", "Status", "ScheduledAt", "SentAt", "DeliveredAt", "ReadAt", "CreatedAt", "RetryCount", "ErrorMessage" }, null, null, null, new pbr::GeneratedClrTypeInfo[] { null, }),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.NotificationTemplate), global::Insuretech.Notification.Entity.V1.NotificationTemplate.Parser, new[]{ "TemplateId", "TemplateName", "Type", "Channel", "SubjectTemplate", "BodyTemplate", "Language", "CreatedAt", "UpdatedAt", "IsActive" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.PushDeviceToken), global::Insuretech.Notification.Entity.V1.PushDeviceToken.Parser, new[]{ "TokenId", "UserId", "Provider", "Platform", "DeviceToken", "DeviceId", "AppId", "IsActive", "LastSeenAt", "CreatedAt", "UpdatedAt" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.WebhookSubscription), global::Insuretech.Notification.Entity.V1.WebhookSubscription.Parser, new[]{ "SubscriptionId", "SubscriberName", "TargetUrl", "Secret", "EventTypes", "TopicGroups", "Topics", "Channels", "TimeoutSeconds", "MaxAttempts", "IsActive", "CreatedAt", "UpdatedAt" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.WebhookDeliveryAttempt), global::Insuretech.Notification.Entity.V1.WebhookDeliveryAttempt.Parser, new[]{ "AttemptId", "SubscriptionId", "NotificationId", "LifecycleEvent", "SourceTopic", "Payload", "Status", "ResponseStatus", "ResponseBody", "RetryCount", "ErrorMessage", "ScheduledAt", "LastAttemptedAt", "CreatedAt", "UpdatedAt" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.NotificationPreference), global::Insuretech.Notification.Entity.V1.NotificationPreference.Parser, new[]{ "UserId", "ChannelPreferences", "MarketingOptIn", "TransactionalOptIn", "UpdatedAt" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Notification.Entity.V1.ChannelPreference), global::Insuretech.Notification.Entity.V1.ChannelPreference.Parser, new[]{ "Channel", "Enabled", "ExcludedTypes" }, null, null, null, null)
           }));
@@ -1639,6 +1770,2095 @@ namespace Insuretech.Notification.Entity.V1 {
   }
 
   /// <summary>
+  /// PushDeviceToken stores mobile and web push registration tokens for each user.
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class PushDeviceToken : pb::IMessage<PushDeviceToken>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<PushDeviceToken> _parser = new pb::MessageParser<PushDeviceToken>(() => new PushDeviceToken());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<PushDeviceToken> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[2]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PushDeviceToken() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PushDeviceToken(PushDeviceToken other) : this() {
+      tokenId_ = other.tokenId_;
+      userId_ = other.userId_;
+      provider_ = other.provider_;
+      platform_ = other.platform_;
+      deviceToken_ = other.deviceToken_;
+      deviceId_ = other.deviceId_;
+      appId_ = other.appId_;
+      isActive_ = other.isActive_;
+      lastSeenAt_ = other.lastSeenAt_ != null ? other.lastSeenAt_.Clone() : null;
+      createdAt_ = other.createdAt_ != null ? other.createdAt_.Clone() : null;
+      updatedAt_ = other.updatedAt_ != null ? other.updatedAt_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PushDeviceToken Clone() {
+      return new PushDeviceToken(this);
+    }
+
+    /// <summary>Field number for the "token_id" field.</summary>
+    public const int TokenIdFieldNumber = 1;
+    private string tokenId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"primaryKey;column:token_id;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TokenId {
+      get { return tokenId_; }
+      set {
+        tokenId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 2;
+    private string userId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:user_id;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "provider" field.</summary>
+    public const int ProviderFieldNumber = 3;
+    private string provider_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:provider;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Provider {
+      get { return provider_; }
+      set {
+        provider_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "platform" field.</summary>
+    public const int PlatformFieldNumber = 4;
+    private string platform_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:platform;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Platform {
+      get { return platform_; }
+      set {
+        platform_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_token" field.</summary>
+    public const int DeviceTokenFieldNumber = 5;
+    private string deviceToken_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:device_token;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceToken {
+      get { return deviceToken_; }
+      set {
+        deviceToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_id" field.</summary>
+    public const int DeviceIdFieldNumber = 6;
+    private string deviceId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:device_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceId {
+      get { return deviceId_; }
+      set {
+        deviceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "app_id" field.</summary>
+    public const int AppIdFieldNumber = 7;
+    private string appId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:app_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string AppId {
+      get { return appId_; }
+      set {
+        appId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "is_active" field.</summary>
+    public const int IsActiveFieldNumber = 8;
+    private bool isActive_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:is_active;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsActive {
+      get { return isActive_; }
+      set {
+        isActive_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "last_seen_at" field.</summary>
+    public const int LastSeenAtFieldNumber = 9;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp lastSeenAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp LastSeenAt {
+      get { return lastSeenAt_; }
+      set {
+        lastSeenAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "created_at" field.</summary>
+    public const int CreatedAtFieldNumber = 10;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp createdAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp CreatedAt {
+      get { return createdAt_; }
+      set {
+        createdAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "updated_at" field.</summary>
+    public const int UpdatedAtFieldNumber = 11;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp updatedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp UpdatedAt {
+      get { return updatedAt_; }
+      set {
+        updatedAt_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as PushDeviceToken);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(PushDeviceToken other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (TokenId != other.TokenId) return false;
+      if (UserId != other.UserId) return false;
+      if (Provider != other.Provider) return false;
+      if (Platform != other.Platform) return false;
+      if (DeviceToken != other.DeviceToken) return false;
+      if (DeviceId != other.DeviceId) return false;
+      if (AppId != other.AppId) return false;
+      if (IsActive != other.IsActive) return false;
+      if (!object.Equals(LastSeenAt, other.LastSeenAt)) return false;
+      if (!object.Equals(CreatedAt, other.CreatedAt)) return false;
+      if (!object.Equals(UpdatedAt, other.UpdatedAt)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (TokenId.Length != 0) hash ^= TokenId.GetHashCode();
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (Provider.Length != 0) hash ^= Provider.GetHashCode();
+      if (Platform.Length != 0) hash ^= Platform.GetHashCode();
+      if (DeviceToken.Length != 0) hash ^= DeviceToken.GetHashCode();
+      if (DeviceId.Length != 0) hash ^= DeviceId.GetHashCode();
+      if (AppId.Length != 0) hash ^= AppId.GetHashCode();
+      if (IsActive != false) hash ^= IsActive.GetHashCode();
+      if (lastSeenAt_ != null) hash ^= LastSeenAt.GetHashCode();
+      if (createdAt_ != null) hash ^= CreatedAt.GetHashCode();
+      if (updatedAt_ != null) hash ^= UpdatedAt.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (TokenId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(TokenId);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Provider);
+      }
+      if (Platform.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Platform);
+      }
+      if (DeviceToken.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(DeviceToken);
+      }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(DeviceId);
+      }
+      if (AppId.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(AppId);
+      }
+      if (IsActive != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(IsActive);
+      }
+      if (lastSeenAt_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(LastSeenAt);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (TokenId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(TokenId);
+      }
+      if (UserId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(UserId);
+      }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Provider);
+      }
+      if (Platform.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Platform);
+      }
+      if (DeviceToken.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(DeviceToken);
+      }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(DeviceId);
+      }
+      if (AppId.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(AppId);
+      }
+      if (IsActive != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(IsActive);
+      }
+      if (lastSeenAt_ != null) {
+        output.WriteRawTag(74);
+        output.WriteMessage(LastSeenAt);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(90);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (TokenId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TokenId);
+      }
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (Provider.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Provider);
+      }
+      if (Platform.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Platform);
+      }
+      if (DeviceToken.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceToken);
+      }
+      if (DeviceId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceId);
+      }
+      if (AppId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AppId);
+      }
+      if (IsActive != false) {
+        size += 1 + 1;
+      }
+      if (lastSeenAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(LastSeenAt);
+      }
+      if (createdAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(PushDeviceToken other) {
+      if (other == null) {
+        return;
+      }
+      if (other.TokenId.Length != 0) {
+        TokenId = other.TokenId;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.Provider.Length != 0) {
+        Provider = other.Provider;
+      }
+      if (other.Platform.Length != 0) {
+        Platform = other.Platform;
+      }
+      if (other.DeviceToken.Length != 0) {
+        DeviceToken = other.DeviceToken;
+      }
+      if (other.DeviceId.Length != 0) {
+        DeviceId = other.DeviceId;
+      }
+      if (other.AppId.Length != 0) {
+        AppId = other.AppId;
+      }
+      if (other.IsActive != false) {
+        IsActive = other.IsActive;
+      }
+      if (other.lastSeenAt_ != null) {
+        if (lastSeenAt_ == null) {
+          LastSeenAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        LastSeenAt.MergeFrom(other.LastSeenAt);
+      }
+      if (other.createdAt_ != null) {
+        if (createdAt_ == null) {
+          CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        CreatedAt.MergeFrom(other.CreatedAt);
+      }
+      if (other.updatedAt_ != null) {
+        if (updatedAt_ == null) {
+          UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        UpdatedAt.MergeFrom(other.UpdatedAt);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            TokenId = input.ReadString();
+            break;
+          }
+          case 18: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 26: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 34: {
+            Platform = input.ReadString();
+            break;
+          }
+          case 42: {
+            DeviceToken = input.ReadString();
+            break;
+          }
+          case 50: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 58: {
+            AppId = input.ReadString();
+            break;
+          }
+          case 64: {
+            IsActive = input.ReadBool();
+            break;
+          }
+          case 74: {
+            if (lastSeenAt_ == null) {
+              LastSeenAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(LastSeenAt);
+            break;
+          }
+          case 82: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 90: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            TokenId = input.ReadString();
+            break;
+          }
+          case 18: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 26: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 34: {
+            Platform = input.ReadString();
+            break;
+          }
+          case 42: {
+            DeviceToken = input.ReadString();
+            break;
+          }
+          case 50: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 58: {
+            AppId = input.ReadString();
+            break;
+          }
+          case 64: {
+            IsActive = input.ReadBool();
+            break;
+          }
+          case 74: {
+            if (lastSeenAt_ == null) {
+              LastSeenAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(LastSeenAt);
+            break;
+          }
+          case 82: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 90: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
+  /// WebhookSubscription stores downstream subscribers for signed lifecycle fanout.
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class WebhookSubscription : pb::IMessage<WebhookSubscription>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<WebhookSubscription> _parser = new pb::MessageParser<WebhookSubscription>(() => new WebhookSubscription());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<WebhookSubscription> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[3]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookSubscription() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookSubscription(WebhookSubscription other) : this() {
+      subscriptionId_ = other.subscriptionId_;
+      subscriberName_ = other.subscriberName_;
+      targetUrl_ = other.targetUrl_;
+      secret_ = other.secret_;
+      eventTypes_ = other.eventTypes_.Clone();
+      topicGroups_ = other.topicGroups_.Clone();
+      topics_ = other.topics_.Clone();
+      channels_ = other.channels_.Clone();
+      timeoutSeconds_ = other.timeoutSeconds_;
+      maxAttempts_ = other.maxAttempts_;
+      isActive_ = other.isActive_;
+      createdAt_ = other.createdAt_ != null ? other.createdAt_.Clone() : null;
+      updatedAt_ = other.updatedAt_ != null ? other.updatedAt_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookSubscription Clone() {
+      return new WebhookSubscription(this);
+    }
+
+    /// <summary>Field number for the "subscription_id" field.</summary>
+    public const int SubscriptionIdFieldNumber = 1;
+    private string subscriptionId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"primaryKey;column:subscription_id;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SubscriptionId {
+      get { return subscriptionId_; }
+      set {
+        subscriptionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "subscriber_name" field.</summary>
+    public const int SubscriberNameFieldNumber = 2;
+    private string subscriberName_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:subscriber_name;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SubscriberName {
+      get { return subscriberName_; }
+      set {
+        subscriberName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "target_url" field.</summary>
+    public const int TargetUrlFieldNumber = 3;
+    private string targetUrl_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:target_url;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TargetUrl {
+      get { return targetUrl_; }
+      set {
+        targetUrl_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "secret" field.</summary>
+    public const int SecretFieldNumber = 4;
+    private string secret_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:secret;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Secret {
+      get { return secret_; }
+      set {
+        secret_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "event_types" field.</summary>
+    public const int EventTypesFieldNumber = 5;
+    private static readonly pb::FieldCodec<string> _repeated_eventTypes_codec
+        = pb::FieldCodec.ForString(42);
+    private readonly pbc::RepeatedField<string> eventTypes_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// @inject_tag: gorm:"column:event_types;serializer:json"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> EventTypes {
+      get { return eventTypes_; }
+    }
+
+    /// <summary>Field number for the "topic_groups" field.</summary>
+    public const int TopicGroupsFieldNumber = 6;
+    private static readonly pb::FieldCodec<string> _repeated_topicGroups_codec
+        = pb::FieldCodec.ForString(50);
+    private readonly pbc::RepeatedField<string> topicGroups_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// @inject_tag: gorm:"column:topic_groups;serializer:json"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> TopicGroups {
+      get { return topicGroups_; }
+    }
+
+    /// <summary>Field number for the "topics" field.</summary>
+    public const int TopicsFieldNumber = 7;
+    private static readonly pb::FieldCodec<string> _repeated_topics_codec
+        = pb::FieldCodec.ForString(58);
+    private readonly pbc::RepeatedField<string> topics_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// @inject_tag: gorm:"column:topics;serializer:json"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Topics {
+      get { return topics_; }
+    }
+
+    /// <summary>Field number for the "channels" field.</summary>
+    public const int ChannelsFieldNumber = 8;
+    private static readonly pb::FieldCodec<string> _repeated_channels_codec
+        = pb::FieldCodec.ForString(66);
+    private readonly pbc::RepeatedField<string> channels_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// @inject_tag: gorm:"column:channels;serializer:json"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> Channels {
+      get { return channels_; }
+    }
+
+    /// <summary>Field number for the "timeout_seconds" field.</summary>
+    public const int TimeoutSecondsFieldNumber = 9;
+    private int timeoutSeconds_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:timeout_seconds;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TimeoutSeconds {
+      get { return timeoutSeconds_; }
+      set {
+        timeoutSeconds_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "max_attempts" field.</summary>
+    public const int MaxAttemptsFieldNumber = 10;
+    private int maxAttempts_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:max_attempts;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int MaxAttempts {
+      get { return maxAttempts_; }
+      set {
+        maxAttempts_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_active" field.</summary>
+    public const int IsActiveFieldNumber = 11;
+    private bool isActive_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:is_active;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsActive {
+      get { return isActive_; }
+      set {
+        isActive_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "created_at" field.</summary>
+    public const int CreatedAtFieldNumber = 12;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp createdAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp CreatedAt {
+      get { return createdAt_; }
+      set {
+        createdAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "updated_at" field.</summary>
+    public const int UpdatedAtFieldNumber = 13;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp updatedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp UpdatedAt {
+      get { return updatedAt_; }
+      set {
+        updatedAt_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as WebhookSubscription);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(WebhookSubscription other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (SubscriptionId != other.SubscriptionId) return false;
+      if (SubscriberName != other.SubscriberName) return false;
+      if (TargetUrl != other.TargetUrl) return false;
+      if (Secret != other.Secret) return false;
+      if(!eventTypes_.Equals(other.eventTypes_)) return false;
+      if(!topicGroups_.Equals(other.topicGroups_)) return false;
+      if(!topics_.Equals(other.topics_)) return false;
+      if(!channels_.Equals(other.channels_)) return false;
+      if (TimeoutSeconds != other.TimeoutSeconds) return false;
+      if (MaxAttempts != other.MaxAttempts) return false;
+      if (IsActive != other.IsActive) return false;
+      if (!object.Equals(CreatedAt, other.CreatedAt)) return false;
+      if (!object.Equals(UpdatedAt, other.UpdatedAt)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (SubscriptionId.Length != 0) hash ^= SubscriptionId.GetHashCode();
+      if (SubscriberName.Length != 0) hash ^= SubscriberName.GetHashCode();
+      if (TargetUrl.Length != 0) hash ^= TargetUrl.GetHashCode();
+      if (Secret.Length != 0) hash ^= Secret.GetHashCode();
+      hash ^= eventTypes_.GetHashCode();
+      hash ^= topicGroups_.GetHashCode();
+      hash ^= topics_.GetHashCode();
+      hash ^= channels_.GetHashCode();
+      if (TimeoutSeconds != 0) hash ^= TimeoutSeconds.GetHashCode();
+      if (MaxAttempts != 0) hash ^= MaxAttempts.GetHashCode();
+      if (IsActive != false) hash ^= IsActive.GetHashCode();
+      if (createdAt_ != null) hash ^= CreatedAt.GetHashCode();
+      if (updatedAt_ != null) hash ^= UpdatedAt.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (SubscriptionId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SubscriptionId);
+      }
+      if (SubscriberName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SubscriberName);
+      }
+      if (TargetUrl.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(TargetUrl);
+      }
+      if (Secret.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Secret);
+      }
+      eventTypes_.WriteTo(output, _repeated_eventTypes_codec);
+      topicGroups_.WriteTo(output, _repeated_topicGroups_codec);
+      topics_.WriteTo(output, _repeated_topics_codec);
+      channels_.WriteTo(output, _repeated_channels_codec);
+      if (TimeoutSeconds != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(TimeoutSeconds);
+      }
+      if (MaxAttempts != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(MaxAttempts);
+      }
+      if (IsActive != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(IsActive);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (SubscriptionId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(SubscriptionId);
+      }
+      if (SubscriberName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SubscriberName);
+      }
+      if (TargetUrl.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(TargetUrl);
+      }
+      if (Secret.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Secret);
+      }
+      eventTypes_.WriteTo(ref output, _repeated_eventTypes_codec);
+      topicGroups_.WriteTo(ref output, _repeated_topicGroups_codec);
+      topics_.WriteTo(ref output, _repeated_topics_codec);
+      channels_.WriteTo(ref output, _repeated_channels_codec);
+      if (TimeoutSeconds != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(TimeoutSeconds);
+      }
+      if (MaxAttempts != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(MaxAttempts);
+      }
+      if (IsActive != false) {
+        output.WriteRawTag(88);
+        output.WriteBool(IsActive);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (SubscriptionId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SubscriptionId);
+      }
+      if (SubscriberName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SubscriberName);
+      }
+      if (TargetUrl.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TargetUrl);
+      }
+      if (Secret.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Secret);
+      }
+      size += eventTypes_.CalculateSize(_repeated_eventTypes_codec);
+      size += topicGroups_.CalculateSize(_repeated_topicGroups_codec);
+      size += topics_.CalculateSize(_repeated_topics_codec);
+      size += channels_.CalculateSize(_repeated_channels_codec);
+      if (TimeoutSeconds != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TimeoutSeconds);
+      }
+      if (MaxAttempts != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(MaxAttempts);
+      }
+      if (IsActive != false) {
+        size += 1 + 1;
+      }
+      if (createdAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(WebhookSubscription other) {
+      if (other == null) {
+        return;
+      }
+      if (other.SubscriptionId.Length != 0) {
+        SubscriptionId = other.SubscriptionId;
+      }
+      if (other.SubscriberName.Length != 0) {
+        SubscriberName = other.SubscriberName;
+      }
+      if (other.TargetUrl.Length != 0) {
+        TargetUrl = other.TargetUrl;
+      }
+      if (other.Secret.Length != 0) {
+        Secret = other.Secret;
+      }
+      eventTypes_.Add(other.eventTypes_);
+      topicGroups_.Add(other.topicGroups_);
+      topics_.Add(other.topics_);
+      channels_.Add(other.channels_);
+      if (other.TimeoutSeconds != 0) {
+        TimeoutSeconds = other.TimeoutSeconds;
+      }
+      if (other.MaxAttempts != 0) {
+        MaxAttempts = other.MaxAttempts;
+      }
+      if (other.IsActive != false) {
+        IsActive = other.IsActive;
+      }
+      if (other.createdAt_ != null) {
+        if (createdAt_ == null) {
+          CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        CreatedAt.MergeFrom(other.CreatedAt);
+      }
+      if (other.updatedAt_ != null) {
+        if (updatedAt_ == null) {
+          UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        UpdatedAt.MergeFrom(other.UpdatedAt);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            SubscriptionId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SubscriberName = input.ReadString();
+            break;
+          }
+          case 26: {
+            TargetUrl = input.ReadString();
+            break;
+          }
+          case 34: {
+            Secret = input.ReadString();
+            break;
+          }
+          case 42: {
+            eventTypes_.AddEntriesFrom(input, _repeated_eventTypes_codec);
+            break;
+          }
+          case 50: {
+            topicGroups_.AddEntriesFrom(input, _repeated_topicGroups_codec);
+            break;
+          }
+          case 58: {
+            topics_.AddEntriesFrom(input, _repeated_topics_codec);
+            break;
+          }
+          case 66: {
+            channels_.AddEntriesFrom(input, _repeated_channels_codec);
+            break;
+          }
+          case 72: {
+            TimeoutSeconds = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            MaxAttempts = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            IsActive = input.ReadBool();
+            break;
+          }
+          case 98: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 106: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            SubscriptionId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SubscriberName = input.ReadString();
+            break;
+          }
+          case 26: {
+            TargetUrl = input.ReadString();
+            break;
+          }
+          case 34: {
+            Secret = input.ReadString();
+            break;
+          }
+          case 42: {
+            eventTypes_.AddEntriesFrom(ref input, _repeated_eventTypes_codec);
+            break;
+          }
+          case 50: {
+            topicGroups_.AddEntriesFrom(ref input, _repeated_topicGroups_codec);
+            break;
+          }
+          case 58: {
+            topics_.AddEntriesFrom(ref input, _repeated_topics_codec);
+            break;
+          }
+          case 66: {
+            channels_.AddEntriesFrom(ref input, _repeated_channels_codec);
+            break;
+          }
+          case 72: {
+            TimeoutSeconds = input.ReadInt32();
+            break;
+          }
+          case 80: {
+            MaxAttempts = input.ReadInt32();
+            break;
+          }
+          case 88: {
+            IsActive = input.ReadBool();
+            break;
+          }
+          case 98: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 106: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
+  /// WebhookDeliveryAttempt stores retryable outbound webhook deliveries.
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class WebhookDeliveryAttempt : pb::IMessage<WebhookDeliveryAttempt>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<WebhookDeliveryAttempt> _parser = new pb::MessageParser<WebhookDeliveryAttempt>(() => new WebhookDeliveryAttempt());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<WebhookDeliveryAttempt> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[4]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookDeliveryAttempt() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookDeliveryAttempt(WebhookDeliveryAttempt other) : this() {
+      attemptId_ = other.attemptId_;
+      subscriptionId_ = other.subscriptionId_;
+      notificationId_ = other.notificationId_;
+      lifecycleEvent_ = other.lifecycleEvent_;
+      sourceTopic_ = other.sourceTopic_;
+      payload_ = other.payload_;
+      status_ = other.status_;
+      responseStatus_ = other.responseStatus_;
+      responseBody_ = other.responseBody_;
+      retryCount_ = other.retryCount_;
+      errorMessage_ = other.errorMessage_;
+      scheduledAt_ = other.scheduledAt_ != null ? other.scheduledAt_.Clone() : null;
+      lastAttemptedAt_ = other.lastAttemptedAt_ != null ? other.lastAttemptedAt_.Clone() : null;
+      createdAt_ = other.createdAt_ != null ? other.createdAt_.Clone() : null;
+      updatedAt_ = other.updatedAt_ != null ? other.updatedAt_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public WebhookDeliveryAttempt Clone() {
+      return new WebhookDeliveryAttempt(this);
+    }
+
+    /// <summary>Field number for the "attempt_id" field.</summary>
+    public const int AttemptIdFieldNumber = 1;
+    private string attemptId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"primaryKey;column:attempt_id;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string AttemptId {
+      get { return attemptId_; }
+      set {
+        attemptId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "subscription_id" field.</summary>
+    public const int SubscriptionIdFieldNumber = 2;
+    private string subscriptionId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:subscription_id;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SubscriptionId {
+      get { return subscriptionId_; }
+      set {
+        subscriptionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "notification_id" field.</summary>
+    public const int NotificationIdFieldNumber = 3;
+    private string notificationId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:notification_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string NotificationId {
+      get { return notificationId_; }
+      set {
+        notificationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "lifecycle_event" field.</summary>
+    public const int LifecycleEventFieldNumber = 4;
+    private string lifecycleEvent_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:lifecycle_event;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string LifecycleEvent {
+      get { return lifecycleEvent_; }
+      set {
+        lifecycleEvent_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "source_topic" field.</summary>
+    public const int SourceTopicFieldNumber = 5;
+    private string sourceTopic_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:source_topic"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SourceTopic {
+      get { return sourceTopic_; }
+      set {
+        sourceTopic_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "payload" field.</summary>
+    public const int PayloadFieldNumber = 6;
+    private string payload_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:payload;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Payload {
+      get { return payload_; }
+      set {
+        payload_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "status" field.</summary>
+    public const int StatusFieldNumber = 7;
+    private string status_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:status;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Status {
+      get { return status_; }
+      set {
+        status_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "response_status" field.</summary>
+    public const int ResponseStatusFieldNumber = 8;
+    private int responseStatus_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:response_status"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ResponseStatus {
+      get { return responseStatus_; }
+      set {
+        responseStatus_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "response_body" field.</summary>
+    public const int ResponseBodyFieldNumber = 9;
+    private string responseBody_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:response_body"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ResponseBody {
+      get { return responseBody_; }
+      set {
+        responseBody_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "retry_count" field.</summary>
+    public const int RetryCountFieldNumber = 10;
+    private int retryCount_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:retry_count;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RetryCount {
+      get { return retryCount_; }
+      set {
+        retryCount_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "error_message" field.</summary>
+    public const int ErrorMessageFieldNumber = 11;
+    private string errorMessage_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:error_message"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ErrorMessage {
+      get { return errorMessage_; }
+      set {
+        errorMessage_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "scheduled_at" field.</summary>
+    public const int ScheduledAtFieldNumber = 12;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp scheduledAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp ScheduledAt {
+      get { return scheduledAt_; }
+      set {
+        scheduledAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "last_attempted_at" field.</summary>
+    public const int LastAttemptedAtFieldNumber = 13;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp lastAttemptedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:last_attempted_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp LastAttemptedAt {
+      get { return lastAttemptedAt_; }
+      set {
+        lastAttemptedAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "created_at" field.</summary>
+    public const int CreatedAtFieldNumber = 14;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp createdAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp CreatedAt {
+      get { return createdAt_; }
+      set {
+        createdAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "updated_at" field.</summary>
+    public const int UpdatedAtFieldNumber = 15;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp updatedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp UpdatedAt {
+      get { return updatedAt_; }
+      set {
+        updatedAt_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as WebhookDeliveryAttempt);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(WebhookDeliveryAttempt other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (AttemptId != other.AttemptId) return false;
+      if (SubscriptionId != other.SubscriptionId) return false;
+      if (NotificationId != other.NotificationId) return false;
+      if (LifecycleEvent != other.LifecycleEvent) return false;
+      if (SourceTopic != other.SourceTopic) return false;
+      if (Payload != other.Payload) return false;
+      if (Status != other.Status) return false;
+      if (ResponseStatus != other.ResponseStatus) return false;
+      if (ResponseBody != other.ResponseBody) return false;
+      if (RetryCount != other.RetryCount) return false;
+      if (ErrorMessage != other.ErrorMessage) return false;
+      if (!object.Equals(ScheduledAt, other.ScheduledAt)) return false;
+      if (!object.Equals(LastAttemptedAt, other.LastAttemptedAt)) return false;
+      if (!object.Equals(CreatedAt, other.CreatedAt)) return false;
+      if (!object.Equals(UpdatedAt, other.UpdatedAt)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (AttemptId.Length != 0) hash ^= AttemptId.GetHashCode();
+      if (SubscriptionId.Length != 0) hash ^= SubscriptionId.GetHashCode();
+      if (NotificationId.Length != 0) hash ^= NotificationId.GetHashCode();
+      if (LifecycleEvent.Length != 0) hash ^= LifecycleEvent.GetHashCode();
+      if (SourceTopic.Length != 0) hash ^= SourceTopic.GetHashCode();
+      if (Payload.Length != 0) hash ^= Payload.GetHashCode();
+      if (Status.Length != 0) hash ^= Status.GetHashCode();
+      if (ResponseStatus != 0) hash ^= ResponseStatus.GetHashCode();
+      if (ResponseBody.Length != 0) hash ^= ResponseBody.GetHashCode();
+      if (RetryCount != 0) hash ^= RetryCount.GetHashCode();
+      if (ErrorMessage.Length != 0) hash ^= ErrorMessage.GetHashCode();
+      if (scheduledAt_ != null) hash ^= ScheduledAt.GetHashCode();
+      if (lastAttemptedAt_ != null) hash ^= LastAttemptedAt.GetHashCode();
+      if (createdAt_ != null) hash ^= CreatedAt.GetHashCode();
+      if (updatedAt_ != null) hash ^= UpdatedAt.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (AttemptId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(AttemptId);
+      }
+      if (SubscriptionId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SubscriptionId);
+      }
+      if (NotificationId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(NotificationId);
+      }
+      if (LifecycleEvent.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(LifecycleEvent);
+      }
+      if (SourceTopic.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(SourceTopic);
+      }
+      if (Payload.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Payload);
+      }
+      if (Status.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Status);
+      }
+      if (ResponseStatus != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(ResponseStatus);
+      }
+      if (ResponseBody.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(ResponseBody);
+      }
+      if (RetryCount != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(RetryCount);
+      }
+      if (ErrorMessage.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(ErrorMessage);
+      }
+      if (scheduledAt_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(ScheduledAt);
+      }
+      if (lastAttemptedAt_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(LastAttemptedAt);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(114);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(122);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (AttemptId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(AttemptId);
+      }
+      if (SubscriptionId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SubscriptionId);
+      }
+      if (NotificationId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(NotificationId);
+      }
+      if (LifecycleEvent.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(LifecycleEvent);
+      }
+      if (SourceTopic.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(SourceTopic);
+      }
+      if (Payload.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(Payload);
+      }
+      if (Status.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Status);
+      }
+      if (ResponseStatus != 0) {
+        output.WriteRawTag(64);
+        output.WriteInt32(ResponseStatus);
+      }
+      if (ResponseBody.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(ResponseBody);
+      }
+      if (RetryCount != 0) {
+        output.WriteRawTag(80);
+        output.WriteInt32(RetryCount);
+      }
+      if (ErrorMessage.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(ErrorMessage);
+      }
+      if (scheduledAt_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(ScheduledAt);
+      }
+      if (lastAttemptedAt_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(LastAttemptedAt);
+      }
+      if (createdAt_ != null) {
+        output.WriteRawTag(114);
+        output.WriteMessage(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        output.WriteRawTag(122);
+        output.WriteMessage(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (AttemptId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AttemptId);
+      }
+      if (SubscriptionId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SubscriptionId);
+      }
+      if (NotificationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(NotificationId);
+      }
+      if (LifecycleEvent.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(LifecycleEvent);
+      }
+      if (SourceTopic.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SourceTopic);
+      }
+      if (Payload.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Payload);
+      }
+      if (Status.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Status);
+      }
+      if (ResponseStatus != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ResponseStatus);
+      }
+      if (ResponseBody.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ResponseBody);
+      }
+      if (RetryCount != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RetryCount);
+      }
+      if (ErrorMessage.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ErrorMessage);
+      }
+      if (scheduledAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(ScheduledAt);
+      }
+      if (lastAttemptedAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(LastAttemptedAt);
+      }
+      if (createdAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CreatedAt);
+      }
+      if (updatedAt_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(UpdatedAt);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(WebhookDeliveryAttempt other) {
+      if (other == null) {
+        return;
+      }
+      if (other.AttemptId.Length != 0) {
+        AttemptId = other.AttemptId;
+      }
+      if (other.SubscriptionId.Length != 0) {
+        SubscriptionId = other.SubscriptionId;
+      }
+      if (other.NotificationId.Length != 0) {
+        NotificationId = other.NotificationId;
+      }
+      if (other.LifecycleEvent.Length != 0) {
+        LifecycleEvent = other.LifecycleEvent;
+      }
+      if (other.SourceTopic.Length != 0) {
+        SourceTopic = other.SourceTopic;
+      }
+      if (other.Payload.Length != 0) {
+        Payload = other.Payload;
+      }
+      if (other.Status.Length != 0) {
+        Status = other.Status;
+      }
+      if (other.ResponseStatus != 0) {
+        ResponseStatus = other.ResponseStatus;
+      }
+      if (other.ResponseBody.Length != 0) {
+        ResponseBody = other.ResponseBody;
+      }
+      if (other.RetryCount != 0) {
+        RetryCount = other.RetryCount;
+      }
+      if (other.ErrorMessage.Length != 0) {
+        ErrorMessage = other.ErrorMessage;
+      }
+      if (other.scheduledAt_ != null) {
+        if (scheduledAt_ == null) {
+          ScheduledAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        ScheduledAt.MergeFrom(other.ScheduledAt);
+      }
+      if (other.lastAttemptedAt_ != null) {
+        if (lastAttemptedAt_ == null) {
+          LastAttemptedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        LastAttemptedAt.MergeFrom(other.LastAttemptedAt);
+      }
+      if (other.createdAt_ != null) {
+        if (createdAt_ == null) {
+          CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        CreatedAt.MergeFrom(other.CreatedAt);
+      }
+      if (other.updatedAt_ != null) {
+        if (updatedAt_ == null) {
+          UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        UpdatedAt.MergeFrom(other.UpdatedAt);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            AttemptId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SubscriptionId = input.ReadString();
+            break;
+          }
+          case 26: {
+            NotificationId = input.ReadString();
+            break;
+          }
+          case 34: {
+            LifecycleEvent = input.ReadString();
+            break;
+          }
+          case 42: {
+            SourceTopic = input.ReadString();
+            break;
+          }
+          case 50: {
+            Payload = input.ReadString();
+            break;
+          }
+          case 58: {
+            Status = input.ReadString();
+            break;
+          }
+          case 64: {
+            ResponseStatus = input.ReadInt32();
+            break;
+          }
+          case 74: {
+            ResponseBody = input.ReadString();
+            break;
+          }
+          case 80: {
+            RetryCount = input.ReadInt32();
+            break;
+          }
+          case 90: {
+            ErrorMessage = input.ReadString();
+            break;
+          }
+          case 98: {
+            if (scheduledAt_ == null) {
+              ScheduledAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ScheduledAt);
+            break;
+          }
+          case 106: {
+            if (lastAttemptedAt_ == null) {
+              LastAttemptedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(LastAttemptedAt);
+            break;
+          }
+          case 114: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 122: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            AttemptId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SubscriptionId = input.ReadString();
+            break;
+          }
+          case 26: {
+            NotificationId = input.ReadString();
+            break;
+          }
+          case 34: {
+            LifecycleEvent = input.ReadString();
+            break;
+          }
+          case 42: {
+            SourceTopic = input.ReadString();
+            break;
+          }
+          case 50: {
+            Payload = input.ReadString();
+            break;
+          }
+          case 58: {
+            Status = input.ReadString();
+            break;
+          }
+          case 64: {
+            ResponseStatus = input.ReadInt32();
+            break;
+          }
+          case 74: {
+            ResponseBody = input.ReadString();
+            break;
+          }
+          case 80: {
+            RetryCount = input.ReadInt32();
+            break;
+          }
+          case 90: {
+            ErrorMessage = input.ReadString();
+            break;
+          }
+          case 98: {
+            if (scheduledAt_ == null) {
+              ScheduledAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ScheduledAt);
+            break;
+          }
+          case 106: {
+            if (lastAttemptedAt_ == null) {
+              LastAttemptedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(LastAttemptedAt);
+            break;
+          }
+          case 114: {
+            if (createdAt_ == null) {
+              CreatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(CreatedAt);
+            break;
+          }
+          case 122: {
+            if (updatedAt_ == null) {
+              UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(UpdatedAt);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  /// <summary>
   /// NotificationPreference for user preferences (stored in users table as JSONB or separate table)
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -1656,7 +3876,7 @@ namespace Insuretech.Notification.Entity.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[2]; }
+      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[5]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -2003,7 +4223,7 @@ namespace Insuretech.Notification.Entity.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[3]; }
+      get { return global::Insuretech.Notification.Entity.V1.NotificationReflection.Descriptor.MessageTypes[6]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

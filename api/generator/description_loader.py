@@ -9,6 +9,12 @@ import re
 from typing import Optional, Dict
 from pathlib import Path
 
+WORD_RE = re.compile(r'[A-Z]+(?=[A-Z][a-z0-9]|\b)|[A-Z]?[a-z]+|[0-9]+')
+UPPERCASE_TOKENS = {
+    'api', 'otp', 'totp', 'jwt', 'jwks', 'csrf', 'kyc', 'mfa', 'id', 'url', 'sms',
+    'email', 'pdf', 'uuid', 'http', 'https', 'ip', 'ui', 'db',
+}
+
 
 class DescriptionLoader:
     """Loads descriptions from markdown files and proto comments"""
@@ -191,26 +197,53 @@ class DescriptionLoader:
         parts = full_name.split('.')
         name = parts[-1]
         
-        # Convert PascalCase to readable text
-        readable = re.sub(r'([A-Z])', r' \1', name).strip().lower()
+        readable = self._humanize_identifier(name)
         
         return f"Represents a {readable} entity"
     
     def _generate_operation_description(self, operation_name: str) -> Dict[str, str]:
         """Generate default operation description"""
-        # CreatePolicy → Create a policy
-        readable = re.sub(r'([A-Z])', r' \1', operation_name).strip().lower()
+        readable = self._humanize_identifier(operation_name)
+        summary = self._sentence_case_identifier(operation_name)
         
         return {
-            'summary': f"{readable.capitalize()}",
+            'summary': summary,
             'description': f"Performs {readable} operation"
         }
     
     def _generate_field_description(self, field_name: str) -> str:
         """Generate default field description"""
         # policy_id → Policy identifier
-        readable = field_name.replace('_', ' ')
-        return f"{readable.capitalize()}"
+        readable = self._humanize_identifier(field_name)
+        return f"{readable[:1].upper()}{readable[1:]}" if readable else ""
+
+    def _humanize_identifier(self, value: str) -> str:
+        """Convert snake_case / PascalCase / camelCase into readable text while preserving acronyms."""
+        if not value:
+            return ""
+        normalized = value.replace('_', ' ').replace('-', ' ')
+        tokens: list[str] = []
+        for chunk in normalized.split():
+            parts = WORD_RE.findall(chunk) or [chunk]
+            for part in parts:
+                lower = part.lower()
+                if lower in UPPERCASE_TOKENS:
+                    tokens.append(lower.upper())
+                else:
+                    tokens.append(lower)
+        return ' '.join(tokens)
+
+    def _sentence_case_identifier(self, value: str) -> str:
+        """Humanize an identifier for use as an OpenAPI summary."""
+        tokens = self._humanize_identifier(value).split()
+        if not tokens:
+            return ""
+        first = tokens[0]
+        if first.lower() in UPPERCASE_TOKENS:
+            tokens[0] = first.upper()
+        else:
+            tokens[0] = first.capitalize()
+        return ' '.join(tokens)
     
     def create_template(self, full_name: str, message_data: dict) -> str:
         """

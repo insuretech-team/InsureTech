@@ -5,9 +5,16 @@
  * GET  → List documents for an entity (GET /v1/entities/{entity_type}/{entity_id}/documents)
  */
 import { NextResponse } from "next/server";
-import { makeDocgenClient } from "@lib/sdk/docgen-sdk-client";
+import { makeDocgenClient } from "@lib/sdk/b2b-sdk-client";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
-import type { GenerateDocumentPayload } from "@lib/sdk/docgen-sdk-client";
+
+type GenerateDocumentPayload = {
+  template_id: string;
+  entity_type: string;
+  entity_id: string;
+  data?: Record<string, unknown>;
+  include_qr_code?: boolean;
+};
 
 export async function POST(request: Request) {
   try {

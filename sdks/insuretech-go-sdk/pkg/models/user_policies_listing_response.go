@@ -5,5 +5,4 @@ package models
 type UserPoliciesListingResponse struct {
 	Policies []*Policy `json:"policies,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

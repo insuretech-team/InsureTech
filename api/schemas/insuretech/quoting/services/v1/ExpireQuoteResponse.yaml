@@ -1,0 +1,7 @@
+ExpireQuoteResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for expire quote operation. Returns operation results
+    and status.

@@ -6,7 +6,6 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 
@@ -16,10 +15,13 @@ import (
 	fraudgrpc "github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/grpc"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/interceptors"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	fraudservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/services/v1"
 	opsconfig "github.com/newage-saint/insuretech/ops/config"
@@ -27,7 +29,6 @@ import (
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
@@ -36,15 +37,7 @@ import (
 )
 
 // ServicesConfig matches backend/inscore/configs/services.yaml structure.
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	if err := appLogger.Initialize(appLogger.NoFileConfig()); err != nil {
@@ -116,7 +109,7 @@ func main() {
 
 	fraudSvcLogic := service.NewFraudService(ruleRepo, alertRepo, caseRepo, eventPublisher)
 	consumer := events.NewConsumer(fraudSvcLogic)
-	consumerGroup, consumerErr := kafkaconsumer.NewConsumerGroup(kafkaconsumer.Config{
+	consumerGroup, consumerErr := kafkaapp.StartConsumerGroup(kafkaconsumer.Config{
 		Brokers: cfg.Kafka.Brokers,
 		GroupID: cfg.Kafka.ConsumerGroup,
 		Topics:  cfg.Kafka.ConsumerTopics,
@@ -129,11 +122,7 @@ func main() {
 	if consumerErr != nil {
 		appLogger.Warn("Kafka consumer group failed to start — fraud async checks disabled", zap.Error(consumerErr))
 	} else {
-		consumerCtx, consumerCancel := context.WithCancel(context.Background())
-		defer consumerCancel()
-		go consumerGroup.Start(consumerCtx)
 		defer func() {
-			consumerCancel()
 			_ = consumerGroup.Close()
 		}()
 		appLogger.Info("Kafka consumer group started", zap.Strings("topics", cfg.Kafka.ConsumerTopics))
@@ -145,7 +134,7 @@ func main() {
 		appLogger.Fatal("authz address is empty; configure AUTHZ_SERVICE_ADDRESS or services.yaml entry")
 	}
 	appLogger.Info("connecting to authz", zap.String("address", authzAddr))
-	authzConn, err := grpc.Dial(authzAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	authzConn, err := grpcclient.NewClient(authzAddr)
 	if err != nil {
 		appLogger.Fatal("failed to connect to authz", zap.Error(err), zap.String("address", authzAddr))
 	}
@@ -201,22 +190,8 @@ func main() {
 	}
 }
 
-func resolveServiceAddr(explicit string, services map[string]struct {
-	Name  string `yaml:"name"`
-	Ports struct {
-		Grpc int `yaml:"grpc"`
-		Http int `yaml:"http"`
-	} `yaml:"ports"`
-}, key string) string {
-	v := strings.TrimSpace(explicit)
-	if v != "" {
-		return v
-	}
-	svc, ok := services[key]
-	if !ok || svc.Ports.Grpc <= 0 {
-		return ""
-	}
-	return key + ":" + strconv.Itoa(svc.Ports.Grpc)
+func resolveServiceAddr(explicit string, services map[string]serviceaddr.Service, key string) string {
+	return serviceaddr.ResolveFromServicesMap(explicit, services, os.Getenv("FRAUD_SERVICE_DISCOVERY_HOST"), key)
 }
 
 func loggingInterceptor() grpc.UnaryServerInterceptor {

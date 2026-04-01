@@ -1,0 +1,34 @@
+RatingFormulaUpdateRequest:
+  type: object
+  properties:
+    formula_id:
+      type: string
+    formula_name:
+      type: string
+    description:
+      type: string
+    category:
+      $ref: '#/components/schemas/FormulaCategory'
+    formula_expression:
+      type: string
+    variables:
+      type: array
+      items:
+        $ref: '#/components/schemas/ActuarialVariable'
+    sort_order:
+      type: integer
+      format: int32
+    valid_until:
+      type: string
+      format: date-time
+    create_new_version:
+      type: boolean
+    updated_by:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing rating formula update. Contains
+    fields to be modified.

@@ -1,0 +1,14 @@
+BusinessWorkflowsListingResponse:
+  type: object
+  properties:
+    workflows:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessWorkflowDefinition'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for business workflows listing operation. Returns
+    operation results and status.

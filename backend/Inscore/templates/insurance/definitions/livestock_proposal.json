@@ -1,0 +1,95 @@
+{
+  "id": "livestock_proposal",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "LIVESTOCK INSURANCE PROPOSAL FORM" },
+    { "type": "subtitle", "text": "(To be submitted in duplicate)", "italic": true, "size": 9 },
+    { "type": "divider" },
+    { "type": "notice", "text": "Acceptance of this proposal is subject to the rules & regulations of the Company. Please answer all questions fully and accurately. Any misrepresentation may invalidate the policy." },
+    { "type": "heading", "text": "I.  PROPOSER / INSURED DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Full Name of Proposer / Organization", "value": "{{ proposer_name }}" },
+        { "number": "2.", "label": "ID Card / Company Registration No.", "value": "{{ id_card_number }}" },
+        { "number": "3.", "label": "Phone Number & Mobile", "value": "{{ phone_number }}" },
+        { "number": "4.", "label": "Email Address", "value": "{{ email_address }}" },
+        { "number": "5.", "label": "Occupation / Nature of Business", "value": "{{ occupation }}" },
+        { "number": "6.", "label": "Correspondence Address", "value": "{{ address }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  FARM / RISK LOCATION DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Farm / Risk Location Name", "value": "{{ farm_name }}" },
+        { "number": "2.", "label": "Farm / Risk Address", "value": "{{ farm_address }}" },
+        { "number": "3.", "label": "District / Upazila", "value": "{{ district_upazila }}" },
+        { "number": "4.", "label": "Type of Farm", "value": "{{ farm_type }}" },
+        { "number": "5.", "label": "Years in Livestock Business", "value": "{{ years_in_business }}" },
+        { "number": "6.", "label": "Nearest Veterinary Officer (Name & Contact)", "value": "{{ vet_officer }}" }
+      ]
+    },
+    { "type": "heading", "text": "III.  LIVESTOCK / ANIMAL SCHEDULE", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Animal Type / Breed", "Age", "Sex", "Tag / Ear No.", "Estimated Value (Tk.)", "Sum Insured (Tk.)"],
+      "rows_key": "animal_schedule",
+      "columns": ["number", "animal_type", "age", "sex", "tag_number", "estimated_value", "sum_insured"],
+      "col_widths": [0.3, 1.5, 0.5, 0.5, 0.8, 1.43, 1.43]
+    },
+    { "type": "heading", "text": "IV.  HEALTH & MANAGEMENT DECLARATIONS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 4.0,
+      "rows": [
+        { "number": "1.", "label": "Are all animals in good health at the time of proposal?", "value": "{{ q1_good_health }}" },
+        { "number": "2.", "label": "Have any animals died or been slaughtered in the past 12 months due to disease?", "value": "{{ q2_recent_deaths }}" },
+        { "number": "3.", "label": "Has any epidemic or contagious disease occurred on the farm in the past 24 months?", "value": "{{ q3_disease_history }}" },
+        { "number": "4.", "label": "Are the animals regularly vaccinated? (State schedule)", "value": "{{ q4_vaccination }}" },
+        { "number": "5.", "label": "Are the animals housed / sheltered?", "value": "{{ q5_sheltered }}" },
+        { "number": "6.", "label": "Name and address of attending veterinary surgeon:", "value": "{{ q6_vet_surgeon }}" },
+        { "number": "7.", "label": "Have you previously held livestock insurance? If yes, state insurer and outcome:", "value": "{{ q7_previous_insurance }}" }
+      ]
+    },
+    { "type": "heading", "text": "V.  PREMIUM SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Total Sum Insured (Tk.)", "value": "{{ total_sum_insured }}" },
+        { "number": "", "label": "Coverage Period From", "value": "{{ coverage_start_date }}" },
+        { "number": "", "label": "Coverage Period To", "value": "{{ coverage_end_date }}" },
+        { "number": "", "label": "Basic Premium (Tk.)", "value": "{{ basic_premium }}" },
+        { "number": "", "label": "Stamp Duty (Tk.)", "value": "{{ stamp_duty }}" },
+        { "number": "", "label": "VAT (7%) (Tk.)", "value": "{{ vat_amount }}" },
+        { "number": "", "label": "TOTAL PREMIUM (Tk.)", "value": "{{ total_premium }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/We hereby declare that all statements made in this proposal are true and complete. I/We agree that this proposal shall form the basis of the contract of insurance. I/We consent to the collection and use of personal data for insurance processing purposes."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer / Insured Signature & Date", "name": "{{ proposer_name }}" },
+        { "label": "Agent / Broker Signature & Date", "name": "{{ agent_name }}" },
+        { "label": "For & On Behalf of Insurer", "name": "" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Proposal Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

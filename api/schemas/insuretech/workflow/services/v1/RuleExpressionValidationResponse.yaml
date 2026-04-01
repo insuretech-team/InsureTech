@@ -1,0 +1,11 @@
+RuleExpressionValidationResponse:
+  type: object
+  properties:
+    is_valid:
+      type: boolean
+    error_message:
+      type: string
+    test_passed:
+      type: boolean
+  description: Response payload for rule expression validation operation. Returns
+    operation results and status.

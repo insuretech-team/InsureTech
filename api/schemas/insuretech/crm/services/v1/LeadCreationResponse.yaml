@@ -1,0 +1,7 @@
+LeadCreationResponse:
+  type: object
+  properties:
+    lead:
+      $ref: '#/components/schemas/Lead'
+  description: Response payload for lead creation operation. Returns operation results
+    and status.

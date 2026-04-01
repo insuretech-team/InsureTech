@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -10,15 +10,14 @@
   <ItemGroup>
     <ProjectReference Include="..\PoliSync.SharedKernel\PoliSync.SharedKernel.csproj" />
     <ProjectReference Include="..\PoliSync.Infrastructure\PoliSync.Infrastructure.csproj" />
+    <ProjectReference Include="..\PoliSync.Workflow\PoliSync.Workflow.csproj" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="MediatR" Version="14.1.0" />
-    <PackageReference Include="FluentValidation" Version="12.1.1" />
-    <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
+    <PackageReference Include="MediatR" Version="12.2.0" />
+    <PackageReference Include="FluentValidation" Version="11.9.0" />
+    <PackageReference Include="Grpc.AspNetCore" Version="2.60.0" />
     <PackageReference Include="Google.Protobuf" Version="3.25.1" />
   </ItemGroup>
 
 </Project>
-
-

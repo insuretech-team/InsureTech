@@ -1,0 +1,14 @@
+LifeQuotesListingResponse:
+  type: object
+  properties:
+    quotes:
+      type: array
+      items:
+        $ref: '#/components/schemas/LifeQuote'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for quotes listing operation. Returns operation results
+    and status.

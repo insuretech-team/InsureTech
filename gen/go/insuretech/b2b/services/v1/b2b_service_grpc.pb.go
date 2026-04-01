@@ -19,30 +19,34 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	B2BService_CreateOrganisation_FullMethodName       = "/insuretech.b2b.services.v1.B2BService/CreateOrganisation"
-	B2BService_GetOrganisation_FullMethodName          = "/insuretech.b2b.services.v1.B2BService/GetOrganisation"
-	B2BService_ListOrganisations_FullMethodName        = "/insuretech.b2b.services.v1.B2BService/ListOrganisations"
-	B2BService_UpdateOrganisation_FullMethodName       = "/insuretech.b2b.services.v1.B2BService/UpdateOrganisation"
-	B2BService_DeleteOrganisation_FullMethodName       = "/insuretech.b2b.services.v1.B2BService/DeleteOrganisation"
-	B2BService_ListOrgMembers_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/ListOrgMembers"
-	B2BService_AddOrgMember_FullMethodName             = "/insuretech.b2b.services.v1.B2BService/AddOrgMember"
-	B2BService_AssignOrgAdmin_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/AssignOrgAdmin"
-	B2BService_RemoveOrgMember_FullMethodName          = "/insuretech.b2b.services.v1.B2BService/RemoveOrgMember"
-	B2BService_ResolveMyOrganisation_FullMethodName    = "/insuretech.b2b.services.v1.B2BService/ResolveMyOrganisation"
-	B2BService_ListDepartments_FullMethodName          = "/insuretech.b2b.services.v1.B2BService/ListDepartments"
-	B2BService_GetDepartment_FullMethodName            = "/insuretech.b2b.services.v1.B2BService/GetDepartment"
-	B2BService_CreateDepartment_FullMethodName         = "/insuretech.b2b.services.v1.B2BService/CreateDepartment"
-	B2BService_UpdateDepartment_FullMethodName         = "/insuretech.b2b.services.v1.B2BService/UpdateDepartment"
-	B2BService_DeleteDepartment_FullMethodName         = "/insuretech.b2b.services.v1.B2BService/DeleteDepartment"
-	B2BService_ListEmployees_FullMethodName            = "/insuretech.b2b.services.v1.B2BService/ListEmployees"
-	B2BService_GetEmployee_FullMethodName              = "/insuretech.b2b.services.v1.B2BService/GetEmployee"
-	B2BService_CreateEmployee_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/CreateEmployee"
-	B2BService_UpdateEmployee_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/UpdateEmployee"
-	B2BService_DeleteEmployee_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/DeleteEmployee"
-	B2BService_ListPurchaseOrderCatalog_FullMethodName = "/insuretech.b2b.services.v1.B2BService/ListPurchaseOrderCatalog"
-	B2BService_ListPurchaseOrders_FullMethodName       = "/insuretech.b2b.services.v1.B2BService/ListPurchaseOrders"
-	B2BService_GetPurchaseOrder_FullMethodName         = "/insuretech.b2b.services.v1.B2BService/GetPurchaseOrder"
-	B2BService_CreatePurchaseOrder_FullMethodName      = "/insuretech.b2b.services.v1.B2BService/CreatePurchaseOrder"
+	B2BService_CreateOrganisation_FullMethodName             = "/insuretech.b2b.services.v1.B2BService/CreateOrganisation"
+	B2BService_GetOrganisation_FullMethodName                = "/insuretech.b2b.services.v1.B2BService/GetOrganisation"
+	B2BService_ListOrganisations_FullMethodName              = "/insuretech.b2b.services.v1.B2BService/ListOrganisations"
+	B2BService_UpdateOrganisation_FullMethodName             = "/insuretech.b2b.services.v1.B2BService/UpdateOrganisation"
+	B2BService_DeleteOrganisation_FullMethodName             = "/insuretech.b2b.services.v1.B2BService/DeleteOrganisation"
+	B2BService_ListOrgMembers_FullMethodName                 = "/insuretech.b2b.services.v1.B2BService/ListOrgMembers"
+	B2BService_AddOrgMember_FullMethodName                   = "/insuretech.b2b.services.v1.B2BService/AddOrgMember"
+	B2BService_AssignOrgAdmin_FullMethodName                 = "/insuretech.b2b.services.v1.B2BService/AssignOrgAdmin"
+	B2BService_RemoveOrgMember_FullMethodName                = "/insuretech.b2b.services.v1.B2BService/RemoveOrgMember"
+	B2BService_ResolveMyOrganisation_FullMethodName          = "/insuretech.b2b.services.v1.B2BService/ResolveMyOrganisation"
+	B2BService_ListDepartments_FullMethodName                = "/insuretech.b2b.services.v1.B2BService/ListDepartments"
+	B2BService_GetDepartment_FullMethodName                  = "/insuretech.b2b.services.v1.B2BService/GetDepartment"
+	B2BService_CreateDepartment_FullMethodName               = "/insuretech.b2b.services.v1.B2BService/CreateDepartment"
+	B2BService_UpdateDepartment_FullMethodName               = "/insuretech.b2b.services.v1.B2BService/UpdateDepartment"
+	B2BService_DeleteDepartment_FullMethodName               = "/insuretech.b2b.services.v1.B2BService/DeleteDepartment"
+	B2BService_ListEmployees_FullMethodName                  = "/insuretech.b2b.services.v1.B2BService/ListEmployees"
+	B2BService_GetEmployee_FullMethodName                    = "/insuretech.b2b.services.v1.B2BService/GetEmployee"
+	B2BService_ListEmployeeLoginOrganisations_FullMethodName = "/insuretech.b2b.services.v1.B2BService/ListEmployeeLoginOrganisations"
+	B2BService_CreateEmployee_FullMethodName                 = "/insuretech.b2b.services.v1.B2BService/CreateEmployee"
+	B2BService_UpdateEmployee_FullMethodName                 = "/insuretech.b2b.services.v1.B2BService/UpdateEmployee"
+	B2BService_DeleteEmployee_FullMethodName                 = "/insuretech.b2b.services.v1.B2BService/DeleteEmployee"
+	B2BService_ActivateEmployee_FullMethodName               = "/insuretech.b2b.services.v1.B2BService/ActivateEmployee"
+	B2BService_GetMyEmployeeProfile_FullMethodName           = "/insuretech.b2b.services.v1.B2BService/GetMyEmployeeProfile"
+	B2BService_GetMyEmployeeCoverage_FullMethodName          = "/insuretech.b2b.services.v1.B2BService/GetMyEmployeeCoverage"
+	B2BService_ListPurchaseOrderCatalog_FullMethodName       = "/insuretech.b2b.services.v1.B2BService/ListPurchaseOrderCatalog"
+	B2BService_ListPurchaseOrders_FullMethodName             = "/insuretech.b2b.services.v1.B2BService/ListPurchaseOrders"
+	B2BService_GetPurchaseOrder_FullMethodName               = "/insuretech.b2b.services.v1.B2BService/GetPurchaseOrder"
+	B2BService_CreatePurchaseOrder_FullMethodName            = "/insuretech.b2b.services.v1.B2BService/CreatePurchaseOrder"
 )
 
 // B2BServiceClient is the client API for B2BService service.
@@ -90,12 +94,21 @@ type B2BServiceClient interface {
 	ListEmployees(ctx context.Context, in *ListEmployeesRequest, opts ...grpc.CallOption) (*ListEmployeesResponse, error)
 	// Get a single employee by employee_uuid.
 	GetEmployee(ctx context.Context, in *GetEmployeeRequest, opts ...grpc.CallOption) (*GetEmployeeResponse, error)
+	// List organisations matching a partial name/code for employee activation.
+	ListEmployeeLoginOrganisations(ctx context.Context, in *ListEmployeeLoginOrganisationsRequest, opts ...grpc.CallOption) (*ListEmployeeLoginOrganisationsResponse, error)
 	// Create a new employee.
 	CreateEmployee(ctx context.Context, in *CreateEmployeeRequest, opts ...grpc.CallOption) (*CreateEmployeeResponse, error)
 	// Update an existing employee's details.
 	UpdateEmployee(ctx context.Context, in *UpdateEmployeeRequest, opts ...grpc.CallOption) (*UpdateEmployeeResponse, error)
 	// Soft-delete an employee record.
 	DeleteEmployee(ctx context.Context, in *DeleteEmployeeRequest, opts ...grpc.CallOption) (*DeleteEmployeeResponse, error)
+	// Start employee self-service activation using organisation code +
+	// employee_id + email.
+	ActivateEmployee(ctx context.Context, in *ActivateEmployeeRequest, opts ...grpc.CallOption) (*ActivateEmployeeResponse, error)
+	// Resolve the authenticated employee's own profile.
+	GetMyEmployeeProfile(ctx context.Context, in *GetMyEmployeeProfileRequest, opts ...grpc.CallOption) (*GetMyEmployeeProfileResponse, error)
+	// Resolve the authenticated employee's assigned plan and coverage.
+	GetMyEmployeeCoverage(ctx context.Context, in *GetMyEmployeeCoverageRequest, opts ...grpc.CallOption) (*GetMyEmployeeCoverageResponse, error)
 	// List purchasable product plans for purchase orders.
 	ListPurchaseOrderCatalog(ctx context.Context, in *ListPurchaseOrderCatalogRequest, opts ...grpc.CallOption) (*ListPurchaseOrderCatalogResponse, error)
 	// List purchase orders for the authenticated organisation.
@@ -284,6 +297,16 @@ func (c *b2BServiceClient) GetEmployee(ctx context.Context, in *GetEmployeeReque
 	return out, nil
 }
 
+func (c *b2BServiceClient) ListEmployeeLoginOrganisations(ctx context.Context, in *ListEmployeeLoginOrganisationsRequest, opts ...grpc.CallOption) (*ListEmployeeLoginOrganisationsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListEmployeeLoginOrganisationsResponse)
+	err := c.cc.Invoke(ctx, B2BService_ListEmployeeLoginOrganisations_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *b2BServiceClient) CreateEmployee(ctx context.Context, in *CreateEmployeeRequest, opts ...grpc.CallOption) (*CreateEmployeeResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreateEmployeeResponse)
@@ -308,6 +331,36 @@ func (c *b2BServiceClient) DeleteEmployee(ctx context.Context, in *DeleteEmploye
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(DeleteEmployeeResponse)
 	err := c.cc.Invoke(ctx, B2BService_DeleteEmployee_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *b2BServiceClient) ActivateEmployee(ctx context.Context, in *ActivateEmployeeRequest, opts ...grpc.CallOption) (*ActivateEmployeeResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ActivateEmployeeResponse)
+	err := c.cc.Invoke(ctx, B2BService_ActivateEmployee_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *b2BServiceClient) GetMyEmployeeProfile(ctx context.Context, in *GetMyEmployeeProfileRequest, opts ...grpc.CallOption) (*GetMyEmployeeProfileResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMyEmployeeProfileResponse)
+	err := c.cc.Invoke(ctx, B2BService_GetMyEmployeeProfile_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *b2BServiceClient) GetMyEmployeeCoverage(ctx context.Context, in *GetMyEmployeeCoverageRequest, opts ...grpc.CallOption) (*GetMyEmployeeCoverageResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetMyEmployeeCoverageResponse)
+	err := c.cc.Invoke(ctx, B2BService_GetMyEmployeeCoverage_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -399,12 +452,21 @@ type B2BServiceServer interface {
 	ListEmployees(context.Context, *ListEmployeesRequest) (*ListEmployeesResponse, error)
 	// Get a single employee by employee_uuid.
 	GetEmployee(context.Context, *GetEmployeeRequest) (*GetEmployeeResponse, error)
+	// List organisations matching a partial name/code for employee activation.
+	ListEmployeeLoginOrganisations(context.Context, *ListEmployeeLoginOrganisationsRequest) (*ListEmployeeLoginOrganisationsResponse, error)
 	// Create a new employee.
 	CreateEmployee(context.Context, *CreateEmployeeRequest) (*CreateEmployeeResponse, error)
 	// Update an existing employee's details.
 	UpdateEmployee(context.Context, *UpdateEmployeeRequest) (*UpdateEmployeeResponse, error)
 	// Soft-delete an employee record.
 	DeleteEmployee(context.Context, *DeleteEmployeeRequest) (*DeleteEmployeeResponse, error)
+	// Start employee self-service activation using organisation code +
+	// employee_id + email.
+	ActivateEmployee(context.Context, *ActivateEmployeeRequest) (*ActivateEmployeeResponse, error)
+	// Resolve the authenticated employee's own profile.
+	GetMyEmployeeProfile(context.Context, *GetMyEmployeeProfileRequest) (*GetMyEmployeeProfileResponse, error)
+	// Resolve the authenticated employee's assigned plan and coverage.
+	GetMyEmployeeCoverage(context.Context, *GetMyEmployeeCoverageRequest) (*GetMyEmployeeCoverageResponse, error)
 	// List purchasable product plans for purchase orders.
 	ListPurchaseOrderCatalog(context.Context, *ListPurchaseOrderCatalogRequest) (*ListPurchaseOrderCatalogResponse, error)
 	// List purchase orders for the authenticated organisation.
@@ -473,6 +535,9 @@ func (UnimplementedB2BServiceServer) ListEmployees(context.Context, *ListEmploye
 func (UnimplementedB2BServiceServer) GetEmployee(context.Context, *GetEmployeeRequest) (*GetEmployeeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetEmployee not implemented")
 }
+func (UnimplementedB2BServiceServer) ListEmployeeLoginOrganisations(context.Context, *ListEmployeeLoginOrganisationsRequest) (*ListEmployeeLoginOrganisationsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListEmployeeLoginOrganisations not implemented")
+}
 func (UnimplementedB2BServiceServer) CreateEmployee(context.Context, *CreateEmployeeRequest) (*CreateEmployeeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateEmployee not implemented")
 }
@@ -481,6 +546,15 @@ func (UnimplementedB2BServiceServer) UpdateEmployee(context.Context, *UpdateEmpl
 }
 func (UnimplementedB2BServiceServer) DeleteEmployee(context.Context, *DeleteEmployeeRequest) (*DeleteEmployeeResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteEmployee not implemented")
+}
+func (UnimplementedB2BServiceServer) ActivateEmployee(context.Context, *ActivateEmployeeRequest) (*ActivateEmployeeResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ActivateEmployee not implemented")
+}
+func (UnimplementedB2BServiceServer) GetMyEmployeeProfile(context.Context, *GetMyEmployeeProfileRequest) (*GetMyEmployeeProfileResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMyEmployeeProfile not implemented")
+}
+func (UnimplementedB2BServiceServer) GetMyEmployeeCoverage(context.Context, *GetMyEmployeeCoverageRequest) (*GetMyEmployeeCoverageResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetMyEmployeeCoverage not implemented")
 }
 func (UnimplementedB2BServiceServer) ListPurchaseOrderCatalog(context.Context, *ListPurchaseOrderCatalogRequest) (*ListPurchaseOrderCatalogResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPurchaseOrderCatalog not implemented")
@@ -820,6 +894,24 @@ func _B2BService_GetEmployee_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _B2BService_ListEmployeeLoginOrganisations_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListEmployeeLoginOrganisationsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(B2BServiceServer).ListEmployeeLoginOrganisations(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: B2BService_ListEmployeeLoginOrganisations_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(B2BServiceServer).ListEmployeeLoginOrganisations(ctx, req.(*ListEmployeeLoginOrganisationsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _B2BService_CreateEmployee_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreateEmployeeRequest)
 	if err := dec(in); err != nil {
@@ -870,6 +962,60 @@ func _B2BService_DeleteEmployee_Handler(srv interface{}, ctx context.Context, de
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(B2BServiceServer).DeleteEmployee(ctx, req.(*DeleteEmployeeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _B2BService_ActivateEmployee_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ActivateEmployeeRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(B2BServiceServer).ActivateEmployee(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: B2BService_ActivateEmployee_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(B2BServiceServer).ActivateEmployee(ctx, req.(*ActivateEmployeeRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _B2BService_GetMyEmployeeProfile_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyEmployeeProfileRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(B2BServiceServer).GetMyEmployeeProfile(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: B2BService_GetMyEmployeeProfile_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(B2BServiceServer).GetMyEmployeeProfile(ctx, req.(*GetMyEmployeeProfileRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _B2BService_GetMyEmployeeCoverage_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetMyEmployeeCoverageRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(B2BServiceServer).GetMyEmployeeCoverage(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: B2BService_GetMyEmployeeCoverage_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(B2BServiceServer).GetMyEmployeeCoverage(ctx, req.(*GetMyEmployeeCoverageRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1022,6 +1168,10 @@ var B2BService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _B2BService_GetEmployee_Handler,
 		},
 		{
+			MethodName: "ListEmployeeLoginOrganisations",
+			Handler:    _B2BService_ListEmployeeLoginOrganisations_Handler,
+		},
+		{
 			MethodName: "CreateEmployee",
 			Handler:    _B2BService_CreateEmployee_Handler,
 		},
@@ -1032,6 +1182,18 @@ var B2BService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteEmployee",
 			Handler:    _B2BService_DeleteEmployee_Handler,
+		},
+		{
+			MethodName: "ActivateEmployee",
+			Handler:    _B2BService_ActivateEmployee_Handler,
+		},
+		{
+			MethodName: "GetMyEmployeeProfile",
+			Handler:    _B2BService_GetMyEmployeeProfile_Handler,
+		},
+		{
+			MethodName: "GetMyEmployeeCoverage",
+			Handler:    _B2BService_GetMyEmployeeCoverage_Handler,
 		},
 		{
 			MethodName: "ListPurchaseOrderCatalog",

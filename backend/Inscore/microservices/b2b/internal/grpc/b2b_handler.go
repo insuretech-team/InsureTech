@@ -162,6 +162,14 @@ func (h *B2BHandler) GetEmployee(ctx context.Context, req *b2bservicev1.GetEmplo
 	return resp, nil
 }
 
+func (h *B2BHandler) ListEmployeeLoginOrganisations(ctx context.Context, req *b2bservicev1.ListEmployeeLoginOrganisationsRequest) (*b2bservicev1.ListEmployeeLoginOrganisationsResponse, error) {
+	resp, err := h.svc.ListEmployeeLoginOrganisations(ctx, req)
+	if err != nil {
+		return nil, mapError(err)
+	}
+	return resp, nil
+}
+
 func (h *B2BHandler) CreateEmployee(ctx context.Context, req *b2bservicev1.CreateEmployeeRequest) (*b2bservicev1.CreateEmployeeResponse, error) {
 	resp, err := h.svc.CreateEmployee(ctx, req)
 	if err != nil {
@@ -180,6 +188,30 @@ func (h *B2BHandler) UpdateEmployee(ctx context.Context, req *b2bservicev1.Updat
 
 func (h *B2BHandler) DeleteEmployee(ctx context.Context, req *b2bservicev1.DeleteEmployeeRequest) (*b2bservicev1.DeleteEmployeeResponse, error) {
 	resp, err := h.svc.DeleteEmployee(ctx, req)
+	if err != nil {
+		return nil, mapError(err)
+	}
+	return resp, nil
+}
+
+func (h *B2BHandler) ActivateEmployee(ctx context.Context, req *b2bservicev1.ActivateEmployeeRequest) (*b2bservicev1.ActivateEmployeeResponse, error) {
+	resp, err := h.svc.ActivateEmployee(ctx, req)
+	if err != nil {
+		return nil, mapError(err)
+	}
+	return resp, nil
+}
+
+func (h *B2BHandler) GetMyEmployeeProfile(ctx context.Context, req *b2bservicev1.GetMyEmployeeProfileRequest) (*b2bservicev1.GetMyEmployeeProfileResponse, error) {
+	resp, err := h.svc.GetMyEmployeeProfile(ctx, req)
+	if err != nil {
+		return nil, mapError(err)
+	}
+	return resp, nil
+}
+
+func (h *B2BHandler) GetMyEmployeeCoverage(ctx context.Context, req *b2bservicev1.GetMyEmployeeCoverageRequest) (*b2bservicev1.GetMyEmployeeCoverageResponse, error) {
+	resp, err := h.svc.GetMyEmployeeCoverage(ctx, req)
 	if err != nil {
 		return nil, mapError(err)
 	}

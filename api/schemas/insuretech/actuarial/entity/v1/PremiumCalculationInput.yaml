@@ -1,0 +1,32 @@
+PremiumCalculationInput:
+  type: object
+  properties:
+    product_id:
+      type: string
+    coverage_type:
+      type: string
+    sum_insured:
+      type: number
+      format: double
+    coverage_period_months:
+      type: integer
+      format: int32
+    rating_factors:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    risk_characteristics:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    loadings:
+      type: array
+      items:
+        type: string
+    discounts:
+      type: array
+      items:
+        type: string
+  description: PremiumCalculationInput represents input for premium calculations

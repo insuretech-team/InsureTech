@@ -1,0 +1,19 @@
+VehicleRegistrationRequest:
+  type: object
+  properties:
+    vehicle_id:
+      type: string
+    owner_id:
+      type: string
+    registration_number:
+      type: string
+    registration_year:
+      type: integer
+      format: int32
+    additional_info:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for vehicle registration operation. Contains parameters
+    required to execute the operation.

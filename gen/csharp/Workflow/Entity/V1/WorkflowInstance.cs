@@ -28,7 +28,7 @@ namespace Insuretech.Workflow.Entity.V1 {
             "YW5jZS5wcm90bxIdaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjEaIGlu",
             "c3VyZXRlY2gvY29tbW9uL3YxL3R5cGVzLnByb3RvGh9nb29nbGUvcHJvdG9i",
             "dWYvdGltZXN0YW1wLnByb3RvGh1pbnN1cmV0ZWNoL2NvbW1vbi92MS9kYi5w",
-            "cm90byKICgoQV29ya2Zsb3dJbnN0YW5jZRI+CgJpZBgBIAEoCUIukrUYKgoL",
+            "cm90byLQCwoQV29ya2Zsb3dJbnN0YW5jZRI+CgJpZBgBIAEoCUIukrUYKgoL",
             "aW5zdGFuY2VfaWQSBFVVSUQYASgBOhFnZW5fcmFuZG9tX3V1aWQoKVICaWQS",
             "yQEKFndvcmtmbG93X2RlZmluaXRpb25faWQYAiABKAlCkgGStRiNAQoWd29y",
             "a2Zsb3dfZGVmaW5pdGlvbl9pZBIEVVVJRBgBSkEKFHdvcmtmbG93X2RlZmlu",
@@ -55,24 +55,28 @@ namespace Insuretech.Workflow.Entity.V1 {
             "ZEF0EoQBCgphdWRpdF9pbmZvGAsgASgLMh8uaW5zdXJldGVjaC5jb21tb24u",
             "djEuQXVkaXRJbmZvQkSStRhACgphdWRpdF9pbmZvEgVKU09OQhgBOgsne30n",
             "Ojpqc29uYloaQXVkaXQgdHJhaWwgc3RvcmVkIGFzIEpTT054AVIJYXVkaXRJ",
-            "bmZvOkuKtRhHChJ3b3JrZmxvd19pbnN0YW5jZXMSD3dvcmtmbG93X3NjaGVt",
-            "YRg8IAEqGkFjdGl2ZSB3b3JrZmxvdyBleGVjdXRpb25zOAEqyQEKDkluc3Rh",
-            "bmNlU3RhdHVzEh8KG0lOU1RBTkNFX1NUQVRVU19VTlNQRUNJRklFRBAAEhsK",
-            "F0lOU1RBTkNFX1NUQVRVU19QRU5ESU5HEAESHwobSU5TVEFOQ0VfU1RBVFVT",
-            "X0lOX1BST0dSRVNTEAISHQoZSU5TVEFOQ0VfU1RBVFVTX0NPTVBMRVRFRBAD",
-            "EhoKFklOU1RBTkNFX1NUQVRVU19GQUlMRUQQBBIdChlJTlNUQU5DRV9TVEFU",
-            "VVNfQ0FOQ0VMTEVEEAVCowIKIWNvbS5pbnN1cmV0ZWNoLndvcmtmbG93LmVu",
-            "dGl0eS52MUIVV29ya2Zsb3dJbnN0YW5jZVByb3RvUAFaUGdpdGh1Yi5jb20v",
-            "bmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvd29y",
-            "a2Zsb3cvZW50aXR5L3YxO2VudGl0eXYxogIDSVdFqgIdSW5zdXJldGVjaC5X",
-            "b3JrZmxvdy5FbnRpdHkuVjHKAh1JbnN1cmV0ZWNoXFdvcmtmbG93XEVudGl0",
-            "eVxWMeICKUluc3VyZXRlY2hcV29ya2Zsb3dcRW50aXR5XFYxXEdQQk1ldGFk",
-            "YXRh6gIgSW5zdXJldGVjaDo6V29ya2Zsb3c6OkVudGl0eTo6VjFiBnByb3Rv",
-            "Mw=="));
+            "bmZvEsUBCg5jb3JyZWxhdGlvbl9pZBgMIAEoCUKdAZK1GJgBCg5jb3JyZWxh",
+            "dGlvbl9pZBIEVVVJRFIpCiVpZHhfd29ya2Zsb3dfaW5zdGFuY2VzX2NvcnJl",
+            "bGF0aW9uX2lkEAJaVURpc3RyaWJ1dGVkIHRyYWNpbmcgY29ycmVsYXRpb24g",
+            "SUQg4oCUIGxpbmtzIHdvcmtmbG93IGluc3RhbmNlIHRvIG9yaWdpbmF0aW5n",
+            "IHJlcXVlc3RSDWNvcnJlbGF0aW9uSWQ6S4q1GEcKEndvcmtmbG93X2luc3Rh",
+            "bmNlcxIPd29ya2Zsb3dfc2NoZW1hGDwgASoaQWN0aXZlIHdvcmtmbG93IGV4",
+            "ZWN1dGlvbnM4ASrJAQoOSW5zdGFuY2VTdGF0dXMSHwobSU5TVEFOQ0VfU1RB",
+            "VFVTX1VOU1BFQ0lGSUVEEAASGwoXSU5TVEFOQ0VfU1RBVFVTX1BFTkRJTkcQ",
+            "ARIfChtJTlNUQU5DRV9TVEFUVVNfSU5fUFJPR1JFU1MQAhIdChlJTlNUQU5D",
+            "RV9TVEFUVVNfQ09NUExFVEVEEAMSGgoWSU5TVEFOQ0VfU1RBVFVTX0ZBSUxF",
+            "RBAEEh0KGUlOU1RBTkNFX1NUQVRVU19DQU5DRUxMRUQQBUKjAgohY29tLmlu",
+            "c3VyZXRlY2gud29ya2Zsb3cuZW50aXR5LnYxQhVXb3JrZmxvd0luc3RhbmNl",
+            "UHJvdG9QAVpQZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9n",
+            "ZW4vZ28vaW5zdXJldGVjaC93b3JrZmxvdy9lbnRpdHkvdjE7ZW50aXR5djGi",
+            "AgNJV0WqAh1JbnN1cmV0ZWNoLldvcmtmbG93LkVudGl0eS5WMcoCHUluc3Vy",
+            "ZXRlY2hcV29ya2Zsb3dcRW50aXR5XFYx4gIpSW5zdXJldGVjaFxXb3JrZmxv",
+            "d1xFbnRpdHlcVjFcR1BCTWV0YWRhdGHqAiBJbnN1cmV0ZWNoOjpXb3JrZmxv",
+            "dzo6RW50aXR5OjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Workflow.Entity.V1.InstanceStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Entity.V1.WorkflowInstance), global::Insuretech.Workflow.Entity.V1.WorkflowInstance.Parser, new[]{ "Id", "WorkflowDefinitionId", "EntityType", "EntityId", "Status", "CurrentStep", "Context", "InitiatedBy", "StartedAt", "CompletedAt", "AuditInfo" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Entity.V1.WorkflowInstance), global::Insuretech.Workflow.Entity.V1.WorkflowInstance.Parser, new[]{ "Id", "WorkflowDefinitionId", "EntityType", "EntityId", "Status", "CurrentStep", "Context", "InitiatedBy", "StartedAt", "CompletedAt", "AuditInfo", "CorrelationId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -140,6 +144,7 @@ namespace Insuretech.Workflow.Entity.V1 {
       startedAt_ = other.startedAt_ != null ? other.startedAt_.Clone() : null;
       completedAt_ = other.completedAt_ != null ? other.completedAt_.Clone() : null;
       auditInfo_ = other.auditInfo_ != null ? other.auditInfo_.Clone() : null;
+      correlationId_ = other.correlationId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -303,7 +308,7 @@ namespace Insuretech.Workflow.Entity.V1 {
     public const int AuditInfoFieldNumber = 11;
     private global::Insuretech.Common.V1.AuditInfo auditInfo_;
     /// <summary>
-    /// @inject_tag: gorm:"column:audit_info;not null"
+    /// @inject_tag: gorm:"-"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -311,6 +316,21 @@ namespace Insuretech.Workflow.Entity.V1 {
       get { return auditInfo_; }
       set {
         auditInfo_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "correlation_id" field.</summary>
+    public const int CorrelationIdFieldNumber = 12;
+    private string correlationId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:correlation_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string CorrelationId {
+      get { return correlationId_; }
+      set {
+        correlationId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
       }
     }
 
@@ -340,6 +360,7 @@ namespace Insuretech.Workflow.Entity.V1 {
       if (!object.Equals(StartedAt, other.StartedAt)) return false;
       if (!object.Equals(CompletedAt, other.CompletedAt)) return false;
       if (!object.Equals(AuditInfo, other.AuditInfo)) return false;
+      if (CorrelationId != other.CorrelationId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -358,6 +379,7 @@ namespace Insuretech.Workflow.Entity.V1 {
       if (startedAt_ != null) hash ^= StartedAt.GetHashCode();
       if (completedAt_ != null) hash ^= CompletedAt.GetHashCode();
       if (auditInfo_ != null) hash ^= AuditInfo.GetHashCode();
+      if (CorrelationId.Length != 0) hash ^= CorrelationId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -420,6 +442,10 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(90);
         output.WriteMessage(AuditInfo);
       }
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(98);
+        output.WriteString(CorrelationId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -474,6 +500,10 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(90);
         output.WriteMessage(AuditInfo);
       }
+      if (CorrelationId.Length != 0) {
+        output.WriteRawTag(98);
+        output.WriteString(CorrelationId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -516,6 +546,9 @@ namespace Insuretech.Workflow.Entity.V1 {
       }
       if (auditInfo_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(AuditInfo);
+      }
+      if (CorrelationId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CorrelationId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -570,6 +603,9 @@ namespace Insuretech.Workflow.Entity.V1 {
           AuditInfo = new global::Insuretech.Common.V1.AuditInfo();
         }
         AuditInfo.MergeFrom(other.AuditInfo);
+      }
+      if (other.CorrelationId.Length != 0) {
+        CorrelationId = other.CorrelationId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -643,6 +679,10 @@ namespace Insuretech.Workflow.Entity.V1 {
             input.ReadMessage(AuditInfo);
             break;
           }
+          case 98: {
+            CorrelationId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -713,6 +753,10 @@ namespace Insuretech.Workflow.Entity.V1 {
               AuditInfo = new global::Insuretech.Common.V1.AuditInfo();
             }
             input.ReadMessage(AuditInfo);
+            break;
+          }
+          case 98: {
+            CorrelationId = input.ReadString();
             break;
           }
         }

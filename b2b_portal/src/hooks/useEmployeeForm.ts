@@ -18,7 +18,11 @@ import type {
   EmployeeFormMode,
 } from "@lib/types/employee-form";
 import { EMPTY_EMPLOYEE_FORM } from "@lib/types/employee-form";
-import { employeeClient, type EmployeeFullRecord } from "@lib/sdk/employee-client";
+import { bffClient, type EmployeeFullRecord } from "@lib/sdk/b2b-sdk-client";
+import {
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+} from "@/src/lib/utils/bd-mobile";
 
 interface UseEmployeeFormOptions {
   mode: EmployeeFormMode;
@@ -33,21 +37,13 @@ function validate(values: EmployeeFormValues, mode: EmployeeFormMode): EmployeeF
   if (!values.name.trim()) errors.name = "Name is required";
   if (!values.employeeId.trim()) errors.employeeId = "Employee ID is required";
   if (mode === "create" && !values.businessId.trim()) errors.businessId = "Organisation is required";
+  if (mode === "create" && !values.email.trim()) errors.email = "Work email is required";
   if (!values.departmentId.trim()) errors.departmentId = "Department is required";
   if (!values.dateOfJoining.trim()) errors.dateOfJoining = "Date of joining is required";
-  return errors;
-}
-
-/** Parse a Money-like value from the API into a plain decimal string */
-function parseCoverage(raw: unknown): string {
-  if (!raw) return "";
-  if (typeof raw === "number") return String(raw);
-  if (typeof raw === "object" && raw !== null) {
-    const m = raw as Record<string, unknown>;
-    if (typeof m.decimal_amount === "number") return String(m.decimal_amount);
-    if (typeof m.amount === "number") return String(m.amount / 100);
+  if (values.mobileNumber.trim() && !normalizeBangladeshMobile(values.mobileNumber)) {
+    errors.mobileNumber = getBangladeshMobileValidationMessage("Employee mobile number");
   }
-  return "";
+  return errors;
 }
 
 /** Map a full employee record (from GET /api/employees/{id}) to form values */
@@ -94,7 +90,7 @@ export function useEmployeeForm({
     let cancelled = false;
     setLoadingRecord(true);
 
-    employeeClient.get(employeeUuid)
+    bffClient.employees.get(employeeUuid)
       .then((result) => {
         if (cancelled) return;
         if (result.ok && result.employee) {
@@ -141,13 +137,16 @@ export function useEmployeeForm({
       }
       setSubmitting(true);
       try {
+        const normalizedMobileNumber = values.mobileNumber.trim()
+          ? normalizeBangladeshMobile(values.mobileNumber)
+          : null;
         const payload = {
           name:              values.name.trim(),
           employeeId:        values.employeeId.trim(),
           businessId:        values.businessId,
           departmentId:      values.departmentId,
           email:             values.email.trim() || undefined,
-          mobileNumber:      values.mobileNumber.trim() || undefined,
+          mobileNumber:      normalizedMobileNumber ?? undefined,
           dateOfBirth:       values.dateOfBirth || undefined,
           dateOfJoining:     values.dateOfJoining,
           gender:            values.gender || undefined,
@@ -159,8 +158,8 @@ export function useEmployeeForm({
 
         const result =
           mode === "edit" && employeeUuid
-            ? await employeeClient.update(employeeUuid, payload)
-            : await employeeClient.create(payload);
+            ? await bffClient.employees.update(employeeUuid, payload)
+            : await bffClient.employees.create(payload);
 
         if (!result.ok) {
           onError?.(result.message ?? "Operation failed");

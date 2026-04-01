@@ -8,6 +8,7 @@ import (
 	"github.com/google/uuid"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authneventsv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/events/v1"
+	kyceventv1 "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/events/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -32,6 +33,8 @@ const (
 	TopicSMSDeliveryReport             = "authn.otp.sms_dlr"
 	TopicCSRFValidationFailed          = "authn.csrf.validation_failed"
 	TopicAccountLocked                 = "authn.account.locked"
+	TopicKYCVerificationStarted        = "kyc.verification.started"
+	TopicKYCVerified                   = "kyc.verified"
 )
 
 // EventProducer interface for decoupling Kafka/MsgQueue
@@ -66,7 +69,7 @@ func isNilProducer(producer EventProducer) bool {
 	}
 }
 
-func (p *Publisher) PublishUserRegistered(ctx context.Context, userID, mobile, email, ip, deviceType string) error {
+func (p *Publisher) PublishUserRegistered(ctx context.Context, userID, mobile, email, ip, deviceType, portal, tenantID string) error {
 	evt := &authneventsv1.UserRegisteredEvent{
 		EventId:      uuid.New().String(),
 		UserId:       userID,
@@ -75,6 +78,8 @@ func (p *Publisher) PublishUserRegistered(ctx context.Context, userID, mobile, e
 		Timestamp:    timestamppb.New(time.Now()),
 		IpAddress:    ip,
 		DeviceType:   deviceType,
+		Portal:       portal,
+		TenantId:     tenantID,
 	}
 	if err := p.publish(ctx, TopicUserRegistered, userID, evt); err != nil {
 		appLogger.Warnf("Failed to publish UserRegisteredEvent for user %s: %v", userID, err)
@@ -420,6 +425,38 @@ func (p *Publisher) PublishAccountLocked(ctx context.Context, userID, reason str
 	}
 	if err := p.publish(ctx, TopicAccountLocked, userID, evt); err != nil {
 		appLogger.Warnf("Failed to publish AccountLockedEvent (user_id=%s): %v", userID, err)
+	}
+	return nil
+}
+
+func (p *Publisher) PublishKYCVerificationStarted(ctx context.Context, kycID string, entityType string, entityID string, method string) error {
+	evt := &kyceventv1.KYCVerificationStartedEvent{
+		EventId:            uuid.New().String(),
+		KycVerificationId:  kycID,
+		Type:               "KYC",
+		EntityType:         entityType,
+		EntityId:           entityID,
+		Method:             method,
+		Timestamp:          timestamppb.New(time.Now()),
+	}
+	if err := p.publish(ctx, TopicKYCVerificationStarted, kycID, evt); err != nil {
+		appLogger.Warnf("Failed to publish KYCVerificationStartedEvent (kyc_id=%s): %v", kycID, err)
+	}
+	return nil
+}
+
+func (p *Publisher) PublishKYCVerified(ctx context.Context, entityID, kycID, reviewerID string, verifiedAt time.Time) error {
+	evt := &kyceventv1.KYCVerifiedEvent{
+		EventId:           uuid.New().String(),
+		KycVerificationId: kycID,
+		EntityType:        "user",
+		EntityId:          entityID,
+		VerifiedBy:        reviewerID,
+		CorrelationId:     kycID,
+		Timestamp:         timestamppb.New(verifiedAt),
+	}
+	if err := p.publish(ctx, TopicKYCVerified, kycID, evt); err != nil {
+		appLogger.Warnf("Failed to publish KYCVerifiedEvent (kyc_id=%s entity_id=%s): %v", kycID, entityID, err)
 	}
 	return nil
 }

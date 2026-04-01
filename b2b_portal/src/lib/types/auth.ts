@@ -4,7 +4,7 @@ export interface PortalPrincipal {
   businessId: string;
   /** Human-readable organisation name for B2B admin users. Empty for super_admin. */
   organisationName: string;
-  role: "BUSINESS_ADMIN" | "FINANCE_MANAGER" | "HR_MANAGER" | "SYSTEM_ADMIN" | "B2B_ORG_ADMIN";
+  role: "BUSINESS_ADMIN" | "FINANCE_MANAGER" | "HR_MANAGER" | "SYSTEM_ADMIN" | "B2B_ORG_ADMIN" | "B2B_BENEFICIARY";
   displayName: string;
   user: User;
 }
@@ -13,11 +13,18 @@ export interface PortalSession {
   session: Session;
   principal: PortalPrincipal;
   user?: User;
+  passwordChangeRequired?: boolean;
   expiresAt: number;
 }
 
 export interface PortalLoginRequest {
   mobileNumber?: string;
+  password: string;
+  deviceId?: string;
+}
+
+export interface EmployeePortalLoginRequest {
+  email: string;
   password: string;
   deviceId?: string;
 }

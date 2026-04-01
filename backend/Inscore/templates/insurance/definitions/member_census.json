@@ -1,0 +1,75 @@
+{
+  "id": "member_census",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "GROUP HEALTH INSURANCE — MEMBER CENSUS SCHEDULE" },
+    { "type": "subtitle", "text": "Employee, Spouse and Dependent Enrollment Register", "italic": true },
+    { "type": "divider" },
+    { "type": "heading", "text": "I.  GROUP / EMPLOYER DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Company / Organization Name", "value": "{{ company_name }}" },
+        { "number": "2.", "label": "Company Registration No.", "value": "{{ company_reg_number }}" },
+        { "number": "3.", "label": "Contact Person", "value": "{{ contact_person }}" },
+        { "number": "4.", "label": "Contact Phone / Email", "value": "{{ contact_phone_email }}" },
+        { "number": "5.", "label": "Policy Number", "value": "{{ policy_number }}" },
+        { "number": "6.", "label": "Policy Period From", "value": "{{ policy_start_date }}" },
+        { "number": "7.", "label": "Policy Period To", "value": "{{ policy_end_date }}" },
+        { "number": "8.", "label": "Total Employees Enrolled", "value": "{{ total_employees }}" },
+        { "number": "9.", "label": "Total Dependents Enrolled", "value": "{{ total_dependents }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  EMPLOYEE MEMBER SCHEDULE", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Employee Name", "Employee ID", "Date of Birth", "Sex", "Designation", "Coverage Start", "Sum Insured (Tk.)"],
+      "rows_key": "employee_members",
+      "columns": ["number", "name", "employee_id", "date_of_birth", "sex", "designation", "coverage_start", "sum_insured"],
+      "col_widths": [0.3, 1.3, 0.8, 0.8, 0.4, 1.0, 0.8, 1.06]
+    },
+    { "type": "heading", "text": "III.  SPOUSE / DEPENDENT SCHEDULE", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Dependent Name", "Relationship", "Employee ID (Principal)", "Date of Birth", "Sex", "Coverage Start", "Sum Insured (Tk.)"],
+      "rows_key": "dependent_members",
+      "columns": ["number", "name", "relationship", "principal_id", "date_of_birth", "sex", "coverage_start", "sum_insured"],
+      "col_widths": [0.3, 1.1, 0.8, 0.8, 0.7, 0.4, 0.8, 0.76]
+    },
+    { "type": "heading", "text": "IV.  SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "", "label": "Total Principal Members", "value": "{{ total_employees }}" },
+        { "number": "", "label": "Total Spouse / Dependents", "value": "{{ total_dependents }}" },
+        { "number": "", "label": "Grand Total Insured Lives", "value": "{{ grand_total_lives }}" },
+        { "number": "", "label": "Total Annual Premium (Tk.)", "value": "{{ total_premium }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/We hereby certify that the information provided in this census schedule is accurate and complete. Any additions, deletions or amendments must be notified to the insurer within 30 days of the change. I/We consent to the collection and use of this data for group insurance administration purposes."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "HR / Admin Officer Signature & Date", "name": "{{ contact_person }}" },
+        { "label": "Company Stamp", "name": "" },
+        { "label": "For & On Behalf of Insurer", "name": "" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Group Ref: {{ proposal_id }}   |   Policy: {{ policy_number }}   |   Generated: {{ generated_at }}" }
+  ]
+}

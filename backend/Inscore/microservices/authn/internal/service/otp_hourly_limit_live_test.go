@@ -28,16 +28,23 @@ func TestOTPService_CheckRateLimit_Hourly_LiveDB(t *testing.T) {
 	t.Cleanup(func() { _ = tx.Rollback().Error })
 
 	otpRepo := repository.NewOTPRepository(tx.Table("authn_schema.otps"))
-	cfg := &config.Config{}
-	cfg.Security.RateLimitPerMinute = 100
-	cfg.Security.RateLimitPerDay = 1000
+
+	// Load config from env so the test respects OTP_RATE_LIMIT_MAX (default 100).
+	cfg, cfgErr := config.Load()
+	require.NoError(t, cfgErr)
+	// Override the hourly limit to a small test value so we don't need to
+	// insert OTP_RATE_LIMIT_MAX (100) rows to trigger the cap.
+	// The check is >= limit, so limit=3 means the 3rd inserted OTP triggers it.
+	testHourlyLimit := 3
+	cfg.Security.RateLimitPerHour = testHourlyLimit
 
 	svc := NewOTPService(otpRepo, nil, nil, cfg, nil)
 
-	recipient := "8801999999999"
 	userID := uuid.New().String()
 	numStr := strconv.FormatInt(time.Now().UnixNano()%1_000_000_000, 10)
 	mobile := "+8801" + strings.Repeat("0", 9-len(numStr)) + numStr
+	// recipient must match what CountRecentOTPs queries — use the mobile number
+	recipient := mobile
 	require.NoError(t, tx.Exec(
 		`INSERT INTO authn_schema.users
 		   (user_id, mobile_number, password_hash, status, user_type, created_at, updated_at)
@@ -45,7 +52,7 @@ func TestOTPService_CheckRateLimit_Hourly_LiveDB(t *testing.T) {
 		userID, mobile,
 	).Error)
 
-	for i := 0; i < 3; i++ {
+	for i := 0; i < testHourlyLimit; i++ {
 		otp := &authnentityv1.OTP{
 			OtpId:      uuid.New().String(),
 			UserId:     userID,
@@ -63,6 +70,7 @@ func TestOTPService_CheckRateLimit_Hourly_LiveDB(t *testing.T) {
 		require.NoError(t, otpRepo.Create(ctx, otp))
 	}
 
+	// After inserting testHourlyLimit OTPs, checkRateLimit must return an error.
 	err := svc.checkRateLimit(ctx, recipient, "login")
 	require.Error(t, err)
 	require.Contains(t, err.Error(), "last hour")

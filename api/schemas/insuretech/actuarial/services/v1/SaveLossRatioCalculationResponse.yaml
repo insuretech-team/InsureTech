@@ -1,0 +1,13 @@
+SaveLossRatioCalculationResponse:
+  type: object
+  properties:
+    loss_ratio:
+      $ref: '#/components/schemas/LossRatioCalculation'
+    success:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+  description: Response payload for save loss ratio calculation operation. Returns
+    operation results and status.

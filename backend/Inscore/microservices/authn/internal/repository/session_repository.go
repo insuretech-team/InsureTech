@@ -264,6 +264,19 @@ func sessionTypeToString(st authnentityv1.SessionType) string {
 	}
 }
 
+// CountRecentLoginAttempts counts how many sessions were created for a mobile number
+// within the given window. Used by Login() for login-specific rate limiting.
+func (r *SessionRepository) CountRecentLoginAttempts(ctx context.Context, mobileNumber string, window time.Duration) (int64, error) {
+	var count int64
+	since := time.Now().Add(-window)
+	err := r.db.WithContext(ctx).
+		Table("authn_schema.sessions s").
+		Joins("JOIN authn_schema.users u ON u.user_id = s.user_id").
+		Where("u.mobile_number = ? AND s.created_at >= ?", mobileNumber, since).
+		Count(&count).Error
+	return count, err
+}
+
 // CleanupExpiredSessions deletes expired sessions (background job)
 func (r *SessionRepository) CleanupExpiredSessions(ctx context.Context) (int64, error) {
 	result := r.db.WithContext(ctx).

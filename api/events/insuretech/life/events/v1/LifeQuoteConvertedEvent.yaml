@@ -1,0 +1,22 @@
+LifeQuoteConvertedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    policy_id:
+      type: string
+    customer_id:
+      type: string
+    product_id:
+      type: string
+    total_premium:
+      type: string
+      format: int64
+    converted_at:
+      type: string
+      format: date-time
+  description: LifeQuoteConvertedEvent is emitted when a quote is converted to policy

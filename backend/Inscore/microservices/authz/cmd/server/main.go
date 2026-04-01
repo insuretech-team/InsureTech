@@ -30,21 +30,15 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/service"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	opsconfig "github.com/newage-saint/insuretech/ops/config"
 	"github.com/newage-saint/insuretech/ops/env"
 )
 
 // ServicesConfig matches backend/inscore/configs/services.yaml structure.
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// ── Logger ────────────────────────────────────────────────────────────────
@@ -163,7 +157,7 @@ func main() {
 		"authn.user.registered":      authzEvents.NewUserRegisteredHandler(enf),
 		authzEvents.TopicAuthZEvents: authzEvents.NewPolicyCacheInvalidatedHandler(enf),
 	})
-	consumerGroup, consumerErr := kafkaconsumer.NewConsumerGroup(kafkaconsumer.Config{
+	consumerGroup, consumerErr := kafkaapp.StartConsumerGroup(kafkaconsumer.Config{
 		Brokers:  cfg.Kafka.Brokers,
 		GroupID:  "authz-service-consumer",
 		Topics:   consumerTopics,
@@ -174,11 +168,7 @@ func main() {
 	if consumerErr != nil {
 		appLogger.Warn("Kafka consumer group failed to start — events will not be consumed", zap.Error(consumerErr))
 	} else {
-		consumerCtx, consumerCancel := context.WithCancel(context.Background())
-		defer consumerCancel()
-		go consumerGroup.Start(consumerCtx)
 		defer func() {
-			consumerCancel()
 			_ = consumerGroup.Close()
 		}()
 		appLogger.Info("Kafka consumer group started", zap.Strings("topics", consumerTopics))
@@ -192,24 +182,20 @@ func main() {
 	seedCancel()
 
 	// ── JWT Interceptor ───────────────────────────────────────────────────────
-	// Parse RSA public key from config. If the PEM is empty (dev/test), the
-	// interceptor operates in no-op mode (all requests pass through).
+	// Parse RSA public key from config. If the PEM is empty, only public endpoints
+	// and signed internal service calls will be accepted.
 	publicKey, err := middleware.ParseRSAPublicKeyFromPEM(cfg.Auth.PublicKeyPEM)
 	if err != nil {
 		appLogger.Fatal("failed to parse RSA public key for JWT interceptor", zap.Error(err))
 	}
 	if publicKey == nil {
-		appLogger.Warn("AUTHZ_JWT_PUBLIC_KEY_PEM not set — JWT validation disabled (no-op mode)")
+		appLogger.Warn("AUTHZ_JWT_PUBLIC_KEY_PEM not set — external JWT validation disabled; only public and signed internal calls will be allowed")
 	}
 
 	// Methods that are publicly accessible without a JWT.
 	publicMethods := []string{
 		"/insuretech.authz.services.v1.AuthZService/CheckPermission",
-		"/insuretech.authz.services.v1.AuthZService/CheckAccess",
 		"/insuretech.authz.services.v1.AuthZService/GetJWKS",
-		"/insuretech.authz.services.v1.AuthZService/ListRoles",
-		"/insuretech.authz.services.v1.AuthZService/AssignRole",
-		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
 		"/grpc.health.v1.Health/Check",
 		"/grpc.health.v1.Health/Watch",
 	}

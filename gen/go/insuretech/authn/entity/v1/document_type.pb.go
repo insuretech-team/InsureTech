@@ -28,13 +28,13 @@ type DocumentType struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DocumentTypeId string                 `protobuf:"bytes,1,opt,name=document_type_id,json=documentTypeId,proto3" json:"document_type_id,omitempty"` // @inject_tag: gorm:"primaryKey;column:document_type_id;not null"
-	Code           string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty"`                                             // @inject_tag: gorm:"column:code;not null"
-	Name           string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                                             // @inject_tag: gorm:"column:name;not null"
-	Description    string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`                               // @inject_tag: gorm:"column:description"
-	IsActive       bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                    // @inject_tag: gorm:"column:is_active;not null"
-	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	DocumentTypeId string                 `protobuf:"bytes,1,opt,name=document_type_id,json=documentTypeId,proto3" json:"document_type_id,omitempty" gorm:"primaryKey;column:document_type_id;not null"`
+	Code           string                 `protobuf:"bytes,2,opt,name=code,proto3" json:"code,omitempty" gorm:"column:code;not null"`
+	Name           string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	Description    string                 `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	IsActive       bool                   `protobuf:"varint,5,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active;not null"`
+	CreatedAt      *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt      *timestamppb.Timestamp `protobuf:"bytes,7,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *DocumentType) Reset() {

@@ -69,23 +69,25 @@ namespace Insuretech.Kyc.Entity.V1 {
             "aWNhdGlvbnMSDGF1dGhuX3NjaGVtYRgMIAEqHEtZQy9LWUIgdmVyaWZpY2F0",
             "aW9uIHJlY29yZHM4ASprChBWZXJpZmljYXRpb25UeXBlEiEKHVZFUklGSUNB",
             "VElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGQoVVkVSSUZJQ0FUSU9OX1RZUEVf",
-            "S1lDEAESGQoVVkVSSUZJQ0FUSU9OX1RZUEVfS1lCEAIq4QEKElZlcmlmaWNh",
+            "S1lDEAESGQoVVkVSSUZJQ0FUSU9OX1RZUEVfS1lCEAIqhAIKElZlcmlmaWNh",
             "dGlvbk1ldGhvZBIjCh9WRVJJRklDQVRJT05fTUVUSE9EX1VOU1BFQ0lGSUVE",
             "EAASIAocVkVSSUZJQ0FUSU9OX01FVEhPRF9QT1JJQ0hPWRABEhsKF1ZFUklG",
             "SUNBVElPTl9NRVRIT0RfTklEEAISIAocVkVSSUZJQ0FUSU9OX01FVEhPRF9Q",
             "QVNTUE9SVBADEh4KGlZFUklGSUNBVElPTl9NRVRIT0RfTUFOVUFMEAQSJQoh",
-            "VkVSSUZJQ0FUSU9OX01FVEhPRF9UUkFERV9MSUNFTlNFEAUq5AEKElZlcmlm",
-            "aWNhdGlvblN0YXR1cxIjCh9WRVJJRklDQVRJT05fU1RBVFVTX1VOU1BFQ0lG",
-            "SUVEEAASHwobVkVSSUZJQ0FUSU9OX1NUQVRVU19QRU5ESU5HEAESIwofVkVS",
-            "SUZJQ0FUSU9OX1NUQVRVU19JTl9QUk9HUkVTUxACEiAKHFZFUklGSUNBVElP",
-            "Tl9TVEFUVVNfVkVSSUZJRUQQAxIgChxWRVJJRklDQVRJT05fU1RBVFVTX1JF",
-            "SkVDVEVEEAQSHwobVkVSSUZJQ0FUSU9OX1NUQVRVU19FWFBJUkVEEAVChAIK",
-            "HGNvbS5pbnN1cmV0ZWNoLmt5Yy5lbnRpdHkudjFCFEt5Y1ZlcmlmaWNhdGlv",
-            "blByb3RvUAFaS2dpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gv",
-            "Z2VuL2dvL2luc3VyZXRlY2gva3ljL2VudGl0eS92MTtlbnRpdHl2MaICA0lL",
-            "RaoCGEluc3VyZXRlY2guS3ljLkVudGl0eS5WMcoCGEluc3VyZXRlY2hcS3lj",
-            "XEVudGl0eVxWMeICJEluc3VyZXRlY2hcS3ljXEVudGl0eVxWMVxHUEJNZXRh",
-            "ZGF0YeoCG0luc3VyZXRlY2g6Okt5Yzo6RW50aXR5OjpWMWIGcHJvdG8z"));
+            "VkVSSUZJQ0FUSU9OX01FVEhPRF9UUkFERV9MSUNFTlNFEAUSIQodVkVSSUZJ",
+            "Q0FUSU9OX01FVEhPRF9GTFZFX0VLWUMQBiqMAgoSVmVyaWZpY2F0aW9uU3Rh",
+            "dHVzEiMKH1ZFUklGSUNBVElPTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIfChtW",
+            "RVJJRklDQVRJT05fU1RBVFVTX1BFTkRJTkcQARIjCh9WRVJJRklDQVRJT05f",
+            "U1RBVFVTX0lOX1BST0dSRVNTEAISIAocVkVSSUZJQ0FUSU9OX1NUQVRVU19W",
+            "RVJJRklFRBADEiAKHFZFUklGSUNBVElPTl9TVEFUVVNfUkVKRUNURUQQBBIf",
+            "ChtWRVJJRklDQVRJT05fU1RBVFVTX0VYUElSRUQQBRImCiJWRVJJRklDQVRJ",
+            "T05fU1RBVFVTX1BFTkRJTkdfUkVWSUVXEAZChAIKHGNvbS5pbnN1cmV0ZWNo",
+            "Lmt5Yy5lbnRpdHkudjFCFEt5Y1ZlcmlmaWNhdGlvblByb3RvUAFaS2dpdGh1",
+            "Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRl",
+            "Y2gva3ljL2VudGl0eS92MTtlbnRpdHl2MaICA0lLRaoCGEluc3VyZXRlY2gu",
+            "S3ljLkVudGl0eS5WMcoCGEluc3VyZXRlY2hcS3ljXEVudGl0eVxWMeICJElu",
+            "c3VyZXRlY2hcS3ljXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCG0luc3VyZXRl",
+            "Y2g6Okt5Yzo6RW50aXR5OjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Insuretech.Common.V1.SecurityReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Kyc.Entity.V1.VerificationType), typeof(global::Insuretech.Kyc.Entity.V1.VerificationMethod), typeof(global::Insuretech.Kyc.Entity.V1.VerificationStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -109,6 +111,7 @@ namespace Insuretech.Kyc.Entity.V1 {
     [pbr::OriginalName("VERIFICATION_METHOD_PASSPORT")] Passport = 3,
     [pbr::OriginalName("VERIFICATION_METHOD_MANUAL")] Manual = 4,
     [pbr::OriginalName("VERIFICATION_METHOD_TRADE_LICENSE")] TradeLicense = 5,
+    [pbr::OriginalName("VERIFICATION_METHOD_FLVE_EKYC")] FlveEkyc = 6,
   }
 
   public enum VerificationStatus {
@@ -118,6 +121,12 @@ namespace Insuretech.Kyc.Entity.V1 {
     [pbr::OriginalName("VERIFICATION_STATUS_VERIFIED")] Verified = 3,
     [pbr::OriginalName("VERIFICATION_STATUS_REJECTED")] Rejected = 4,
     [pbr::OriginalName("VERIFICATION_STATUS_EXPIRED")] Expired = 5,
+    /// <summary>
+    /// PENDING_REVIEW: FLVE eKYC session completed successfully on the provider side;
+    /// the InsureTech compliance team has not yet approved. Sits between IN_PROGRESS
+    /// and VERIFIED. Set by CompleteKYCSession; cleared by ApproveKYC/rejectKYCInternal.
+    /// </summary>
+    [pbr::OriginalName("VERIFICATION_STATUS_PENDING_REVIEW")] PendingReview = 6,
   }
 
   #endregion

@@ -1,0 +1,13 @@
+NotificationPreferencesRetrievalResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    notification_preference:
+      type: string
+      description: SMS, EMAIL, PUSH, ALL, NONE
+    preferred_language:
+      type: string
+      description: en or bn
+  description: Response payload for notification preferences retrieval operation.
+    Returns operation results and status.

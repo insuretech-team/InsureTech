@@ -1,0 +1,34 @@
+LifeQuoteGenerationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    customer_id:
+      type: string
+    agent_id:
+      type: string
+    insured_person:
+      $ref: '#/components/schemas/InsuredPerson'
+    age_at_entry:
+      type: integer
+      format: int32
+    policy_term_years:
+      type: integer
+      format: int32
+    sum_assured:
+      type: string
+      format: int64
+    bonus_codes:
+      type: array
+      items:
+        type: string
+    validity_days:
+      type: integer
+      format: int32
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for quote generation operation. Contains parameters
+    required to execute the operation.

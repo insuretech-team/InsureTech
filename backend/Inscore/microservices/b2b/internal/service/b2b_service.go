@@ -11,16 +11,33 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/b2b/internal/domain"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
+	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
+	authzentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
+	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	b2bv1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1"
 	b2bservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
-	"google.golang.org/grpc/metadata"
+	"google.golang.org/grpc/status"
 	"gorm.io/gorm"
 )
 
 type B2BService struct {
 	repo      domain.B2BRepository
 	publisher EventPublisher
+	authn     EmployeeAuthNClient
+	authz     EmployeeAuthZClient
+}
+
+type EmployeeAuthNClient interface {
+	ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error)
+	RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error)
+}
+
+type EmployeeAuthZClient interface {
+	AssignRole(ctx context.Context, req *authzservicev1.AssignRoleRequest) (*authzservicev1.AssignRoleResponse, error)
+	ListRoles(ctx context.Context, req *authzservicev1.ListRolesRequest) (*authzservicev1.ListRolesResponse, error)
 }
 
 // EventPublisher interface for publishing B2B events
@@ -79,16 +96,20 @@ func NewB2BService(repo domain.B2BRepository, publisher EventPublisher) *B2BServ
 	}
 }
 
+func (s *B2BService) WithEmployeeIdentity(authnClient EmployeeAuthNClient, authzClient EmployeeAuthZClient) *B2BService {
+	s.authn = authnClient
+	s.authz = authzClient
+	return s
+}
+
 func resolveTenantID(ctx context.Context, requestedTenantID string) string {
 	tenantID := strings.TrimSpace(requestedTenantID)
 	if tenantID != "" {
 		return tenantID
 	}
 
-	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		if vals := md.Get("x-tenant-id"); len(vals) > 0 && strings.TrimSpace(vals[0]) != "" {
-			return strings.TrimSpace(vals[0])
-		}
+	if tenantID = grpcmeta.FirstFromContext(ctx, "x-tenant-id"); tenantID != "" {
+		return tenantID
 	}
 
 	if envTenantID := strings.TrimSpace(os.Getenv("DEFAULT_TENANT_ID")); envTenantID != "" {
@@ -101,10 +122,8 @@ func resolveTenantID(ctx context.Context, requestedTenantID string) string {
 // resolveCallerID extracts the acting user's ID from gRPC metadata (x-user-id header).
 // Falls back to the provided default if not present.
 func resolveCallerID(ctx context.Context, fallback string) string {
-	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		if vals := md.Get("x-user-id"); len(vals) > 0 && strings.TrimSpace(vals[0]) != "" {
-			return strings.TrimSpace(vals[0])
-		}
+	if callerID := grpcmeta.FirstFromContext(ctx, "x-user-id"); callerID != "" {
+		return callerID
 	}
 	if strings.TrimSpace(fallback) != "" {
 		return strings.TrimSpace(fallback)
@@ -138,6 +157,108 @@ func cloneMoney(value *commonv1.Money) *commonv1.Money {
 		Currency:      value.Currency,
 		DecimalAmount: value.DecimalAmount,
 	}
+}
+
+func resolveMetadataValue(ctx context.Context, key string) string {
+	return grpcmeta.FirstFromContext(ctx, key)
+}
+
+func chooseEmployeeFullName(employee *b2bv1.Employee) string {
+	if employee == nil {
+		return "Employee"
+	}
+	if name := strings.TrimSpace(employee.GetName()); name != "" {
+		return name
+	}
+	if email := strings.TrimSpace(employee.GetEmail()); email != "" {
+		return email
+	}
+	return "Employee"
+}
+
+func (s *B2BService) ensureB2BBeneficiaryRole(ctx context.Context, userID, organisationID string) error {
+	if s.authz == nil || strings.TrimSpace(userID) == "" || strings.TrimSpace(organisationID) == "" {
+		return nil
+	}
+
+	resp, err := s.authz.ListRoles(ctx, &authzservicev1.ListRolesRequest{
+		Portal:     authzentityv1.Portal_PORTAL_B2B,
+		ActiveOnly: true,
+		PageSize:   200,
+	})
+	if err != nil {
+		return err
+	}
+
+	roleID := ""
+	for _, role := range resp.GetRoles() {
+		if role.GetName() == "b2b_beneficiary" {
+			roleID = role.GetRoleId()
+			break
+		}
+	}
+	if roleID == "" {
+		return fmt.Errorf("%w: authz role b2b_beneficiary not found", ErrNotFound)
+	}
+
+	_, err = s.authz.AssignRole(ctx, &authzservicev1.AssignRoleRequest{
+		UserId:     userID,
+		RoleId:     roleID,
+		Domain:     "b2b:" + organisationID,
+		AssignedBy: resolveCallerID(ctx, userID),
+	})
+	if err != nil {
+		if st, ok := status.FromError(err); ok {
+			msg := strings.ToLower(st.Message())
+			if strings.Contains(msg, "duplicate") || strings.Contains(msg, "already exists") {
+				return nil
+			}
+		}
+		return err
+	}
+	return nil
+}
+
+func (s *B2BService) ensureEmployeeUser(ctx context.Context, employee *b2bv1.Employee) (string, error) {
+	if employee == nil {
+		return "", fmt.Errorf("%w: employee is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(employee.GetEmail()) == "" {
+		return "", fmt.Errorf("%w: employee email is required for self-service access", ErrInvalidArgument)
+	}
+	if s.authn == nil {
+		return strings.TrimSpace(employee.GetUserId()), nil
+	}
+
+	resp, err := s.authn.ProvisionEmployeeUser(ctx, &authnservicev1.ProvisionEmployeeUserRequest{
+		Email:        strings.TrimSpace(employee.GetEmail()),
+		FullName:     chooseEmployeeFullName(employee),
+		MobileNumber: strings.TrimSpace(employee.GetMobileNumber()),
+		EmployeeId:   strings.TrimSpace(employee.GetEmployeeId()),
+		BusinessId:   strings.TrimSpace(employee.GetBusinessId()),
+	})
+	if err != nil {
+		return "", err
+	}
+	return strings.TrimSpace(resp.GetUserId()), nil
+}
+
+func (s *B2BService) assignedPlanNameForEmployee(ctx context.Context, employee *b2bv1.Employee) (string, error) {
+	if employee == nil || strings.TrimSpace(employee.GetAssignedPlanId()) == "" {
+		return "N/A", nil
+	}
+	planCatalog, err := s.repo.GetCatalogPlansByPlanIDs(ctx, []string{employee.GetAssignedPlanId()})
+	if err != nil {
+		return "", err
+	}
+	planCatalog = mergeCatalogMapWithSeedFallback(planCatalog)
+	if plan := planCatalog[employee.GetAssignedPlanId()]; plan != nil && strings.TrimSpace(plan.PlanName) != "" {
+		return plan.PlanName, nil
+	}
+	if fallback := fallbackCatalogPlan(employee.GetAssignedPlanId(), "", employee.GetInsuranceCategory()); fallback != nil && strings.TrimSpace(fallback.PlanName) != "" {
+		return fallback.PlanName, nil
+	}
+	return employee.GetAssignedPlanId(), nil
 }
 
 func multiplyMoney(value *commonv1.Money, factor int32) *commonv1.Money {
@@ -231,6 +352,19 @@ func mergeCatalogMapWithSeedFallback(items map[string]*domain.CatalogPlan) map[s
 		result[planID] = fallbackCatalogPlan(item.PlanID, item.ProductID, item.InsuranceCategory)
 	}
 	return result
+}
+
+func normalizeOptionalEmployeeMobile(raw string) (string, error) {
+	trimmed := strings.TrimSpace(raw)
+	if trimmed == "" {
+		return "", nil
+	}
+
+	normalized, err := mobile.NormalizeBangladeshMobileE164(trimmed)
+	if err != nil {
+		return "", fmt.Errorf("%w: mobile_number must be a valid Bangladesh number in formats like 01712345678, +8801712345678, or 008801712345678", ErrInvalidArgument)
+	}
+	return normalized, nil
 }
 
 func purchaseOrderView(
@@ -637,6 +771,47 @@ func (s *B2BService) GetEmployee(
 	}, nil
 }
 
+func (s *B2BService) ListEmployeeLoginOrganisations(
+	ctx context.Context,
+	req *b2bservicev1.ListEmployeeLoginOrganisationsRequest,
+) (*b2bservicev1.ListEmployeeLoginOrganisationsResponse, error) {
+	if req == nil {
+		req = &b2bservicev1.ListEmployeeLoginOrganisationsRequest{}
+	}
+	query := strings.TrimSpace(req.GetQuery())
+	if len(query) < 2 {
+		return &b2bservicev1.ListEmployeeLoginOrganisationsResponse{
+			Organisations: []*b2bservicev1.EmployeeLoginOrganisation{},
+		}, nil
+	}
+
+	pageSize := int(req.GetPageSize())
+	if pageSize <= 0 {
+		pageSize = 8
+	}
+	if pageSize > 10 {
+		pageSize = 10
+	}
+
+	organisations, err := s.repo.SearchOrganisationsForEmployeeActivation(ctx, query, pageSize)
+	if err != nil {
+		return nil, err
+	}
+
+	items := make([]*b2bservicev1.EmployeeLoginOrganisation, 0, len(organisations))
+	for _, organisation := range organisations {
+		items = append(items, &b2bservicev1.EmployeeLoginOrganisation{
+			OrganisationId:   organisation.GetOrganisationId(),
+			OrganisationName: organisation.GetName(),
+			OrganisationCode: organisation.GetCode(),
+		})
+	}
+
+	return &b2bservicev1.ListEmployeeLoginOrganisationsResponse{
+		Organisations: items,
+	}, nil
+}
+
 // ─── CreateEmployee ───────────────────────────────────────────────────────────
 
 func (s *B2BService) CreateEmployee(
@@ -657,6 +832,13 @@ func (s *B2BService) CreateEmployee(
 	}
 	if strings.TrimSpace(req.GetBusinessId()) == "" {
 		return nil, fmt.Errorf("%w: business_id is required — must be injected from session", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetEmail()) == "" {
+		return nil, fmt.Errorf("%w: email is required for employee self-service login", ErrInvalidArgument)
+	}
+	normalizedMobileNumber, err := normalizeOptionalEmployeeMobile(req.GetMobileNumber())
+	if err != nil {
+		return nil, err
 	}
 
 	// Resolve plan premium before insert so it is persisted on the employee row.
@@ -686,14 +868,32 @@ func (s *B2BService) CreateEmployee(
 		PremiumAmount:     planPremiumAmount,
 		NumberOfDependent: req.GetNumberOfDependent(),
 		Email:             strings.TrimSpace(req.GetEmail()),
-		MobileNumber:      strings.TrimSpace(req.GetMobileNumber()),
+		MobileNumber:      normalizedMobileNumber,
 		DateOfBirth:       req.GetDateOfBirth(),
 		DateOfJoining:     req.GetDateOfJoining(),
 		Gender:            req.GetGender(),
+		UserID:            strings.TrimSpace(req.GetUserId()),
+	}
+
+	if strings.TrimSpace(input.UserID) == "" {
+		input.UserID, err = s.ensureEmployeeUser(ctx, &b2bv1.Employee{
+			Name:         input.Name,
+			EmployeeId:   input.EmployeeID,
+			BusinessId:   input.BusinessID,
+			Email:        input.Email,
+			MobileNumber: input.MobileNumber,
+		})
+		if err != nil {
+			return nil, err
+		}
 	}
 
 	employee, err := s.repo.CreateEmployee(ctx, input)
 	if err != nil {
+		return nil, err
+	}
+
+	if err := s.ensureB2BBeneficiaryRole(ctx, employee.GetUserId(), employee.GetBusinessId()); err != nil {
 		return nil, err
 	}
 
@@ -734,13 +934,17 @@ func (s *B2BService) UpdateEmployee(
 	if oldEmp != nil {
 		oldDeptID = oldEmp.GetDepartmentId()
 	}
+	normalizedMobileNumber, err := normalizeOptionalEmployeeMobile(req.GetMobileNumber())
+	if err != nil {
+		return nil, err
+	}
 
 	input := domain.EmployeeUpdateInput{
 		EmployeeUUID:      req.GetEmployeeUuid(),
 		Name:              req.GetName(),
 		DepartmentID:      req.GetDepartmentId(),
 		Email:             req.GetEmail(),
-		MobileNumber:      req.GetMobileNumber(),
+		MobileNumber:      normalizedMobileNumber,
 		DateOfBirth:       req.GetDateOfBirth(),
 		DateOfJoining:     req.GetDateOfJoining(),
 		Gender:            req.GetGender(),
@@ -749,6 +953,7 @@ func (s *B2BService) UpdateEmployee(
 		CoverageAmount:    req.GetCoverageAmount(),
 		NumberOfDependent: req.GetNumberOfDependent(),
 		Status:            req.GetStatus(),
+		UserID:            strings.TrimSpace(req.GetUserId()),
 	}
 
 	employee, err := s.repo.UpdateEmployee(ctx, input)
@@ -792,6 +997,180 @@ func (s *B2BService) UpdateEmployee(
 			AssignedPlanName: assignedPlanName,
 		},
 		Message: "Employee updated successfully",
+	}, nil
+}
+
+func (s *B2BService) ActivateEmployee(
+	ctx context.Context,
+	req *b2bservicev1.ActivateEmployeeRequest,
+) (*b2bservicev1.ActivateEmployeeResponse, error) {
+	if req == nil {
+		return nil, fmt.Errorf("%w: request is required", ErrInvalidArgument)
+	}
+	organisationCode := strings.ToUpper(strings.TrimSpace(req.GetOrganisationCode()))
+	organisationID := strings.TrimSpace(req.GetOrganisationId())
+	if organisationCode == "" && organisationID == "" {
+		return nil, fmt.Errorf("%w: organisation_code or organisation_id is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetEmployeeId()) == "" {
+		return nil, fmt.Errorf("%w: employee_id is required", ErrInvalidArgument)
+	}
+	if strings.TrimSpace(req.GetEmail()) == "" {
+		return nil, fmt.Errorf("%w: email is required", ErrInvalidArgument)
+	}
+	if s.authn == nil {
+		return nil, fmt.Errorf("%w: employee activation is unavailable", ErrInvalidArgument)
+	}
+
+	var organisation *b2bv1.Organisation
+	var err error
+	if organisationCode != "" {
+		organisation, err = s.repo.GetOrganisationByCode(ctx, organisationCode)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, err
+		}
+	}
+	if organisation == nil && organisationID != "" {
+		organisation, err = s.repo.GetOrganisation(ctx, organisationID)
+		if err != nil && !errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, err
+		}
+	}
+	if organisation == nil {
+		return nil, fmt.Errorf("%w: organisation not found for this activation request", ErrNotFound)
+	}
+
+	employee, err := s.repo.GetEmployeeByBusinessEmployeeIDEmail(
+		ctx,
+		organisation.GetOrganisationId(),
+		strings.TrimSpace(req.GetEmployeeId()),
+		strings.TrimSpace(req.GetEmail()),
+	)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: employee not found for this organisation and email", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	userID := strings.TrimSpace(employee.GetUserId())
+	if userID == "" {
+		userID, err = s.ensureEmployeeUser(ctx, employee)
+		if err != nil {
+			return nil, err
+		}
+		employee, err = s.repo.UpdateEmployee(ctx, domain.EmployeeUpdateInput{
+			EmployeeUUID: employee.GetEmployeeUuid(),
+			UserID:       userID,
+		})
+		if err != nil {
+			return nil, err
+		}
+	}
+
+	if err := s.ensureB2BBeneficiaryRole(ctx, userID, employee.GetBusinessId()); err != nil {
+		return nil, err
+	}
+
+	resetResp, err := s.authn.RequestPasswordResetByEmail(ctx, &authnservicev1.RequestPasswordResetByEmailRequest{
+		Email: strings.TrimSpace(employee.GetEmail()),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &b2bservicev1.ActivateEmployeeResponse{
+		UserId:           userID,
+		OtpId:            resetResp.GetOtpId(),
+		Message:          resetResp.GetMessage(),
+		ExpiresInSeconds: resetResp.GetExpiresInSeconds(),
+	}, nil
+}
+
+func (s *B2BService) GetMyEmployeeProfile(
+	ctx context.Context,
+	req *b2bservicev1.GetMyEmployeeProfileRequest,
+) (*b2bservicev1.GetMyEmployeeProfileResponse, error) {
+	if req == nil {
+		req = &b2bservicev1.GetMyEmployeeProfileRequest{}
+	}
+	userID := resolveMetadataValue(ctx, "x-user-id")
+	if userID == "" {
+		return nil, fmt.Errorf("%w: missing user_id", ErrInvalidArgument)
+	}
+
+	employee, err := s.repo.GetEmployeeByUserID(ctx, userID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: employee not found", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	departmentNames, err := s.repo.GetDepartmentNames(ctx, []string{employee.GetDepartmentId()})
+	if err != nil {
+		return nil, err
+	}
+	departmentName := departmentNames[employee.GetDepartmentId()]
+	if strings.TrimSpace(departmentName) == "" {
+		departmentName = "Unassigned"
+	}
+	assignedPlanName, err := s.assignedPlanNameForEmployee(ctx, employee)
+	if err != nil {
+		return nil, err
+	}
+
+	return &b2bservicev1.GetMyEmployeeProfileResponse{
+		Employee: &b2bservicev1.EmployeeView{
+			Employee:         employee,
+			DepartmentName:   departmentName,
+			AssignedPlanName: assignedPlanName,
+		},
+	}, nil
+}
+
+func (s *B2BService) GetMyEmployeeCoverage(
+	ctx context.Context,
+	req *b2bservicev1.GetMyEmployeeCoverageRequest,
+) (*b2bservicev1.GetMyEmployeeCoverageResponse, error) {
+	if req == nil {
+		req = &b2bservicev1.GetMyEmployeeCoverageRequest{}
+	}
+	userID := resolveMetadataValue(ctx, "x-user-id")
+	if userID == "" {
+		return nil, fmt.Errorf("%w: missing user_id", ErrInvalidArgument)
+	}
+
+	employee, err := s.repo.GetEmployeeByUserID(ctx, userID)
+	if err != nil {
+		if errors.Is(err, gorm.ErrRecordNotFound) {
+			return nil, fmt.Errorf("%w: employee not found", ErrNotFound)
+		}
+		return nil, err
+	}
+
+	organisation, err := s.repo.GetOrganisation(ctx, employee.GetBusinessId())
+	if err != nil {
+		return nil, err
+	}
+	assignedPlanName, err := s.assignedPlanNameForEmployee(ctx, employee)
+	if err != nil {
+		return nil, err
+	}
+
+	return &b2bservicev1.GetMyEmployeeCoverageResponse{
+		Coverage: &b2bservicev1.EmployeeCoverageView{
+			OrganisationId:    organisation.GetOrganisationId(),
+			OrganisationName:  organisation.GetName(),
+			EmployeeUuid:      employee.GetEmployeeUuid(),
+			EmployeeId:        employee.GetEmployeeId(),
+			AssignedPlanId:    employee.GetAssignedPlanId(),
+			AssignedPlanName:  assignedPlanName,
+			InsuranceCategory: employee.GetInsuranceCategory(),
+			CoverageAmount:    cloneMoney(employee.GetCoverageAmount()),
+			PremiumAmount:     cloneMoney(employee.GetPremiumAmount()),
+			NumberOfDependent: employee.GetNumberOfDependent(),
+		},
 	}, nil
 }
 

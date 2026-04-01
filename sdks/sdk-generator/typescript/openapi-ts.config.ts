@@ -5,8 +5,11 @@ export default defineConfig({
   input: '../../../api/openapi.yaml',
   output: {
     path: '../../insuretech-typescript-sdk/src',
-    format: 'prettier',
-    lint: 'eslint',
+    // format and lint are disabled during pipeline generation for speed.
+    // The generated files are immediately post-processed by generator.go anyway.
+    // Run `npx prettier --write src/` and `npx eslint src/ --fix` manually if needed.
+    format: false,
+    lint: false,
   },
   types: {
     enums: 'javascript',

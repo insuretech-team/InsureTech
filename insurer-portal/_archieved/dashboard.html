@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureTech Dashboard</title>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="dashboard">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                    <circle cx="12" cy="12" r="10" fill="#16a34a"/>
+                    <path d="M8 12l3 3 5-6" stroke="white" stroke-width="2" fill="none"/>
+                </svg>
+                <span class="logo-text"><span class="logo-light">LARAID</span><span class="logo-bold">INSURETECH</span></span>
+            </div>
+            
+            <nav class="nav-menu">
+                <a href="#" class="nav-item active">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="7" height="7" rx="1"/>
+                        <rect x="14" y="3" width="7" height="7" rx="1"/>
+                        <rect x="3" y="14" width="7" height="7" rx="1"/>
+                        <rect x="14" y="14" width="7" height="7" rx="1"/>
+                    </svg>
+                    Dashboard
+                </a>
+                <a href="#" class="nav-item has-dropdown">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <rect x="3" y="3" width="18" height="18" rx="2"/>
+                        <path d="M3 9h18M9 21V9"/>
+                    </svg>
+                    Plan Template
+                    <svg class="dropdown-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M6 9l6 6 6-6"/>
+                    </svg>
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M12 2v4m0 12v4m10-10h-4M6 12H2m15.07-7.07l-2.83 2.83M9.76 14.24l-2.83 2.83m0-10.14l2.83 2.83m4.48 4.48l2.83 2.83"/>
+                    </svg>
+                    Policy Categories
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                        <polyline points="10 9 9 9 8 9"/>
+                    </svg>
+                    Proposals
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                    Claim Settlement
+                </a>
+                <a href="#" class="nav-item">
+                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="3"/>
+                        <path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/>
+                    </svg>
+                    Settings
+                </a>
+            </nav>
+        </aside>
+
+        <!-- Main Content -->
+        <main class="main-content">
+            <!-- Header -->
+            <header class="header">
+                <div class="header-spacer"></div>
+                <div class="header-actions">
+                    <button class="notification-btn">
+                        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M18 8A6 6 0 0 0 6 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                            <path d="M13.73 21a2 2 0 0 1-3.46 0"/>
+                        </svg>
+                        <span class="notification-badge"></span>
+                    </button>
+                    <div class="user-avatar">
+                        <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User">
+                    </div>
+                </div>
+            </header>
+
+            <!-- Dashboard Grid -->
+            <div class="dashboard-grid">
+                <!-- Stats Cards Row -->
+                <div class="stats-row">
+                    <div class="stat-card">
+                        <div class="stat-icon yellow">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="3" y="3" width="7" height="7"/>
+                                <rect x="14" y="3" width="7" height="7"/>
+                                <rect x="3" y="14" width="7" height="7"/>
+                                <rect x="14" y="14" width="7" height="7"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">6</div>
+                        <div class="stat-label">Insurance Categories</div>
+                        <div class="stat-pattern">
+                            <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+                                <circle cx="20" cy="15" r="8" fill="#f3f4f6"/>
+                                <circle cx="50" cy="25" r="12" fill="#f3f4f6"/>
+                                <circle cx="70" cy="45" r="10" fill="#f3f4f6"/>
+                            </svg>
+                        </div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon green">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
+                                <polyline points="22 4 12 14.01 9 11.01"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">326</div>
+                        <div class="stat-label">Claim settled</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon orange">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <rect x="2" y="4" width="20" height="16" rx="2"/>
+                                <path d="M12 12h.01M7 12h.01M17 12h.01"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">৳ 425,647</div>
+                        <div class="stat-label">Total monthly premium</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon teal">
+                            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M20.84 4.61a5.5 5.5 0 0 0-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 0 0-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 0 0 0-7.78z"/>
+                            </svg>
+                        </div>
+                        <div class="stat-value">12</div>
+                        <div class="stat-label">Active Plans</div>
+                    </div>
+                </div>
+
+                <!-- Main Content Grid -->
+                <div class="content-grid">
+                    <!-- Left Column -->
+                    <div class="left-column">
+                        <!-- Claim Ratio -->
+                        <div class="card claim-ratio-card">
+                            <h3 class="card-title">Claim Ratio</h3>
+                            <div class="claim-ratio-content">
+                                <div class="donut-chart-container">
+                                    <canvas id="claimRatioChart"></canvas>
+                                </div>
+                                <div class="claim-ratio-legend">
+                                    <div class="legend-item">
+                                        <span class="legend-dot" style="background: #1f2937;"></span>
+                                        <span class="legend-label">Settled</span>
+                                        <span class="legend-value">47.6%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot" style="background: #16a34a;"></span>
+                                        <span class="legend-label">Approved</span>
+                                        <span class="legend-value">24.3%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot" style="background: #3b82f6;"></span>
+                                        <span class="legend-label">Under Review</span>
+                                        <span class="legend-value">10.2%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot" style="background: #f97316;"></span>
+                                        <span class="legend-label">Document Requested</span>
+                                        <span class="legend-value">7.9%</span>
+                                    </div>
+                                    <div class="legend-item">
+                                        <span class="legend-dot" style="background: #ef4444;"></span>
+                                        <span class="legend-label">Rejected</span>
+                                        <span class="legend-value">7.2%</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Settlement Status -->
+                        <div class="card settlement-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Settlement Status</h3>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn">
+                                        Monthly
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="settlement-content">
+                                <div class="settlement-legend-box">
+                                    <div class="settlement-legend-item"><span class="dot settled"></span>Settled<span class="value">1997</span></div>
+                                    <div class="settlement-legend-item"><span class="dot approved"></span>Approved<span class="value">2065</span></div>
+                                    <div class="settlement-legend-item"><span class="dot review"></span>Review<span class="value">1152</span></div>
+                                    <div class="settlement-legend-item"><span class="dot requested"></span>Requested<span class="value">598</span></div>
+                                    <div class="settlement-legend-item"><span class="dot rejected"></span>Rejected<span class="value">413</span></div>
+                                </div>
+                                <div class="bar-chart-container">
+                                    <canvas id="settlementChart"></canvas>
+                                </div>
+                            </div>
+                            <div class="settlement-bottom-legend">
+                                <div class="legend-item"><span class="dot settled"></span>Settled</div>
+                                <div class="legend-item"><span class="dot approved"></span>Approved</div>
+                                <div class="legend-item"><span class="dot review"></span>Under Review</div>
+                                <div class="legend-item"><span class="dot requested"></span>Document Requested</div>
+                                <div class="legend-item"><span class="dot rejected"></span>Rejected</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="right-column">
+                        <!-- Premium Summary -->
+                        <div class="card premium-card">
+                            <div class="card-header">
+                                <h3 class="card-title">Premium Summary</h3>
+                                <div class="dropdown">
+                                    <button class="dropdown-btn">
+                                        Monthly
+                                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                            <path d="M6 9l6 6 6-6"/>
+                                        </svg>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="line-chart-container">
+                                <canvas id="premiumChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Alerts & Product Row -->
+                        <div class="alerts-products-row">
+                            <!-- Alerts & Reminders -->
+                            <div class="card alerts-card">
+                                <h3 class="card-title">Alerts & Reminders</h3>
+                                <div class="alert-item pink">
+                                    <div class="alert-value">6</div>
+                                    <div class="alert-label">Suspicious claim activity</div>
+                                </div>
+                                <div class="alert-item peach">
+                                    <div class="alert-value">362</div>
+                                    <div class="alert-label">Claims reported without documents</div>
+                                </div>
+                                <div class="alert-item yellow">
+                                    <div class="alert-value">141</div>
+                                    <div class="alert-label">High value claim</div>
+                                </div>
+                            </div>
+
+                            <!-- Product Sold -->
+                            <div class="card products-card">
+                                <h3 class="card-title">Product Sold</h3>
+                                <div class="product-item">
+                                    <div class="product-icon health">❤️</div>
+                                    <div class="product-info">
+                                        <div class="product-name">Health</div>
+                                        <div class="product-units">2,431 unit</div>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-icon auto">🚗</div>
+                                    <div class="product-info">
+                                        <div class="product-name">Auto</div>
+                                        <div class="product-units">12,431 unit</div>
+                                    </div>
+                                </div>
+                                <div class="product-item">
+                                    <div class="product-icon travel">🧳</div>
+                                    <div class="product-info">
+                                        <div class="product-name">Travel</div>
+                                        <div class="product-units">3,067 unit</div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>

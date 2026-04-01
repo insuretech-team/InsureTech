@@ -5,6 +5,4 @@ package models
 type RequestProcessingResponse struct {
 	JobId string `json:"job_id,omitempty"`
 	Status string `json:"status,omitempty"`
-	Message string `json:"message,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

@@ -13,6 +13,7 @@ import (
 func TestPhoneHelpers(t *testing.T) {
 	require.Equal(t, "8801712345678", NormalizeMSISDN("+8801712345678"))
 	require.Equal(t, "8801712345678", NormalizeMSISDN("01712345678"))
+	require.Equal(t, "8801712345678", NormalizeMSISDN("008801712345678"))
 	require.Equal(t, "", NormalizeMSISDN("12345"))
 
 	require.True(t, ValidateMSISDN("+8801712345678"))
@@ -31,7 +32,7 @@ func TestPhoneHelpers(t *testing.T) {
 func TestSSLWirelessClient_SendSMS_AndParseDLR(t *testing.T) {
 	srv := httptest.NewServer(http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("Content-Type", "application/json")
-		_, _ = w.Write([]byte(`{"status":"success","message_id":"mid-1"}`))
+		_, _ = w.Write([]byte(`{"status":"SUCCESS","status_code":200,"error_message":"","smsinfo":[{"sms_status":"SUCCESS","status_message":"Accepted","msisdn":"8801712345678","csms_id":"cs-1","reference_id":"mid-1"}]}`))
 	}))
 	defer srv.Close()
 

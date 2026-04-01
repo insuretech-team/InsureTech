@@ -1,0 +1,21 @@
+ContactUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    contact_id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    changed_fields:
+      type: array
+      items:
+        type: string
+    updated_by:
+      type: string
+    updated_at:
+      type: string
+      format: date-time
+  description: ContactUpdatedEvent is emitted when a contact is updated

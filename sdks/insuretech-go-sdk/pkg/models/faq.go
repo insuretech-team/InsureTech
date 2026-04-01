@@ -3,14 +3,14 @@ package models
 
 // FAQ represents a faq
 type FAQ struct {
-	ViewCount int `json:"view_count,omitempty"`
-	AuditInfo interface{} `json:"audit_info"`
-	QuestionBn string `json:"question_bn,omitempty"`
+	Answer string `json:"answer"`
 	AnswerBn string `json:"answer_bn,omitempty"`
+	AuditInfo interface{} `json:"audit_info"`
+	Category string `json:"category"`
 	DisplayOrder int `json:"display_order,omitempty"`
 	Id string `json:"id"`
-	Category string `json:"category"`
-	Question string `json:"question"`
-	Answer string `json:"answer"`
 	IsPublished bool `json:"is_published,omitempty"`
+	Question string `json:"question"`
+	QuestionBn string `json:"question_bn,omitempty"`
+	ViewCount int `json:"view_count,omitempty"`
 }

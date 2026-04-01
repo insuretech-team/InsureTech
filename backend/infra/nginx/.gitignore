@@ -16,6 +16,11 @@ proxy_temp/
 *.log
 logs/
 
+# Rendered output (generated from templates + .env.prod — never commit)
+# Run: backend/infra/nginx/scripts/render-nginx-conf.ps1 (Windows)
+#      backend/infra/nginx/scripts/render-nginx-conf.sh  (Linux/Mac)
+dist/
+
 # Temporary files
 *.tmp
 *.bak

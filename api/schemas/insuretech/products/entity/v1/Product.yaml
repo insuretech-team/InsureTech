@@ -71,8 +71,8 @@ Product:
         $ref: '#/components/schemas/ProductPlan'
     base_premium_currency:
       type: string
-      description: "Currency companion fields for Money types (flattened storage)\n\
-        \ @inject_tag: gorm:\"column:base_premium_currency;not null\""
+      description: "Currency companion fields for Money types (flattened storage)\r\
+        \n @inject_tag: gorm:\"column:base_premium_currency;not null\""
     min_sum_insured_currency:
       type: string
       description: '@inject_tag: gorm:"column:min_sum_insured_currency;not null"'
@@ -80,4 +80,4 @@ Product:
       type: string
       description: '@inject_tag: gorm:"column:max_sum_insured_currency;not null"'
   description: "Product represents an insurance product (Motor, Health, Travel, Device,\
-    \ etc.)\n Maps to 'products' table in product_schema"
+    \ etc.)\r\n Maps to 'products' table in product_schema"

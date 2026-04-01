@@ -74,7 +74,7 @@ message CreateIndividualBeneficiaryRequest {
   string date_of_birth = 3 [(google.api.field_behavior) = REQUIRED];
   string gender = 4 [(google.api.field_behavior) = REQUIRED];
   string nid_number = 5 [(google.api.field_behavior) = REQUIRED];
-  string mobile_number = 6 [(google.api.field_behavior) = REQUIRED];
+  string mobile_number = 6 [(google.api.field_behavior) = REQUIRED]; // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
   string email = 7 [(google.api.field_behavior) = OPTIONAL];
   string partner_id = 8 [(google.api.field_behavior) = OPTIONAL];
 }
@@ -93,7 +93,7 @@ message CreateBusinessBeneficiaryRequest {
   string trade_license_number = 3 [(google.api.field_behavior) = REQUIRED];
   string tin_number = 4 [(google.api.field_behavior) = REQUIRED];
   string focal_person_name = 5 [(google.api.field_behavior) = REQUIRED];
-  string focal_person_mobile = 6 [(google.api.field_behavior) = REQUIRED];
+  string focal_person_mobile = 6 [(google.api.field_behavior) = REQUIRED]; // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
   string partner_id = 7 [(google.api.field_behavior) = OPTIONAL];
 }
 
@@ -119,7 +119,7 @@ message GetBeneficiaryResponse {
 
 message UpdateBeneficiaryRequest {
   string beneficiary_id = 1 [(google.api.field_behavior) = REQUIRED];
-  string mobile_number = 2 [(google.api.field_behavior) = OPTIONAL];
+  string mobile_number = 2 [(google.api.field_behavior) = OPTIONAL]; // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
   string email = 3 [(google.api.field_behavior) = OPTIONAL];
   string address = 4 [(google.api.field_behavior) = OPTIONAL];
 }

@@ -49,11 +49,8 @@ func main() {
 		zap.String("active_db", string(db.Manager.GetCurrentType())),
 		zap.Bool("failover_enabled", db.Manager.GetPrimaryDB() != nil && db.Manager.GetBackupDB() != nil))
 
-	// TODO: Initialize workflow server when implemented
-	// workflowServer, err := workflowpkg.NewWorkflowServer(sqlDB)
-	// if err != nil {
-	// 	logger.Fatal("Failed to create workflow server", zap.Error(err))
-	// }
+	// This legacy command still provides health checks while the dedicated
+	// workflow microservice bootstrap under microservices/workflow owns RPC wiring.
 	_ = sqlDB
 
 	// Setup gRPC server
@@ -69,8 +66,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	// TODO: Register workflow service when implemented
-	// workflowservicev1.RegisterWorkflowServiceServer(grpcServer, workflowServer)
+	// RPC registration is handled by the dedicated workflow microservice bootstrap.
 
 	// Register health service
 	healthServer := health.NewServer()

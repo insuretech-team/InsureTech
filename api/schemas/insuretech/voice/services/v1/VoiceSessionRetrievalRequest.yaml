@@ -1,4 +1,4 @@
-VoiceVoiceSessionRetrievalRequest:
+VoiceSessionRetrievalRequest:
   type: object
   properties:
     voice_session_id:

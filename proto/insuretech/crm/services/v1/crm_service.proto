@@ -1,0 +1,276 @@
+syntax = "proto3";
+
+package insuretech.crm.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/crm/services/v1;crmservicev1";
+option csharp_namespace = "Insuretech.Crm.Services.V1";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/crm/entity/v1/crm.proto";
+
+// CrmService provides customer relationship management
+service CrmService {
+  // Lead management
+  rpc CreateLead(CreateLeadRequest) returns (CreateLeadResponse);
+
+  rpc GetLead(GetLeadRequest) returns (GetLeadResponse);
+
+  rpc ListLeads(ListLeadsRequest) returns (ListLeadsResponse);
+
+  rpc UpdateLead(UpdateLeadRequest) returns (UpdateLeadResponse);
+
+  rpc DeleteLead(DeleteLeadRequest) returns (DeleteLeadResponse);
+
+  rpc ConvertLeadToContact(ConvertLeadToContactRequest) returns (ConvertLeadToContactResponse);
+
+  rpc AssignLead(AssignLeadRequest) returns (AssignLeadResponse);
+
+  // Contact management
+  rpc CreateContact(CreateContactRequest) returns (CreateContactResponse);
+
+  rpc GetContact(GetContactRequest) returns (GetContactResponse);
+
+  rpc ListContacts(ListContactsRequest) returns (ListContactsResponse);
+
+  rpc UpdateContact(UpdateContactRequest) returns (UpdateContactResponse);
+
+  rpc DeleteContact(DeleteContactRequest) returns (DeleteContactResponse);
+
+  // Lead and contact statistics
+  rpc GetCrmStatistics(GetCrmStatisticsRequest) returns (GetCrmStatisticsResponse);
+
+  rpc GetAgentDashboard(GetAgentDashboardRequest) returns (GetAgentDashboardResponse);
+}
+
+// Lead requests/responses
+message CreateLeadRequest {
+  string title = 1;
+  string first_name = 2;
+  string last_name = 3;
+  google.protobuf.Timestamp date_of_birth = 4;
+  string gender = 5;
+  string phone_number = 6;
+  string email_address = 7;
+  string address = 8;
+  entity.v1.LeadSource lead_source = 9;
+  entity.v1.LeadPriority lead_priority = 10;
+  string assigned_agent_id = 11;
+  string desired_insurance_type = 12;
+  int64 desired_coverage_amount = 13;
+  string specific_requirements = 14;
+  map<string, string> metadata = 15;
+  string created_by = 16;
+}
+
+message CreateLeadResponse {
+  entity.v1.Lead lead = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetLeadRequest {
+  string lead_id = 1;
+}
+
+message GetLeadResponse {
+  entity.v1.Lead lead = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListLeadsRequest {
+  entity.v1.LeadStatus status = 1;
+  entity.v1.LeadSource source = 2;
+  string assigned_agent_id = 3;
+  string search_query = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListLeadsResponse {
+  repeated entity.v1.Lead leads = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message UpdateLeadRequest {
+  string lead_id = 1;
+  string title = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string phone_number = 5;
+  string email_address = 6;
+  string address = 7;
+  entity.v1.LeadStatus lead_status = 8;
+  entity.v1.LeadPriority lead_priority = 9;
+  int32 lead_score = 10;
+  string assigned_agent_id = 11;
+  string desired_insurance_type = 12;
+  int64 desired_coverage_amount = 13;
+  entity.v1.QualificationStatus qualification_status = 14;
+  map<string, string> metadata = 15;
+}
+
+message UpdateLeadResponse {
+  entity.v1.Lead lead = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteLeadRequest {
+  string lead_id = 1;
+  bool permanent = 2;
+}
+
+message DeleteLeadResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ConvertLeadToContactRequest {
+  string lead_id = 1;
+  string conversion_reason = 2;
+}
+
+message ConvertLeadToContactResponse {
+  entity.v1.Contact contact = 1;
+  entity.v1.Lead lead = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message AssignLeadRequest {
+  string lead_id = 1;
+  string agent_id = 2;
+}
+
+message AssignLeadResponse {
+  entity.v1.Lead lead = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+// Contact requests/responses
+message CreateContactRequest {
+  string first_name = 1;
+  string last_name = 2;
+  google.protobuf.Timestamp date_of_birth = 3;
+  string gender = 4;
+  string phone_number = 5;
+  string email_address = 6;
+  string address = 7;
+  entity.v1.PreferredContactMethod preferred_contact_method = 8;
+  string referral_source = 9;
+  string preferred_language = 10;
+  bool marketing_consent = 11;
+  string assigned_agent_id = 12;
+  entity.v1.ContactType contact_type = 13;
+  map<string, string> metadata = 14;
+  string created_by = 15;
+}
+
+message CreateContactResponse {
+  entity.v1.Contact contact = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetContactRequest {
+  string contact_id = 1;
+}
+
+message GetContactResponse {
+  entity.v1.Contact contact = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListContactsRequest {
+  entity.v1.ContactStatus status = 1;
+  entity.v1.ContactType contact_type = 2;
+  string assigned_agent_id = 3;
+  string search_query = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListContactsResponse {
+  repeated entity.v1.Contact contacts = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message UpdateContactRequest {
+  string contact_id = 1;
+  string first_name = 2;
+  string last_name = 3;
+  string phone_number = 4;
+  string email_address = 5;
+  string address = 6;
+  entity.v1.PreferredContactMethod preferred_contact_method = 7;
+  bool marketing_consent = 8;
+  string assigned_agent_id = 9;
+  entity.v1.ContactStatus contact_status = 10;
+  map<string, string> metadata = 11;
+}
+
+message UpdateContactResponse {
+  entity.v1.Contact contact = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteContactRequest {
+  string contact_id = 1;
+  bool permanent = 2;
+}
+
+message DeleteContactResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+// Statistics
+message GetCrmStatisticsRequest {
+  string agent_id = 1;
+  google.protobuf.Timestamp start_date = 2;
+  google.protobuf.Timestamp end_date = 3;
+}
+
+message GetCrmStatisticsResponse {
+  int32 total_leads = 1;
+  int32 new_leads = 2;
+  int32 contacted_leads = 3;
+  int32 qualified_leads = 4;
+  int32 converted_leads = 5;
+  int32 lost_leads = 6;
+  int32 total_contacts = 7;
+  int32 active_contacts = 8;
+  double conversion_rate = 9;
+  map<string, int32> leads_by_source = 10;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 11;
+}
+
+message GetAgentDashboardRequest {
+  string agent_id = 1;
+}
+
+message GetAgentDashboardResponse {
+  int32 my_leads_count = 1;
+  int32 my_contacts_count = 2;
+  int32 new_leads_today = 3;
+  int32 leads_converted_this_month = 4;
+  repeated entity.v1.Lead recent_leads = 5;
+  repeated entity.v1.Contact recent_contacts = 6;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 7;
+}

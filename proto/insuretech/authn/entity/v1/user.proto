@@ -38,14 +38,14 @@ message User {
     (insuretech.common.v1.column) = {
       column_name : "mobile_number"
       sql_type : "VARCHAR(20)"
-      not_null : true
       unique : true
-      check_constraint : "mobile_number ~ '^\\+880[1][0-9]{9}$'"
-      comment : "Bangladesh mobile format: +880 1XXX XXXXXX"
+      check_constraint : "mobile_number ~ '^\\+880(13|14|15|16|17|18|19)[0-9]{8}$'"
+      comment : "Optional canonical Bangladesh mobile format: +8801XXXXXXXXX"
       index : {
         index_name : "idx_users_mobile_number"
         index_type : INDEX_TYPE_BTREE
         unique : true
+        where_clause : "mobile_number IS NOT NULL AND deleted_at IS NULL"
       }
     },
     (insuretech.common.v1.pii) = true,
@@ -55,7 +55,7 @@ message User {
     (insuretech.common.v1.data_purpose) =
         "User authentication and communication"
   ];
-  // @inject_tag: gorm:"column:mobile_number;not null"
+  // @inject_tag: gorm:"column:mobile_number"
 
   string email = 3 [
     (insuretech.common.v1.column) = {
@@ -219,15 +219,16 @@ message User {
   } ];
   // @inject_tag: gorm:"column:wallet_payment_method"
 
-  // UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER use
-  // email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth
+  // UserType determines auth method: BUSINESS_BENEFICIARY, B2B_BENEFICIARY,
+  // and SYSTEM_USER use email auth (web portal). B2C_CUSTOMER and AGENT use
+  // mobile/SMS auth.
   UserType user_type = 20 [ (insuretech.common.v1.column) = {
     column_name : "user_type"
     sql_type : "VARCHAR(50)"
     not_null : true
     default_value : "'B2C_CUSTOMER'"
     comment : "User type: B2C_CUSTOMER, AGENT, BUSINESS_BENEFICIARY, "
-              "SYSTEM_USER"
+              "B2B_BENEFICIARY, SYSTEM_USER"
     index : {index_name : "idx_users_user_type" index_type : INDEX_TYPE_BTREE}
   } ];
   // @inject_tag: gorm:"column:user_type;not null;serializer:proto_enum"
@@ -354,6 +355,20 @@ message User {
     comment : "AES-256-GCM encrypted TOTP secret (base32)"
   } ];
   // @inject_tag: gorm:"column:totp_secret_enc"
+
+  bool password_change_required = 34 [ (insuretech.common.v1.column) = {
+    column_name : "password_change_required"
+    sql_type : "BOOLEAN"
+    not_null : true
+    default_value : "false"
+    comment : "Whether the user must change their password before continuing"
+    index : {
+      index_name : "idx_users_password_change_required"
+      index_type : INDEX_TYPE_BTREE
+      where_clause : "password_change_required = true AND deleted_at IS NULL"
+    }
+  } ];
+  // @inject_tag: gorm:"column:password_change_required;not null"
 
   int32 active_policies_count = 26 [ (insuretech.common.v1.column) = {
     column_name : "active_policies_count"

@@ -1,0 +1,14 @@
+package models
+
+// TaskType represents a task_type
+type TaskType string
+
+// TaskType values
+const (
+	TaskTypeTASKTYPEUNSPECIFIED TaskType = "TASK_TYPE_UNSPECIFIED"
+	TaskTypeTASKTYPEFOLLOWUP  = "TASK_TYPE_FOLLOW_UP"
+	TaskTypeTASKTYPEREVIEW  = "TASK_TYPE_REVIEW"
+	TaskTypeTASKTYPEAPPROVAL  = "TASK_TYPE_APPROVAL"
+	TaskTypeTASKTYPEDOCUMENT  = "TASK_TYPE_DOCUMENT"
+	TaskTypeTASKTYPEREMINDER  = "TASK_TYPE_REMINDER"
+)

@@ -2,6 +2,8 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
 using PoliSync.ApiHost.BackgroundServices;
+using PoliSync.ApiHost.Interceptors;
+using PoliSync.ApiHost.Services;
 using PoliSync.Infrastructure.Auth;
 using PoliSync.Infrastructure.Messaging;
 using PoliSync.Infrastructure.Persistence;
@@ -20,8 +22,11 @@ using PoliSync.SharedKernel.Auth;
 using PoliSync.SharedKernel.Messaging;
 using PoliSync.SharedKernel.Persistence;
 using PoliSync.SharedKernel.Pii;
+using PoliSync.Workflow;
+using PoliSync.Workflow.Infrastructure;
 using Serilog;
 using System.Security.Cryptography;
+using System.Reflection;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -35,12 +40,17 @@ builder.Host.UseSerilog();
 // Add services
 builder.Services.AddGrpc(options =>
 {
+    options.Interceptors.Add<AuthInterceptor>();
+    options.Interceptors.Add<JwtAuthInterceptor>();
+    options.Interceptors.Add<LoggingInterceptor>();
+    options.Interceptors.Add<ValidationInterceptor>();
     options.EnableDetailedErrors = true;
     options.MaxReceiveMessageSize = 16 * 1024 * 1024; // 16MB
     options.MaxSendMessageSize = 16 * 1024 * 1024;
 });
 
 builder.Services.AddGrpcReflection();
+builder.Services.AddControllers();
 
 // Database
 var insuranceConnectionString = builder.Configuration.GetConnectionString("InsuranceDb")!
@@ -59,6 +69,12 @@ builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
 // Repositories
 builder.Services.AddScoped(typeof(PoliSync.SharedKernel.Persistence.IRepository<>), 
     typeof(Repository<>));
+
+// GoProductDataGateway — routes ALL product/plan/rider/pricing calls through Go insurance gRPC
+// This is the single source of truth pattern: PoliSync → gRPC → Go → DB
+builder.Services.AddScoped<PoliSync.Products.Infrastructure.IProductRepository, 
+    PoliSync.Products.Infrastructure.GoProductDataGateway>();
+builder.Services.AddScoped<PoliSync.Products.Infrastructure.GoProductDataGateway>();
 
 // Redis Cache
 var redisConnectionString = builder.Configuration.GetConnectionString("Redis")!
@@ -91,23 +107,52 @@ builder.Services.AddSingleton<IPiiEncryptor, AesGcmPiiEncryptor>();
 // Current User
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<ICurrentUser, CurrentUser>();
+builder.Services.AddSingleton<PoliSync.Infrastructure.GrpcClients.GrpcClientFactory>();
+builder.Services.AddSingleton<PoliSync.Infrastructure.GrpcClients.DocgenGrpcClient>();
 builder.Services.AddSingleton<PoliSync.Infrastructure.Clients.InsuranceServiceClient>();
 builder.Services.AddSingleton<PoliSync.Infrastructure.Clients.OrderServiceGrpcClient>();
 builder.Services.AddSingleton<PoliSync.Infrastructure.Clients.PaymentServiceGrpcClient>();
+builder.Services.AddSingleton<PoliSync.Infrastructure.Clients.CommissionServiceGrpcClient>();
 builder.Services.AddScoped<IPolicyDataGateway, GoPolicyDataGateway>();
+builder.Services.AddScoped<InsuranceProposalWorkflowService>();
 builder.Services.AddScoped<IQuotationDataGateway, GoQuotationDataGateway>();
 builder.Services.AddScoped<IClaimDataGateway, GoClaimDataGateway>();
 builder.Services.AddScoped<IEndorsementDataGateway, GoEndorsementDataGateway>();
 builder.Services.AddScoped<IRenewalDataGateway, GoRenewalDataGateway>();
 builder.Services.AddScoped<IOrderDataGateway, GoOrderDataGateway>();
 builder.Services.AddScoped<IRefundPaymentGateway, GoRefundPaymentGateway>();
+builder.Services.AddScoped<PoliSync.Commission.Infrastructure.ICommissionDataGateway, PoliSync.Commission.Infrastructure.GoCommissionDataGateway>();
 builder.Services.AddScoped<IUnderwritingDataGateway, GoUnderwritingDataGateway>();
+builder.Services.AddScoped<IWorkflowDataGateway, GoWorkflowDataGateway>();
 builder.Services.AddSingleton<IUnderwritingRiskScorer, UnderwritingRiskScorer>();
 builder.Services.AddHostedService<UnderwritingQuotationSubmittedConsumer>();
 builder.Services.AddHostedService<OrderPaymentConfirmedConsumer>();
+builder.Services.AddHostedService<InsuranceProposalDecisionConsumer>();
+builder.Services.AddHostedService<QuotationExpiryService>();
 
 // Domain modules
 builder.Services.AddProductsModule();
+
+// Workflow engine — IWorkflowDataGateway + WorkflowTemplateSeeder (IHostedService)
+builder.Services.AddWorkflow();
+
+// Business Rules Engine (Microsoft RulesEngine)
+InvokeModuleRegistration(builder.Services, "PoliSync.RulesEngine", "PoliSync.RulesEngine.DependencyInjection", "AddRulesEngineServices");
+
+// Quoting Service
+InvokeModuleRegistration(builder.Services, "PoliSync.Quoting", "PoliSync.Quoting.DependencyInjection", "AddQuotingServices");
+
+// Vehicle Insurance Service
+InvokeModuleRegistration(builder.Services, "PoliSync.VehicleInsurance", "PoliSync.VehicleInsurance.DependencyInjection", "AddVehicleInsuranceServices");
+
+// Life Insurance Service
+InvokeModuleRegistration(builder.Services, "PoliSync.LifeInsurance", "PoliSync.LifeInsurance.DependencyInjection", "AddLifeInsuranceServices");
+
+// CRM Service
+InvokeModuleRegistration(builder.Services, "PoliSync.CRM", "PoliSync.CRM.DependencyInjection", "AddCrmServices");
+
+// Actuarial Service
+InvokeModuleRegistration(builder.Services, "PoliSync.Actuarial", "PoliSync.Actuarial.DependencyInjection", "AddActuarialServices");
 
 // MediatR
 builder.Services.AddMediatR(cfg =>
@@ -123,6 +168,13 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssemblyContaining<PoliSync.Renewal.AssemblyMarker>();
     cfg.RegisterServicesFromAssemblyContaining<PoliSync.Underwriting.AssemblyMarker>();
     cfg.RegisterServicesFromAssemblyContaining<PoliSync.Refund.AssemblyMarker>();
+    cfg.RegisterServicesFromAssemblyContaining<PoliSync.Workflow.AssemblyMarker>();
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.RulesEngine"));
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.Quoting"));
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.VehicleInsurance"));
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.LifeInsurance"));
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.CRM"));
+    cfg.RegisterServicesFromAssembly(LoadModuleAssembly("PoliSync.Actuarial"));
 });
 
 // JWT Authentication
@@ -153,10 +205,18 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     });
 
 builder.Services.AddAuthorization();
+builder.Services.AddScoped<AuthInterceptor>();
+builder.Services.AddScoped<JwtAuthInterceptor>();
+builder.Services.AddScoped<LoggingInterceptor>();
+builder.Services.AddScoped<ValidationInterceptor>();
 
-// Health Checks
-builder.Services.AddHealthChecks()
-    .AddNpgSql(insuranceConnectionString, name: "postgres")
+// Health Checks — DB health check is conditional (PoliSync delegates CRUD to Go insurance service)
+var healthChecks = builder.Services.AddHealthChecks();
+if (!string.IsNullOrEmpty(insuranceConnectionString))
+{
+    healthChecks.AddNpgSql(insuranceConnectionString, name: "postgres");
+}
+healthChecks
     .AddRedis(redisConnectionString, name: "redis")
     .AddKafka(new Confluent.Kafka.ProducerConfig 
     { 
@@ -196,11 +256,19 @@ app.MapGrpcService<PoliSync.Underwriting.GrpcServices.UnderwritingGrpcService>()
 app.MapGrpcService<PoliSync.Endorsement.GrpcServices.EndorsementGrpcService>();
 app.MapGrpcService<PoliSync.Renewal.GrpcServices.RenewalGrpcService>();
 app.MapGrpcService<PoliSync.Refund.GrpcServices.RefundGrpcService>();
+app.MapGrpcService<PoliSync.Workflow.GrpcServices.WorkflowGrpcService>();
+MapGrpcServiceByName(app, "PoliSync.RulesEngine", "PoliSync.RulesEngine.GrpcServices.BusinessWorkflowGrpcService");
+MapGrpcServiceByName(app, "PoliSync.Quoting", "PoliSync.Quoting.GrpcServices.QuotingGrpcService");
+MapGrpcServiceByName(app, "PoliSync.VehicleInsurance", "PoliSync.VehicleInsurance.GrpcServices.VehicleGrpcService");
+MapGrpcServiceByName(app, "PoliSync.LifeInsurance", "PoliSync.LifeInsurance.GrpcServices.LifeInsuranceGrpcService");
+MapGrpcServiceByName(app, "PoliSync.CRM", "PoliSync.CRM.GrpcServices.CrmGrpcService");
+MapGrpcServiceByName(app, "PoliSync.Actuarial", "PoliSync.Actuarial.GrpcServices.ActuarialGrpcService");
 
 app.MapGrpcReflectionService();
 
 // Health checks
 app.MapHealthChecks("/health");
+app.MapControllers();
 
 // Root endpoint
 app.MapGet("/", () => new
@@ -223,4 +291,36 @@ catch (Exception ex)
 finally
 {
     Log.CloseAndFlush();
+}
+
+static Assembly LoadModuleAssembly(string assemblyName)
+{
+    return AppDomain.CurrentDomain.GetAssemblies()
+        .FirstOrDefault(a => string.Equals(a.GetName().Name, assemblyName, StringComparison.Ordinal))
+        ?? Assembly.Load(assemblyName);
+}
+
+static void InvokeModuleRegistration(IServiceCollection services, string assemblyName, string typeName, string methodName)
+{
+    var assembly = LoadModuleAssembly(assemblyName);
+    var type = assembly.GetType(typeName, throwOnError: true)!;
+    var method = type.GetMethod(methodName, BindingFlags.Public | BindingFlags.Static, [typeof(IServiceCollection)]);
+    if (method is null)
+    {
+        throw new InvalidOperationException($"Could not find {typeName}.{methodName}(IServiceCollection).");
+    }
+
+    method.Invoke(null, [services]);
+}
+
+static void MapGrpcServiceByName(IEndpointRouteBuilder app, string assemblyName, string serviceTypeName)
+{
+    var assembly = LoadModuleAssembly(assemblyName);
+    var serviceType = assembly.GetType(serviceTypeName, throwOnError: true)!;
+
+    var mapGrpcService = typeof(Microsoft.AspNetCore.Builder.GrpcEndpointRouteBuilderExtensions)
+        .GetMethods(BindingFlags.Public | BindingFlags.Static)
+        .Single(m => m.Name == "MapGrpcService" && m.IsGenericMethodDefinition && m.GetParameters().Length == 1);
+
+    mapGrpcService.MakeGenericMethod(serviceType).Invoke(null, [app]);
 }

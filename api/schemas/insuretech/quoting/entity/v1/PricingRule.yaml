@@ -1,0 +1,73 @@
+QuotingPricingRule:
+  type: object
+  properties:
+    pricing_rule_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:pricing_rule_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    rule_name:
+      type: string
+      description: '@inject_tag: gorm:"column:rule_name;not null"'
+    rule_type:
+      $ref: '#/components/schemas/PricingRuleType'
+      description: '@inject_tag: gorm:"column:rule_type;not null;serializer:proto_enum"'
+    condition_expression:
+      type: string
+      description: '@inject_tag: gorm:"column:condition_expression"'
+    calculation_expression:
+      type: string
+      description: '@inject_tag: gorm:"column:calculation_expression;not null"'
+    priority:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:priority;not null"'
+      default: 100
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    valid_from:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:valid_from;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    valid_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "PricingRule represents a pricing calculation rule\n Maps to 'pricing_rules'\
+    \ table in quoting_schema"
+  required:
+  - pricing_rule_id
+  - product_id
+  - rule_name
+  - rule_type
+  - calculation_expression
+  - priority
+  - is_active
+  - valid_from
+  - created_at
+  - updated_at

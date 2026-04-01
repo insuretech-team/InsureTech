@@ -31,42 +31,58 @@ public sealed class RefundGrpcService : RefundService.RefundServiceBase
         _paymentGateway = paymentGateway;
     }
 
-    public override Task<RequestRefundResponse> RequestRefund(RequestRefundRequest request, ServerCallContext context)
+    public override async Task<RequestRefundResponse> RequestRefund(RequestRefundRequest request, ServerCallContext context)
     {
         if (string.IsNullOrWhiteSpace(request.PolicyId))
         {
-            return Task.FromResult(new RequestRefundResponse
+            return new RequestRefundResponse
             {
                 Error = BuildError("VALIDATION_ERROR", "PolicyId is required")
-            });
+            };
         }
 
-        var refundId = Guid.NewGuid().ToString("N");
-        var refund = new RefundEntity
+        try
         {
-            Id = refundId,
-            RefundNumber = $"RFD-{DateTime.UtcNow:yyyyMMdd}-{Random.Shared.Next(100000, 999999)}",
-            PolicyId = request.PolicyId,
-            Reason = ParseRefundReason(request.Reason),
-            ReasonDetails = request.ReasonDetails,
-            TotalPremiumPaid = NewMoney(0),
-            PremiumUsed = NewMoney(0),
-            CancellationCharge = NewMoney(0),
-            RefundableAmount = NewMoney(0),
-            CalculationDetails = string.Empty,
-            Status = RefundStatus.Pending,
-            RequestedBy = "SYSTEM"
-        };
+            var result = await _mediator.Send(
+                new Application.Commands.RequestRefundCommand(
+                    request.PolicyId, request.Reason, request.ReasonDetails, "SYSTEM"),
+                context.CancellationToken);
 
-        RefundsStore[refundId] = refund;
-        _logger.LogInformation("Refund requested: {RefundId}", refundId);
+            if (result.IsFailure)
+                return new RequestRefundResponse { Error = BuildError(result.Error!.Code, result.Error.Message) };
 
-        return Task.FromResult(new RequestRefundResponse
+            // Also store in local cache so CalculateRefund / GetRefund / ListRefunds work immediately
+            var refundId = result.Value!.RefundId;
+            var refund = new RefundEntity
+            {
+                Id = refundId,
+                RefundNumber = result.Value.RefundNumber,
+                PolicyId = request.PolicyId,
+                Reason = ParseRefundReason(request.Reason),
+                ReasonDetails = request.ReasonDetails,
+                TotalPremiumPaid = NewMoney(0),
+                PremiumUsed = NewMoney(0),
+                CancellationCharge = NewMoney(0),
+                RefundableAmount = NewMoney(0),
+                CalculationDetails = string.Empty,
+                Status = RefundStatus.Pending,
+                RequestedBy = "SYSTEM"
+            };
+            RefundsStore[refundId] = refund;
+
+            _logger.LogInformation("Refund requested: {RefundId}", refundId);
+            return new RequestRefundResponse
+            {
+                RefundId = refund.Id,
+                RefundNumber = refund.RefundNumber,
+                Message = "Refund request submitted"
+            };
+        }
+        catch (Exception ex)
         {
-            RefundId = refund.Id,
-            RefundNumber = refund.RefundNumber,
-            Message = "Refund request submitted"
-        });
+            _logger.LogError(ex, "Failed to request refund for policy {PolicyId}", request.PolicyId);
+            return new RequestRefundResponse { Error = BuildError("REQUEST_FAILED", ex.Message) };
+        }
     }
 
     public override Task<CalculateRefundResponse> CalculateRefund(CalculateRefundRequest request, ServerCallContext context)
@@ -152,30 +168,38 @@ public sealed class RefundGrpcService : RefundService.RefundServiceBase
         });
     }
 
-    public override Task<ApproveRefundResponse> ApproveRefund(ApproveRefundRequest request, ServerCallContext context)
+    public override async Task<ApproveRefundResponse> ApproveRefund(ApproveRefundRequest request, ServerCallContext context)
     {
         if (!RefundsStore.TryGetValue(request.RefundId, out var refund))
         {
-            return Task.FromResult(new ApproveRefundResponse
-            {
-                Error = BuildError("NOT_FOUND", "Refund not found")
-            });
+            return new ApproveRefundResponse { Error = BuildError("NOT_FOUND", "Refund not found") };
         }
 
-        lock (MutationLock)
+        try
         {
-            refund.Status = RefundStatus.Approved;
-            refund.ApprovedBy = request.ApprovedBy;
-            if (!string.IsNullOrWhiteSpace(request.Comments))
+            var result = await _mediator.Send(
+                new Application.Commands.ApproveRefundCommand(
+                    request.RefundId, request.ApprovedBy, request.Comments),
+                context.CancellationToken);
+
+            if (result.IsFailure)
+                return new ApproveRefundResponse { Error = BuildError(result.Error!.Code, result.Error.Message) };
+
+            lock (MutationLock)
             {
-                refund.ReasonDetails = $"{refund.ReasonDetails};approval_comments={request.Comments}";
+                refund.Status = RefundStatus.Approved;
+                refund.ApprovedBy = request.ApprovedBy;
+                if (!string.IsNullOrWhiteSpace(request.Comments))
+                    refund.ReasonDetails = $"{refund.ReasonDetails};approval_comments={request.Comments}";
             }
-        }
 
-        return Task.FromResult(new ApproveRefundResponse
+            return new ApproveRefundResponse { Message = "Refund approved" };
+        }
+        catch (Exception ex)
         {
-            Message = "Refund approved"
-        });
+            _logger.LogError(ex, "Failed to approve refund {RefundId}", request.RefundId);
+            return new ApproveRefundResponse { Error = BuildError("APPROVE_FAILED", ex.Message) };
+        }
     }
 
     public override async Task<ProcessRefundResponse> ProcessRefund(ProcessRefundRequest request, ServerCallContext context)

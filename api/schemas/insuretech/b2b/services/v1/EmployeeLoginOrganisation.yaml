@@ -1,0 +1,11 @@
+EmployeeLoginOrganisation:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    organisation_name:
+      type: string
+    organisation_code:
+      type: string
+  description: Domain entity representing employee login organisation. Core business
+    object in the system.

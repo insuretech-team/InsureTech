@@ -5,5 +5,4 @@ package models
 type InvoiceIssuanceResponse struct {
 	InvoiceId string `json:"invoice_id,omitempty"`
 	Status *InvoiceStatus `json:"status,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

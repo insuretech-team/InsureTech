@@ -11,7 +11,7 @@ IoTDevice:
       description: '@inject_tag: gorm:"column:device_serial;not null"'
       x-unique: true
     type:
-      $ref: '#/components/schemas/IotDeviceType'
+      $ref: '#/components/schemas/IoTDeviceType'
       description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
     manufacturer:
       type: string

@@ -1,0 +1,16 @@
+AgeAdditionConfig:
+  type: object
+  properties:
+    start_age:
+      type: integer
+      format: int32
+      description: Age at which additions start (e.g., 18)
+    age_increment:
+      type: integer
+      format: int32
+      description: Increment period in years (e.g., 5)
+    price_to_add:
+      type: string
+      format: int64
+      description: Amount to add per increment in smallest currency unit
+  description: AgeAdditionConfig - Configuration for age-based premium additions

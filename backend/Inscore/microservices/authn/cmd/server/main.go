@@ -2,8 +2,6 @@ package main
 
 import (
 	"context"
-	"net"
-	"net/url"
 	"os"
 	"os/signal"
 	"strconv"
@@ -22,27 +20,22 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/seeder"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/service"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/sms"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/runtimeaddr"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	kycservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/services/v1"
 	"github.com/newage-saint/insuretech/ops/config"
 	"github.com/redis/go-redis/v9"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v3"
 )
 
 // ServicesConfig structure matches services.yaml
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// 1. Initialize Logger
@@ -111,7 +104,7 @@ func main() {
 	voiceRepo := repository.NewVoiceSessionRepository(database)
 
 	// 6. Initialize Kafka Event Producer (with retry for startup resilience)
-	kafkaBrokers := normalizeKafkaBrokers(cfg.Kafka.Brokers)
+	kafkaBrokers := runtimeaddr.NormalizeKafkaBrokers(cfg.Kafka.Brokers)
 	appLogger.Infof("Connecting to Kafka brokers: %v", kafkaBrokers)
 	kafkaProducer, err := producer.NewEventProducerWithRetry(
 		kafkaBrokers,
@@ -134,6 +127,7 @@ func main() {
 	smsClient := sms.NewSSLWirelessClient(cfg)
 
 	// 7b. Initialize Email Client (for Business Beneficiary + System User email OTP)
+	// OTP / verification email client (noreply@labaidinsuretech.com)
 	emailClient := email.NewClient(email.Config{
 		SMTPHost: cfg.Email.SMTPHost,
 		SMTPPort: cfg.Email.SMTPPort,
@@ -144,9 +138,21 @@ func main() {
 	})
 	appLogger.Infof("Email client initialized (SMTP: %s:%d, from: %s)", cfg.Email.SMTPHost, cfg.Email.SMTPPort, cfg.Email.From)
 
+	// Info / transactional email client (info@labaidinsuretech.com)
+	emailInfoClient := email.NewClient(email.Config{
+		SMTPHost: cfg.EmailInfo.SMTPHost,
+		SMTPPort: cfg.EmailInfo.SMTPPort,
+		From:     cfg.EmailInfo.From,
+		Username: cfg.EmailInfo.Username,
+		Password: cfg.EmailInfo.Password,
+		TLS:      cfg.EmailInfo.TLS,
+	})
+	appLogger.Infof("Email info client initialized (SMTP: %s:%d, from: %s)", cfg.EmailInfo.SMTPHost, cfg.EmailInfo.SMTPPort, cfg.EmailInfo.From)
+	_ = emailInfoClient // available for future transactional email use
+
 	// 7d. Initialize Redis client (optional — used for JTI blocklist + session limiter)
 	var redisClient redis.UniversalClient
-	redisURL := normalizeRedisURL(cfg.Redis.URL)
+	redisURL := runtimeaddr.NormalizeRedisURL(cfg.Redis.URL)
 	if redisURL != cfg.Redis.URL {
 		appLogger.Warnf("Redis URL normalized for runtime: %s -> %s", cfg.Redis.URL, redisURL)
 	}
@@ -181,7 +187,12 @@ func main() {
 	if err != nil {
 		appLogger.Fatalf("failed to initialize token service: %v", err)
 	}
-	otpService := service.NewOTPService(otpRepo, smsClient, emailClient, cfg, eventPublisher)
+	var otpService *service.OTPService
+	if redisClient != nil {
+		otpService = service.NewOTPServiceWithRedis(otpRepo, smsClient, emailClient, cfg, eventPublisher, redisClient)
+	} else {
+		otpService = service.NewOTPService(otpRepo, smsClient, emailClient, cfg, eventPublisher)
+	}
 	authService := service.NewAuthService(
 		tokenService,
 		otpService,
@@ -199,30 +210,44 @@ func main() {
 		metadataExtractor,
 	)
 
-	// Optional downstream KYC client wiring (Phase B).
+	// Wire purpose-built FLVEAdapter when HF endpoint is configured.
+	if cfg.FLVE.HFEndpoint != "" {
+		timeout := cfg.KYC.Timeout
+		if timeout <= 0 {
+			timeout = 30 * time.Second
+		}
+		appLogger.Infof("FLVE eKYC adapter enabled: endpoint=%s token_len=%d", cfg.FLVE.HFEndpoint, len(cfg.FLVE.HFToken))
+		authService.SetFLVEAdapter(service.NewFLVEAdapter(cfg.FLVE.HFEndpoint, cfg.FLVE.HFToken, timeout))
+	}
+
+	// Downstream KYC microservice wiring.
+	// Reads KYC_SERVICE_ADDRESS directly from OS env (not via config struct) to avoid
+	// godotenv not-overwrite behaviour when KYC_SERVICE_ENABLED was previously false
+	// in the shell environment. Address presence is the only gate needed.
 	var kycConn *grpc.ClientConn
-	if cfg.KYC.Enabled && cfg.KYC.Address != "" {
-		addressLower := strings.ToLower(cfg.KYC.Address)
+	kycAddress := os.Getenv("KYC_SERVICE_ADDRESS")
+	if kycAddress == "" {
+		kycAddress = cfg.KYC.Address
+	}
+	if kycAddress != "" {
+		addressLower := strings.ToLower(kycAddress)
 		if strings.HasPrefix(addressLower, "http://") || strings.HasPrefix(addressLower, "https://") {
-			authService.SetExternalKYCClient(service.NewFLVEExternalKYCClient(cfg.KYC.Address, cfg.KYC.Token, cfg.KYC.Timeout))
-			appLogger.Infof("Downstream FLVE KYC client enabled: %s", cfg.KYC.Address)
+			authService.SetExternalKYCClient(service.NewFLVEExternalKYCClient(kycAddress, cfg.KYC.Token, cfg.KYC.Timeout))
+			appLogger.Infof("Downstream FLVE KYC client (legacy) enabled: %s", kycAddress)
 		} else {
-			dialCtx, dialCancel := context.WithTimeout(context.Background(), cfg.KYC.Timeout)
-			defer dialCancel()
-			conn, dialErr := grpc.DialContext(
-				dialCtx,
-				cfg.KYC.Address,
-				grpc.WithTransportCredentials(insecure.NewCredentials()),
-				grpc.WithBlock(),
-			)
+			// Non-blocking dial — gRPC will reconnect automatically when the KYC service is ready.
+			// WithBlock() caused silent failures when KYC service wasn't up yet during authn startup.
+			conn, dialErr := grpcclient.NewClient(kycAddress)
 			if dialErr != nil {
-				appLogger.Warnf("Downstream KYC dial failed (%s): %v — using local KYC repository path", cfg.KYC.Address, dialErr)
+				appLogger.Warnf("Downstream KYC client setup failed (%s): %v — using local KYC repository path", kycAddress, dialErr)
 			} else {
 				kycConn = conn
 				authService.SetExternalKYCClient(kycservicev1.NewKYCServiceClient(conn))
-				appLogger.Infof("Downstream KYC client enabled: %s", cfg.KYC.Address)
+				appLogger.Infof("Downstream KYC gRPC client enabled: %s", kycAddress)
 			}
 		}
+	} else {
+		appLogger.Warn("KYC_SERVICE_ADDRESS not set — using local KYC repository (no FLVE eKYC)")
 	}
 	if kycConn != nil {
 		defer func() { _ = kycConn.Close() }()
@@ -251,7 +276,7 @@ func main() {
 		events.TopicSessionRevoked,
 		topicAuthzEvents,
 	}
-	consumerGroup, consumerErr := kafkaconsumer.NewConsumerGroup(kafkaconsumer.Config{
+	consumerGroup, consumerErr := kafkaapp.StartConsumerGroup(kafkaconsumer.Config{
 		Brokers:  kafkaBrokers,
 		GroupID:  "authn-service-consumer",
 		Topics:   consumerTopics,
@@ -262,11 +287,7 @@ func main() {
 	if consumerErr != nil {
 		appLogger.Warnf("Kafka consumer group failed to start (events will not be consumed): %v", consumerErr)
 	} else {
-		consumerCtx, consumerCancel := context.WithCancel(context.Background())
-		defer consumerCancel()
-		go consumerGroup.Start(consumerCtx)
 		defer func() {
-			consumerCancel()
 			_ = consumerGroup.Close()
 		}()
 		appLogger.Infof("Kafka consumer group started (topics=%v)", consumerTopics)
@@ -354,155 +375,4 @@ func main() {
 	appLogger.Info("Shutting down...")
 	server.Stop()
 	appLogger.Info("Stopped.")
-}
-
-func normalizeKafkaBrokers(brokers []string) []string {
-	if len(brokers) == 0 {
-		return brokers
-	}
-	inDocker := isRunningInDocker()
-	inWSL := isRunningInWSL()
-
-	normalized := make([]string, 0, len(brokers)*2)
-	for _, broker := range brokers {
-		if broker == "" {
-			continue
-		}
-
-		host, port, err := net.SplitHostPort(broker)
-		if err == nil {
-			if host == "localhost" || host == "127.0.0.1" || host == "::1" {
-				if inDocker {
-					normalized = append(normalized, net.JoinHostPort("kafka", port))
-					normalized = append(normalized, net.JoinHostPort("host.docker.internal", port))
-					normalized = append(normalized, broker)
-				} else if inWSL {
-					normalized = append(normalized, net.JoinHostPort("host.docker.internal", port))
-					normalized = append(normalized, broker)
-				} else {
-					normalized = append(normalized, broker)
-					normalized = append(normalized, net.JoinHostPort("host.docker.internal", port))
-				}
-				continue
-			}
-			if host == "kafka" {
-				if inDocker {
-					normalized = append(normalized, broker)
-					normalized = append(normalized, net.JoinHostPort("host.docker.internal", port))
-				} else {
-					normalized = append(normalized, net.JoinHostPort("host.docker.internal", port))
-					normalized = append(normalized, net.JoinHostPort("localhost", port))
-				}
-				continue
-			}
-			if host == "host.docker.internal" {
-				if inDocker {
-					normalized = append(normalized, broker)
-					normalized = append(normalized, net.JoinHostPort("kafka", port))
-				} else {
-					normalized = append(normalized, broker)
-					normalized = append(normalized, net.JoinHostPort("localhost", port))
-				}
-				continue
-			}
-			normalized = append(normalized, broker)
-		} else {
-			if broker == "localhost" || broker == "127.0.0.1" {
-				if inDocker {
-					normalized = append(normalized, "kafka:9092", "host.docker.internal:9092", "localhost:9092")
-				} else if inWSL {
-					normalized = append(normalized, "host.docker.internal:9092", "localhost:9092")
-				} else {
-					normalized = append(normalized, "localhost:9092", "host.docker.internal:9092")
-				}
-				continue
-			}
-			if broker == "kafka" {
-				if inDocker {
-					normalized = append(normalized, "kafka:9092", "host.docker.internal:9092")
-				} else {
-					normalized = append(normalized, "host.docker.internal:9092", "localhost:9092")
-				}
-				continue
-			}
-			normalized = append(normalized, broker)
-		}
-	}
-
-	deduped := dedupeStrings(normalized)
-	if !equalStringSlices(brokers, deduped) {
-		appLogger.Warnf("Kafka brokers normalized with runtime fallbacks: %v -> %v", brokers, deduped)
-	}
-	return deduped
-}
-
-func isRunningInDocker() bool {
-	if _, err := os.Stat("/.dockerenv"); err == nil {
-		return true
-	}
-	return false
-}
-
-func isRunningInWSL() bool {
-	if os.Getenv("WSL_DISTRO_NAME") != "" || os.Getenv("WSL_INTEROP") != "" {
-		return true
-	}
-	data, err := os.ReadFile("/proc/version")
-	if err != nil {
-		return false
-	}
-	lower := strings.ToLower(string(data))
-	return strings.Contains(lower, "microsoft")
-}
-
-func dedupeStrings(values []string) []string {
-	if len(values) == 0 {
-		return values
-	}
-	result := make([]string, 0, len(values))
-	seen := make(map[string]struct{}, len(values))
-	for _, v := range values {
-		if _, ok := seen[v]; ok {
-			continue
-		}
-		seen[v] = struct{}{}
-		result = append(result, v)
-	}
-	return result
-}
-
-func equalStringSlices(a, b []string) bool {
-	if len(a) != len(b) {
-		return false
-	}
-	for i := range a {
-		if a[i] != b[i] {
-			return false
-		}
-	}
-	return true
-}
-
-func normalizeRedisURL(raw string) string {
-	if raw == "" {
-		return raw
-	}
-	parsed, err := url.Parse(raw)
-	if err != nil {
-		return raw
-	}
-	host := parsed.Hostname()
-	port := parsed.Port()
-	if port == "" {
-		port = "6379"
-	}
-
-	if host == "localhost" || host == "127.0.0.1" || host == "::1" {
-		if isRunningInDocker() {
-			parsed.Host = net.JoinHostPort("redis", port)
-		} else if isRunningInWSL() {
-			parsed.Host = net.JoinHostPort("host.docker.internal", port)
-		}
-	}
-	return parsed.String()
 }

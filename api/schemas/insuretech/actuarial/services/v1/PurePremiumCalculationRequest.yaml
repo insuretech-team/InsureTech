@@ -1,0 +1,23 @@
+PurePremiumCalculationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    expected_claims:
+      type: number
+      format: double
+    claim_severity:
+      type: number
+      format: double
+    exposure_units:
+      type: number
+      format: double
+    risk_adjustment_factor:
+      type: number
+      format: double
+    calculation_reference:
+      type: string
+    calculated_by:
+      type: string
+  description: Request payload for pure premium calculation operation. Contains parameters
+    required to execute the operation.

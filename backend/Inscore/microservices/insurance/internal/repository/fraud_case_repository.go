@@ -26,14 +26,10 @@ func (r *FraudCaseRepository) Create(ctx context.Context, fraudCase *fraudv1.Fra
 		return nil, fmt.Errorf("case_id is required")
 	}
 
-	// Get valid user UUID for audit_info
-	var createdBy string
-	err := r.db.WithContext(ctx).Raw(`SELECT user_id FROM authn_schema.users LIMIT 1`).Scan(&createdBy).Error
-	if err != nil || createdBy == "" {
-		return nil, fmt.Errorf("failed to get valid user for created_by: %w", err)
+	auditInfoJSON, err := newAuditInfoJSON(ctx)
+	if err != nil {
+		return nil, err
 	}
-
-	auditInfoJSON := fmt.Sprintf(`{"created_by":"%s","created_at":"%s"}`, createdBy, time.Now().UTC().Format(time.RFC3339))
 
 	// Handle nullable fields
 	var investigatorID sql.NullString

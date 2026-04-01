@@ -3,10 +3,12 @@
  */
 import { NextResponse } from "next/server";
 import { makeDirectHttp, makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { Organisation } from "@lifeplus/insuretech-sdk";
 import type { Organisation as UiOrg } from "@lib/types/b2b";
+import { getBangladeshMobileValidationMessage, normalizeBangladeshMobile } from "@lib/utils/bd-mobile";
+import { getPasswordValidationMessage } from "@/src/lib/utils/password";
 
 function mapOrg(org: Organisation): UiOrg {
   return {
@@ -26,13 +28,7 @@ function getTenantIdFallback(): string {
   );
 }
 
-function normalizeOrganisationCode(name: string, rawCode: unknown): string {
-  const provided = typeof rawCode === "string" ? rawCode : "";
-  const sanitized = provided.toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-+|-+$/g, "");
-  if (sanitized) {
-    return sanitized;
-  }
-
+function normalizeOrganisationCode(name: string): string {
   const fallbackBase = name.toUpperCase().replace(/[^A-Z0-9]+/g, "-").replace(/^-+|-+$/g, "").slice(0, 12) || "ORG";
   const suffix = Math.random().toString(36).slice(2, 6).toUpperCase();
   return `${fallbackBase}-${suffix}`;
@@ -46,8 +42,10 @@ export async function GET(request: Request) {
     const result = await makeSdkClient(request, hdrs ?? undefined).listOrganisations({
       query: { tenant_id: tenantId, page_size: Number(url.searchParams.get("page_size") ?? 50) },
     });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result), organisations: [] }, { status: result.response.status });
-    return NextResponse.json({ ok: true, organisations: (result.data?.organisations ?? []).map(mapOrg) });
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message, organisations: [] }, { status: unwrapped.status });
+    const d = unwrapped.data as Record<string, unknown>;
+    return NextResponse.json({ ok: true, organisations: ((d?.organisations ?? []) as Organisation[]).map(mapOrg) });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error", organisations: [] }, { status: 502 });
   }
@@ -61,22 +59,59 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>;
     const name = String(body.name ?? "").trim();
     const tenantId = getTenantIdFallback();
+    if (!name) {
+      return NextResponse.json({ ok: false, message: "Organisation name is required" }, { status: 400 });
+    }
+    const contactPhone = body.contactPhone ? String(body.contactPhone).trim() : "";
+    const normalizedContactPhone = contactPhone ? normalizeBangladeshMobile(contactPhone) : null;
+    if (contactPhone && !normalizedContactPhone) {
+      return NextResponse.json({ ok: false, message: getBangladeshMobileValidationMessage("Contact phone") }, { status: 400 });
+    }
+    const adminAssignment = body.adminAssignment as Record<string, unknown> | undefined;
+    const assignmentUserId = typeof adminAssignment?.userId === "string" ? adminAssignment.userId.trim() : "";
+    const assignmentTemporaryPassword =
+      typeof adminAssignment?.temporaryPassword === "string" ? adminAssignment.temporaryPassword : "";
+    if (adminAssignment) {
+      if (!assignmentUserId) {
+        return NextResponse.json({ ok: false, message: "Assigned admin userId is required" }, { status: 400 });
+      }
+      const passwordError = getPasswordValidationMessage(assignmentTemporaryPassword, "Temporary password");
+      if (passwordError) {
+        return NextResponse.json({ ok: false, message: passwordError }, { status: 400 });
+      }
+    }
 
     const result = await sdk.createOrganisation({
       body: {
         tenant_id: tenantId,
         name,
-        code: normalizeOrganisationCode(name, body.code),
+        code: normalizeOrganisationCode(name),
         industry: body.industry ? String(body.industry).trim() : undefined,
         contact_email: body.contactEmail ? String(body.contactEmail).trim() : undefined,
-        contact_phone: body.contactPhone ? String(body.contactPhone).trim() : undefined,
+        contact_phone: normalizedContactPhone ?? undefined,
         address: body.address ? String(body.address).trim() : undefined,
       },
     });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    const organisation = result.data?.organisation ? mapOrg(result.data.organisation) : null;
-    const organisationID = result.data?.organisation?.organisation_id ?? "";
-    if (body.admin && organisationID) {
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message }, { status: unwrapped.status });
+    const organisation = unwrapped.data?.organisation ? mapOrg(unwrapped.data.organisation) : null;
+    const organisationID = unwrapped.data?.organisation?.organisation_id ?? "";
+    if (adminAssignment && organisationID) {
+      const assignResult = await http.post(`/v1/b2b/organisations/${organisationID}/admins:assign`, {
+        userId: assignmentUserId,
+        temporaryPassword: assignmentTemporaryPassword,
+      });
+      if (!assignResult.ok) {
+        return NextResponse.json(
+          {
+            ok: false,
+            message: `Organisation created but admin assignment failed: ${String(assignResult.data.message ?? "Unknown error")}`,
+            organisation,
+          },
+          { status: assignResult.status }
+        );
+      }
+    } else if (body.admin && organisationID) {
       // Pass hdrs so x-portal/x-user-id are forwarded — without them the backend
       // authz interceptor can't resolve the Casbin domain and returns 403.
       const adminResult = await http.post(`/v1/b2b/organisations/${organisationID}/admins`, body.admin);
@@ -92,7 +127,7 @@ export async function POST(request: Request) {
       }
     }
     return NextResponse.json(
-      { ok: true, message: result.data?.message ?? "Organisation created", organisation },
+      { ok: true, message: "Organisation created", organisation },
       { status: 201 }
     );
   } catch (err) {

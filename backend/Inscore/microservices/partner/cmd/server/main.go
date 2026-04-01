@@ -5,7 +5,6 @@ import (
 	"os"
 	"os/signal"
 	"strconv"
-	"strings"
 	"syscall"
 	"time"
 
@@ -15,29 +14,25 @@ import (
 	partnergrpc "github.com/newage-saint/insuretech/backend/inscore/microservices/partner/internal/grpc"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/partner/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/partner/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"github.com/newage-saint/insuretech/ops/config"
 	"github.com/newage-saint/insuretech/ops/env"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v3"
 )
 
 // ServicesConfig structure matches services.yaml.
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	if err := appLogger.Initialize(appLogger.NoFileConfig()); err != nil {
@@ -114,16 +109,16 @@ func main() {
 		appLogger.Fatal("authn address is empty; configure AUTHN_SERVICE_ADDRESS or services.yaml entry")
 	}
 	appLogger.Info("Connecting to AuthN service", zap.String("addr", authnAddr))
-	authnConn, err := grpc.Dial(authnAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	authnConn, err := grpcclient.NewClient(authnAddr)
 	if err != nil {
 		appLogger.Fatal("Failed to connect to AuthN service", zap.Error(err), zap.String("addr", authnAddr))
 	}
 	defer authnConn.Close()
-	authnClient := authnservicev1.NewAuthServiceClient(authnConn)
+	authnClient := &authnClientAdapter{client: authnservicev1.NewAuthServiceClient(authnConn)}
 
 	partnerService := service.NewPartnerService(partnerRepo, agentRepo, commissionRepo, eventPublisher, authnClient)
 
-	consumerGroup, consumerErr := kafkaconsumer.NewConsumerGroup(kafkaconsumer.Config{
+	consumerGroup, consumerErr := kafkaapp.StartConsumerGroup(kafkaconsumer.Config{
 		Brokers:  cfg.Kafka.Brokers,
 		GroupID:  cfg.Kafka.ConsumerGroup,
 		Topics:   cfg.Kafka.ConsumerTopics,
@@ -134,11 +129,7 @@ func main() {
 	if consumerErr != nil {
 		appLogger.Warn("Kafka consumer group failed to start; policy commission events will not be consumed", zap.Error(consumerErr))
 	} else {
-		consumerCtx, consumerCancel := context.WithCancel(context.Background())
-		defer consumerCancel()
-		go consumerGroup.Start(consumerCtx)
 		defer func() {
-			consumerCancel()
 			_ = consumerGroup.Close()
 		}()
 		appLogger.Info("Kafka consumer group started", zap.Strings("topics", cfg.Kafka.ConsumerTopics))
@@ -149,7 +140,7 @@ func main() {
 		appLogger.Fatal("authz address is empty; configure AUTHZ_SERVICE_ADDRESS or services.yaml entry")
 	}
 	appLogger.Info("Connecting to AuthZ service", zap.String("addr", authzAddr))
-	authzConn, err := grpc.Dial(authzAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	authzConn, err := grpcclient.NewClient(authzAddr)
 	if err != nil {
 		appLogger.Fatal("Failed to connect to AuthZ service", zap.Error(err), zap.String("addr", authzAddr))
 	}
@@ -186,20 +177,28 @@ func main() {
 	appLogger.Info("Partner service stopped")
 }
 
-func resolveServiceAddr(explicit string, services map[string]struct {
-	Name  string `yaml:"name"`
-	Ports struct {
-		Grpc int `yaml:"grpc"`
-		Http int `yaml:"http"`
-	} `yaml:"ports"`
-}, key string) string {
-	v := strings.TrimSpace(explicit)
-	if v != "" {
-		return v
-	}
-	svc, ok := services[key]
-	if !ok || svc.Ports.Grpc <= 0 {
-		return ""
-	}
-	return key + ":" + strconv.Itoa(svc.Ports.Grpc)
+type authnClientAdapter struct {
+	client authnservicev1.AuthServiceClient
+}
+
+func (a *authnClientAdapter) ListAPIKeys(ctx context.Context, in *authnservicev1.ListAPIKeysRequest, opts ...grpc.CallOption) (*authnservicev1.ListAPIKeysResponse, error) {
+	ctx = grpcmeta.ForwardIncomingToOutgoing(ctx)
+	ctx = internalrpc.OutgoingContext(ctx, "partner-service")
+	return a.client.ListAPIKeys(ctx, in, opts...)
+}
+
+func (a *authnClientAdapter) CreateAPIKey(ctx context.Context, in *authnservicev1.CreateAPIKeyRequest, opts ...grpc.CallOption) (*authnservicev1.CreateAPIKeyResponse, error) {
+	ctx = grpcmeta.ForwardIncomingToOutgoing(ctx)
+	ctx = internalrpc.OutgoingContext(ctx, "partner-service")
+	return a.client.CreateAPIKey(ctx, in, opts...)
+}
+
+func (a *authnClientAdapter) RotateAPIKey(ctx context.Context, in *authnservicev1.RotateAPIKeyRequest, opts ...grpc.CallOption) (*authnservicev1.RotateAPIKeyResponse, error) {
+	ctx = grpcmeta.ForwardIncomingToOutgoing(ctx)
+	ctx = internalrpc.OutgoingContext(ctx, "partner-service")
+	return a.client.RotateAPIKey(ctx, in, opts...)
+}
+
+func resolveServiceAddr(explicit string, services map[string]serviceaddr.Service, key string) string {
+	return serviceaddr.ResolveFromServicesMap(explicit, services, os.Getenv("PARTNER_SERVICE_DISCOVERY_HOST"), key)
 }

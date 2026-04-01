@@ -12,5 +12,17 @@ DocumentGenerationRequest:
       description: 'CG-7: Typed document data for template merge'
     include_qr_code:
       type: boolean
+    output_format:
+      type: string
+      description: "output_format overrides the template's default format for this\
+        \ request.\r\n Accepts: \"pdf\", \"html\", \"docx\", \"xlsx\" (case-insensitive).\r\
+        \n If empty, the template's configured output_format is used."
+      x-sensitive: true
+      writeOnly: true
+    alt:
+      type: string
+      description: "alt controls the response format (Google API style).\r\n Use alt=\"\
+        media\" to receive raw file bytes instead of JSON metadata.\r\n Equivalent\
+        \ to passing $alt=media as a query parameter."
   description: Request payload for document generation operation. Contains parameters
     required to execute the operation.

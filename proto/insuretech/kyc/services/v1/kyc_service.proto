@@ -38,7 +38,7 @@ service KYCService {
   // Verify KYC
   rpc VerifyKYC(VerifyKYCRequest) returns (VerifyKYCResponse) {
     option (google.api.http) = {
-      post: "/v1/kyc-verifications/{kyc_verification_id}?action=verify"
+      post: "/v1/kyc-verifications/{kyc_verification_id}:verify"
       body: "*"
     };
   }
@@ -46,7 +46,7 @@ service KYCService {
   // Reject KYC
   rpc RejectKYC(RejectKYCRequest) returns (RejectKYCResponse) {
     option (google.api.http) = {
-      post: "/v1/kyc-verifications/{kyc_verification_id}?action=reject"
+      post: "/v1/kyc-verifications/{kyc_verification_id}:reject"
       body: "*"
     };
   }

@@ -1,0 +1,618 @@
+syntax = "proto3";
+
+package insuretech.life.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/life/entity/v1;lifev1";
+option csharp_namespace = "Insuretech.Life.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// LifeProduct represents a life insurance product
+// Maps to 'life_products' table in life_schema
+message LifeProduct {
+  option (insuretech.common.v1.table) = {
+    table_name: "life_products"
+    schema_name: "life_schema"
+    migration_order: 240
+    is_table: true
+    comment: "Life insurance products (Term, Whole Life, Endowment, etc.)"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string product_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Product UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:product_id;not null"
+
+  string product_code = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_code"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Unique product code (e.g., LIFE-TERM-001)"
+      index: {
+        index_name: "idx_life_products_code"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_code;not null"
+
+  string product_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Product name"
+    }
+  ];
+  // @inject_tag: gorm:"column:product_name;not null"
+
+  LifeProductType product_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of life insurance"
+      index: {
+        index_name: "idx_life_products_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_type;not null;serializer:proto_enum"
+
+  string description = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "description"
+      sql_type: "TEXT"
+      comment: "Product description"
+    }
+  ];
+  // @inject_tag: gorm:"column:description"
+
+  // Base premium rate
+  int64 base_rate = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "base_rate"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Base premium rate in smallest currency unit"
+    }
+  ];
+  // @inject_tag: gorm:"column:base_rate;not null"
+
+  // Age addition configuration
+  AgeAdditionConfig age_addition_config = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "age_addition_config"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Age-based premium addition configuration"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:age_addition_config;not null;serializer:json"
+
+  // Condition multipliers
+  string condition_multipliers_json = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "condition_multipliers_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Health condition multipliers as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:condition_multipliers_json;not null"
+
+  // Bonus/discount configuration
+  string bonus_config_json = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "bonus_config_json"
+      sql_type: "JSONB"
+      comment: "Bonus/discount configuration as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:bonus_config_json"
+
+  int64 min_sum_assured = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "min_sum_assured"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Minimum sum assured"
+    }
+  ];
+  // @inject_tag: gorm:"column:min_sum_assured;not null"
+
+  int64 max_sum_assured = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "max_sum_assured"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Maximum sum assured"
+    }
+  ];
+  // @inject_tag: gorm:"column:max_sum_assured;not null"
+
+  int32 min_entry_age = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "min_entry_age"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "18"
+      comment: "Minimum entry age"
+    }
+  ];
+  // @inject_tag: gorm:"column:min_entry_age;not null"
+
+  int32 max_entry_age = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "max_entry_age"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "65"
+      comment: "Maximum entry age"
+    }
+  ];
+  // @inject_tag: gorm:"column:max_entry_age;not null"
+
+  int32 min_policy_term = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "min_policy_term"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "5"
+      comment: "Minimum policy term in years"
+    }
+  ];
+  // @inject_tag: gorm:"column:min_policy_term;not null"
+
+  int32 max_policy_term = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "max_policy_term"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "30"
+      comment: "Maximum policy term in years"
+    }
+  ];
+  // @inject_tag: gorm:"column:max_policy_term;not null"
+
+  bool is_active = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  map<string, string> metadata = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum LifeProductType {
+  LIFE_PRODUCT_TYPE_UNSPECIFIED = 0;
+  LIFE_PRODUCT_TYPE_TERM = 1;           // Term life insurance
+  LIFE_PRODUCT_TYPE_WHOLE_LIFE = 2;     // Whole life insurance
+  LIFE_PRODUCT_TYPE_ENDOWMENT = 3;      // Endowment plans
+  LIFE_PRODUCT_TYPE_MONEY_BACK = 4;     // Money back policies
+  LIFE_PRODUCT_TYPE_UNIT_LINKED = 5;    // ULIP
+  LIFE_PRODUCT_TYPE_GROUP = 6;          // Group life insurance
+  LIFE_PRODUCT_TYPE_PENSION = 7;        // Pension/Annuity plans
+  LIFE_PRODUCT_TYPE_CHILD = 8;          // Child plans
+}
+
+// AgeAdditionConfig - Configuration for age-based premium additions
+message AgeAdditionConfig {
+  int32 start_age = 1;      // Age at which additions start (e.g., 18)
+  int32 age_increment = 2;  // Increment period in years (e.g., 5)
+  int64 price_to_add = 3;  // Amount to add per increment in smallest currency unit
+}
+
+// ConditionMultiplier - Health condition risk multipliers
+message ConditionMultiplier {
+  string condition_code = 1;   // e.g., "DIABETES", "HYPERTENSION"
+  string condition_name = 2;   // Human readable name
+  float multiplier = 3;        // e.g., 0.2 = 20% increase
+  string severity = 4;         // LOW, MEDIUM, HIGH
+  string description = 5;      // Detailed description
+}
+
+// BonusConfig - Discount/bonus configuration
+message BonusConfig {
+  string bonus_code = 1;
+  string bonus_name = 2;
+  string bonus_type = 3;       // PERCENTAGE, FIXED_AMOUNT
+  float percentage = 4;        // If percentage type
+  int64 fixed_amount = 5;      // If fixed amount type
+  string description = 6;
+}
+
+// LifeQuote represents a calculated life insurance quote
+// Maps to 'life_quotes' table in life_schema
+message LifeQuote {
+  option (insuretech.common.v1.table) = {
+    table_name: "life_quotes"
+    schema_name: "life_schema"
+    migration_order: 241
+    is_table: true
+    comment: "Life insurance quotes with premium calculations"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string quote_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "quote_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:quote_id;not null"
+
+  string quote_number = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "quote_number"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Human-readable quote number"
+      index: {
+        index_name: "idx_life_quotes_number"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:quote_number;not null"
+
+  string product_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to life_products"
+      foreign_key: {
+        references_table: "life_products"
+        references_column: "product_id"
+        references_schema: "life_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_life_quotes_product_id"
+      }
+      index: {
+        index_name: "idx_life_quotes_product_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string customer_id = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "customer_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to customers"
+      index: {
+        index_name: "idx_life_quotes_customer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  string agent_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "agent_id"
+      sql_type: "UUID"
+      comment: "Agent who created the quote"
+    }
+  ];
+  // @inject_tag: gorm:"column:agent_id"
+
+  LifeQuoteStatus status = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'DRAFT'"
+      comment: "Quote status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  // Insured person details
+  string insured_person_json = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "insured_person_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Insured person details as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:insured_person_json;not null"
+
+  int32 age_at_entry = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "age_at_entry"
+      sql_type: "INTEGER"
+      not_null: true
+      comment: "Age when policy starts"
+    }
+  ];
+  // @inject_tag: gorm:"column:age_at_entry;not null"
+
+  int32 policy_term_years = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "policy_term_years"
+      sql_type: "INTEGER"
+      not_null: true
+      comment: "Policy term in years"
+    }
+  ];
+  // @inject_tag: gorm:"column:policy_term_years;not null"
+
+  int64 sum_assured = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "sum_assured"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Sum assured amount"
+    }
+  ];
+  // @inject_tag: gorm:"column:sum_assured;not null"
+
+  // Premium calculation breakdown
+  int64 base_premium = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "base_premium"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Base premium amount"
+    }
+  ];
+  // @inject_tag: gorm:"column:base_premium;not null"
+
+  int64 age_addition = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "age_addition"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Age-based premium addition"
+    }
+  ];
+  // @inject_tag: gorm:"column:age_addition;not null"
+
+  float condition_multiplier = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "condition_multiplier"
+      sql_type: "DECIMAL(5,2)"
+      not_null: true
+      comment: "Health condition multiplier (1.0 = base)"
+    }
+  ];
+  // @inject_tag: gorm:"column:condition_multiplier;not null"
+
+  int64 condition_addition = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "condition_addition"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Additional premium due to conditions"
+    }
+  ];
+  // @inject_tag: gorm:"column:condition_addition;not null"
+
+  int64 bonus_discount = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "bonus_discount"
+      sql_type: "BIGINT"
+      not_null: true
+      default_value: "0"
+      comment: "Bonus/discount amount"
+    }
+  ];
+  // @inject_tag: gorm:"column:bonus_discount;not null"
+
+  int64 total_premium = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "total_premium"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Total calculated premium"
+    }
+  ];
+  // @inject_tag: gorm:"column:total_premium;not null"
+
+  // Health conditions applied
+  string health_conditions_json = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "health_conditions_json"
+      sql_type: "JSONB"
+      comment: "Applied health conditions as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:health_conditions_json"
+
+  // Bonuses applied
+  string bonuses_applied_json = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "bonuses_applied_json"
+      sql_type: "JSONB"
+      comment: "Applied bonuses as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:bonuses_applied_json"
+
+  google.protobuf.Timestamp valid_until = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_until"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Quote validity date"
+    }
+  ];
+  // @inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp converted_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "When quote was converted to policy"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"
+
+  string converted_policy_id = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_policy_id"
+      sql_type: "UUID"
+      comment: "Policy ID if converted"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_policy_id"
+
+  map<string, string> metadata = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+
+  google.protobuf.Timestamp created_at = 23 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 24 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 25 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum LifeQuoteStatus {
+  LIFE_QUOTE_STATUS_UNSPECIFIED = 0;
+  LIFE_QUOTE_STATUS_DRAFT = 1;
+  LIFE_QUOTE_STATUS_GENERATED = 2;
+  LIFE_QUOTE_STATUS_SENT = 3;
+  LIFE_QUOTE_STATUS_VIEWED = 4;
+  LIFE_QUOTE_STATUS_ACCEPTED = 5;
+  LIFE_QUOTE_STATUS_DECLINED = 6;
+  LIFE_QUOTE_STATUS_EXPIRED = 7;
+  LIFE_QUOTE_STATUS_CONVERTED = 8;
+}
+
+// InsuredPerson - Details of the person being insured
+message InsuredPerson {
+  string first_name = 1;
+  string last_name = 2;
+  int32 age = 3;
+  string gender = 4;  // MALE, FEMALE, OTHER
+  string occupation = 5;
+  string email = 6;
+  string phone = 7;
+  repeated HealthCondition health_conditions = 8;
+}
+
+message HealthCondition {
+  string condition_code = 1;   // e.g., "DIABETES", "HYPERTENSION", "SMOKING"
+  string condition_name = 2;
+  string severity = 3;         // LOW, MEDIUM, HIGH
+  string diagnosis_date = 4;   // ISO date string
+  string notes = 5;
+}
+
+// PremiumBreakdown - Detailed premium calculation
+message PremiumBreakdown {
+  string component = 1;
+  int64 amount = 2;
+  string description = 3;
+  bool is_discount = 4;
+}

@@ -1060,7 +1060,7 @@ type ContactInfo struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MobileNumber    string `protobuf:"bytes,1,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"` // +880 1XXX XXXXXX
+	MobileNumber    string `protobuf:"bytes,1,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"` // Canonical format: +8801XXXXXXXXX
 	Email           string `protobuf:"bytes,2,opt,name=email,proto3" json:"email,omitempty"`
 	AlternateMobile string `protobuf:"bytes,3,opt,name=alternate_mobile,json=alternateMobile,proto3" json:"alternate_mobile,omitempty"`
 	Landline        string `protobuf:"bytes,4,opt,name=landline,proto3" json:"landline,omitempty"`

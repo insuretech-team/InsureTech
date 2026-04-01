@@ -1,0 +1,106 @@
+QuotingQuote:
+  type: object
+  properties:
+    quote_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:quote_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    quote_number:
+      type: string
+      description: '@inject_tag: gorm:"column:quote_number;not null"'
+      x-unique: true
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_id"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/QuotingQuoteStatus'
+      x-database-default: DRAFT
+    parameters_json:
+      type: string
+      description: "Quote parameters/inputs\n @inject_tag: gorm:\"column:parameters_json;not\
+        \ null\""
+    premium_calculation_json:
+      type: string
+      description: "Premium calculation results\n @inject_tag: gorm:\"column:premium_calculation_json;not\
+        \ null\""
+    coverages_json:
+      type: string
+      description: "Coverages included in the quote\n @inject_tag: gorm:\"column:coverages_json;not\
+        \ null\""
+    discounts_json:
+      type: string
+      description: "Discounts applied\n @inject_tag: gorm:\"column:discounts_json\""
+    total_premium:
+      $ref: '#/components/schemas/Money'
+      description: "Total premium amount\n @inject_tag: gorm:\"column:total_premium;serializer:proto_money\""
+    valid_from:
+      type: string
+      format: date-time
+      description: "Validity period\n @inject_tag: gorm:\"column:valid_from;not null;serializer:proto_timestamp\""
+      x-database-default: CURRENT_TIMESTAMP
+    valid_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"'
+    converted_at:
+      type: string
+      format: date-time
+      description: "Conversion tracking\n @inject_tag: gorm:\"column:converted_at;serializer:proto_timestamp\""
+    converted_policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:converted_policy_id"'
+    revision_number:
+      type: integer
+      format: int32
+      description: "Revision tracking\n @inject_tag: gorm:\"column:revision_number;not\
+        \ null\""
+      default: 1
+    parent_quote_id:
+      type: string
+      description: '@inject_tag: gorm:"column:parent_quote_id"'
+    revision_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:revision_reason"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Quote represents a dynamically generated insurance quote\n Maps to\
+    \ 'quotes' table in quoting_schema"
+  required:
+  - quote_id
+  - quote_number
+  - product_id
+  - customer_id
+  - status
+  - parameters_json
+  - premium_calculation_json
+  - coverages_json
+  - valid_from
+  - valid_until
+  - revision_number
+  - created_at
+  - updated_at

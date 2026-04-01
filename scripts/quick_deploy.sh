@@ -6,9 +6,10 @@
 # the full stack, syncs nginx, and provisions SSL (first run).
 #
 # Usage:
-#   bash scripts/quick_deploy.sh              # full deploy
-#   bash scripts/quick_deploy.sh --nginx-only # nginx + certs only
-#   bash scripts/quick_deploy.sh --no-build   # skip build (cached)
+#   bash scripts/quick_deploy.sh                          # full deploy
+#   bash scripts/quick_deploy.sh --nginx-only             # nginx + certs only
+#   bash scripts/quick_deploy.sh --skip-build             # skip build, use existing images, still save/transfer/load
+#   bash scripts/quick_deploy.sh --restart-only (or --no-build) # restart only, no save/transfer/load
 # =============================================================
 
 set -euo pipefail
@@ -22,10 +23,12 @@ CERTBOT_EMAIL="admin@labaidinsuretech.com"
 # -- Flags -----------------------------------------------------
 NGINX_ONLY=false
 NO_BUILD=false
+SKIP_BUILD=false
 for arg in "$@"; do
     case $arg in
         --nginx-only) NGINX_ONLY=true ;;
-        --no-build)   NO_BUILD=true ;;
+        --skip-build) SKIP_BUILD=true ;;
+        --no-build|--restart-only) NO_BUILD=true ;;
     esac
 done
 
@@ -42,8 +45,9 @@ fi
 echo "=== InsureTech Quick Docker Deployment ==="
 echo "  Target : $REMOTE_HOST"
 echo "  Mode   : $([ "$NGINX_ONLY" = true ] && echo 'nginx+certs only' \
-    || ([ "$NO_BUILD" = true ] && echo 'no-build (cached images)' \
-    || echo 'full deploy'))"
+    || ([ "$NO_BUILD" = true ] && echo 'restart-only (no save/transfer/load)' \
+    || ([ "$SKIP_BUILD" = true ] && echo 'skip-build (use existing images, still save/transfer/load)' \
+    || echo 'full deploy')))"
 echo ""
 
 # -- SSH Multiplexing (ControlMaster) --------------------------
@@ -101,13 +105,18 @@ echo ""
 if [ "$NGINX_ONLY" = false ]; then
     echo "[1/4] Docker images..."
 
-    if [ "$NO_BUILD" = false ]; then
+    if [ "$NO_BUILD" = false ] && [ "$SKIP_BUILD" = false ]; then
         echo "  Building images locally..."
         # We use `docker build` directly (not `docker compose build`) because:
         # 1. `docker compose build` in BuildKit bake mode generates content-hash
         #    image names ignoring our explicit image: tags in compose.
         # 2. Building directly with -t gives us the exact insuretech-* tag we need.
         # 3. --no-cache busts any stale BuildKit layers.
+
+        # -- Step 1: Clean stale local binaries (force fresh compile inside Docker)
+        echo "  Cleaning stale local binaries..."
+        rm -rf bin/
+        echo "  Done."
 
         # Application microservices
         for SPEC in \
@@ -144,33 +153,48 @@ if [ "$NGINX_ONLY" = false ]; then
         $DOCKER pull apache/kafka:latest || true
     fi
 
-    echo "  Saving images to tarball..."
-    mkdir -p build
-    IMAGE_TAR="build/insuretech_images.tar"
+    if [ "$NO_BUILD" = false ]; then
+        echo "  Saving images to tarball..."
+        mkdir -p build
+        IMAGE_TAR="build/insuretech_images.tar"
 
-    # docker-compose-prod.yml is the production compose file.
-    # We use it locally to enumerate images, then push it to remote AS docker-compose.yml.
-    COMPOSE_IMAGES=$($DOCKER compose -f docker-compose-prod.yml --profile full config --images)
-    $DOCKER save -o "$IMAGE_TAR" $COMPOSE_IMAGES
-    echo "  Tarball: $(du -sh "$IMAGE_TAR" | cut -f1)"
+        # docker-compose-prod.yml is the production compose file.
+        # We use it locally to enumerate images, then push it to remote AS docker-compose.yml.
+        COMPOSE_IMAGES=$($DOCKER compose -f docker-compose-prod.yml --profile full config --images)
+        $DOCKER save -o "$IMAGE_TAR" $COMPOSE_IMAGES
+        echo "  Tarball: $(du -sh "$IMAGE_TAR" | cut -f1)"
 
-    echo "  Transferring docker-compose-prod.yml to remote as docker-compose.yml..."
-    scp_put "docker-compose-prod.yml" "$REMOTE_HOST:$REMOTE_DIR/docker-compose.yml"
+        echo "  Transferring docker-compose-prod.yml to remote as docker-compose.yml..."
+        scp_put "docker-compose-prod.yml" "$REMOTE_HOST:$REMOTE_DIR/docker-compose.yml"
 
-    echo "  Transferring image tarball to remote (may take a few minutes)..."
-    scp_put "$IMAGE_TAR" "$REMOTE_HOST:$REMOTE_DIR/insuretech_images.tar"
+        echo "  Transferring image tarball to remote (may take a few minutes)..."
+        scp_put "$IMAGE_TAR" "$REMOTE_HOST:$REMOTE_DIR/insuretech_images.tar"
 
-    echo "  Transferring b2b_portal/public/ assets to remote..."
-    # Pack public/ into a tar locally, ship one file, extract on remote.
-    # This avoids scp -r quirks with trailing /. on Windows SSH clients
-    # and handles subdirectories (logos/, stats-cards/, icons/ etc.) correctly.
-    tar -czf build/b2b_portal_public.tar.gz -C b2b_portal/public .
-    ssh_run "rm -rf $REMOTE_DIR/b2b_portal_public && mkdir -p $REMOTE_DIR/b2b_portal_public"
-    scp_put "build/b2b_portal_public.tar.gz" "$REMOTE_HOST:$REMOTE_DIR/b2b_portal_public.tar.gz"
-    ssh_run "tar -xzf $REMOTE_DIR/b2b_portal_public.tar.gz -C $REMOTE_DIR/b2b_portal_public && rm -f $REMOTE_DIR/b2b_portal_public.tar.gz"
-    rm -f build/b2b_portal_public.tar.gz
-    echo "  b2b_portal/public/ transferred ($(find b2b_portal/public -type f | wc -l) files)."
-    echo ""
+        echo "  Transferring b2b_portal/public/ assets to remote..."
+        # Pack public/ into a tar locally, ship one file, extract on remote.
+        # This avoids scp -r quirks with trailing /. on Windows SSH clients
+        # and handles subdirectories (logos/, stats-cards/, icons/ etc.) correctly.
+        tar -czf build/b2b_portal_public.tar.gz -C b2b_portal/public .
+        ssh_run "rm -rf $REMOTE_DIR/b2b_portal_public && mkdir -p $REMOTE_DIR/b2b_portal_public"
+        scp_put "build/b2b_portal_public.tar.gz" "$REMOTE_HOST:$REMOTE_DIR/b2b_portal_public.tar.gz"
+        ssh_run "tar -xzf $REMOTE_DIR/b2b_portal_public.tar.gz -C $REMOTE_DIR/b2b_portal_public && rm -f $REMOTE_DIR/b2b_portal_public.tar.gz"
+        rm -f build/b2b_portal_public.tar.gz
+        echo "  b2b_portal/public/ transferred ($(find b2b_portal/public -type f | wc -l) files)."
+        echo ""
+    else
+        # --no-build: images are already loaded on the remote server.
+        # Just restart the stack with the existing images -- no save/transfer/load needed.
+        echo "  --restart-only: skipping image save/transfer/load."
+        echo "  Transferring docker-compose-prod.yml to remote as docker-compose.yml..."
+        scp_put "docker-compose-prod.yml" "$REMOTE_HOST:$REMOTE_DIR/docker-compose.yml"
+        echo "  Transferring b2b_portal/public/ assets to remote..."
+        tar -czf /tmp/b2b_portal_public.tar.gz -C b2b_portal/public .
+        ssh_run "rm -rf $REMOTE_DIR/b2b_portal_public && mkdir -p $REMOTE_DIR/b2b_portal_public"
+        scp_put "/tmp/b2b_portal_public.tar.gz" "$REMOTE_HOST:$REMOTE_DIR/b2b_portal_public.tar.gz"
+        ssh_run "tar -xzf $REMOTE_DIR/b2b_portal_public.tar.gz -C $REMOTE_DIR/b2b_portal_public && rm -f $REMOTE_DIR/b2b_portal_public.tar.gz"
+        rm -f /tmp/b2b_portal_public.tar.gz
+        echo "  Done."
+    fi
 fi
 
 # =============================================================
@@ -244,9 +268,13 @@ s systemctl daemon-reload 2>/dev/null || true
 if [ "\$NGINX_ONLY" = false ]; then
     cd "\$REMOTE_DIR"
 
-    echo "  Loading Docker images from tarball..."
-    docker load -i insuretech_images.tar
-    rm -f insuretech_images.tar
+    if [ "${NO_BUILD}" = false ] && [ -f "\$REMOTE_DIR/insuretech_images.tar" ]; then
+        echo "  Loading Docker images from tarball..."
+        docker load -i insuretech_images.tar
+        rm -f insuretech_images.tar
+    else
+        echo "  --no-build: using already-loaded images on server."
+    fi
 
     echo "  Starting Docker stack (--profile full)..."
     docker compose --profile full down --remove-orphans 2>/dev/null || true

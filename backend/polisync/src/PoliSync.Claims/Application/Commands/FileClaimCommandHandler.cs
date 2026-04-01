@@ -1,25 +1,31 @@
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using PoliSync.SharedKernel.CQRS;
 using PoliSync.SharedKernel.Messaging;
 using PoliSync.Claims.Domain;
 using PoliSync.Infrastructure.Persistence;
+using PoliSync.Workflow.Application.Commands;
+using PoliSync.Workflow.Domain;
 
 namespace PoliSync.Claims.Application.Commands;
 
-public sealed class FileClaimCommandHandler : IRequestHandler<FileClaimCommand, Result<string>>
+public class FileClaimCommandHandler : IRequestHandler<FileClaimCommand, Result<string>>
 {
     private readonly PoliSyncDbContext _dbContext;
     private readonly IEventBus _eventBus;
+    private readonly IMediator _mediator;
     private readonly ILogger<FileClaimCommandHandler> _logger;
-    
+
     public FileClaimCommandHandler(
         PoliSyncDbContext dbContext,
         IEventBus eventBus,
+        IMediator mediator,
         ILogger<FileClaimCommandHandler> logger)
     {
         _dbContext = dbContext;
         _eventBus = eventBus;
+        _mediator = mediator;
         _logger = logger;
     }
     
@@ -51,7 +57,29 @@ public sealed class FileClaimCommandHandler : IRequestHandler<FileClaimCommand, 
                 claimAggregate.ClaimId,
                 claimAggregate.ClaimNumber,
                 request.PolicyId);
-            
+
+            // Trigger approval workflow — template resolved dynamically by amount
+            var workflowResult = await _mediator.Send(new TriggerWorkflowCommand(
+                new WorkflowTriggerContext
+                {
+                    EntityType  = "CLAIM",
+                    EntityId    = claimAggregate.ClaimId,
+                    InitiatedBy = request.CustomerId,
+                    AmountPaisa = request.ClaimedAmountPaisa,
+                    Portal      = "B2C",
+                    Metadata    = new Dictionary<string, string>
+                    {
+                        ["policy_id"]    = request.PolicyId,
+                        ["claim_number"] = claimAggregate.ClaimNumber,
+                        ["claim_type"]   = request.ClaimType.ToString().Replace("ClaimType", "").Trim()
+                    }
+                }), cancellationToken);
+
+            if (workflowResult.IsSuccess && workflowResult.Value!.WasTriggered)
+                _logger.LogInformation(
+                    "Claim approval workflow started: instance={InstanceId} template='{Template}'",
+                    workflowResult.Value.WorkflowInstanceId, workflowResult.Value.TemplateName);
+
             return Result.Ok(claimAggregate.ClaimId);
         }
         catch (Exception ex)
@@ -61,7 +89,7 @@ public sealed class FileClaimCommandHandler : IRequestHandler<FileClaimCommand, 
         }
     }
     
-    private async Task SaveClaimToDatabase(Insuretech.Claims.Entity.V1.Claim claim, CancellationToken cancellationToken)
+    protected virtual async Task SaveClaimToDatabase(Insuretech.Claims.Entity.V1.Claim claim, CancellationToken cancellationToken)
     {
         var sql = @"
             INSERT INTO insurance_schema.claims (
@@ -76,25 +104,27 @@ public sealed class FileClaimCommandHandler : IRequestHandler<FileClaimCommand, 
         await _dbContext.Database.ExecuteSqlRawAsync(sql,
             new object[]
             {
-                claim.ClaimId,
-                claim.ClaimNumber,
-                claim.PolicyId,
-                claim.CustomerId,
-                claim.Status.ToString(),
-                claim.Type.ToString(),
-                claim.ClaimedAmount.Amount,
-                claim.ClaimedAmount.Currency,
-                claim.ApprovedAmount.Amount,
-                claim.ApprovedAmount.Currency,
-                claim.SettledAmount.Amount,
-                claim.SettledAmount.Currency,
-                claim.IncidentDate.ToDateTime(),
-                claim.IncidentDescription,
-                claim.PlaceOfIncident,
-                claim.SubmittedAt.ToDateTime(),
-                claim.ProcessingType.ToString(),
-                claim.CreatedAt.ToDateTime(),
-                claim.UpdatedAt?.ToDateTime() ?? (object)DBNull.Value
+                Guid.Parse(claim.ClaimId),                     // uuid: claim_id
+                claim.ClaimNumber,                              // varchar: claim_number
+                Guid.Parse(claim.PolicyId),                    // uuid: policy_id
+                Guid.Parse(claim.CustomerId),                  // uuid: customer_id
+                // Claim status/type must be uppercase to match DB check constraint
+                // proto enum .ToString() gives "Submitted", "Health" etc — convert to DB format
+                claim.Status.ToString().ToUpperInvariant(),    // varchar: status (e.g. "SUBMITTED")
+                claim.Type.ToString().ToUpperInvariant(),      // varchar: type (e.g. "HEALTH")
+                claim.ClaimedAmount?.Amount ?? 0L,             // bigint: claimed_amount
+                claim.ClaimedAmount?.Currency ?? "BDT",        // varchar: claimed_currency
+                claim.ApprovedAmount?.Amount ?? 0L,            // bigint: approved_amount
+                claim.ApprovedAmount?.Currency ?? "BDT",       // varchar: approved_currency
+                claim.SettledAmount?.Amount ?? 0L,             // bigint: settled_amount
+                claim.SettledAmount?.Currency ?? "BDT",        // varchar: settled_currency
+                claim.IncidentDate?.ToDateTime(),               // timestamp: incident_date
+                claim.IncidentDescription,                      // text: incident_description
+                claim.PlaceOfIncident,                          // text: place_of_incident
+                claim.SubmittedAt?.ToDateTime() ?? DateTime.UtcNow, // timestamp: submitted_at
+                claim.ProcessingType.ToString(),                // varchar: processing_type
+                claim.CreatedAt?.ToDateTime() ?? DateTime.UtcNow,  // timestamp: created_at
+                claim.UpdatedAt?.ToDateTime() ?? DateTime.UtcNow  // timestamp: updated_at (defaults to now if not set)
             },
             cancellationToken);
     }

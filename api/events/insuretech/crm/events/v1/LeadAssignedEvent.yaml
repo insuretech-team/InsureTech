@@ -1,0 +1,19 @@
+LeadAssignedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    lead_id:
+      type: string
+    lead_name:
+      type: string
+    previous_agent_id:
+      type: string
+    new_agent_id:
+      type: string
+    assigned_by:
+      type: string
+    assigned_at:
+      type: string
+      format: date-time
+  description: LeadAssignedEvent is emitted when a lead is assigned to an agent

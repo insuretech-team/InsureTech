@@ -1,10 +1,5 @@
 TaskAssignmentResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+  properties: {}
   description: Response payload for task assignment operation. Returns operation results
     and status.

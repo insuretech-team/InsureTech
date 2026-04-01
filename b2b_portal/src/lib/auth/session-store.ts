@@ -4,13 +4,8 @@ import { create } from "@bufbuild/protobuf";
 
 import {
   DeviceType,
-  MoneySchema,
   SessionSchema,
   SessionType,
-  UserSchema,
-  UserStatus,
-  UserType,
-  type User,
 } from "@lib/proto";
 import type { PortalPrincipal, PortalSession } from "@lib/types/auth";
 
@@ -25,13 +20,15 @@ function toTimestamp(milliseconds: number) {
   };
 }
 
-export function createSession(principal: PortalPrincipal): PortalSession {
+export function createSession(principal: PortalPrincipal, existingSessionId?: string): PortalSession {
   // Ensure organisationName is always present (backwards compat for callers that omit it)
   if (principal.organisationName === undefined) {
     (principal as PortalPrincipal).organisationName = "";
   }
   const now = Date.now();
-  const sessionId = crypto.randomUUID();
+  // Use the provided sessionId (e.g. backend gateway token) if given, so the
+  // in-memory store can be looked up with the same value stored in the cookie.
+  const sessionId = existingSessionId ?? crypto.randomUUID();
   const expiresAt = now + SESSION_TTL_MS;
   const csrfToken = crypto.randomBytes(16).toString("hex");
 
@@ -54,6 +51,7 @@ export function createSession(principal: PortalPrincipal): PortalSession {
     }),
     principal,
     user: principal.user,
+    passwordChangeRequired: false,
     expiresAt,
   } satisfies PortalSession;
 

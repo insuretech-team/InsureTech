@@ -1,0 +1,23 @@
+BusinessWorkflowEvaluationResponse:
+  type: object
+  properties:
+    execution_id:
+      type: string
+    workflow_name:
+      type: string
+    is_success:
+      type: boolean
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessRuleResult'
+    outputs:
+      type: object
+    execution_time_ms:
+      type: integer
+      format: int32
+    executed_at:
+      type: string
+      format: date-time
+  description: Response payload for business workflow evaluation operation. Returns
+    operation results and status.

@@ -23,7 +23,7 @@ service RefundService {
   // Calculate refund amount
   rpc CalculateRefund(CalculateRefundRequest) returns (CalculateRefundResponse) {
     option (google.api.http) = {
-      post: "/v1/policies/{policy_id}/refunds?action=calculate"
+      post: "/v1/policies/{policy_id}/refunds:calculate"
       body: "*"
     };
   }
@@ -38,7 +38,7 @@ service RefundService {
   // Approve refund
   rpc ApproveRefund(ApproveRefundRequest) returns (ApproveRefundResponse) {
     option (google.api.http) = {
-      post: "/v1/refunds/{refund_id}?action=approve"
+      post: "/v1/refunds/{refund_id}:approve"
       body: "*"
     };
   }
@@ -46,7 +46,7 @@ service RefundService {
   // Process refund payment
   rpc ProcessRefund(ProcessRefundRequest) returns (ProcessRefundResponse) {
     option (google.api.http) = {
-      post: "/v1/refunds/{refund_id}?action=process"
+      post: "/v1/refunds/{refund_id}:process"
       body: "*"
     };
   }

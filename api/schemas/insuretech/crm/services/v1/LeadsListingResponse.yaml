@@ -1,0 +1,14 @@
+LeadsListingResponse:
+  type: object
+  properties:
+    leads:
+      type: array
+      items:
+        $ref: '#/components/schemas/Lead'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for leads listing operation. Returns operation results
+    and status.

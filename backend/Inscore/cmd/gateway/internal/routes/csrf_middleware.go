@@ -5,6 +5,7 @@ import (
 	"net/http"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"go.uber.org/zap"
@@ -41,7 +42,7 @@ func CSRFMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 			csrfToken := r.Header.Get("X-CSRF-Token")
 			if csrfToken == "" {
 				logger.Warn("CSRF token missing for SERVER_SIDE session", zap.String("path", r.URL.Path))
-				http.Error(w, "Forbidden: missing CSRF token", http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: missing CSRF token")
 				return
 			}
 
@@ -49,7 +50,7 @@ func CSRFMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 
 			if client == nil {
 				logger.Error("CSRF middleware has no authn connection")
-				http.Error(w, "Forbidden: CSRF validation unavailable", http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: CSRF validation unavailable")
 				return
 			}
 
@@ -62,12 +63,12 @@ func CSRFMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 			})
 			if err != nil {
 				logger.Warn("ValidateCSRF gRPC error", zap.Error(err), zap.String("path", r.URL.Path))
-				http.Error(w, "Forbidden: CSRF validation failed", http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: CSRF validation failed")
 				return
 			}
 			if resp == nil || !resp.Valid {
 				logger.Warn("Invalid CSRF token", zap.String("path", r.URL.Path))
-				http.Error(w, "Forbidden: invalid CSRF token", http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: invalid CSRF token")
 				return
 			}
 

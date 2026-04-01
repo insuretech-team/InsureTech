@@ -1,0 +1,8 @@
+CalculationRetrievalRequest:
+  type: object
+  properties:
+    calculation_id:
+      type: string
+    calculation_reference:
+      type: string
+  description: Calculation history

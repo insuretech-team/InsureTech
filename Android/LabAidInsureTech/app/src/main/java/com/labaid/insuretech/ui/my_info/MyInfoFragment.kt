@@ -24,7 +24,8 @@ class MyInfoFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        binding.btnBack.setOnClickListener {
+        binding.myInfoToolbar.toolbarTitle.text = "My Info"
+        binding.myInfoToolbar.backButton.setOnClickListener {
             findNavController().popBackStack()
         }
     }

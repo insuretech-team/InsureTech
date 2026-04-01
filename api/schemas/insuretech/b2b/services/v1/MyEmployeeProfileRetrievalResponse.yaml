@@ -1,0 +1,7 @@
+MyEmployeeProfileRetrievalResponse:
+  type: object
+  properties:
+    employee:
+      $ref: '#/components/schemas/EmployeeView'
+  description: Response payload for my employee profile retrieval operation. Returns
+    operation results and status.

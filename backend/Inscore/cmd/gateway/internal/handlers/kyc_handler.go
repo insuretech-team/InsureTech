@@ -1,11 +1,10 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
 	"net/http"
 
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 
 	kycservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/services/v1"
@@ -26,7 +25,7 @@ func NewKYCHandler(conn *grpc.ClientConn) *KYCHandler {
 func (h *KYCHandler) Create(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req kycservicev1.StartKYCVerificationRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.StartKYCVerification(ctx, &req)

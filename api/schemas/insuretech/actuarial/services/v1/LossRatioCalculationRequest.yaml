@@ -1,0 +1,22 @@
+LossRatioCalculationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    line_of_business:
+      type: string
+    period_start:
+      type: string
+      format: date-time
+    period_end:
+      type: string
+      format: date-time
+    input:
+      $ref: '#/components/schemas/LossRatioInput'
+    calculation_reference:
+      type: string
+    calculated_by:
+      type: string
+    save_calculation:
+      type: boolean
+  description: Loss ratio calculation

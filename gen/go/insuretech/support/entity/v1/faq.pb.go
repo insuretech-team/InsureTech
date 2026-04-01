@@ -27,16 +27,16 @@ type FAQ struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                          // @inject_tag: gorm:"primaryKey;column:faq_id;not null"
-	Category     string        `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty"`                              // @inject_tag: gorm:"column:category;not null"
-	Question     string        `protobuf:"bytes,3,opt,name=question,proto3" json:"question,omitempty"`                              // @inject_tag: gorm:"column:question;not null"
-	QuestionBn   string        `protobuf:"bytes,4,opt,name=question_bn,json=questionBn,proto3" json:"question_bn,omitempty"`        // @inject_tag: gorm:"column:question_bn"
-	Answer       string        `protobuf:"bytes,5,opt,name=answer,proto3" json:"answer,omitempty"`                                  // @inject_tag: gorm:"column:answer;not null"
-	AnswerBn     string        `protobuf:"bytes,6,opt,name=answer_bn,json=answerBn,proto3" json:"answer_bn,omitempty"`              // @inject_tag: gorm:"column:answer_bn"
-	DisplayOrder int32         `protobuf:"varint,7,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty"` // @inject_tag: gorm:"column:display_order"
-	IsPublished  bool          `protobuf:"varint,8,opt,name=is_published,json=isPublished,proto3" json:"is_published,omitempty"`    // @inject_tag: gorm:"column:is_published"
-	ViewCount    int32         `protobuf:"varint,9,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty"`          // @inject_tag: gorm:"column:view_count"
-	AuditInfo    *v1.AuditInfo `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`          // @inject_tag: gorm:"column:audit_info;not null"
+	Id           string        `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:faq_id;not null"`
+	Category     string        `protobuf:"bytes,2,opt,name=category,proto3" json:"category,omitempty" gorm:"column:category;not null"`
+	Question     string        `protobuf:"bytes,3,opt,name=question,proto3" json:"question,omitempty" gorm:"column:question;not null"`
+	QuestionBn   string        `protobuf:"bytes,4,opt,name=question_bn,json=questionBn,proto3" json:"question_bn,omitempty" gorm:"column:question_bn"`
+	Answer       string        `protobuf:"bytes,5,opt,name=answer,proto3" json:"answer,omitempty" gorm:"column:answer;not null"`
+	AnswerBn     string        `protobuf:"bytes,6,opt,name=answer_bn,json=answerBn,proto3" json:"answer_bn,omitempty" gorm:"column:answer_bn"`
+	DisplayOrder int32         `protobuf:"varint,7,opt,name=display_order,json=displayOrder,proto3" json:"display_order,omitempty" gorm:"column:display_order"`
+	IsPublished  bool          `protobuf:"varint,8,opt,name=is_published,json=isPublished,proto3" json:"is_published,omitempty" gorm:"column:is_published"`
+	ViewCount    int32         `protobuf:"varint,9,opt,name=view_count,json=viewCount,proto3" json:"view_count,omitempty" gorm:"column:view_count"`
+	AuditInfo    *v1.AuditInfo `protobuf:"bytes,10,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *FAQ) Reset() {

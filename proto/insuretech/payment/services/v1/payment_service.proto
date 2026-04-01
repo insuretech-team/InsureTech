@@ -48,7 +48,7 @@ service PaymentService {
   }
   rpc GetRefundStatus(GetRefundStatusRequest) returns (GetRefundStatusResponse) {
     option (google.api.http) = {
-      get: "/v1/refunds/{refund_id}"
+      get: "/v1/refunds/{refund_id}/status"
     };
   }
   
@@ -254,14 +254,14 @@ message ListPaymentMethodsRequest {
 }
 
 message ListPaymentMethodsResponse {
-  repeated PaymentMethod payment_methods = 1;
+  repeated PaymentMethodDetails payment_methods = 1;
   string next_page_token = 2;
   int32 total_count = 3;
   // Error information if operation failed
   insuretech.common.v1.Error error = 4;
 }
 
-message PaymentMethod {
+message PaymentMethodDetails {
   string method_id = 1;
   string method_type = 2; // BKASH, NAGAD, ROCKET, CARD
   string display_name = 3;
@@ -271,7 +271,7 @@ message PaymentMethod {
 
 message AddPaymentMethodRequest {
   string user_id = 1;
-  PaymentMethod payment_method = 2;
+  PaymentMethodDetails payment_method = 2;
 }
 
 message AddPaymentMethodResponse {

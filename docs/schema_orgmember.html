@@ -250,9 +250,9 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">OrgMember links a platform user (authn_schema.users) to an Organisation with
- a role. This is how we know which organisation a logged-in admin/HR belongs
- to. The business_id stored in every JWT-derived session maps to
+            <div class="description">OrgMember links a platform user (authn_schema.users) to an Organisation with
+ a role. This is how we know which organisation a logged-in admin/HR belongs
+ to. The business_id stored in every JWT-derived session maps to
  organisation_id here.</div>
         </div>
         
@@ -314,7 +314,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">The organisation this member belongs to
+                <td class="field-description">The organisation this member belongs to
  @inject_tag: gorm:"column:organisation_id;not null;index"</td>
             </tr>
             
@@ -329,7 +329,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">The platform user ID (from authn_schema.users.user_id)
+                <td class="field-description">The platform user ID (from authn_schema.users.user_id)
  @inject_tag: gorm:"column:user_id;not null;index"</td>
             </tr>
             
@@ -344,7 +344,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Role within the organisation (BUSINESS_ADMIN, HR_MANAGER, VIEWER)
+                <td class="field-description">Role within the organisation (BUSINESS_ADMIN, HR_MANAGER, VIEWER)
  @inject_tag: gorm:"column:role;not null"</td>
             </tr>
             

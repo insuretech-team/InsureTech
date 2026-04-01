@@ -5,13 +5,13 @@ import DashboardLayout from "../dashboard-layout";
 import { DataTable } from "./data-table/data-table";
 import { buildDepartmentColumns } from "@/components/dashboard/departments/data-table/columns";
 import AddDepartmentModal from "@/components/modals/add-department-modal";
-import { departmentClient } from "@lib/sdk/department-client";
-import { organisationClient } from "@lib/sdk/organisation-client";
-import { authClient } from "@lib/sdk/auth-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Department, Organisation } from "@lib/types/b2b";
+import { usePortalPrincipal } from "@lib/auth/portal-session-context";
 
 const Departments = () => {
+  const principal = usePortalPrincipal();
   const [data, setData] = React.useState<Department[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [addOpen, setAddOpen] = React.useState(false);
@@ -22,42 +22,46 @@ const Departments = () => {
   const [resolvedOrg, setResolvedOrg] = React.useState<Organisation | null>(null);
   const [isB2BAdmin, setIsB2BAdmin] = React.useState<boolean | null>(null);
 
-  // Step 1: resolve role → load org context
+  // Step 1: resolve role from the server-hydrated portal session → load org context
   React.useEffect(() => {
     let cancelled = false;
-    void authClient.getSession().then((response) => {
-      if (cancelled) return;
-      const role = response.session?.principal.role ?? "";
-      const isSuperAdmin = role === "SYSTEM_ADMIN";
-      setIsB2BAdmin(!isSuperAdmin);
+    const role = principal?.role ?? "";
+    const isSuperAdmin = role === "SYSTEM_ADMIN";
 
-      if (isSuperAdmin) {
-        void organisationClient.list().then((res) => {
-          if (cancelled || !res.ok) return;
-          const rows = res.organisations ?? [];
-          setOrganisations(rows);
-          setSelectedOrgId((cur) => cur || rows[0]?.id || "");
-        });
-      } else {
-        void organisationClient.getMe().then((res) => {
-          if (cancelled || !res.ok) return;
-          if (res.organisation?.id) {
-            setResolvedOrg(res.organisation);
-            setOrganisations([res.organisation]);
-            setSelectedOrgId(res.organisation.id);
-          }
-        });
-      }
-    }).catch(() => { if (!cancelled) setIsB2BAdmin(true); });
+    if (!role) {
+      setIsB2BAdmin(null);
+      return () => { cancelled = true; };
+    }
+
+    setIsB2BAdmin(!isSuperAdmin);
+
+    if (isSuperAdmin) {
+      void bffClient.organisations.list().then((res) => {
+        if (cancelled || !res.ok) return;
+        const rows = res.organisations ?? [];
+        setOrganisations(rows);
+        setSelectedOrgId((cur) => cur || rows[0]?.id || "");
+      });
+    } else {
+      void bffClient.organisations.getMe().then((res) => {
+        if (cancelled || !res.ok) return;
+        if (res.organisation?.id) {
+          setResolvedOrg(res.organisation);
+          setOrganisations([res.organisation]);
+          setSelectedOrgId(res.organisation.id);
+        }
+      });
+    }
+
     return () => { cancelled = true; };
-  }, []);
+  }, [principal?.role]);
 
   // Step 2: load departments whenever selected org changes
   const reload = React.useCallback(async () => {
     if (!selectedOrgId) { setData([]); setLoading(false); return; }
     setLoading(true);
     try {
-      const result = await departmentClient.list(50, 0, selectedOrgId);
+      const result = await bffClient.departments.list(50, 0, selectedOrgId);
       setData(result.ok ? (result.departments ?? []) : []);
     } finally {
       setLoading(false);

@@ -16,7 +16,7 @@ service ReportService {
   // Execute report
   rpc ExecuteReport(ExecuteReportRequest) returns (ExecuteReportResponse) {
     option (google.api.http) = {
-      post: "/v1/reports/{report_definition_id}?action=execute"
+      post: "/v1/reports/{report_definition_id}:execute"
       body: "*"
     };
   }

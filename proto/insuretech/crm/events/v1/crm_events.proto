@@ -1,0 +1,107 @@
+syntax = "proto3";
+
+package insuretech.crm.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/crm/events/v1;crmeventsv1";
+option csharp_namespace = "Insuretech.Crm.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/crm/entity/v1/crm.proto";
+
+// LeadCreatedEvent is emitted when a new lead is created
+message LeadCreatedEvent {
+  string event_id = 1;
+  string lead_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email_address = 5;
+  entity.v1.LeadSource lead_source = 6;
+  string assigned_agent_id = 7;
+  google.protobuf.Timestamp created_at = 8;
+}
+
+// LeadUpdatedEvent is emitted when a lead is updated
+message LeadUpdatedEvent {
+  string event_id = 1;
+  string lead_id = 2;
+  entity.v1.LeadStatus old_status = 3;
+  entity.v1.LeadStatus new_status = 4;
+  string updated_by = 5;
+  google.protobuf.Timestamp updated_at = 6;
+}
+
+// LeadConvertedEvent is emitted when a lead is converted to contact
+message LeadConvertedEvent {
+  string event_id = 1;
+  string lead_id = 2;
+  string contact_id = 3;
+  string first_name = 4;
+  string last_name = 5;
+  string assigned_agent_id = 6;
+  google.protobuf.Timestamp converted_at = 7;
+}
+
+// LeadAssignedEvent is emitted when a lead is assigned to an agent
+message LeadAssignedEvent {
+  string event_id = 1;
+  string lead_id = 2;
+  string lead_name = 3;
+  string previous_agent_id = 4;
+  string new_agent_id = 5;
+  string assigned_by = 6;
+  google.protobuf.Timestamp assigned_at = 7;
+}
+
+// LeadDeletedEvent is emitted when a lead is deleted
+message LeadDeletedEvent {
+  string event_id = 1;
+  string lead_id = 2;
+  string lead_name = 3;
+  bool permanent = 4;
+  string deleted_by = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}
+
+// ContactCreatedEvent is emitted when a new contact is created
+message ContactCreatedEvent {
+  string event_id = 1;
+  string contact_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  string email_address = 5;
+  string phone_number = 6;
+  entity.v1.ContactType contact_type = 7;
+  string created_by = 8;
+  google.protobuf.Timestamp created_at = 9;
+}
+
+// ContactUpdatedEvent is emitted when a contact is updated
+message ContactUpdatedEvent {
+  string event_id = 1;
+  string contact_id = 2;
+  string first_name = 3;
+  string last_name = 4;
+  repeated string changed_fields = 5;
+  string updated_by = 6;
+  google.protobuf.Timestamp updated_at = 7;
+}
+
+// ContactStatusChangedEvent is emitted when contact status changes
+message ContactStatusChangedEvent {
+  string event_id = 1;
+  string contact_id = 2;
+  entity.v1.ContactStatus old_status = 3;
+  entity.v1.ContactStatus new_status = 4;
+  string reason = 5;
+  google.protobuf.Timestamp changed_at = 6;
+}
+
+// ContactDeletedEvent is emitted when a contact is deleted
+message ContactDeletedEvent {
+  string event_id = 1;
+  string contact_id = 2;
+  string contact_name = 3;
+  bool permanent = 4;
+  string deleted_by = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}

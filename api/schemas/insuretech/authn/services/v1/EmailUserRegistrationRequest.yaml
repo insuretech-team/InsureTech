@@ -9,7 +9,7 @@ EmailUserRegistrationRequest:
       description: Min 8 chars, 1 upper, 1 number, 1 special
     user_type:
       type: string
-      description: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
+      description: BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
     full_name:
       type: string
       description: Full name for account
@@ -17,7 +17,8 @@ EmailUserRegistrationRequest:
       type: string
     mobile_number:
       type: string
-      description: Optional for business users
-  description: "Register Email User Request\n Only for user_type: BUSINESS_BENEFICIARY,\
-    \ SYSTEM_USER, AGENT, or\n B2B_ORG_ADMIN\n Email is REQUIRED. Triggers an email\
-    \ verification OTP automatically."
+      description: Optional for business users. Accepts 017..., +880..., or 00880...
+        and is normalized to +8801XXXXXXXXX.
+  description: "Register Email User Request\r\n Only for user_type: BUSINESS_BENEFICIARY,\
+    \ B2B_BENEFICIARY, SYSTEM_USER,\r\n AGENT, or B2B_ORG_ADMIN\r\n Email is REQUIRED.\
+    \ Triggers an email verification OTP automatically."

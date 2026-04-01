@@ -1,0 +1,121 @@
+{
+  "id": "health_claim",
+  "font": "Times New Roman",
+  "nav_color": "7F1D1D",
+  "nav_light_color": "FEF2F2",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "HEALTH INSURANCE REIMBURSEMENT CLAIM FORM" },
+    { "type": "subtitle", "text": "Claim No: {{ claim_number }}   |   Policy No: {{ policy_number }}   |   Date: {{ claim_date }}", "bold": true },
+    { "type": "divider" },
+    { "type": "heading", "text": "I.  CLAIMANT DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Full Name of Claimant", "value": "{{ claimant_name }}" },
+        { "number": "2.", "label": "ID Card / Passport No.", "value": "{{ id_card_number }}" },
+        { "number": "3.", "label": "Date of Birth", "value": "{{ date_of_birth }}" },
+        { "number": "4.", "label": "Phone Number", "value": "{{ phone_number }}" },
+        { "number": "5.", "label": "Email Address", "value": "{{ email_address }}" },
+        { "number": "6.", "label": "Relationship to Insured", "value": "{{ relationship_to_insured }}" },
+        { "number": "7.", "label": "Contact Address", "value": "{{ contact_address }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  POLICY DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Policy Number", "value": "{{ policy_number }}" },
+        { "number": "2.", "label": "Group / Corporate Name", "value": "{{ group_name }}" },
+        { "number": "3.", "label": "Policy Period From", "value": "{{ policy_start_date }}" },
+        { "number": "4.", "label": "Policy Period To", "value": "{{ policy_end_date }}" },
+        { "number": "5.", "label": "Sum Insured (Tk.)", "value": "{{ sum_insured }}" },
+        { "number": "6.", "label": "Deductible / Excess (Tk.)", "value": "{{ deductible_amount }}" }
+      ]
+    },
+    { "type": "heading", "text": "III.  HOSPITALIZATION / TREATMENT DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Name of Hospital / Clinic", "value": "{{ hospital_name }}" },
+        { "number": "2.", "label": "Hospital Address", "value": "{{ hospital_address }}" },
+        { "number": "3.", "label": "Attending Physician / Surgeon", "value": "{{ attending_physician }}" },
+        { "number": "4.", "label": "Diagnosis / Nature of Illness / Injury", "value": "{{ diagnosis }}" },
+        { "number": "5.", "label": "Date of Admission", "value": "{{ admission_date }}" },
+        { "number": "6.", "label": "Date of Discharge", "value": "{{ discharge_date }}" },
+        { "number": "7.", "label": "No. of Days Hospitalized", "value": "{{ days_hospitalized }}" },
+        { "number": "8.", "label": "Type of Treatment", "value": "{{ treatment_type }}" },
+        { "number": "9.", "label": "Was this a pre-existing condition?", "value": "{{ is_pre_existing }}" },
+        { "number": "10.", "label": "Was this a planned / elective procedure?", "value": "{{ is_elective }}" }
+      ]
+    },
+    { "type": "heading", "text": "IV.  EXPENSE BREAKUP", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Expense Item", "Amount Claimed (Tk.)"],
+      "rows_key": "expense_items",
+      "columns": ["item", "amount"],
+      "col_widths": [4.46, 2.0]
+    },
+    { "type": "heading", "text": "V.  CLAIM AMOUNT SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "", "label": "Total Medical Expenses (Tk.)", "value": "{{ total_medical_expenses }}" },
+        { "number": "", "label": "Less: Amount covered by other insurer (Tk.)", "value": "{{ other_insurer_amount }}" },
+        { "number": "", "label": "Less: Deductible / Excess (Tk.)", "value": "{{ deductible_amount }}" },
+        { "number": "", "label": "NET CLAIM AMOUNT (Tk.)", "value": "{{ net_claim_amount }}" },
+        { "number": "", "label": "Payment Method", "value": "{{ payment_method }}" },
+        { "number": "", "label": "Bank Name", "value": "{{ bank_name }}" },
+        { "number": "", "label": "Account Number", "value": "{{ bank_account_number }}" },
+        { "number": "", "label": "Account Holder Name", "value": "{{ account_holder_name }}" }
+      ]
+    },
+    { "type": "heading", "text": "VI.  DOCUMENTS SUBMITTED", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Document", "Required", "Submitted (Y/N)"],
+      "rows_key": "submitted_documents",
+      "columns": ["document", "required", "submitted"],
+      "col_widths": [3.46, 1.5, 1.5]
+    },
+    { "type": "heading", "text": "VII.  FOR INSURER USE ONLY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Date Received", "value": "{{ date_received }}" },
+        { "number": "", "label": "Received By", "value": "{{ received_by }}" },
+        { "number": "", "label": "Claim Status", "value": "{{ claim_status }}" },
+        { "number": "", "label": "Surveyor / Assessor", "value": "{{ surveyor_name }}" },
+        { "number": "", "label": "Approved Amount (Tk.)", "value": "{{ approved_amount }}" },
+        { "number": "", "label": "Settlement Date", "value": "{{ settlement_date }}" },
+        { "number": "", "label": "Payment Reference", "value": "{{ payment_reference }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/We hereby declare that the information provided in this claim form is true, complete and accurate. I/We understand that any false or misleading information may result in the claim being rejected. I/We authorise the insurer to obtain any records or documents necessary for the assessment and settlement of this claim."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Claimant Signature & Date", "name": "{{ claimant_name }}" },
+        { "label": "Claims Officer Signature & Date", "name": "" },
+        { "label": "Surveyor / Assessor", "name": "" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Claim Ref: {{ claim_id }}   |   Policy No: {{ policy_number }}   |   Generated: {{ generated_at }}" }
+  ]
+}

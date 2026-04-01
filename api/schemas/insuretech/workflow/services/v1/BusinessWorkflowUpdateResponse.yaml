@@ -1,0 +1,7 @@
+BusinessWorkflowUpdateResponse:
+  type: object
+  properties:
+    workflow:
+      $ref: '#/components/schemas/BusinessWorkflowDefinition'
+  description: Response payload for business workflow update operation. Returns operation
+    results and status.

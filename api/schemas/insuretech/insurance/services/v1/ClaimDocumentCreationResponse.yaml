@@ -1,0 +1,7 @@
+ClaimDocumentCreationResponse:
+  type: object
+  properties:
+    document:
+      $ref: '#/components/schemas/ClaimDocument'
+  description: Response payload for claim document creation operation. Returns operation
+    results and status.

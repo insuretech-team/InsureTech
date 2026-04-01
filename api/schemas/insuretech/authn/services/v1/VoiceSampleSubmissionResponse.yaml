@@ -3,9 +3,5 @@ VoiceSampleSubmissionResponse:
   properties:
     verified:
       type: boolean
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for voice sample submission operation. Returns operation
     results and status.

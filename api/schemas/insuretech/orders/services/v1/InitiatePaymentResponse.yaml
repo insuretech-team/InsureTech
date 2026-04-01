@@ -12,7 +12,5 @@ OrdersInitiatePaymentResponse:
     expires_at:
       type: string
       format: date-time
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for initiate payment operation. Returns operation
     results and status.

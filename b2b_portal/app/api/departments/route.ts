@@ -3,7 +3,7 @@
  */
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { parseMoneyDecimal, sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { parseMoneyDecimal, sdkErrorMessage, unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { Department } from "@lifeplus/insuretech-sdk";
 import type { Department as UiDepartment } from "@lib/types/b2b";
@@ -23,28 +23,14 @@ export async function GET(request: Request) {
     // For super_admin (PORTAL_SYSTEM) business_id is not needed — backend uses system:root domain.
     let businessId = url.searchParams.get("business_id") ?? hdrs?.businessId ?? undefined;
 
-    if (!businessId) {
-      const cookieHeader = request.headers.get("cookie") ?? "";
-      if (cookieHeader) {
-        try {
-          const base =
-            process.env.INSURETECH_API_BASE_URL ??
-            process.env.NEXT_PUBLIC_INSURETECH_API_BASE_URL ??
-            "http://localhost:8080";
-          const meRes = await fetch(`${base}/v1/b2b/organisations/me`, {
-            method: "GET",
-            headers: { cookie: cookieHeader },
-            cache: "no-store",
-          });
-          if (meRes.ok) {
-            const meData = (await meRes.json()) as Record<string, unknown>;
-            if (typeof meData.organisation_id === "string" && meData.organisation_id) {
-              businessId = meData.organisation_id;
-            }
-          }
-        } catch {
-          // proceed without — backend enforces via session cookie
+    if (!businessId && hdrs?.portal !== "PORTAL_SYSTEM") {
+      try {
+        const meResult = await sdk.getMyOrganisation();
+        if (meResult.ok && typeof meResult.data.organisation_id === "string" && meResult.data.organisation_id) {
+          businessId = meResult.data.organisation_id;
         }
+      } catch {
+        // proceed without — backend enforces via session cookie
       }
     }
 
@@ -55,7 +41,9 @@ export async function GET(request: Request) {
       },
     });
     if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result), departments: [] }, { status: result.response.status });
-    return NextResponse.json({ ok: true, departments: (result.data?.departments ?? []).map(mapDept) });
+    // SDK interceptor unwraps the envelope; result.data is the payload directly.
+    const payload = result.data as Record<string, unknown> | null;
+    return NextResponse.json({ ok: true, departments: ((payload?.departments ?? []) as unknown[]).map((d) => mapDept(d as Department)) });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error", departments: [] }, { status: 502 });
   }
@@ -68,9 +56,11 @@ export async function POST(request: Request) {
     const body = (await request.json()) as Record<string, unknown>;
     const businessId = String(body.businessId ?? "").trim();
     const result = await sdk.createDepartment({ body: { name: String(body.name ?? ""), business_id: businessId } });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message }, { status: unwrapped.status });
+    const d = unwrapped.data as Record<string, unknown>;
     return NextResponse.json(
-      { ok: true, message: result.data?.message ?? "Department created", department: result.data?.department ? mapDept(result.data.department) : null },
+      { ok: true, message: (d?.message as string) ?? "Department created", department: d?.department ? mapDept(d.department as Department) : null },
       { status: 201 }
     );
   } catch (err) {

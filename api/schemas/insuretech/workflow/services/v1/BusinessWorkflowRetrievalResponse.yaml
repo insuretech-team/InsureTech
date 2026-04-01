@@ -1,0 +1,7 @@
+BusinessWorkflowRetrievalResponse:
+  type: object
+  properties:
+    workflow:
+      $ref: '#/components/schemas/BusinessWorkflowDefinition'
+  description: Response payload for business workflow retrieval operation. Returns
+    operation results and status.

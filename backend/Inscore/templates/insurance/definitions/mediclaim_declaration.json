@@ -1,0 +1,78 @@
+{
+  "id": "mediclaim_declaration",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "OVERSEAS MEDICLAIM POLICY — DECLARATION & BENEFITS SCHEDULE" },
+    { "type": "subtitle", "text": "Travel Insurance (Business and Holidays)", "italic": true },
+    { "type": "divider" },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Proposer Name", "value": "{{ proposer_name }}" },
+        { "number": "", "label": "Policy / Reference No.", "value": "{{ proposal_id }}" },
+        { "number": "", "label": "Plan Type", "value": "{{ plan_type }}" },
+        { "number": "", "label": "Coverage Period", "value": "{{ departure_date }} — {{ return_date }}" },
+        { "number": "", "label": "Destination", "value": "{{ itinerary }}" }
+      ]
+    },
+    { "type": "heading", "text": "I HEREBY DECLARE THAT:", "level": 1 },
+    {
+      "type": "declaration",
+      "items": [
+        "I will not be travelling against the advice of a physician.",
+        "I am not on a waiting list for any medical treatment.",
+        "I will not be travelling for the purpose of obtaining medical treatment.",
+        "I have not received a terminal prognosis for a medical condition before this day.",
+        "All information provided in the proposal form is true and complete to the best of my knowledge.",
+        "I understand that any misrepresentation or non-disclosure may result in the policy being null and void."
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I further declare and warrant that the above statements are true and complete. I consent to the insurers seeking medical information from any doctor who has at any time attended concerning anything which affects my physical or mental health, and I authorise the giving of such information as Van Ameyde UK Ltd. / Specialty Assist Ltd. and/or their Program Medical Advisor may require. I agree that this proposal shall form the basis of the contract should the insurance be effected.\n\nI am willing to accept the Policy, subject to the terms, exceptions and conditions prescribed by Corporation/Company therein."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer Signature", "name": "{{ proposer_name }}" },
+        { "label": "Date (DD / MM / YY)", "name": "{{ signature_date }}" },
+        { "label": "Place", "name": "{{ signature_place }}" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "heading", "text": "LIST OF SCHENGEN COUNTRIES", "level": 2 },
+    {
+      "type": "paragraph",
+      "text": "Austria, Belgium, Denmark, Finland, France, Germany, Iceland, Italy, Greece, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Estonia, Latvia, Lithuania, Poland, Czech Republic, Slovakia, Hungary, Slovenia, Malta, Cyprus, Switzerland and Liechtenstein",
+      "bold": true,
+      "align": "center",
+      "size": 9
+    },
+    { "type": "divider" },
+    { "type": "heading", "text": "PRODUCT BENEFITS & LIMITATIONS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Benefit / Coverage", "Coverage Limit"],
+      "rows_key": "product_benefits",
+      "columns": ["number", "benefit", "limit"],
+      "col_widths": [0.4, 4.16, 1.9]
+    },
+    {
+      "type": "notice",
+      "bold": true,
+      "text": "NOTE: THE COMPANY WILL NOT BE LIABLE TO PROVIDE ANY ASSISTANCE WHICH ARISES DIRECTLY OR INDIRECTLY FROM ANY PRE-EXISTING MEDICAL CONDITION, SUICIDE OR ATTEMPTED SUICIDE, MENTAL ILLNESS, PREGNANCY OR CHILDBIRTH."
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

@@ -3,9 +3,5 @@ OrderCreationResponse:
   properties:
     order:
       $ref: '#/components/schemas/OrderView'
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for order creation operation. Returns operation results
     and status.

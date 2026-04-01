@@ -1,15 +1,7 @@
 using System.Text.Json;
-using System.Text.Json.Serialization;
 using Confluent.Kafka;
-using Google.Protobuf.WellKnownTypes;
-using Insuretech.Common.V1;
-using Insuretech.Orders.Entity.V1;
+using PoliSync.ApiHost.Services;
 using PoliSync.Orders.Infrastructure;
-using PoliSync.Policy.Domain;
-using PoliSync.Policy.Infrastructure;
-using PoliSync.Quotes.Infrastructure;
-using PoliSync.SharedKernel.Domain;
-using PoliSync.SharedKernel.Messaging;
 
 namespace PoliSync.ApiHost.BackgroundServices;
 
@@ -17,23 +9,18 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
 {
     private readonly ILogger<OrderPaymentConfirmedConsumer> _logger;
     private readonly IServiceScopeFactory _scopeFactory;
-    private readonly IEventBus _eventBus;
     private readonly IConsumer<Ignore, string> _consumer;
     private readonly string _consumeTopic;
-    private readonly string _projectionTopic;
 
     public OrderPaymentConfirmedConsumer(
         IConfiguration configuration,
         ILogger<OrderPaymentConfirmedConsumer> logger,
-        IServiceScopeFactory scopeFactory,
-        IEventBus eventBus)
+        IServiceScopeFactory scopeFactory)
     {
         _logger = logger;
         _scopeFactory = scopeFactory;
-        _eventBus = eventBus;
 
-        _consumeTopic = configuration["Kafka:Topics:OrderPaymentConfirmed"] ?? "orders.order.payment_confirmed";
-        _projectionTopic = configuration["Kafka:Topics:OrderPolicyProjectionIssued"] ?? "policy.issued";
+        _consumeTopic = configuration["Kafka:Topics:OrderPaymentConfirmed"] ?? "insuretech.orders.v1.payment_confirmed";
         var bootstrapServers = configuration["Kafka:BootstrapServers"] ?? "localhost:9092";
         var groupId = configuration["Kafka:Consumer:OrderPaymentConfirmed:GroupId"] ?? "polisync-order-payment-confirmed";
 
@@ -51,7 +38,7 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
     protected override Task ExecuteAsync(CancellationToken stoppingToken)
     {
         _consumer.Subscribe(_consumeTopic);
-        _logger.LogInformation("Subscribed to Kafka topic {Topic} for policy issuance", _consumeTopic);
+        _logger.LogInformation("Subscribed to Kafka topic {Topic} for proposal submission", _consumeTopic);
 
         return Task.Run(async () =>
         {
@@ -122,8 +109,7 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
         {
             using var scope = _scopeFactory.CreateScope();
             var orderGateway = scope.ServiceProvider.GetRequiredService<IOrderDataGateway>();
-            var quotationGateway = scope.ServiceProvider.GetRequiredService<IQuotationDataGateway>();
-            var policyGateway = scope.ServiceProvider.GetRequiredService<IPolicyDataGateway>();
+            var workflowService = scope.ServiceProvider.GetRequiredService<InsuranceProposalWorkflowService>();
 
             var order = await orderGateway.GetOrderAsync(evt.OrderId, cancellationToken);
             if (order?.Order is null)
@@ -132,86 +118,40 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
                 return true;
             }
 
-            if (!string.IsNullOrWhiteSpace(order.Order.PolicyId) || order.Order.Status == OrderStatus.PolicyIssued)
+            if (!string.IsNullOrWhiteSpace(order.Order.PolicyId))
             {
                 return true;
             }
 
-            var quotationId = FirstNonEmpty(evt.QuotationId, order.Order.QuotationId);
-            var customerId = FirstNonEmpty(evt.CustomerId, order.Order.CustomerId);
-            var productId = FirstNonEmpty(evt.ProductId, order.Order.ProductId);
-            var paymentId = FirstNonEmpty(evt.PaymentId, order.Order.PaymentId);
+            var insurerId = FirstNonEmpty(evt.InsurerId, order.Order.InsurerId);
 
-            if (string.IsNullOrWhiteSpace(quotationId) || string.IsNullOrWhiteSpace(customerId) || string.IsNullOrWhiteSpace(productId))
+            if (string.IsNullOrWhiteSpace(insurerId))
             {
                 _logger.LogWarning(
-                    "Skipping policy issuance for order {OrderId} because quotation/customer/product data is incomplete",
+                    "Skipping proposal submission for order {OrderId} because insurer_id is missing",
                     evt.OrderId);
                 return true;
             }
 
-            var quotation = await quotationGateway.GetQuotationAsync(quotationId, cancellationToken);
-            if (quotation is null)
-            {
-                _logger.LogWarning("Quotation {QuotationId} not found for order {OrderId}", quotationId, evt.OrderId);
-                return true;
-            }
-
-            if (quotation.Status != Insuretech.Policy.Entity.V1.QuotationStatus.Approved)
-            {
-                _logger.LogWarning(
-                    "Skipping policy issuance for order {OrderId} because quotation {QuotationId} is in status {Status}",
-                    evt.OrderId,
-                    quotationId,
-                    quotation.Status);
-                return true;
-            }
-
-            var premium = ResolveMoney(evt.TotalPayableAmount, evt.TotalPayableCurrency, order.Order.TotalPayable, quotation);
-            var sumInsured = ResolveSumInsured(quotation, premium.Currency);
-            var now = DateTime.UtcNow;
-
-            var aggregate = PolicyAggregate.Create(
-                customerId,
-                productId,
-                quotationId,
-                premium.Amount,
-                sumInsured.Amount,
-                12,
-                now.Date,
-                now.Date.AddMonths(12));
-
-            aggregate.IssuePolicy();
-            aggregate.Policy.PartnerId = quotation.BusinessId;
-            aggregate.Policy.PaymentGatewayReference = paymentId;
-            aggregate.Policy.ReceiptNumber = $"RCPT-{DateTime.UtcNow:yyyyMMdd}-{Random.Shared.Next(100000, 999999)}";
-            aggregate.Policy.PaymentFrequency = "ANNUAL";
-            aggregate.Policy.PremiumCurrency = premium.Currency;
-            aggregate.Policy.SumInsuredCurrency = sumInsured.Currency;
-            aggregate.Policy.PremiumAmount = premium;
-            aggregate.Policy.SumInsured = sumInsured;
-            aggregate.Policy.TotalPayable = premium;
-            aggregate.Policy.VatTax = NewMoney(0, premium.Currency);
-            aggregate.Policy.ServiceFee = NewMoney(0, premium.Currency);
-            aggregate.Policy.UpdatedAt = Timestamp.FromDateTime(DateTime.UtcNow);
-
-            var created = await policyGateway.CreatePolicyAsync(aggregate.Policy, cancellationToken);
-
-            await _eventBus.PublishAsync(
-                new PolicyIssuedProjectionEvent(created.PolicyId, evt.OrderId),
-                _projectionTopic,
+            var created = await workflowService.SubmitProposalForOrderAsync(
+                evt.OrderId,
+                insurerId,
+                correlationId: FirstNonEmpty(evt.CorrelationId, order.Order.CorrelationId),
+                submissionPayload: payload,
+                totalPayableAmount: evt.TotalPayableAmount > 0 ? evt.TotalPayableAmount : null,
+                totalPayableCurrency: evt.TotalPayableCurrency,
                 cancellationToken);
 
             _logger.LogInformation(
-                "Issued policy {PolicyId} for order {OrderId} from payment confirmed event",
-                created.PolicyId,
+                "Submitted proposal {ProposalId} for order {OrderId} from payment confirmed event",
+                created.ProposalId,
                 evt.OrderId);
 
             return true;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to issue policy from order payment confirmed event for order {OrderId}", evt.OrderId);
+            _logger.LogError(ex, "Failed to submit proposal from order payment confirmed event for order {OrderId}", evt.OrderId);
             return false;
         }
     }
@@ -226,52 +166,10 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
             QuotationId: FirstString(root, "quotation_id", "quotationId"),
             CustomerId: FirstString(root, "customer_id", "customerId"),
             ProductId: FirstString(root, "product_id", "productId"),
+            InsurerId: FirstString(root, "insurer_id", "insurerId"),
+            CorrelationId: FirstString(root, "correlation_id", "correlationId"),
             TotalPayableAmount: money?.Amount ?? 0,
             TotalPayableCurrency: money?.Currency ?? "BDT");
-    }
-
-    private static Money ResolveMoney(
-        long eventAmount,
-        string eventCurrency,
-        Money? orderAmount,
-        Insuretech.Policy.Entity.V1.Quotation quotation)
-    {
-        if (eventAmount > 0)
-        {
-            return NewMoney(eventAmount, string.IsNullOrWhiteSpace(eventCurrency) ? "BDT" : eventCurrency);
-        }
-
-        if (orderAmount is not null && orderAmount.Amount > 0)
-        {
-            return NewMoney(orderAmount.Amount, string.IsNullOrWhiteSpace(orderAmount.Currency) ? "BDT" : orderAmount.Currency);
-        }
-
-        if (quotation.QuotedAmount is not null && quotation.QuotedAmount.Amount > 0)
-        {
-            return NewMoney(quotation.QuotedAmount.Amount, string.IsNullOrWhiteSpace(quotation.QuotedAmount.Currency) ? "BDT" : quotation.QuotedAmount.Currency);
-        }
-
-        if (quotation.EstimatedPremium is not null && quotation.EstimatedPremium.Amount > 0)
-        {
-            return NewMoney(quotation.EstimatedPremium.Amount, string.IsNullOrWhiteSpace(quotation.EstimatedPremium.Currency) ? "BDT" : quotation.EstimatedPremium.Currency);
-        }
-
-        return NewMoney(120_000);
-    }
-
-    private static Money ResolveSumInsured(Insuretech.Policy.Entity.V1.Quotation quotation, string currency)
-    {
-        if (quotation.QuotedAmount is not null && quotation.QuotedAmount.Amount > 0)
-        {
-            return NewMoney(Math.Max(quotation.QuotedAmount.Amount * 10, 1_000_000), currency);
-        }
-
-        if (quotation.EstimatedPremium is not null && quotation.EstimatedPremium.Amount > 0)
-        {
-            return NewMoney(Math.Max(quotation.EstimatedPremium.Amount * 10, 1_000_000), currency);
-        }
-
-        return NewMoney(1_000_000, currency);
     }
 
     private static string? FirstString(JsonElement root, params string[] names)
@@ -328,19 +226,14 @@ public sealed class OrderPaymentConfirmedConsumer : BackgroundService
     private static string? FirstNonEmpty(params string?[] values)
         => values.FirstOrDefault(value => !string.IsNullOrWhiteSpace(value));
 
-    private static Money NewMoney(long amount, string currency = "BDT")
-        => new() { Amount = amount, Currency = currency };
-
     private sealed record OrderPaymentConfirmedPayload(
         string? OrderId,
         string? PaymentId,
         string? QuotationId,
         string? CustomerId,
         string? ProductId,
+        string? InsurerId,
+        string? CorrelationId,
         long TotalPayableAmount,
         string TotalPayableCurrency);
-
-    private sealed record PolicyIssuedProjectionEvent(
-        [property: JsonPropertyName("policy_id")] string PolicyId,
-        [property: JsonPropertyName("order_id")] string OrderId) : DomainEvent;
 }

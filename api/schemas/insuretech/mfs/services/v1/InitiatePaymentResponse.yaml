@@ -7,10 +7,5 @@ MfsInitiatePaymentResponse:
       type: string
     payment_url:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for initiate payment operation. Returns operation
     results and status.

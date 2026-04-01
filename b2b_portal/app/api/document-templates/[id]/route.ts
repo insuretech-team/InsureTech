@@ -12,7 +12,7 @@ export async function GET(request: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
     const hdrs = await resolvePortalHeaders(request);
-    const docgen = makeDocgenClient(request, hdrs ?? undefined);
+    const docgen = makeDocgenClient(request, hdrs as unknown as Record<string, string> ?? undefined);
     const result = await docgen.getTemplate(id);
     return NextResponse.json(result.data, { status: result.status });
   } catch (err) {
@@ -27,7 +27,7 @@ export async function PATCH(request: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
     const hdrs = await resolvePortalHeaders(request);
-    const docgen = makeDocgenClient(request, hdrs ?? undefined);
+    const docgen = makeDocgenClient(request, hdrs as unknown as Record<string, string> ?? undefined);
     const body = (await request.json()) as UpdateDocumentTemplatePayload;
     const result = await docgen.updateTemplate(id, body);
     return NextResponse.json(result.data, { status: result.status });
@@ -43,7 +43,7 @@ export async function DELETE(request: Request, { params }: RouteContext) {
   const { id } = await params;
   try {
     const hdrs = await resolvePortalHeaders(request);
-    const docgen = makeDocgenClient(request, hdrs ?? undefined);
+    const docgen = makeDocgenClient(request, hdrs as unknown as Record<string, string> ?? undefined);
     const result = await docgen.deleteTemplate(id);
     return NextResponse.json(result.data, { status: result.status });
   } catch (err) {

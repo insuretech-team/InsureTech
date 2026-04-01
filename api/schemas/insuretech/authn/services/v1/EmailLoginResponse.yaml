@@ -16,7 +16,5 @@ EmailLoginResponse:
     session_type:
       type: string
       description: Always SERVER_SIDE
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for email login operation. Returns operation results
     and status.

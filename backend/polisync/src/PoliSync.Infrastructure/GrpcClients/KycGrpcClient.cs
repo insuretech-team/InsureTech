@@ -21,8 +21,8 @@ public sealed class KycGrpcClient
         try
         {
             var resp = await Client.GetKYCVerificationAsync(
-                new GetKYCVerificationRequest { UserId = userId }, cancellationToken: ct);
-            return resp.Verification?.Status == "APPROVED";
+                new GetKYCVerificationRequest { KycVerificationId = userId }, cancellationToken: ct);
+            return resp.KycVerification?.Status == Insuretech.Kyc.Entity.V1.VerificationStatus.Verified;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
         {

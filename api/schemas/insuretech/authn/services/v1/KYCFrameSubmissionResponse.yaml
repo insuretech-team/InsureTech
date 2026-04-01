@@ -16,9 +16,40 @@ KYCFrameSubmissionResponse:
     liveness_confidence:
       type: number
       format: double
-    message:
+    session_state:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
+      description: '"EKYC_SESSION_ACTIVE"'
+    step_progress:
+      type: number
+      format: double
+      description: "0.0\u20131.0"
+    overall_progress:
+      type: number
+      format: double
+      description: "0.0\u20131.0"
+    guidance_messages:
+      type: array
+      items:
+        type: string
+        description: all guidance strings
+      description: all guidance strings
+    detection:
+      $ref: '#/components/schemas/KYCDetection'
+      description: face detection box
+    head_pose:
+      $ref: '#/components/schemas/KYCHeadPose'
+      description: yaw/pitch/roll
+    eye_state:
+      $ref: '#/components/schemas/KYCEyeState'
+      description: blink state
+    current_step_detail:
+      $ref: '#/components/schemas/KYCStep'
+      description: full step info
+    eye_contours_json:
+      type: string
+      description: "eye_contours_json: JSON-encoded FLVE eye mesh (left/right edges+points).\r\
+        \n Parsed by the frontend for canvas eye contour overlay rendering."
+    step_completed:
+      type: boolean
   description: Response payload for kyc frame submission operation. Returns operation
     results and status.

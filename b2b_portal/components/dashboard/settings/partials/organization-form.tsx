@@ -6,8 +6,14 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { organisationClient } from "@lib/sdk";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import type { Organisation } from "@lib/types/b2b";
+import {
+  BD_MOBILE_EXAMPLES,
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+  normalizeBangladeshMobileOrRaw,
+} from "@lib/utils/bd-mobile";
 
 const focusPurple =
   "focus-visible:ring-primary focus-visible:border-primary focus-visible:ring-2";
@@ -34,9 +40,10 @@ const OrganizationForm = () => {
   const [saving, setSaving] = useState(false);
   const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
   const [isSystemAdmin, setIsSystemAdmin] = useState(false);
+  const [contactPhoneTouched, setContactPhoneTouched] = useState(false);
 
   useEffect(() => {
-    organisationClient.getMe().then((res) => {
+    bffClient.organisations.getMe().then((res) => {
       if (res.ok && res.organisation) {
         const org: Organisation = res.organisation;
         setOrgId(org.id);
@@ -58,17 +65,27 @@ const OrganizationForm = () => {
   const set = (key: keyof OrgFormData) => (e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>) =>
     setForm((f) => ({ ...f, [key]: e.target.value }));
 
+  const contactPhoneError =
+    contactPhoneTouched && form.contactPhone.trim() && !normalizeBangladeshMobile(form.contactPhone)
+      ? getBangladeshMobileValidationMessage("Contact phone")
+      : "";
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!orgId) return;
+    if (form.contactPhone.trim() && !normalizeBangladeshMobile(form.contactPhone)) {
+      setContactPhoneTouched(true);
+      setMessage({ text: getBangladeshMobileValidationMessage("Contact phone"), ok: false });
+      return;
+    }
     setSaving(true);
     setMessage(null);
     try {
-      const res = await organisationClient.update(orgId, {
+      const res = await bffClient.organisations.update(orgId, {
         name: form.name,
         industry: form.industry,
         contactEmail: form.contactEmail,
-        contactPhone: form.contactPhone,
+        contactPhone: normalizeBangladeshMobile(form.contactPhone) ?? undefined,
         address: form.address,
       });
       setMessage({
@@ -161,11 +178,24 @@ const OrganizationForm = () => {
                 <Label htmlFor="contactPhone">Contact Phone</Label>
                 <Input
                   id="contactPhone"
-                  placeholder="e.g. 01712345678"
-                  className={focusPurple}
+                  placeholder={BD_MOBILE_EXAMPLES}
+                  className={`${focusPurple} ${contactPhoneError ? "border-red-500" : ""}`}
                   value={form.contactPhone}
-                  onChange={set("contactPhone")}
+                  onChange={(event) => {
+                    setForm((current) => ({ ...current, contactPhone: event.target.value }));
+                    setMessage(null);
+                  }}
+                  onBlur={(event) => {
+                    setContactPhoneTouched(true);
+                    setForm((current) => ({
+                      ...current,
+                      contactPhone: normalizeBangladeshMobileOrRaw(event.target.value),
+                    }));
+                  }}
                 />
+                <p className={`mt-1 text-xs ${contactPhoneError ? "text-red-500" : "text-muted-foreground"}`}>
+                  {contactPhoneError || `Accepted formats: ${BD_MOBILE_EXAMPLES}.`}
+                </p>
               </Field>
             </div>
 

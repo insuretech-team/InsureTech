@@ -55,7 +55,7 @@ import (
 	"github.com/spf13/cobra"
 
 	// Register all proto entity packages so the UnifiedMigrationManager can
-	// discover schemas from protobuf descriptors (same pattern as dbmanager).
+	// discover schemas from protobuf descriptors (same pattern as dbx).
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/ai/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/analytics/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/apikey/entity/v1"
@@ -72,6 +72,7 @@ import (
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/insurer/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/iot/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/kyc/entity/v1"
+	_ "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/mfs/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/notification/entity/v1"
 	_ "github.com/newage-saint/insuretech/gen/go/insuretech/partner/entity/v1"
@@ -505,7 +506,7 @@ func newValidateCmd(cfgPath *string) *cobra.Command {
 mismatches (missing tables, missing columns, constraint differences).
 Exits 0 if schemas match, 1 if mismatches are found.
 
-Tip: run 'dbops migrate --target=backup' or 'dbmanager rebuild-backup'
+Tip: run 'dbops migrate --target=backup' or 'dbx rebuild-backup'
 to fix schema drift in the backup database.`,
 		Example: "  dbops validate",
 		PreRunE: func(cmd *cobra.Command, args []string) error {
@@ -535,7 +536,7 @@ func runValidate() error {
 	for _, m := range mismatches {
 		appLogger.Errorf("   • %s", m)
 	}
-	appLogger.Info("Tip: run 'dbops migrate --target=backup' or 'dbmanager rebuild-backup' to fix")
+	appLogger.Info("Tip: run 'dbops migrate --target=backup' or 'dbx rebuild-backup' to fix")
 	return fmt.Errorf("schema validation failed: %d mismatch(es)", len(mismatches))
 }
 

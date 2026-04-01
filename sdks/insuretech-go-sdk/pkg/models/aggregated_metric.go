@@ -6,12 +6,12 @@ import (
 
 // AggregatedMetric represents a aggregated_metric
 type AggregatedMetric struct {
-	Dimensions map[string]interface{} `json:"dimensions,omitempty"`
-	TimeBucket string `json:"time_bucket"`
 	AggregatedMetricId string `json:"aggregated_metric_id"`
+	Aggregation *MetricAggregation `json:"aggregation"`
+	Dimensions map[string]interface{} `json:"dimensions,omitempty"`
 	MetricId string `json:"metric_id"`
 	MetricName string `json:"metric_name"`
-	Aggregation *MetricAggregation `json:"aggregation"`
-	Value float64 `json:"value"`
+	TimeBucket string `json:"time_bucket"`
 	Timestamp time.Time `json:"timestamp"`
+	Value float64 `json:"value"`
 }

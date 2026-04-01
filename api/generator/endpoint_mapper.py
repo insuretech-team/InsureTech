@@ -2,6 +2,7 @@
 Endpoint Mapper - Maps all HTTP methods and custom actions per endpoint
 Provides complete visibility into API structure
 """
+from write_guard import write_if_changed
 
 class EndpointMapper:
     def __init__(self):
@@ -169,63 +170,65 @@ class EndpointMapper:
     
     def export_to_markdown(self, output_file):
         """Export endpoint map to markdown file for documentation"""
-        with open(output_file, 'w', encoding='utf-8') as f:
-            f.write("# API Endpoint Map\n\n")
-            f.write("Auto-generated endpoint documentation\n\n")
+        lines = []
+        lines.append("# API Endpoint Map\n\n")
+        lines.append("Auto-generated endpoint documentation\n\n")
+        
+        # Group by resource
+        by_resource = {}
+        for path, info in self.endpoints.items():
+            resource = info['resource_name']
+            if resource not in by_resource:
+                by_resource[resource] = []
+            by_resource[resource].append((path, info))
+        
+        # Write table of contents
+        lines.append("## Table of Contents\n\n")
+        for resource in sorted(by_resource.keys()):
+            lines.append(f"- [{resource.title()}](#{resource.lower()})\n")
+        
+        # Write details
+        for resource in sorted(by_resource.keys()):
+            endpoints = by_resource[resource]
+            lines.append(f"\n## {resource.title()}\n\n")
             
-            # Group by resource
-            by_resource = {}
-            for path, info in self.endpoints.items():
-                resource = info['resource_name']
-                if resource not in by_resource:
-                    by_resource[resource] = []
-                by_resource[resource].append((path, info))
+            # Create table
+            lines.append("| Path | Type | Methods | Operations |\n")
+            lines.append("|------|------|---------|------------|\n")
             
-            # Write table of contents
-            f.write("## Table of Contents\n\n")
-            for resource in sorted(by_resource.keys()):
-                f.write(f"- [{resource.title()}](#{resource.lower()})\n")
-            
-            # Write details
-            for resource in sorted(by_resource.keys()):
-                endpoints = by_resource[resource]
-                f.write(f"\n## {resource.title()}\n\n")
+            for path, info in sorted(endpoints):
+                # Type
+                if info['is_custom_action']:
+                    type_str = f"Custom Action: `{info.get('custom_action')}`"
+                elif info['is_collection']:
+                    type_str = "Collection"
+                else:
+                    type_str = "Resource"
                 
-                # Create table
-                f.write("| Path | Type | Methods | Operations |\n")
-                f.write("|------|------|---------|------------|\n")
+                # Methods
+                methods_str = ", ".join(f"`{m.upper()}`" for m in sorted(info['methods'].keys()))
                 
-                for path, info in sorted(endpoints):
-                    # Type
-                    if info['is_custom_action']:
-                        type_str = f"Custom Action: `{info.get('custom_action')}`"
-                    elif info['is_collection']:
-                        type_str = "Collection"
-                    else:
-                        type_str = "Resource"
-                    
-                    # Methods
-                    methods_str = ", ".join(f"`{m.upper()}`" for m in sorted(info['methods'].keys()))
-                    
-                    # Operations
-                    ops = []
-                    for method in sorted(info['methods'].keys()):
-                        op = info['methods'][method]
-                        ops.append(f"{method.upper()}: {op.get('summary', 'N/A')}")
-                    ops_str = "<br>".join(ops)
-                    
-                    f.write(f"| `{path}` | {type_str} | {methods_str} | {ops_str} |\n")
-            
-            # Statistics
-            f.write(f"\n## Statistics\n\n")
-            total_endpoints = len(self.endpoints)
-            total_operations = sum(len(info['methods']) for info in self.endpoints.values())
-            custom_actions = len([e for e in self.endpoints.values() if e['is_custom_action']])
-            collections = len([e for e in self.endpoints.values() if e['is_collection'] and not e['is_custom_action']])
-            resources = len([e for e in self.endpoints.values() if not e['is_collection'] and not e['is_custom_action']])
-            
-            f.write(f"- **Total Endpoints:** {total_endpoints}\n")
-            f.write(f"- **Total Operations:** {total_operations}\n")
-            f.write(f"- **Collections:** {collections}\n")
-            f.write(f"- **Resources:** {resources}\n")
-            f.write(f"- **Custom Actions:** {custom_actions}\n")
+                # Operations
+                ops = []
+                for method in sorted(info['methods'].keys()):
+                    op = info['methods'][method]
+                    ops.append(f"{method.upper()}: {op.get('summary', 'N/A')}")
+                ops_str = "<br>".join(ops)
+                
+                lines.append(f"| `{path}` | {type_str} | {methods_str} | {ops_str} |\n")
+        
+        # Statistics
+        lines.append(f"\n## Statistics\n\n")
+        total_endpoints = len(self.endpoints)
+        total_operations = sum(len(info['methods']) for info in self.endpoints.values())
+        custom_actions = len([e for e in self.endpoints.values() if e['is_custom_action']])
+        collections = len([e for e in self.endpoints.values() if e['is_collection'] and not e['is_custom_action']])
+        resources = len([e for e in self.endpoints.values() if not e['is_collection'] and not e['is_custom_action']])
+        
+        lines.append(f"- **Total Endpoints:** {total_endpoints}\n")
+        lines.append(f"- **Total Operations:** {total_operations}\n")
+        lines.append(f"- **Collections:** {collections}\n")
+        lines.append(f"- **Resources:** {resources}\n")
+        lines.append(f"- **Custom Actions:** {custom_actions}\n")
+
+        write_if_changed(output_file, ''.join(lines))

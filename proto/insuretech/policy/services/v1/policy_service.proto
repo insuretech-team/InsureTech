@@ -53,9 +53,9 @@ service PolicyService {
   }
   
   // Renew policy
-  rpc RenewPolicy(RenewPolicyRequest) returns (RenewPolicyResponse) {
+  rpc RenewPolicy(RenewPolicyTenureRequest) returns (RenewPolicyTenureResponse) {
     option (google.api.http) = {
-      post: "/v1/policies/{policy_id}:renew"
+      post: "/v1/policies/{policy_id}:renew-tenure"
       body: "*"
     };
   }
@@ -146,14 +146,14 @@ message CancelPolicyResponse {
   insuretech.common.v1.Error error = 3 [(google.api.field_behavior) = OUTPUT_ONLY];
 }
 
-message RenewPolicyRequest {
+message RenewPolicyTenureRequest {
   string policy_id = 1 [(google.api.field_behavior) = REQUIRED];
   int32 tenure_months = 2 [(google.api.field_behavior) = REQUIRED];
   bool update_nominees = 3 [(google.api.field_behavior) = OPTIONAL];
   repeated entity.v1.Nominee nominees = 4 [(google.api.field_behavior) = OPTIONAL];
 }
 
-message RenewPolicyResponse {
+message RenewPolicyTenureResponse {
   string new_policy_id = 1 [(google.api.field_behavior) = OUTPUT_ONLY];
   string new_policy_number = 2 [(google.api.field_behavior) = OUTPUT_ONLY];
   insuretech.common.v1.Money premium_amount = 3 [(google.api.field_behavior) = OUTPUT_ONLY];

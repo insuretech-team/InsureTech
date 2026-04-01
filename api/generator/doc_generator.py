@@ -3,6 +3,7 @@
 Enhanced Documentation Generator
 Generates organized API documentation with tabs, groups, and modern UI
 """
+from write_guard import write_if_changed
 
 import yaml
 import json
@@ -453,8 +454,7 @@ class DocGenerator:
         )
         
         # Write to file
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         print(f"✓ Documentation generated: {output_path}")
         print(f"  - {total_schema_groups} schema groups")

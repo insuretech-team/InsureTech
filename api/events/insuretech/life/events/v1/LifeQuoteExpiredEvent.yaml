@@ -1,0 +1,13 @@
+LifeQuoteExpiredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    expired_at:
+      type: string
+      format: date-time
+  description: LifeQuoteExpiredEvent is emitted when a quote expires

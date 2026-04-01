@@ -1,14 +1,34 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"os"
 	"os/exec"
 	"path/filepath"
+	"regexp"
 	"strings"
 	"text/template"
 )
+
+// writeFileIfChanged writes content to path only when the file doesn't exist or
+// its content differs — preventing unnecessary git churn on repeated pipeline runs.
+func writeFileIfChanged(path string, content []byte, perm os.FileMode) error {
+	if existing, err := ioutil.ReadFile(path); err == nil {
+		if bytes.Equal(existing, content) {
+			return nil
+		}
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+	return ioutil.WriteFile(path, content, perm)
+}
+
+func writeFileIfChangedStr(path string, content string, perm os.FileMode) error {
+	return writeFileIfChanged(path, []byte(content), perm)
+}
 
 // GeneratorConfig holds configuration
 type GeneratorConfig struct {
@@ -128,12 +148,19 @@ func applyCustomizations(config *GeneratorConfig) error {
 		return fmt.Errorf("failed to fix service exports: %w", err)
 	}
 
+	// Custom modification 4: Unwrap ApiResponse envelope from generated response types
+	// Transforms "200: ApiResponse & { data?: T }" → "200: T" so that
+	// result.data is T directly (matches the response interceptor in client-wrapper.ts).
+	if err := unwrapResponseTypes(config); err != nil {
+		return fmt.Errorf("failed to unwrap response types: %w", err)
+	}
+
 	return nil
 }
 
 func customizePackageJson(config *GeneratorConfig) error {
 	pkgPath := filepath.Join(config.OutputPath, "package.json")
-	
+
 	// Read existing package.json
 	data, err := ioutil.ReadFile(pkgPath)
 	if err != nil {
@@ -143,11 +170,11 @@ func customizePackageJson(config *GeneratorConfig) error {
 	content := string(data)
 
 	// Replace package name
-	content = strings.ReplaceAll(content, `"name": "insuretech-typescript-sdk"`, 
+	content = strings.ReplaceAll(content, `"name": "insuretech-typescript-sdk"`,
 		fmt.Sprintf(`"name": "%s"`, config.PackageName))
 
 	// Replace version
-	content = strings.ReplaceAll(content, `"version": "1.0.0"`, 
+	content = strings.ReplaceAll(content, `"version": "1.0.0"`,
 		fmt.Sprintf(`"version": "%s"`, config.Version))
 
 	// Add repository info if not present
@@ -162,7 +189,7 @@ func customizePackageJson(config *GeneratorConfig) error {
     "url": "https://github.com/lifeplus/InsureTech/issues"
   },
   "homepage": "https://github.com/lifeplus/InsureTech#readme"`
-		
+
 		content = strings.ReplaceAll(content, `"devDependencies"`, repoInfo+`,
   "devDependencies"`)
 	}
@@ -174,18 +201,18 @@ func customizePackageJson(config *GeneratorConfig) error {
   "dependencies": {
     "@hey-api/client-fetch": "^0.1.0"
   }`
-		
+
 		content = strings.ReplaceAll(content, `"devDependencies"`, deps+`,
   "devDependencies"`)
 	}
 
-	return ioutil.WriteFile(pkgPath, []byte(content), 0644)
+	return writeFileIfChangedStr(pkgPath, content, 0644)
 }
 
 func addClientWrapper(config *GeneratorConfig) error {
 	// Create a custom client wrapper that provides better DX
 	wrapperPath := filepath.Join(config.OutputPath, "src", "client-wrapper.ts")
-	
+
 	wrapper := `// Custom Client Wrapper for InsureTech SDK
 // Provides a configured client instance for use with generated services
 
@@ -220,43 +247,119 @@ export interface InsureTechClientConfig {
  * ` + "```" + `
  */
 export function createInsureTechClient(config: InsureTechClientConfig) {
-  return createClient(createConfig({
+  const c = createClient(createConfig({
     baseUrl: config.baseUrl || 'https://api.insuretech.com',
     headers: {
       'Authorization': ` + "`Bearer ${config.apiKey}`" + `,
       ...config.headers,
     },
   }));
+
+  // ── Unwrap ApiResponse envelope ─────────────────────────────────────────
+  // The gateway wraps every response as { success, data, error, meta }.
+  // hey-api puts the parsed JSON into result.data, so without this
+  // interceptor consumers would need result.data.data to reach the payload.
+  // By replacing the Response body with just the inner "data" field we make
+  // result.data === T directly — no double-wrap.
+  c.interceptors.response.use(async (response) => {
+    const ct = response.headers.get('content-type') ?? '';
+    if (!ct.includes('application/json')) return response;
+    // Clone so we can read the body without consuming the original.
+    const text = await response.clone().text();
+    if (!text) return response;
+    try {
+      const envelope = JSON.parse(text);
+      // Only unwrap if it looks like our standard ApiResponse envelope.
+      if (
+        typeof envelope === 'object' &&
+        envelope !== null &&
+        'success' in envelope &&
+        'data' in envelope
+      ) {
+        // Success: unwrap envelope.data so result.data === T
+        // Error: unwrap envelope.error so result.error has gateway error details
+        const inner = envelope.success ? envelope.data : envelope.error;
+
+        // Preserve Set-Cookie and X-CSRF-Token across the body rewrite.
+        // Set-Cookie is a forbidden header in the Fetch API — constructing a
+        // new Response(..., { headers }) silently drops it in both browser and
+        // Node.js (undici). We copy it to the readable header x-set-cookie so
+        // that server-side Next.js API route handlers (e.g. the login route)
+        // can still forward the session cookie to the browser.
+        const newHeaders = new Headers(response.headers);
+        const setCookie = response.headers.get('set-cookie');
+        if (setCookie) newHeaders.set('x-set-cookie', setCookie);
+        const csrfToken = response.headers.get('x-csrf-token');
+        if (csrfToken) newHeaders.set('x-csrf-token', csrfToken);
+
+        return new Response(JSON.stringify(inner ?? {}), {
+          status: response.status,
+          statusText: response.statusText,
+          headers: newHeaders,
+        });
+      }
+    } catch { /* not JSON — pass through */ }
+    return response;
+  });
+
+  return c;
 }
 
 // Re-export for convenience
 export { createClient, createConfig } from './client';
 `
 
-	return ioutil.WriteFile(wrapperPath, []byte(wrapper), 0644)
+	return writeFileIfChangedStr(wrapperPath, wrapper, 0644)
 }
 
 func fixServiceExports(config *GeneratorConfig) error {
 	// hey-api v0.73+ generates sdk.gen.ts and types.gen.ts
-	// We just need to re-export them along with our custom client helper
+	// index.ts re-exports everything including the unified ApiResponse<T> envelope.
 	indexPath := filepath.Join(config.OutputPath, "src", "index.ts")
-	
-	index := `// Main SDK Entry Point
-// Auto-generated with custom enhancements
 
-// Export all generated services and types
+	index := `// Auto-generated SDK Entry Point — DO NOT EDIT
+// Generated by InsureTech API Pipeline
+
+// ─── Core ApiResponse<T> envelope + type guards ───────────────────────────────
+export type {
+  ApiResponse,
+  ResponseMeta,
+  PaginationMeta,
+  PaginationRequest,
+  Money,
+  Address,
+  Timestamp,
+  DateString,
+  UUID,
+} from './types';
+export { unwrapData, isApiSuccess, isApiError } from './types';
+
+// ─── Structured error classes ─────────────────────────────────────────────────
+export { InsureTechApiError, ApiError } from './errors';
+export type { ApiErrorDetail, FieldViolation } from './errors';
+
+// ─── Generated services and types (hey-api) ───────────────────────────────────
 export * from './sdk.gen';
 export * from './types.gen';
 
-// Export custom client helper
+// ─── Custom client helper ─────────────────────────────────────────────────────
 export { createInsureTechClient } from './client-wrapper';
 export type { InsureTechClientConfig } from './client-wrapper';
 `
 
-	return ioutil.WriteFile(indexPath, []byte(index), 0644)
+	return writeFileIfChangedStr(indexPath, index, 0644)
 }
 
 func generateAdditionalFiles(config *GeneratorConfig) error {
+	// Generate ApiResponse envelope types (errors.ts, types.ts)
+	if err := generateErrorsFile(config); err != nil {
+		return fmt.Errorf("failed to generate errors.ts: %w", err)
+	}
+
+	if err := generateTypesFile(config); err != nil {
+		return fmt.Errorf("failed to generate types.ts: %w", err)
+	}
+
 	// Generate README
 	if err := generateReadme(config); err != nil {
 		return err
@@ -280,6 +383,32 @@ func generateAdditionalFiles(config *GeneratorConfig) error {
 	return nil
 }
 
+// generateErrorsFile writes src/errors.ts from errors.ts.tmpl.
+// Contains InsureTechApiError class and ApiErrorDetail/FieldViolation interfaces
+// aligned with the Go gateway's respond package.
+func generateErrorsFile(config *GeneratorConfig) error {
+	tmplPath := filepath.Join(config.TemplatesPath, "errors.ts.tmpl")
+	outputPath := filepath.Join(config.OutputPath, "src", "errors.ts")
+	data, err := ioutil.ReadFile(tmplPath)
+	if err != nil {
+		return err
+	}
+	return writeFileIfChanged(outputPath, data, 0644)
+}
+
+// generateTypesFile writes src/types.ts from types.ts.tmpl.
+// Contains ApiResponse<T>, ResponseMeta, PaginationMeta and helper utilities
+// (unwrapData, isApiSuccess, isApiError) aligned with the openapi.yaml schema.
+func generateTypesFile(config *GeneratorConfig) error {
+	tmplPath := filepath.Join(config.TemplatesPath, "types.ts.tmpl")
+	outputPath := filepath.Join(config.OutputPath, "src", "types.ts")
+	data, err := ioutil.ReadFile(tmplPath)
+	if err != nil {
+		return err
+	}
+	return writeFileIfChanged(outputPath, data, 0644)
+}
+
 func generateReadme(config *GeneratorConfig) error {
 	tmplPath := filepath.Join(config.TemplatesPath, "README.md.tmpl")
 	outputPath := filepath.Join(config.OutputPath, "README.md")
@@ -289,19 +418,17 @@ func generateReadme(config *GeneratorConfig) error {
 		return err
 	}
 
-	f, err := os.Create(outputPath)
-	if err != nil {
-		return err
-	}
-	defer f.Close()
-
 	data := map[string]interface{}{
 		"PackageName": config.PackageName,
 		"Version":     config.Version,
 		"License":     config.License,
 	}
 
-	return tmpl.Execute(f, data)
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		return err
+	}
+	return writeFileIfChanged(outputPath, buf.Bytes(), 0644)
 }
 
 func generateVitestConfig(config *GeneratorConfig) error {
@@ -313,7 +440,7 @@ func generateVitestConfig(config *GeneratorConfig) error {
 		return err
 	}
 
-	return ioutil.WriteFile(outputPath, data, 0644)
+	return writeFileIfChanged(outputPath, data, 0644)
 }
 
 func generatePrettierConfig(config *GeneratorConfig) error {
@@ -325,7 +452,7 @@ func generatePrettierConfig(config *GeneratorConfig) error {
 		return err
 	}
 
-	return ioutil.WriteFile(outputPath, data, 0644)
+	return writeFileIfChanged(outputPath, data, 0644)
 }
 
 func generateTsConfig(config *GeneratorConfig) error {
@@ -337,5 +464,39 @@ func generateTsConfig(config *GeneratorConfig) error {
 		return err
 	}
 
-	return ioutil.WriteFile(outputPath, data, 0644)
+	return writeFileIfChanged(outputPath, data, 0644)
+}
+
+// unwrapResponseTypes post-processes the generated types.gen.ts to remove the
+// ApiResponse envelope wrapper from response type definitions.
+//
+// hey-api generates response types like:
+//
+//	200: ApiResponse & {
+//	    data?: LoginResponse;
+//	};
+//
+// Because the client-wrapper response interceptor already strips the envelope
+// at the HTTP layer, the TypeScript types should reflect the unwrapped payload:
+//
+//	200: LoginResponse;
+//
+// This function performs a regex transformation on the generated types file
+// to align the types with the runtime unwrapping behaviour.
+func unwrapResponseTypes(config *GeneratorConfig) error {
+	typesPath := filepath.Join(config.OutputPath, "src", "types.gen.ts")
+	data, err := ioutil.ReadFile(typesPath)
+	if err != nil {
+		return err
+	}
+
+	content := string(data)
+
+	// Pattern: "    200: ApiResponse & {\n        data?: SomeType;\n    };"
+	// Replace with: "    200: SomeType;"
+	// Works for 200 and 201 success responses.
+	re := regexp.MustCompile(`(\s+)(200|201): ApiResponse & \{\s*\n\s+data\?: ([^;]+);\s*\n\s+\};`)
+	content = re.ReplaceAllString(content, "${1}${2}: ${3};")
+
+	return writeFileIfChanged(typesPath, []byte(content), 0644)
 }

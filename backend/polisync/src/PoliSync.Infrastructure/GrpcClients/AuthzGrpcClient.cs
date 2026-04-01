@@ -23,12 +23,19 @@ public sealed class AuthzGrpcClient
     {
         try
         {
+            var domain = string.IsNullOrWhiteSpace(tenantId)
+                ? "system:root"
+                : (tenantId.Contains(':') ? tenantId : $"system:{tenantId}");
+            var obj = resource.StartsWith("svc:", StringComparison.OrdinalIgnoreCase)
+                ? resource
+                : $"svc:{resource}";
+
             var resp = await Client.CheckAccessAsync(new CheckAccessRequest
             {
-                UserId   = userId,
-                TenantId = tenantId,
-                Resource = resource,
-                Action   = action,
+                UserId = userId,
+                Domain = domain,
+                Object = obj,
+                Action = action,
             }, cancellationToken: ct);
             return resp.Allowed;
         }

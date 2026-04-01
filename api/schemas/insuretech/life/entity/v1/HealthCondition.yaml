@@ -1,0 +1,18 @@
+HealthCondition:
+  type: object
+  properties:
+    condition_code:
+      type: string
+      description: e.g., "DIABETES", "HYPERTENSION", "SMOKING"
+    condition_name:
+      type: string
+    severity:
+      type: string
+      description: LOW, MEDIUM, HIGH
+    diagnosis_date:
+      type: string
+      description: ISO date string
+    notes:
+      type: string
+  description: Domain entity representing health condition. Core business object in
+    the system.

@@ -52,461 +52,544 @@ namespace Insuretech.Authn.Services.V1 {
             "aXJlc0luU2Vjb25kcxIgCglzZW5kZXJfaWQYBCABKAlCA+BBA1IIc2VuZGVy",
             "SWQSLgoQY29vbGRvd25fc2Vjb25kcxgFIAEoBUID4EEDUg9jb29sZG93blNl",
             "Y29uZHMSNgoFZXJyb3IYBiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5F",
-            "cnJvckID4EEDUgVlcnJvciJHChBWZXJpZnlPVFBSZXF1ZXN0EhoKBm90cF9p",
-            "ZBgBIAEoCUID4EECUgVvdHBJZBIXCgRjb2RlGAIgASgJQgPgQQJSBGNvZGUi",
-            "qQEKEVZlcmlmeU9UUFJlc3BvbnNlEh8KCHZlcmlmaWVkGAEgASgIQgPgQQNS",
-            "CHZlcmlmaWVkEhwKB3VzZXJfaWQYAiABKAlCA+BBA1IGdXNlcklkEh0KB21l",
-            "c3NhZ2UYAyABKAlCA+BBA1IHbWVzc2FnZRI2CgVlcnJvchgEIAEoCzIbLmlu",
-            "c3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIlwKEFJlc2Vu",
-            "ZE9UUFJlcXVlc3QSKwoPb3JpZ2luYWxfb3RwX2lkGAEgASgJQgPgQQJSDW9y",
-            "aWdpbmFsT3RwSWQSGwoGcmVhc29uGAIgASgJQgPgQQFSBnJlYXNvbiKCAwoR",
-            "UmVzZW5kT1RQUmVzcG9uc2USGgoGb3RwX2lkGAEgASgJQgPgQQNSBW90cElk",
-            "Eh0KB21lc3NhZ2UYAiABKAlCA+BBA1IHbWVzc2FnZRIxChJleHBpcmVzX2lu",
-            "X3NlY29uZHMYAyABKAVCA+BBA1IQZXhwaXJlc0luU2Vjb25kcxIuChBjb29s",
-            "ZG93bl9zZWNvbmRzGAQgASgFQgPgQQNSD2Nvb2xkb3duU2Vjb25kcxIyChJh",
-            "dHRlbXB0c19yZW1haW5pbmcYBSABKAVCA+BBA1IRYXR0ZW1wdHNSZW1haW5p",
-            "bmcSQQoMY2FuX3JldHJ5X2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRp",
-            "bWVzdGFtcEID4EEDUgpjYW5SZXRyeUF0EiAKCXNlbmRlcl9pZBgHIAEoCUID",
-            "4EEDUghzZW5kZXJJZBI2CgVlcnJvchgIIAEoCzIbLmluc3VyZXRlY2guY29t",
-            "bW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIscBCgxMb2dpblJlcXVlc3QSKAoN",
-            "bW9iaWxlX251bWJlchgBIAEoCUID4EECUgxtb2JpbGVOdW1iZXISHwoIcGFz",
-            "c3dvcmQYAiABKAlCA+BBAlIIcGFzc3dvcmQSIAoJZGV2aWNlX2lkGAMgASgJ",
-            "QgPgQQFSCGRldmljZUlkEiQKC2RldmljZV90eXBlGAQgASgJQgPgQQFSCmRl",
-            "dmljZVR5cGUSJAoLZGV2aWNlX25hbWUYBSABKAlCA+BBAVIKZGV2aWNlTmFt",
-            "ZSKDBQoNTG9naW5SZXNwb25zZRIcCgd1c2VyX2lkGAEgASgJQgPgQQNSBnVz",
-            "ZXJJZBIiCgpzZXNzaW9uX2lkGAIgASgJQgPgQQNSCXNlc3Npb25JZBImCgxh",
-            "Y2Nlc3NfdG9rZW4YAyABKAlCA+BBA1ILYWNjZXNzVG9rZW4SKAoNcmVmcmVz",
-            "aF90b2tlbhgEIAEoCUID4EEDUgxyZWZyZXNoVG9rZW4SOgoXYWNjZXNzX3Rv",
-            "a2VuX2V4cGlyZXNfaW4YBSABKAVCA+BBA1IUYWNjZXNzVG9rZW5FeHBpcmVz",
-            "SW4SPAoYcmVmcmVzaF90b2tlbl9leHBpcmVzX2luGAYgASgFQgPgQQNSFXJl",
-            "ZnJlc2hUb2tlbkV4cGlyZXNJbhIoCg1zZXNzaW9uX3Rva2VuGAcgASgJQgPg",
-            "QQNSDHNlc3Npb25Ub2tlbhIiCgpjc3JmX3Rva2VuGAggASgJQgPgQQNSCWNz",
-            "cmZUb2tlbhI5CgR1c2VyGAkgASgLMiAuaW5zdXJldGVjaC5hdXRobi5lbnRp",
-            "dHkudjEuVXNlckID4EEDUgR1c2VyEiYKDHNlc3Npb25fdHlwZRgKIAEoCUID",
-            "4EEDUgtzZXNzaW9uVHlwZRImCgxtZmFfcmVxdWlyZWQYDCABKAhCA+BBA1IL",
-            "bWZhUmVxdWlyZWQSIgoKbWZhX21ldGhvZBgNIAEoCUID4EEDUgltZmFNZXRo",
-            "b2QSLwoRbWZhX3Nlc3Npb25fdG9rZW4YDiABKAlCA+BBA1IPbWZhU2Vzc2lv",
-            "blRva2VuEjYKBWVycm9yGAsgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEu",
-            "RXJyb3JCA+BBA1IFZXJyb3IiqQEKE1JlZnJlc2hUb2tlblJlcXVlc3QSKAoN",
-            "cmVmcmVzaF90b2tlbhgBIAEoCUID4EECUgxyZWZyZXNoVG9rZW4SIAoJZGV2",
-            "aWNlX2lkGAIgASgJQgPgQQFSCGRldmljZUlkEiIKCmlwX2FkZHJlc3MYAyAB",
-            "KAlCA+BBAVIJaXBBZGRyZXNzEiIKCnVzZXJfYWdlbnQYBCABKAlCA+BBAVIJ",
-            "dXNlckFnZW50Io0DChRSZWZyZXNoVG9rZW5SZXNwb25zZRImCgxhY2Nlc3Nf",
-            "dG9rZW4YASABKAlCA+BBA1ILYWNjZXNzVG9rZW4SKAoNcmVmcmVzaF90b2tl",
-            "bhgCIAEoCUID4EEDUgxyZWZyZXNoVG9rZW4SOgoXYWNjZXNzX3Rva2VuX2V4",
-            "cGlyZXNfaW4YAyABKAVCA+BBA1IUYWNjZXNzVG9rZW5FeHBpcmVzSW4SPAoY",
-            "cmVmcmVzaF90b2tlbl9leHBpcmVzX2luGAQgASgFQgPgQQNSFXJlZnJlc2hU",
-            "b2tlbkV4cGlyZXNJbhIiCgpzZXNzaW9uX2lkGAUgASgJQgPgQQNSCXNlc3Np",
-            "b25JZBJNChJzZXNzaW9uX2V4cGlyZXNfYXQYBiABKAsyGi5nb29nbGUucHJv",
-            "dG9idWYuVGltZXN0YW1wQgPgQQNSEHNlc3Npb25FeHBpcmVzQXQSNgoFZXJy",
-            "b3IYByABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVl",
-            "cnJvciKFAQoNTG9nb3V0UmVxdWVzdBIiCgpzZXNzaW9uX2lkGAEgASgJQgPg",
-            "QQFSCXNlc3Npb25JZBImCgxhY2Nlc3NfdG9rZW4YAiABKAlCA+BBAVILYWNj",
-            "ZXNzVG9rZW4SKAoNbG9nb3V0X3JlYXNvbhgDIAEoCUID4EEBUgxsb2dvdXRS",
-            "ZWFzb24ilQEKDkxvZ291dFJlc3BvbnNlEh0KB21lc3NhZ2UYASABKAlCA+BB",
-            "A1IHbWVzc2FnZRIsCg9zZXNzaW9uX3Jldm9rZWQYAiABKAhCA+BBA1IOc2Vz",
-            "c2lvblJldm9rZWQSNgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1v",
-            "bi52MS5FcnJvckID4EEDUgVlcnJvciKFAQoVQ2hhbmdlUGFzc3dvcmRSZXF1",
-            "ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiYKDG9sZF9wYXNz",
-            "d29yZBgCIAEoCUID4EECUgtvbGRQYXNzd29yZBImCgxuZXdfcGFzc3dvcmQY",
-            "AyABKAlCA+BBAlILbmV3UGFzc3dvcmQibwoWQ2hhbmdlUGFzc3dvcmRSZXNw",
-            "b25zZRIdCgdtZXNzYWdlGAEgASgJQgPgQQNSB21lc3NhZ2USNgoFZXJyb3IY",
-            "AiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJv",
-            "ciKIAQoUUmVzZXRQYXNzd29yZFJlcXVlc3QSKAoNbW9iaWxlX251bWJlchgB",
-            "IAEoCUID4EECUgxtb2JpbGVOdW1iZXISHgoIb3RwX2NvZGUYAiABKAlCA+BB",
-            "AlIHb3RwQ29kZRImCgxuZXdfcGFzc3dvcmQYAyABKAlCA+BBAlILbmV3UGFz",
-            "c3dvcmQibgoVUmVzZXRQYXNzd29yZFJlc3BvbnNlEh0KB21lc3NhZ2UYASAB",
-            "KAlCA+BBA1IHbWVzc2FnZRI2CgVlcnJvchgCIAEoCzIbLmluc3VyZXRlY2gu",
-            "Y29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yImIKFFZhbGlkYXRlVG9rZW5S",
-            "ZXF1ZXN0EiYKDGFjY2Vzc190b2tlbhgBIAEoCUID4EEBUgthY2Nlc3NUb2tl",
-            "bhIiCgpzZXNzaW9uX2lkGAIgASgJQgPgQQFSCXNlc3Npb25JZCLiAwoVVmFs",
-            "aWRhdGVUb2tlblJlc3BvbnNlEhkKBXZhbGlkGAEgASgIQgPgQQNSBXZhbGlk",
-            "EhwKB3VzZXJfaWQYAiABKAlCA+BBA1IGdXNlcklkEiIKCnNlc3Npb25faWQY",
-            "AyABKAlCA+BBA1IJc2Vzc2lvbklkEiYKDHNlc3Npb25fdHlwZRgEIAEoCUID",
-            "4EEDUgtzZXNzaW9uVHlwZRIgCgl1c2VyX3R5cGUYBSABKAlCA+BBA1IIdXNl",
-            "clR5cGUSGwoGcG9ydGFsGAYgASgJQgPgQQNSBnBvcnRhbBIgCgl0ZW5hbnRf",
-            "aWQYByABKAlCA+BBA1IIdGVuYW50SWQSHgoIdG9rZW5faWQYCCABKAlCA+BB",
-            "A1IHdG9rZW5JZBIgCglkZXZpY2VfaWQYCSABKAlCA+BBA1IIZGV2aWNlSWQS",
-            "PgoKZXhwaXJlc19hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3Rh",
-            "bXBCA+BBA1IJZXhwaXJlc0F0EjYKBWVycm9yGAsgASgLMhsuaW5zdXJldGVj",
-            "aC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3ISKQoOYXBpX2tleV9zY29w",
-            "ZXMYDCADKAlCA+BBA1IMYXBpS2V5U2NvcGVzIjcKEUdldFNlc3Npb25SZXF1",
-            "ZXN0EiIKCnNlc3Npb25faWQYASABKAlCA+BBAlIJc2Vzc2lvbklkIpABChJH",
-            "ZXRTZXNzaW9uUmVzcG9uc2USQgoHc2Vzc2lvbhgBIAEoCzIjLmluc3VyZXRl",
-            "Y2guYXV0aG4uZW50aXR5LnYxLlNlc3Npb25CA+BBA1IHc2Vzc2lvbhI2CgVl",
-            "cnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNS",
-            "BWVycm9yIu0BChNMaXN0U2Vzc2lvbnNSZXF1ZXN0EhwKB3VzZXJfaWQYASAB",
-            "KAlCA+BBAlIGdXNlcklkEiAKCXBhZ2Vfc2l6ZRgCIAEoBUID4EEBUghwYWdl",
-            "U2l6ZRIiCgpwYWdlX3Rva2VuGAMgASgJQgPgQQFSCXBhZ2VUb2tlbhImCgxz",
-            "ZXNzaW9uX3R5cGUYBCABKAlCA+BBAVILc2Vzc2lvblR5cGUSJAoLYWN0aXZl",
-            "X29ubHkYBSABKAhCA+BBAVIKYWN0aXZlT25seRIkCgtkZXZpY2VfdHlwZRgG",
-            "IAEoCUID4EEBUgpkZXZpY2VUeXBlIucBChRMaXN0U2Vzc2lvbnNSZXNwb25z",
-            "ZRJECghzZXNzaW9ucxgBIAMoCzIjLmluc3VyZXRlY2guYXV0aG4uZW50aXR5",
-            "LnYxLlNlc3Npb25CA+BBA1IIc2Vzc2lvbnMSKwoPbmV4dF9wYWdlX3Rva2Vu",
-            "GAIgASgJQgPgQQNSDW5leHRQYWdlVG9rZW4SJAoLdG90YWxfY291bnQYAyAB",
-            "KAVCA+BBA1IKdG90YWxDb3VudBI2CgVlcnJvchgEIAEoCzIbLmluc3VyZXRl",
-            "Y2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIlcKFFJldm9rZVNlc3Np",
-            "b25SZXF1ZXN0EiIKCnNlc3Npb25faWQYASABKAlCA+BBAlIJc2Vzc2lvbklk",
-            "EhsKBnJlYXNvbhgCIAEoCUID4EEBUgZyZWFzb24ibgoVUmV2b2tlU2Vzc2lv",
-            "blJlc3BvbnNlEh0KB21lc3NhZ2UYASABKAlCA+BBA1IHbWVzc2FnZRI2CgVl",
-            "cnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNS",
-            "BWVycm9yIl0KE1ZhbGlkYXRlQ1NSRlJlcXVlc3QSIgoKc2Vzc2lvbl9pZBgB",
-            "IAEoCUID4EEBUglzZXNzaW9uSWQSIgoKY3NyZl90b2tlbhgCIAEoCUID4EEC",
-            "Ugljc3JmVG9rZW4iiAEKFFZhbGlkYXRlQ1NSRlJlc3BvbnNlEhkKBXZhbGlk",
-            "GAEgASgIQgPgQQNSBXZhbGlkEh0KB21lc3NhZ2UYAiABKAlCA+BBA1IHbWVz",
-            "c2FnZRI2CgVlcnJvchgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVy",
-            "cm9yQgPgQQNSBWVycm9yIhoKGEdldEN1cnJlbnRTZXNzaW9uUmVxdWVzdCK5",
-            "AQoZR2V0Q3VycmVudFNlc3Npb25SZXNwb25zZRJCCgdzZXNzaW9uGAEgASgL",
-            "MiMuaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuU2Vzc2lvbkID4EEDUgdz",
-            "ZXNzaW9uEjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEu",
-            "RXJyb3JCA+BBA1IFZXJyb3ISIAoJdXNlcl90eXBlGAMgASgJQgPgQQNSCHVz",
-            "ZXJUeXBlIpIBChhSZXZva2VBbGxTZXNzaW9uc1JlcXVlc3QSHAoHdXNlcl9p",
-            "ZBgBIAEoCUID4EECUgZ1c2VySWQSGwoGcmVhc29uGAIgASgJQgPgQQFSBnJl",
-            "YXNvbhI7ChdleGNsdWRlX2N1cnJlbnRfc2Vzc2lvbhgDIAEoCEID4EEBUhVl",
-            "eGNsdWRlQ3VycmVudFNlc3Npb24inAEKGVJldm9rZUFsbFNlc3Npb25zUmVz",
-            "cG9uc2USKAoNcmV2b2tlZF9jb3VudBgBIAEoBUID4EEDUgxyZXZva2VkQ291",
-            "bnQSHQoHbWVzc2FnZRgCIAEoCUID4EEDUgdtZXNzYWdlEjYKBWVycm9yGAMg",
-            "ASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3Ii",
-            "5gEKGFJlZ2lzdGVyRW1haWxVc2VyUmVxdWVzdBIZCgVlbWFpbBgBIAEoCUID",
-            "4EECUgVlbWFpbBIfCghwYXNzd29yZBgCIAEoCUID4EECUghwYXNzd29yZBIg",
-            "Cgl1c2VyX3R5cGUYAyABKAlCA+BBAlIIdXNlclR5cGUSIAoJZnVsbF9uYW1l",
-            "GAQgASgJQgPgQQJSCGZ1bGxOYW1lEiAKCWRldmljZV9pZBgFIAEoCUID4EEB",
-            "UghkZXZpY2VJZBIoCg1tb2JpbGVfbnVtYmVyGAYgASgJQgPgQQFSDG1vYmls",
-            "ZU51bWJlciKjAgoZUmVnaXN0ZXJFbWFpbFVzZXJSZXNwb25zZRIcCgd1c2Vy",
-            "X2lkGAEgASgJQgPgQQNSBnVzZXJJZBIdCgdtZXNzYWdlGAIgASgJQgPgQQNS",
-            "B21lc3NhZ2USOwoXdmVyaWZpY2F0aW9uX2VtYWlsX3NlbnQYAyABKAhCA+BB",
-            "A1IVdmVyaWZpY2F0aW9uRW1haWxTZW50EhoKBm90cF9pZBgEIAEoCUID4EED",
-            "UgVvdHBJZBI4ChZvdHBfZXhwaXJlc19pbl9zZWNvbmRzGAUgASgFQgPgQQNS",
-            "E290cEV4cGlyZXNJblNlY29uZHMSNgoFZXJyb3IYBiABKAsyGy5pbnN1cmV0",
-            "ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciJJChNTZW5kRW1haWxP",
-            "VFBSZXF1ZXN0EhkKBWVtYWlsGAEgASgJQgPgQQJSBWVtYWlsEhcKBHR5cGUY",
-            "AiABKAlCA+BBAlIEdHlwZSLsAQoUU2VuZEVtYWlsT1RQUmVzcG9uc2USGgoG",
-            "b3RwX2lkGAEgASgJQgPgQQNSBW90cElkEh0KB21lc3NhZ2UYAiABKAlCA+BB",
-            "A1IHbWVzc2FnZRIxChJleHBpcmVzX2luX3NlY29uZHMYAyABKAVCA+BBA1IQ",
-            "ZXhwaXJlc0luU2Vjb25kcxIuChBjb29sZG93bl9zZWNvbmRzGAQgASgFQgPg",
-            "QQNSD2Nvb2xkb3duU2Vjb25kcxI2CgVlcnJvchgFIAEoCzIbLmluc3VyZXRl",
-            "Y2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIkkKElZlcmlmeUVtYWls",
-            "UmVxdWVzdBIaCgZvdHBfaWQYASABKAlCA+BBAlIFb3RwSWQSFwoEY29kZRgC",
-            "IAEoCUID4EECUgRjb2RlIqsBChNWZXJpZnlFbWFpbFJlc3BvbnNlEh8KCHZl",
-            "cmlmaWVkGAEgASgIQgPgQQNSCHZlcmlmaWVkEhwKB3VzZXJfaWQYAiABKAlC",
-            "A+BBA1IGdXNlcklkEh0KB21lc3NhZ2UYAyABKAlCA+BBA1IHbWVzc2FnZRI2",
-            "CgVlcnJvchgEIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPg",
-            "QQNSBWVycm9yIqsBChFFbWFpbExvZ2luUmVxdWVzdBIZCgVlbWFpbBgBIAEo",
-            "CUID4EECUgVlbWFpbBIaCgZvdHBfaWQYAiABKAlCA+BBAlIFb3RwSWQSFwoE",
-            "Y29kZRgDIAEoCUID4EECUgRjb2RlEiAKCWRldmljZV9pZBgEIAEoCUID4EEB",
-            "UghkZXZpY2VJZBIkCgtkZXZpY2VfbmFtZRgFIAEoCUID4EEBUgpkZXZpY2VO",
-            "YW1lIr8CChJFbWFpbExvZ2luUmVzcG9uc2USHAoHdXNlcl9pZBgBIAEoCUID",
-            "4EEDUgZ1c2VySWQSIgoKc2Vzc2lvbl9pZBgCIAEoCUID4EEDUglzZXNzaW9u",
-            "SWQSKAoNc2Vzc2lvbl90b2tlbhgDIAEoCUID4EEDUgxzZXNzaW9uVG9rZW4S",
-            "IgoKY3NyZl90b2tlbhgEIAEoCUID4EEDUgljc3JmVG9rZW4SOQoEdXNlchgF",
-            "IAEoCzIgLmluc3VyZXRlY2guYXV0aG4uZW50aXR5LnYxLlVzZXJCA+BBA1IE",
-            "dXNlchImCgxzZXNzaW9uX3R5cGUYBiABKAlCA+BBA1ILc2Vzc2lvblR5cGUS",
+            "cnJvckID4EEDUgVlcnJvciKPAQoQVmVyaWZ5T1RQUmVxdWVzdBIaCgZvdHBf",
+            "aWQYASABKAlCA+BBAlIFb3RwSWQSFwoEY29kZRgCIAEoCUID4EECUgRjb2Rl",
+            "EiAKCWRldmljZV9pZBgDIAEoCUID4EEBUghkZXZpY2VJZBIkCgtkZXZpY2Vf",
+            "dHlwZRgEIAEoCUID4EEBUgpkZXZpY2VUeXBlItsBChFWZXJpZnlPVFBSZXNw",
+            "b25zZRIfCgh2ZXJpZmllZBgBIAEoCEID4EEDUgh2ZXJpZmllZBIcCgd1c2Vy",
+            "X2lkGAIgASgJQgPgQQNSBnVzZXJJZBIdCgdtZXNzYWdlGAMgASgJQgPgQQNS",
+            "B21lc3NhZ2USNgoFZXJyb3IYBCABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
+            "MS5FcnJvckID4EEDUgVlcnJvchIwChFkZXZpY2VfY3JlZGVudGlhbBgFIAEo",
+            "CUID4EEDUhBkZXZpY2VDcmVkZW50aWFsIlwKEFJlc2VuZE9UUFJlcXVlc3QS",
+            "KwoPb3JpZ2luYWxfb3RwX2lkGAEgASgJQgPgQQJSDW9yaWdpbmFsT3RwSWQS",
+            "GwoGcmVhc29uGAIgASgJQgPgQQFSBnJlYXNvbiKCAwoRUmVzZW5kT1RQUmVz",
+            "cG9uc2USGgoGb3RwX2lkGAEgASgJQgPgQQNSBW90cElkEh0KB21lc3NhZ2UY",
+            "AiABKAlCA+BBA1IHbWVzc2FnZRIxChJleHBpcmVzX2luX3NlY29uZHMYAyAB",
+            "KAVCA+BBA1IQZXhwaXJlc0luU2Vjb25kcxIuChBjb29sZG93bl9zZWNvbmRz",
+            "GAQgASgFQgPgQQNSD2Nvb2xkb3duU2Vjb25kcxIyChJhdHRlbXB0c19yZW1h",
+            "aW5pbmcYBSABKAVCA+BBA1IRYXR0ZW1wdHNSZW1haW5pbmcSQQoMY2FuX3Jl",
+            "dHJ5X2F0GAYgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEID4EED",
+            "UgpjYW5SZXRyeUF0EiAKCXNlbmRlcl9pZBgHIAEoCUID4EEDUghzZW5kZXJJ",
+            "ZBI2CgVlcnJvchgIIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "QgPgQQNSBWVycm9yIscBCgxMb2dpblJlcXVlc3QSKAoNbW9iaWxlX251bWJl",
+            "chgBIAEoCUID4EECUgxtb2JpbGVOdW1iZXISHwoIcGFzc3dvcmQYAiABKAlC",
+            "A+BBAVIIcGFzc3dvcmQSIAoJZGV2aWNlX2lkGAMgASgJQgPgQQFSCGRldmlj",
+            "ZUlkEiQKC2RldmljZV90eXBlGAQgASgJQgPgQQFSCmRldmljZVR5cGUSJAoL",
+            "ZGV2aWNlX25hbWUYBSABKAlCA+BBAVIKZGV2aWNlTmFtZSLCBQoNTG9naW5S",
+            "ZXNwb25zZRIcCgd1c2VyX2lkGAEgASgJQgPgQQNSBnVzZXJJZBIiCgpzZXNz",
+            "aW9uX2lkGAIgASgJQgPgQQNSCXNlc3Npb25JZBImCgxhY2Nlc3NfdG9rZW4Y",
+            "AyABKAlCA+BBA1ILYWNjZXNzVG9rZW4SKAoNcmVmcmVzaF90b2tlbhgEIAEo",
+            "CUID4EEDUgxyZWZyZXNoVG9rZW4SOgoXYWNjZXNzX3Rva2VuX2V4cGlyZXNf",
+            "aW4YBSABKAVCA+BBA1IUYWNjZXNzVG9rZW5FeHBpcmVzSW4SPAoYcmVmcmVz",
+            "aF90b2tlbl9leHBpcmVzX2luGAYgASgFQgPgQQNSFXJlZnJlc2hUb2tlbkV4",
+            "cGlyZXNJbhIoCg1zZXNzaW9uX3Rva2VuGAcgASgJQgPgQQNSDHNlc3Npb25U",
+            "b2tlbhIiCgpjc3JmX3Rva2VuGAggASgJQgPgQQNSCWNzcmZUb2tlbhI5CgR1",
+            "c2VyGAkgASgLMiAuaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuVXNlckID",
+            "4EEDUgR1c2VyEiYKDHNlc3Npb25fdHlwZRgKIAEoCUID4EEDUgtzZXNzaW9u",
+            "VHlwZRImCgxtZmFfcmVxdWlyZWQYDCABKAhCA+BBA1ILbWZhUmVxdWlyZWQS",
+            "IgoKbWZhX21ldGhvZBgNIAEoCUID4EEDUgltZmFNZXRob2QSLwoRbWZhX3Nl",
+            "c3Npb25fdG9rZW4YDiABKAlCA+BBA1IPbWZhU2Vzc2lvblRva2VuEj0KGHBh",
+            "c3N3b3JkX2NoYW5nZV9yZXF1aXJlZBgPIAEoCEID4EEDUhZwYXNzd29yZENo",
+            "YW5nZVJlcXVpcmVkEjYKBWVycm9yGAsgASgLMhsuaW5zdXJldGVjaC5jb21t",
+            "b24udjEuRXJyb3JCA+BBA1IFZXJyb3IiqQEKE1JlZnJlc2hUb2tlblJlcXVl",
+            "c3QSKAoNcmVmcmVzaF90b2tlbhgBIAEoCUID4EECUgxyZWZyZXNoVG9rZW4S",
+            "IAoJZGV2aWNlX2lkGAIgASgJQgPgQQFSCGRldmljZUlkEiIKCmlwX2FkZHJl",
+            "c3MYAyABKAlCA+BBAVIJaXBBZGRyZXNzEiIKCnVzZXJfYWdlbnQYBCABKAlC",
+            "A+BBAVIJdXNlckFnZW50Io0DChRSZWZyZXNoVG9rZW5SZXNwb25zZRImCgxh",
+            "Y2Nlc3NfdG9rZW4YASABKAlCA+BBA1ILYWNjZXNzVG9rZW4SKAoNcmVmcmVz",
+            "aF90b2tlbhgCIAEoCUID4EEDUgxyZWZyZXNoVG9rZW4SOgoXYWNjZXNzX3Rv",
+            "a2VuX2V4cGlyZXNfaW4YAyABKAVCA+BBA1IUYWNjZXNzVG9rZW5FeHBpcmVz",
+            "SW4SPAoYcmVmcmVzaF90b2tlbl9leHBpcmVzX2luGAQgASgFQgPgQQNSFXJl",
+            "ZnJlc2hUb2tlbkV4cGlyZXNJbhIiCgpzZXNzaW9uX2lkGAUgASgJQgPgQQNS",
+            "CXNlc3Npb25JZBJNChJzZXNzaW9uX2V4cGlyZXNfYXQYBiABKAsyGi5nb29n",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wQgPgQQNSEHNlc3Npb25FeHBpcmVzQXQS",
             "NgoFZXJyb3IYByABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID",
-            "4EEDUgVlcnJvciI/CiJSZXF1ZXN0UGFzc3dvcmRSZXNldEJ5RW1haWxSZXF1",
-            "ZXN0EhkKBWVtYWlsGAEgASgJQgPgQQJSBWVtYWlsIssBCiNSZXF1ZXN0UGFz",
-            "c3dvcmRSZXNldEJ5RW1haWxSZXNwb25zZRIaCgZvdHBfaWQYASABKAlCA+BB",
-            "A1IFb3RwSWQSHQoHbWVzc2FnZRgCIAEoCUID4EEDUgdtZXNzYWdlEjEKEmV4",
-            "cGlyZXNfaW5fc2Vjb25kcxgDIAEoBUID4EEDUhBleHBpcmVzSW5TZWNvbmRz",
-            "EjYKBWVycm9yGAQgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JC",
-            "A+BBA1IFZXJyb3IiugEKHEJpb21ldHJpY0F1dGhlbnRpY2F0ZVJlcXVlc3QS",
-            "LAoPYmlvbWV0cmljX3Rva2VuGAEgASgJQgPgQQJSDmJpb21ldHJpY1Rva2Vu",
-            "EiAKCWRldmljZV9pZBgCIAEoCUID4EECUghkZXZpY2VJZBIkCgtkZXZpY2Vf",
-            "dHlwZRgDIAEoCUID4EEBUgpkZXZpY2VUeXBlEiQKC2RldmljZV9uYW1lGAQg",
-            "ASgJQgPgQQFSCmRldmljZU5hbWUiyAMKHUJpb21ldHJpY0F1dGhlbnRpY2F0",
-            "ZVJlc3BvbnNlEhwKB3VzZXJfaWQYASABKAlCA+BBA1IGdXNlcklkEiIKCnNl",
-            "c3Npb25faWQYAiABKAlCA+BBA1IJc2Vzc2lvbklkEiYKDGFjY2Vzc190b2tl",
-            "bhgDIAEoCUID4EEDUgthY2Nlc3NUb2tlbhIoCg1yZWZyZXNoX3Rva2VuGAQg",
-            "ASgJQgPgQQNSDHJlZnJlc2hUb2tlbhI6ChdhY2Nlc3NfdG9rZW5fZXhwaXJl",
-            "c19pbhgFIAEoBUID4EEDUhRhY2Nlc3NUb2tlbkV4cGlyZXNJbhI8ChhyZWZy",
-            "ZXNoX3Rva2VuX2V4cGlyZXNfaW4YBiABKAVCA+BBA1IVcmVmcmVzaFRva2Vu",
-            "RXhwaXJlc0luEiYKDHNlc3Npb25fdHlwZRgHIAEoCUID4EEDUgtzZXNzaW9u",
-            "VHlwZRI5CgR1c2VyGAggASgLMiAuaW5zdXJldGVjaC5hdXRobi5lbnRpdHku",
-            "djEuVXNlckID4EEDUgR1c2VyEjYKBWVycm9yGAkgASgLMhsuaW5zdXJldGVj",
-            "aC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IijgEKFlVwZGF0ZURMUlN0",
-            "YXR1c1JlcXVlc3QSMwoTcHJvdmlkZXJfbWVzc2FnZV9pZBgBIAEoCUID4EEC",
-            "UhFwcm92aWRlck1lc3NhZ2VJZBIbCgZzdGF0dXMYAiABKAlCA+BBAlIGc3Rh",
-            "dHVzEiIKCmVycm9yX2NvZGUYAyABKAlCA+BBAVIJZXJyb3JDb2RlIo8BChdV",
-            "cGRhdGVETFJTdGF0dXNSZXNwb25zZRIdCgd1cGRhdGVkGAEgASgIQgPgQQNS",
-            "B3VwZGF0ZWQSHQoHbWVzc2FnZRgCIAEoCUID4EEDUgdtZXNzYWdlEjYKBWVy",
-            "cm9yGAMgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IF",
-            "ZXJyb3IihwIKE0NyZWF0ZUFQSUtleVJlcXVlc3QSFwoEbmFtZRgBIAEoCUID",
-            "4EECUgRuYW1lEh4KCG93bmVyX2lkGAIgASgJQgPgQQJSB293bmVySWQSIgoK",
-            "b3duZXJfdHlwZRgDIAEoCUID4EECUglvd25lclR5cGUSGwoGc2NvcGVzGAQg",
-            "AygJQgPgQQJSBnNjb3BlcxI2ChVyYXRlX2xpbWl0X3Blcl9taW51dGUYBSAB",
-            "KAVCA+BBAVIScmF0ZUxpbWl0UGVyTWludXRlEj4KCmV4cGlyZXNfYXQYBiAB",
-            "KAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQgPgQQFSCWV4cGlyZXNB",
-            "dCL+AQoUQ3JlYXRlQVBJS2V5UmVzcG9uc2USGgoGa2V5X2lkGAEgASgJQgPg",
-            "QQNSBWtleUlkEhwKB3Jhd19rZXkYAiABKAlCA+BBA1IGcmF3S2V5EhcKBG5h",
-            "bWUYAyABKAlCA+BBA1IEbmFtZRIbCgZzY29wZXMYBCADKAlCA+BBA1IGc2Nv",
-            "cGVzEj4KCmV4cGlyZXNfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGlt",
-            "ZXN0YW1wQgPgQQNSCWV4cGlyZXNBdBI2CgVlcnJvchgGIAEoCzIbLmluc3Vy",
-            "ZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIsQBChJMaXN0QVBJ",
-            "S2V5c1JlcXVlc3QSHgoIb3duZXJfaWQYASABKAlCA+BBAlIHb3duZXJJZBIi",
-            "Cgpvd25lcl90eXBlGAIgASgJQgPgQQFSCW93bmVyVHlwZRIkCgthY3RpdmVf",
-            "b25seRgDIAEoCEID4EEBUgphY3RpdmVPbmx5EiAKCXBhZ2Vfc2l6ZRgEIAEo",
-            "BUID4EEBUghwYWdlU2l6ZRIiCgpwYWdlX3Rva2VuGAUgASgJQgPgQQFSCXBh",
-            "Z2VUb2tlbiKWAgoNQVBJS2V5U3VtbWFyeRIVCgZrZXlfaWQYASABKAlSBWtl",
-            "eUlkEhIKBG5hbWUYAiABKAlSBG5hbWUSFgoGc2NvcGVzGAMgAygJUgZzY29w",
-            "ZXMSFgoGc3RhdHVzGAQgASgJUgZzdGF0dXMSOQoKZXhwaXJlc19hdBgFIAEo",
-            "CzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCWV4cGlyZXNBdBI8Cgxs",
-            "YXN0X3VzZWRfYXQYBiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w",
-            "UgpsYXN0VXNlZEF0EjEKFXJhdGVfbGltaXRfcGVyX21pbnV0ZRgHIAEoBVIS",
-            "cmF0ZUxpbWl0UGVyTWludXRlIsABChNMaXN0QVBJS2V5c1Jlc3BvbnNlEkQK",
-            "BGtleXMYASADKAsyKy5pbnN1cmV0ZWNoLmF1dGhuLnNlcnZpY2VzLnYxLkFQ",
-            "SUtleVN1bW1hcnlCA+BBA1IEa2V5cxIrCg9uZXh0X3BhZ2VfdG9rZW4YAiAB",
-            "KAlCA+BBA1INbmV4dFBhZ2VUb2tlbhI2CgVlcnJvchgDIAEoCzIbLmluc3Vy",
-            "ZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIk4KE1Jldm9rZUFQ",
-            "SUtleVJlcXVlc3QSGgoGa2V5X2lkGAEgASgJQgPgQQJSBWtleUlkEhsKBnJl",
-            "YXNvbhgCIAEoCUID4EEBUgZyZWFzb24ibQoUUmV2b2tlQVBJS2V5UmVzcG9u",
-            "c2USHQoHbWVzc2FnZRgBIAEoCUID4EEDUgdtZXNzYWdlEjYKBWVycm9yGAIg",
-            "ASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3Ii",
-            "ZAoTUm90YXRlQVBJS2V5UmVxdWVzdBIaCgZrZXlfaWQYASABKAlCA+BBAlIF",
-            "a2V5SWQSMQoSZ3JhY2VfcGVyaW9kX2hvdXJzGAIgASgFQgPgQQFSEGdyYWNl",
-            "UGVyaW9kSG91cnMinwIKFFJvdGF0ZUFQSUtleVJlc3BvbnNlEiEKCm5ld19r",
-            "ZXlfaWQYASABKAlCA+BBA1IIbmV3S2V5SWQSHAoHcmF3X2tleRgCIAEoCUID",
-            "4EEDUgZyYXdLZXkSIQoKb2xkX2tleV9pZBgDIAEoCUID4EEDUghvbGRLZXlJ",
-            "ZBJMChJvbGRfa2V5X2V4cGlyZXNfYXQYBCABKAsyGi5nb29nbGUucHJvdG9i",
-            "dWYuVGltZXN0YW1wQgPgQQNSD29sZEtleUV4cGlyZXNBdBIdCgdtZXNzYWdl",
-            "GAUgASgJQgPgQQNSB21lc3NhZ2USNgoFZXJyb3IYBiABKAsyGy5pbnN1cmV0",
-            "ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciKcAQobUmVzZXRQYXNz",
-            "d29yZEJ5RW1haWxSZXF1ZXN0EhkKBWVtYWlsGAEgASgJQgPgQQJSBWVtYWls",
-            "EhoKBm90cF9pZBgCIAEoCUID4EECUgVvdHBJZBIeCghvdHBfY29kZRgDIAEo",
-            "CUID4EECUgdvdHBDb2RlEiYKDG5ld19wYXNzd29yZBgEIAEoCUID4EECUgtu",
-            "ZXdQYXNzd29yZCJ1ChxSZXNldFBhc3N3b3JkQnlFbWFpbFJlc3BvbnNlEh0K",
-            "B21lc3NhZ2UYASABKAlCA+BBA1IHbWVzc2FnZRI2CgVlcnJvchgCIAEoCzIb",
-            "Lmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIpUHChhD",
-            "cmVhdGVVc2VyUHJvZmlsZVJlcXVlc3QSHAoHdXNlcl9pZBgBIAEoCUID4EEC",
-            "UgZ1c2VySWQSIAoJZnVsbF9uYW1lGAIgASgJQgPgQQJSCGZ1bGxOYW1lEkMK",
-            "DWRhdGVfb2ZfYmlydGgYAyABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0",
-            "YW1wQgPgQQJSC2RhdGVPZkJpcnRoEhsKBmdlbmRlchgEIAEoCUID4EECUgZn",
-            "ZW5kZXISKAoNYWRkcmVzc19saW5lMRgFIAEoCUID4EECUgxhZGRyZXNzTGlu",
-            "ZTESFwoEY2l0eRgGIAEoCUID4EECUgRjaXR5Eh8KCGRpc3RyaWN0GAcgASgJ",
-            "QgPgQQJSCGRpc3RyaWN0Eh8KCGRpdmlzaW9uGAggASgJQgPgQQJSCGRpdmlz",
-            "aW9uEiIKCm5pZF9udW1iZXIYCSABKAlCA+BBAlIJbmlkTnVtYmVyEiMKCm9j",
-            "Y3VwYXRpb24YCiABKAlCA+BBAVIKb2NjdXBhdGlvbhIfCghlbXBsb3llchgL",
-            "IAEoCUID4EEBUghlbXBsb3llchIoCg1hZGRyZXNzX2xpbmUyGAwgASgJQgPg",
-            "QQFSDGFkZHJlc3NMaW5lMhIdCgdjb3VudHJ5GA0gASgJQgPgQQFSB2NvdW50",
-            "cnkSJAoLcG9zdGFsX2NvZGUYDiABKAlCA+BBAVIKcG9zdGFsQ29kZRIwChFw",
-            "ZXJtYW5lbnRfYWRkcmVzcxgPIAEoCUID4EEBUhBwZXJtYW5lbnRBZGRyZXNz",
-            "EioKDm1hcml0YWxfc3RhdHVzGBAgASgJQgPgQQFSDW1hcml0YWxTdGF0dXMS",
-            "OQoWZW1lcmdlbmN5X2NvbnRhY3RfbmFtZRgRIAEoCUID4EEBUhRlbWVyZ2Vu",
-            "Y3lDb250YWN0TmFtZRI9ChhlbWVyZ2VuY3lfY29udGFjdF9udW1iZXIYEiAB",
-            "KAlCA+BBAVIWZW1lcmdlbmN5Q29udGFjdE51bWJlchIlCgtuYXRpb25hbGl0",
-            "eRgTIAEoCUID4EEBUgtuYXRpb25hbGl0eRIkCgtibG9vZF9ncm91cBgUIAEo",
-            "CUID4EEBUgpibG9vZEdyb3VwEiYKDGluY29tZV9yYW5nZRgVIAEoCUID4EEB",
-            "UgtpbmNvbWVSYW5nZRIsCg9wYXNzcG9ydF9udW1iZXIYFiABKAlCA+BBAVIO",
-            "cGFzc3BvcnROdW1iZXIiugEKGUNyZWF0ZVVzZXJQcm9maWxlUmVzcG9uc2US",
-            "RgoHcHJvZmlsZRgBIAEoCzInLmluc3VyZXRlY2guYXV0aG4uZW50aXR5LnYx",
-            "LlVzZXJQcm9maWxlQgPgQQNSB3Byb2ZpbGUSHQoHbWVzc2FnZRgCIAEoCUID",
-            "4EEDUgdtZXNzYWdlEjYKBWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5jb21t",
-            "b24udjEuRXJyb3JCA+BBA1IFZXJyb3IiNQoVR2V0VXNlclByb2ZpbGVSZXF1",
-            "ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkIpgBChZHZXRVc2Vy",
-            "UHJvZmlsZVJlc3BvbnNlEkYKB3Byb2ZpbGUYASABKAsyJy5pbnN1cmV0ZWNo",
-            "LmF1dGhuLmVudGl0eS52MS5Vc2VyUHJvZmlsZUID4EEDUgdwcm9maWxlEjYK",
-            "BWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BB",
-            "A1IFZXJyb3IixgcKGFVwZGF0ZVVzZXJQcm9maWxlUmVxdWVzdBIcCgd1c2Vy",
-            "X2lkGAEgASgJQgPgQQJSBnVzZXJJZBIgCglmdWxsX25hbWUYAiABKAlCA+BB",
-            "AVIIZnVsbE5hbWUSQwoNZGF0ZV9vZl9iaXJ0aBgDIAEoCzIaLmdvb2dsZS5w",
-            "cm90b2J1Zi5UaW1lc3RhbXBCA+BBAVILZGF0ZU9mQmlydGgSGwoGZ2VuZGVy",
-            "GAQgASgJQgPgQQFSBmdlbmRlchIjCgpvY2N1cGF0aW9uGAUgASgJQgPgQQFS",
-            "Cm9jY3VwYXRpb24SHwoIZW1wbG95ZXIYBiABKAlCA+BBAVIIZW1wbG95ZXIS",
-            "KAoNYWRkcmVzc19saW5lMRgHIAEoCUID4EEBUgxhZGRyZXNzTGluZTESKAoN",
-            "YWRkcmVzc19saW5lMhgIIAEoCUID4EEBUgxhZGRyZXNzTGluZTISFwoEY2l0",
-            "eRgJIAEoCUID4EEBUgRjaXR5Eh8KCGRpc3RyaWN0GAogASgJQgPgQQFSCGRp",
-            "c3RyaWN0Eh8KCGRpdmlzaW9uGAsgASgJQgPgQQFSCGRpdmlzaW9uEh0KB2Nv",
-            "dW50cnkYDCABKAlCA+BBAVIHY291bnRyeRIkCgtwb3N0YWxfY29kZRgNIAEo",
-            "CUID4EEBUgpwb3N0YWxDb2RlEjAKEXBlcm1hbmVudF9hZGRyZXNzGA4gASgJ",
-            "QgPgQQFSEHBlcm1hbmVudEFkZHJlc3MSIgoKbmlkX251bWJlchgPIAEoCUID",
-            "4EEBUgluaWROdW1iZXISKgoObWFyaXRhbF9zdGF0dXMYECABKAlCA+BBAVIN",
-            "bWFyaXRhbFN0YXR1cxI5ChZlbWVyZ2VuY3lfY29udGFjdF9uYW1lGBEgASgJ",
-            "QgPgQQFSFGVtZXJnZW5jeUNvbnRhY3ROYW1lEj0KGGVtZXJnZW5jeV9jb250",
-            "YWN0X251bWJlchgSIAEoCUID4EEBUhZlbWVyZ2VuY3lDb250YWN0TnVtYmVy",
-            "Ei8KEXByb2ZpbGVfcGhvdG9fdXJsGBMgASgJQgPgQQFSD3Byb2ZpbGVQaG90",
-            "b1VybBImCgxpbmNvbWVfcmFuZ2UYFCABKAlCA+BBAVILaW5jb21lUmFuZ2US",
-            "JQoLbmF0aW9uYWxpdHkYFSABKAlCA+BBAVILbmF0aW9uYWxpdHkSJAoLYmxv",
-            "b2RfZ3JvdXAYFiABKAlCA+BBAVIKYmxvb2RHcm91cBIsCg9wYXNzcG9ydF9u",
-            "dW1iZXIYFyABKAlCA+BBAVIOcGFzc3BvcnROdW1iZXIiugEKGVVwZGF0ZVVz",
+            "4EEDUgVlcnJvciKFAQoNTG9nb3V0UmVxdWVzdBIiCgpzZXNzaW9uX2lkGAEg",
+            "ASgJQgPgQQFSCXNlc3Npb25JZBImCgxhY2Nlc3NfdG9rZW4YAiABKAlCA+BB",
+            "AVILYWNjZXNzVG9rZW4SKAoNbG9nb3V0X3JlYXNvbhgDIAEoCUID4EEBUgxs",
+            "b2dvdXRSZWFzb24ilQEKDkxvZ291dFJlc3BvbnNlEh0KB21lc3NhZ2UYASAB",
+            "KAlCA+BBA1IHbWVzc2FnZRIsCg9zZXNzaW9uX3Jldm9rZWQYAiABKAhCA+BB",
+            "A1IOc2Vzc2lvblJldm9rZWQSNgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNo",
+            "LmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciKFAQoVQ2hhbmdlUGFzc3dv",
+            "cmRSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiYKDG9s",
+            "ZF9wYXNzd29yZBgCIAEoCUID4EECUgtvbGRQYXNzd29yZBImCgxuZXdfcGFz",
+            "c3dvcmQYAyABKAlCA+BBAlILbmV3UGFzc3dvcmQibwoWQ2hhbmdlUGFzc3dv",
+            "cmRSZXNwb25zZRIdCgdtZXNzYWdlGAEgASgJQgPgQQNSB21lc3NhZ2USNgoF",
+            "ZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EED",
+            "UgVlcnJvciKIAQoUUmVzZXRQYXNzd29yZFJlcXVlc3QSKAoNbW9iaWxlX251",
+            "bWJlchgBIAEoCUID4EECUgxtb2JpbGVOdW1iZXISHgoIb3RwX2NvZGUYAiAB",
+            "KAlCA+BBAlIHb3RwQ29kZRImCgxuZXdfcGFzc3dvcmQYAyABKAlCA+BBAlIL",
+            "bmV3UGFzc3dvcmQibgoVUmVzZXRQYXNzd29yZFJlc3BvbnNlEh0KB21lc3Nh",
+            "Z2UYASABKAlCA+BBA1IHbWVzc2FnZRI2CgVlcnJvchgCIAEoCzIbLmluc3Vy",
+            "ZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yImIKFFZhbGlkYXRl",
+            "VG9rZW5SZXF1ZXN0EiYKDGFjY2Vzc190b2tlbhgBIAEoCUID4EEBUgthY2Nl",
+            "c3NUb2tlbhIiCgpzZXNzaW9uX2lkGAIgASgJQgPgQQFSCXNlc3Npb25JZCLi",
+            "AwoVVmFsaWRhdGVUb2tlblJlc3BvbnNlEhkKBXZhbGlkGAEgASgIQgPgQQNS",
+            "BXZhbGlkEhwKB3VzZXJfaWQYAiABKAlCA+BBA1IGdXNlcklkEiIKCnNlc3Np",
+            "b25faWQYAyABKAlCA+BBA1IJc2Vzc2lvbklkEiYKDHNlc3Npb25fdHlwZRgE",
+            "IAEoCUID4EEDUgtzZXNzaW9uVHlwZRIgCgl1c2VyX3R5cGUYBSABKAlCA+BB",
+            "A1IIdXNlclR5cGUSGwoGcG9ydGFsGAYgASgJQgPgQQNSBnBvcnRhbBIgCgl0",
+            "ZW5hbnRfaWQYByABKAlCA+BBA1IIdGVuYW50SWQSHgoIdG9rZW5faWQYCCAB",
+            "KAlCA+BBA1IHdG9rZW5JZBIgCglkZXZpY2VfaWQYCSABKAlCA+BBA1IIZGV2",
+            "aWNlSWQSPgoKZXhwaXJlc19hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5U",
+            "aW1lc3RhbXBCA+BBA1IJZXhwaXJlc0F0EjYKBWVycm9yGAsgASgLMhsuaW5z",
+            "dXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3ISKQoOYXBpX2tl",
+            "eV9zY29wZXMYDCADKAlCA+BBA1IMYXBpS2V5U2NvcGVzIjcKEUdldFNlc3Np",
+            "b25SZXF1ZXN0EiIKCnNlc3Npb25faWQYASABKAlCA+BBAlIJc2Vzc2lvbklk",
+            "IpABChJHZXRTZXNzaW9uUmVzcG9uc2USQgoHc2Vzc2lvbhgBIAEoCzIjLmlu",
+            "c3VyZXRlY2guYXV0aG4uZW50aXR5LnYxLlNlc3Npb25CA+BBA1IHc2Vzc2lv",
+            "bhI2CgVlcnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "QgPgQQNSBWVycm9yIu0BChNMaXN0U2Vzc2lvbnNSZXF1ZXN0EhwKB3VzZXJf",
+            "aWQYASABKAlCA+BBAlIGdXNlcklkEiAKCXBhZ2Vfc2l6ZRgCIAEoBUID4EEB",
+            "UghwYWdlU2l6ZRIiCgpwYWdlX3Rva2VuGAMgASgJQgPgQQFSCXBhZ2VUb2tl",
+            "bhImCgxzZXNzaW9uX3R5cGUYBCABKAlCA+BBAVILc2Vzc2lvblR5cGUSJAoL",
+            "YWN0aXZlX29ubHkYBSABKAhCA+BBAVIKYWN0aXZlT25seRIkCgtkZXZpY2Vf",
+            "dHlwZRgGIAEoCUID4EEBUgpkZXZpY2VUeXBlIucBChRMaXN0U2Vzc2lvbnNS",
+            "ZXNwb25zZRJECghzZXNzaW9ucxgBIAMoCzIjLmluc3VyZXRlY2guYXV0aG4u",
+            "ZW50aXR5LnYxLlNlc3Npb25CA+BBA1IIc2Vzc2lvbnMSKwoPbmV4dF9wYWdl",
+            "X3Rva2VuGAIgASgJQgPgQQNSDW5leHRQYWdlVG9rZW4SJAoLdG90YWxfY291",
+            "bnQYAyABKAVCA+BBA1IKdG90YWxDb3VudBI2CgVlcnJvchgEIAEoCzIbLmlu",
+            "c3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIlcKFFJldm9r",
+            "ZVNlc3Npb25SZXF1ZXN0EiIKCnNlc3Npb25faWQYASABKAlCA+BBAlIJc2Vz",
+            "c2lvbklkEhsKBnJlYXNvbhgCIAEoCUID4EEBUgZyZWFzb24ibgoVUmV2b2tl",
+            "U2Vzc2lvblJlc3BvbnNlEh0KB21lc3NhZ2UYASABKAlCA+BBA1IHbWVzc2Fn",
+            "ZRI2CgVlcnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "QgPgQQNSBWVycm9yIl0KE1ZhbGlkYXRlQ1NSRlJlcXVlc3QSIgoKc2Vzc2lv",
+            "bl9pZBgBIAEoCUID4EEBUglzZXNzaW9uSWQSIgoKY3NyZl90b2tlbhgCIAEo",
+            "CUID4EECUgljc3JmVG9rZW4iiAEKFFZhbGlkYXRlQ1NSRlJlc3BvbnNlEhkK",
+            "BXZhbGlkGAEgASgIQgPgQQNSBXZhbGlkEh0KB21lc3NhZ2UYAiABKAlCA+BB",
+            "A1IHbWVzc2FnZRI2CgVlcnJvchgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9u",
+            "LnYxLkVycm9yQgPgQQNSBWVycm9yIhoKGEdldEN1cnJlbnRTZXNzaW9uUmVx",
+            "dWVzdCL4AQoZR2V0Q3VycmVudFNlc3Npb25SZXNwb25zZRJCCgdzZXNzaW9u",
+            "GAEgASgLMiMuaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuU2Vzc2lvbkID",
+            "4EEDUgdzZXNzaW9uEjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21t",
+            "b24udjEuRXJyb3JCA+BBA1IFZXJyb3ISIAoJdXNlcl90eXBlGAMgASgJQgPg",
+            "QQNSCHVzZXJUeXBlEj0KGHBhc3N3b3JkX2NoYW5nZV9yZXF1aXJlZBgEIAEo",
+            "CEID4EEDUhZwYXNzd29yZENoYW5nZVJlcXVpcmVkIs0CChFQb3J0YWxVc2Vy",
+            "U3VtbWFyeRIcCgd1c2VyX2lkGAEgASgJQgPgQQNSBnVzZXJJZBIgCglmdWxs",
+            "X25hbWUYAiABKAlCA+BBA1IIZnVsbE5hbWUSGQoFZW1haWwYAyABKAlCA+BB",
+            "A1IFZW1haWwSKAoNbW9iaWxlX251bWJlchgEIAEoCUID4EEDUgxtb2JpbGVO",
+            "dW1iZXISIAoJdXNlcl90eXBlGAUgASgJQgPgQQNSCHVzZXJUeXBlEioKDmVt",
+            "YWlsX3ZlcmlmaWVkGAYgASgIQgPgQQNSDWVtYWlsVmVyaWZpZWQSJgoMa3lj",
+            "X3ZlcmlmaWVkGAcgASgIQgPgQQNSC2t5Y1ZlcmlmaWVkEj0KGHBhc3N3b3Jk",
+            "X2NoYW5nZV9yZXF1aXJlZBgIIAEoCEID4EEDUhZwYXNzd29yZENoYW5nZVJl",
+            "cXVpcmVkIjwKFUZpbmRQb3J0YWxVc2VyUmVxdWVzdBIjCgppZGVudGlmaWVy",
+            "GAEgASgJQgPgQQJSCmlkZW50aWZpZXIimgEKFkZpbmRQb3J0YWxVc2VyUmVz",
+            "cG9uc2USSAoEdXNlchgBIAEoCzIvLmluc3VyZXRlY2guYXV0aG4uc2Vydmlj",
+            "ZXMudjEuUG9ydGFsVXNlclN1bW1hcnlCA+BBA1IEdXNlchI2CgVlcnJvchgC",
+            "IAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9y",
+            "ItIBChtTZXRUZW1wb3JhcnlQYXNzd29yZFJlcXVlc3QSHAoHdXNlcl9pZBgB",
+            "IAEoCUID4EECUgZ1c2VySWQSMgoSdGVtcG9yYXJ5X3Bhc3N3b3JkGAIgASgJ",
+            "QgPgQQJSEXRlbXBvcmFyeVBhc3N3b3JkEiQKC2Fzc2lnbmVkX2J5GAMgASgJ",
+            "QgPgQQFSCmFzc2lnbmVkQnkSOwoXcmVxdWlyZV9wYXNzd29yZF9jaGFuZ2UY",
+            "BCABKAhCA+BBAVIVcmVxdWlyZVBhc3N3b3JkQ2hhbmdlInUKHFNldFRlbXBv",
+            "cmFyeVBhc3N3b3JkUmVzcG9uc2USHQoHbWVzc2FnZRgBIAEoCUID4EEDUgdt",
+            "ZXNzYWdlEjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEu",
+            "RXJyb3JCA+BBA1IFZXJyb3IikgEKGFJldm9rZUFsbFNlc3Npb25zUmVxdWVz",
+            "dBIcCgd1c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIbCgZyZWFzb24YAiAB",
+            "KAlCA+BBAVIGcmVhc29uEjsKF2V4Y2x1ZGVfY3VycmVudF9zZXNzaW9uGAMg",
+            "ASgIQgPgQQFSFWV4Y2x1ZGVDdXJyZW50U2Vzc2lvbiKcAQoZUmV2b2tlQWxs",
+            "U2Vzc2lvbnNSZXNwb25zZRIoCg1yZXZva2VkX2NvdW50GAEgASgFQgPgQQNS",
+            "DHJldm9rZWRDb3VudBIdCgdtZXNzYWdlGAIgASgJQgPgQQNSB21lc3NhZ2US",
+            "NgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID",
+            "4EEDUgVlcnJvciLmAQoYUmVnaXN0ZXJFbWFpbFVzZXJSZXF1ZXN0EhkKBWVt",
+            "YWlsGAEgASgJQgPgQQJSBWVtYWlsEh8KCHBhc3N3b3JkGAIgASgJQgPgQQJS",
+            "CHBhc3N3b3JkEiAKCXVzZXJfdHlwZRgDIAEoCUID4EECUgh1c2VyVHlwZRIg",
+            "CglmdWxsX25hbWUYBCABKAlCA+BBAlIIZnVsbE5hbWUSIAoJZGV2aWNlX2lk",
+            "GAUgASgJQgPgQQFSCGRldmljZUlkEigKDW1vYmlsZV9udW1iZXIYBiABKAlC",
+            "A+BBAVIMbW9iaWxlTnVtYmVyIqMCChlSZWdpc3RlckVtYWlsVXNlclJlc3Bv",
+            "bnNlEhwKB3VzZXJfaWQYASABKAlCA+BBA1IGdXNlcklkEh0KB21lc3NhZ2UY",
+            "AiABKAlCA+BBA1IHbWVzc2FnZRI7Chd2ZXJpZmljYXRpb25fZW1haWxfc2Vu",
+            "dBgDIAEoCEID4EEDUhV2ZXJpZmljYXRpb25FbWFpbFNlbnQSGgoGb3RwX2lk",
+            "GAQgASgJQgPgQQNSBW90cElkEjgKFm90cF9leHBpcmVzX2luX3NlY29uZHMY",
+            "BSABKAVCA+BBA1ITb3RwRXhwaXJlc0luU2Vjb25kcxI2CgVlcnJvchgGIAEo",
+            "CzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIkkK",
+            "E1NlbmRFbWFpbE9UUFJlcXVlc3QSGQoFZW1haWwYASABKAlCA+BBAlIFZW1h",
+            "aWwSFwoEdHlwZRgCIAEoCUID4EECUgR0eXBlIuwBChRTZW5kRW1haWxPVFBS",
+            "ZXNwb25zZRIaCgZvdHBfaWQYASABKAlCA+BBA1IFb3RwSWQSHQoHbWVzc2Fn",
+            "ZRgCIAEoCUID4EEDUgdtZXNzYWdlEjEKEmV4cGlyZXNfaW5fc2Vjb25kcxgD",
+            "IAEoBUID4EEDUhBleHBpcmVzSW5TZWNvbmRzEi4KEGNvb2xkb3duX3NlY29u",
+            "ZHMYBCABKAVCA+BBA1IPY29vbGRvd25TZWNvbmRzEjYKBWVycm9yGAUgASgL",
+            "MhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IiSQoS",
+            "VmVyaWZ5RW1haWxSZXF1ZXN0EhoKBm90cF9pZBgBIAEoCUID4EECUgVvdHBJ",
+            "ZBIXCgRjb2RlGAIgASgJQgPgQQJSBGNvZGUiqwEKE1ZlcmlmeUVtYWlsUmVz",
+            "cG9uc2USHwoIdmVyaWZpZWQYASABKAhCA+BBA1IIdmVyaWZpZWQSHAoHdXNl",
+            "cl9pZBgCIAEoCUID4EEDUgZ1c2VySWQSHQoHbWVzc2FnZRgDIAEoCUID4EED",
+            "UgdtZXNzYWdlEjYKBWVycm9yGAQgASgLMhsuaW5zdXJldGVjaC5jb21tb24u",
+            "djEuRXJyb3JCA+BBA1IFZXJyb3IiqwEKEUVtYWlsTG9naW5SZXF1ZXN0EhkK",
+            "BWVtYWlsGAEgASgJQgPgQQJSBWVtYWlsEhoKBm90cF9pZBgCIAEoCUID4EEC",
+            "UgVvdHBJZBIXCgRjb2RlGAMgASgJQgPgQQJSBGNvZGUSIAoJZGV2aWNlX2lk",
+            "GAQgASgJQgPgQQFSCGRldmljZUlkEiQKC2RldmljZV9uYW1lGAUgASgJQgPg",
+            "QQFSCmRldmljZU5hbWUivwIKEkVtYWlsTG9naW5SZXNwb25zZRIcCgd1c2Vy",
+            "X2lkGAEgASgJQgPgQQNSBnVzZXJJZBIiCgpzZXNzaW9uX2lkGAIgASgJQgPg",
+            "QQNSCXNlc3Npb25JZBIoCg1zZXNzaW9uX3Rva2VuGAMgASgJQgPgQQNSDHNl",
+            "c3Npb25Ub2tlbhIiCgpjc3JmX3Rva2VuGAQgASgJQgPgQQNSCWNzcmZUb2tl",
+            "bhI5CgR1c2VyGAUgASgLMiAuaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEu",
+            "VXNlckID4EEDUgR1c2VyEiYKDHNlc3Npb25fdHlwZRgGIAEoCUID4EEDUgtz",
+            "ZXNzaW9uVHlwZRI2CgVlcnJvchgHIAEoCzIbLmluc3VyZXRlY2guY29tbW9u",
+            "LnYxLkVycm9yQgPgQQNSBWVycm9yIp8BChlFbWFpbFBhc3N3b3JkTG9naW5S",
+            "ZXF1ZXN0EhkKBWVtYWlsGAEgASgJQgPgQQJSBWVtYWlsEh8KCHBhc3N3b3Jk",
+            "GAIgASgJQgPgQQJSCHBhc3N3b3JkEiAKCWRldmljZV9pZBgDIAEoCUID4EEB",
+            "UghkZXZpY2VJZBIkCgtkZXZpY2VfbmFtZRgEIAEoCUID4EEBUgpkZXZpY2VO",
+            "YW1lIoYDChpFbWFpbFBhc3N3b3JkTG9naW5SZXNwb25zZRIcCgd1c2VyX2lk",
+            "GAEgASgJQgPgQQNSBnVzZXJJZBIiCgpzZXNzaW9uX2lkGAIgASgJQgPgQQNS",
+            "CXNlc3Npb25JZBIoCg1zZXNzaW9uX3Rva2VuGAMgASgJQgPgQQNSDHNlc3Np",
+            "b25Ub2tlbhIiCgpjc3JmX3Rva2VuGAQgASgJQgPgQQNSCWNzcmZUb2tlbhI5",
+            "CgR1c2VyGAUgASgLMiAuaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuVXNl",
+            "ckID4EEDUgR1c2VyEiYKDHNlc3Npb25fdHlwZRgGIAEoCUID4EEDUgtzZXNz",
+            "aW9uVHlwZRI9ChhwYXNzd29yZF9jaGFuZ2VfcmVxdWlyZWQYByABKAhCA+BB",
+            "A1IWcGFzc3dvcmRDaGFuZ2VSZXF1aXJlZBI2CgVlcnJvchgIIAEoCzIbLmlu",
+            "c3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9yIj8KIlJlcXVl",
+            "c3RQYXNzd29yZFJlc2V0QnlFbWFpbFJlcXVlc3QSGQoFZW1haWwYASABKAlC",
+            "A+BBAlIFZW1haWwiywEKI1JlcXVlc3RQYXNzd29yZFJlc2V0QnlFbWFpbFJl",
+            "c3BvbnNlEhoKBm90cF9pZBgBIAEoCUID4EEDUgVvdHBJZBIdCgdtZXNzYWdl",
+            "GAIgASgJQgPgQQNSB21lc3NhZ2USMQoSZXhwaXJlc19pbl9zZWNvbmRzGAMg",
+            "ASgFQgPgQQNSEGV4cGlyZXNJblNlY29uZHMSNgoFZXJyb3IYBCABKAsyGy5p",
+            "bnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciK6AQocQmlv",
+            "bWV0cmljQXV0aGVudGljYXRlUmVxdWVzdBIsCg9iaW9tZXRyaWNfdG9rZW4Y",
+            "ASABKAlCA+BBAlIOYmlvbWV0cmljVG9rZW4SIAoJZGV2aWNlX2lkGAIgASgJ",
+            "QgPgQQJSCGRldmljZUlkEiQKC2RldmljZV90eXBlGAMgASgJQgPgQQFSCmRl",
+            "dmljZVR5cGUSJAoLZGV2aWNlX25hbWUYBCABKAlCA+BBAVIKZGV2aWNlTmFt",
+            "ZSLIAwodQmlvbWV0cmljQXV0aGVudGljYXRlUmVzcG9uc2USHAoHdXNlcl9p",
+            "ZBgBIAEoCUID4EEDUgZ1c2VySWQSIgoKc2Vzc2lvbl9pZBgCIAEoCUID4EED",
+            "UglzZXNzaW9uSWQSJgoMYWNjZXNzX3Rva2VuGAMgASgJQgPgQQNSC2FjY2Vz",
+            "c1Rva2VuEigKDXJlZnJlc2hfdG9rZW4YBCABKAlCA+BBA1IMcmVmcmVzaFRv",
+            "a2VuEjoKF2FjY2Vzc190b2tlbl9leHBpcmVzX2luGAUgASgFQgPgQQNSFGFj",
+            "Y2Vzc1Rva2VuRXhwaXJlc0luEjwKGHJlZnJlc2hfdG9rZW5fZXhwaXJlc19p",
+            "bhgGIAEoBUID4EEDUhVyZWZyZXNoVG9rZW5FeHBpcmVzSW4SJgoMc2Vzc2lv",
+            "bl90eXBlGAcgASgJQgPgQQNSC3Nlc3Npb25UeXBlEjkKBHVzZXIYCCABKAsy",
+            "IC5pbnN1cmV0ZWNoLmF1dGhuLmVudGl0eS52MS5Vc2VyQgPgQQNSBHVzZXIS",
+            "NgoFZXJyb3IYCSABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID",
+            "4EEDUgVlcnJvciKOAQoWVXBkYXRlRExSU3RhdHVzUmVxdWVzdBIzChNwcm92",
+            "aWRlcl9tZXNzYWdlX2lkGAEgASgJQgPgQQJSEXByb3ZpZGVyTWVzc2FnZUlk",
+            "EhsKBnN0YXR1cxgCIAEoCUID4EECUgZzdGF0dXMSIgoKZXJyb3JfY29kZRgD",
+            "IAEoCUID4EEBUgllcnJvckNvZGUijwEKF1VwZGF0ZURMUlN0YXR1c1Jlc3Bv",
+            "bnNlEh0KB3VwZGF0ZWQYASABKAhCA+BBA1IHdXBkYXRlZBIdCgdtZXNzYWdl",
+            "GAIgASgJQgPgQQNSB21lc3NhZ2USNgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0",
+            "ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciKHAgoTQ3JlYXRlQVBJ",
+            "S2V5UmVxdWVzdBIXCgRuYW1lGAEgASgJQgPgQQJSBG5hbWUSHgoIb3duZXJf",
+            "aWQYAiABKAlCA+BBAlIHb3duZXJJZBIiCgpvd25lcl90eXBlGAMgASgJQgPg",
+            "QQJSCW93bmVyVHlwZRIbCgZzY29wZXMYBCADKAlCA+BBAlIGc2NvcGVzEjYK",
+            "FXJhdGVfbGltaXRfcGVyX21pbnV0ZRgFIAEoBUID4EEBUhJyYXRlTGltaXRQ",
+            "ZXJNaW51dGUSPgoKZXhwaXJlc19hdBgGIAEoCzIaLmdvb2dsZS5wcm90b2J1",
+            "Zi5UaW1lc3RhbXBCA+BBAVIJZXhwaXJlc0F0Iv4BChRDcmVhdGVBUElLZXlS",
+            "ZXNwb25zZRIaCgZrZXlfaWQYASABKAlCA+BBA1IFa2V5SWQSHAoHcmF3X2tl",
+            "eRgCIAEoCUID4EEDUgZyYXdLZXkSFwoEbmFtZRgDIAEoCUID4EEDUgRuYW1l",
+            "EhsKBnNjb3BlcxgEIAMoCUID4EEDUgZzY29wZXMSPgoKZXhwaXJlc19hdBgF",
+            "IAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCA+BBA1IJZXhwaXJl",
+            "c0F0EjYKBWVycm9yGAYgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJy",
+            "b3JCA+BBA1IFZXJyb3IixAEKEkxpc3RBUElLZXlzUmVxdWVzdBIeCghvd25l",
+            "cl9pZBgBIAEoCUID4EECUgdvd25lcklkEiIKCm93bmVyX3R5cGUYAiABKAlC",
+            "A+BBAVIJb3duZXJUeXBlEiQKC2FjdGl2ZV9vbmx5GAMgASgIQgPgQQFSCmFj",
+            "dGl2ZU9ubHkSIAoJcGFnZV9zaXplGAQgASgFQgPgQQFSCHBhZ2VTaXplEiIK",
+            "CnBhZ2VfdG9rZW4YBSABKAlCA+BBAVIJcGFnZVRva2VuIpYCCg1BUElLZXlT",
+            "dW1tYXJ5EhUKBmtleV9pZBgBIAEoCVIFa2V5SWQSEgoEbmFtZRgCIAEoCVIE",
+            "bmFtZRIWCgZzY29wZXMYAyADKAlSBnNjb3BlcxIWCgZzdGF0dXMYBCABKAlS",
+            "BnN0YXR1cxI5CgpleHBpcmVzX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVm",
+            "LlRpbWVzdGFtcFIJZXhwaXJlc0F0EjwKDGxhc3RfdXNlZF9hdBgGIAEoCzIa",
+            "Lmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSCmxhc3RVc2VkQXQSMQoVcmF0",
+            "ZV9saW1pdF9wZXJfbWludXRlGAcgASgFUhJyYXRlTGltaXRQZXJNaW51dGUi",
+            "wAEKE0xpc3RBUElLZXlzUmVzcG9uc2USRAoEa2V5cxgBIAMoCzIrLmluc3Vy",
+            "ZXRlY2guYXV0aG4uc2VydmljZXMudjEuQVBJS2V5U3VtbWFyeUID4EEDUgRr",
+            "ZXlzEisKD25leHRfcGFnZV90b2tlbhgCIAEoCUID4EEDUg1uZXh0UGFnZVRv",
+            "a2VuEjYKBWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJy",
+            "b3JCA+BBA1IFZXJyb3IiTgoTUmV2b2tlQVBJS2V5UmVxdWVzdBIaCgZrZXlf",
+            "aWQYASABKAlCA+BBAlIFa2V5SWQSGwoGcmVhc29uGAIgASgJQgPgQQFSBnJl",
+            "YXNvbiJtChRSZXZva2VBUElLZXlSZXNwb25zZRIdCgdtZXNzYWdlGAEgASgJ",
+            "QgPgQQNSB21lc3NhZ2USNgoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNv",
+            "bW1vbi52MS5FcnJvckID4EEDUgVlcnJvciJkChNSb3RhdGVBUElLZXlSZXF1",
+            "ZXN0EhoKBmtleV9pZBgBIAEoCUID4EECUgVrZXlJZBIxChJncmFjZV9wZXJp",
+            "b2RfaG91cnMYAiABKAVCA+BBAVIQZ3JhY2VQZXJpb2RIb3VycyKfAgoUUm90",
+            "YXRlQVBJS2V5UmVzcG9uc2USIQoKbmV3X2tleV9pZBgBIAEoCUID4EEDUghu",
+            "ZXdLZXlJZBIcCgdyYXdfa2V5GAIgASgJQgPgQQNSBnJhd0tleRIhCgpvbGRf",
+            "a2V5X2lkGAMgASgJQgPgQQNSCG9sZEtleUlkEkwKEm9sZF9rZXlfZXhwaXJl",
+            "c19hdBgEIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCA+BBA1IP",
+            "b2xkS2V5RXhwaXJlc0F0Eh0KB21lc3NhZ2UYBSABKAlCA+BBA1IHbWVzc2Fn",
+            "ZRI2CgVlcnJvchgGIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "QgPgQQNSBWVycm9yIpwBChtSZXNldFBhc3N3b3JkQnlFbWFpbFJlcXVlc3QS",
+            "GQoFZW1haWwYASABKAlCA+BBAlIFZW1haWwSGgoGb3RwX2lkGAIgASgJQgPg",
+            "QQJSBW90cElkEh4KCG90cF9jb2RlGAMgASgJQgPgQQJSB290cENvZGUSJgoM",
+            "bmV3X3Bhc3N3b3JkGAQgASgJQgPgQQJSC25ld1Bhc3N3b3JkInUKHFJlc2V0",
+            "UGFzc3dvcmRCeUVtYWlsUmVzcG9uc2USHQoHbWVzc2FnZRgBIAEoCUID4EED",
+            "UgdtZXNzYWdlEjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21tb24u",
+            "djEuRXJyb3JCA+BBA1IFZXJyb3Ii0QEKHFByb3Zpc2lvbkVtcGxveWVlVXNl",
+            "clJlcXVlc3QSGQoFZW1haWwYASABKAlCA+BBAlIFZW1haWwSIAoJZnVsbF9u",
+            "YW1lGAIgASgJQgPgQQJSCGZ1bGxOYW1lEigKDW1vYmlsZV9udW1iZXIYAyAB",
+            "KAlCA+BBAVIMbW9iaWxlTnVtYmVyEiQKC2VtcGxveWVlX2lkGAQgASgJQgPg",
+            "QQJSCmVtcGxveWVlSWQSJAoLYnVzaW5lc3NfaWQYBSABKAlCA+BBAlIKYnVz",
+            "aW5lc3NJZCLTAQodUHJvdmlzaW9uRW1wbG95ZWVVc2VyUmVzcG9uc2USHAoH",
+            "dXNlcl9pZBgBIAEoCUID4EEDUgZ1c2VySWQSHQoHY3JlYXRlZBgCIAEoCEID",
+            "4EEDUgdjcmVhdGVkEj0KGHBhc3N3b3JkX2NoYW5nZV9yZXF1aXJlZBgDIAEo",
+            "CEID4EEDUhZwYXNzd29yZENoYW5nZVJlcXVpcmVkEjYKBWVycm9yGAQgASgL",
+            "MhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IilQcK",
+            "GENyZWF0ZVVzZXJQcm9maWxlUmVxdWVzdBIcCgd1c2VyX2lkGAEgASgJQgPg",
+            "QQJSBnVzZXJJZBIgCglmdWxsX25hbWUYAiABKAlCA+BBAlIIZnVsbE5hbWUS",
+            "QwoNZGF0ZV9vZl9iaXJ0aBgDIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l",
+            "c3RhbXBCA+BBAlILZGF0ZU9mQmlydGgSGwoGZ2VuZGVyGAQgASgJQgPgQQJS",
+            "BmdlbmRlchIoCg1hZGRyZXNzX2xpbmUxGAUgASgJQgPgQQJSDGFkZHJlc3NM",
+            "aW5lMRIXCgRjaXR5GAYgASgJQgPgQQJSBGNpdHkSHwoIZGlzdHJpY3QYByAB",
+            "KAlCA+BBAlIIZGlzdHJpY3QSHwoIZGl2aXNpb24YCCABKAlCA+BBAlIIZGl2",
+            "aXNpb24SIgoKbmlkX251bWJlchgJIAEoCUID4EECUgluaWROdW1iZXISIwoK",
+            "b2NjdXBhdGlvbhgKIAEoCUID4EEBUgpvY2N1cGF0aW9uEh8KCGVtcGxveWVy",
+            "GAsgASgJQgPgQQFSCGVtcGxveWVyEigKDWFkZHJlc3NfbGluZTIYDCABKAlC",
+            "A+BBAVIMYWRkcmVzc0xpbmUyEh0KB2NvdW50cnkYDSABKAlCA+BBAVIHY291",
+            "bnRyeRIkCgtwb3N0YWxfY29kZRgOIAEoCUID4EEBUgpwb3N0YWxDb2RlEjAK",
+            "EXBlcm1hbmVudF9hZGRyZXNzGA8gASgJQgPgQQFSEHBlcm1hbmVudEFkZHJl",
+            "c3MSKgoObWFyaXRhbF9zdGF0dXMYECABKAlCA+BBAVINbWFyaXRhbFN0YXR1",
+            "cxI5ChZlbWVyZ2VuY3lfY29udGFjdF9uYW1lGBEgASgJQgPgQQFSFGVtZXJn",
+            "ZW5jeUNvbnRhY3ROYW1lEj0KGGVtZXJnZW5jeV9jb250YWN0X251bWJlchgS",
+            "IAEoCUID4EEBUhZlbWVyZ2VuY3lDb250YWN0TnVtYmVyEiUKC25hdGlvbmFs",
+            "aXR5GBMgASgJQgPgQQFSC25hdGlvbmFsaXR5EiQKC2Jsb29kX2dyb3VwGBQg",
+            "ASgJQgPgQQFSCmJsb29kR3JvdXASJgoMaW5jb21lX3JhbmdlGBUgASgJQgPg",
+            "QQFSC2luY29tZVJhbmdlEiwKD3Bhc3Nwb3J0X251bWJlchgWIAEoCUID4EEB",
+            "Ug5wYXNzcG9ydE51bWJlciK6AQoZQ3JlYXRlVXNlclByb2ZpbGVSZXNwb25z",
+            "ZRJGCgdwcm9maWxlGAEgASgLMicuaW5zdXJldGVjaC5hdXRobi5lbnRpdHku",
+            "djEuVXNlclByb2ZpbGVCA+BBA1IHcHJvZmlsZRIdCgdtZXNzYWdlGAIgASgJ",
+            "QgPgQQNSB21lc3NhZ2USNgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNv",
+            "bW1vbi52MS5FcnJvckID4EEDUgVlcnJvciI1ChVHZXRVc2VyUHJvZmlsZVJl",
+            "cXVlc3QSHAoHdXNlcl9pZBgBIAEoCUID4EECUgZ1c2VySWQimAEKFkdldFVz",
             "ZXJQcm9maWxlUmVzcG9uc2USRgoHcHJvZmlsZRgBIAEoCzInLmluc3VyZXRl",
             "Y2guYXV0aG4uZW50aXR5LnYxLlVzZXJQcm9maWxlQgPgQQNSB3Byb2ZpbGUS",
-            "HQoHbWVzc2FnZRgCIAEoCUID4EEDUgdtZXNzYWdlEjYKBWVycm9yGAMgASgL",
-            "MhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IiqgEK",
-            "GVVwbG9hZFVzZXJEb2N1bWVudFJlcXVlc3QSHAoHdXNlcl9pZBgBIAEoCUID",
-            "4EECUgZ1c2VySWQSLQoQZG9jdW1lbnRfdHlwZV9pZBgCIAEoCUID4EECUg5k",
-            "b2N1bWVudFR5cGVJZBIeCghmaWxlX3VybBgDIAEoCUID4EECUgdmaWxlVXJs",
-            "EiAKCXBvbGljeV9pZBgEIAEoCUID4EEBUghwb2xpY3lJZCK+AQoaVXBsb2Fk",
-            "VXNlckRvY3VtZW50UmVzcG9uc2USSQoIZG9jdW1lbnQYASABKAsyKC5pbnN1",
-            "cmV0ZWNoLmF1dGhuLmVudGl0eS52MS5Vc2VyRG9jdW1lbnRCA+BBA1IIZG9j",
-            "dW1lbnQSHQoHbWVzc2FnZRgCIAEoCUID4EEDUgdtZXNzYWdlEjYKBWVycm9y",
-            "GAMgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JCA+BBA1IFZXJy",
-            "b3IirQEKGExpc3RVc2VyRG9jdW1lbnRzUmVxdWVzdBIcCgd1c2VyX2lkGAEg",
-            "ASgJQgPgQQJSBnVzZXJJZBItChBkb2N1bWVudF90eXBlX2lkGAIgASgJQgPg",
-            "QQFSDmRvY3VtZW50VHlwZUlkEiAKCXBhZ2Vfc2l6ZRgDIAEoBUID4EEBUghw",
-            "YWdlU2l6ZRIiCgpwYWdlX3Rva2VuGAQgASgJQgPgQQFSCXBhZ2VUb2tlbiLz",
-            "AQoZTGlzdFVzZXJEb2N1bWVudHNSZXNwb25zZRJLCglkb2N1bWVudHMYASAD",
-            "KAsyKC5pbnN1cmV0ZWNoLmF1dGhuLmVudGl0eS52MS5Vc2VyRG9jdW1lbnRC",
-            "A+BBA1IJZG9jdW1lbnRzEisKD25leHRfcGFnZV90b2tlbhgCIAEoCUID4EED",
-            "Ug1uZXh0UGFnZVRva2VuEiQKC3RvdGFsX2NvdW50GAMgASgFQgPgQQNSCnRv",
-            "dGFsQ291bnQSNgoFZXJyb3IYBCABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
-            "MS5FcnJvckID4EEDUgVlcnJvciJHChZHZXRVc2VyRG9jdW1lbnRSZXF1ZXN0",
-            "Ei0KEHVzZXJfZG9jdW1lbnRfaWQYASABKAlCA+BBAlIOdXNlckRvY3VtZW50",
-            "SWQinAEKF0dldFVzZXJEb2N1bWVudFJlc3BvbnNlEkkKCGRvY3VtZW50GAEg",
-            "ASgLMiguaW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuVXNlckRvY3VtZW50",
-            "QgPgQQNSCGRvY3VtZW50EjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5j",
-            "b21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IiuwEKGVVwZGF0ZVVzZXJEb2N1",
-            "bWVudFJlcXVlc3QSLQoQdXNlcl9kb2N1bWVudF9pZBgBIAEoCUID4EECUg51",
-            "c2VyRG9jdW1lbnRJZBItChBkb2N1bWVudF90eXBlX2lkGAIgASgJQgPgQQFS",
-            "DmRvY3VtZW50VHlwZUlkEh4KCGZpbGVfdXJsGAMgASgJQgPgQQFSB2ZpbGVV",
-            "cmwSIAoJcG9saWN5X2lkGAQgASgJQgPgQQFSCHBvbGljeUlkIr4BChpVcGRh",
-            "dGVVc2VyRG9jdW1lbnRSZXNwb25zZRJJCghkb2N1bWVudBgBIAEoCzIoLmlu",
+            "NgoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID",
+            "4EEDUgVlcnJvciLGBwoYVXBkYXRlVXNlclByb2ZpbGVSZXF1ZXN0EhwKB3Vz",
+            "ZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiAKCWZ1bGxfbmFtZRgCIAEoCUID",
+            "4EEBUghmdWxsTmFtZRJDCg1kYXRlX29mX2JpcnRoGAMgASgLMhouZ29vZ2xl",
+            "LnByb3RvYnVmLlRpbWVzdGFtcEID4EEBUgtkYXRlT2ZCaXJ0aBIbCgZnZW5k",
+            "ZXIYBCABKAlCA+BBAVIGZ2VuZGVyEiMKCm9jY3VwYXRpb24YBSABKAlCA+BB",
+            "AVIKb2NjdXBhdGlvbhIfCghlbXBsb3llchgGIAEoCUID4EEBUghlbXBsb3ll",
+            "chIoCg1hZGRyZXNzX2xpbmUxGAcgASgJQgPgQQFSDGFkZHJlc3NMaW5lMRIo",
+            "Cg1hZGRyZXNzX2xpbmUyGAggASgJQgPgQQFSDGFkZHJlc3NMaW5lMhIXCgRj",
+            "aXR5GAkgASgJQgPgQQFSBGNpdHkSHwoIZGlzdHJpY3QYCiABKAlCA+BBAVII",
+            "ZGlzdHJpY3QSHwoIZGl2aXNpb24YCyABKAlCA+BBAVIIZGl2aXNpb24SHQoH",
+            "Y291bnRyeRgMIAEoCUID4EEBUgdjb3VudHJ5EiQKC3Bvc3RhbF9jb2RlGA0g",
+            "ASgJQgPgQQFSCnBvc3RhbENvZGUSMAoRcGVybWFuZW50X2FkZHJlc3MYDiAB",
+            "KAlCA+BBAVIQcGVybWFuZW50QWRkcmVzcxIiCgpuaWRfbnVtYmVyGA8gASgJ",
+            "QgPgQQFSCW5pZE51bWJlchIqCg5tYXJpdGFsX3N0YXR1cxgQIAEoCUID4EEB",
+            "Ug1tYXJpdGFsU3RhdHVzEjkKFmVtZXJnZW5jeV9jb250YWN0X25hbWUYESAB",
+            "KAlCA+BBAVIUZW1lcmdlbmN5Q29udGFjdE5hbWUSPQoYZW1lcmdlbmN5X2Nv",
+            "bnRhY3RfbnVtYmVyGBIgASgJQgPgQQFSFmVtZXJnZW5jeUNvbnRhY3ROdW1i",
+            "ZXISLwoRcHJvZmlsZV9waG90b191cmwYEyABKAlCA+BBAVIPcHJvZmlsZVBo",
+            "b3RvVXJsEiYKDGluY29tZV9yYW5nZRgUIAEoCUID4EEBUgtpbmNvbWVSYW5n",
+            "ZRIlCgtuYXRpb25hbGl0eRgVIAEoCUID4EEBUgtuYXRpb25hbGl0eRIkCgti",
+            "bG9vZF9ncm91cBgWIAEoCUID4EEBUgpibG9vZEdyb3VwEiwKD3Bhc3Nwb3J0",
+            "X251bWJlchgXIAEoCUID4EEBUg5wYXNzcG9ydE51bWJlciK6AQoZVXBkYXRl",
+            "VXNlclByb2ZpbGVSZXNwb25zZRJGCgdwcm9maWxlGAEgASgLMicuaW5zdXJl",
+            "dGVjaC5hdXRobi5lbnRpdHkudjEuVXNlclByb2ZpbGVCA+BBA1IHcHJvZmls",
+            "ZRIdCgdtZXNzYWdlGAIgASgJQgPgQQNSB21lc3NhZ2USNgoFZXJyb3IYAyAB",
+            "KAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciKq",
+            "AQoZVXBsb2FkVXNlckRvY3VtZW50UmVxdWVzdBIcCgd1c2VyX2lkGAEgASgJ",
+            "QgPgQQJSBnVzZXJJZBItChBkb2N1bWVudF90eXBlX2lkGAIgASgJQgPgQQJS",
+            "DmRvY3VtZW50VHlwZUlkEh4KCGZpbGVfdXJsGAMgASgJQgPgQQJSB2ZpbGVV",
+            "cmwSIAoJcG9saWN5X2lkGAQgASgJQgPgQQFSCHBvbGljeUlkIr4BChpVcGxv",
+            "YWRVc2VyRG9jdW1lbnRSZXNwb25zZRJJCghkb2N1bWVudBgBIAEoCzIoLmlu",
             "c3VyZXRlY2guYXV0aG4uZW50aXR5LnYxLlVzZXJEb2N1bWVudEID4EEDUghk",
             "b2N1bWVudBIdCgdtZXNzYWdlGAIgASgJQgPgQQNSB21lc3NhZ2USNgoFZXJy",
             "b3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvckID4EEDUgVl",
-            "cnJvciJKChlEZWxldGVVc2VyRG9jdW1lbnRSZXF1ZXN0Ei0KEHVzZXJfZG9j",
-            "dW1lbnRfaWQYASABKAlCA+BBAlIOdXNlckRvY3VtZW50SWQicwoaRGVsZXRl",
-            "VXNlckRvY3VtZW50UmVzcG9uc2USHQoHbWVzc2FnZRgBIAEoCUID4EEDUgdt",
-            "ZXNzYWdlEjYKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEu",
-            "RXJyb3JCA+BBA1IFZXJyb3IiQAoYTGlzdERvY3VtZW50VHlwZXNSZXF1ZXN0",
-            "EiQKC2FjdGl2ZV9vbmx5GAEgASgIQgPgQQFSCmFjdGl2ZU9ubHkimAEKGUxp",
-            "c3REb2N1bWVudFR5cGVzUmVzcG9uc2USQwoFdHlwZXMYASADKAsyKC5pbnN1",
-            "cmV0ZWNoLmF1dGhuLmVudGl0eS52MS5Eb2N1bWVudFR5cGVCA+BBA1IFdHlw",
-            "ZXMSNgoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJv",
-            "ckID4EEDUgVlcnJvciIyChJJbml0aWF0ZUtZQ1JlcXVlc3QSHAoHdXNlcl9p",
-            "ZBgBIAEoCUID4EECUgZ1c2VySWQikQEKE0luaXRpYXRlS1lDUmVzcG9uc2US",
-            "FQoGa3ljX2lkGAEgASgJUgVreWNJZBIWCgZzdGF0dXMYAiABKAlSBnN0YXR1",
+            "cnJvciKtAQoYTGlzdFVzZXJEb2N1bWVudHNSZXF1ZXN0EhwKB3VzZXJfaWQY",
+            "ASABKAlCA+BBAlIGdXNlcklkEi0KEGRvY3VtZW50X3R5cGVfaWQYAiABKAlC",
+            "A+BBAVIOZG9jdW1lbnRUeXBlSWQSIAoJcGFnZV9zaXplGAMgASgFQgPgQQFS",
+            "CHBhZ2VTaXplEiIKCnBhZ2VfdG9rZW4YBCABKAlCA+BBAVIJcGFnZVRva2Vu",
+            "IvMBChlMaXN0VXNlckRvY3VtZW50c1Jlc3BvbnNlEksKCWRvY3VtZW50cxgB",
+            "IAMoCzIoLmluc3VyZXRlY2guYXV0aG4uZW50aXR5LnYxLlVzZXJEb2N1bWVu",
+            "dEID4EEDUglkb2N1bWVudHMSKwoPbmV4dF9wYWdlX3Rva2VuGAIgASgJQgPg",
+            "QQNSDW5leHRQYWdlVG9rZW4SJAoLdG90YWxfY291bnQYAyABKAVCA+BBA1IK",
+            "dG90YWxDb3VudBI2CgVlcnJvchgEIAEoCzIbLmluc3VyZXRlY2guY29tbW9u",
+            "LnYxLkVycm9yQgPgQQNSBWVycm9yIkcKFkdldFVzZXJEb2N1bWVudFJlcXVl",
+            "c3QSLQoQdXNlcl9kb2N1bWVudF9pZBgBIAEoCUID4EECUg51c2VyRG9jdW1l",
+            "bnRJZCKcAQoXR2V0VXNlckRvY3VtZW50UmVzcG9uc2USSQoIZG9jdW1lbnQY",
+            "ASABKAsyKC5pbnN1cmV0ZWNoLmF1dGhuLmVudGl0eS52MS5Vc2VyRG9jdW1l",
+            "bnRCA+BBA1IIZG9jdW1lbnQSNgoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNo",
+            "LmNvbW1vbi52MS5FcnJvckID4EEDUgVlcnJvciK7AQoZVXBkYXRlVXNlckRv",
+            "Y3VtZW50UmVxdWVzdBItChB1c2VyX2RvY3VtZW50X2lkGAEgASgJQgPgQQJS",
+            "DnVzZXJEb2N1bWVudElkEi0KEGRvY3VtZW50X3R5cGVfaWQYAiABKAlCA+BB",
+            "AVIOZG9jdW1lbnRUeXBlSWQSHgoIZmlsZV91cmwYAyABKAlCA+BBAVIHZmls",
+            "ZVVybBIgCglwb2xpY3lfaWQYBCABKAlCA+BBAVIIcG9saWN5SWQivgEKGlVw",
+            "ZGF0ZVVzZXJEb2N1bWVudFJlc3BvbnNlEkkKCGRvY3VtZW50GAEgASgLMigu",
+            "aW5zdXJldGVjaC5hdXRobi5lbnRpdHkudjEuVXNlckRvY3VtZW50QgPgQQNS",
+            "CGRvY3VtZW50Eh0KB21lc3NhZ2UYAiABKAlCA+BBA1IHbWVzc2FnZRI2CgVl",
+            "cnJvchgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNS",
+            "BWVycm9yIkoKGURlbGV0ZVVzZXJEb2N1bWVudFJlcXVlc3QSLQoQdXNlcl9k",
+            "b2N1bWVudF9pZBgBIAEoCUID4EECUg51c2VyRG9jdW1lbnRJZCJzChpEZWxl",
+            "dGVVc2VyRG9jdW1lbnRSZXNwb25zZRIdCgdtZXNzYWdlGAEgASgJQgPgQQNS",
+            "B21lc3NhZ2USNgoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
+            "MS5FcnJvckID4EEDUgVlcnJvciJAChhMaXN0RG9jdW1lbnRUeXBlc1JlcXVl",
+            "c3QSJAoLYWN0aXZlX29ubHkYASABKAhCA+BBAVIKYWN0aXZlT25seSKYAQoZ",
+            "TGlzdERvY3VtZW50VHlwZXNSZXNwb25zZRJDCgV0eXBlcxgBIAMoCzIoLmlu",
+            "c3VyZXRlY2guYXV0aG4uZW50aXR5LnYxLkRvY3VtZW50VHlwZUID4EEDUgV0",
+            "eXBlcxI2CgVlcnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVy",
+            "cm9yQgPgQQNSBWVycm9yIvsBCgdLWUNTdGVwEh8KC3N0ZXBfbnVtYmVyGAEg",
+            "ASgFUgpzdGVwTnVtYmVyEiUKDmNoYWxsZW5nZV90eXBlGAIgASgJUg1jaGFs",
+            "bGVuZ2VUeXBlEhQKBXN0YXRlGAMgASgJUgVzdGF0ZRIgCgtpbnN0cnVjdGlv",
+            "bhgEIAEoCVILaW5zdHJ1Y3Rpb24SJwoPaW5zdHJ1Y3Rpb25fa2V5GAUgASgJ",
+            "Ug5pbnN0cnVjdGlvbktleRInCg90aW1lb3V0X3NlY29uZHMYBiABKAVSDnRp",
+            "bWVvdXRTZWNvbmRzEh4KCmNvbmZpZGVuY2UYByABKAFSCmNvbmZpZGVuY2Ui",
+            "dAoMS1lDRGV0ZWN0aW9uEhoKCGRldGVjdGVkGAEgASgIUghkZXRlY3RlZBIM",
+            "CgF4GAIgASgFUgF4EgwKAXkYAyABKAVSAXkSFAoFd2lkdGgYBCABKAVSBXdp",
+            "ZHRoEhYKBmhlaWdodBgFIAEoBVIGaGVpZ2h0IkkKC0tZQ0hlYWRQb3NlEhAK",
+            "A3lhdxgBIAEoAVIDeWF3EhQKBXBpdGNoGAIgASgBUgVwaXRjaBISCgRyb2xs",
+            "GAMgASgBUgRyb2xsInoKC0tZQ0V5ZVN0YXRlEiMKDWxlZnRfb3Blbm5lc3MY",
+            "ASABKAFSDGxlZnRPcGVubmVzcxIlCg5yaWdodF9vcGVubmVzcxgCIAEoAVIN",
+            "cmlnaHRPcGVubmVzcxIfCgtpc19ibGlua2luZxgDIAEoCFIKaXNCbGlua2lu",
+            "ZyKlAgoRS1lDU2Vzc2lvblN1bW1hcnkSHwoLdG90YWxfc3RlcHMYASABKAVS",
+            "CnRvdGFsU3RlcHMSJwoPY29tcGxldGVkX3N0ZXBzGAIgASgFUg5jb21wbGV0",
+            "ZWRTdGVwcxIhCgxmYWlsZWRfc3RlcHMYAyABKAVSC2ZhaWxlZFN0ZXBzEjQK",
+            "FnRvdGFsX2ZyYW1lc19wcm9jZXNzZWQYBCABKAVSFHRvdGFsRnJhbWVzUHJv",
+            "Y2Vzc2VkEh0KCmVsYXBzZWRfbXMYBSABKAVSCWVsYXBzZWRNcxJOCgxzdGVw",
+            "X3Jlc3VsdHMYBiADKAsyKy5pbnN1cmV0ZWNoLmF1dGhuLnNlcnZpY2VzLnYx",
+            "LktZQ1N0ZXBSZXN1bHRSC3N0ZXBSZXN1bHRzIrYBCg1LWUNTdGVwUmVzdWx0",
+            "EiUKDmNoYWxsZW5nZV90eXBlGAEgASgJUg1jaGFsbGVuZ2VUeXBlEhQKBXN0",
+            "YXRlGAIgASgJUgVzdGF0ZRIeCgpjb25maWRlbmNlGAMgASgBUgpjb25maWRl",
+            "bmNlEikKEGZyYW1lc19wcm9jZXNzZWQYBCABKAVSD2ZyYW1lc1Byb2Nlc3Nl",
+            "ZBIdCgplbGFwc2VkX21zGAUgASgFUgllbGFwc2VkTXMiMgoSSW5pdGlhdGVL",
+            "WUNSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkIvICChNJ",
+            "bml0aWF0ZUtZQ1Jlc3BvbnNlEhUKBmt5Y19pZBgBIAEoCVIFa3ljSWQSFgoG",
+            "c3RhdHVzGAIgASgJUgZzdGF0dXMSGAoHbWVzc2FnZRgDIAEoCVIHbWVzc2Fn",
+            "ZRIxCgVlcnJvchgEIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "UgVlcnJvchIaCghwcm92aWRlchgFIAEoCVIIcHJvdmlkZXISLQoScHJvdmlk",
+            "ZXJfcmVmZXJlbmNlGAYgASgJUhFwcm92aWRlclJlZmVyZW5jZRIjCg1zZXNz",
+            "aW9uX3N0YXRlGAcgASgJUgxzZXNzaW9uU3RhdGUSOwoFc3RlcHMYCCADKAsy",
+            "JS5pbnN1cmV0ZWNoLmF1dGhuLnNlcnZpY2VzLnYxLktZQ1N0ZXBSBXN0ZXBz",
+            "EjIKFXRvdGFsX3RpbWVvdXRfc2Vjb25kcxgJIAEoBVITdG90YWxUaW1lb3V0",
+            "U2Vjb25kcyIzChNHZXRLWUNTdGF0dXNSZXF1ZXN0EhwKB3VzZXJfaWQYASAB",
+            "KAlCA+BBAlIGdXNlcklkIvsEChRHZXRLWUNTdGF0dXNSZXNwb25zZRIVCgZr",
+            "eWNfaWQYASABKAlSBWt5Y0lkEhYKBnN0YXR1cxgCIAEoCVIGc3RhdHVzEikK",
+            "EHJlamVjdGlvbl9yZWFzb24YAyABKAlSD3JlamVjdGlvblJlYXNvbhI9Cgxz",
+            "dWJtaXR0ZWRfYXQYBCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1w",
+            "UgtzdWJtaXR0ZWRBdBI7CgtyZXZpZXdlZF9hdBgFIAEoCzIaLmdvb2dsZS5w",
+            "cm90b2J1Zi5UaW1lc3RhbXBSCnJldmlld2VkQXQSMQoFZXJyb3IYBiABKAsy",
+            "Gy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJyb3ISGgoIcHJvdmlk",
+            "ZXIYByABKAlSCHByb3ZpZGVyEi0KEnByb3ZpZGVyX3JlZmVyZW5jZRgIIAEo",
+            "CVIRcHJvdmlkZXJSZWZlcmVuY2USIwoNc2Vzc2lvbl9zdGF0ZRgJIAEoCVIM",
+            "c2Vzc2lvblN0YXRlEkgKDGN1cnJlbnRfc3RlcBgKIAEoCzIlLmluc3VyZXRl",
+            "Y2guYXV0aG4uc2VydmljZXMudjEuS1lDU3RlcFILY3VycmVudFN0ZXASJwoP",
+            "Y29tcGxldGVkX3N0ZXBzGAsgASgFUg5jb21wbGV0ZWRTdGVwcxIfCgt0b3Rh",
+            "bF9zdGVwcxgMIAEoBVIKdG90YWxTdGVwcxIpChBvdmVyYWxsX3Byb2dyZXNz",
+            "GA0gASgBUg9vdmVyYWxsUHJvZ3Jlc3MSKwoRcmVtYWluaW5nX3NlY29uZHMY",
+            "DiABKAVSEHJlbWFpbmluZ1NlY29uZHMiqQEKFVN1Ym1pdEtZQ0ZyYW1lUmVx",
+            "dWVzdBIcCgd1c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIiCgpzZXNzaW9u",
+            "X2lkGAIgASgJQgPgQQJSCXNlc3Npb25JZBIiCgppbWFnZV9kYXRhGAMgASgM",
+            "QgPgQQJSCWltYWdlRGF0YRIqCg5mcmFtZV9zZXF1ZW5jZRgEIAEoBUID4EEB",
+            "Ug1mcmFtZVNlcXVlbmNlIuEGChZTdWJtaXRLWUNGcmFtZVJlc3BvbnNlEhoK",
+            "CGFjY2VwdGVkGAEgASgIUghhY2NlcHRlZBIaCghndWlkYW5jZRgCIAEoCVII",
+            "Z3VpZGFuY2USIQoMY3VycmVudF9zdGVwGAMgASgJUgtjdXJyZW50U3RlcBIn",
+            "Cg9jb21wbGV0ZWRfc3RlcHMYBCABKAVSDmNvbXBsZXRlZFN0ZXBzEh8KC3Rv",
+            "dGFsX3N0ZXBzGAUgASgFUgp0b3RhbFN0ZXBzEi8KE2xpdmVuZXNzX2NvbmZp",
+            "ZGVuY2UYBiABKAFSEmxpdmVuZXNzQ29uZmlkZW5jZRIYCgdtZXNzYWdlGAcg",
+            "ASgJUgdtZXNzYWdlEjEKBWVycm9yGAggASgLMhsuaW5zdXJldGVjaC5jb21t",
+            "b24udjEuRXJyb3JSBWVycm9yEiMKDXNlc3Npb25fc3RhdGUYCSABKAlSDHNl",
+            "c3Npb25TdGF0ZRIjCg1zdGVwX3Byb2dyZXNzGAogASgBUgxzdGVwUHJvZ3Jl",
+            "c3MSKQoQb3ZlcmFsbF9wcm9ncmVzcxgLIAEoAVIPb3ZlcmFsbFByb2dyZXNz",
+            "EisKEWd1aWRhbmNlX21lc3NhZ2VzGAwgAygJUhBndWlkYW5jZU1lc3NhZ2Vz",
+            "EkgKCWRldGVjdGlvbhgNIAEoCzIqLmluc3VyZXRlY2guYXV0aG4uc2Vydmlj",
+            "ZXMudjEuS1lDRGV0ZWN0aW9uUglkZXRlY3Rpb24SRgoJaGVhZF9wb3NlGA4g",
+            "ASgLMikuaW5zdXJldGVjaC5hdXRobi5zZXJ2aWNlcy52MS5LWUNIZWFkUG9z",
+            "ZVIIaGVhZFBvc2USRgoJZXllX3N0YXRlGA8gASgLMikuaW5zdXJldGVjaC5h",
+            "dXRobi5zZXJ2aWNlcy52MS5LWUNFeWVTdGF0ZVIIZXllU3RhdGUSVQoTY3Vy",
+            "cmVudF9zdGVwX2RldGFpbBgQIAEoCzIlLmluc3VyZXRlY2guYXV0aG4uc2Vy",
+            "dmljZXMudjEuS1lDU3RlcFIRY3VycmVudFN0ZXBEZXRhaWwSKgoRZXllX2Nv",
+            "bnRvdXJzX2pzb24YESABKAlSD2V5ZUNvbnRvdXJzSnNvbhIlCg5zdGVwX2Nv",
+            "bXBsZXRlZBgSIAEoCFINc3RlcENvbXBsZXRlZCJdChlDb21wbGV0ZUtZQ1Nl",
+            "c3Npb25SZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiIK",
+            "CnNlc3Npb25faWQYAiABKAlCA+BBAlIJc2Vzc2lvbklkIpkEChpDb21wbGV0",
+            "ZUtZQ1Nlc3Npb25SZXNwb25zZRIVCgZreWNfaWQYASABKAlSBWt5Y0lkEhYK",
+            "BnN0YXR1cxgCIAEoCVIGc3RhdHVzEhgKB3N1Y2Nlc3MYAyABKAhSB3N1Y2Nl",
+            "c3MSLwoTbGl2ZW5lc3NfY29uZmlkZW5jZRgEIAEoAVISbGl2ZW5lc3NDb25m",
+            "aWRlbmNlEioKEXByb2ZpbGVfaW1hZ2VfdXJsGAUgASgJUg9wcm9maWxlSW1h",
+            "Z2VVcmwSGAoHbWVzc2FnZRgGIAEoCVIHbWVzc2FnZRIxCgVlcnJvchgHIAEo",
+            "CzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvchItChJwcm92",
+            "aWRlcl9yZWZlcmVuY2UYCCABKAlSEXByb3ZpZGVyUmVmZXJlbmNlEiMKDXNl",
+            "c3Npb25fc3RhdGUYCSABKAlSDHNlc3Npb25TdGF0ZRIlCg5pZGVudGl0eV9t",
+            "YXRjaBgKIAEoCFINaWRlbnRpdHlNYXRjaBIfCgttYXRjaF9zY29yZRgLIAEo",
+            "AVIKbWF0Y2hTY29yZRJJCgdzdW1tYXJ5GAwgASgLMi8uaW5zdXJldGVjaC5h",
+            "dXRobi5zZXJ2aWNlcy52MS5LWUNTZXNzaW9uU3VtbWFyeVIHc3VtbWFyeRIh",
+            "Cgxjb21wbGV0ZWRfYXQYDSABKAlSC2NvbXBsZXRlZEF0IlUKEUFwcHJvdmVL",
+            "WUNSZXF1ZXN0EhoKBmt5Y19pZBgBIAEoCUID4EECUgVreWNJZBIkCgtyZXZp",
+            "ZXdlcl9pZBgCIAEoCUID4EECUgpyZXZpZXdlcklkImEKEkFwcHJvdmVLWUNS",
+            "ZXNwb25zZRIYCgdtZXNzYWdlGAEgASgJUgdtZXNzYWdlEjEKBWVycm9yGAIg",
+            "ASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVycm9yIs0BChVW",
+            "ZXJpZnlEb2N1bWVudFJlcXVlc3QSLQoQdXNlcl9kb2N1bWVudF9pZBgBIAEo",
+            "CUID4EECUg51c2VyRG9jdW1lbnRJZBI0ChN2ZXJpZmljYXRpb25fc3RhdHVz",
+            "GAIgASgJQgPgQQJSEnZlcmlmaWNhdGlvblN0YXR1cxIkCgt2ZXJpZmllZF9i",
+            "eRgDIAEoCUID4EECUgp2ZXJpZmllZEJ5EikKEHJlamVjdGlvbl9yZWFzb24Y",
+            "BCABKAlSD3JlamVjdGlvblJlYXNvbiKrAQoWVmVyaWZ5RG9jdW1lbnRSZXNw",
+            "b25zZRJECghkb2N1bWVudBgBIAEoCzIoLmluc3VyZXRlY2guYXV0aG4uZW50",
+            "aXR5LnYxLlVzZXJEb2N1bWVudFIIZG9jdW1lbnQSGAoHbWVzc2FnZRgCIAEo",
+            "CVIHbWVzc2FnZRIxCgVlcnJvchgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9u",
+            "LnYxLkVycm9yUgVlcnJvciKbAQoZQ3JlYXRlVm9pY2VTZXNzaW9uUmVxdWVz",
+            "dBIcCgd1c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIaCghsYW5ndWFnZRgC",
+            "IAEoCVIIbGFuZ3VhZ2USIQoMc2Vzc2lvbl90eXBlGAMgASgJUgtzZXNzaW9u",
+            "VHlwZRIhCgxwaG9uZV9udW1iZXIYBCABKAlSC3Bob25lTnVtYmVyIqsBChpD",
+            "cmVhdGVWb2ljZVNlc3Npb25SZXNwb25zZRIoChB2b2ljZV9zZXNzaW9uX2lk",
+            "GAEgASgJUg52b2ljZVNlc3Npb25JZBIWCgZzdGF0dXMYAiABKAlSBnN0YXR1",
             "cxIYCgdtZXNzYWdlGAMgASgJUgdtZXNzYWdlEjEKBWVycm9yGAQgASgLMhsu",
-            "aW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVycm9yIjMKE0dldEtZQ1N0",
-            "YXR1c1JlcXVlc3QSHAoHdXNlcl9pZBgBIAEoCUID4EECUgZ1c2VySWQinwIK",
-            "FEdldEtZQ1N0YXR1c1Jlc3BvbnNlEhUKBmt5Y19pZBgBIAEoCVIFa3ljSWQS",
-            "FgoGc3RhdHVzGAIgASgJUgZzdGF0dXMSKQoQcmVqZWN0aW9uX3JlYXNvbhgD",
-            "IAEoCVIPcmVqZWN0aW9uUmVhc29uEj0KDHN1Ym1pdHRlZF9hdBgEIAEoCzIa",
-            "Lmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBSC3N1Ym1pdHRlZEF0EjsKC3Jl",
-            "dmlld2VkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIK",
-            "cmV2aWV3ZWRBdBIxCgVlcnJvchgGIAEoCzIbLmluc3VyZXRlY2guY29tbW9u",
-            "LnYxLkVycm9yUgVlcnJvciKpAQoVU3VibWl0S1lDRnJhbWVSZXF1ZXN0EhwK",
-            "B3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiIKCnNlc3Npb25faWQYAiAB",
-            "KAlCA+BBAlIJc2Vzc2lvbklkEiIKCmltYWdlX2RhdGEYAyABKAxCA+BBAlIJ",
-            "aW1hZ2VEYXRhEioKDmZyYW1lX3NlcXVlbmNlGAQgASgFQgPgQQFSDWZyYW1l",
-            "U2VxdWVuY2UiuwIKFlN1Ym1pdEtZQ0ZyYW1lUmVzcG9uc2USGgoIYWNjZXB0",
-            "ZWQYASABKAhSCGFjY2VwdGVkEhoKCGd1aWRhbmNlGAIgASgJUghndWlkYW5j",
-            "ZRIhCgxjdXJyZW50X3N0ZXAYAyABKAlSC2N1cnJlbnRTdGVwEicKD2NvbXBs",
-            "ZXRlZF9zdGVwcxgEIAEoBVIOY29tcGxldGVkU3RlcHMSHwoLdG90YWxfc3Rl",
-            "cHMYBSABKAVSCnRvdGFsU3RlcHMSLwoTbGl2ZW5lc3NfY29uZmlkZW5jZRgG",
-            "IAEoAVISbGl2ZW5lc3NDb25maWRlbmNlEhgKB21lc3NhZ2UYByABKAlSB21l",
-            "c3NhZ2USMQoFZXJyb3IYCCABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5F",
-            "cnJvclIFZXJyb3IiXQoZQ29tcGxldGVLWUNTZXNzaW9uUmVxdWVzdBIcCgd1",
-            "c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIiCgpzZXNzaW9uX2lkGAIgASgJ",
-            "QgPgQQJSCXNlc3Npb25JZCKPAgoaQ29tcGxldGVLWUNTZXNzaW9uUmVzcG9u",
-            "c2USFQoGa3ljX2lkGAEgASgJUgVreWNJZBIWCgZzdGF0dXMYAiABKAlSBnN0",
-            "YXR1cxIYCgdzdWNjZXNzGAMgASgIUgdzdWNjZXNzEi8KE2xpdmVuZXNzX2Nv",
-            "bmZpZGVuY2UYBCABKAFSEmxpdmVuZXNzQ29uZmlkZW5jZRIqChFwcm9maWxl",
-            "X2ltYWdlX3VybBgFIAEoCVIPcHJvZmlsZUltYWdlVXJsEhgKB21lc3NhZ2UY",
-            "BiABKAlSB21lc3NhZ2USMQoFZXJyb3IYByABKAsyGy5pbnN1cmV0ZWNoLmNv",
-            "bW1vbi52MS5FcnJvclIFZXJyb3IiVQoRQXBwcm92ZUtZQ1JlcXVlc3QSGgoG",
-            "a3ljX2lkGAEgASgJQgPgQQJSBWt5Y0lkEiQKC3Jldmlld2VyX2lkGAIgASgJ",
-            "QgPgQQJSCnJldmlld2VySWQiYQoSQXBwcm92ZUtZQ1Jlc3BvbnNlEhgKB21l",
-            "c3NhZ2UYASABKAlSB21lc3NhZ2USMQoFZXJyb3IYAiABKAsyGy5pbnN1cmV0",
-            "ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJyb3IihAEKEFJlamVjdEtZQ1JlcXVl",
-            "c3QSGgoGa3ljX2lkGAEgASgJQgPgQQJSBWt5Y0lkEiQKC3Jldmlld2VyX2lk",
-            "GAIgASgJQgPgQQJSCnJldmlld2VySWQSLgoQcmVqZWN0aW9uX3JlYXNvbhgD",
-            "IAEoCUID4EECUg9yZWplY3Rpb25SZWFzb24iYAoRUmVqZWN0S1lDUmVzcG9u",
-            "c2USGAoHbWVzc2FnZRgBIAEoCVIHbWVzc2FnZRIxCgVlcnJvchgCIAEoCzIb",
-            "Lmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvciLNAQoVVmVyaWZ5",
-            "RG9jdW1lbnRSZXF1ZXN0Ei0KEHVzZXJfZG9jdW1lbnRfaWQYASABKAlCA+BB",
-            "AlIOdXNlckRvY3VtZW50SWQSNAoTdmVyaWZpY2F0aW9uX3N0YXR1cxgCIAEo",
-            "CUID4EECUhJ2ZXJpZmljYXRpb25TdGF0dXMSJAoLdmVyaWZpZWRfYnkYAyAB",
-            "KAlCA+BBAlIKdmVyaWZpZWRCeRIpChByZWplY3Rpb25fcmVhc29uGAQgASgJ",
-            "Ug9yZWplY3Rpb25SZWFzb24iqwEKFlZlcmlmeURvY3VtZW50UmVzcG9uc2US",
-            "RAoIZG9jdW1lbnQYASABKAsyKC5pbnN1cmV0ZWNoLmF1dGhuLmVudGl0eS52",
-            "MS5Vc2VyRG9jdW1lbnRSCGRvY3VtZW50EhgKB21lc3NhZ2UYAiABKAlSB21l",
-            "c3NhZ2USMQoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5F",
-            "cnJvclIFZXJyb3IimwEKGUNyZWF0ZVZvaWNlU2Vzc2lvblJlcXVlc3QSHAoH",
-            "dXNlcl9pZBgBIAEoCUID4EECUgZ1c2VySWQSGgoIbGFuZ3VhZ2UYAiABKAlS",
-            "CGxhbmd1YWdlEiEKDHNlc3Npb25fdHlwZRgDIAEoCVILc2Vzc2lvblR5cGUS",
-            "IQoMcGhvbmVfbnVtYmVyGAQgASgJUgtwaG9uZU51bWJlciKrAQoaQ3JlYXRl",
-            "Vm9pY2VTZXNzaW9uUmVzcG9uc2USKAoQdm9pY2Vfc2Vzc2lvbl9pZBgBIAEo",
-            "CVIOdm9pY2VTZXNzaW9uSWQSFgoGc3RhdHVzGAIgASgJUgZzdGF0dXMSGAoH",
-            "bWVzc2FnZRgDIAEoCVIHbWVzc2FnZRIxCgVlcnJvchgEIAEoCzIbLmluc3Vy",
-            "ZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvciJHChZHZXRWb2ljZVNlc3Np",
-            "b25SZXF1ZXN0Ei0KEHZvaWNlX3Nlc3Npb25faWQYASABKAlCA+BBAlIOdm9p",
-            "Y2VTZXNzaW9uSWQi2AIKF0dldFZvaWNlU2Vzc2lvblJlc3BvbnNlEigKEHZv",
-            "aWNlX3Nlc3Npb25faWQYASABKAlSDnZvaWNlU2Vzc2lvbklkEhcKB3VzZXJf",
-            "aWQYAiABKAlSBnVzZXJJZBIWCgZzdGF0dXMYAyABKAlSBnN0YXR1cxIaCghs",
-            "YW5ndWFnZRgEIAEoCVIIbGFuZ3VhZ2USIQoMc2Vzc2lvbl90eXBlGAUgASgJ",
-            "UgtzZXNzaW9uVHlwZRI5CgpzdGFydGVkX2F0GAYgASgLMhouZ29vZ2xlLnBy",
-            "b3RvYnVmLlRpbWVzdGFtcFIJc3RhcnRlZEF0EjUKCGVuZGVkX2F0GAcgASgL",
-            "MhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcFIHZW5kZWRBdBIxCgVlcnJv",
-            "chgIIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvciKK",
-            "AQoWRW5kVm9pY2VTZXNzaW9uUmVxdWVzdBItChB2b2ljZV9zZXNzaW9uX2lk",
-            "GAEgASgJQgPgQQJSDnZvaWNlU2Vzc2lvbklkEhYKBnN0YXR1cxgCIAEoCVIG",
-            "c3RhdHVzEikKEGR1cmF0aW9uX3NlY29uZHMYAyABKAVSD2R1cmF0aW9uU2Vj",
-            "b25kcyJmChdFbmRWb2ljZVNlc3Npb25SZXNwb25zZRIYCgdtZXNzYWdlGAEg",
+            "aW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVycm9yIooBCh9HZXRQcm9m",
+            "aWxlUGhvdG9VcGxvYWRVUkxSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BB",
+            "AlIGdXNlcklkEiEKDGNvbnRlbnRfdHlwZRgCIAEoCVILY29udGVudFR5cGUS",
+            "JgoPZmlsZV9zaXplX2J5dGVzGAMgASgDUg1maWxlU2l6ZUJ5dGVzIr0BCiBH",
+            "ZXRQcm9maWxlUGhvdG9VcGxvYWRVUkxSZXNwb25zZRIdCgp1cGxvYWRfdXJs",
+            "GAEgASgJUgl1cGxvYWRVcmwSGQoIZmlsZV91cmwYAiABKAlSB2ZpbGVVcmwS",
+            "LAoSZXhwaXJlc19pbl9zZWNvbmRzGAMgASgFUhBleHBpcmVzSW5TZWNvbmRz",
+            "EjEKBWVycm9yGAQgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JS",
+            "BWVycm9yIqwBCiRVcGRhdGVOb3RpZmljYXRpb25QcmVmZXJlbmNlc1JlcXVl",
+            "c3QSHAoHdXNlcl9pZBgBIAEoCUID4EECUgZ1c2VySWQSNwoXbm90aWZpY2F0",
+            "aW9uX3ByZWZlcmVuY2UYAiABKAlSFm5vdGlmaWNhdGlvblByZWZlcmVuY2US",
+            "LQoScHJlZmVycmVkX2xhbmd1YWdlGAMgASgJUhFwcmVmZXJyZWRMYW5ndWFn",
+            "ZSJ0CiVVcGRhdGVOb3RpZmljYXRpb25QcmVmZXJlbmNlc1Jlc3BvbnNlEhgK",
+            "B21lc3NhZ2UYASABKAlSB21lc3NhZ2USMQoFZXJyb3IYAiABKAsyGy5pbnN1",
+            "cmV0ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJyb3IiQQohR2V0Tm90aWZpY2F0",
+            "aW9uUHJlZmVyZW5jZXNSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIG",
+            "dXNlcklkItgBCiJHZXROb3RpZmljYXRpb25QcmVmZXJlbmNlc1Jlc3BvbnNl",
+            "EhcKB3VzZXJfaWQYASABKAlSBnVzZXJJZBI3Chdub3RpZmljYXRpb25fcHJl",
+            "ZmVyZW5jZRgCIAEoCVIWbm90aWZpY2F0aW9uUHJlZmVyZW5jZRItChJwcmVm",
+            "ZXJyZWRfbGFuZ3VhZ2UYAyABKAlSEXByZWZlcnJlZExhbmd1YWdlEjEKBWVy",
+            "cm9yGAQgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVycm9y",
+            "IjEKEUVuYWJsZVRPVFBSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIG",
+            "dXNlcklkIpMBChJFbmFibGVUT1RQUmVzcG9uc2USHwoLdG90cF9zZWNyZXQY",
+            "ASABKAlSCnRvdHBTZWNyZXQSKQoQcHJvdmlzaW9uaW5nX3VyaRgCIAEoCVIP",
+            "cHJvdmlzaW9uaW5nVXJpEjEKBWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5j",
+            "b21tb24udjEuRXJyb3JSBWVycm9yIoQBChFWZXJpZnlUT1RQUmVxdWVzdBIc",
+            "Cgd1c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIgCgl0b3RwX2NvZGUYAiAB",
+            "KAlCA+BBAlIIdG90cENvZGUSLwoRbWZhX3Nlc3Npb25fdG9rZW4YAyABKAlC",
+            "A+BBAVIPbWZhU2Vzc2lvblRva2VuIuMDChJWZXJpZnlUT1RQUmVzcG9uc2US",
+            "GgoIdmVyaWZpZWQYASABKAhSCHZlcmlmaWVkEhgKB21lc3NhZ2UYAiABKAlS",
+            "B21lc3NhZ2USMQoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
+            "MS5FcnJvclIFZXJyb3ISJgoMYWNjZXNzX3Rva2VuGAQgASgJQgPgQQNSC2Fj",
+            "Y2Vzc1Rva2VuEigKDXJlZnJlc2hfdG9rZW4YBSABKAlCA+BBA1IMcmVmcmVz",
+            "aFRva2VuEigKDXNlc3Npb25fdG9rZW4YBiABKAlCA+BBA1IMc2Vzc2lvblRv",
+            "a2VuEiIKCmNzcmZfdG9rZW4YByABKAlCA+BBA1IJY3NyZlRva2VuEiIKCnNl",
+            "c3Npb25faWQYCCABKAlCA+BBA1IJc2Vzc2lvbklkEiYKDHNlc3Npb25fdHlw",
+            "ZRgJIAEoCUID4EEDUgtzZXNzaW9uVHlwZRI6ChdhY2Nlc3NfdG9rZW5fZXhw",
+            "aXJlc19pbhgKIAEoBUID4EEDUhRhY2Nlc3NUb2tlbkV4cGlyZXNJbhI8Chhy",
+            "ZWZyZXNoX3Rva2VuX2V4cGlyZXNfaW4YCyABKAVCA+BBA1IVcmVmcmVzaFRv",
+            "a2VuRXhwaXJlc0luIlQKEkRpc2FibGVUT1RQUmVxdWVzdBIcCgd1c2VyX2lk",
+            "GAEgASgJQgPgQQJSBnVzZXJJZBIgCgl0b3RwX2NvZGUYAiABKAlCA+BBAlII",
+            "dG90cENvZGUiYgoTRGlzYWJsZVRPVFBSZXNwb25zZRIYCgdtZXNzYWdlGAEg",
             "ASgJUgdtZXNzYWdlEjEKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21t",
-            "b24udjEuRXJyb3JSBWVycm9yIooBCh9HZXRQcm9maWxlUGhvdG9VcGxvYWRV",
-            "UkxSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiEKDGNv",
-            "bnRlbnRfdHlwZRgCIAEoCVILY29udGVudFR5cGUSJgoPZmlsZV9zaXplX2J5",
-            "dGVzGAMgASgDUg1maWxlU2l6ZUJ5dGVzIr0BCiBHZXRQcm9maWxlUGhvdG9V",
-            "cGxvYWRVUkxSZXNwb25zZRIdCgp1cGxvYWRfdXJsGAEgASgJUgl1cGxvYWRV",
-            "cmwSGQoIZmlsZV91cmwYAiABKAlSB2ZpbGVVcmwSLAoSZXhwaXJlc19pbl9z",
-            "ZWNvbmRzGAMgASgFUhBleHBpcmVzSW5TZWNvbmRzEjEKBWVycm9yGAQgASgL",
-            "MhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVycm9yIqwBCiRVcGRh",
-            "dGVOb3RpZmljYXRpb25QcmVmZXJlbmNlc1JlcXVlc3QSHAoHdXNlcl9pZBgB",
-            "IAEoCUID4EECUgZ1c2VySWQSNwoXbm90aWZpY2F0aW9uX3ByZWZlcmVuY2UY",
-            "AiABKAlSFm5vdGlmaWNhdGlvblByZWZlcmVuY2USLQoScHJlZmVycmVkX2xh",
-            "bmd1YWdlGAMgASgJUhFwcmVmZXJyZWRMYW5ndWFnZSJ0CiVVcGRhdGVOb3Rp",
-            "ZmljYXRpb25QcmVmZXJlbmNlc1Jlc3BvbnNlEhgKB21lc3NhZ2UYASABKAlS",
-            "B21lc3NhZ2USMQoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
-            "MS5FcnJvclIFZXJyb3IiMQoRRW5hYmxlVE9UUFJlcXVlc3QSHAoHdXNlcl9p",
-            "ZBgBIAEoCUID4EECUgZ1c2VySWQikwEKEkVuYWJsZVRPVFBSZXNwb25zZRIf",
-            "Cgt0b3RwX3NlY3JldBgBIAEoCVIKdG90cFNlY3JldBIpChBwcm92aXNpb25p",
-            "bmdfdXJpGAIgASgJUg9wcm92aXNpb25pbmdVcmkSMQoFZXJyb3IYAyABKAsy",
-            "Gy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJyb3IihAEKEVZlcmlm",
-            "eVRPVFBSZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiAK",
-            "CXRvdHBfY29kZRgCIAEoCUID4EECUgh0b3RwQ29kZRIvChFtZmFfc2Vzc2lv",
-            "bl90b2tlbhgDIAEoCUID4EEBUg9tZmFTZXNzaW9uVG9rZW4i4wMKElZlcmlm",
-            "eVRPVFBSZXNwb25zZRIaCgh2ZXJpZmllZBgBIAEoCFIIdmVyaWZpZWQSGAoH",
-            "bWVzc2FnZRgCIAEoCVIHbWVzc2FnZRIxCgVlcnJvchgDIAEoCzIbLmluc3Vy",
-            "ZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvchImCgxhY2Nlc3NfdG9rZW4Y",
-            "BCABKAlCA+BBA1ILYWNjZXNzVG9rZW4SKAoNcmVmcmVzaF90b2tlbhgFIAEo",
-            "CUID4EEDUgxyZWZyZXNoVG9rZW4SKAoNc2Vzc2lvbl90b2tlbhgGIAEoCUID",
-            "4EEDUgxzZXNzaW9uVG9rZW4SIgoKY3NyZl90b2tlbhgHIAEoCUID4EEDUglj",
-            "c3JmVG9rZW4SIgoKc2Vzc2lvbl9pZBgIIAEoCUID4EEDUglzZXNzaW9uSWQS",
-            "JgoMc2Vzc2lvbl90eXBlGAkgASgJQgPgQQNSC3Nlc3Npb25UeXBlEjoKF2Fj",
-            "Y2Vzc190b2tlbl9leHBpcmVzX2luGAogASgFQgPgQQNSFGFjY2Vzc1Rva2Vu",
-            "RXhwaXJlc0luEjwKGHJlZnJlc2hfdG9rZW5fZXhwaXJlc19pbhgLIAEoBUID",
-            "4EEDUhVyZWZyZXNoVG9rZW5FeHBpcmVzSW4iVAoSRGlzYWJsZVRPVFBSZXF1",
-            "ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNlcklkEiAKCXRvdHBfY29k",
-            "ZRgCIAEoCUID4EECUgh0b3RwQ29kZSJiChNEaXNhYmxlVE9UUFJlc3BvbnNl",
-            "EhgKB21lc3NhZ2UYASABKAlSB21lc3NhZ2USMQoFZXJyb3IYAiABKAsyGy5p",
-            "bnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJyb3IiWAobSW5pdGlhdGVW",
-            "b2ljZVNlc3Npb25SZXF1ZXN0EhwKB3VzZXJfaWQYASABKAlCA+BBAlIGdXNl",
-            "cklkEhsKCXBvcnRhbF9pZBgCIAEoCVIIcG9ydGFsSWQiqAEKHEluaXRpYXRl",
-            "Vm9pY2VTZXNzaW9uUmVzcG9uc2USHQoKc2Vzc2lvbl9pZBgBIAEoCVIJc2Vz",
-            "c2lvbklkEhwKCWNoYWxsZW5nZRgCIAEoCVIJY2hhbGxlbmdlEhgKB21lc3Nh",
-            "Z2UYAyABKAlSB21lc3NhZ2USMQoFZXJyb3IYBCABKAsyGy5pbnN1cmV0ZWNo",
-            "LmNvbW1vbi52MS5FcnJvclIFZXJyb3IiqwEKGFN1Ym1pdFZvaWNlU2FtcGxl",
-            "UmVxdWVzdBIiCgpzZXNzaW9uX2lkGAEgASgJQgPgQQJSCXNlc3Npb25JZBIj",
-            "Cgp0cmFuc2NyaXB0GAIgASgJQgPgQQJSCnRyYW5zY3JpcHQSKQoQY29uZmlk",
-            "ZW5jZV9zY29yZRgDIAEoAVIPY29uZmlkZW5jZVNjb3JlEhsKCWF1ZGlvX3Vy",
-            "bBgEIAEoCVIIYXVkaW9VcmwihAEKGVN1Ym1pdFZvaWNlU2FtcGxlUmVzcG9u",
-            "c2USGgoIdmVyaWZpZWQYASABKAhSCHZlcmlmaWVkEhgKB21lc3NhZ2UYAiAB",
-            "KAlSB21lc3NhZ2USMQoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1v",
-            "bi52MS5FcnJvclIFZXJyb3IiPwoZVmVyaWZ5Vm9pY2VTZXNzaW9uUmVxdWVz",
-            "dBIiCgpzZXNzaW9uX2lkGAEgASgJQgPgQQJSCXNlc3Npb25JZCKoAQoaVmVy",
-            "aWZ5Vm9pY2VTZXNzaW9uUmVzcG9uc2USJAoNYXV0aGVudGljYXRlZBgBIAEo",
-            "CFINYXV0aGVudGljYXRlZBIXCgd1c2VyX2lkGAIgASgJUgZ1c2VySWQSGAoH",
-            "bWVzc2FnZRgDIAEoCVIHbWVzc2FnZRIxCgVlcnJvchgEIAEoCzIbLmluc3Vy",
-            "ZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJvciJpCgNKV0sSEAoDa3R5GAEg",
-            "ASgJUgNrdHkSEAoDdXNlGAIgASgJUgN1c2USEAoDYWxnGAMgASgJUgNhbGcS",
-            "EAoDa2lkGAQgASgJUgNraWQSDAoBbhgFIAEoCVIBbhIMCgFlGAYgASgJUgFl",
-            "IhAKDkdldEpXS1NSZXF1ZXN0IkgKD0dldEpXS1NSZXNwb25zZRI1CgRrZXlz",
-            "GAEgAygLMiEuaW5zdXJldGVjaC5hdXRobi5zZXJ2aWNlcy52MS5KV0tSBGtl",
-            "eXNCkwIKIGNvbS5pbnN1cmV0ZWNoLmF1dGhuLnNlcnZpY2VzLnYxQglDb3Jl",
-            "UHJvdG9QAVpRZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9n",
-            "ZW4vZ28vaW5zdXJldGVjaC9hdXRobi9zZXJ2aWNlcy92MTtzZXJ2aWNlc3Yx",
-            "ogIDSUFTqgIcSW5zdXJldGVjaC5BdXRobi5TZXJ2aWNlcy5WMcoCHEluc3Vy",
-            "ZXRlY2hcQXV0aG5cU2VydmljZXNcVjHiAihJbnN1cmV0ZWNoXEF1dGhuXFNl",
-            "cnZpY2VzXFYxXEdQQk1ldGFkYXRh6gIfSW5zdXJldGVjaDo6QXV0aG46OlNl",
-            "cnZpY2VzOjpWMWIGcHJvdG8z"));
+            "b24udjEuRXJyb3JSBWVycm9yIlgKG0luaXRpYXRlVm9pY2VTZXNzaW9uUmVx",
+            "dWVzdBIcCgd1c2VyX2lkGAEgASgJQgPgQQJSBnVzZXJJZBIbCglwb3J0YWxf",
+            "aWQYAiABKAlSCHBvcnRhbElkIqgBChxJbml0aWF0ZVZvaWNlU2Vzc2lvblJl",
+            "c3BvbnNlEh0KCnNlc3Npb25faWQYASABKAlSCXNlc3Npb25JZBIcCgljaGFs",
+            "bGVuZ2UYAiABKAlSCWNoYWxsZW5nZRIYCgdtZXNzYWdlGAMgASgJUgdtZXNz",
+            "YWdlEjEKBWVycm9yGAQgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJy",
+            "b3JSBWVycm9yIqsBChhTdWJtaXRWb2ljZVNhbXBsZVJlcXVlc3QSIgoKc2Vz",
+            "c2lvbl9pZBgBIAEoCUID4EECUglzZXNzaW9uSWQSIwoKdHJhbnNjcmlwdBgC",
+            "IAEoCUID4EECUgp0cmFuc2NyaXB0EikKEGNvbmZpZGVuY2Vfc2NvcmUYAyAB",
+            "KAFSD2NvbmZpZGVuY2VTY29yZRIbCglhdWRpb191cmwYBCABKAlSCGF1ZGlv",
+            "VXJsIoQBChlTdWJtaXRWb2ljZVNhbXBsZVJlc3BvbnNlEhoKCHZlcmlmaWVk",
+            "GAEgASgIUgh2ZXJpZmllZBIYCgdtZXNzYWdlGAIgASgJUgdtZXNzYWdlEjEK",
+            "BWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JSBWVy",
+            "cm9yIj8KGVZlcmlmeVZvaWNlU2Vzc2lvblJlcXVlc3QSIgoKc2Vzc2lvbl9p",
+            "ZBgBIAEoCUID4EECUglzZXNzaW9uSWQiqAEKGlZlcmlmeVZvaWNlU2Vzc2lv",
+            "blJlc3BvbnNlEiQKDWF1dGhlbnRpY2F0ZWQYASABKAhSDWF1dGhlbnRpY2F0",
+            "ZWQSFwoHdXNlcl9pZBgCIAEoCVIGdXNlcklkEhgKB21lc3NhZ2UYAyABKAlS",
+            "B21lc3NhZ2USMQoFZXJyb3IYBCABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52",
+            "MS5FcnJvclIFZXJyb3JCkwIKIGNvbS5pbnN1cmV0ZWNoLmF1dGhuLnNlcnZp",
+            "Y2VzLnYxQglDb3JlUHJvdG9QAVpRZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQv",
+            "aW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC9hdXRobi9zZXJ2aWNlcy92",
+            "MTtzZXJ2aWNlc3YxogIDSUFTqgIcSW5zdXJldGVjaC5BdXRobi5TZXJ2aWNl",
+            "cy5WMcoCHEluc3VyZXRlY2hcQXV0aG5cU2VydmljZXNcVjHiAihJbnN1cmV0",
+            "ZWNoXEF1dGhuXFNlcnZpY2VzXFYxXEdQQk1ldGFkYXRh6gIfSW5zdXJldGVj",
+            "aDo6QXV0aG46OlNlcnZpY2VzOjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Api.FieldBehaviorReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.ErrorReflection.Descriptor, global::Insuretech.Authn.Entity.V1.UserReflection.Descriptor, global::Insuretech.Authn.Entity.V1.SessionReflection.Descriptor, global::Insuretech.Authn.Entity.V1.DocumentTypeReflection.Descriptor, global::Insuretech.Authn.Entity.V1.UserDocumentReflection.Descriptor, global::Insuretech.Authn.Entity.V1.UserProfileReflection.Descriptor, global::Insuretech.Authn.Entity.V1.EnumsReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -514,12 +597,12 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RegisterResponse), global::Insuretech.Authn.Services.V1.RegisterResponse.Parser, new[]{ "UserId", "Message", "OtpSent", "OtpId", "OtpExpiresInSeconds", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SendOTPRequest), global::Insuretech.Authn.Services.V1.SendOTPRequest.Parser, new[]{ "Recipient", "Type", "Channel", "UseMasking" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SendOTPResponse), global::Insuretech.Authn.Services.V1.SendOTPResponse.Parser, new[]{ "OtpId", "Message", "ExpiresInSeconds", "SenderId", "CooldownSeconds", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyOTPRequest), global::Insuretech.Authn.Services.V1.VerifyOTPRequest.Parser, new[]{ "OtpId", "Code" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyOTPResponse), global::Insuretech.Authn.Services.V1.VerifyOTPResponse.Parser, new[]{ "Verified", "UserId", "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyOTPRequest), global::Insuretech.Authn.Services.V1.VerifyOTPRequest.Parser, new[]{ "OtpId", "Code", "DeviceId", "DeviceType" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyOTPResponse), global::Insuretech.Authn.Services.V1.VerifyOTPResponse.Parser, new[]{ "Verified", "UserId", "Message", "Error", "DeviceCredential" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ResendOTPRequest), global::Insuretech.Authn.Services.V1.ResendOTPRequest.Parser, new[]{ "OriginalOtpId", "Reason" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ResendOTPResponse), global::Insuretech.Authn.Services.V1.ResendOTPResponse.Parser, new[]{ "OtpId", "Message", "ExpiresInSeconds", "CooldownSeconds", "AttemptsRemaining", "CanRetryAt", "SenderId", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.LoginRequest), global::Insuretech.Authn.Services.V1.LoginRequest.Parser, new[]{ "MobileNumber", "Password", "DeviceId", "DeviceType", "DeviceName" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.LoginResponse), global::Insuretech.Authn.Services.V1.LoginResponse.Parser, new[]{ "UserId", "SessionId", "AccessToken", "RefreshToken", "AccessTokenExpiresIn", "RefreshTokenExpiresIn", "SessionToken", "CsrfToken", "User", "SessionType", "MfaRequired", "MfaMethod", "MfaSessionToken", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.LoginResponse), global::Insuretech.Authn.Services.V1.LoginResponse.Parser, new[]{ "UserId", "SessionId", "AccessToken", "RefreshToken", "AccessTokenExpiresIn", "RefreshTokenExpiresIn", "SessionToken", "CsrfToken", "User", "SessionType", "MfaRequired", "MfaMethod", "MfaSessionToken", "PasswordChangeRequired", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RefreshTokenRequest), global::Insuretech.Authn.Services.V1.RefreshTokenRequest.Parser, new[]{ "RefreshToken", "DeviceId", "IpAddress", "UserAgent" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RefreshTokenResponse), global::Insuretech.Authn.Services.V1.RefreshTokenResponse.Parser, new[]{ "AccessToken", "RefreshToken", "AccessTokenExpiresIn", "RefreshTokenExpiresIn", "SessionId", "SessionExpiresAt", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.LogoutRequest), global::Insuretech.Authn.Services.V1.LogoutRequest.Parser, new[]{ "SessionId", "AccessToken", "LogoutReason" }, null, null, null, null),
@@ -539,7 +622,12 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ValidateCSRFRequest), global::Insuretech.Authn.Services.V1.ValidateCSRFRequest.Parser, new[]{ "SessionId", "CsrfToken" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ValidateCSRFResponse), global::Insuretech.Authn.Services.V1.ValidateCSRFResponse.Parser, new[]{ "Valid", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetCurrentSessionRequest), global::Insuretech.Authn.Services.V1.GetCurrentSessionRequest.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetCurrentSessionResponse), global::Insuretech.Authn.Services.V1.GetCurrentSessionResponse.Parser, new[]{ "Session", "Error", "UserType" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetCurrentSessionResponse), global::Insuretech.Authn.Services.V1.GetCurrentSessionResponse.Parser, new[]{ "Session", "Error", "UserType", "PasswordChangeRequired" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.PortalUserSummary), global::Insuretech.Authn.Services.V1.PortalUserSummary.Parser, new[]{ "UserId", "FullName", "Email", "MobileNumber", "UserType", "EmailVerified", "KycVerified", "PasswordChangeRequired" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.FindPortalUserRequest), global::Insuretech.Authn.Services.V1.FindPortalUserRequest.Parser, new[]{ "Identifier" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.FindPortalUserResponse), global::Insuretech.Authn.Services.V1.FindPortalUserResponse.Parser, new[]{ "User", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest), global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest.Parser, new[]{ "UserId", "TemporaryPassword", "AssignedBy", "RequirePasswordChange" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse), global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RevokeAllSessionsRequest), global::Insuretech.Authn.Services.V1.RevokeAllSessionsRequest.Parser, new[]{ "UserId", "Reason", "ExcludeCurrentSession" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RevokeAllSessionsResponse), global::Insuretech.Authn.Services.V1.RevokeAllSessionsResponse.Parser, new[]{ "RevokedCount", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest), global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest.Parser, new[]{ "Email", "Password", "UserType", "FullName", "DeviceId", "MobileNumber" }, null, null, null, null),
@@ -550,6 +638,8 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyEmailResponse), global::Insuretech.Authn.Services.V1.VerifyEmailResponse.Parser, new[]{ "Verified", "UserId", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EmailLoginRequest), global::Insuretech.Authn.Services.V1.EmailLoginRequest.Parser, new[]{ "Email", "OtpId", "Code", "DeviceId", "DeviceName" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EmailLoginResponse), global::Insuretech.Authn.Services.V1.EmailLoginResponse.Parser, new[]{ "UserId", "SessionId", "SessionToken", "CsrfToken", "User", "SessionType", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest), global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest.Parser, new[]{ "Email", "Password", "DeviceId", "DeviceName" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse), global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse.Parser, new[]{ "UserId", "SessionId", "SessionToken", "CsrfToken", "User", "SessionType", "PasswordChangeRequired", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest), global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest.Parser, new[]{ "Email" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse), global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse.Parser, new[]{ "OtpId", "Message", "ExpiresInSeconds", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.BiometricAuthenticateRequest), global::Insuretech.Authn.Services.V1.BiometricAuthenticateRequest.Parser, new[]{ "BiometricToken", "DeviceId", "DeviceType", "DeviceName" }, null, null, null, null),
@@ -567,6 +657,8 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RotateAPIKeyResponse), global::Insuretech.Authn.Services.V1.RotateAPIKeyResponse.Parser, new[]{ "NewKeyId", "RawKey", "OldKeyId", "OldKeyExpiresAt", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ResetPasswordByEmailRequest), global::Insuretech.Authn.Services.V1.ResetPasswordByEmailRequest.Parser, new[]{ "Email", "OtpId", "OtpCode", "NewPassword" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ResetPasswordByEmailResponse), global::Insuretech.Authn.Services.V1.ResetPasswordByEmailResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest), global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest.Parser, new[]{ "Email", "FullName", "MobileNumber", "EmployeeId", "BusinessId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse), global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse.Parser, new[]{ "UserId", "Created", "PasswordChangeRequired", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CreateUserProfileRequest), global::Insuretech.Authn.Services.V1.CreateUserProfileRequest.Parser, new[]{ "UserId", "FullName", "DateOfBirth", "Gender", "AddressLine1", "City", "District", "Division", "NidNumber", "Occupation", "Employer", "AddressLine2", "Country", "PostalCode", "PermanentAddress", "MaritalStatus", "EmergencyContactName", "EmergencyContactNumber", "Nationality", "BloodGroup", "IncomeRange", "PassportNumber" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CreateUserProfileResponse), global::Insuretech.Authn.Services.V1.CreateUserProfileResponse.Parser, new[]{ "Profile", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetUserProfileRequest), global::Insuretech.Authn.Services.V1.GetUserProfileRequest.Parser, new[]{ "UserId" }, null, null, null, null),
@@ -585,30 +677,32 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.DeleteUserDocumentResponse), global::Insuretech.Authn.Services.V1.DeleteUserDocumentResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ListDocumentTypesRequest), global::Insuretech.Authn.Services.V1.ListDocumentTypesRequest.Parser, new[]{ "ActiveOnly" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ListDocumentTypesResponse), global::Insuretech.Authn.Services.V1.ListDocumentTypesResponse.Parser, new[]{ "Types_", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCStep), global::Insuretech.Authn.Services.V1.KYCStep.Parser, new[]{ "StepNumber", "ChallengeType", "State", "Instruction", "InstructionKey", "TimeoutSeconds", "Confidence" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCDetection), global::Insuretech.Authn.Services.V1.KYCDetection.Parser, new[]{ "Detected", "X", "Y", "Width", "Height" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCHeadPose), global::Insuretech.Authn.Services.V1.KYCHeadPose.Parser, new[]{ "Yaw", "Pitch", "Roll" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCEyeState), global::Insuretech.Authn.Services.V1.KYCEyeState.Parser, new[]{ "LeftOpenness", "RightOpenness", "IsBlinking" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCSessionSummary), global::Insuretech.Authn.Services.V1.KYCSessionSummary.Parser, new[]{ "TotalSteps", "CompletedSteps", "FailedSteps", "TotalFramesProcessed", "ElapsedMs", "StepResults" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.KYCStepResult), global::Insuretech.Authn.Services.V1.KYCStepResult.Parser, new[]{ "ChallengeType", "State", "Confidence", "FramesProcessed", "ElapsedMs" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.InitiateKYCRequest), global::Insuretech.Authn.Services.V1.InitiateKYCRequest.Parser, new[]{ "UserId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.InitiateKYCResponse), global::Insuretech.Authn.Services.V1.InitiateKYCResponse.Parser, new[]{ "KycId", "Status", "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.InitiateKYCResponse), global::Insuretech.Authn.Services.V1.InitiateKYCResponse.Parser, new[]{ "KycId", "Status", "Message", "Error", "Provider", "ProviderReference", "SessionState", "Steps", "TotalTimeoutSeconds" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetKYCStatusRequest), global::Insuretech.Authn.Services.V1.GetKYCStatusRequest.Parser, new[]{ "UserId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetKYCStatusResponse), global::Insuretech.Authn.Services.V1.GetKYCStatusResponse.Parser, new[]{ "KycId", "Status", "RejectionReason", "SubmittedAt", "ReviewedAt", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetKYCStatusResponse), global::Insuretech.Authn.Services.V1.GetKYCStatusResponse.Parser, new[]{ "KycId", "Status", "RejectionReason", "SubmittedAt", "ReviewedAt", "Error", "Provider", "ProviderReference", "SessionState", "CurrentStep", "CompletedSteps", "TotalSteps", "OverallProgress", "RemainingSeconds" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SubmitKYCFrameRequest), global::Insuretech.Authn.Services.V1.SubmitKYCFrameRequest.Parser, new[]{ "UserId", "SessionId", "ImageData", "FrameSequence" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SubmitKYCFrameResponse), global::Insuretech.Authn.Services.V1.SubmitKYCFrameResponse.Parser, new[]{ "Accepted", "Guidance", "CurrentStep", "CompletedSteps", "TotalSteps", "LivenessConfidence", "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SubmitKYCFrameResponse), global::Insuretech.Authn.Services.V1.SubmitKYCFrameResponse.Parser, new[]{ "Accepted", "Guidance", "CurrentStep", "CompletedSteps", "TotalSteps", "LivenessConfidence", "Message", "Error", "SessionState", "StepProgress", "OverallProgress", "GuidanceMessages", "Detection", "HeadPose", "EyeState", "CurrentStepDetail", "EyeContoursJson", "StepCompleted" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CompleteKYCSessionRequest), global::Insuretech.Authn.Services.V1.CompleteKYCSessionRequest.Parser, new[]{ "UserId", "SessionId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CompleteKYCSessionResponse), global::Insuretech.Authn.Services.V1.CompleteKYCSessionResponse.Parser, new[]{ "KycId", "Status", "Success", "LivenessConfidence", "ProfileImageUrl", "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CompleteKYCSessionResponse), global::Insuretech.Authn.Services.V1.CompleteKYCSessionResponse.Parser, new[]{ "KycId", "Status", "Success", "LivenessConfidence", "ProfileImageUrl", "Message", "Error", "ProviderReference", "SessionState", "IdentityMatch", "MatchScore", "Summary", "CompletedAt" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ApproveKYCRequest), global::Insuretech.Authn.Services.V1.ApproveKYCRequest.Parser, new[]{ "KycId", "ReviewerId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.ApproveKYCResponse), global::Insuretech.Authn.Services.V1.ApproveKYCResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RejectKYCRequest), global::Insuretech.Authn.Services.V1.RejectKYCRequest.Parser, new[]{ "KycId", "ReviewerId", "RejectionReason" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.RejectKYCResponse), global::Insuretech.Authn.Services.V1.RejectKYCResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyDocumentRequest), global::Insuretech.Authn.Services.V1.VerifyDocumentRequest.Parser, new[]{ "UserDocumentId", "VerificationStatus", "VerifiedBy", "RejectionReason" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyDocumentResponse), global::Insuretech.Authn.Services.V1.VerifyDocumentResponse.Parser, new[]{ "Document", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CreateVoiceSessionRequest), global::Insuretech.Authn.Services.V1.CreateVoiceSessionRequest.Parser, new[]{ "UserId", "Language", "SessionType", "PhoneNumber" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.CreateVoiceSessionResponse), global::Insuretech.Authn.Services.V1.CreateVoiceSessionResponse.Parser, new[]{ "VoiceSessionId", "Status", "Message", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest), global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest.Parser, new[]{ "VoiceSessionId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse), global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse.Parser, new[]{ "VoiceSessionId", "UserId", "Status", "Language", "SessionType", "StartedAt", "EndedAt", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest), global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest.Parser, new[]{ "VoiceSessionId", "Status", "DurationSeconds" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse), global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest), global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest.Parser, new[]{ "UserId", "ContentType", "FileSizeBytes" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse), global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse.Parser, new[]{ "UploadUrl", "FileUrl", "ExpiresInSeconds", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest), global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest.Parser, new[]{ "UserId", "NotificationPreference", "PreferredLanguage" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse), global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest), global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest.Parser, new[]{ "UserId" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse), global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse.Parser, new[]{ "UserId", "NotificationPreference", "PreferredLanguage", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EnableTOTPRequest), global::Insuretech.Authn.Services.V1.EnableTOTPRequest.Parser, new[]{ "UserId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.EnableTOTPResponse), global::Insuretech.Authn.Services.V1.EnableTOTPResponse.Parser, new[]{ "TotpSecret", "ProvisioningUri", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyTOTPRequest), global::Insuretech.Authn.Services.V1.VerifyTOTPRequest.Parser, new[]{ "UserId", "TotpCode", "MfaSessionToken" }, null, null, null, null),
@@ -620,10 +714,7 @@ namespace Insuretech.Authn.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SubmitVoiceSampleRequest), global::Insuretech.Authn.Services.V1.SubmitVoiceSampleRequest.Parser, new[]{ "SessionId", "Transcript", "ConfidenceScore", "AudioUrl" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.SubmitVoiceSampleResponse), global::Insuretech.Authn.Services.V1.SubmitVoiceSampleResponse.Parser, new[]{ "Verified", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest), global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest.Parser, new[]{ "SessionId" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse), global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse.Parser, new[]{ "Authenticated", "UserId", "Message", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.JWK), global::Insuretech.Authn.Services.V1.JWK.Parser, new[]{ "Kty", "Use", "Alg", "Kid", "N", "E" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetJWKSRequest), global::Insuretech.Authn.Services.V1.GetJWKSRequest.Parser, null, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.GetJWKSResponse), global::Insuretech.Authn.Services.V1.GetJWKSResponse.Parser, new[]{ "Keys" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse), global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse.Parser, new[]{ "Authenticated", "UserId", "Message", "Error" }, null, null, null, null)
           }));
     }
     #endregion
@@ -686,7 +777,7 @@ namespace Insuretech.Authn.Services.V1 {
     public const int MobileNumberFieldNumber = 1;
     private string mobileNumber_ = "";
     /// <summary>
-    /// Required: +880 1XXX XXXXXX
+    /// Required. Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -1444,7 +1535,7 @@ namespace Insuretech.Authn.Services.V1 {
     public const int RecipientFieldNumber = 1;
     private string recipient_ = "";
     /// <summary>
-    /// Phone: 8801XXXXXXXXX or email
+    /// For sms: accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX. For email: send a valid email address.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2151,6 +2242,8 @@ namespace Insuretech.Authn.Services.V1 {
     public VerifyOTPRequest(VerifyOTPRequest other) : this() {
       otpId_ = other.otpId_;
       code_ = other.code_;
+      deviceId_ = other.deviceId_;
+      deviceType_ = other.deviceType_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2184,6 +2277,37 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "device_id" field.</summary>
+    public const int DeviceIdFieldNumber = 3;
+    private string deviceId_ = "";
+    /// <summary>
+    /// Device binding: if provided with ANDROID or IOS device_type, the response
+    /// will include a one-time device_credential for WhatsApp-style login.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceId {
+      get { return deviceId_; }
+      set {
+        deviceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_type" field.</summary>
+    public const int DeviceTypeFieldNumber = 4;
+    private string deviceType_ = "";
+    /// <summary>
+    /// ANDROID | IOS
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceType {
+      get { return deviceType_; }
+      set {
+        deviceType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2201,6 +2325,8 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (OtpId != other.OtpId) return false;
       if (Code != other.Code) return false;
+      if (DeviceId != other.DeviceId) return false;
+      if (DeviceType != other.DeviceType) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2210,6 +2336,8 @@ namespace Insuretech.Authn.Services.V1 {
       int hash = 1;
       if (OtpId.Length != 0) hash ^= OtpId.GetHashCode();
       if (Code.Length != 0) hash ^= Code.GetHashCode();
+      if (DeviceId.Length != 0) hash ^= DeviceId.GetHashCode();
+      if (DeviceType.Length != 0) hash ^= DeviceType.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2236,6 +2364,14 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(18);
         output.WriteString(Code);
       }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(DeviceId);
+      }
+      if (DeviceType.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(DeviceType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2254,6 +2390,14 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(18);
         output.WriteString(Code);
       }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(DeviceId);
+      }
+      if (DeviceType.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(DeviceType);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2269,6 +2413,12 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (Code.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(Code);
+      }
+      if (DeviceId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceId);
+      }
+      if (DeviceType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceType);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2287,6 +2437,12 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (other.Code.Length != 0) {
         Code = other.Code;
+      }
+      if (other.DeviceId.Length != 0) {
+        DeviceId = other.DeviceId;
+      }
+      if (other.DeviceType.Length != 0) {
+        DeviceType = other.DeviceType;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2315,6 +2471,14 @@ namespace Insuretech.Authn.Services.V1 {
             Code = input.ReadString();
             break;
           }
+          case 26: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            DeviceType = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -2340,6 +2504,14 @@ namespace Insuretech.Authn.Services.V1 {
           }
           case 18: {
             Code = input.ReadString();
+            break;
+          }
+          case 26: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            DeviceType = input.ReadString();
             break;
           }
         }
@@ -2388,6 +2560,7 @@ namespace Insuretech.Authn.Services.V1 {
       userId_ = other.userId_;
       message_ = other.message_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
+      deviceCredential_ = other.deviceCredential_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2448,6 +2621,24 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "device_credential" field.</summary>
+    public const int DeviceCredentialFieldNumber = 5;
+    private string deviceCredential_ = "";
+    /// <summary>
+    /// WhatsApp-style device credential — returned ONCE after successful OTP verify
+    /// when device_type is ANDROID or IOS. Store in Android Keystore / iOS Keychain.
+    /// Use as `password` field in subsequent Login requests (no OTP needed).
+    /// Empty for WEB clients or when device_id is not provided.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceCredential {
+      get { return deviceCredential_; }
+      set {
+        deviceCredential_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2467,6 +2658,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (UserId != other.UserId) return false;
       if (Message != other.Message) return false;
       if (!object.Equals(Error, other.Error)) return false;
+      if (DeviceCredential != other.DeviceCredential) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2478,6 +2670,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (UserId.Length != 0) hash ^= UserId.GetHashCode();
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
+      if (DeviceCredential.Length != 0) hash ^= DeviceCredential.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -2512,6 +2705,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(34);
         output.WriteMessage(Error);
       }
+      if (DeviceCredential.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(DeviceCredential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -2538,6 +2735,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(34);
         output.WriteMessage(Error);
       }
+      if (DeviceCredential.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(DeviceCredential);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -2559,6 +2760,9 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (DeviceCredential.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceCredential);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -2586,6 +2790,9 @@ namespace Insuretech.Authn.Services.V1 {
           Error = new global::Insuretech.Common.V1.Error();
         }
         Error.MergeFrom(other.Error);
+      }
+      if (other.DeviceCredential.Length != 0) {
+        DeviceCredential = other.DeviceCredential;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -2625,6 +2832,10 @@ namespace Insuretech.Authn.Services.V1 {
             input.ReadMessage(Error);
             break;
           }
+          case 42: {
+            DeviceCredential = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -2661,6 +2872,10 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
+            break;
+          }
+          case 42: {
+            DeviceCredential = input.ReadString();
             break;
           }
         }
@@ -3461,6 +3676,9 @@ namespace Insuretech.Authn.Services.V1 {
     /// <summary>Field number for the "mobile_number" field.</summary>
     public const int MobileNumberFieldNumber = 1;
     private string mobileNumber_ = "";
+    /// <summary>
+    /// Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string MobileNumber {
@@ -3473,6 +3691,10 @@ namespace Insuretech.Authn.Services.V1 {
     /// <summary>Field number for the "password" field.</summary>
     public const int PasswordFieldNumber = 2;
     private string password_ = "";
+    /// <summary>
+    /// Optional for B2C OTP-only login. Leave empty only after VerifyOTP succeeds
+    /// and only for JWT-style mobile/API clients. WEB login still requires password.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string Password {
@@ -3809,6 +4031,7 @@ namespace Insuretech.Authn.Services.V1 {
       mfaRequired_ = other.mfaRequired_;
       mfaMethod_ = other.mfaMethod_;
       mfaSessionToken_ = other.mfaSessionToken_;
+      passwordChangeRequired_ = other.passwordChangeRequired_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
@@ -3997,6 +4220,18 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "password_change_required" field.</summary>
+    public const int PasswordChangeRequiredFieldNumber = 15;
+    private bool passwordChangeRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PasswordChangeRequired {
+      get { return passwordChangeRequired_; }
+      set {
+        passwordChangeRequired_ = value;
+      }
+    }
+
     /// <summary>Field number for the "error" field.</summary>
     public const int ErrorFieldNumber = 11;
     private global::Insuretech.Common.V1.Error error_;
@@ -4040,6 +4275,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (MfaRequired != other.MfaRequired) return false;
       if (MfaMethod != other.MfaMethod) return false;
       if (MfaSessionToken != other.MfaSessionToken) return false;
+      if (PasswordChangeRequired != other.PasswordChangeRequired) return false;
       if (!object.Equals(Error, other.Error)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
@@ -4061,6 +4297,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (MfaRequired != false) hash ^= MfaRequired.GetHashCode();
       if (MfaMethod.Length != 0) hash ^= MfaMethod.GetHashCode();
       if (MfaSessionToken.Length != 0) hash ^= MfaSessionToken.GetHashCode();
+      if (PasswordChangeRequired != false) hash ^= PasswordChangeRequired.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
@@ -4136,6 +4373,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(114);
         output.WriteString(MfaSessionToken);
       }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(PasswordChangeRequired);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -4202,6 +4443,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(114);
         output.WriteString(MfaSessionToken);
       }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(120);
+        output.WriteBool(PasswordChangeRequired);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -4250,6 +4495,9 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (MfaSessionToken.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(MfaSessionToken);
+      }
+      if (PasswordChangeRequired != false) {
+        size += 1 + 1;
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
@@ -4307,6 +4555,9 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (other.MfaSessionToken.Length != 0) {
         MfaSessionToken = other.MfaSessionToken;
+      }
+      if (other.PasswordChangeRequired != false) {
+        PasswordChangeRequired = other.PasswordChangeRequired;
       }
       if (other.error_ != null) {
         if (error_ == null) {
@@ -4395,6 +4646,10 @@ namespace Insuretech.Authn.Services.V1 {
             MfaSessionToken = input.ReadString();
             break;
           }
+          case 120: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
         }
       }
     #endif
@@ -4474,6 +4729,10 @@ namespace Insuretech.Authn.Services.V1 {
           }
           case 114: {
             MfaSessionToken = input.ReadString();
+            break;
+          }
+          case 120: {
+            PasswordChangeRequired = input.ReadBool();
             break;
           }
         }
@@ -6402,6 +6661,9 @@ namespace Insuretech.Authn.Services.V1 {
     /// <summary>Field number for the "mobile_number" field.</summary>
     public const int MobileNumberFieldNumber = 1;
     private string mobileNumber_ = "";
+    /// <summary>
+    /// Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string MobileNumber {
@@ -10124,6 +10386,7 @@ namespace Insuretech.Authn.Services.V1 {
       session_ = other.session_ != null ? other.session_.Clone() : null;
       error_ = other.error_ != null ? other.error_.Clone() : null;
       userType_ = other.userType_;
+      passwordChangeRequired_ = other.passwordChangeRequired_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -10173,6 +10436,18 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "password_change_required" field.</summary>
+    public const int PasswordChangeRequiredFieldNumber = 4;
+    private bool passwordChangeRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PasswordChangeRequired {
+      get { return passwordChangeRequired_; }
+      set {
+        passwordChangeRequired_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -10191,6 +10466,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (!object.Equals(Session, other.Session)) return false;
       if (!object.Equals(Error, other.Error)) return false;
       if (UserType != other.UserType) return false;
+      if (PasswordChangeRequired != other.PasswordChangeRequired) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -10201,6 +10477,7 @@ namespace Insuretech.Authn.Services.V1 {
       if (session_ != null) hash ^= Session.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
       if (UserType.Length != 0) hash ^= UserType.GetHashCode();
+      if (PasswordChangeRequired != false) hash ^= PasswordChangeRequired.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -10231,6 +10508,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(26);
         output.WriteString(UserType);
       }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(PasswordChangeRequired);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -10253,6 +10534,10 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(26);
         output.WriteString(UserType);
       }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(PasswordChangeRequired);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -10271,6 +10556,9 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (UserType.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(UserType);
+      }
+      if (PasswordChangeRequired != false) {
+        size += 1 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -10298,6 +10586,9 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (other.UserType.Length != 0) {
         UserType = other.UserType;
+      }
+      if (other.PasswordChangeRequired != false) {
+        PasswordChangeRequired = other.PasswordChangeRequired;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -10334,6 +10625,10 @@ namespace Insuretech.Authn.Services.V1 {
           }
           case 26: {
             UserType = input.ReadString();
+            break;
+          }
+          case 32: {
+            PasswordChangeRequired = input.ReadBool();
             break;
           }
         }
@@ -10373,6 +10668,1471 @@ namespace Insuretech.Authn.Services.V1 {
             UserType = input.ReadString();
             break;
           }
+          case 32: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class PortalUserSummary : pb::IMessage<PortalUserSummary>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<PortalUserSummary> _parser = new pb::MessageParser<PortalUserSummary>(() => new PortalUserSummary());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<PortalUserSummary> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[30]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PortalUserSummary() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PortalUserSummary(PortalUserSummary other) : this() {
+      userId_ = other.userId_;
+      fullName_ = other.fullName_;
+      email_ = other.email_;
+      mobileNumber_ = other.mobileNumber_;
+      userType_ = other.userType_;
+      emailVerified_ = other.emailVerified_;
+      kycVerified_ = other.kycVerified_;
+      passwordChangeRequired_ = other.passwordChangeRequired_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public PortalUserSummary Clone() {
+      return new PortalUserSummary(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "full_name" field.</summary>
+    public const int FullNameFieldNumber = 2;
+    private string fullName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string FullName {
+      get { return fullName_; }
+      set {
+        fullName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 3;
+    private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "mobile_number" field.</summary>
+    public const int MobileNumberFieldNumber = 4;
+    private string mobileNumber_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string MobileNumber {
+      get { return mobileNumber_; }
+      set {
+        mobileNumber_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "user_type" field.</summary>
+    public const int UserTypeFieldNumber = 5;
+    private string userType_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserType {
+      get { return userType_; }
+      set {
+        userType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "email_verified" field.</summary>
+    public const int EmailVerifiedFieldNumber = 6;
+    private bool emailVerified_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool EmailVerified {
+      get { return emailVerified_; }
+      set {
+        emailVerified_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "kyc_verified" field.</summary>
+    public const int KycVerifiedFieldNumber = 7;
+    private bool kycVerified_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool KycVerified {
+      get { return kycVerified_; }
+      set {
+        kycVerified_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "password_change_required" field.</summary>
+    public const int PasswordChangeRequiredFieldNumber = 8;
+    private bool passwordChangeRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PasswordChangeRequired {
+      get { return passwordChangeRequired_; }
+      set {
+        passwordChangeRequired_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as PortalUserSummary);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(PortalUserSummary other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (FullName != other.FullName) return false;
+      if (Email != other.Email) return false;
+      if (MobileNumber != other.MobileNumber) return false;
+      if (UserType != other.UserType) return false;
+      if (EmailVerified != other.EmailVerified) return false;
+      if (KycVerified != other.KycVerified) return false;
+      if (PasswordChangeRequired != other.PasswordChangeRequired) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (FullName.Length != 0) hash ^= FullName.GetHashCode();
+      if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (MobileNumber.Length != 0) hash ^= MobileNumber.GetHashCode();
+      if (UserType.Length != 0) hash ^= UserType.GetHashCode();
+      if (EmailVerified != false) hash ^= EmailVerified.GetHashCode();
+      if (KycVerified != false) hash ^= KycVerified.GetHashCode();
+      if (PasswordChangeRequired != false) hash ^= PasswordChangeRequired.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (FullName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(FullName);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Email);
+      }
+      if (MobileNumber.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(MobileNumber);
+      }
+      if (UserType.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(UserType);
+      }
+      if (EmailVerified != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(EmailVerified);
+      }
+      if (KycVerified != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(KycVerified);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (FullName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(FullName);
+      }
+      if (Email.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(Email);
+      }
+      if (MobileNumber.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(MobileNumber);
+      }
+      if (UserType.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(UserType);
+      }
+      if (EmailVerified != false) {
+        output.WriteRawTag(48);
+        output.WriteBool(EmailVerified);
+      }
+      if (KycVerified != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(KycVerified);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(64);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (FullName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(FullName);
+      }
+      if (Email.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (MobileNumber.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MobileNumber);
+      }
+      if (UserType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserType);
+      }
+      if (EmailVerified != false) {
+        size += 1 + 1;
+      }
+      if (KycVerified != false) {
+        size += 1 + 1;
+      }
+      if (PasswordChangeRequired != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(PortalUserSummary other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.FullName.Length != 0) {
+        FullName = other.FullName;
+      }
+      if (other.Email.Length != 0) {
+        Email = other.Email;
+      }
+      if (other.MobileNumber.Length != 0) {
+        MobileNumber = other.MobileNumber;
+      }
+      if (other.UserType.Length != 0) {
+        UserType = other.UserType;
+      }
+      if (other.EmailVerified != false) {
+        EmailVerified = other.EmailVerified;
+      }
+      if (other.KycVerified != false) {
+        KycVerified = other.KycVerified;
+      }
+      if (other.PasswordChangeRequired != false) {
+        PasswordChangeRequired = other.PasswordChangeRequired;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            FullName = input.ReadString();
+            break;
+          }
+          case 26: {
+            Email = input.ReadString();
+            break;
+          }
+          case 34: {
+            MobileNumber = input.ReadString();
+            break;
+          }
+          case 42: {
+            UserType = input.ReadString();
+            break;
+          }
+          case 48: {
+            EmailVerified = input.ReadBool();
+            break;
+          }
+          case 56: {
+            KycVerified = input.ReadBool();
+            break;
+          }
+          case 64: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            FullName = input.ReadString();
+            break;
+          }
+          case 26: {
+            Email = input.ReadString();
+            break;
+          }
+          case 34: {
+            MobileNumber = input.ReadString();
+            break;
+          }
+          case 42: {
+            UserType = input.ReadString();
+            break;
+          }
+          case 48: {
+            EmailVerified = input.ReadBool();
+            break;
+          }
+          case 56: {
+            KycVerified = input.ReadBool();
+            break;
+          }
+          case 64: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class FindPortalUserRequest : pb::IMessage<FindPortalUserRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<FindPortalUserRequest> _parser = new pb::MessageParser<FindPortalUserRequest>(() => new FindPortalUserRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<FindPortalUserRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[31]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserRequest(FindPortalUserRequest other) : this() {
+      identifier_ = other.identifier_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserRequest Clone() {
+      return new FindPortalUserRequest(this);
+    }
+
+    /// <summary>Field number for the "identifier" field.</summary>
+    public const int IdentifierFieldNumber = 1;
+    private string identifier_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Identifier {
+      get { return identifier_; }
+      set {
+        identifier_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as FindPortalUserRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(FindPortalUserRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Identifier != other.Identifier) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Identifier.Length != 0) hash ^= Identifier.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Identifier.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Identifier);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Identifier.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Identifier);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Identifier.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Identifier);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(FindPortalUserRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Identifier.Length != 0) {
+        Identifier = other.Identifier;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Identifier = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Identifier = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class FindPortalUserResponse : pb::IMessage<FindPortalUserResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<FindPortalUserResponse> _parser = new pb::MessageParser<FindPortalUserResponse>(() => new FindPortalUserResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<FindPortalUserResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[32]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserResponse(FindPortalUserResponse other) : this() {
+      user_ = other.user_ != null ? other.user_.Clone() : null;
+      error_ = other.error_ != null ? other.error_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public FindPortalUserResponse Clone() {
+      return new FindPortalUserResponse(this);
+    }
+
+    /// <summary>Field number for the "user" field.</summary>
+    public const int UserFieldNumber = 1;
+    private global::Insuretech.Authn.Services.V1.PortalUserSummary user_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.PortalUserSummary User {
+      get { return user_; }
+      set {
+        user_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 2;
+    private global::Insuretech.Common.V1.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Common.V1.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as FindPortalUserResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(FindPortalUserResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!object.Equals(User, other.User)) return false;
+      if (!object.Equals(Error, other.Error)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (user_ != null) hash ^= User.GetHashCode();
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (user_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(User);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (user_ != null) {
+        output.WriteRawTag(10);
+        output.WriteMessage(User);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (user_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(User);
+      }
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(FindPortalUserResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.user_ != null) {
+        if (user_ == null) {
+          User = new global::Insuretech.Authn.Services.V1.PortalUserSummary();
+        }
+        User.MergeFrom(other.User);
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          Error = new global::Insuretech.Common.V1.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            if (user_ == null) {
+              User = new global::Insuretech.Authn.Services.V1.PortalUserSummary();
+            }
+            input.ReadMessage(User);
+            break;
+          }
+          case 18: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            if (user_ == null) {
+              User = new global::Insuretech.Authn.Services.V1.PortalUserSummary();
+            }
+            input.ReadMessage(User);
+            break;
+          }
+          case 18: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class SetTemporaryPasswordRequest : pb::IMessage<SetTemporaryPasswordRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<SetTemporaryPasswordRequest> _parser = new pb::MessageParser<SetTemporaryPasswordRequest>(() => new SetTemporaryPasswordRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<SetTemporaryPasswordRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[33]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordRequest(SetTemporaryPasswordRequest other) : this() {
+      userId_ = other.userId_;
+      temporaryPassword_ = other.temporaryPassword_;
+      assignedBy_ = other.assignedBy_;
+      requirePasswordChange_ = other.requirePasswordChange_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordRequest Clone() {
+      return new SetTemporaryPasswordRequest(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "temporary_password" field.</summary>
+    public const int TemporaryPasswordFieldNumber = 2;
+    private string temporaryPassword_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string TemporaryPassword {
+      get { return temporaryPassword_; }
+      set {
+        temporaryPassword_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "assigned_by" field.</summary>
+    public const int AssignedByFieldNumber = 3;
+    private string assignedBy_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string AssignedBy {
+      get { return assignedBy_; }
+      set {
+        assignedBy_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "require_password_change" field.</summary>
+    public const int RequirePasswordChangeFieldNumber = 4;
+    private bool requirePasswordChange_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool RequirePasswordChange {
+      get { return requirePasswordChange_; }
+      set {
+        requirePasswordChange_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as SetTemporaryPasswordRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(SetTemporaryPasswordRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (TemporaryPassword != other.TemporaryPassword) return false;
+      if (AssignedBy != other.AssignedBy) return false;
+      if (RequirePasswordChange != other.RequirePasswordChange) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (TemporaryPassword.Length != 0) hash ^= TemporaryPassword.GetHashCode();
+      if (AssignedBy.Length != 0) hash ^= AssignedBy.GetHashCode();
+      if (RequirePasswordChange != false) hash ^= RequirePasswordChange.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (TemporaryPassword.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TemporaryPassword);
+      }
+      if (AssignedBy.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(AssignedBy);
+      }
+      if (RequirePasswordChange != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(RequirePasswordChange);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (TemporaryPassword.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(TemporaryPassword);
+      }
+      if (AssignedBy.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(AssignedBy);
+      }
+      if (RequirePasswordChange != false) {
+        output.WriteRawTag(32);
+        output.WriteBool(RequirePasswordChange);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (TemporaryPassword.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(TemporaryPassword);
+      }
+      if (AssignedBy.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(AssignedBy);
+      }
+      if (RequirePasswordChange != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(SetTemporaryPasswordRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.TemporaryPassword.Length != 0) {
+        TemporaryPassword = other.TemporaryPassword;
+      }
+      if (other.AssignedBy.Length != 0) {
+        AssignedBy = other.AssignedBy;
+      }
+      if (other.RequirePasswordChange != false) {
+        RequirePasswordChange = other.RequirePasswordChange;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            TemporaryPassword = input.ReadString();
+            break;
+          }
+          case 26: {
+            AssignedBy = input.ReadString();
+            break;
+          }
+          case 32: {
+            RequirePasswordChange = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            TemporaryPassword = input.ReadString();
+            break;
+          }
+          case 26: {
+            AssignedBy = input.ReadString();
+            break;
+          }
+          case 32: {
+            RequirePasswordChange = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class SetTemporaryPasswordResponse : pb::IMessage<SetTemporaryPasswordResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<SetTemporaryPasswordResponse> _parser = new pb::MessageParser<SetTemporaryPasswordResponse>(() => new SetTemporaryPasswordResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<SetTemporaryPasswordResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[34]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordResponse(SetTemporaryPasswordResponse other) : this() {
+      message_ = other.message_;
+      error_ = other.error_ != null ? other.error_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public SetTemporaryPasswordResponse Clone() {
+      return new SetTemporaryPasswordResponse(this);
+    }
+
+    /// <summary>Field number for the "message" field.</summary>
+    public const int MessageFieldNumber = 1;
+    private string message_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Message {
+      get { return message_; }
+      set {
+        message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 2;
+    private global::Insuretech.Common.V1.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Common.V1.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as SetTemporaryPasswordResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(SetTemporaryPasswordResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Message != other.Message) return false;
+      if (!object.Equals(Error, other.Error)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Message.Length != 0) hash ^= Message.GetHashCode();
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Message.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Message);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Message.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Message);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(18);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Message.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
+      }
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(SetTemporaryPasswordResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Message.Length != 0) {
+        Message = other.Message;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          Error = new global::Insuretech.Common.V1.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Message = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Message = input.ReadString();
+            break;
+          }
+          case 18: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
         }
       }
     }
@@ -10398,7 +12158,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[30]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[35]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10673,7 +12433,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[31]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[36]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -10941,8 +12701,8 @@ namespace Insuretech.Authn.Services.V1 {
 
   /// <summary>
   /// Register Email User Request
-  /// Only for user_type: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or
-  /// B2B_ORG_ADMIN
+  /// Only for user_type: BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER,
+  /// AGENT, or B2B_ORG_ADMIN
   /// Email is REQUIRED. Triggers an email verification OTP automatically.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -10960,7 +12720,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[32]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[37]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11029,7 +12789,7 @@ namespace Insuretech.Authn.Services.V1 {
     public const int UserTypeFieldNumber = 3;
     private string userType_ = "";
     /// <summary>
-    /// BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
+    /// BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -11071,7 +12831,7 @@ namespace Insuretech.Authn.Services.V1 {
     public const int MobileNumberFieldNumber = 6;
     private string mobileNumber_ = "";
     /// <summary>
-    /// Optional for business users
+    /// Optional for business users. Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -11358,7 +13118,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[33]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[38]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11758,7 +13518,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[34]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[39]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -11996,7 +13756,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[35]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[40]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12356,7 +14116,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[36]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[41]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12597,7 +14357,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[37]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[42]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -12923,7 +14683,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[38]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[43]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13278,7 +15038,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[39]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[44]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13710,10 +15470,795 @@ namespace Insuretech.Authn.Services.V1 {
 
   }
 
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class EmailPasswordLoginRequest : pb::IMessage<EmailPasswordLoginRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<EmailPasswordLoginRequest> _parser = new pb::MessageParser<EmailPasswordLoginRequest>(() => new EmailPasswordLoginRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<EmailPasswordLoginRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[45]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginRequest(EmailPasswordLoginRequest other) : this() {
+      email_ = other.email_;
+      password_ = other.password_;
+      deviceId_ = other.deviceId_;
+      deviceName_ = other.deviceName_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginRequest Clone() {
+      return new EmailPasswordLoginRequest(this);
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 1;
+    private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "password" field.</summary>
+    public const int PasswordFieldNumber = 2;
+    private string password_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Password {
+      get { return password_; }
+      set {
+        password_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_id" field.</summary>
+    public const int DeviceIdFieldNumber = 3;
+    private string deviceId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceId {
+      get { return deviceId_; }
+      set {
+        deviceId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "device_name" field.</summary>
+    public const int DeviceNameFieldNumber = 4;
+    private string deviceName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string DeviceName {
+      get { return deviceName_; }
+      set {
+        deviceName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as EmailPasswordLoginRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(EmailPasswordLoginRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Email != other.Email) return false;
+      if (Password != other.Password) return false;
+      if (DeviceId != other.DeviceId) return false;
+      if (DeviceName != other.DeviceName) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (Password.Length != 0) hash ^= Password.GetHashCode();
+      if (DeviceId.Length != 0) hash ^= DeviceId.GetHashCode();
+      if (DeviceName.Length != 0) hash ^= DeviceName.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Email.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Email);
+      }
+      if (Password.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Password);
+      }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(DeviceId);
+      }
+      if (DeviceName.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(DeviceName);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Email.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Email);
+      }
+      if (Password.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(Password);
+      }
+      if (DeviceId.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(DeviceId);
+      }
+      if (DeviceName.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(DeviceName);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Email.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (Password.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Password);
+      }
+      if (DeviceId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceId);
+      }
+      if (DeviceName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(DeviceName);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(EmailPasswordLoginRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Email.Length != 0) {
+        Email = other.Email;
+      }
+      if (other.Password.Length != 0) {
+        Password = other.Password;
+      }
+      if (other.DeviceId.Length != 0) {
+        DeviceId = other.DeviceId;
+      }
+      if (other.DeviceName.Length != 0) {
+        DeviceName = other.DeviceName;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Email = input.ReadString();
+            break;
+          }
+          case 18: {
+            Password = input.ReadString();
+            break;
+          }
+          case 26: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            DeviceName = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Email = input.ReadString();
+            break;
+          }
+          case 18: {
+            Password = input.ReadString();
+            break;
+          }
+          case 26: {
+            DeviceId = input.ReadString();
+            break;
+          }
+          case 34: {
+            DeviceName = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class EmailPasswordLoginResponse : pb::IMessage<EmailPasswordLoginResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<EmailPasswordLoginResponse> _parser = new pb::MessageParser<EmailPasswordLoginResponse>(() => new EmailPasswordLoginResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<EmailPasswordLoginResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[46]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginResponse(EmailPasswordLoginResponse other) : this() {
+      userId_ = other.userId_;
+      sessionId_ = other.sessionId_;
+      sessionToken_ = other.sessionToken_;
+      csrfToken_ = other.csrfToken_;
+      user_ = other.user_ != null ? other.user_.Clone() : null;
+      sessionType_ = other.sessionType_;
+      passwordChangeRequired_ = other.passwordChangeRequired_;
+      error_ = other.error_ != null ? other.error_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public EmailPasswordLoginResponse Clone() {
+      return new EmailPasswordLoginResponse(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "session_id" field.</summary>
+    public const int SessionIdFieldNumber = 2;
+    private string sessionId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionId {
+      get { return sessionId_; }
+      set {
+        sessionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "session_token" field.</summary>
+    public const int SessionTokenFieldNumber = 3;
+    private string sessionToken_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionToken {
+      get { return sessionToken_; }
+      set {
+        sessionToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "csrf_token" field.</summary>
+    public const int CsrfTokenFieldNumber = 4;
+    private string csrfToken_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string CsrfToken {
+      get { return csrfToken_; }
+      set {
+        csrfToken_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "user" field.</summary>
+    public const int UserFieldNumber = 5;
+    private global::Insuretech.Authn.Entity.V1.User user_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Entity.V1.User User {
+      get { return user_; }
+      set {
+        user_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "session_type" field.</summary>
+    public const int SessionTypeFieldNumber = 6;
+    private string sessionType_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionType {
+      get { return sessionType_; }
+      set {
+        sessionType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "password_change_required" field.</summary>
+    public const int PasswordChangeRequiredFieldNumber = 7;
+    private bool passwordChangeRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PasswordChangeRequired {
+      get { return passwordChangeRequired_; }
+      set {
+        passwordChangeRequired_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 8;
+    private global::Insuretech.Common.V1.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Common.V1.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as EmailPasswordLoginResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(EmailPasswordLoginResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (SessionId != other.SessionId) return false;
+      if (SessionToken != other.SessionToken) return false;
+      if (CsrfToken != other.CsrfToken) return false;
+      if (!object.Equals(User, other.User)) return false;
+      if (SessionType != other.SessionType) return false;
+      if (PasswordChangeRequired != other.PasswordChangeRequired) return false;
+      if (!object.Equals(Error, other.Error)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (SessionId.Length != 0) hash ^= SessionId.GetHashCode();
+      if (SessionToken.Length != 0) hash ^= SessionToken.GetHashCode();
+      if (CsrfToken.Length != 0) hash ^= CsrfToken.GetHashCode();
+      if (user_ != null) hash ^= User.GetHashCode();
+      if (SessionType.Length != 0) hash ^= SessionType.GetHashCode();
+      if (PasswordChangeRequired != false) hash ^= PasswordChangeRequired.GetHashCode();
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (SessionId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SessionId);
+      }
+      if (SessionToken.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(SessionToken);
+      }
+      if (CsrfToken.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(CsrfToken);
+      }
+      if (user_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(User);
+      }
+      if (SessionType.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(SessionType);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (SessionId.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(SessionId);
+      }
+      if (SessionToken.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(SessionToken);
+      }
+      if (CsrfToken.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(CsrfToken);
+      }
+      if (user_ != null) {
+        output.WriteRawTag(42);
+        output.WriteMessage(User);
+      }
+      if (SessionType.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(SessionType);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(56);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(66);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (SessionId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionId);
+      }
+      if (SessionToken.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionToken);
+      }
+      if (CsrfToken.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CsrfToken);
+      }
+      if (user_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(User);
+      }
+      if (SessionType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionType);
+      }
+      if (PasswordChangeRequired != false) {
+        size += 1 + 1;
+      }
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(EmailPasswordLoginResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.SessionId.Length != 0) {
+        SessionId = other.SessionId;
+      }
+      if (other.SessionToken.Length != 0) {
+        SessionToken = other.SessionToken;
+      }
+      if (other.CsrfToken.Length != 0) {
+        CsrfToken = other.CsrfToken;
+      }
+      if (other.user_ != null) {
+        if (user_ == null) {
+          User = new global::Insuretech.Authn.Entity.V1.User();
+        }
+        User.MergeFrom(other.User);
+      }
+      if (other.SessionType.Length != 0) {
+        SessionType = other.SessionType;
+      }
+      if (other.PasswordChangeRequired != false) {
+        PasswordChangeRequired = other.PasswordChangeRequired;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          Error = new global::Insuretech.Common.V1.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SessionId = input.ReadString();
+            break;
+          }
+          case 26: {
+            SessionToken = input.ReadString();
+            break;
+          }
+          case 34: {
+            CsrfToken = input.ReadString();
+            break;
+          }
+          case 42: {
+            if (user_ == null) {
+              User = new global::Insuretech.Authn.Entity.V1.User();
+            }
+            input.ReadMessage(User);
+            break;
+          }
+          case 50: {
+            SessionType = input.ReadString();
+            break;
+          }
+          case 56: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+          case 66: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            SessionId = input.ReadString();
+            break;
+          }
+          case 26: {
+            SessionToken = input.ReadString();
+            break;
+          }
+          case 34: {
+            CsrfToken = input.ReadString();
+            break;
+          }
+          case 42: {
+            if (user_ == null) {
+              User = new global::Insuretech.Authn.Entity.V1.User();
+            }
+            input.ReadMessage(User);
+            break;
+          }
+          case 50: {
+            SessionType = input.ReadString();
+            break;
+          }
+          case 56: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+          case 66: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   /// <summary>
   /// Request Password Reset By Email
   /// Sends a password reset OTP to the registered email.
-  /// Restricted to users with verified email addresses.
+  /// Restricted to users with email-auth access. B2B beneficiary first-time
+  /// activation also uses this flow.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class RequestPasswordResetByEmailRequest : pb::IMessage<RequestPasswordResetByEmailRequest>
@@ -13730,7 +16275,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[40]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[47]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -13928,7 +16473,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[41]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[48]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -14252,7 +16797,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[42]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[49]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -14573,7 +17118,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[43]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[50]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15088,7 +17633,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[44]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[51]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15369,7 +17914,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[45]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[52]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -15650,7 +18195,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[46]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[53]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16049,7 +18594,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[47]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[54]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16445,7 +18990,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[48]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[55]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -16791,7 +19336,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[49]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[56]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -17218,7 +19763,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[50]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[57]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -17488,7 +20033,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[51]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[58]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -17723,7 +20268,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[52]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[59]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -17967,7 +20512,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[53]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[60]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -18205,7 +20750,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[54]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[61]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -18616,7 +21161,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[55]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[62]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -18925,7 +21470,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[56]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[63]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -19155,6 +21700,670 @@ namespace Insuretech.Authn.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ProvisionEmployeeUserRequest : pb::IMessage<ProvisionEmployeeUserRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ProvisionEmployeeUserRequest> _parser = new pb::MessageParser<ProvisionEmployeeUserRequest>(() => new ProvisionEmployeeUserRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ProvisionEmployeeUserRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[64]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserRequest(ProvisionEmployeeUserRequest other) : this() {
+      email_ = other.email_;
+      fullName_ = other.fullName_;
+      mobileNumber_ = other.mobileNumber_;
+      employeeId_ = other.employeeId_;
+      businessId_ = other.businessId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserRequest Clone() {
+      return new ProvisionEmployeeUserRequest(this);
+    }
+
+    /// <summary>Field number for the "email" field.</summary>
+    public const int EmailFieldNumber = 1;
+    private string email_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Email {
+      get { return email_; }
+      set {
+        email_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "full_name" field.</summary>
+    public const int FullNameFieldNumber = 2;
+    private string fullName_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string FullName {
+      get { return fullName_; }
+      set {
+        fullName_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "mobile_number" field.</summary>
+    public const int MobileNumberFieldNumber = 3;
+    private string mobileNumber_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string MobileNumber {
+      get { return mobileNumber_; }
+      set {
+        mobileNumber_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "employee_id" field.</summary>
+    public const int EmployeeIdFieldNumber = 4;
+    private string employeeId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string EmployeeId {
+      get { return employeeId_; }
+      set {
+        employeeId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "business_id" field.</summary>
+    public const int BusinessIdFieldNumber = 5;
+    private string businessId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string BusinessId {
+      get { return businessId_; }
+      set {
+        businessId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ProvisionEmployeeUserRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ProvisionEmployeeUserRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Email != other.Email) return false;
+      if (FullName != other.FullName) return false;
+      if (MobileNumber != other.MobileNumber) return false;
+      if (EmployeeId != other.EmployeeId) return false;
+      if (BusinessId != other.BusinessId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Email.Length != 0) hash ^= Email.GetHashCode();
+      if (FullName.Length != 0) hash ^= FullName.GetHashCode();
+      if (MobileNumber.Length != 0) hash ^= MobileNumber.GetHashCode();
+      if (EmployeeId.Length != 0) hash ^= EmployeeId.GetHashCode();
+      if (BusinessId.Length != 0) hash ^= BusinessId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Email.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Email);
+      }
+      if (FullName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(FullName);
+      }
+      if (MobileNumber.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(MobileNumber);
+      }
+      if (EmployeeId.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(EmployeeId);
+      }
+      if (BusinessId.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(BusinessId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Email.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(Email);
+      }
+      if (FullName.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(FullName);
+      }
+      if (MobileNumber.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(MobileNumber);
+      }
+      if (EmployeeId.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(EmployeeId);
+      }
+      if (BusinessId.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(BusinessId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Email.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Email);
+      }
+      if (FullName.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(FullName);
+      }
+      if (MobileNumber.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(MobileNumber);
+      }
+      if (EmployeeId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(EmployeeId);
+      }
+      if (BusinessId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(BusinessId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ProvisionEmployeeUserRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Email.Length != 0) {
+        Email = other.Email;
+      }
+      if (other.FullName.Length != 0) {
+        FullName = other.FullName;
+      }
+      if (other.MobileNumber.Length != 0) {
+        MobileNumber = other.MobileNumber;
+      }
+      if (other.EmployeeId.Length != 0) {
+        EmployeeId = other.EmployeeId;
+      }
+      if (other.BusinessId.Length != 0) {
+        BusinessId = other.BusinessId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            Email = input.ReadString();
+            break;
+          }
+          case 18: {
+            FullName = input.ReadString();
+            break;
+          }
+          case 26: {
+            MobileNumber = input.ReadString();
+            break;
+          }
+          case 34: {
+            EmployeeId = input.ReadString();
+            break;
+          }
+          case 42: {
+            BusinessId = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            Email = input.ReadString();
+            break;
+          }
+          case 18: {
+            FullName = input.ReadString();
+            break;
+          }
+          case 26: {
+            MobileNumber = input.ReadString();
+            break;
+          }
+          case 34: {
+            EmployeeId = input.ReadString();
+            break;
+          }
+          case 42: {
+            BusinessId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class ProvisionEmployeeUserResponse : pb::IMessage<ProvisionEmployeeUserResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<ProvisionEmployeeUserResponse> _parser = new pb::MessageParser<ProvisionEmployeeUserResponse>(() => new ProvisionEmployeeUserResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<ProvisionEmployeeUserResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[65]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserResponse(ProvisionEmployeeUserResponse other) : this() {
+      userId_ = other.userId_;
+      created_ = other.created_;
+      passwordChangeRequired_ = other.passwordChangeRequired_;
+      error_ = other.error_ != null ? other.error_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public ProvisionEmployeeUserResponse Clone() {
+      return new ProvisionEmployeeUserResponse(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "created" field.</summary>
+    public const int CreatedFieldNumber = 2;
+    private bool created_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Created {
+      get { return created_; }
+      set {
+        created_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "password_change_required" field.</summary>
+    public const int PasswordChangeRequiredFieldNumber = 3;
+    private bool passwordChangeRequired_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool PasswordChangeRequired {
+      get { return passwordChangeRequired_; }
+      set {
+        passwordChangeRequired_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 4;
+    private global::Insuretech.Common.V1.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Common.V1.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as ProvisionEmployeeUserResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(ProvisionEmployeeUserResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (Created != other.Created) return false;
+      if (PasswordChangeRequired != other.PasswordChangeRequired) return false;
+      if (!object.Equals(Error, other.Error)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (Created != false) hash ^= Created.GetHashCode();
+      if (PasswordChangeRequired != false) hash ^= PasswordChangeRequired.GetHashCode();
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (Created != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(Created);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (Created != false) {
+        output.WriteRawTag(16);
+        output.WriteBool(Created);
+      }
+      if (PasswordChangeRequired != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(PasswordChangeRequired);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (Created != false) {
+        size += 1 + 1;
+      }
+      if (PasswordChangeRequired != false) {
+        size += 1 + 1;
+      }
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(ProvisionEmployeeUserResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.Created != false) {
+        Created = other.Created;
+      }
+      if (other.PasswordChangeRequired != false) {
+        PasswordChangeRequired = other.PasswordChangeRequired;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          Error = new global::Insuretech.Common.V1.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            Created = input.ReadBool();
+            break;
+          }
+          case 24: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+          case 34: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 16: {
+            Created = input.ReadBool();
+            break;
+          }
+          case 24: {
+            PasswordChangeRequired = input.ReadBool();
+            break;
+          }
+          case 34: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class CreateUserProfileRequest : pb::IMessage<CreateUserProfileRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -19169,7 +22378,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[57]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[66]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20159,7 +23368,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[58]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[67]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20449,7 +23658,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[59]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[68]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20647,7 +23856,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[60]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[69]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -20900,7 +24109,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[61]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[70]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -21921,7 +25130,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[62]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[71]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -22211,7 +25420,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[63]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[72]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -22523,7 +25732,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[64]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[73]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -22813,7 +26022,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[65]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[74]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -23125,7 +26334,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[66]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[75]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -23432,7 +26641,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[67]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[76]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -23630,7 +26839,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[68]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[77]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -23883,7 +27092,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[69]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[78]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -24192,7 +27401,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[70]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[79]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -24482,7 +27691,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[71]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[80]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -24680,7 +27889,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[72]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[81]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -24924,7 +28133,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[73]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[82]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -25122,7 +28331,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[74]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[83]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -25341,6 +28550,2046 @@ namespace Insuretech.Authn.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCStep : pb::IMessage<KYCStep>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCStep> _parser = new pb::MessageParser<KYCStep>(() => new KYCStep());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCStep> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[84]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStep() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStep(KYCStep other) : this() {
+      stepNumber_ = other.stepNumber_;
+      challengeType_ = other.challengeType_;
+      state_ = other.state_;
+      instruction_ = other.instruction_;
+      instructionKey_ = other.instructionKey_;
+      timeoutSeconds_ = other.timeoutSeconds_;
+      confidence_ = other.confidence_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStep Clone() {
+      return new KYCStep(this);
+    }
+
+    /// <summary>Field number for the "step_number" field.</summary>
+    public const int StepNumberFieldNumber = 1;
+    private int stepNumber_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int StepNumber {
+      get { return stepNumber_; }
+      set {
+        stepNumber_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "challenge_type" field.</summary>
+    public const int ChallengeTypeFieldNumber = 2;
+    private string challengeType_ = "";
+    /// <summary>
+    /// "BLINK", "LOOK_LEFT", "LOOK_RIGHT", "CAPTURE"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ChallengeType {
+      get { return challengeType_; }
+      set {
+        challengeType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "state" field.</summary>
+    public const int StateFieldNumber = 3;
+    private string state_ = "";
+    /// <summary>
+    /// "PENDING", "IN_PROGRESS", "COMPLETED", "FAILED"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string State {
+      get { return state_; }
+      set {
+        state_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "instruction" field.</summary>
+    public const int InstructionFieldNumber = 4;
+    private string instruction_ = "";
+    /// <summary>
+    /// "Please blink your eyes"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Instruction {
+      get { return instruction_; }
+      set {
+        instruction_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "instruction_key" field.</summary>
+    public const int InstructionKeyFieldNumber = 5;
+    private string instructionKey_ = "";
+    /// <summary>
+    /// "ekyc.instruction.blink" (i18n)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string InstructionKey {
+      get { return instructionKey_; }
+      set {
+        instructionKey_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "timeout_seconds" field.</summary>
+    public const int TimeoutSecondsFieldNumber = 6;
+    private int timeoutSeconds_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TimeoutSeconds {
+      get { return timeoutSeconds_; }
+      set {
+        timeoutSeconds_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "confidence" field.</summary>
+    public const int ConfidenceFieldNumber = 7;
+    private double confidence_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double Confidence {
+      get { return confidence_; }
+      set {
+        confidence_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCStep);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCStep other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (StepNumber != other.StepNumber) return false;
+      if (ChallengeType != other.ChallengeType) return false;
+      if (State != other.State) return false;
+      if (Instruction != other.Instruction) return false;
+      if (InstructionKey != other.InstructionKey) return false;
+      if (TimeoutSeconds != other.TimeoutSeconds) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Confidence, other.Confidence)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (StepNumber != 0) hash ^= StepNumber.GetHashCode();
+      if (ChallengeType.Length != 0) hash ^= ChallengeType.GetHashCode();
+      if (State.Length != 0) hash ^= State.GetHashCode();
+      if (Instruction.Length != 0) hash ^= Instruction.GetHashCode();
+      if (InstructionKey.Length != 0) hash ^= InstructionKey.GetHashCode();
+      if (TimeoutSeconds != 0) hash ^= TimeoutSeconds.GetHashCode();
+      if (Confidence != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Confidence);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (StepNumber != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(StepNumber);
+      }
+      if (ChallengeType.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(ChallengeType);
+      }
+      if (State.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(State);
+      }
+      if (Instruction.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Instruction);
+      }
+      if (InstructionKey.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(InstructionKey);
+      }
+      if (TimeoutSeconds != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(TimeoutSeconds);
+      }
+      if (Confidence != 0D) {
+        output.WriteRawTag(57);
+        output.WriteDouble(Confidence);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (StepNumber != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(StepNumber);
+      }
+      if (ChallengeType.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(ChallengeType);
+      }
+      if (State.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(State);
+      }
+      if (Instruction.Length != 0) {
+        output.WriteRawTag(34);
+        output.WriteString(Instruction);
+      }
+      if (InstructionKey.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(InstructionKey);
+      }
+      if (TimeoutSeconds != 0) {
+        output.WriteRawTag(48);
+        output.WriteInt32(TimeoutSeconds);
+      }
+      if (Confidence != 0D) {
+        output.WriteRawTag(57);
+        output.WriteDouble(Confidence);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (StepNumber != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(StepNumber);
+      }
+      if (ChallengeType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ChallengeType);
+      }
+      if (State.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(State);
+      }
+      if (Instruction.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Instruction);
+      }
+      if (InstructionKey.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(InstructionKey);
+      }
+      if (TimeoutSeconds != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TimeoutSeconds);
+      }
+      if (Confidence != 0D) {
+        size += 1 + 8;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCStep other) {
+      if (other == null) {
+        return;
+      }
+      if (other.StepNumber != 0) {
+        StepNumber = other.StepNumber;
+      }
+      if (other.ChallengeType.Length != 0) {
+        ChallengeType = other.ChallengeType;
+      }
+      if (other.State.Length != 0) {
+        State = other.State;
+      }
+      if (other.Instruction.Length != 0) {
+        Instruction = other.Instruction;
+      }
+      if (other.InstructionKey.Length != 0) {
+        InstructionKey = other.InstructionKey;
+      }
+      if (other.TimeoutSeconds != 0) {
+        TimeoutSeconds = other.TimeoutSeconds;
+      }
+      if (other.Confidence != 0D) {
+        Confidence = other.Confidence;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            StepNumber = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            ChallengeType = input.ReadString();
+            break;
+          }
+          case 26: {
+            State = input.ReadString();
+            break;
+          }
+          case 34: {
+            Instruction = input.ReadString();
+            break;
+          }
+          case 42: {
+            InstructionKey = input.ReadString();
+            break;
+          }
+          case 48: {
+            TimeoutSeconds = input.ReadInt32();
+            break;
+          }
+          case 57: {
+            Confidence = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            StepNumber = input.ReadInt32();
+            break;
+          }
+          case 18: {
+            ChallengeType = input.ReadString();
+            break;
+          }
+          case 26: {
+            State = input.ReadString();
+            break;
+          }
+          case 34: {
+            Instruction = input.ReadString();
+            break;
+          }
+          case 42: {
+            InstructionKey = input.ReadString();
+            break;
+          }
+          case 48: {
+            TimeoutSeconds = input.ReadInt32();
+            break;
+          }
+          case 57: {
+            Confidence = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCDetection : pb::IMessage<KYCDetection>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCDetection> _parser = new pb::MessageParser<KYCDetection>(() => new KYCDetection());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCDetection> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[85]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCDetection() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCDetection(KYCDetection other) : this() {
+      detected_ = other.detected_;
+      x_ = other.x_;
+      y_ = other.y_;
+      width_ = other.width_;
+      height_ = other.height_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCDetection Clone() {
+      return new KYCDetection(this);
+    }
+
+    /// <summary>Field number for the "detected" field.</summary>
+    public const int DetectedFieldNumber = 1;
+    private bool detected_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Detected {
+      get { return detected_; }
+      set {
+        detected_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "x" field.</summary>
+    public const int XFieldNumber = 2;
+    private int x_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int X {
+      get { return x_; }
+      set {
+        x_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "y" field.</summary>
+    public const int YFieldNumber = 3;
+    private int y_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Y {
+      get { return y_; }
+      set {
+        y_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "width" field.</summary>
+    public const int WidthFieldNumber = 4;
+    private int width_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Width {
+      get { return width_; }
+      set {
+        width_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "height" field.</summary>
+    public const int HeightFieldNumber = 5;
+    private int height_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int Height {
+      get { return height_; }
+      set {
+        height_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCDetection);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCDetection other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (Detected != other.Detected) return false;
+      if (X != other.X) return false;
+      if (Y != other.Y) return false;
+      if (Width != other.Width) return false;
+      if (Height != other.Height) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Detected != false) hash ^= Detected.GetHashCode();
+      if (X != 0) hash ^= X.GetHashCode();
+      if (Y != 0) hash ^= Y.GetHashCode();
+      if (Width != 0) hash ^= Width.GetHashCode();
+      if (Height != 0) hash ^= Height.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Detected != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(Detected);
+      }
+      if (X != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Y);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Width);
+      }
+      if (Height != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Height);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Detected != false) {
+        output.WriteRawTag(8);
+        output.WriteBool(Detected);
+      }
+      if (X != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(X);
+      }
+      if (Y != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(Y);
+      }
+      if (Width != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(Width);
+      }
+      if (Height != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(Height);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Detected != false) {
+        size += 1 + 1;
+      }
+      if (X != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(X);
+      }
+      if (Y != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Y);
+      }
+      if (Width != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Width);
+      }
+      if (Height != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(Height);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCDetection other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Detected != false) {
+        Detected = other.Detected;
+      }
+      if (other.X != 0) {
+        X = other.X;
+      }
+      if (other.Y != 0) {
+        Y = other.Y;
+      }
+      if (other.Width != 0) {
+        Width = other.Width;
+      }
+      if (other.Height != 0) {
+        Height = other.Height;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            Detected = input.ReadBool();
+            break;
+          }
+          case 16: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            Y = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Width = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Height = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            Detected = input.ReadBool();
+            break;
+          }
+          case 16: {
+            X = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            Y = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            Width = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            Height = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCHeadPose : pb::IMessage<KYCHeadPose>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCHeadPose> _parser = new pb::MessageParser<KYCHeadPose>(() => new KYCHeadPose());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCHeadPose> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[86]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCHeadPose() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCHeadPose(KYCHeadPose other) : this() {
+      yaw_ = other.yaw_;
+      pitch_ = other.pitch_;
+      roll_ = other.roll_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCHeadPose Clone() {
+      return new KYCHeadPose(this);
+    }
+
+    /// <summary>Field number for the "yaw" field.</summary>
+    public const int YawFieldNumber = 1;
+    private double yaw_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double Yaw {
+      get { return yaw_; }
+      set {
+        yaw_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "pitch" field.</summary>
+    public const int PitchFieldNumber = 2;
+    private double pitch_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double Pitch {
+      get { return pitch_; }
+      set {
+        pitch_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "roll" field.</summary>
+    public const int RollFieldNumber = 3;
+    private double roll_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double Roll {
+      get { return roll_; }
+      set {
+        roll_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCHeadPose);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCHeadPose other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Yaw, other.Yaw)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Pitch, other.Pitch)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Roll, other.Roll)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (Yaw != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Yaw);
+      if (Pitch != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Pitch);
+      if (Roll != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Roll);
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (Yaw != 0D) {
+        output.WriteRawTag(9);
+        output.WriteDouble(Yaw);
+      }
+      if (Pitch != 0D) {
+        output.WriteRawTag(17);
+        output.WriteDouble(Pitch);
+      }
+      if (Roll != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(Roll);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (Yaw != 0D) {
+        output.WriteRawTag(9);
+        output.WriteDouble(Yaw);
+      }
+      if (Pitch != 0D) {
+        output.WriteRawTag(17);
+        output.WriteDouble(Pitch);
+      }
+      if (Roll != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(Roll);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (Yaw != 0D) {
+        size += 1 + 8;
+      }
+      if (Pitch != 0D) {
+        size += 1 + 8;
+      }
+      if (Roll != 0D) {
+        size += 1 + 8;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCHeadPose other) {
+      if (other == null) {
+        return;
+      }
+      if (other.Yaw != 0D) {
+        Yaw = other.Yaw;
+      }
+      if (other.Pitch != 0D) {
+        Pitch = other.Pitch;
+      }
+      if (other.Roll != 0D) {
+        Roll = other.Roll;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 9: {
+            Yaw = input.ReadDouble();
+            break;
+          }
+          case 17: {
+            Pitch = input.ReadDouble();
+            break;
+          }
+          case 25: {
+            Roll = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 9: {
+            Yaw = input.ReadDouble();
+            break;
+          }
+          case 17: {
+            Pitch = input.ReadDouble();
+            break;
+          }
+          case 25: {
+            Roll = input.ReadDouble();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCEyeState : pb::IMessage<KYCEyeState>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCEyeState> _parser = new pb::MessageParser<KYCEyeState>(() => new KYCEyeState());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCEyeState> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[87]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCEyeState() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCEyeState(KYCEyeState other) : this() {
+      leftOpenness_ = other.leftOpenness_;
+      rightOpenness_ = other.rightOpenness_;
+      isBlinking_ = other.isBlinking_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCEyeState Clone() {
+      return new KYCEyeState(this);
+    }
+
+    /// <summary>Field number for the "left_openness" field.</summary>
+    public const int LeftOpennessFieldNumber = 1;
+    private double leftOpenness_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double LeftOpenness {
+      get { return leftOpenness_; }
+      set {
+        leftOpenness_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "right_openness" field.</summary>
+    public const int RightOpennessFieldNumber = 2;
+    private double rightOpenness_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double RightOpenness {
+      get { return rightOpenness_; }
+      set {
+        rightOpenness_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "is_blinking" field.</summary>
+    public const int IsBlinkingFieldNumber = 3;
+    private bool isBlinking_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IsBlinking {
+      get { return isBlinking_; }
+      set {
+        isBlinking_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCEyeState);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCEyeState other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(LeftOpenness, other.LeftOpenness)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(RightOpenness, other.RightOpenness)) return false;
+      if (IsBlinking != other.IsBlinking) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (LeftOpenness != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(LeftOpenness);
+      if (RightOpenness != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(RightOpenness);
+      if (IsBlinking != false) hash ^= IsBlinking.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (LeftOpenness != 0D) {
+        output.WriteRawTag(9);
+        output.WriteDouble(LeftOpenness);
+      }
+      if (RightOpenness != 0D) {
+        output.WriteRawTag(17);
+        output.WriteDouble(RightOpenness);
+      }
+      if (IsBlinking != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsBlinking);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (LeftOpenness != 0D) {
+        output.WriteRawTag(9);
+        output.WriteDouble(LeftOpenness);
+      }
+      if (RightOpenness != 0D) {
+        output.WriteRawTag(17);
+        output.WriteDouble(RightOpenness);
+      }
+      if (IsBlinking != false) {
+        output.WriteRawTag(24);
+        output.WriteBool(IsBlinking);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (LeftOpenness != 0D) {
+        size += 1 + 8;
+      }
+      if (RightOpenness != 0D) {
+        size += 1 + 8;
+      }
+      if (IsBlinking != false) {
+        size += 1 + 1;
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCEyeState other) {
+      if (other == null) {
+        return;
+      }
+      if (other.LeftOpenness != 0D) {
+        LeftOpenness = other.LeftOpenness;
+      }
+      if (other.RightOpenness != 0D) {
+        RightOpenness = other.RightOpenness;
+      }
+      if (other.IsBlinking != false) {
+        IsBlinking = other.IsBlinking;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 9: {
+            LeftOpenness = input.ReadDouble();
+            break;
+          }
+          case 17: {
+            RightOpenness = input.ReadDouble();
+            break;
+          }
+          case 24: {
+            IsBlinking = input.ReadBool();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 9: {
+            LeftOpenness = input.ReadDouble();
+            break;
+          }
+          case 17: {
+            RightOpenness = input.ReadDouble();
+            break;
+          }
+          case 24: {
+            IsBlinking = input.ReadBool();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCSessionSummary : pb::IMessage<KYCSessionSummary>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCSessionSummary> _parser = new pb::MessageParser<KYCSessionSummary>(() => new KYCSessionSummary());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCSessionSummary> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[88]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCSessionSummary() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCSessionSummary(KYCSessionSummary other) : this() {
+      totalSteps_ = other.totalSteps_;
+      completedSteps_ = other.completedSteps_;
+      failedSteps_ = other.failedSteps_;
+      totalFramesProcessed_ = other.totalFramesProcessed_;
+      elapsedMs_ = other.elapsedMs_;
+      stepResults_ = other.stepResults_.Clone();
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCSessionSummary Clone() {
+      return new KYCSessionSummary(this);
+    }
+
+    /// <summary>Field number for the "total_steps" field.</summary>
+    public const int TotalStepsFieldNumber = 1;
+    private int totalSteps_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TotalSteps {
+      get { return totalSteps_; }
+      set {
+        totalSteps_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "completed_steps" field.</summary>
+    public const int CompletedStepsFieldNumber = 2;
+    private int completedSteps_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CompletedSteps {
+      get { return completedSteps_; }
+      set {
+        completedSteps_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "failed_steps" field.</summary>
+    public const int FailedStepsFieldNumber = 3;
+    private int failedSteps_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FailedSteps {
+      get { return failedSteps_; }
+      set {
+        failedSteps_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "total_frames_processed" field.</summary>
+    public const int TotalFramesProcessedFieldNumber = 4;
+    private int totalFramesProcessed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TotalFramesProcessed {
+      get { return totalFramesProcessed_; }
+      set {
+        totalFramesProcessed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "elapsed_ms" field.</summary>
+    public const int ElapsedMsFieldNumber = 5;
+    private int elapsedMs_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ElapsedMs {
+      get { return elapsedMs_; }
+      set {
+        elapsedMs_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "step_results" field.</summary>
+    public const int StepResultsFieldNumber = 6;
+    private static readonly pb::FieldCodec<global::Insuretech.Authn.Services.V1.KYCStepResult> _repeated_stepResults_codec
+        = pb::FieldCodec.ForMessage(50, global::Insuretech.Authn.Services.V1.KYCStepResult.Parser);
+    private readonly pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStepResult> stepResults_ = new pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStepResult>();
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStepResult> StepResults {
+      get { return stepResults_; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCSessionSummary);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCSessionSummary other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (TotalSteps != other.TotalSteps) return false;
+      if (CompletedSteps != other.CompletedSteps) return false;
+      if (FailedSteps != other.FailedSteps) return false;
+      if (TotalFramesProcessed != other.TotalFramesProcessed) return false;
+      if (ElapsedMs != other.ElapsedMs) return false;
+      if(!stepResults_.Equals(other.stepResults_)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (TotalSteps != 0) hash ^= TotalSteps.GetHashCode();
+      if (CompletedSteps != 0) hash ^= CompletedSteps.GetHashCode();
+      if (FailedSteps != 0) hash ^= FailedSteps.GetHashCode();
+      if (TotalFramesProcessed != 0) hash ^= TotalFramesProcessed.GetHashCode();
+      if (ElapsedMs != 0) hash ^= ElapsedMs.GetHashCode();
+      hash ^= stepResults_.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (TotalSteps != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(TotalSteps);
+      }
+      if (CompletedSteps != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(CompletedSteps);
+      }
+      if (FailedSteps != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(FailedSteps);
+      }
+      if (TotalFramesProcessed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(TotalFramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ElapsedMs);
+      }
+      stepResults_.WriteTo(output, _repeated_stepResults_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (TotalSteps != 0) {
+        output.WriteRawTag(8);
+        output.WriteInt32(TotalSteps);
+      }
+      if (CompletedSteps != 0) {
+        output.WriteRawTag(16);
+        output.WriteInt32(CompletedSteps);
+      }
+      if (FailedSteps != 0) {
+        output.WriteRawTag(24);
+        output.WriteInt32(FailedSteps);
+      }
+      if (TotalFramesProcessed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(TotalFramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ElapsedMs);
+      }
+      stepResults_.WriteTo(ref output, _repeated_stepResults_codec);
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (TotalSteps != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalSteps);
+      }
+      if (CompletedSteps != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CompletedSteps);
+      }
+      if (FailedSteps != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FailedSteps);
+      }
+      if (TotalFramesProcessed != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalFramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ElapsedMs);
+      }
+      size += stepResults_.CalculateSize(_repeated_stepResults_codec);
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCSessionSummary other) {
+      if (other == null) {
+        return;
+      }
+      if (other.TotalSteps != 0) {
+        TotalSteps = other.TotalSteps;
+      }
+      if (other.CompletedSteps != 0) {
+        CompletedSteps = other.CompletedSteps;
+      }
+      if (other.FailedSteps != 0) {
+        FailedSteps = other.FailedSteps;
+      }
+      if (other.TotalFramesProcessed != 0) {
+        TotalFramesProcessed = other.TotalFramesProcessed;
+      }
+      if (other.ElapsedMs != 0) {
+        ElapsedMs = other.ElapsedMs;
+      }
+      stepResults_.Add(other.stepResults_);
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 8: {
+            TotalSteps = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            CompletedSteps = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            FailedSteps = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            TotalFramesProcessed = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ElapsedMs = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            stepResults_.AddEntriesFrom(input, _repeated_stepResults_codec);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 8: {
+            TotalSteps = input.ReadInt32();
+            break;
+          }
+          case 16: {
+            CompletedSteps = input.ReadInt32();
+            break;
+          }
+          case 24: {
+            FailedSteps = input.ReadInt32();
+            break;
+          }
+          case 32: {
+            TotalFramesProcessed = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ElapsedMs = input.ReadInt32();
+            break;
+          }
+          case 50: {
+            stepResults_.AddEntriesFrom(ref input, _repeated_stepResults_codec);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class KYCStepResult : pb::IMessage<KYCStepResult>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<KYCStepResult> _parser = new pb::MessageParser<KYCStepResult>(() => new KYCStepResult());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<KYCStepResult> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[89]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStepResult() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStepResult(KYCStepResult other) : this() {
+      challengeType_ = other.challengeType_;
+      state_ = other.state_;
+      confidence_ = other.confidence_;
+      framesProcessed_ = other.framesProcessed_;
+      elapsedMs_ = other.elapsedMs_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public KYCStepResult Clone() {
+      return new KYCStepResult(this);
+    }
+
+    /// <summary>Field number for the "challenge_type" field.</summary>
+    public const int ChallengeTypeFieldNumber = 1;
+    private string challengeType_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ChallengeType {
+      get { return challengeType_; }
+      set {
+        challengeType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "state" field.</summary>
+    public const int StateFieldNumber = 2;
+    private string state_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string State {
+      get { return state_; }
+      set {
+        state_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "confidence" field.</summary>
+    public const int ConfidenceFieldNumber = 3;
+    private double confidence_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double Confidence {
+      get { return confidence_; }
+      set {
+        confidence_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "frames_processed" field.</summary>
+    public const int FramesProcessedFieldNumber = 4;
+    private int framesProcessed_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int FramesProcessed {
+      get { return framesProcessed_; }
+      set {
+        framesProcessed_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "elapsed_ms" field.</summary>
+    public const int ElapsedMsFieldNumber = 5;
+    private int elapsedMs_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int ElapsedMs {
+      get { return elapsedMs_; }
+      set {
+        elapsedMs_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as KYCStepResult);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(KYCStepResult other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (ChallengeType != other.ChallengeType) return false;
+      if (State != other.State) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(Confidence, other.Confidence)) return false;
+      if (FramesProcessed != other.FramesProcessed) return false;
+      if (ElapsedMs != other.ElapsedMs) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (ChallengeType.Length != 0) hash ^= ChallengeType.GetHashCode();
+      if (State.Length != 0) hash ^= State.GetHashCode();
+      if (Confidence != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(Confidence);
+      if (FramesProcessed != 0) hash ^= FramesProcessed.GetHashCode();
+      if (ElapsedMs != 0) hash ^= ElapsedMs.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (ChallengeType.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(ChallengeType);
+      }
+      if (State.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(State);
+      }
+      if (Confidence != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(Confidence);
+      }
+      if (FramesProcessed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ElapsedMs);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (ChallengeType.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(ChallengeType);
+      }
+      if (State.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(State);
+      }
+      if (Confidence != 0D) {
+        output.WriteRawTag(25);
+        output.WriteDouble(Confidence);
+      }
+      if (FramesProcessed != 0) {
+        output.WriteRawTag(32);
+        output.WriteInt32(FramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        output.WriteRawTag(40);
+        output.WriteInt32(ElapsedMs);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (ChallengeType.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ChallengeType);
+      }
+      if (State.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(State);
+      }
+      if (Confidence != 0D) {
+        size += 1 + 8;
+      }
+      if (FramesProcessed != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(FramesProcessed);
+      }
+      if (ElapsedMs != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(ElapsedMs);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(KYCStepResult other) {
+      if (other == null) {
+        return;
+      }
+      if (other.ChallengeType.Length != 0) {
+        ChallengeType = other.ChallengeType;
+      }
+      if (other.State.Length != 0) {
+        State = other.State;
+      }
+      if (other.Confidence != 0D) {
+        Confidence = other.Confidence;
+      }
+      if (other.FramesProcessed != 0) {
+        FramesProcessed = other.FramesProcessed;
+      }
+      if (other.ElapsedMs != 0) {
+        ElapsedMs = other.ElapsedMs;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            ChallengeType = input.ReadString();
+            break;
+          }
+          case 18: {
+            State = input.ReadString();
+            break;
+          }
+          case 25: {
+            Confidence = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            FramesProcessed = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ElapsedMs = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            ChallengeType = input.ReadString();
+            break;
+          }
+          case 18: {
+            State = input.ReadString();
+            break;
+          }
+          case 25: {
+            Confidence = input.ReadDouble();
+            break;
+          }
+          case 32: {
+            FramesProcessed = input.ReadInt32();
+            break;
+          }
+          case 40: {
+            ElapsedMs = input.ReadInt32();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class InitiateKYCRequest : pb::IMessage<InitiateKYCRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -25355,7 +30604,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[75]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[90]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -25553,7 +30802,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[76]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[91]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -25577,6 +30826,11 @@ namespace Insuretech.Authn.Services.V1 {
       status_ = other.status_;
       message_ = other.message_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
+      provider_ = other.provider_;
+      providerReference_ = other.providerReference_;
+      sessionState_ = other.sessionState_;
+      steps_ = other.steps_.Clone();
+      totalTimeoutSeconds_ = other.totalTimeoutSeconds_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -25634,6 +30888,80 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "provider" field.</summary>
+    public const int ProviderFieldNumber = 5;
+    private string provider_ = "";
+    /// <summary>
+    /// e.g. "FLVE_HF"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Provider {
+      get { return provider_; }
+      set {
+        provider_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "provider_reference" field.</summary>
+    public const int ProviderReferenceFieldNumber = 6;
+    private string providerReference_ = "";
+    /// <summary>
+    /// FLVE session_id (internal)
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProviderReference {
+      get { return providerReference_; }
+      set {
+        providerReference_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "session_state" field.</summary>
+    public const int SessionStateFieldNumber = 7;
+    private string sessionState_ = "";
+    /// <summary>
+    /// "EKYC_SESSION_ACTIVE"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionState {
+      get { return sessionState_; }
+      set {
+        sessionState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "steps" field.</summary>
+    public const int StepsFieldNumber = 8;
+    private static readonly pb::FieldCodec<global::Insuretech.Authn.Services.V1.KYCStep> _repeated_steps_codec
+        = pb::FieldCodec.ForMessage(66, global::Insuretech.Authn.Services.V1.KYCStep.Parser);
+    private readonly pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStep> steps_ = new pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStep>();
+    /// <summary>
+    /// challenge steps
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<global::Insuretech.Authn.Services.V1.KYCStep> Steps {
+      get { return steps_; }
+    }
+
+    /// <summary>Field number for the "total_timeout_seconds" field.</summary>
+    public const int TotalTimeoutSecondsFieldNumber = 9;
+    private int totalTimeoutSeconds_;
+    /// <summary>
+    /// session timeout
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TotalTimeoutSeconds {
+      get { return totalTimeoutSeconds_; }
+      set {
+        totalTimeoutSeconds_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -25653,6 +30981,11 @@ namespace Insuretech.Authn.Services.V1 {
       if (Status != other.Status) return false;
       if (Message != other.Message) return false;
       if (!object.Equals(Error, other.Error)) return false;
+      if (Provider != other.Provider) return false;
+      if (ProviderReference != other.ProviderReference) return false;
+      if (SessionState != other.SessionState) return false;
+      if(!steps_.Equals(other.steps_)) return false;
+      if (TotalTimeoutSeconds != other.TotalTimeoutSeconds) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -25664,6 +30997,11 @@ namespace Insuretech.Authn.Services.V1 {
       if (Status.Length != 0) hash ^= Status.GetHashCode();
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
+      if (Provider.Length != 0) hash ^= Provider.GetHashCode();
+      if (ProviderReference.Length != 0) hash ^= ProviderReference.GetHashCode();
+      if (SessionState.Length != 0) hash ^= SessionState.GetHashCode();
+      hash ^= steps_.GetHashCode();
+      if (TotalTimeoutSeconds != 0) hash ^= TotalTimeoutSeconds.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -25698,6 +31036,23 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(34);
         output.WriteMessage(Error);
       }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(SessionState);
+      }
+      steps_.WriteTo(output, _repeated_steps_codec);
+      if (TotalTimeoutSeconds != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(TotalTimeoutSeconds);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -25724,6 +31079,23 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(34);
         output.WriteMessage(Error);
       }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(42);
+        output.WriteString(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(50);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(SessionState);
+      }
+      steps_.WriteTo(ref output, _repeated_steps_codec);
+      if (TotalTimeoutSeconds != 0) {
+        output.WriteRawTag(72);
+        output.WriteInt32(TotalTimeoutSeconds);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -25745,6 +31117,19 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (Provider.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionState);
+      }
+      size += steps_.CalculateSize(_repeated_steps_codec);
+      if (TotalTimeoutSeconds != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalTimeoutSeconds);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -25772,6 +31157,19 @@ namespace Insuretech.Authn.Services.V1 {
           Error = new global::Insuretech.Common.V1.Error();
         }
         Error.MergeFrom(other.Error);
+      }
+      if (other.Provider.Length != 0) {
+        Provider = other.Provider;
+      }
+      if (other.ProviderReference.Length != 0) {
+        ProviderReference = other.ProviderReference;
+      }
+      if (other.SessionState.Length != 0) {
+        SessionState = other.SessionState;
+      }
+      steps_.Add(other.steps_);
+      if (other.TotalTimeoutSeconds != 0) {
+        TotalTimeoutSeconds = other.TotalTimeoutSeconds;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -25809,6 +31207,26 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
+            break;
+          }
+          case 42: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 50: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 58: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 66: {
+            steps_.AddEntriesFrom(input, _repeated_steps_codec);
+            break;
+          }
+          case 72: {
+            TotalTimeoutSeconds = input.ReadInt32();
             break;
           }
         }
@@ -25849,6 +31267,26 @@ namespace Insuretech.Authn.Services.V1 {
             input.ReadMessage(Error);
             break;
           }
+          case 42: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 50: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 58: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 66: {
+            steps_.AddEntriesFrom(ref input, _repeated_steps_codec);
+            break;
+          }
+          case 72: {
+            TotalTimeoutSeconds = input.ReadInt32();
+            break;
+          }
         }
       }
     }
@@ -25871,7 +31309,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[77]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[92]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -26069,7 +31507,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[78]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[93]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -26095,6 +31533,14 @@ namespace Insuretech.Authn.Services.V1 {
       submittedAt_ = other.submittedAt_ != null ? other.submittedAt_.Clone() : null;
       reviewedAt_ = other.reviewedAt_ != null ? other.reviewedAt_.Clone() : null;
       error_ = other.error_ != null ? other.error_.Clone() : null;
+      provider_ = other.provider_;
+      providerReference_ = other.providerReference_;
+      sessionState_ = other.sessionState_;
+      currentStep_ = other.currentStep_ != null ? other.currentStep_.Clone() : null;
+      completedSteps_ = other.completedSteps_;
+      totalSteps_ = other.totalSteps_;
+      overallProgress_ = other.overallProgress_;
+      remainingSeconds_ = other.remainingSeconds_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -26176,6 +31622,126 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "provider" field.</summary>
+    public const int ProviderFieldNumber = 7;
+    private string provider_ = "";
+    /// <summary>
+    /// e.g. "FLVE_HF"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Provider {
+      get { return provider_; }
+      set {
+        provider_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "provider_reference" field.</summary>
+    public const int ProviderReferenceFieldNumber = 8;
+    private string providerReference_ = "";
+    /// <summary>
+    /// FLVE session_id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProviderReference {
+      get { return providerReference_; }
+      set {
+        providerReference_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "session_state" field.</summary>
+    public const int SessionStateFieldNumber = 9;
+    private string sessionState_ = "";
+    /// <summary>
+    /// current FLVE state
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionState {
+      get { return sessionState_; }
+      set {
+        sessionState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "current_step" field.</summary>
+    public const int CurrentStepFieldNumber = 10;
+    private global::Insuretech.Authn.Services.V1.KYCStep currentStep_;
+    /// <summary>
+    /// current challenge
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCStep CurrentStep {
+      get { return currentStep_; }
+      set {
+        currentStep_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "completed_steps" field.</summary>
+    public const int CompletedStepsFieldNumber = 11;
+    private int completedSteps_;
+    /// <summary>
+    /// steps done
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CompletedSteps {
+      get { return completedSteps_; }
+      set {
+        completedSteps_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "total_steps" field.</summary>
+    public const int TotalStepsFieldNumber = 12;
+    private int totalSteps_;
+    /// <summary>
+    /// total challenges
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int TotalSteps {
+      get { return totalSteps_; }
+      set {
+        totalSteps_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "overall_progress" field.</summary>
+    public const int OverallProgressFieldNumber = 13;
+    private double overallProgress_;
+    /// <summary>
+    /// 0.0–1.0
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double OverallProgress {
+      get { return overallProgress_; }
+      set {
+        overallProgress_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "remaining_seconds" field.</summary>
+    public const int RemainingSecondsFieldNumber = 14;
+    private int remainingSeconds_;
+    /// <summary>
+    /// time left
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int RemainingSeconds {
+      get { return remainingSeconds_; }
+      set {
+        remainingSeconds_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -26197,6 +31763,14 @@ namespace Insuretech.Authn.Services.V1 {
       if (!object.Equals(SubmittedAt, other.SubmittedAt)) return false;
       if (!object.Equals(ReviewedAt, other.ReviewedAt)) return false;
       if (!object.Equals(Error, other.Error)) return false;
+      if (Provider != other.Provider) return false;
+      if (ProviderReference != other.ProviderReference) return false;
+      if (SessionState != other.SessionState) return false;
+      if (!object.Equals(CurrentStep, other.CurrentStep)) return false;
+      if (CompletedSteps != other.CompletedSteps) return false;
+      if (TotalSteps != other.TotalSteps) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(OverallProgress, other.OverallProgress)) return false;
+      if (RemainingSeconds != other.RemainingSeconds) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -26210,6 +31784,14 @@ namespace Insuretech.Authn.Services.V1 {
       if (submittedAt_ != null) hash ^= SubmittedAt.GetHashCode();
       if (reviewedAt_ != null) hash ^= ReviewedAt.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
+      if (Provider.Length != 0) hash ^= Provider.GetHashCode();
+      if (ProviderReference.Length != 0) hash ^= ProviderReference.GetHashCode();
+      if (SessionState.Length != 0) hash ^= SessionState.GetHashCode();
+      if (currentStep_ != null) hash ^= CurrentStep.GetHashCode();
+      if (CompletedSteps != 0) hash ^= CompletedSteps.GetHashCode();
+      if (TotalSteps != 0) hash ^= TotalSteps.GetHashCode();
+      if (OverallProgress != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(OverallProgress);
+      if (RemainingSeconds != 0) hash ^= RemainingSeconds.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -26252,6 +31834,38 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(50);
         output.WriteMessage(Error);
       }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (currentStep_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(CurrentStep);
+      }
+      if (CompletedSteps != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(CompletedSteps);
+      }
+      if (TotalSteps != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(TotalSteps);
+      }
+      if (OverallProgress != 0D) {
+        output.WriteRawTag(105);
+        output.WriteDouble(OverallProgress);
+      }
+      if (RemainingSeconds != 0) {
+        output.WriteRawTag(112);
+        output.WriteInt32(RemainingSeconds);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -26286,6 +31900,38 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(50);
         output.WriteMessage(Error);
       }
+      if (Provider.Length != 0) {
+        output.WriteRawTag(58);
+        output.WriteString(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (currentStep_ != null) {
+        output.WriteRawTag(82);
+        output.WriteMessage(CurrentStep);
+      }
+      if (CompletedSteps != 0) {
+        output.WriteRawTag(88);
+        output.WriteInt32(CompletedSteps);
+      }
+      if (TotalSteps != 0) {
+        output.WriteRawTag(96);
+        output.WriteInt32(TotalSteps);
+      }
+      if (OverallProgress != 0D) {
+        output.WriteRawTag(105);
+        output.WriteDouble(OverallProgress);
+      }
+      if (RemainingSeconds != 0) {
+        output.WriteRawTag(112);
+        output.WriteInt32(RemainingSeconds);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -26313,6 +31959,30 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (Provider.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(Provider);
+      }
+      if (ProviderReference.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionState);
+      }
+      if (currentStep_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(CurrentStep);
+      }
+      if (CompletedSteps != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(CompletedSteps);
+      }
+      if (TotalSteps != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(TotalSteps);
+      }
+      if (OverallProgress != 0D) {
+        size += 1 + 8;
+      }
+      if (RemainingSeconds != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeInt32Size(RemainingSeconds);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -26352,6 +32022,33 @@ namespace Insuretech.Authn.Services.V1 {
           Error = new global::Insuretech.Common.V1.Error();
         }
         Error.MergeFrom(other.Error);
+      }
+      if (other.Provider.Length != 0) {
+        Provider = other.Provider;
+      }
+      if (other.ProviderReference.Length != 0) {
+        ProviderReference = other.ProviderReference;
+      }
+      if (other.SessionState.Length != 0) {
+        SessionState = other.SessionState;
+      }
+      if (other.currentStep_ != null) {
+        if (currentStep_ == null) {
+          CurrentStep = new global::Insuretech.Authn.Services.V1.KYCStep();
+        }
+        CurrentStep.MergeFrom(other.CurrentStep);
+      }
+      if (other.CompletedSteps != 0) {
+        CompletedSteps = other.CompletedSteps;
+      }
+      if (other.TotalSteps != 0) {
+        TotalSteps = other.TotalSteps;
+      }
+      if (other.OverallProgress != 0D) {
+        OverallProgress = other.OverallProgress;
+      }
+      if (other.RemainingSeconds != 0) {
+        RemainingSeconds = other.RemainingSeconds;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -26403,6 +32100,41 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
+            break;
+          }
+          case 58: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 66: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 82: {
+            if (currentStep_ == null) {
+              CurrentStep = new global::Insuretech.Authn.Services.V1.KYCStep();
+            }
+            input.ReadMessage(CurrentStep);
+            break;
+          }
+          case 88: {
+            CompletedSteps = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            TotalSteps = input.ReadInt32();
+            break;
+          }
+          case 105: {
+            OverallProgress = input.ReadDouble();
+            break;
+          }
+          case 112: {
+            RemainingSeconds = input.ReadInt32();
             break;
           }
         }
@@ -26457,6 +32189,41 @@ namespace Insuretech.Authn.Services.V1 {
             input.ReadMessage(Error);
             break;
           }
+          case 58: {
+            Provider = input.ReadString();
+            break;
+          }
+          case 66: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 82: {
+            if (currentStep_ == null) {
+              CurrentStep = new global::Insuretech.Authn.Services.V1.KYCStep();
+            }
+            input.ReadMessage(CurrentStep);
+            break;
+          }
+          case 88: {
+            CompletedSteps = input.ReadInt32();
+            break;
+          }
+          case 96: {
+            TotalSteps = input.ReadInt32();
+            break;
+          }
+          case 105: {
+            OverallProgress = input.ReadDouble();
+            break;
+          }
+          case 112: {
+            RemainingSeconds = input.ReadInt32();
+            break;
+          }
         }
       }
     }
@@ -26479,7 +32246,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[79]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[94]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -26788,7 +32555,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[80]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[95]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -26816,6 +32583,16 @@ namespace Insuretech.Authn.Services.V1 {
       livenessConfidence_ = other.livenessConfidence_;
       message_ = other.message_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
+      sessionState_ = other.sessionState_;
+      stepProgress_ = other.stepProgress_;
+      overallProgress_ = other.overallProgress_;
+      guidanceMessages_ = other.guidanceMessages_.Clone();
+      detection_ = other.detection_ != null ? other.detection_.Clone() : null;
+      headPose_ = other.headPose_ != null ? other.headPose_.Clone() : null;
+      eyeState_ = other.eyeState_ != null ? other.eyeState_.Clone() : null;
+      currentStepDetail_ = other.currentStepDetail_ != null ? other.currentStepDetail_.Clone() : null;
+      eyeContoursJson_ = other.eyeContoursJson_;
+      stepCompleted_ = other.stepCompleted_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -26921,6 +32698,153 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "session_state" field.</summary>
+    public const int SessionStateFieldNumber = 9;
+    private string sessionState_ = "";
+    /// <summary>
+    /// "EKYC_SESSION_ACTIVE"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionState {
+      get { return sessionState_; }
+      set {
+        sessionState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "step_progress" field.</summary>
+    public const int StepProgressFieldNumber = 10;
+    private double stepProgress_;
+    /// <summary>
+    /// 0.0–1.0
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double StepProgress {
+      get { return stepProgress_; }
+      set {
+        stepProgress_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "overall_progress" field.</summary>
+    public const int OverallProgressFieldNumber = 11;
+    private double overallProgress_;
+    /// <summary>
+    /// 0.0–1.0
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double OverallProgress {
+      get { return overallProgress_; }
+      set {
+        overallProgress_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "guidance_messages" field.</summary>
+    public const int GuidanceMessagesFieldNumber = 12;
+    private static readonly pb::FieldCodec<string> _repeated_guidanceMessages_codec
+        = pb::FieldCodec.ForString(98);
+    private readonly pbc::RepeatedField<string> guidanceMessages_ = new pbc::RepeatedField<string>();
+    /// <summary>
+    /// all guidance strings
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public pbc::RepeatedField<string> GuidanceMessages {
+      get { return guidanceMessages_; }
+    }
+
+    /// <summary>Field number for the "detection" field.</summary>
+    public const int DetectionFieldNumber = 13;
+    private global::Insuretech.Authn.Services.V1.KYCDetection detection_;
+    /// <summary>
+    /// face detection box
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCDetection Detection {
+      get { return detection_; }
+      set {
+        detection_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "head_pose" field.</summary>
+    public const int HeadPoseFieldNumber = 14;
+    private global::Insuretech.Authn.Services.V1.KYCHeadPose headPose_;
+    /// <summary>
+    /// yaw/pitch/roll
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCHeadPose HeadPose {
+      get { return headPose_; }
+      set {
+        headPose_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "eye_state" field.</summary>
+    public const int EyeStateFieldNumber = 15;
+    private global::Insuretech.Authn.Services.V1.KYCEyeState eyeState_;
+    /// <summary>
+    /// blink state
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCEyeState EyeState {
+      get { return eyeState_; }
+      set {
+        eyeState_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "current_step_detail" field.</summary>
+    public const int CurrentStepDetailFieldNumber = 16;
+    private global::Insuretech.Authn.Services.V1.KYCStep currentStepDetail_;
+    /// <summary>
+    /// full step info
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCStep CurrentStepDetail {
+      get { return currentStepDetail_; }
+      set {
+        currentStepDetail_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "eye_contours_json" field.</summary>
+    public const int EyeContoursJsonFieldNumber = 17;
+    private string eyeContoursJson_ = "";
+    /// <summary>
+    /// eye_contours_json: JSON-encoded FLVE eye mesh (left/right edges+points).
+    /// Parsed by the frontend for canvas eye contour overlay rendering.
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string EyeContoursJson {
+      get { return eyeContoursJson_; }
+      set {
+        eyeContoursJson_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "step_completed" field.</summary>
+    public const int StepCompletedFieldNumber = 18;
+    private bool stepCompleted_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool StepCompleted {
+      get { return stepCompleted_; }
+      set {
+        stepCompleted_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -26944,6 +32868,16 @@ namespace Insuretech.Authn.Services.V1 {
       if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(LivenessConfidence, other.LivenessConfidence)) return false;
       if (Message != other.Message) return false;
       if (!object.Equals(Error, other.Error)) return false;
+      if (SessionState != other.SessionState) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(StepProgress, other.StepProgress)) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(OverallProgress, other.OverallProgress)) return false;
+      if(!guidanceMessages_.Equals(other.guidanceMessages_)) return false;
+      if (!object.Equals(Detection, other.Detection)) return false;
+      if (!object.Equals(HeadPose, other.HeadPose)) return false;
+      if (!object.Equals(EyeState, other.EyeState)) return false;
+      if (!object.Equals(CurrentStepDetail, other.CurrentStepDetail)) return false;
+      if (EyeContoursJson != other.EyeContoursJson) return false;
+      if (StepCompleted != other.StepCompleted) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -26959,6 +32893,16 @@ namespace Insuretech.Authn.Services.V1 {
       if (LivenessConfidence != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(LivenessConfidence);
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
+      if (SessionState.Length != 0) hash ^= SessionState.GetHashCode();
+      if (StepProgress != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(StepProgress);
+      if (OverallProgress != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(OverallProgress);
+      hash ^= guidanceMessages_.GetHashCode();
+      if (detection_ != null) hash ^= Detection.GetHashCode();
+      if (headPose_ != null) hash ^= HeadPose.GetHashCode();
+      if (eyeState_ != null) hash ^= EyeState.GetHashCode();
+      if (currentStepDetail_ != null) hash ^= CurrentStepDetail.GetHashCode();
+      if (EyeContoursJson.Length != 0) hash ^= EyeContoursJson.GetHashCode();
+      if (StepCompleted != false) hash ^= StepCompleted.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -27009,6 +32953,43 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(66);
         output.WriteMessage(Error);
       }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (StepProgress != 0D) {
+        output.WriteRawTag(81);
+        output.WriteDouble(StepProgress);
+      }
+      if (OverallProgress != 0D) {
+        output.WriteRawTag(89);
+        output.WriteDouble(OverallProgress);
+      }
+      guidanceMessages_.WriteTo(output, _repeated_guidanceMessages_codec);
+      if (detection_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(Detection);
+      }
+      if (headPose_ != null) {
+        output.WriteRawTag(114);
+        output.WriteMessage(HeadPose);
+      }
+      if (eyeState_ != null) {
+        output.WriteRawTag(122);
+        output.WriteMessage(EyeState);
+      }
+      if (currentStepDetail_ != null) {
+        output.WriteRawTag(130, 1);
+        output.WriteMessage(CurrentStepDetail);
+      }
+      if (EyeContoursJson.Length != 0) {
+        output.WriteRawTag(138, 1);
+        output.WriteString(EyeContoursJson);
+      }
+      if (StepCompleted != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(StepCompleted);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -27051,6 +33032,43 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(66);
         output.WriteMessage(Error);
       }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (StepProgress != 0D) {
+        output.WriteRawTag(81);
+        output.WriteDouble(StepProgress);
+      }
+      if (OverallProgress != 0D) {
+        output.WriteRawTag(89);
+        output.WriteDouble(OverallProgress);
+      }
+      guidanceMessages_.WriteTo(ref output, _repeated_guidanceMessages_codec);
+      if (detection_ != null) {
+        output.WriteRawTag(106);
+        output.WriteMessage(Detection);
+      }
+      if (headPose_ != null) {
+        output.WriteRawTag(114);
+        output.WriteMessage(HeadPose);
+      }
+      if (eyeState_ != null) {
+        output.WriteRawTag(122);
+        output.WriteMessage(EyeState);
+      }
+      if (currentStepDetail_ != null) {
+        output.WriteRawTag(130, 1);
+        output.WriteMessage(CurrentStepDetail);
+      }
+      if (EyeContoursJson.Length != 0) {
+        output.WriteRawTag(138, 1);
+        output.WriteString(EyeContoursJson);
+      }
+      if (StepCompleted != false) {
+        output.WriteRawTag(144, 1);
+        output.WriteBool(StepCompleted);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -27084,6 +33102,34 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (SessionState.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionState);
+      }
+      if (StepProgress != 0D) {
+        size += 1 + 8;
+      }
+      if (OverallProgress != 0D) {
+        size += 1 + 8;
+      }
+      size += guidanceMessages_.CalculateSize(_repeated_guidanceMessages_codec);
+      if (detection_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Detection);
+      }
+      if (headPose_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(HeadPose);
+      }
+      if (eyeState_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(EyeState);
+      }
+      if (currentStepDetail_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(CurrentStepDetail);
+      }
+      if (EyeContoursJson.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(EyeContoursJson);
+      }
+      if (StepCompleted != false) {
+        size += 2 + 1;
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -27123,6 +33169,46 @@ namespace Insuretech.Authn.Services.V1 {
           Error = new global::Insuretech.Common.V1.Error();
         }
         Error.MergeFrom(other.Error);
+      }
+      if (other.SessionState.Length != 0) {
+        SessionState = other.SessionState;
+      }
+      if (other.StepProgress != 0D) {
+        StepProgress = other.StepProgress;
+      }
+      if (other.OverallProgress != 0D) {
+        OverallProgress = other.OverallProgress;
+      }
+      guidanceMessages_.Add(other.guidanceMessages_);
+      if (other.detection_ != null) {
+        if (detection_ == null) {
+          Detection = new global::Insuretech.Authn.Services.V1.KYCDetection();
+        }
+        Detection.MergeFrom(other.Detection);
+      }
+      if (other.headPose_ != null) {
+        if (headPose_ == null) {
+          HeadPose = new global::Insuretech.Authn.Services.V1.KYCHeadPose();
+        }
+        HeadPose.MergeFrom(other.HeadPose);
+      }
+      if (other.eyeState_ != null) {
+        if (eyeState_ == null) {
+          EyeState = new global::Insuretech.Authn.Services.V1.KYCEyeState();
+        }
+        EyeState.MergeFrom(other.EyeState);
+      }
+      if (other.currentStepDetail_ != null) {
+        if (currentStepDetail_ == null) {
+          CurrentStepDetail = new global::Insuretech.Authn.Services.V1.KYCStep();
+        }
+        CurrentStepDetail.MergeFrom(other.CurrentStepDetail);
+      }
+      if (other.EyeContoursJson.Length != 0) {
+        EyeContoursJson = other.EyeContoursJson;
+      }
+      if (other.StepCompleted != false) {
+        StepCompleted = other.StepCompleted;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -27176,6 +33262,58 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
+            break;
+          }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 81: {
+            StepProgress = input.ReadDouble();
+            break;
+          }
+          case 89: {
+            OverallProgress = input.ReadDouble();
+            break;
+          }
+          case 98: {
+            guidanceMessages_.AddEntriesFrom(input, _repeated_guidanceMessages_codec);
+            break;
+          }
+          case 106: {
+            if (detection_ == null) {
+              Detection = new global::Insuretech.Authn.Services.V1.KYCDetection();
+            }
+            input.ReadMessage(Detection);
+            break;
+          }
+          case 114: {
+            if (headPose_ == null) {
+              HeadPose = new global::Insuretech.Authn.Services.V1.KYCHeadPose();
+            }
+            input.ReadMessage(HeadPose);
+            break;
+          }
+          case 122: {
+            if (eyeState_ == null) {
+              EyeState = new global::Insuretech.Authn.Services.V1.KYCEyeState();
+            }
+            input.ReadMessage(EyeState);
+            break;
+          }
+          case 130: {
+            if (currentStepDetail_ == null) {
+              CurrentStepDetail = new global::Insuretech.Authn.Services.V1.KYCStep();
+            }
+            input.ReadMessage(CurrentStepDetail);
+            break;
+          }
+          case 138: {
+            EyeContoursJson = input.ReadString();
+            break;
+          }
+          case 144: {
+            StepCompleted = input.ReadBool();
             break;
           }
         }
@@ -27232,6 +33370,58 @@ namespace Insuretech.Authn.Services.V1 {
             input.ReadMessage(Error);
             break;
           }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 81: {
+            StepProgress = input.ReadDouble();
+            break;
+          }
+          case 89: {
+            OverallProgress = input.ReadDouble();
+            break;
+          }
+          case 98: {
+            guidanceMessages_.AddEntriesFrom(ref input, _repeated_guidanceMessages_codec);
+            break;
+          }
+          case 106: {
+            if (detection_ == null) {
+              Detection = new global::Insuretech.Authn.Services.V1.KYCDetection();
+            }
+            input.ReadMessage(Detection);
+            break;
+          }
+          case 114: {
+            if (headPose_ == null) {
+              HeadPose = new global::Insuretech.Authn.Services.V1.KYCHeadPose();
+            }
+            input.ReadMessage(HeadPose);
+            break;
+          }
+          case 122: {
+            if (eyeState_ == null) {
+              EyeState = new global::Insuretech.Authn.Services.V1.KYCEyeState();
+            }
+            input.ReadMessage(EyeState);
+            break;
+          }
+          case 130: {
+            if (currentStepDetail_ == null) {
+              CurrentStepDetail = new global::Insuretech.Authn.Services.V1.KYCStep();
+            }
+            input.ReadMessage(CurrentStepDetail);
+            break;
+          }
+          case 138: {
+            EyeContoursJson = input.ReadString();
+            break;
+          }
+          case 144: {
+            StepCompleted = input.ReadBool();
+            break;
+          }
         }
       }
     }
@@ -27254,7 +33444,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[81]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[96]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -27489,7 +33679,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[82]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[97]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -27516,6 +33706,12 @@ namespace Insuretech.Authn.Services.V1 {
       profileImageUrl_ = other.profileImageUrl_;
       message_ = other.message_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
+      providerReference_ = other.providerReference_;
+      sessionState_ = other.sessionState_;
+      identityMatch_ = other.identityMatch_;
+      matchScore_ = other.matchScore_;
+      summary_ = other.summary_ != null ? other.summary_.Clone() : null;
+      completedAt_ = other.completedAt_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -27609,6 +33805,96 @@ namespace Insuretech.Authn.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "provider_reference" field.</summary>
+    public const int ProviderReferenceFieldNumber = 8;
+    private string providerReference_ = "";
+    /// <summary>
+    /// FLVE session_id
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProviderReference {
+      get { return providerReference_; }
+      set {
+        providerReference_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "session_state" field.</summary>
+    public const int SessionStateFieldNumber = 9;
+    private string sessionState_ = "";
+    /// <summary>
+    /// "EKYC_SESSION_COMPLETED"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string SessionState {
+      get { return sessionState_; }
+      set {
+        sessionState_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "identity_match" field.</summary>
+    public const int IdentityMatchFieldNumber = 10;
+    private bool identityMatch_;
+    /// <summary>
+    /// face match result
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool IdentityMatch {
+      get { return identityMatch_; }
+      set {
+        identityMatch_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "match_score" field.</summary>
+    public const int MatchScoreFieldNumber = 11;
+    private double matchScore_;
+    /// <summary>
+    /// cosine similarity
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public double MatchScore {
+      get { return matchScore_; }
+      set {
+        matchScore_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "summary" field.</summary>
+    public const int SummaryFieldNumber = 12;
+    private global::Insuretech.Authn.Services.V1.KYCSessionSummary summary_;
+    /// <summary>
+    /// step-by-step results
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Authn.Services.V1.KYCSessionSummary Summary {
+      get { return summary_; }
+      set {
+        summary_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "completed_at" field.</summary>
+    public const int CompletedAtFieldNumber = 13;
+    private string completedAt_ = "";
+    /// <summary>
+    /// ISO timestamp
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string CompletedAt {
+      get { return completedAt_; }
+      set {
+        completedAt_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -27631,6 +33917,12 @@ namespace Insuretech.Authn.Services.V1 {
       if (ProfileImageUrl != other.ProfileImageUrl) return false;
       if (Message != other.Message) return false;
       if (!object.Equals(Error, other.Error)) return false;
+      if (ProviderReference != other.ProviderReference) return false;
+      if (SessionState != other.SessionState) return false;
+      if (IdentityMatch != other.IdentityMatch) return false;
+      if (!pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.Equals(MatchScore, other.MatchScore)) return false;
+      if (!object.Equals(Summary, other.Summary)) return false;
+      if (CompletedAt != other.CompletedAt) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -27645,6 +33937,12 @@ namespace Insuretech.Authn.Services.V1 {
       if (ProfileImageUrl.Length != 0) hash ^= ProfileImageUrl.GetHashCode();
       if (Message.Length != 0) hash ^= Message.GetHashCode();
       if (error_ != null) hash ^= Error.GetHashCode();
+      if (ProviderReference.Length != 0) hash ^= ProviderReference.GetHashCode();
+      if (SessionState.Length != 0) hash ^= SessionState.GetHashCode();
+      if (IdentityMatch != false) hash ^= IdentityMatch.GetHashCode();
+      if (MatchScore != 0D) hash ^= pbc::ProtobufEqualityComparers.BitwiseDoubleEqualityComparer.GetHashCode(MatchScore);
+      if (summary_ != null) hash ^= Summary.GetHashCode();
+      if (CompletedAt.Length != 0) hash ^= CompletedAt.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -27691,6 +33989,30 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(58);
         output.WriteMessage(Error);
       }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (IdentityMatch != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(IdentityMatch);
+      }
+      if (MatchScore != 0D) {
+        output.WriteRawTag(89);
+        output.WriteDouble(MatchScore);
+      }
+      if (summary_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(Summary);
+      }
+      if (CompletedAt.Length != 0) {
+        output.WriteRawTag(106);
+        output.WriteString(CompletedAt);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -27729,6 +34051,30 @@ namespace Insuretech.Authn.Services.V1 {
         output.WriteRawTag(58);
         output.WriteMessage(Error);
       }
+      if (ProviderReference.Length != 0) {
+        output.WriteRawTag(66);
+        output.WriteString(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        output.WriteRawTag(74);
+        output.WriteString(SessionState);
+      }
+      if (IdentityMatch != false) {
+        output.WriteRawTag(80);
+        output.WriteBool(IdentityMatch);
+      }
+      if (MatchScore != 0D) {
+        output.WriteRawTag(89);
+        output.WriteDouble(MatchScore);
+      }
+      if (summary_ != null) {
+        output.WriteRawTag(98);
+        output.WriteMessage(Summary);
+      }
+      if (CompletedAt.Length != 0) {
+        output.WriteRawTag(106);
+        output.WriteString(CompletedAt);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -27759,6 +34105,24 @@ namespace Insuretech.Authn.Services.V1 {
       }
       if (error_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (ProviderReference.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(ProviderReference);
+      }
+      if (SessionState.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionState);
+      }
+      if (IdentityMatch != false) {
+        size += 1 + 1;
+      }
+      if (MatchScore != 0D) {
+        size += 1 + 8;
+      }
+      if (summary_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Summary);
+      }
+      if (CompletedAt.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(CompletedAt);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -27795,6 +34159,27 @@ namespace Insuretech.Authn.Services.V1 {
           Error = new global::Insuretech.Common.V1.Error();
         }
         Error.MergeFrom(other.Error);
+      }
+      if (other.ProviderReference.Length != 0) {
+        ProviderReference = other.ProviderReference;
+      }
+      if (other.SessionState.Length != 0) {
+        SessionState = other.SessionState;
+      }
+      if (other.IdentityMatch != false) {
+        IdentityMatch = other.IdentityMatch;
+      }
+      if (other.MatchScore != 0D) {
+        MatchScore = other.MatchScore;
+      }
+      if (other.summary_ != null) {
+        if (summary_ == null) {
+          Summary = new global::Insuretech.Authn.Services.V1.KYCSessionSummary();
+        }
+        Summary.MergeFrom(other.Summary);
+      }
+      if (other.CompletedAt.Length != 0) {
+        CompletedAt = other.CompletedAt;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -27844,6 +34229,33 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
+            break;
+          }
+          case 66: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 80: {
+            IdentityMatch = input.ReadBool();
+            break;
+          }
+          case 89: {
+            MatchScore = input.ReadDouble();
+            break;
+          }
+          case 98: {
+            if (summary_ == null) {
+              Summary = new global::Insuretech.Authn.Services.V1.KYCSessionSummary();
+            }
+            input.ReadMessage(Summary);
+            break;
+          }
+          case 106: {
+            CompletedAt = input.ReadString();
             break;
           }
         }
@@ -27896,6 +34308,33 @@ namespace Insuretech.Authn.Services.V1 {
             input.ReadMessage(Error);
             break;
           }
+          case 66: {
+            ProviderReference = input.ReadString();
+            break;
+          }
+          case 74: {
+            SessionState = input.ReadString();
+            break;
+          }
+          case 80: {
+            IdentityMatch = input.ReadBool();
+            break;
+          }
+          case 89: {
+            MatchScore = input.ReadDouble();
+            break;
+          }
+          case 98: {
+            if (summary_ == null) {
+              Summary = new global::Insuretech.Authn.Services.V1.KYCSessionSummary();
+            }
+            input.ReadMessage(Summary);
+            break;
+          }
+          case 106: {
+            CompletedAt = input.ReadString();
+            break;
+          }
         }
       }
     }
@@ -27918,7 +34357,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[83]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[98]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -28153,7 +34592,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[84]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[99]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -28383,522 +34822,6 @@ namespace Insuretech.Authn.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RejectKYCRequest : pb::IMessage<RejectKYCRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<RejectKYCRequest> _parser = new pb::MessageParser<RejectKYCRequest>(() => new RejectKYCRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RejectKYCRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[85]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCRequest(RejectKYCRequest other) : this() {
-      kycId_ = other.kycId_;
-      reviewerId_ = other.reviewerId_;
-      rejectionReason_ = other.rejectionReason_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCRequest Clone() {
-      return new RejectKYCRequest(this);
-    }
-
-    /// <summary>Field number for the "kyc_id" field.</summary>
-    public const int KycIdFieldNumber = 1;
-    private string kycId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string KycId {
-      get { return kycId_; }
-      set {
-        kycId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "reviewer_id" field.</summary>
-    public const int ReviewerIdFieldNumber = 2;
-    private string reviewerId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string ReviewerId {
-      get { return reviewerId_; }
-      set {
-        reviewerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "rejection_reason" field.</summary>
-    public const int RejectionReasonFieldNumber = 3;
-    private string rejectionReason_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string RejectionReason {
-      get { return rejectionReason_; }
-      set {
-        rejectionReason_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as RejectKYCRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RejectKYCRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (KycId != other.KycId) return false;
-      if (ReviewerId != other.ReviewerId) return false;
-      if (RejectionReason != other.RejectionReason) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (KycId.Length != 0) hash ^= KycId.GetHashCode();
-      if (ReviewerId.Length != 0) hash ^= ReviewerId.GetHashCode();
-      if (RejectionReason.Length != 0) hash ^= RejectionReason.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (KycId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(KycId);
-      }
-      if (ReviewerId.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(ReviewerId);
-      }
-      if (RejectionReason.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(RejectionReason);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (KycId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(KycId);
-      }
-      if (ReviewerId.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(ReviewerId);
-      }
-      if (RejectionReason.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(RejectionReason);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (KycId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(KycId);
-      }
-      if (ReviewerId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(ReviewerId);
-      }
-      if (RejectionReason.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(RejectionReason);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RejectKYCRequest other) {
-      if (other == null) {
-        return;
-      }
-      if (other.KycId.Length != 0) {
-        KycId = other.KycId;
-      }
-      if (other.ReviewerId.Length != 0) {
-        ReviewerId = other.ReviewerId;
-      }
-      if (other.RejectionReason.Length != 0) {
-        RejectionReason = other.RejectionReason;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            KycId = input.ReadString();
-            break;
-          }
-          case 18: {
-            ReviewerId = input.ReadString();
-            break;
-          }
-          case 26: {
-            RejectionReason = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            KycId = input.ReadString();
-            break;
-          }
-          case 18: {
-            ReviewerId = input.ReadString();
-            break;
-          }
-          case 26: {
-            RejectionReason = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RejectKYCResponse : pb::IMessage<RejectKYCResponse>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<RejectKYCResponse> _parser = new pb::MessageParser<RejectKYCResponse>(() => new RejectKYCResponse());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RejectKYCResponse> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[86]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCResponse() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCResponse(RejectKYCResponse other) : this() {
-      message_ = other.message_;
-      error_ = other.error_ != null ? other.error_.Clone() : null;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RejectKYCResponse Clone() {
-      return new RejectKYCResponse(this);
-    }
-
-    /// <summary>Field number for the "message" field.</summary>
-    public const int MessageFieldNumber = 1;
-    private string message_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Message {
-      get { return message_; }
-      set {
-        message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "error" field.</summary>
-    public const int ErrorFieldNumber = 2;
-    private global::Insuretech.Common.V1.Error error_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Insuretech.Common.V1.Error Error {
-      get { return error_; }
-      set {
-        error_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as RejectKYCResponse);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RejectKYCResponse other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Message != other.Message) return false;
-      if (!object.Equals(Error, other.Error)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Message.Length != 0) hash ^= Message.GetHashCode();
-      if (error_ != null) hash ^= Error.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (Message.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Message);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Message.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Message);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (Message.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
-      }
-      if (error_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RejectKYCResponse other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Message.Length != 0) {
-        Message = other.Message;
-      }
-      if (other.error_ != null) {
-        if (error_ == null) {
-          Error = new global::Insuretech.Common.V1.Error();
-        }
-        Error.MergeFrom(other.Error);
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            Message = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            Message = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class VerifyDocumentRequest : pb::IMessage<VerifyDocumentRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -28913,7 +34836,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[87]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[100]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -29225,7 +35148,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[88]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[101]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -29515,7 +35438,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[89]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[102]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -29830,7 +35753,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[90]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[103]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -30134,1207 +36057,6 @@ namespace Insuretech.Authn.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetVoiceSessionRequest : pb::IMessage<GetVoiceSessionRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<GetVoiceSessionRequest> _parser = new pb::MessageParser<GetVoiceSessionRequest>(() => new GetVoiceSessionRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetVoiceSessionRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[91]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionRequest(GetVoiceSessionRequest other) : this() {
-      voiceSessionId_ = other.voiceSessionId_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionRequest Clone() {
-      return new GetVoiceSessionRequest(this);
-    }
-
-    /// <summary>Field number for the "voice_session_id" field.</summary>
-    public const int VoiceSessionIdFieldNumber = 1;
-    private string voiceSessionId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string VoiceSessionId {
-      get { return voiceSessionId_; }
-      set {
-        voiceSessionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as GetVoiceSessionRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetVoiceSessionRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (VoiceSessionId != other.VoiceSessionId) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (VoiceSessionId.Length != 0) hash ^= VoiceSessionId.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (VoiceSessionId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(VoiceSessionId);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetVoiceSessionRequest other) {
-      if (other == null) {
-        return;
-      }
-      if (other.VoiceSessionId.Length != 0) {
-        VoiceSessionId = other.VoiceSessionId;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetVoiceSessionResponse : pb::IMessage<GetVoiceSessionResponse>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<GetVoiceSessionResponse> _parser = new pb::MessageParser<GetVoiceSessionResponse>(() => new GetVoiceSessionResponse());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetVoiceSessionResponse> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[92]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionResponse() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionResponse(GetVoiceSessionResponse other) : this() {
-      voiceSessionId_ = other.voiceSessionId_;
-      userId_ = other.userId_;
-      status_ = other.status_;
-      language_ = other.language_;
-      sessionType_ = other.sessionType_;
-      startedAt_ = other.startedAt_ != null ? other.startedAt_.Clone() : null;
-      endedAt_ = other.endedAt_ != null ? other.endedAt_.Clone() : null;
-      error_ = other.error_ != null ? other.error_.Clone() : null;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetVoiceSessionResponse Clone() {
-      return new GetVoiceSessionResponse(this);
-    }
-
-    /// <summary>Field number for the "voice_session_id" field.</summary>
-    public const int VoiceSessionIdFieldNumber = 1;
-    private string voiceSessionId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string VoiceSessionId {
-      get { return voiceSessionId_; }
-      set {
-        voiceSessionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "user_id" field.</summary>
-    public const int UserIdFieldNumber = 2;
-    private string userId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string UserId {
-      get { return userId_; }
-      set {
-        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "status" field.</summary>
-    public const int StatusFieldNumber = 3;
-    private string status_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Status {
-      get { return status_; }
-      set {
-        status_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "language" field.</summary>
-    public const int LanguageFieldNumber = 4;
-    private string language_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Language {
-      get { return language_; }
-      set {
-        language_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "session_type" field.</summary>
-    public const int SessionTypeFieldNumber = 5;
-    private string sessionType_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string SessionType {
-      get { return sessionType_; }
-      set {
-        sessionType_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "started_at" field.</summary>
-    public const int StartedAtFieldNumber = 6;
-    private global::Google.Protobuf.WellKnownTypes.Timestamp startedAt_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp StartedAt {
-      get { return startedAt_; }
-      set {
-        startedAt_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "ended_at" field.</summary>
-    public const int EndedAtFieldNumber = 7;
-    private global::Google.Protobuf.WellKnownTypes.Timestamp endedAt_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Google.Protobuf.WellKnownTypes.Timestamp EndedAt {
-      get { return endedAt_; }
-      set {
-        endedAt_ = value;
-      }
-    }
-
-    /// <summary>Field number for the "error" field.</summary>
-    public const int ErrorFieldNumber = 8;
-    private global::Insuretech.Common.V1.Error error_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Insuretech.Common.V1.Error Error {
-      get { return error_; }
-      set {
-        error_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as GetVoiceSessionResponse);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetVoiceSessionResponse other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (VoiceSessionId != other.VoiceSessionId) return false;
-      if (UserId != other.UserId) return false;
-      if (Status != other.Status) return false;
-      if (Language != other.Language) return false;
-      if (SessionType != other.SessionType) return false;
-      if (!object.Equals(StartedAt, other.StartedAt)) return false;
-      if (!object.Equals(EndedAt, other.EndedAt)) return false;
-      if (!object.Equals(Error, other.Error)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (VoiceSessionId.Length != 0) hash ^= VoiceSessionId.GetHashCode();
-      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
-      if (Status.Length != 0) hash ^= Status.GetHashCode();
-      if (Language.Length != 0) hash ^= Language.GetHashCode();
-      if (SessionType.Length != 0) hash ^= SessionType.GetHashCode();
-      if (startedAt_ != null) hash ^= StartedAt.GetHashCode();
-      if (endedAt_ != null) hash ^= EndedAt.GetHashCode();
-      if (error_ != null) hash ^= Error.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (UserId.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(UserId);
-      }
-      if (Status.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Status);
-      }
-      if (Language.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Language);
-      }
-      if (SessionType.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(SessionType);
-      }
-      if (startedAt_ != null) {
-        output.WriteRawTag(50);
-        output.WriteMessage(StartedAt);
-      }
-      if (endedAt_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(EndedAt);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(66);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (UserId.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(UserId);
-      }
-      if (Status.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Status);
-      }
-      if (Language.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Language);
-      }
-      if (SessionType.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(SessionType);
-      }
-      if (startedAt_ != null) {
-        output.WriteRawTag(50);
-        output.WriteMessage(StartedAt);
-      }
-      if (endedAt_ != null) {
-        output.WriteRawTag(58);
-        output.WriteMessage(EndedAt);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(66);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (VoiceSessionId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(VoiceSessionId);
-      }
-      if (UserId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
-      }
-      if (Status.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Status);
-      }
-      if (Language.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Language);
-      }
-      if (SessionType.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(SessionType);
-      }
-      if (startedAt_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(StartedAt);
-      }
-      if (endedAt_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(EndedAt);
-      }
-      if (error_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetVoiceSessionResponse other) {
-      if (other == null) {
-        return;
-      }
-      if (other.VoiceSessionId.Length != 0) {
-        VoiceSessionId = other.VoiceSessionId;
-      }
-      if (other.UserId.Length != 0) {
-        UserId = other.UserId;
-      }
-      if (other.Status.Length != 0) {
-        Status = other.Status;
-      }
-      if (other.Language.Length != 0) {
-        Language = other.Language;
-      }
-      if (other.SessionType.Length != 0) {
-        SessionType = other.SessionType;
-      }
-      if (other.startedAt_ != null) {
-        if (startedAt_ == null) {
-          StartedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-        }
-        StartedAt.MergeFrom(other.StartedAt);
-      }
-      if (other.endedAt_ != null) {
-        if (endedAt_ == null) {
-          EndedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-        }
-        EndedAt.MergeFrom(other.EndedAt);
-      }
-      if (other.error_ != null) {
-        if (error_ == null) {
-          Error = new global::Insuretech.Common.V1.Error();
-        }
-        Error.MergeFrom(other.Error);
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-          case 18: {
-            UserId = input.ReadString();
-            break;
-          }
-          case 26: {
-            Status = input.ReadString();
-            break;
-          }
-          case 34: {
-            Language = input.ReadString();
-            break;
-          }
-          case 42: {
-            SessionType = input.ReadString();
-            break;
-          }
-          case 50: {
-            if (startedAt_ == null) {
-              StartedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-            }
-            input.ReadMessage(StartedAt);
-            break;
-          }
-          case 58: {
-            if (endedAt_ == null) {
-              EndedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-            }
-            input.ReadMessage(EndedAt);
-            break;
-          }
-          case 66: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-          case 18: {
-            UserId = input.ReadString();
-            break;
-          }
-          case 26: {
-            Status = input.ReadString();
-            break;
-          }
-          case 34: {
-            Language = input.ReadString();
-            break;
-          }
-          case 42: {
-            SessionType = input.ReadString();
-            break;
-          }
-          case 50: {
-            if (startedAt_ == null) {
-              StartedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-            }
-            input.ReadMessage(StartedAt);
-            break;
-          }
-          case 58: {
-            if (endedAt_ == null) {
-              EndedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
-            }
-            input.ReadMessage(EndedAt);
-            break;
-          }
-          case 66: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class EndVoiceSessionRequest : pb::IMessage<EndVoiceSessionRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<EndVoiceSessionRequest> _parser = new pb::MessageParser<EndVoiceSessionRequest>(() => new EndVoiceSessionRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<EndVoiceSessionRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[93]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionRequest(EndVoiceSessionRequest other) : this() {
-      voiceSessionId_ = other.voiceSessionId_;
-      status_ = other.status_;
-      durationSeconds_ = other.durationSeconds_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionRequest Clone() {
-      return new EndVoiceSessionRequest(this);
-    }
-
-    /// <summary>Field number for the "voice_session_id" field.</summary>
-    public const int VoiceSessionIdFieldNumber = 1;
-    private string voiceSessionId_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string VoiceSessionId {
-      get { return voiceSessionId_; }
-      set {
-        voiceSessionId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "status" field.</summary>
-    public const int StatusFieldNumber = 2;
-    private string status_ = "";
-    /// <summary>
-    /// ENDED or FAILED
-    /// </summary>
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Status {
-      get { return status_; }
-      set {
-        status_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "duration_seconds" field.</summary>
-    public const int DurationSecondsFieldNumber = 3;
-    private int durationSeconds_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int DurationSeconds {
-      get { return durationSeconds_; }
-      set {
-        durationSeconds_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as EndVoiceSessionRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(EndVoiceSessionRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (VoiceSessionId != other.VoiceSessionId) return false;
-      if (Status != other.Status) return false;
-      if (DurationSeconds != other.DurationSeconds) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (VoiceSessionId.Length != 0) hash ^= VoiceSessionId.GetHashCode();
-      if (Status.Length != 0) hash ^= Status.GetHashCode();
-      if (DurationSeconds != 0) hash ^= DurationSeconds.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (Status.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Status);
-      }
-      if (DurationSeconds != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(DurationSeconds);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (VoiceSessionId.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(VoiceSessionId);
-      }
-      if (Status.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Status);
-      }
-      if (DurationSeconds != 0) {
-        output.WriteRawTag(24);
-        output.WriteInt32(DurationSeconds);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (VoiceSessionId.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(VoiceSessionId);
-      }
-      if (Status.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Status);
-      }
-      if (DurationSeconds != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeInt32Size(DurationSeconds);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(EndVoiceSessionRequest other) {
-      if (other == null) {
-        return;
-      }
-      if (other.VoiceSessionId.Length != 0) {
-        VoiceSessionId = other.VoiceSessionId;
-      }
-      if (other.Status.Length != 0) {
-        Status = other.Status;
-      }
-      if (other.DurationSeconds != 0) {
-        DurationSeconds = other.DurationSeconds;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-          case 18: {
-            Status = input.ReadString();
-            break;
-          }
-          case 24: {
-            DurationSeconds = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            VoiceSessionId = input.ReadString();
-            break;
-          }
-          case 18: {
-            Status = input.ReadString();
-            break;
-          }
-          case 24: {
-            DurationSeconds = input.ReadInt32();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class EndVoiceSessionResponse : pb::IMessage<EndVoiceSessionResponse>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<EndVoiceSessionResponse> _parser = new pb::MessageParser<EndVoiceSessionResponse>(() => new EndVoiceSessionResponse());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<EndVoiceSessionResponse> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[94]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionResponse() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionResponse(EndVoiceSessionResponse other) : this() {
-      message_ = other.message_;
-      error_ = other.error_ != null ? other.error_.Clone() : null;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public EndVoiceSessionResponse Clone() {
-      return new EndVoiceSessionResponse(this);
-    }
-
-    /// <summary>Field number for the "message" field.</summary>
-    public const int MessageFieldNumber = 1;
-    private string message_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Message {
-      get { return message_; }
-      set {
-        message_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "error" field.</summary>
-    public const int ErrorFieldNumber = 2;
-    private global::Insuretech.Common.V1.Error error_;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Insuretech.Common.V1.Error Error {
-      get { return error_; }
-      set {
-        error_ = value;
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as EndVoiceSessionResponse);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(EndVoiceSessionResponse other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Message != other.Message) return false;
-      if (!object.Equals(Error, other.Error)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Message.Length != 0) hash ^= Message.GetHashCode();
-      if (error_ != null) hash ^= Error.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (Message.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Message);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Message.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Message);
-      }
-      if (error_ != null) {
-        output.WriteRawTag(18);
-        output.WriteMessage(Error);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (Message.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Message);
-      }
-      if (error_ != null) {
-        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(EndVoiceSessionResponse other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Message.Length != 0) {
-        Message = other.Message;
-      }
-      if (other.error_ != null) {
-        if (error_ == null) {
-          Error = new global::Insuretech.Common.V1.Error();
-        }
-        Error.MergeFrom(other.Error);
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            Message = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            Message = input.ReadString();
-            break;
-          }
-          case 18: {
-            if (error_ == null) {
-              Error = new global::Insuretech.Common.V1.Error();
-            }
-            input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class GetProfilePhotoUploadURLRequest : pb::IMessage<GetProfilePhotoUploadURLRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
@@ -31349,7 +36071,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[95]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[104]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -31624,7 +36346,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[96]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[105]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -31942,7 +36664,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[97]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[106]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -32220,7 +36942,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[98]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[107]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -32449,6 +37171,531 @@ namespace Insuretech.Authn.Services.V1 {
 
   }
 
+  /// <summary>
+  /// BUG-010 FIX: GetNotificationPreferences — read current preferences for a user.
+  /// </summary>
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GetNotificationPreferencesRequest : pb::IMessage<GetNotificationPreferencesRequest>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetNotificationPreferencesRequest> _parser = new pb::MessageParser<GetNotificationPreferencesRequest>(() => new GetNotificationPreferencesRequest());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetNotificationPreferencesRequest> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[108]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesRequest() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesRequest(GetNotificationPreferencesRequest other) : this() {
+      userId_ = other.userId_;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesRequest Clone() {
+      return new GetNotificationPreferencesRequest(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetNotificationPreferencesRequest);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetNotificationPreferencesRequest other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetNotificationPreferencesRequest other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
+  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
+  public sealed partial class GetNotificationPreferencesResponse : pb::IMessage<GetNotificationPreferencesResponse>
+  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      , pb::IBufferMessage
+  #endif
+  {
+    private static readonly pb::MessageParser<GetNotificationPreferencesResponse> _parser = new pb::MessageParser<GetNotificationPreferencesResponse>(() => new GetNotificationPreferencesResponse());
+    private pb::UnknownFieldSet _unknownFields;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pb::MessageParser<GetNotificationPreferencesResponse> Parser { get { return _parser; } }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public static pbr::MessageDescriptor Descriptor {
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[109]; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    pbr::MessageDescriptor pb::IMessage.Descriptor {
+      get { return Descriptor; }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesResponse() {
+      OnConstruction();
+    }
+
+    partial void OnConstruction();
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesResponse(GetNotificationPreferencesResponse other) : this() {
+      userId_ = other.userId_;
+      notificationPreference_ = other.notificationPreference_;
+      preferredLanguage_ = other.preferredLanguage_;
+      error_ = other.error_ != null ? other.error_.Clone() : null;
+      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public GetNotificationPreferencesResponse Clone() {
+      return new GetNotificationPreferencesResponse(this);
+    }
+
+    /// <summary>Field number for the "user_id" field.</summary>
+    public const int UserIdFieldNumber = 1;
+    private string userId_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string UserId {
+      get { return userId_; }
+      set {
+        userId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "notification_preference" field.</summary>
+    public const int NotificationPreferenceFieldNumber = 2;
+    private string notificationPreference_ = "";
+    /// <summary>
+    /// SMS, EMAIL, PUSH, ALL, NONE
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string NotificationPreference {
+      get { return notificationPreference_; }
+      set {
+        notificationPreference_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "preferred_language" field.</summary>
+    public const int PreferredLanguageFieldNumber = 3;
+    private string preferredLanguage_ = "";
+    /// <summary>
+    /// en or bn
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string PreferredLanguage {
+      get { return preferredLanguage_; }
+      set {
+        preferredLanguage_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "error" field.</summary>
+    public const int ErrorFieldNumber = 4;
+    private global::Insuretech.Common.V1.Error error_;
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Common.V1.Error Error {
+      get { return error_; }
+      set {
+        error_ = value;
+      }
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override bool Equals(object other) {
+      return Equals(other as GetNotificationPreferencesResponse);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public bool Equals(GetNotificationPreferencesResponse other) {
+      if (ReferenceEquals(other, null)) {
+        return false;
+      }
+      if (ReferenceEquals(other, this)) {
+        return true;
+      }
+      if (UserId != other.UserId) return false;
+      if (NotificationPreference != other.NotificationPreference) return false;
+      if (PreferredLanguage != other.PreferredLanguage) return false;
+      if (!object.Equals(Error, other.Error)) return false;
+      return Equals(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override int GetHashCode() {
+      int hash = 1;
+      if (UserId.Length != 0) hash ^= UserId.GetHashCode();
+      if (NotificationPreference.Length != 0) hash ^= NotificationPreference.GetHashCode();
+      if (PreferredLanguage.Length != 0) hash ^= PreferredLanguage.GetHashCode();
+      if (error_ != null) hash ^= Error.GetHashCode();
+      if (_unknownFields != null) {
+        hash ^= _unknownFields.GetHashCode();
+      }
+      return hash;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public override string ToString() {
+      return pb::JsonFormatter.ToDiagnosticString(this);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void WriteTo(pb::CodedOutputStream output) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      output.WriteRawMessage(this);
+    #else
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (NotificationPreference.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(NotificationPreference);
+      }
+      if (PreferredLanguage.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(PreferredLanguage);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(output);
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
+      if (UserId.Length != 0) {
+        output.WriteRawTag(10);
+        output.WriteString(UserId);
+      }
+      if (NotificationPreference.Length != 0) {
+        output.WriteRawTag(18);
+        output.WriteString(NotificationPreference);
+      }
+      if (PreferredLanguage.Length != 0) {
+        output.WriteRawTag(26);
+        output.WriteString(PreferredLanguage);
+      }
+      if (error_ != null) {
+        output.WriteRawTag(34);
+        output.WriteMessage(Error);
+      }
+      if (_unknownFields != null) {
+        _unknownFields.WriteTo(ref output);
+      }
+    }
+    #endif
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public int CalculateSize() {
+      int size = 0;
+      if (UserId.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(UserId);
+      }
+      if (NotificationPreference.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(NotificationPreference);
+      }
+      if (PreferredLanguage.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(PreferredLanguage);
+      }
+      if (error_ != null) {
+        size += 1 + pb::CodedOutputStream.ComputeMessageSize(Error);
+      }
+      if (_unknownFields != null) {
+        size += _unknownFields.CalculateSize();
+      }
+      return size;
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(GetNotificationPreferencesResponse other) {
+      if (other == null) {
+        return;
+      }
+      if (other.UserId.Length != 0) {
+        UserId = other.UserId;
+      }
+      if (other.NotificationPreference.Length != 0) {
+        NotificationPreference = other.NotificationPreference;
+      }
+      if (other.PreferredLanguage.Length != 0) {
+        PreferredLanguage = other.PreferredLanguage;
+      }
+      if (other.error_ != null) {
+        if (error_ == null) {
+          Error = new global::Insuretech.Common.V1.Error();
+        }
+        Error.MergeFrom(other.Error);
+      }
+      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
+    }
+
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public void MergeFrom(pb::CodedInputStream input) {
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+      input.ReadRawMessage(this);
+    #else
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            NotificationPreference = input.ReadString();
+            break;
+          }
+          case 26: {
+            PreferredLanguage = input.ReadString();
+            break;
+          }
+          case 34: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    #endif
+    }
+
+    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
+      uint tag;
+      while ((tag = input.ReadTag()) != 0) {
+      if ((tag & 7) == 4) {
+        // Abort on any end group tag.
+        return;
+      }
+      switch(tag) {
+          default:
+            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
+            break;
+          case 10: {
+            UserId = input.ReadString();
+            break;
+          }
+          case 18: {
+            NotificationPreference = input.ReadString();
+            break;
+          }
+          case 26: {
+            PreferredLanguage = input.ReadString();
+            break;
+          }
+          case 34: {
+            if (error_ == null) {
+              Error = new global::Insuretech.Common.V1.Error();
+            }
+            input.ReadMessage(Error);
+            break;
+          }
+        }
+      }
+    }
+    #endif
+
+  }
+
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class EnableTOTPRequest : pb::IMessage<EnableTOTPRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
@@ -32464,7 +37711,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[99]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[110]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -32662,7 +37909,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[100]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[111]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -32949,7 +38196,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[101]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[112]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -33228,7 +38475,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[102]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[113]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -33815,7 +39062,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[103]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[114]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -34053,7 +39300,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[104]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[115]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -34297,7 +39544,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[105]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[116]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -34532,7 +39779,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[106]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[117]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -34850,7 +40097,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[107]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[118]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -35159,7 +40406,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[108]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[119]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -35440,7 +40687,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[109]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[120]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -35638,7 +40885,7 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[110]; }
+      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[121]; }
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -35932,737 +41179,6 @@ namespace Insuretech.Authn.Services.V1 {
               Error = new global::Insuretech.Common.V1.Error();
             }
             input.ReadMessage(Error);
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class JWK : pb::IMessage<JWK>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<JWK> _parser = new pb::MessageParser<JWK>(() => new JWK());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<JWK> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[111]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public JWK() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public JWK(JWK other) : this() {
-      kty_ = other.kty_;
-      use_ = other.use_;
-      alg_ = other.alg_;
-      kid_ = other.kid_;
-      n_ = other.n_;
-      e_ = other.e_;
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public JWK Clone() {
-      return new JWK(this);
-    }
-
-    /// <summary>Field number for the "kty" field.</summary>
-    public const int KtyFieldNumber = 1;
-    private string kty_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Kty {
-      get { return kty_; }
-      set {
-        kty_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "use" field.</summary>
-    public const int UseFieldNumber = 2;
-    private string use_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Use {
-      get { return use_; }
-      set {
-        use_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "alg" field.</summary>
-    public const int AlgFieldNumber = 3;
-    private string alg_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Alg {
-      get { return alg_; }
-      set {
-        alg_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "kid" field.</summary>
-    public const int KidFieldNumber = 4;
-    private string kid_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string Kid {
-      get { return kid_; }
-      set {
-        kid_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "n" field.</summary>
-    public const int NFieldNumber = 5;
-    private string n_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string N {
-      get { return n_; }
-      set {
-        n_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    /// <summary>Field number for the "e" field.</summary>
-    public const int EFieldNumber = 6;
-    private string e_ = "";
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public string E {
-      get { return e_; }
-      set {
-        e_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
-      }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as JWK);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(JWK other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if (Kty != other.Kty) return false;
-      if (Use != other.Use) return false;
-      if (Alg != other.Alg) return false;
-      if (Kid != other.Kid) return false;
-      if (N != other.N) return false;
-      if (E != other.E) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (Kty.Length != 0) hash ^= Kty.GetHashCode();
-      if (Use.Length != 0) hash ^= Use.GetHashCode();
-      if (Alg.Length != 0) hash ^= Alg.GetHashCode();
-      if (Kid.Length != 0) hash ^= Kid.GetHashCode();
-      if (N.Length != 0) hash ^= N.GetHashCode();
-      if (E.Length != 0) hash ^= E.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (Kty.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Kty);
-      }
-      if (Use.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Use);
-      }
-      if (Alg.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Alg);
-      }
-      if (Kid.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Kid);
-      }
-      if (N.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(N);
-      }
-      if (E.Length != 0) {
-        output.WriteRawTag(50);
-        output.WriteString(E);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (Kty.Length != 0) {
-        output.WriteRawTag(10);
-        output.WriteString(Kty);
-      }
-      if (Use.Length != 0) {
-        output.WriteRawTag(18);
-        output.WriteString(Use);
-      }
-      if (Alg.Length != 0) {
-        output.WriteRawTag(26);
-        output.WriteString(Alg);
-      }
-      if (Kid.Length != 0) {
-        output.WriteRawTag(34);
-        output.WriteString(Kid);
-      }
-      if (N.Length != 0) {
-        output.WriteRawTag(42);
-        output.WriteString(N);
-      }
-      if (E.Length != 0) {
-        output.WriteRawTag(50);
-        output.WriteString(E);
-      }
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (Kty.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Kty);
-      }
-      if (Use.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Use);
-      }
-      if (Alg.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Alg);
-      }
-      if (Kid.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(Kid);
-      }
-      if (N.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(N);
-      }
-      if (E.Length != 0) {
-        size += 1 + pb::CodedOutputStream.ComputeStringSize(E);
-      }
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(JWK other) {
-      if (other == null) {
-        return;
-      }
-      if (other.Kty.Length != 0) {
-        Kty = other.Kty;
-      }
-      if (other.Use.Length != 0) {
-        Use = other.Use;
-      }
-      if (other.Alg.Length != 0) {
-        Alg = other.Alg;
-      }
-      if (other.Kid.Length != 0) {
-        Kid = other.Kid;
-      }
-      if (other.N.Length != 0) {
-        N = other.N;
-      }
-      if (other.E.Length != 0) {
-        E = other.E;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            Kty = input.ReadString();
-            break;
-          }
-          case 18: {
-            Use = input.ReadString();
-            break;
-          }
-          case 26: {
-            Alg = input.ReadString();
-            break;
-          }
-          case 34: {
-            Kid = input.ReadString();
-            break;
-          }
-          case 42: {
-            N = input.ReadString();
-            break;
-          }
-          case 50: {
-            E = input.ReadString();
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            Kty = input.ReadString();
-            break;
-          }
-          case 18: {
-            Use = input.ReadString();
-            break;
-          }
-          case 26: {
-            Alg = input.ReadString();
-            break;
-          }
-          case 34: {
-            Kid = input.ReadString();
-            break;
-          }
-          case 42: {
-            N = input.ReadString();
-            break;
-          }
-          case 50: {
-            E = input.ReadString();
-            break;
-          }
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetJWKSRequest : pb::IMessage<GetJWKSRequest>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<GetJWKSRequest> _parser = new pb::MessageParser<GetJWKSRequest>(() => new GetJWKSRequest());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetJWKSRequest> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[112]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSRequest() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSRequest(GetJWKSRequest other) : this() {
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSRequest Clone() {
-      return new GetJWKSRequest(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as GetJWKSRequest);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetJWKSRequest other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetJWKSRequest other) {
-      if (other == null) {
-        return;
-      }
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-        }
-      }
-    }
-    #endif
-
-  }
-
-  [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class GetJWKSResponse : pb::IMessage<GetJWKSResponse>
-  #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      , pb::IBufferMessage
-  #endif
-  {
-    private static readonly pb::MessageParser<GetJWKSResponse> _parser = new pb::MessageParser<GetJWKSResponse>(() => new GetJWKSResponse());
-    private pb::UnknownFieldSet _unknownFields;
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<GetJWKSResponse> Parser { get { return _parser; } }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pbr::MessageDescriptor Descriptor {
-      get { return global::Insuretech.Authn.Services.V1.CoreReflection.Descriptor.MessageTypes[113]; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    pbr::MessageDescriptor pb::IMessage.Descriptor {
-      get { return Descriptor; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSResponse() {
-      OnConstruction();
-    }
-
-    partial void OnConstruction();
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSResponse(GetJWKSResponse other) : this() {
-      keys_ = other.keys_.Clone();
-      _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public GetJWKSResponse Clone() {
-      return new GetJWKSResponse(this);
-    }
-
-    /// <summary>Field number for the "keys" field.</summary>
-    public const int KeysFieldNumber = 1;
-    private static readonly pb::FieldCodec<global::Insuretech.Authn.Services.V1.JWK> _repeated_keys_codec
-        = pb::FieldCodec.ForMessage(10, global::Insuretech.Authn.Services.V1.JWK.Parser);
-    private readonly pbc::RepeatedField<global::Insuretech.Authn.Services.V1.JWK> keys_ = new pbc::RepeatedField<global::Insuretech.Authn.Services.V1.JWK>();
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public pbc::RepeatedField<global::Insuretech.Authn.Services.V1.JWK> Keys {
-      get { return keys_; }
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override bool Equals(object other) {
-      return Equals(other as GetJWKSResponse);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(GetJWKSResponse other) {
-      if (ReferenceEquals(other, null)) {
-        return false;
-      }
-      if (ReferenceEquals(other, this)) {
-        return true;
-      }
-      if(!keys_.Equals(other.keys_)) return false;
-      return Equals(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override int GetHashCode() {
-      int hash = 1;
-      hash ^= keys_.GetHashCode();
-      if (_unknownFields != null) {
-        hash ^= _unknownFields.GetHashCode();
-      }
-      return hash;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public override string ToString() {
-      return pb::JsonFormatter.ToDiagnosticString(this);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void WriteTo(pb::CodedOutputStream output) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      output.WriteRawMessage(this);
-    #else
-      keys_.WriteTo(output, _repeated_keys_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(output);
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalWriteTo(ref pb::WriteContext output) {
-      keys_.WriteTo(ref output, _repeated_keys_codec);
-      if (_unknownFields != null) {
-        _unknownFields.WriteTo(ref output);
-      }
-    }
-    #endif
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public int CalculateSize() {
-      int size = 0;
-      size += keys_.CalculateSize(_repeated_keys_codec);
-      if (_unknownFields != null) {
-        size += _unknownFields.CalculateSize();
-      }
-      return size;
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(GetJWKSResponse other) {
-      if (other == null) {
-        return;
-      }
-      keys_.Add(other.keys_);
-      _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
-    }
-
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(pb::CodedInputStream input) {
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-      input.ReadRawMessage(this);
-    #else
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, input);
-            break;
-          case 10: {
-            keys_.AddEntriesFrom(input, _repeated_keys_codec);
-            break;
-          }
-        }
-      }
-    #endif
-    }
-
-    #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
-    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
-    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    void pb::IBufferMessage.InternalMergeFrom(ref pb::ParseContext input) {
-      uint tag;
-      while ((tag = input.ReadTag()) != 0) {
-      if ((tag & 7) == 4) {
-        // Abort on any end group tag.
-        return;
-      }
-      switch(tag) {
-          default:
-            _unknownFields = pb::UnknownFieldSet.MergeFieldFrom(_unknownFields, ref input);
-            break;
-          case 10: {
-            keys_.AddEntriesFrom(ref input, _repeated_keys_codec);
             break;
           }
         }

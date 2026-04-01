@@ -1,0 +1,9 @@
+RatingFormulaRetrievalResponse:
+  type: object
+  properties:
+    formula:
+      $ref: '#/components/schemas/RatingFormula'
+    found:
+      type: boolean
+  description: Response payload for rating formula retrieval operation. Returns operation
+    results and status.

@@ -2,8 +2,8 @@
  * /api/organisations/me  GET
  */
 import { NextResponse } from "next/server";
-import { getCurrentSession, toPortalSessionFromCurrentSession } from "@lib/auth/backend-auth";
-import { makeDirectHttp, makeSdkClient } from "@lib/sdk/b2b-sdk-client";
+import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
+import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { Organisation } from "@lifeplus/insuretech-sdk";
 import type { Organisation as UiOrg } from "@lib/types/b2b";
 
@@ -17,34 +17,58 @@ function mapOrg(org: Organisation): UiOrg {
   };
 }
 
+function mapResolvedOrg(organisationId: string, organisationName: string): UiOrg {
+  return {
+    id: organisationId,
+    name: organisationName,
+    code: "",
+    industry: "",
+    contactEmail: "",
+    contactPhone: "",
+    address: "",
+    status: "ORGANISATION_STATUS_ACTIVE",
+    totalEmployees: 0,
+    createdAt: "",
+  };
+}
+
 export async function GET(request: Request) {
   try {
-    const cookieHeader = request.headers.get("cookie") ?? "";
-    if (cookieHeader) {
-      const sessionResult = await getCurrentSession(cookieHeader);
-      if (!sessionResult.error && sessionResult.data) {
-        const session = await toPortalSessionFromCurrentSession(sessionResult.data, cookieHeader);
-        if (session?.principal.role === "SYSTEM_ADMIN") {
-          return NextResponse.json({ ok: true, organisation: null });
-        }
-      }
+    const hdrs = await resolvePortalHeaders(request);
+    if (!hdrs) return NextResponse.json({ ok: false, message: "Unauthorized" }, { status: 401 });
+
+    const sdk = makeSdkClient(request, hdrs);
+
+    // Super admins have no own org — skip the lookup entirely.
+    if (hdrs.portal === "PORTAL_SYSTEM") {
+      return NextResponse.json({ ok: true, organisation: null });
     }
 
-    const http = makeDirectHttp(request);
-    const result = await http.get("/v1/b2b/organisations/me");
+    // Use the SDK's getMyOrganisation helper (routes via makeDirectHttp, no hardcoded fetch).
+    const result = await sdk.getMyOrganisation();
     if (result.ok) {
       const organisationId = String(result.data.organisation_id ?? "");
       if (!organisationId) {
         return NextResponse.json({ ok: true, organisation: null });
       }
-
-      const organisationResult = await makeSdkClient(request).getOrganisation({
-        path: { organisation_id: organisationId },
-      });
-      if (!organisationResult.response.ok || !organisationResult.data?.organisation) {
-        return NextResponse.json({ ok: false, message: "Failed to load resolved organisation" }, { status: organisationResult.response.status });
+      const organisationResult = await sdk.getOrganisation({ path: { organisation_id: organisationId } });
+      if (organisationResult.response.ok && organisationResult.data?.organisation) {
+        return NextResponse.json({ ok: true, organisation: mapOrg(organisationResult.data.organisation as Organisation) });
       }
-      return NextResponse.json({ ok: true, organisation: mapOrg(organisationResult.data.organisation as Organisation) });
+
+      if (organisationResult.response.status === 403 || organisationResult.response.status === 404) {
+        return NextResponse.json({
+          ok: true,
+          organisation: mapResolvedOrg(organisationId, String(result.data.organisation_name ?? "")),
+        });
+      }
+
+      if (!organisationResult.response.ok || !organisationResult.data?.organisation) {
+        return NextResponse.json(
+          { ok: false, message: "Failed to load resolved organisation" },
+          { status: organisationResult.response.status }
+        );
+      }
     }
 
     if (result.status === 403 || result.status === 404) {
@@ -52,7 +76,7 @@ export async function GET(request: Request) {
     }
 
     return NextResponse.json(
-      { ok: false, message: String(result.data.message ?? "Failed to resolve organisation context") },
+      { ok: false, message: String(result.data?.message ?? "Failed to resolve organisation context") },
       { status: result.status }
     );
   } catch (err) {

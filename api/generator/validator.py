@@ -2,6 +2,7 @@
 OpenAPI Spec Validator for InsureTech API
 Validates generated OpenAPI specs against apirules.md guidelines
 """
+from write_guard import write_if_changed
 
 import yaml
 import re
@@ -467,8 +468,7 @@ class APIRulesValidator:
         report_text = "\n".join(report)
         
         if output_path:
-            with open(output_path, 'w', encoding='utf-8') as f:
-                f.write(report_text)
+            write_if_changed(output_path, report_text)
             print(f"Report saved to: {output_path}")
         
         return report_text

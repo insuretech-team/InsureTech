@@ -1,0 +1,254 @@
+name: Publish TypeScript SDK
+
+on:
+  push:
+    tags:
+      - 'ts-v*.*.*'
+    paths:
+      - 'sdks/insuretech-typescript-sdk/**'
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version to publish (e.g., 1.0.0)'
+        required: true
+        type: string
+
+env:
+  NODE_VERSION: '20'
+  SDK_PATH: 'sdks/insuretech-typescript-sdk'
+  PACKAGE_NAME: '@newage-saint/insuretech-sdk'
+
+jobs:
+  validate:
+    name: Validate TypeScript SDK
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+
+      - name: Verify SDK exists
+        run: |
+          if [ ! -d "${{ env.SDK_PATH }}" ]; then
+            echo "❌ SDK directory not found at ${{ env.SDK_PATH }}"
+            exit 1
+          fi
+          echo "✓ SDK directory found"
+
+      - name: Install dependencies
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm install
+
+      - name: Type check
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm run typecheck
+
+      - name: Lint
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm run lint
+
+      - name: Build SDK
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm run build
+
+      - name: Run tests
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm test
+
+      - name: Check build artifacts
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          if [ ! -d "dist" ]; then
+            echo "❌ Build artifacts not found"
+            exit 1
+          fi
+          
+          echo "✓ Build artifacts present:"
+          ls -lh dist/
+
+  publish:
+    name: Publish to NPM
+    runs-on: ubuntu-latest
+    needs: validate
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: ${{ env.NODE_VERSION }}
+          registry-url: 'https://registry.npmjs.org'
+
+      - name: Set version
+        id: version
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/ts-v}"
+          fi
+          
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+          echo "📦 Publishing version: $VERSION"
+          
+          # Update package.json version
+          npm version $VERSION --no-git-tag-version
+
+      - name: Install dependencies
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm install
+
+      - name: Build for production
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm run build
+
+      - name: Prepare package for publishing
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          # Create .npmignore if doesn't exist
+          cat > .npmignore << 'EOF'
+          # Source files
+          src/
+          tests/
+          
+          # Config files
+          tsconfig.json
+          .eslintrc.json
+          
+          # Development files
+          *.test.ts
+          *.spec.ts
+          .DS_Store
+          
+          # CI/CD
+          .github/
+          
+          # Documentation (keep README)
+          docs/
+          EOF
+          
+          echo "✓ Package prepared"
+
+      - name: Test package before publishing
+        working-directory: ${{ env.SDK_PATH }}
+        run: |
+          npm publish --dry-run --access public
+          echo "✓ Dry-run successful"
+
+      - name: Publish to NPM
+        working-directory: ${{ env.SDK_PATH }}
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+        run: |
+          npm publish --access public
+          echo "✅ Published to NPM!"
+
+      - name: Verify publication
+        run: |
+          sleep 10  # Wait for NPM to update
+          
+          # Check if package is available
+          npm view ${{ env.PACKAGE_NAME }}@${{ steps.version.outputs.version }}
+          
+          echo "✓ Package verified on NPM"
+
+  create-release:
+    name: Create GitHub Release
+    runs-on: ubuntu-latest
+    needs: publish
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Get version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "workflow_dispatch" ]; then
+            VERSION="${{ github.event.inputs.version }}"
+          else
+            VERSION="${GITHUB_REF#refs/tags/ts-v}"
+          fi
+          echo "version=$VERSION" >> $GITHUB_OUTPUT
+
+      - name: Create Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ github.token }}
+        with:
+          tag_name: ts-v${{ steps.version.outputs.version }}
+          release_name: TypeScript SDK v${{ steps.version.outputs.version }}
+          body: |
+            # InsureTech TypeScript SDK v${{ steps.version.outputs.version }}
+            
+            ## Installation
+            
+            ```bash
+            npm install ${{ env.PACKAGE_NAME }}@${{ steps.version.outputs.version }}
+            ```
+            
+            ## What's Included
+            
+            - 57 Services with 221 methods
+            - 865 Type-safe models
+            - Complete API coverage
+            - ES Modules + CommonJS
+            - Tree-shakeable
+            - TypeScript declarations
+            
+            ## Quick Start
+            
+            ```typescript
+            import { InsureTechClient } from '${{ env.PACKAGE_NAME }}';
+            
+            const client = new InsureTechClient({
+              apiKey: 'your-api-key'
+            });
+            
+            // Use the SDK
+            const policy = await client.policies.create({
+              productId: 'prod-123',
+              customerId: 'cust-456',
+            });
+            ```
+            
+            ## Links
+            
+            - 📦 [NPM Package](https://www.npmjs.com/package/${{ env.PACKAGE_NAME }}/v/${{ steps.version.outputs.version }})
+            - 📖 [Documentation](https://github.com/${{ github.repository }}/tree/main/sdks/insuretech-typescript-sdk)
+            - 🚀 [Quick Start Guide](https://github.com/${{ github.repository }}/blob/main/sdks/insuretech-typescript-sdk/QUICKSTART.md)
+            
+            ## Changes
+            
+            See [commit history](https://github.com/${{ github.repository }}/commits/ts-v${{ steps.version.outputs.version }})
+          draft: false
+          prerelease: false
+
+  notify:
+    name: Notify completion
+    runs-on: ubuntu-latest
+    needs: [publish, create-release]
+    if: always()
+    steps:
+      - name: Report status
+        run: |
+          if [ "${{ needs.publish.result }}" == "success" ]; then
+            echo "✅ TypeScript SDK published successfully!"
+            echo "📦 Package: ${{ env.PACKAGE_NAME }}"
+            echo "🔗 NPM: https://www.npmjs.com/package/${{ env.PACKAGE_NAME }}"
+          else
+            echo "❌ Publication failed"
+            exit 1
+          fi

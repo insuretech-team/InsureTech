@@ -3,7 +3,5 @@ InvoiceByOrderIdRetrievalResponse:
   properties:
     invoice:
       $ref: '#/components/schemas/Invoice'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for invoice by order id retrieval operation. Returns
     operation results and status.

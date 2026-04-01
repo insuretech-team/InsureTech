@@ -8,6 +8,8 @@ import (
 	"net/http"
 	"sync"
 	"time"
+
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 )
 
 // DedupEntry represents a deduplicated request
@@ -188,7 +190,7 @@ func (d *Deduplicator) Middleware(next http.Handler) http.Handler {
 				var err error
 				requestBody, err = io.ReadAll(r.Body)
 				if err != nil {
-					http.Error(w, "Failed to read request body", http.StatusBadRequest)
+					respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "Failed to read request body")
 					return
 				}
 				// Restore body for next handler

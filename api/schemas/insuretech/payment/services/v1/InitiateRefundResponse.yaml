@@ -8,8 +8,5 @@ InitiateRefundResponse:
     initiated_at:
       type: string
       format: date-time
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for initiate refund operation. Returns operation results
     and status.

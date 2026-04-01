@@ -271,6 +271,9 @@ namespace Insuretech.Beneficiary.Services.V1 {
     /// <summary>Field number for the "mobile_number" field.</summary>
     public const int MobileNumberFieldNumber = 6;
     private string mobileNumber_ = "";
+    /// <summary>
+    /// Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string MobileNumber {
@@ -1048,6 +1051,9 @@ namespace Insuretech.Beneficiary.Services.V1 {
     /// <summary>Field number for the "focal_person_mobile" field.</summary>
     public const int FocalPersonMobileFieldNumber = 6;
     private string focalPersonMobile_ = "";
+    /// <summary>
+    /// Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string FocalPersonMobile {
@@ -2284,6 +2290,9 @@ namespace Insuretech.Beneficiary.Services.V1 {
     /// <summary>Field number for the "mobile_number" field.</summary>
     public const int MobileNumberFieldNumber = 2;
     private string mobileNumber_ = "";
+    /// <summary>
+    /// Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+    /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public string MobileNumber {

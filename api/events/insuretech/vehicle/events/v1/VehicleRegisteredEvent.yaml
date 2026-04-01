@@ -1,0 +1,22 @@
+VehicleRegisteredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    registration_id:
+      type: string
+    vehicle_id:
+      type: string
+    owner_id:
+      type: string
+    registration_number:
+      type: string
+    registration_year:
+      type: integer
+      format: int32
+    registration_state:
+      type: string
+    registered_at:
+      type: string
+      format: date-time
+  description: VehicleRegisteredEvent is emitted when a vehicle is registered

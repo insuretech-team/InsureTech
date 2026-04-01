@@ -1,0 +1,104 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "model": "huggingface/moonshotai/Kimi-K2.5",
+  "enabled_providers": ["huggingface"],
+  "instructions": [
+    ".opencode/rules/*.md",
+    "rules/*.md"
+  ],
+  "watcher": {
+    "ignore": [
+      ".resources/**",
+      "gen/**",
+      "node_modules/**",
+      ".venv/**",
+      ".git/**",
+      ".gocache/**",
+      "backups/**",
+      "documentation/**",
+      "logs/**",
+      "*.exe",
+      "tmp_*"
+    ]
+  },
+  "mcp": {
+    "context7": {
+      "type": "remote",
+      "url": "https://mcp.context7.com/mcp"
+    },
+    "postgres": {
+      "type": "local",
+      "command": ["npx", "-y", "@modelcontextprotocol/server-postgres"],
+      "environment": {
+        "DATABASE_URL": "{env:INSURETECH_DB_URL}"
+      }
+    },
+    "gh_grep": {
+      "type": "remote",
+      "url": "https://mcp.grep.app"
+    }
+  },
+  "permission": {
+    "skill": {
+      "*": "allow"
+    }
+  },
+  "agent": {
+    "build": {
+      "mode": "primary",
+      "model": "huggingface/moonshotai/Kimi-K2.5",
+      "prompt": "{file:.opencode/prompts/build-prompt.md}",
+      "steps": 50,
+      "permission": {
+        "write": "allow",
+        "edit": "allow",
+        "bash": "allow",
+        "read": "allow"
+      }
+    },
+    "plan": {
+      "mode": "primary",
+      "model": "huggingface/moonshotai/Kimi-K2.5",
+      "prompt": "{file:.opencode/prompts/plan-prompt.md}",
+      "steps": 30,
+      "permission": {
+        "write": "deny",
+        "edit": "deny",
+        "bash": "deny",
+        "read": "allow"
+      }
+    }
+  },
+  "command": {
+    "proto-gen": {
+      "template": "Run `buf generate` from the project root to regenerate all Go, TypeScript, and C# code from proto definitions. Then verify there are no lint errors with `buf lint`.",
+      "description": "Generate code from proto definitions using Buf",
+      "agent": "build"
+    },
+    "proto-lint": {
+      "template": "Run `buf lint` on the proto directory and report any issues. For each issue, explain what the lint rule means and how to fix it.",
+      "description": "Lint proto files with Buf",
+      "agent": "build"
+    },
+    "proto-breaking": {
+      "template": "Run `buf breaking --against .git#branch=main` to check for breaking changes in proto definitions. Report all breaking changes and suggest backward-compatible alternatives.",
+      "description": "Check proto breaking changes",
+      "agent": "build"
+    },
+    "test": {
+      "template": "Run the Go test suite with `go test ./...` from the project root. Report failures and suggest fixes.",
+      "description": "Run Go test suite",
+      "agent": "build"
+    },
+    "docker-up": {
+      "template": "Start all services using `docker-compose up -d` and verify they are healthy. Report any container failures.",
+      "description": "Start Docker Compose services",
+      "agent": "build"
+    },
+    "analyze-upgrade": {
+      "template": "Read the upgrade.md file and the .resources/ directory. Analyze what features from the reference projects could be implemented next. Focus on proto-first integration patterns that fit the existing architecture.",
+      "description": "Analyze upgrade opportunities from .resources",
+      "agent": "plan"
+    }
+  }
+}

@@ -1,0 +1,24 @@
+KYCSessionSummary:
+  type: object
+  properties:
+    total_steps:
+      type: integer
+      format: int32
+    completed_steps:
+      type: integer
+      format: int32
+    failed_steps:
+      type: integer
+      format: int32
+    total_frames_processed:
+      type: integer
+      format: int32
+    elapsed_ms:
+      type: integer
+      format: int32
+    step_results:
+      type: array
+      items:
+        $ref: '#/components/schemas/KYCStepResult'
+  description: Domain entity representing kyc session summary. Core business object
+    in the system.

@@ -10,7 +10,7 @@ PricingConfig:
     rules:
       type: array
       items:
-        $ref: '#/components/schemas/PricingRule'
+        $ref: '#/components/schemas/ProductsPricingRule'
         description: '@inject_tag: gorm:"column:rules;not null;serializer:proto_enum"'
       description: '@inject_tag: gorm:"column:rules;not null;serializer:proto_enum"'
     effective_from:

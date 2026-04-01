@@ -6,15 +6,15 @@ import (
 
 // TigerBeetleAccount represents a tiger_beetle_account
 type TigerBeetleAccount struct {
-	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
-	TigerbeetleAccountId string `json:"tigerbeetle_account_id"`
-	AccountType string `json:"account_type"`
-	LedgerId int `json:"ledger_id"`
-	Currency string `json:"currency"`
-	BalanceUpdatedAt time.Time `json:"balance_updated_at,omitempty"`
 	AccountId string `json:"account_id"`
-	UserId string `json:"user_id,omitempty"`
+	AccountType string `json:"account_type"`
 	Balance string `json:"balance"`
+	BalanceUpdatedAt time.Time `json:"balance_updated_at,omitempty"`
+	CreatedAt time.Time `json:"created_at"`
+	Currency string `json:"currency"`
 	IsActive bool `json:"is_active"`
+	LedgerId int `json:"ledger_id"`
+	TigerbeetleAccountId string `json:"tigerbeetle_account_id"`
+	UpdatedAt time.Time `json:"updated_at"`
+	UserId string `json:"user_id,omitempty"`
 }

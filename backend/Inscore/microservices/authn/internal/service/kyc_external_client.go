@@ -23,3 +23,12 @@ func (s *AuthService) SetExternalKYCClient(client ExternalKYCClient) {
 	}
 	s.externalKYC = client
 }
+
+// SetFLVEAdapter injects the purpose-built FLVE eKYC adapter.
+// When set, KYC orchestration uses FLVE for liveness verification.
+func (s *AuthService) SetFLVEAdapter(adapter FLVEAdapter) {
+	if s == nil {
+		return
+	}
+	s.flveAdapter = adapter
+}

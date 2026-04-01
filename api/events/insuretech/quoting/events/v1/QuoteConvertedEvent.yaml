@@ -1,0 +1,21 @@
+QuotingQuoteConvertedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    policy_id:
+      type: string
+    customer_id:
+      type: string
+    product_id:
+      type: string
+    converted_premium:
+      $ref: '#/components/schemas/Money'
+    converted_at:
+      type: string
+      format: date-time
+  description: QuoteConvertedEvent is emitted when a quote is converted to a policy

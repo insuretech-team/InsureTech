@@ -1,0 +1,15 @@
+VehicleRegistrationUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    registration_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/RegistrationStatus'
+    new_status:
+      $ref: '#/components/schemas/RegistrationStatus'
+    updated_at:
+      type: string
+      format: date-time
+  description: VehicleRegistrationUpdatedEvent is emitted when registration is updated

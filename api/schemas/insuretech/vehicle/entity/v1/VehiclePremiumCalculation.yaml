@@ -1,0 +1,69 @@
+VehiclePremiumCalculation:
+  type: object
+  properties:
+    calculation_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:calculation_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    registration_id:
+      type: string
+      description: '@inject_tag: gorm:"column:registration_id;not null"'
+    base_premium:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:base_premium;serializer:proto_money"'
+    type_multiplier:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:type_multiplier"'
+    age_multiplier:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:age_multiplier"'
+    value_multiplier:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:value_multiplier"'
+    location_multiplier:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:location_multiplier"'
+    tp_premium_1_year:
+      $ref: '#/components/schemas/Money'
+      description: Third Party premiums
+    tp_premium_2_year:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:tp_premium_1_year;serializer:proto_money"'
+    tp_premium_3_year:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:tp_premium_2_year;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:tp_premium_3_year;serializer:proto_money\""
+    comp_premium_1_year:
+      $ref: '#/components/schemas/Money'
+      description: Comprehensive premiums
+    comp_premium_2_year:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:comp_premium_1_year;serializer:proto_money"'
+    comp_premium_3_year:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:comp_premium_2_year;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:comp_premium_3_year;serializer:proto_money\""
+    accidental_cover:
+      type: boolean
+      description: '@inject_tag: gorm:"column:accidental_cover"'
+      default: false
+    calculated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:calculated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    calculation_duration_ms:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:calculation_duration_ms"'
+  description: "VehiclePremiumCalculation stores calculated premiums\n Maps to 'vehicle_premium_calculations'\
+    \ table in vehicle_schema"
+  required:
+  - calculation_id
+  - registration_id
+  - calculated_at

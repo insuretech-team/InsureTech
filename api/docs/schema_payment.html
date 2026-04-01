@@ -250,7 +250,7 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">Payment represents a financial transaction (gateway integration)
+            <div class="description">Payment represents a financial transaction (gateway integration)
  Maps to 'payments' table in payment_schema</div>
         </div>
         
@@ -377,8 +377,8 @@
                 </td>
                 <td class="field-type">
                     <code>reference</code>
-                    <br><small>PaymentPaymentMethod</small>
-                    <a href="schema_paymentpaymentmethod.html" class="ref-link">→ PaymentPaymentMethod</a>
+                    <br><small>PaymentMethod</small>
+                    <a href="schema_paymentmethod.html" class="ref-link">→ PaymentMethod</a>
                 </td>
                 <td class="field-nullable">NO</td>
                 <td class="field-constraints"><small>—</small></td>
@@ -592,7 +592,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Idempotency key for preventing duplicate payment operations (CG-3)
+                <td class="field-description">Idempotency key for preventing duplicate payment operations (CG-3)
  @inject_tag: gorm:"column:idempotency_key"</td>
             </tr>
             
@@ -719,7 +719,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">SSLCommerz-specific fields
+                <td class="field-description">SSLCommerz-specific fields
  @inject_tag: gorm:"column:tran_id"</td>
             </tr>
             

@@ -31,8 +31,6 @@ TokenValidationResponse:
       type: string
       format: date-time
       description: token/session expiry
-    error:
-      $ref: '#/components/schemas/Error'
     api_key_scopes:
       type: array
       items:

@@ -43,7 +43,7 @@ type WorkflowServiceClient interface {
 	// Get my tasks
 	GetMyTasks(ctx context.Context, in *GetMyTasksRequest, opts ...grpc.CallOption) (*GetMyTasksResponse, error)
 	// Complete task
-	CompleteTask(ctx context.Context, in *CompleteTaskRequest, opts ...grpc.CallOption) (*CompleteTaskResponse, error)
+	CompleteTask(ctx context.Context, in *CompleteWorkflowTaskRequest, opts ...grpc.CallOption) (*CompleteWorkflowTaskResponse, error)
 	// Get workflow history for entity
 	GetWorkflowHistory(ctx context.Context, in *GetWorkflowHistoryRequest, opts ...grpc.CallOption) (*GetWorkflowHistoryResponse, error)
 }
@@ -106,9 +106,9 @@ func (c *workflowServiceClient) GetMyTasks(ctx context.Context, in *GetMyTasksRe
 	return out, nil
 }
 
-func (c *workflowServiceClient) CompleteTask(ctx context.Context, in *CompleteTaskRequest, opts ...grpc.CallOption) (*CompleteTaskResponse, error) {
+func (c *workflowServiceClient) CompleteTask(ctx context.Context, in *CompleteWorkflowTaskRequest, opts ...grpc.CallOption) (*CompleteWorkflowTaskResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(CompleteTaskResponse)
+	out := new(CompleteWorkflowTaskResponse)
 	err := c.cc.Invoke(ctx, WorkflowService_CompleteTask_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -141,7 +141,7 @@ type WorkflowServiceServer interface {
 	// Get my tasks
 	GetMyTasks(context.Context, *GetMyTasksRequest) (*GetMyTasksResponse, error)
 	// Complete task
-	CompleteTask(context.Context, *CompleteTaskRequest) (*CompleteTaskResponse, error)
+	CompleteTask(context.Context, *CompleteWorkflowTaskRequest) (*CompleteWorkflowTaskResponse, error)
 	// Get workflow history for entity
 	GetWorkflowHistory(context.Context, *GetWorkflowHistoryRequest) (*GetWorkflowHistoryResponse, error)
 }
@@ -168,7 +168,7 @@ func (UnimplementedWorkflowServiceServer) GetWorkflowInstance(context.Context, *
 func (UnimplementedWorkflowServiceServer) GetMyTasks(context.Context, *GetMyTasksRequest) (*GetMyTasksResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetMyTasks not implemented")
 }
-func (UnimplementedWorkflowServiceServer) CompleteTask(context.Context, *CompleteTaskRequest) (*CompleteTaskResponse, error) {
+func (UnimplementedWorkflowServiceServer) CompleteTask(context.Context, *CompleteWorkflowTaskRequest) (*CompleteWorkflowTaskResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CompleteTask not implemented")
 }
 func (UnimplementedWorkflowServiceServer) GetWorkflowHistory(context.Context, *GetWorkflowHistoryRequest) (*GetWorkflowHistoryResponse, error) {
@@ -285,7 +285,7 @@ func _WorkflowService_GetMyTasks_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _WorkflowService_CompleteTask_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(CompleteTaskRequest)
+	in := new(CompleteWorkflowTaskRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -297,7 +297,7 @@ func _WorkflowService_CompleteTask_Handler(srv interface{}, ctx context.Context,
 		FullMethod: WorkflowService_CompleteTask_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(WorkflowServiceServer).CompleteTask(ctx, req.(*CompleteTaskRequest))
+		return srv.(WorkflowServiceServer).CompleteTask(ctx, req.(*CompleteWorkflowTaskRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

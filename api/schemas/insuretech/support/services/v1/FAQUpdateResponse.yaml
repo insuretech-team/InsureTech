@@ -1,9 +1,5 @@
 FAQUpdateResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
+  properties: {}
   description: Response payload for faq update operation. Returns operation results
     and status.

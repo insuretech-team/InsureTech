@@ -1,4 +1,4 @@
-PremiumCalculatedEvent:
+ProductsPremiumCalculatedEvent:
   type: object
   properties:
     event_id:

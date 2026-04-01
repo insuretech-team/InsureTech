@@ -1,0 +1,41 @@
+BusinessRule:
+  type: object
+  properties:
+    rule_id:
+      type: string
+    rule_name:
+      type: string
+    expression:
+      type: string
+      description: Lambda expression like "input1.age >= 18 AND input1.creditScore
+        >= 600"
+    expression_type:
+      $ref: '#/components/schemas/RuleExpressionType'
+    success_event:
+      type: string
+      description: Value returned on success (e.g., "ELIGIBLE", "10" for discount
+        %)
+    error_message:
+      type: string
+      description: Error message on failure
+    error_type:
+      $ref: '#/components/schemas/ErrorType'
+    priority:
+      type: integer
+      format: int32
+      description: Execution priority (lower = first)
+    is_enabled:
+      type: boolean
+    child_rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessRule'
+        description: Nested rules for complex logic
+      description: Nested rules for complex logic
+    properties:
+      type: object
+      additionalProperties:
+        type: string
+      description: Additional rule properties
+  description: "BusinessRule represents a single rule within a workflow\n This is\
+    \ the Microsoft RulesEngine compatible structure"

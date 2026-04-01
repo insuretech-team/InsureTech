@@ -1,0 +1,14 @@
+ExecutionHistoryRetrievalResponse:
+  type: object
+  properties:
+    executions:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessWorkflowExecution'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for execution history retrieval operation. Returns
+    operation results and status.

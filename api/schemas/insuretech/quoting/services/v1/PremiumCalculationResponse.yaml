@@ -1,0 +1,15 @@
+QuotingPremiumCalculationResponse:
+  type: object
+  properties:
+    calculation:
+      $ref: '#/components/schemas/PremiumCalculation'
+    coverages:
+      type: array
+      items:
+        $ref: '#/components/schemas/Coverage'
+    discounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Discount'
+  description: Response payload for premium calculation operation. Returns operation
+    results and status.

@@ -68,6 +68,7 @@ type PolicyRuleRepository interface {
 type PortalConfigRepository interface {
 	GetByPortal(ctx context.Context, portal authzentityv1.Portal) (*authzentityv1.PortalConfig, error)
 	Upsert(ctx context.Context, pc *authzentityv1.PortalConfig) (*authzentityv1.PortalConfig, error)
+	List(ctx context.Context) ([]*authzentityv1.PortalConfig, error)
 }
 
 // AuditRepository writes access decision audit rows.

@@ -1,0 +1,23 @@
+LossTrendSegment:
+  type: object
+  properties:
+    segment_key:
+      type: string
+    segment_value:
+      type: string
+    current_loss_ratio:
+      type: number
+      format: double
+    previous_loss_ratio:
+      type: number
+      format: double
+    change_percentage:
+      type: number
+      format: double
+    trend_direction:
+      type: string
+      description: IMPROVING, STABLE, WORSENING
+    details:
+      type: object
+  description: Domain entity representing loss trend segment. Core business object
+    in the system.

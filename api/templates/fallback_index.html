@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>InsureTech API Documentation Hub</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body { 
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; 
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 900px;
+            width: 100%;
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+            padding: 40px;
+        }
+        h1 { 
+            color: #333; 
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+        }
+        .stat {
+            text-align: center;
+        }
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+        }
+        .stat-label {
+            font-size: 0.9em;
+            color: #666;
+            margin-top: 5px;
+        }
+        .link-card { 
+            border: 2px solid #e0e0e0;
+            padding: 25px;
+            margin: 15px 0;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .link-card:hover { 
+            border-color: #667eea;
+            box-shadow: 0 5px 20px rgba(102, 126, 234, 0.2);
+            transform: translateY(-2px);
+        }
+        .link-card h3 {
+            margin-bottom: 8px;
+            color: #333;
+        }
+        a { 
+            text-decoration: none; 
+            color: inherit;
+            display: block;
+        }
+        .description { 
+            color: #666; 
+            line-height: 1.6;
+        }
+        .icon {
+            font-size: 1.5em;
+            margin-right: 10px;
+        }
+        .badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            margin-left: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🏥 InsureTech API</h1>
+        <p class="subtitle">Complete API Documentation & Interactive Tools</p>
+        
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value">865</div>
+                <div class="stat-label">Schemas</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">177</div>
+                <div class="stat-label">Endpoints</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">100%</div>
+                <div class="stat-label">Coverage</div>
+            </div>
+            <div class="stat">
+                <div class="stat-value">0</div>
+                <div class="stat-label">Errors</div>
+            </div>
+        </div>
+        
+        <a href="swagger.html">
+            <div class="link-card">
+                <h3><span class="icon">📘</span>Swagger UI<span class="badge">Interactive</span></h3>
+                <div class="description">
+                    Interactive API explorer with try-it-out functionality. 
+                    Test endpoints, view request/response examples, and explore the API interactively.
+                </div>
+            </div>
+        </a>
+        
+        <a href="redoc.html">
+            <div class="link-card">
+                <h3><span class="icon">📗</span>ReDoc<span class="badge">Clean</span></h3>
+                <div class="description">
+                    Clean, responsive three-panel API reference documentation. 
+                    Perfect for reading and understanding the API structure.
+                </div>
+            </div>
+        </a>
+        
+        <a href="../openapi.yaml" download>
+            <div class="link-card">
+                <h3><span class="icon">📄</span>OpenAPI Specification<span class="badge">v3.1</span></h3>
+                <div class="description">
+                    Download the raw OpenAPI 3.1 specification file (YAML format). 
+                    Use for code generation, testing, and integration.
+                </div>
+            </div>
+        </a>
+        
+        <a href="../validation_report.html">
+            <div class="link-card">
+                <h3><span class="icon">✅</span>Validation Report<span class="badge">Passed</span></h3>
+                <div class="description">
+                    Detailed validation results and quality metrics. 
+                    View coverage statistics, warnings, and recommendations.
+                </div>
+            </div>
+        </a>
+    </div>
+</body>
+</html>

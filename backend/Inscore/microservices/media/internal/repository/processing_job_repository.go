@@ -8,7 +8,6 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	mediav1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -29,16 +28,18 @@ func NewProcessingJobRepository(db *sqlx.DB) *ProcessingJobRepository {
 
 // Create stores a new processing job.
 func (r *ProcessingJobRepository) Create(ctx context.Context, job *mediav1.ProcessingJob) (*mediav1.ProcessingJob, error) {
+	auditInfo, auditInfoJSON, err := prepareAuditInfoForCreate(job.AuditInfo, "")
+	if err != nil {
+		return nil, err
+	}
+
 	query := `
 		INSERT INTO media_schema.processing_jobs (
 			job_id, media_id, processing_type, status, priority,
 			retry_count, max_retries, started_at, completed_at,
-			error_message, result_data, audit_info, created_at, updated_at
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, NOW(), NOW())
-		RETURNING created_at, updated_at
+			error_message, result_data, audit_info
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12::jsonb)
 	`
-
-	var createdAt, updatedAt sql.NullTime
 	var startedAt, completedAt sql.NullTime
 
 	if job.StartedAt != nil {
@@ -48,7 +49,7 @@ func (r *ProcessingJobRepository) Create(ctx context.Context, job *mediav1.Proce
 		completedAt = sql.NullTime{Time: job.CompletedAt.AsTime(), Valid: true}
 	}
 
-	err := r.db.QueryRowContext(ctx, query,
+	_, err = r.db.ExecContext(ctx, query,
 		job.Id,
 		job.MediaId,
 		job.ProcessingType.String(),
@@ -60,22 +61,14 @@ func (r *ProcessingJobRepository) Create(ctx context.Context, job *mediav1.Proce
 		completedAt,
 		nullString(job.ErrorMessage),
 		nullString(job.ResultData),
-		"{}",
-	).Scan(&createdAt, &updatedAt)
+		auditInfoJSON,
+	)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to create processing job: %w", err)
 	}
 
-	if job.AuditInfo == nil {
-		job.AuditInfo = &commonv1.AuditInfo{}
-	}
-	if createdAt.Valid {
-		job.AuditInfo.CreatedAt = timestamppb.New(createdAt.Time)
-	}
-	if updatedAt.Valid {
-		job.AuditInfo.UpdatedAt = timestamppb.New(updatedAt.Time)
-	}
+	job.AuditInfo = auditInfo
 
 	return job, nil
 }
@@ -86,7 +79,7 @@ func (r *ProcessingJobRepository) GetByID(ctx context.Context, tenantID, jobID s
 		SELECT
 			pj.job_id, pj.media_id, pj.processing_type, pj.status, pj.priority,
 			pj.retry_count, pj.max_retries, pj.started_at, pj.completed_at,
-			pj.error_message, pj.result_data, pj.created_at, pj.updated_at
+			pj.error_message, pj.result_data, ` + auditInfoSelectExpr("pj") + `
 		FROM media_schema.processing_jobs pj
 		JOIN media_schema.media_files mf ON mf.media_id = pj.media_id
 		WHERE pj.job_id = $1`
@@ -159,13 +152,13 @@ func (r *ProcessingJobRepository) List(
 		SELECT
 			pj.job_id, pj.media_id, pj.processing_type, pj.status, pj.priority,
 			pj.retry_count, pj.max_retries, pj.started_at, pj.completed_at,
-			pj.error_message, pj.result_data, pj.created_at, pj.updated_at
+			pj.error_message, pj.result_data, %s
 		FROM media_schema.processing_jobs pj
 		JOIN media_schema.media_files mf ON mf.media_id = pj.media_id
 		WHERE %s
-		ORDER BY pj.created_at DESC
+		ORDER BY %s DESC
 		LIMIT $%d OFFSET $%d
-	`, whereClause, len(args)+1, len(args)+2)
+	`, auditInfoSelectExpr("pj"), whereClause, auditCreatedAtExpr("pj"), len(args)+1, len(args)+2)
 	queryArgs := append(append([]any{}, args...), limit, offset)
 
 	rows, err := r.db.QueryContext(ctx, query, queryArgs...)
@@ -195,10 +188,10 @@ func (r *ProcessingJobRepository) GetNextPendingJob(ctx context.Context, process
 		SELECT
 			job_id, media_id, processing_type, status, priority,
 			retry_count, max_retries, started_at, completed_at,
-			error_message, result_data, created_at, updated_at
+			error_message, result_data, ` + auditInfoSelectExpr("") + `
 		FROM media_schema.processing_jobs
 		WHERE status = 'PENDING' AND processing_type = $1
-		ORDER BY priority DESC, created_at ASC
+		ORDER BY priority DESC, ` + auditCreatedAtExpr("") + ` ASC
 		LIMIT 1
 		FOR UPDATE SKIP LOCKED
 	`
@@ -219,7 +212,7 @@ func (r *ProcessingJobRepository) GetNextPendingJob(ctx context.Context, process
 func (r *ProcessingJobRepository) UpdateStatus(ctx context.Context, jobID string, status mediav1.ProcessingStatus) error {
 	query := `
 		UPDATE media_schema.processing_jobs
-		SET status = $1, updated_at = NOW()
+		SET status = $1, ` + auditInfoUpdatedExpr("") + `
 		WHERE job_id = $2
 	`
 
@@ -244,7 +237,7 @@ func (r *ProcessingJobRepository) UpdateStatus(ctx context.Context, jobID string
 func (r *ProcessingJobRepository) MarkAsStarted(ctx context.Context, jobID string) error {
 	query := `
 		UPDATE media_schema.processing_jobs
-		SET status = 'IN_PROGRESS', started_at = NOW(), updated_at = NOW()
+		SET status = 'IN_PROGRESS', started_at = NOW(), ` + auditInfoUpdatedExpr("") + `
 		WHERE job_id = $1
 	`
 
@@ -269,7 +262,7 @@ func (r *ProcessingJobRepository) MarkAsStarted(ctx context.Context, jobID strin
 func (r *ProcessingJobRepository) MarkAsCompleted(ctx context.Context, jobID string, resultData string) error {
 	query := `
 		UPDATE media_schema.processing_jobs
-		SET status = 'COMPLETED', completed_at = NOW(), result_data = $1, updated_at = NOW()
+		SET status = 'COMPLETED', completed_at = NOW(), result_data = $1, ` + auditInfoUpdatedExpr("") + `
 		WHERE job_id = $2
 	`
 
@@ -294,7 +287,7 @@ func (r *ProcessingJobRepository) MarkAsCompleted(ctx context.Context, jobID str
 func (r *ProcessingJobRepository) MarkAsFailed(ctx context.Context, jobID string, errorMsg string) error {
 	query := `
 		UPDATE media_schema.processing_jobs
-		SET status = 'FAILED', error_message = $1, retry_count = retry_count + 1, updated_at = NOW()
+		SET status = 'FAILED', error_message = $1, retry_count = retry_count + 1, ` + auditInfoUpdatedExpr("") + `
 		WHERE job_id = $2
 	`
 
@@ -318,8 +311,8 @@ func (r *ProcessingJobRepository) MarkAsFailed(ctx context.Context, jobID string
 func scanProcessingJob(scan func(dest ...any) error) (*mediav1.ProcessingJob, error) {
 	var job mediav1.ProcessingJob
 	var processingType, status string
-	var startedAt, completedAt, createdAt, updatedAt sql.NullTime
-	var errorMessage, resultData sql.NullString
+	var startedAt, completedAt sql.NullTime
+	var errorMessage, resultData, auditInfoJSON sql.NullString
 
 	err := scan(
 		&job.Id,
@@ -333,8 +326,7 @@ func scanProcessingJob(scan func(dest ...any) error) (*mediav1.ProcessingJob, er
 		&completedAt,
 		&errorMessage,
 		&resultData,
-		&createdAt,
-		&updatedAt,
+		&auditInfoJSON,
 	)
 	if err != nil {
 		return nil, err
@@ -355,13 +347,13 @@ func scanProcessingJob(scan func(dest ...any) error) (*mediav1.ProcessingJob, er
 	if resultData.Valid {
 		job.ResultData = resultData.String
 	}
-
-	job.AuditInfo = &commonv1.AuditInfo{}
-	if createdAt.Valid {
-		job.AuditInfo.CreatedAt = timestamppb.New(createdAt.Time)
-	}
-	if updatedAt.Valid {
-		job.AuditInfo.UpdatedAt = timestamppb.New(updatedAt.Time)
+	if auditInfoJSON.Valid {
+		job.AuditInfo, err = parseAuditInfoJSON(auditInfoJSON.String)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		job.AuditInfo, _ = parseAuditInfoJSON("{}")
 	}
 
 	return &job, nil
@@ -400,7 +392,7 @@ func (r *ProcessingJobRepository) GetPendingJobs(ctx context.Context, limit int)
 		FROM media_schema.processing_jobs pj
 		JOIN media_schema.media_files mf ON mf.media_id = pj.media_id
 		WHERE pj.status = 'PENDING'
-		ORDER BY pj.priority DESC, pj.created_at ASC
+		ORDER BY pj.priority DESC, ` + auditCreatedAtExpr("pj") + ` ASC
 		LIMIT $1
 		FOR UPDATE SKIP LOCKED
 	`

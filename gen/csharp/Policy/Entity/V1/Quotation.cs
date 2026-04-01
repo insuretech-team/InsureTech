@@ -27,7 +27,7 @@ namespace Insuretech.Policy.Entity.V1 {
             "CitpbnN1cmV0ZWNoL3BvbGljeS9lbnRpdHkvdjEvcXVvdGF0aW9uLnByb3Rv",
             "EhtpbnN1cmV0ZWNoLnBvbGljeS5lbnRpdHkudjEaH2dvb2dsZS9wcm90b2J1",
             "Zi90aW1lc3RhbXAucHJvdG8aHWluc3VyZXRlY2gvY29tbW9uL3YxL2RiLnBy",
-            "b3RvGiBpbnN1cmV0ZWNoL2NvbW1vbi92MS90eXBlcy5wcm90byLmDwoJUXVv",
+            "b3RvGiBpbnN1cmV0ZWNoL2NvbW1vbi92MS90eXBlcy5wcm90byLkEAoJUXVv",
             "dGF0aW9uElIKDHF1b3RhdGlvbl9pZBgBIAEoCUIvkrUYKwoMcXVvdGF0aW9u",
             "X2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClSC3F1b3RhdGlvbklk",
             "EkgKC2J1c2luZXNzX2lkGAIgASgJQieStRgjCgtidXNpbmVzc19pZBIEVVVJ",
@@ -71,23 +71,26 @@ namespace Insuretech.Policy.Entity.V1 {
             "YWwgdGltZXN0YW1wUgphcHByb3ZlZEF0EnMKEHJlamVjdGlvbl9yZWFzb24Y",
             "FCABKAlCSJK1GEQKEHJlamVjdGlvbl9yZWFzb24SBFRFWFRaKlJlYXNvbiBm",
             "b3IgcmVqZWN0aW9uIGlmIHN0YXR1cyBpcyBSRUpFQ1RFRFIPcmVqZWN0aW9u",
-            "UmVhc29uOkqKtRhGCgpxdW90YXRpb25zEhBpbnN1cmFuY2Vfc2NoZW1hGF0g",
-            "ASocSW5zdXJhbmNlIFF1b3RhdGlvbiBSZXF1ZXN0czABOAFAASrMAQoPUXVv",
-            "dGF0aW9uU3RhdHVzEiAKHFFVT1RBVElPTl9TVEFUVVNfVU5TUEVDSUZJRUQQ",
-            "ABIaChZRVU9UQVRJT05fU1RBVFVTX0RSQUZUEAESHgoaUVVPVEFUSU9OX1NU",
-            "QVRVU19TVUJNSVRURUQQAhIdChlRVU9UQVRJT05fU1RBVFVTX1JFQ0VJVkVE",
-            "EAMSHQoZUVVPVEFUSU9OX1NUQVRVU19BUFBST1ZFRBAEEh0KGVFVT1RBVElP",
-            "Tl9TVEFUVVNfUkVKRUNURUQQBUKQAgofY29tLmluc3VyZXRlY2gucG9saWN5",
-            "LmVudGl0eS52MUIOUXVvdGF0aW9uUHJvdG9QAVpOZ2l0aHViLmNvbS9uZXdh",
-            "Z2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC9wb2xpY3kv",
-            "ZW50aXR5L3YxO2VudGl0eXYxogIDSVBFqgIbSW5zdXJldGVjaC5Qb2xpY3ku",
-            "RW50aXR5LlYxygIbSW5zdXJldGVjaFxQb2xpY3lcRW50aXR5XFYx4gInSW5z",
-            "dXJldGVjaFxQb2xpY3lcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIeSW5zdXJl",
-            "dGVjaDo6UG9saWN5OjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "UmVhc29uEnwKCmRlbGV0ZWRfYXQYFSABKAsyGi5nb29nbGUucHJvdG9idWYu",
+            "VGltZXN0YW1wQkGStRg9CgpkZWxldGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBU",
+            "SU1FIFpPTkVaFVNvZnQgZGVsZXRlIHRpbWVzdGFtcFIJZGVsZXRlZEF0OkqK",
+            "tRhGCgpxdW90YXRpb25zEhBpbnN1cmFuY2Vfc2NoZW1hGF0gASocSW5zdXJh",
+            "bmNlIFF1b3RhdGlvbiBSZXF1ZXN0czABOAFAASrMAQoPUXVvdGF0aW9uU3Rh",
+            "dHVzEiAKHFFVT1RBVElPTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIaChZRVU9U",
+            "QVRJT05fU1RBVFVTX0RSQUZUEAESHgoaUVVPVEFUSU9OX1NUQVRVU19TVUJN",
+            "SVRURUQQAhIdChlRVU9UQVRJT05fU1RBVFVTX1JFQ0VJVkVEEAMSHQoZUVVP",
+            "VEFUSU9OX1NUQVRVU19BUFBST1ZFRBAEEh0KGVFVT1RBVElPTl9TVEFUVVNf",
+            "UkVKRUNURUQQBUKQAgofY29tLmluc3VyZXRlY2gucG9saWN5LmVudGl0eS52",
+            "MUIOUXVvdGF0aW9uUHJvdG9QAVpOZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQv",
+            "aW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC9wb2xpY3kvZW50aXR5L3Yx",
+            "O2VudGl0eXYxogIDSVBFqgIbSW5zdXJldGVjaC5Qb2xpY3kuRW50aXR5LlYx",
+            "ygIbSW5zdXJldGVjaFxQb2xpY3lcRW50aXR5XFYx4gInSW5zdXJldGVjaFxQ",
+            "b2xpY3lcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIeSW5zdXJldGVjaDo6UG9s",
+            "aWN5OjpFbnRpdHk6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, global::Insuretech.Common.V1.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Policy.Entity.V1.QuotationStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Entity.V1.Quotation), global::Insuretech.Policy.Entity.V1.Quotation.Parser, new[]{ "QuotationId", "BusinessId", "InsurerName", "PlanId", "InsuranceCategory", "DepartmentId", "EmployeeNo", "EstimatedPremium", "QuotedAmount", "Status", "SubmissionDate", "ValidUntil", "CreatedAt", "UpdatedAt", "QuotationNumber", "PlanName", "CreatedByUserId", "ApprovedByUserId", "ApprovedAt", "RejectionReason" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Entity.V1.Quotation), global::Insuretech.Policy.Entity.V1.Quotation.Parser, new[]{ "QuotationId", "BusinessId", "InsurerName", "PlanId", "InsuranceCategory", "DepartmentId", "EmployeeNo", "EstimatedPremium", "QuotedAmount", "Status", "SubmissionDate", "ValidUntil", "CreatedAt", "UpdatedAt", "QuotationNumber", "PlanName", "CreatedByUserId", "ApprovedByUserId", "ApprovedAt", "RejectionReason", "DeletedAt" }, null, null, null, null)
           }));
     }
     #endregion
@@ -164,6 +167,7 @@ namespace Insuretech.Policy.Entity.V1 {
       approvedByUserId_ = other.approvedByUserId_;
       approvedAt_ = other.approvedAt_ != null ? other.approvedAt_.Clone() : null;
       rejectionReason_ = other.rejectionReason_;
+      deletedAt_ = other.deletedAt_ != null ? other.deletedAt_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -467,6 +471,21 @@ namespace Insuretech.Policy.Entity.V1 {
       }
     }
 
+    /// <summary>Field number for the "deleted_at" field.</summary>
+    public const int DeletedAtFieldNumber = 21;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp deletedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp DeletedAt {
+      get { return deletedAt_; }
+      set {
+        deletedAt_ = value;
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -502,6 +521,7 @@ namespace Insuretech.Policy.Entity.V1 {
       if (ApprovedByUserId != other.ApprovedByUserId) return false;
       if (!object.Equals(ApprovedAt, other.ApprovedAt)) return false;
       if (RejectionReason != other.RejectionReason) return false;
+      if (!object.Equals(DeletedAt, other.DeletedAt)) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -529,6 +549,7 @@ namespace Insuretech.Policy.Entity.V1 {
       if (ApprovedByUserId.Length != 0) hash ^= ApprovedByUserId.GetHashCode();
       if (approvedAt_ != null) hash ^= ApprovedAt.GetHashCode();
       if (RejectionReason.Length != 0) hash ^= RejectionReason.GetHashCode();
+      if (deletedAt_ != null) hash ^= DeletedAt.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -627,6 +648,10 @@ namespace Insuretech.Policy.Entity.V1 {
         output.WriteRawTag(162, 1);
         output.WriteString(RejectionReason);
       }
+      if (deletedAt_ != null) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(DeletedAt);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -717,6 +742,10 @@ namespace Insuretech.Policy.Entity.V1 {
         output.WriteRawTag(162, 1);
         output.WriteString(RejectionReason);
       }
+      if (deletedAt_ != null) {
+        output.WriteRawTag(170, 1);
+        output.WriteMessage(DeletedAt);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -786,6 +815,9 @@ namespace Insuretech.Policy.Entity.V1 {
       }
       if (RejectionReason.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(RejectionReason);
+      }
+      if (deletedAt_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(DeletedAt);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -879,6 +911,12 @@ namespace Insuretech.Policy.Entity.V1 {
       }
       if (other.RejectionReason.Length != 0) {
         RejectionReason = other.RejectionReason;
+      }
+      if (other.deletedAt_ != null) {
+        if (deletedAt_ == null) {
+          DeletedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        DeletedAt.MergeFrom(other.DeletedAt);
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1000,6 +1038,13 @@ namespace Insuretech.Policy.Entity.V1 {
             RejectionReason = input.ReadString();
             break;
           }
+          case 170: {
+            if (deletedAt_ == null) {
+              DeletedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DeletedAt);
+            break;
+          }
         }
       }
     #endif
@@ -1118,6 +1163,13 @@ namespace Insuretech.Policy.Entity.V1 {
           }
           case 162: {
             RejectionReason = input.ReadString();
+            break;
+          }
+          case 170: {
+            if (deletedAt_ == null) {
+              DeletedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(DeletedAt);
             break;
           }
         }

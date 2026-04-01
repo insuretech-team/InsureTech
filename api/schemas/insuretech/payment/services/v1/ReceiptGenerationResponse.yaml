@@ -7,7 +7,5 @@ ReceiptGenerationResponse:
       type: string
     receipt_file_id:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for receipt generation operation. Returns operation
     results and status.

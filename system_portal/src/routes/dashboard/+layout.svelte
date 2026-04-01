@@ -1,9 +1,11 @@
 <script lang="ts">
 	import DashboardLayout from '$lib/components/dashboard-layout.svelte';
 
-	let { children } = $props();
+	let { data, children } = $props();
 </script>
 
-<DashboardLayout>
-	{@render children()}
+<DashboardLayout user={data.user}>
+	{#snippet children()}
+		{@render children()}
+	{/snippet}
 </DashboardLayout>

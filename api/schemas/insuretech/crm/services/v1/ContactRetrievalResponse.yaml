@@ -1,0 +1,7 @@
+ContactRetrievalResponse:
+  type: object
+  properties:
+    contact:
+      $ref: '#/components/schemas/Contact'
+  description: Response payload for contact retrieval operation. Returns operation
+    results and status.

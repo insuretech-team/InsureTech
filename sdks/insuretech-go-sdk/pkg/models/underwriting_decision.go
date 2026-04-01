@@ -6,21 +6,21 @@ import (
 
 // UnderwritingDecision represents a underwriting_decision
 type UnderwritingDecision struct {
-	Id string `json:"id"`
-	QuoteId string `json:"quote_id"`
-	UnderwriterComments string `json:"underwriter_comments,omitempty"`
-	AuditInfo interface{} `json:"audit_info"`
-	Decision *DecisionType `json:"decision"`
-	Conditions string `json:"conditions,omitempty"`
-	PremiumAdjusted bool `json:"premium_adjusted,omitempty"`
 	AdjustedPremium *Money `json:"adjusted_premium,omitempty"`
-	Method *DecisionMethod `json:"method"`
-	RiskLevel *UnderwritingRiskLevel `json:"risk_level,omitempty"`
-	Reason string `json:"reason,omitempty"`
-	UnderwriterId string `json:"underwriter_id,omitempty"`
-	DecidedAt time.Time `json:"decided_at"`
-	ValidUntil time.Time `json:"valid_until,omitempty"`
-	RiskScore string `json:"risk_score,omitempty"`
-	RiskFactors string `json:"risk_factors,omitempty"`
 	AdjustmentReason string `json:"adjustment_reason,omitempty"`
+	AuditInfo interface{} `json:"audit_info"`
+	Conditions string `json:"conditions,omitempty"`
+	DecidedAt time.Time `json:"decided_at"`
+	Decision *DecisionType `json:"decision"`
+	Id string `json:"id"`
+	Method *DecisionMethod `json:"method"`
+	PremiumAdjusted bool `json:"premium_adjusted,omitempty"`
+	QuoteId string `json:"quote_id"`
+	Reason string `json:"reason,omitempty"`
+	RiskFactors string `json:"risk_factors,omitempty"`
+	RiskLevel *UnderwritingRiskLevel `json:"risk_level,omitempty"`
+	RiskScore string `json:"risk_score,omitempty"`
+	UnderwriterComments string `json:"underwriter_comments,omitempty"`
+	UnderwriterId string `json:"underwriter_id,omitempty"`
+	ValidUntil time.Time `json:"valid_until,omitempty"`
 }

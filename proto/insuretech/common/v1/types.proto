@@ -114,7 +114,7 @@ message ContactInfo {
     (insuretech.common.v1.requires_consent) = true,
     (insuretech.common.v1.data_purpose) =
         "Customer communication and authentication"
-  ]; // +880 1XXX XXXXXX
+  ]; // Canonical format: +8801XXXXXXXXX
   string email = 2 [
     (insuretech.common.v1.pii) = true,
     (insuretech.common.v1.encrypted_security) = true,

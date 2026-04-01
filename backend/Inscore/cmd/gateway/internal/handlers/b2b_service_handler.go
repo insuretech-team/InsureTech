@@ -8,6 +8,9 @@ import (
 	"strings"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 	authnv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	authzentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
 	authzv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
@@ -17,7 +20,6 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -28,13 +30,15 @@ type B2BServiceHandler struct {
 }
 
 type assignOrgAdminPayload struct {
-	MemberID       string `json:"memberId"`
-	Email          string `json:"email"`
-	Password       string `json:"password"`
-	FullName       string `json:"fullName"`
-	MobileNumber   string `json:"mobileNumber"`
-	DepartmentName string `json:"departmentName"`
-	EmployeeID     string `json:"employeeId"`
+	MemberID          string `json:"memberId"`
+	UserID            string `json:"userId"`
+	Email             string `json:"email"`
+	Password          string `json:"password"`
+	TemporaryPassword string `json:"temporaryPassword"`
+	FullName          string `json:"fullName"`
+	MobileNumber      string `json:"mobileNumber"`
+	DepartmentName    string `json:"departmentName"`
+	EmployeeID        string `json:"employeeId"`
 }
 
 func NewB2BServiceHandler(conn *grpc.ClientConn, authnClient authnv1.AuthServiceClient, authzClient authzv1.AuthZServiceClient) *B2BServiceHandler {
@@ -100,7 +104,7 @@ func (h *B2BServiceHandler) GetPurchaseOrder(w http.ResponseWriter, r *http.Requ
 func (h *B2BServiceHandler) CreatePurchaseOrder(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.CreatePurchaseOrderRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreatePurchaseOrder(ctx, &req)
@@ -137,7 +141,7 @@ func (h *B2BServiceHandler) GetDepartment(w http.ResponseWriter, r *http.Request
 func (h *B2BServiceHandler) CreateDepartment(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.CreateDepartmentRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateDepartment(ctx, &req)
@@ -148,7 +152,7 @@ func (h *B2BServiceHandler) UpdateDepartment(w http.ResponseWriter, r *http.Requ
 	departmentID := r.PathValue("department_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.UpdateDepartmentRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.DepartmentId = departmentID
@@ -193,10 +197,24 @@ func (h *B2BServiceHandler) GetEmployee(w http.ResponseWriter, r *http.Request) 
 	})
 }
 
+func (h *B2BServiceHandler) ListEmployeeLoginOrganisations(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		req := &b2bservicev1.ListEmployeeLoginOrganisationsRequest{
+			Query: r.URL.Query().Get("q"),
+		}
+		if q := r.URL.Query().Get("page_size"); q != "" {
+			if n, err := strconv.Atoi(q); err == nil && n > 0 {
+				req.PageSize = int32(n)
+			}
+		}
+		return h.client.ListEmployeeLoginOrganisations(ctx, req)
+	})
+}
+
 func (h *B2BServiceHandler) CreateEmployee(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.CreateEmployeeRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateEmployee(ctx, &req)
@@ -207,7 +225,7 @@ func (h *B2BServiceHandler) UpdateEmployee(w http.ResponseWriter, r *http.Reques
 	employeeUUID := r.PathValue("employee_uuid")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.UpdateEmployeeRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.EmployeeUuid = employeeUUID
@@ -221,6 +239,28 @@ func (h *B2BServiceHandler) DeleteEmployee(w http.ResponseWriter, r *http.Reques
 		return h.client.DeleteEmployee(ctx, &b2bservicev1.DeleteEmployeeRequest{
 			EmployeeUuid: employeeUUID,
 		})
+	})
+}
+
+func (h *B2BServiceHandler) ActivateEmployee(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		var req b2bservicev1.ActivateEmployeeRequest
+		if err := protoUnmarshal(body, &req); err != nil {
+			return nil, err
+		}
+		return h.client.ActivateEmployee(ctx, &req)
+	})
+}
+
+func (h *B2BServiceHandler) GetMyEmployeeProfile(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		return h.client.GetMyEmployeeProfile(ctx, &b2bservicev1.GetMyEmployeeProfileRequest{})
+	})
+}
+
+func (h *B2BServiceHandler) GetMyEmployeeCoverage(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		return h.client.GetMyEmployeeCoverage(ctx, &b2bservicev1.GetMyEmployeeCoverageRequest{})
 	})
 }
 
@@ -253,7 +293,7 @@ func (h *B2BServiceHandler) GetOrganisation(w http.ResponseWriter, r *http.Reque
 func (h *B2BServiceHandler) CreateOrganisation(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.CreateOrganisationRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateOrganisation(ctx, &req)
@@ -264,7 +304,7 @@ func (h *B2BServiceHandler) UpdateOrganisation(w http.ResponseWriter, r *http.Re
 	organisationID := r.PathValue("organisation_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.UpdateOrganisationRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.OrganisationId = organisationID
@@ -294,7 +334,7 @@ func (h *B2BServiceHandler) ListOrgMembers(w http.ResponseWriter, r *http.Reques
 func (h *B2BServiceHandler) ResolveMyOrganisation(w http.ResponseWriter, r *http.Request) {
 	userID := strings.TrimSpace(r.Header.Get("X-User-ID"))
 	if userID == "" {
-		writeJSONError(w, http.StatusUnauthorized, "missing user context")
+		respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "missing user context")
 		return
 	}
 	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
@@ -308,7 +348,7 @@ func (h *B2BServiceHandler) AddOrgMember(w http.ResponseWriter, r *http.Request)
 	organisationID := r.PathValue("organisation_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req b2bservicev1.AddOrgMemberRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.OrganisationId = organisationID
@@ -343,6 +383,10 @@ func (h *B2BServiceHandler) AssignOrgAdmin(w http.ResponseWriter, r *http.Reques
 			return assignResp, nil
 		}
 
+		if userID := strings.TrimSpace(payload.UserID); userID != "" {
+			return h.assignExistingUserAsOrgAdmin(ctx, organisationID, payload, strings.TrimSpace(r.Header.Get("X-User-ID")))
+		}
+
 		return h.bootstrapOrgAdmin(ctx, organisationID, payload, strings.TrimSpace(r.Header.Get("X-User-ID")))
 	})
 }
@@ -371,12 +415,16 @@ func (h *B2BServiceHandler) bootstrapOrgAdmin(
 	if email == "" || password == "" || mobileNumber == "" {
 		return nil, status.Error(codes.InvalidArgument, "email, password, and mobileNumber are required")
 	}
+	normalizedMobileNumber, err := mobile.NormalizeBangladeshMobileE164(mobileNumber)
+	if err != nil {
+		return nil, status.Error(codes.InvalidArgument, "mobileNumber must be a valid Bangladesh number in formats like 01712345678, +8801712345678, or 008801712345678")
+	}
 
 	registrationResp, err := h.authnClient.RegisterEmailUser(ctx, &authnv1.RegisterEmailUserRequest{
 		Email:        email,
 		Password:     password,
 		FullName:     fullName,
-		MobileNumber: mobileNumber,
+		MobileNumber: normalizedMobileNumber,
 		UserType:     "B2B_ORG_ADMIN",
 		DeviceId:     "b2b-portal-" + organisationID,
 	})
@@ -410,7 +458,7 @@ func (h *B2BServiceHandler) bootstrapOrgAdmin(
 		DepartmentId:  departmentID,
 		BusinessId:    organisationID,
 		Email:         email,
-		MobileNumber:  mobileNumber,
+		MobileNumber:  normalizedMobileNumber,
 		DateOfJoining: time.Now().UTC().Format("2006-01-02"),
 	})
 	if err != nil {
@@ -424,6 +472,41 @@ func (h *B2BServiceHandler) bootstrapOrgAdmin(
 	return &b2bservicev1.AssignOrgAdminResponse{
 		Member:  memberResp.GetMember(),
 		Message: "B2B admin created successfully",
+	}, nil
+}
+
+func (h *B2BServiceHandler) assignExistingUserAsOrgAdmin(
+	ctx context.Context,
+	organisationID string,
+	payload assignOrgAdminPayload,
+	assignedBy string,
+) (proto.Message, error) {
+	userID := strings.TrimSpace(payload.UserID)
+	if userID == "" {
+		return nil, status.Error(codes.InvalidArgument, "userId is required")
+	}
+	if strings.TrimSpace(payload.TemporaryPassword) == "" {
+		return nil, status.Error(codes.InvalidArgument, "temporaryPassword is required")
+	}
+
+	orgCtx := withBusinessContext(ctx, organisationID)
+
+	member, err := h.ensureOrgAdminMember(orgCtx, organisationID, userID)
+	if err != nil {
+		return nil, err
+	}
+
+	if err := h.assignTemporaryPassword(ctx, userID, strings.TrimSpace(payload.TemporaryPassword), assignedBy); err != nil {
+		return nil, wrapStepError("set temporary password", err)
+	}
+
+	if err := h.assignB2BOrgAdminRole(ctx, userID, organisationID, assignedBy); err != nil {
+		return nil, wrapStepError("assign authz role", err)
+	}
+
+	return &b2bservicev1.AssignOrgAdminResponse{
+		Member:  member,
+		Message: "B2B admin assigned successfully",
 	}, nil
 }
 
@@ -457,6 +540,60 @@ func (h *B2BServiceHandler) ensureAdminDepartment(ctx context.Context, organisat
 		return "", status.Error(codes.Internal, "default department creation returned no department_id")
 	}
 	return createResp.GetDepartment().GetDepartmentId(), nil
+}
+
+func (h *B2BServiceHandler) ensureOrgAdminMember(ctx context.Context, organisationID, userID string) (*b2bv1.OrgMember, error) {
+	addResp, err := h.client.AddOrgMember(ctx, &b2bservicev1.AddOrgMemberRequest{
+		OrganisationId: organisationID,
+		UserId:         userID,
+		Role:           b2bv1.OrgMemberRole_ORG_MEMBER_ROLE_BUSINESS_ADMIN,
+	})
+	if err == nil && addResp.GetMember() != nil {
+		return addResp.GetMember(), nil
+	}
+
+	listResp, listErr := h.client.ListOrgMembers(ctx, &b2bservicev1.ListOrgMembersRequest{
+		OrganisationId: organisationID,
+	})
+	if listErr != nil {
+		if err != nil {
+			return nil, wrapStepError("add organisation member", err)
+		}
+		return nil, wrapStepError("list organisation members", listErr)
+	}
+
+	for _, member := range listResp.GetMembers() {
+		if strings.TrimSpace(member.GetUserId()) != userID {
+			continue
+		}
+		if member.GetRole() == b2bv1.OrgMemberRole_ORG_MEMBER_ROLE_BUSINESS_ADMIN {
+			return member, nil
+		}
+		assignResp, assignErr := h.client.AssignOrgAdmin(ctx, &b2bservicev1.AssignOrgAdminRequest{
+			OrganisationId: organisationID,
+			MemberId:       member.GetMemberId(),
+		})
+		if assignErr != nil {
+			return nil, wrapStepError("assign organisation admin", assignErr)
+		}
+		return assignResp.GetMember(), nil
+	}
+
+	if err != nil {
+		return nil, wrapStepError("add organisation member", err)
+	}
+	return nil, status.Error(codes.NotFound, "organisation member not found for user")
+}
+
+func (h *B2BServiceHandler) assignTemporaryPassword(ctx context.Context, userID, temporaryPassword, assignedBy string) error {
+	authnCtx := withInternalServiceContext(ctx, "gateway")
+	_, err := h.authnClient.SetTemporaryPassword(authnCtx, &authnv1.SetTemporaryPasswordRequest{
+		UserId:                userID,
+		TemporaryPassword:     temporaryPassword,
+		AssignedBy:            assignedBy,
+		RequirePasswordChange: true,
+	})
+	return err
 }
 
 func (h *B2BServiceHandler) assignB2BOrgAdminRole(ctx context.Context, userID, organisationID, assignedBy string) error {
@@ -557,18 +694,7 @@ func withBusinessContext(ctx context.Context, organisationID string) context.Con
 }
 
 func withInternalServiceContext(ctx context.Context, serviceName string) context.Context {
-	serviceName = strings.TrimSpace(serviceName)
-	if serviceName == "" {
-		return ctx
-	}
-
-	if md, ok := metadata.FromOutgoingContext(ctx); ok {
-		cloned := md.Copy()
-		cloned.Set("x-internal-service", serviceName)
-		return metadata.NewOutgoingContext(ctx, cloned)
-	}
-
-	return metadata.NewOutgoingContext(ctx, metadata.Pairs("x-internal-service", serviceName))
+	return internalrpc.OutgoingContext(ctx, serviceName)
 }
 
 func chooseAdminEmployeeID(requestedID, email, organisationID string) string {

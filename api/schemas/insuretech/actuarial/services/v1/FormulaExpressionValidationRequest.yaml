@@ -1,0 +1,11 @@
+FormulaExpressionValidationRequest:
+  type: object
+  properties:
+    formula_expression:
+      type: string
+    variables:
+      type: array
+      items:
+        $ref: '#/components/schemas/ActuarialVariable'
+  description: Request payload for formula expression validation operation. Contains
+    parameters required to execute the operation.

@@ -1,0 +1,9 @@
+ContactDeletionRequest:
+  type: object
+  properties:
+    contact_id:
+      type: string
+    permanent:
+      type: boolean
+  description: Request payload for contact deletion operation. Contains parameters
+    required to execute the operation.

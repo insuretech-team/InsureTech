@@ -8,5 +8,10 @@ OrderStatus:
   - ORDER_STATUS_POLICY_ISSUED
   - ORDER_STATUS_CANCELLED
   - ORDER_STATUS_FAILED
+  - ORDER_STATUS_PROPOSAL_SUBMITTED
+  - ORDER_STATUS_PROPOSAL_APPROVED
+  - ORDER_STATUS_PROPOSAL_REJECTED
+  - ORDER_STATUS_REFUND_PENDING
+  - ORDER_STATUS_REFUNDED
   description: OrderStatus represents the primary lifecycle state of an insurance
     purchase order.

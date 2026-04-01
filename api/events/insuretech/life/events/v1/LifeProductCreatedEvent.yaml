@@ -1,0 +1,20 @@
+LifeProductCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    product_name:
+      type: string
+    product_type:
+      $ref: '#/components/schemas/LifeProductType'
+    base_rate:
+      type: string
+      format: int64
+    created_at:
+      type: string
+      format: date-time
+  description: LifeProductCreatedEvent is emitted when a new life product is created

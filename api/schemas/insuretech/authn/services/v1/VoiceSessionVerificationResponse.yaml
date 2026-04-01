@@ -5,9 +5,5 @@ VoiceSessionVerificationResponse:
       type: boolean
     user_id:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for voice session verification operation. Returns
     operation results and status.

@@ -1,0 +1,23 @@
+PolicyCategory 
+   1.Life
+   2.NonLife
+      1.Health
+      2.Auto
+      3.Travel
+      4.Fire
+      5.Marine
+      6.Property
+      7.Liability
+      8.Lossof income
+      9.Goodsintransit
+      10.Crops
+      11.Livestock
+      12.Credit
+      13.Surety
+      14.Engineering
+      15.Aviation
+      16.Pet
+      17.Cyber
+      18.Terrorism
+      19.NaturalDisaster
+      20.Device

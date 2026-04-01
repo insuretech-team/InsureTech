@@ -200,6 +200,109 @@ func (p *Publisher) PublishVirusDetected(ctx context.Context, mediaID, tenantID,
 	return nil
 }
 
+// PublishValidationCompleted publishes a media.validation.completed event.
+func (p *Publisher) PublishValidationCompleted(ctx context.Context, mediaID, tenantID, status, validationErrors string) error {
+	if mediaID == "" || tenantID == "" {
+		return fmt.Errorf("mediaID and tenantID are required")
+	}
+
+	event := mediaEvent{
+		EventType: "media.validation.completed",
+		Timestamp: time.Now().UTC(),
+		TenantID:  tenantID,
+		MediaID:   mediaID,
+		Data: map[string]interface{}{
+			"status":            status,
+			"validation_errors": validationErrors,
+		},
+	}
+
+	if err := p.producer.Produce(ctx, p.topic, tenantID, event); err != nil {
+		logger.Errorf("Failed to publish media.validation.completed event (mediaID=%s, tenantID=%s): %v", mediaID, tenantID, err)
+		return fmt.Errorf("failed to publish media.validation.completed event: %w", err)
+	}
+
+	logger.Infof("Published media.validation.completed event (mediaID=%s, tenantID=%s, status=%s)", mediaID, tenantID, status)
+	return nil
+}
+
+// PublishProcessingRequested publishes a media.processing.requested event.
+func (p *Publisher) PublishProcessingRequested(ctx context.Context, jobID, mediaID, tenantID, jobType string, priority int32) error {
+	if jobID == "" || mediaID == "" || tenantID == "" {
+		return fmt.Errorf("jobID, mediaID, and tenantID are required")
+	}
+
+	event := mediaEvent{
+		EventType: "media.processing.requested",
+		Timestamp: time.Now().UTC(),
+		TenantID:  tenantID,
+		MediaID:   mediaID,
+		JobID:     jobID,
+		Data: map[string]interface{}{
+			"job_type": jobType,
+			"priority": priority,
+		},
+	}
+
+	if err := p.producer.Produce(ctx, p.topic, tenantID, event); err != nil {
+		logger.Errorf("Failed to publish media.processing.requested event (jobID=%s, mediaID=%s, tenantID=%s): %v", jobID, mediaID, tenantID, err)
+		return fmt.Errorf("failed to publish media.processing.requested event: %w", err)
+	}
+
+	logger.Infof("Published media.processing.requested event (jobID=%s, mediaID=%s, tenantID=%s)", jobID, mediaID, tenantID)
+	return nil
+}
+
+// PublishOCRCompleted publishes a media.ocr.completed event.
+func (p *Publisher) PublishOCRCompleted(ctx context.Context, mediaID, tenantID string, textLength int) error {
+	if mediaID == "" || tenantID == "" {
+		return fmt.Errorf("mediaID and tenantID are required")
+	}
+
+	event := mediaEvent{
+		EventType: "media.ocr.completed",
+		Timestamp: time.Now().UTC(),
+		TenantID:  tenantID,
+		MediaID:   mediaID,
+		Data: map[string]interface{}{
+			"text_length": textLength,
+		},
+	}
+
+	if err := p.producer.Produce(ctx, p.topic, tenantID, event); err != nil {
+		logger.Errorf("Failed to publish media.ocr.completed event (mediaID=%s, tenantID=%s): %v", mediaID, tenantID, err)
+		return fmt.Errorf("failed to publish media.ocr.completed event: %w", err)
+	}
+
+	logger.Infof("Published media.ocr.completed event (mediaID=%s, tenantID=%s, text_length=%d)", mediaID, tenantID, textLength)
+	return nil
+}
+
+// PublishVirusScanCompleted publishes a media.virus_scan.completed event.
+func (p *Publisher) PublishVirusScanCompleted(ctx context.Context, mediaID, tenantID, status string) error {
+	if mediaID == "" || tenantID == "" {
+		return fmt.Errorf("mediaID and tenantID are required")
+	}
+
+	event := mediaEvent{
+		EventType: "media.virus_scan.completed",
+		Timestamp: time.Now().UTC(),
+		TenantID:  tenantID,
+		MediaID:   mediaID,
+		Data: map[string]interface{}{
+			"status": status,
+		},
+	}
+
+	if err := p.producer.Produce(ctx, p.topic, tenantID, event); err != nil {
+		logger.Errorf("Failed to publish media.virus_scan.completed event (mediaID=%s, tenantID=%s): %v", mediaID, tenantID, err)
+		return fmt.Errorf("failed to publish media.virus_scan.completed event: %w", err)
+	}
+
+	logger.Infof("Published media.virus_scan.completed event (mediaID=%s, tenantID=%s, status=%s)", mediaID, tenantID, status)
+	return nil
+}
+
 // Close gracefully closes the Kafka publisher
 func (p *Publisher) Close() error {
 	if p.producer != nil {

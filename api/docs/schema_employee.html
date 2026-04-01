@@ -250,9 +250,9 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">Employee represents a corporate employee in the B2B portal.
- business_id is the organisation_id from b2b_schema.organisations — the tenant
- isolation key. user_id links to authn_schema.users when portal access is
+            <div class="description">Employee represents a corporate employee in the B2B portal.
+ business_id is the organisation_id from b2b_schema.organisations — the tenant
+ isolation key. user_id links to authn_schema.users when portal access is
  granted (B2C bridge).</div>
         </div>
         
@@ -356,7 +356,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">FK to b2b_schema.organisations.organisation_id — tenant isolation key
+                <td class="field-description">FK to b2b_schema.organisations.organisation_id — tenant isolation key
  @inject_tag: gorm:"column:business_id;not null;index"</td>
             </tr>
             
@@ -483,7 +483,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Work email address
+                <td class="field-description">Work email address
  @inject_tag: gorm:"column:email"</td>
             </tr>
             
@@ -498,7 +498,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Mobile number (BD format: +8801XXXXXXXXX)
+                <td class="field-description">Mobile number stored in canonical BD E.164 format: +8801XXXXXXXXX
  @inject_tag: gorm:"column:mobile_number"</td>
             </tr>
             
@@ -513,7 +513,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Date of birth (ISO 8601 string: YYYY-MM-DD)
+                <td class="field-description">Date of birth (ISO 8601 string: YYYY-MM-DD)
  @inject_tag: gorm:"column:date_of_birth"</td>
             </tr>
             
@@ -528,7 +528,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Date of joining (ISO 8601 string: YYYY-MM-DD)
+                <td class="field-description">Date of joining (ISO 8601 string: YYYY-MM-DD)
  @inject_tag: gorm:"column:date_of_joining"</td>
             </tr>
             
@@ -557,8 +557,8 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">B2C portal bridge: set when portal access is granted via GrantPortalAccess
- RPC. Links to authn_schema.users.user_id.
+                <td class="field-description">B2C portal bridge: set when portal access is granted via GrantPortalAccess
+ RPC. Links to authn_schema.users.user_id.
  @inject_tag: gorm:"column:user_id"</td>
             </tr>
             

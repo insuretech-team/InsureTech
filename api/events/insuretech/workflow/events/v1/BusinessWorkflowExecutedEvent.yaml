@@ -1,0 +1,33 @@
+BusinessWorkflowExecutedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    execution_id:
+      type: string
+    business_workflow_id:
+      type: string
+    workflow_name:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    is_success:
+      type: boolean
+    rules_passed:
+      type: integer
+      format: int32
+    rules_failed:
+      type: integer
+      format: int32
+    execution_time_ms:
+      type: integer
+      format: int32
+    executed_by:
+      type: string
+    executed_at:
+      type: string
+      format: date-time
+  description: BusinessWorkflowExecutedEvent is emitted when a business workflow is
+    executed

@@ -1,0 +1,9 @@
+PortalConfigsListingResponse:
+  type: object
+  properties:
+    configs:
+      type: array
+      items:
+        $ref: '#/components/schemas/PortalConfig'
+  description: Response payload for portal configs listing operation. Returns operation
+    results and status.

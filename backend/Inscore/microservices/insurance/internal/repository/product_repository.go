@@ -23,6 +23,80 @@ func NewProductRepository(db *gorm.DB) *ProductRepository {
 	return &ProductRepository{db: db}
 }
 
+func productCategoryToDB(category productsv1.ProductCategory) string {
+	switch category {
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_MOTOR:
+		return "PRODUCT_CATEGORY_MOTOR"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_HEALTH:
+		return "PRODUCT_CATEGORY_HEALTH"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_TRAVEL:
+		return "PRODUCT_CATEGORY_TRAVEL"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_HOME:
+		return "PRODUCT_CATEGORY_HOME"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_DEVICE:
+		return "PRODUCT_CATEGORY_DEVICE"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_AGRICULTURAL:
+		return "PRODUCT_CATEGORY_AGRICULTURAL"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_LIFE:
+		return "PRODUCT_CATEGORY_LIFE"
+	case productsv1.ProductCategory_PRODUCT_CATEGORY_PET:
+		return "PRODUCT_CATEGORY_PET"
+	default:
+		return "PRODUCT_CATEGORY_UNSPECIFIED"
+	}
+}
+
+func productStatusToDB(status productsv1.ProductStatus) string {
+	switch status {
+	case productsv1.ProductStatus_PRODUCT_STATUS_ACTIVE:
+		return "PRODUCT_STATUS_ACTIVE"
+	case productsv1.ProductStatus_PRODUCT_STATUS_INACTIVE:
+		return "PRODUCT_STATUS_INACTIVE"
+	case productsv1.ProductStatus_PRODUCT_STATUS_DISCONTINUED:
+		return "PRODUCT_STATUS_DISCONTINUED"
+	default:
+		return "PRODUCT_STATUS_DRAFT"
+	}
+}
+
+func parseProductCategoryDB(value string) productsv1.ProductCategory {
+	switch strings.ToUpper(strings.TrimSpace(value)) {
+	case "PRODUCT_CATEGORY_MOTOR", "MOTOR", "1":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_MOTOR
+	case "PRODUCT_CATEGORY_HEALTH", "HEALTH", "2":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_HEALTH
+	case "PRODUCT_CATEGORY_TRAVEL", "TRAVEL", "3":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_TRAVEL
+	case "PRODUCT_CATEGORY_HOME", "HOME", "4":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_HOME
+	case "PRODUCT_CATEGORY_DEVICE", "DEVICE", "5":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_DEVICE
+	case "PRODUCT_CATEGORY_AGRICULTURAL", "AGRICULTURAL", "6":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_AGRICULTURAL
+	case "PRODUCT_CATEGORY_LIFE", "LIFE", "7":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_LIFE
+	case "PRODUCT_CATEGORY_PET", "PET", "8":
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_PET
+	default:
+		return productsv1.ProductCategory_PRODUCT_CATEGORY_UNSPECIFIED
+	}
+}
+
+func parseProductStatusDB(value string) productsv1.ProductStatus {
+	switch strings.ToUpper(strings.TrimSpace(value)) {
+	case "PRODUCT_STATUS_ACTIVE", "ACTIVE", "2":
+		return productsv1.ProductStatus_PRODUCT_STATUS_ACTIVE
+	case "PRODUCT_STATUS_INACTIVE", "INACTIVE", "3":
+		return productsv1.ProductStatus_PRODUCT_STATUS_INACTIVE
+	case "PRODUCT_STATUS_DISCONTINUED", "DISCONTINUED", "4":
+		return productsv1.ProductStatus_PRODUCT_STATUS_DISCONTINUED
+	case "PRODUCT_STATUS_DRAFT", "DRAFT", "1":
+		return productsv1.ProductStatus_PRODUCT_STATUS_DRAFT
+	default:
+		return productsv1.ProductStatus_PRODUCT_STATUS_UNSPECIFIED
+	}
+}
+
 func (r *ProductRepository) Create(ctx context.Context, product *productsv1.Product) (*productsv1.Product, error) {
 	if product.ProductId == "" {
 		return nil, fmt.Errorf("product_id is required")
@@ -71,7 +145,7 @@ func (r *ProductRepository) Create(ctx context.Context, product *productsv1.Prod
 		product.ProductId,
 		product.ProductCode,
 		product.ProductName,
-		strings.ToUpper(product.Category.String()),
+		productCategoryToDB(product.Category),
 		product.Description,
 		basePremium,
 		minSumInsured,
@@ -82,7 +156,7 @@ func (r *ProductRepository) Create(ctx context.Context, product *productsv1.Prod
 		product.MinTenureMonths,
 		product.MaxTenureMonths,
 		pq.Array(product.Exclusions),
-		strings.ToUpper(product.Status.String()),
+		productStatusToDB(product.Status),
 		product.CreatedBy,
 		productAttrs,
 	).Error
@@ -189,18 +263,12 @@ func (r *ProductRepository) GetByID(ctx context.Context, productID string) (*pro
 
 	// Parse category enum
 	if categoryStr.Valid {
-		k := strings.ToUpper(categoryStr.String)
-		if v, ok := productsv1.ProductCategory_value[k]; ok {
-			p.Category = productsv1.ProductCategory(v)
-		}
+		p.Category = parseProductCategoryDB(categoryStr.String)
 	}
 
 	// Parse status enum
 	if statusStr.Valid {
-		k := strings.ToUpper(statusStr.String)
-		if v, ok := productsv1.ProductStatus_value[k]; ok {
-			p.Status = productsv1.ProductStatus(v)
-		}
+		p.Status = parseProductStatusDB(statusStr.String)
 	}
 
 	if !createdAt.IsZero() {
@@ -267,7 +335,7 @@ func (r *ProductRepository) Update(ctx context.Context, product *productsv1.Prod
 		product.ProductId,
 		product.ProductCode,
 		product.ProductName,
-		strings.ToUpper(product.Category.String()),
+		productCategoryToDB(product.Category),
 		product.Description,
 		basePremium,
 		minSumInsured,
@@ -278,7 +346,7 @@ func (r *ProductRepository) Update(ctx context.Context, product *productsv1.Prod
 		product.MinTenureMonths,
 		product.MaxTenureMonths,
 		pq.Array(product.Exclusions),
-		strings.ToUpper(product.Status.String()),
+		productStatusToDB(product.Status),
 		productAttrs,
 	).Error
 
@@ -444,18 +512,12 @@ func (r *ProductRepository) List(ctx context.Context, tenantID string, page, pag
 
 		// Parse category enum
 		if categoryStr.Valid {
-			k := strings.ToUpper(categoryStr.String)
-			if v, ok := productsv1.ProductCategory_value[k]; ok {
-				p.Category = productsv1.ProductCategory(v)
-			}
+			p.Category = parseProductCategoryDB(categoryStr.String)
 		}
 
 		// Parse status enum
 		if statusStr.Valid {
-			k := strings.ToUpper(statusStr.String)
-			if v, ok := productsv1.ProductStatus_value[k]; ok {
-				p.Status = productsv1.ProductStatus(v)
-			}
+			p.Status = parseProductStatusDB(statusStr.String)
 		}
 
 		if !createdAt.IsZero() {

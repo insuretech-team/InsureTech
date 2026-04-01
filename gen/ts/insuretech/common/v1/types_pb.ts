@@ -358,7 +358,7 @@ export const AddressSchema: GenMessage<Address> = /*@__PURE__*/
  */
 export type ContactInfo = Message<"insuretech.common.v1.ContactInfo"> & {
   /**
-   * +880 1XXX XXXXXX
+   * Canonical format: +8801XXXXXXXXX
    *
    * @generated from field: string mobile_number = 1;
    */

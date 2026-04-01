@@ -1,4 +1,5 @@
 using Insuretech.Notification.Services.V1;
+using Insuretech.Notification.Entity.V1;
 using Microsoft.Extensions.Logging;
 
 namespace PoliSync.Infrastructure.GrpcClients;
@@ -27,11 +28,13 @@ public sealed class NotificationGrpcClient
         {
             var req = new SendNotificationRequest
             {
-                UserId     = userId,
-                Channel    = channel,
+                RecipientId = userId,
+                Type = NotificationType.Unspecified,
+                Channel = ParseChannel(channel),
                 TemplateId = templateId,
+                Priority = NotificationPriority.Normal,
             };
-            req.Variables.Add(variables);
+            req.TemplateData.Add(variables);
             await Client.SendNotificationAsync(req, cancellationToken: ct);
         }
         catch (Exception ex)
@@ -39,4 +42,16 @@ public sealed class NotificationGrpcClient
             _logger.LogWarning(ex, "Notification failed for user={UserId} channel={Channel}", userId, channel);
         }
     }
+
+    private static NotificationChannel ParseChannel(string channel) =>
+        channel.Trim().ToLowerInvariant() switch
+        {
+            "sms" => NotificationChannel.Sms,
+            "email" => NotificationChannel.Email,
+            "push" => NotificationChannel.Push,
+            "whatsapp" => NotificationChannel.Whatsapp,
+            "in_app" => NotificationChannel.InApp,
+            "in-app" => NotificationChannel.InApp,
+            _ => NotificationChannel.Unspecified
+        };
 }

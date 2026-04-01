@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { Separator } from "@/components/ui/separator";
-import { authClient } from "@lib/sdk";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 
 const focusPurple =
   "focus-visible:ring-primary focus-visible:border-primary focus-visible:ring-2";
@@ -35,7 +35,7 @@ const ChangePasswordSection = () => {
     }
     setSaving(true);
     try {
-      const res = await authClient.changePassword({
+      const res = await bffClient.auth.changePassword({
         old_password: form.old_password,
         new_password: form.new_password,
       });
@@ -127,7 +127,7 @@ const TotpSection = () => {
     setEnabling(true);
     setMessage(null);
     try {
-      const res = await authClient.enableTotp();
+      const res = await bffClient.auth.enableTotp();
       if (res.ok && res.totp) {
         setTotpData(res.totp);
         setMessage({ text: "Scan the QR code with your authenticator app.", ok: true });
@@ -147,7 +147,7 @@ const TotpSection = () => {
     setDisabling(true);
     setMessage(null);
     try {
-      const res = await authClient.disableTotp(totpCode);
+      const res = await bffClient.auth.disableTotp(totpCode);
       setMessage({ text: res.message ?? (res.ok ? "2FA disabled." : "Failed to disable 2FA."), ok: res.ok });
       if (res.ok) { setTotpData(null); setTotpCode(""); }
     } catch {
@@ -238,7 +238,7 @@ const SessionsSection = () => {
 
   const fetchSessions = (delay = 0) => {
     setLoading(true);
-    const run = () => authClient.listSessions().then((res) => {
+    const run = () => bffClient.auth.listSessions().then((res) => {
       if (res.ok && res.sessions) {
         // BFF returns { ok, sessions: SessionsListingResponse }
         // SessionsListingResponse = { sessions?: Array<Session>, total_count?, ... }
@@ -259,7 +259,7 @@ const SessionsSection = () => {
     setRevoking(sessionId);
     setMessage(null);
     try {
-      const res = await authClient.revokeSession(sessionId);
+      const res = await bffClient.auth.revokeSession(sessionId);
       setMessage({ text: res.message ?? (res.ok ? "Session revoked." : "Failed."), ok: res.ok });
       // Small delay so the DB write propagates before we re-fetch.
       if (res.ok) fetchSessions(500);
@@ -274,7 +274,7 @@ const SessionsSection = () => {
     setRevokingAll(true);
     setMessage(null);
     try {
-      const res = await authClient.revokeAllSessions();
+      const res = await bffClient.auth.revokeAllSessions();
       setMessage({ text: res.message ?? (res.ok ? "All sessions revoked." : "Failed."), ok: res.ok });
       if (res.ok) {
         setSessions([]); // optimistic clear

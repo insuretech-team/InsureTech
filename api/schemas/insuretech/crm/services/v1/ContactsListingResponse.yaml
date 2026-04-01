@@ -1,0 +1,14 @@
+ContactsListingResponse:
+  type: object
+  properties:
+    contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Contact'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for contacts listing operation. Returns operation
+    results and status.

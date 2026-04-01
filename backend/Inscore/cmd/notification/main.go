@@ -49,11 +49,8 @@ func main() {
 		zap.String("active_db", string(db.Manager.GetCurrentType())),
 		zap.Bool("failover_enabled", db.Manager.GetPrimaryDB() != nil && db.Manager.GetBackupDB() != nil))
 
-	// TODO: Initialize notification server when implemented
-	// notificationServer, err := notificationpkg.NewNotificationServer(sqlDB)
-	// if err != nil {
-	// 	logger.Fatal("Failed to create notification server", zap.Error(err))
-	// }
+	// This legacy command still provides health checks while the dedicated
+	// notification microservice bootstrap under microservices/notification owns RPC wiring.
 	_ = sqlDB
 
 	// Setup gRPC server
@@ -69,8 +66,7 @@ func main() {
 
 	grpcServer := grpc.NewServer()
 
-	// TODO: Register notification service when implemented
-	// notificationservicev1.RegisterNotificationServiceServer(grpcServer, notificationServer)
+	// RPC registration is handled by the dedicated notification microservice bootstrap.
 
 	// Register health service
 	healthServer := health.NewServer()

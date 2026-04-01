@@ -292,7 +292,7 @@ namespace Insuretech.Workflow.Entity.V1 {
     public const int AuditInfoFieldNumber = 10;
     private global::Insuretech.Common.V1.AuditInfo auditInfo_;
     /// <summary>
-    /// @inject_tag: gorm:"column:audit_info;not null"
+    /// @inject_tag: gorm:"-"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

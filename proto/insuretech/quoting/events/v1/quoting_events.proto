@@ -1,0 +1,117 @@
+syntax = "proto3";
+
+package insuretech.quoting.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/quoting/events/v1;quotingeventsv1";
+option csharp_namespace = "Insuretech.Quoting.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/quoting/entity/v1/quote.proto";
+
+// QuoteGeneratedEvent is emitted when a new quote is generated
+message QuoteGeneratedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string product_id = 4;
+  string customer_id = 5;
+  string agent_id = 6;
+  insuretech.common.v1.Money total_premium = 7;
+  google.protobuf.Timestamp valid_until = 8;
+  google.protobuf.Timestamp generated_at = 9;
+}
+
+// QuoteRevisedEvent is emitted when a quote is revised
+message QuoteRevisedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string parent_quote_id = 4;
+  int32 revision_number = 5;
+  string revision_reason = 6;
+  insuretech.common.v1.Money previous_premium = 7;
+  insuretech.common.v1.Money new_premium = 8;
+  google.protobuf.Timestamp revised_at = 9;
+}
+
+// QuoteSentEvent is emitted when a quote is sent to customer
+message QuoteSentEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string customer_id = 4;
+  string sent_method = 5; // EMAIL, SMS, PORTAL
+  google.protobuf.Timestamp sent_at = 6;
+}
+
+// QuoteViewedEvent is emitted when customer views a quote
+message QuoteViewedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string customer_id = 4;
+  google.protobuf.Timestamp viewed_at = 5;
+}
+
+// QuoteAcceptedEvent is emitted when customer accepts a quote
+message QuoteAcceptedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string customer_id = 4;
+  insuretech.common.v1.Money accepted_premium = 5;
+  google.protobuf.Timestamp accepted_at = 6;
+}
+
+// QuoteDeclinedEvent is emitted when customer declines a quote
+message QuoteDeclinedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string customer_id = 4;
+  string decline_reason = 5;
+  google.protobuf.Timestamp declined_at = 6;
+}
+
+// QuoteExpiredEvent is emitted when a quote expires
+message QuoteExpiredEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string customer_id = 4;
+  google.protobuf.Timestamp expired_at = 5;
+}
+
+// QuoteConvertedEvent is emitted when a quote is converted to a policy
+message QuoteConvertedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string policy_id = 4;
+  string customer_id = 5;
+  string product_id = 6;
+  insuretech.common.v1.Money converted_premium = 7;
+  google.protobuf.Timestamp converted_at = 8;
+}
+
+// QuoteDeletedEvent is emitted when a quote is deleted
+message QuoteDeletedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  bool permanent = 4;
+  string deleted_by = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}
+
+// PremiumCalculatedEvent is emitted when premium is calculated
+message PremiumCalculatedEvent {
+  string event_id = 1;
+  string calculation_id = 2;
+  string product_id = 3;
+  insuretech.common.v1.Money total_premium = 4;
+  int32 rule_count = 5;
+  int32 execution_time_ms = 6;
+  google.protobuf.Timestamp calculated_at = 7;
+}

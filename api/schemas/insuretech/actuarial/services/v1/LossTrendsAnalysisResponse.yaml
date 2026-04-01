@@ -1,0 +1,20 @@
+LossTrendsAnalysisResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+    segments:
+      type: array
+      items:
+        $ref: '#/components/schemas/LossTrendSegment'
+    overall_trend:
+      type: object
+    warnings:
+      type: array
+      items:
+        type: string
+    analysis_date:
+      type: string
+      format: date-time
+  description: Response payload for loss trends analysis operation. Returns operation
+    results and status.

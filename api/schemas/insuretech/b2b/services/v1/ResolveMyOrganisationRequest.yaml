@@ -4,7 +4,7 @@ ResolveMyOrganisationRequest:
     user_id:
       type: string
       description: "user_id extracted from the validated session token (set by gateway,\
-        \ NOT\r\n from client)"
+        \ NOT\n from client)"
   description: "ResolveMyOrganisation \u2014 called server-side (gateway) to resolve\
-    \ business_id\r\n from user_id. Returns the organisation_id for the authenticated\
-    \ user (via\r\n OrgMember lookup)."
+    \ business_id\n from user_id. Returns the organisation_id for the authenticated\
+    \ user (via\n OrgMember lookup)."

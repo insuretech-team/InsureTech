@@ -1,0 +1,22 @@
+LifePremiumCalculationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    insured_person:
+      $ref: '#/components/schemas/InsuredPerson'
+    age_at_entry:
+      type: integer
+      format: int32
+    policy_term_years:
+      type: integer
+      format: int32
+    sum_assured:
+      type: string
+      format: int64
+    bonus_codes:
+      type: array
+      items:
+        type: string
+  description: Request payload for premium calculation operation. Contains parameters
+    required to execute the operation.

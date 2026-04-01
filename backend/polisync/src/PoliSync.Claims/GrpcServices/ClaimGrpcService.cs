@@ -62,24 +62,25 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
             SettledCurrency = "BDT"
         };
 
-        foreach (var url in request.DocumentUrls)
-        {
-            claim.Documents.Add(new ClaimDocument
-            {
-                DocumentId = Guid.NewGuid().ToString("N"),
-                ClaimId = claimId,
-                DocumentType = "SUPPORTING",
-                FileUrl = url,
-                FileHash = ComputeSha256(url),
-                UploadedAt = now,
-                CreatedAt = now,
-                UpdatedAt = now
-            });
-        }
-
         try
         {
             var created = await _dataGateway.CreateClaimAsync(claim, GetCancellationToken(context));
+
+            foreach (var url in request.DocumentUrls)
+            {
+                await _dataGateway.CreateClaimDocumentAsync(new ClaimDocument
+                {
+                    DocumentId = Guid.NewGuid().ToString("N"),
+                    ClaimId = created.ClaimId,
+                    DocumentType = "SUPPORTING",
+                    FileUrl = url,
+                    FileHash = ComputeSha256(url),
+                    UploadedAt = now,
+                    CreatedAt = now,
+                    UpdatedAt = now
+                }, GetCancellationToken(context));
+            }
+
             _logger.LogInformation("Claim submitted: {ClaimId}", created.ClaimId);
 
             return new SubmitClaimResponse
@@ -172,7 +173,7 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
                 : ComputeSha256(request.FileName + request.MimeType + request.DocumentType);
 
             var documentUrl = $"memory://claims/{claim.ClaimId}/documents/{documentId}/{request.FileName}";
-            claim.Documents.Add(new ClaimDocument
+            await _dataGateway.CreateClaimDocumentAsync(new ClaimDocument
             {
                 DocumentId = documentId,
                 ClaimId = claim.ClaimId,
@@ -182,7 +183,7 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
                 UploadedAt = now,
                 CreatedAt = now,
                 UpdatedAt = now
-            });
+            }, GetCancellationToken(context));
             claim.UpdatedAt = now;
 
             await _dataGateway.UpdateClaimAsync(claim, GetCancellationToken(context));
@@ -222,7 +223,8 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
             claim.ApprovedAmount = request.ApprovedAmount ?? claim.ClaimedAmount;
             claim.ApprovedAt = now;
             claim.UpdatedAt = now;
-            claim.Approvals.Add(new ClaimApproval
+            await _dataGateway.UpdateClaimAsync(claim, GetCancellationToken(context));
+            await _dataGateway.CreateClaimApprovalAsync(new ClaimApproval
             {
                 ApprovalId = Guid.NewGuid().ToString("N"),
                 ClaimId = claim.ClaimId,
@@ -235,9 +237,7 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
                 ApprovedAt = now,
                 CreatedAt = now,
                 ApprovedCurrency = claim.ApprovedAmount?.Currency ?? "BDT"
-            });
-
-            await _dataGateway.UpdateClaimAsync(claim, GetCancellationToken(context));
+            }, GetCancellationToken(context));
             return new ApproveClaimResponse { Message = "Claim approved" };
         }
         catch (RpcException ex)
@@ -267,7 +267,8 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
             claim.Status = ClaimStatus.Rejected;
             claim.RejectionReason = request.Reason;
             claim.UpdatedAt = now;
-            claim.Approvals.Add(new ClaimApproval
+            await _dataGateway.UpdateClaimAsync(claim, GetCancellationToken(context));
+            await _dataGateway.CreateClaimApprovalAsync(new ClaimApproval
             {
                 ApprovalId = Guid.NewGuid().ToString("N"),
                 ClaimId = claim.ClaimId,
@@ -280,9 +281,7 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
                 ApprovedAt = now,
                 CreatedAt = now,
                 ApprovedCurrency = "BDT"
-            });
-
-            await _dataGateway.UpdateClaimAsync(claim, GetCancellationToken(context));
+            }, GetCancellationToken(context));
             return new RejectClaimResponse { Message = "Claim rejected" };
         }
         catch (RpcException ex)

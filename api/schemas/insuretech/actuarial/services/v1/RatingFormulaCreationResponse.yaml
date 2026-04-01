@@ -1,0 +1,15 @@
+RatingFormulaCreationResponse:
+  type: object
+  properties:
+    formula_id:
+      type: string
+    success:
+      type: boolean
+    formula:
+      $ref: '#/components/schemas/RatingFormula'
+    errors:
+      type: array
+      items:
+        type: string
+  description: Response payload for rating formula creation operation. Returns operation
+    results and status.

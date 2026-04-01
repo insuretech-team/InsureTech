@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Claim Settlement - InsureTech</title>
+    <link rel="stylesheet" href="claim-settlement.css">
+</head>
+<body>
+    <!-- Sidebar -->
+    <aside class="sidebar">
+        <div class="logo">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none">
+                <path d="M12 2L2 7l10 5 10-5-10-5z" fill="#22c55e"/>
+                <path d="M2 17l10 5 10-5M2 12l10 5 10-5" stroke="#22c55e" stroke-width="2" fill="none"/>
+            </svg>
+            <span class="logo-text"><span class="logo-bold">LABAID</span> INSURETECH</span>
+        </div>
+
+        <nav class="nav-menu">
+            <a href="dashboard.html" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Dashboard</span>
+            </a>
+
+            <a href="plan-template.html" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                    <line x1="16" y1="13" x2="8" y2="13"/>
+                    <line x1="16" y1="17" x2="8" y2="17"/>
+                </svg>
+                <span>Plan Template</span>
+                <svg class="chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <polyline points="6 9 12 15 18 9"/>
+                </svg>
+            </a>
+
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="7" height="7"/>
+                    <rect x="14" y="3" width="7" height="7"/>
+                    <rect x="14" y="14" width="7" height="7"/>
+                    <rect x="3" y="14" width="7" height="7"/>
+                </svg>
+                <span>Policy Categories</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                    <polyline points="14 2 14 8 20 8"/>
+                </svg>
+                <span>Proposals</span>
+            </a>
+
+            <a href="#" class="nav-item active">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                    <polyline points="22 4 12 14.01 9 11.01"/>
+                </svg>
+                <span>Claim Settlement</span>
+            </a>
+
+            <a href="#" class="nav-item">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="3"/>
+                    <path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06a1.65 1.65 0 00.33-1.82 1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06a1.65 1.65 0 001.82.33H9a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+                </svg>
+                <span>Settings</span>
+            </a>
+        </nav>
+    </aside>
+
+    <!-- Header -->
+    <header class="header">
+        <div class="header-right">
+            <button class="notification-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                    <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/>
+                    <path d="M13.73 21a2 2 0 01-3.46 0"/>
+                </svg>
+                <span class="notification-dot"></span>
+            </button>
+            <div class="user-avatar">
+                <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=40&h=40&fit=crop&crop=face" alt="User">
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Content -->
+    <main class="main-content">
+        <!-- Stats Cards -->
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon blue">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                    </svg>
+                </div>
+                <div class="stat-value">1,236</div>
+                <div class="stat-label">Total Claims</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon yellow">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <path d="M21 21l-4.35-4.35"/>
+                        <path d="M11 8v6"/>
+                        <path d="M8 11h6"/>
+                    </svg>
+                </div>
+                <div class="stat-value">542</div>
+                <div class="stat-label">Claims Under Review</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon green">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M22 11.08V12a10 10 0 11-5.93-9.14"/>
+                        <polyline points="22 4 12 14.01 9 11.01"/>
+                    </svg>
+                </div>
+                <div class="stat-value">329</div>
+                <div class="stat-label">Claims Approved</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon orange">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="16" y1="13" x2="8" y2="13"/>
+                        <line x1="16" y1="17" x2="8" y2="17"/>
+                    </svg>
+                </div>
+                <div class="stat-value">252</div>
+                <div class="stat-label">Document Requested</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon teal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="22" y1="2" x2="11" y2="13"/>
+                        <polygon points="22 2 15 22 11 13 2 9 22 2"/>
+                    </svg>
+                </div>
+                <div class="stat-value">129</div>
+                <div class="stat-label">Claim Settled</div>
+            </div>
+
+            <div class="stat-card">
+                <div class="stat-icon red">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                </div>
+                <div class="stat-value">152</div>
+                <div class="stat-label">Claims Rejected</div>
+            </div>
+        </div>
+
+        <!-- Claim Tabs -->
+        <div class="claim-tabs">
+            <button class="claim-tab active">Individual Claims</button>
+            <button class="claim-tab">Corporate Claims</button>
+        </div>
+
+        <!-- Claim Table Section -->
+        <div class="table-section">
+            <div class="table-header">
+                <h2>Claim Table</h2>
+                <div class="table-actions">
+                    <button class="btn btn-outline">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="17 8 12 3 7 8"/>
+                            <line x1="12" y1="3" x2="12" y2="15"/>
+                        </svg>
+                        Upload (Excel, CSV)
+                    </button>
+                    <button class="btn btn-primary">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <circle cx="12" cy="12" r="10"/>
+                            <line x1="12" y1="8" x2="12" y2="16"/>
+                            <line x1="8" y1="12" x2="16" y2="12"/>
+                        </svg>
+                        Add Claim
+                    </button>
+                    <button class="btn btn-text">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/>
+                            <polyline points="7 10 12 15 17 10"/>
+                            <line x1="12" y1="15" x2="12" y2="3"/>
+                        </svg>
+                        Export (Excel, Pdf, CSV)
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                            <polyline points="6 9 12 15 18 9"/>
+                        </svg>
+                    </button>
+                </div>
+            </div>
+
+            <div class="table-controls">
+                <div class="show-list">
+                    <span>Show List:</span>
+                    <select>
+                        <option>5</option>
+                        <option>10</option>
+                        <option>20</option>
+                        <option>50</option>
+                    </select>
+                </div>
+                <div class="table-search">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="11" cy="11" r="8"/>
+                        <line x1="21" y1="21" x2="16.65" y2="16.65"/>
+                    </svg>
+                    <input type="text" placeholder="Search employee by name or ID...">
+                </div>
+                <button class="btn btn-filter">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <line x1="4" y1="21" x2="4" y2="14"/>
+                        <line x1="4" y1="10" x2="4" y2="3"/>
+                        <line x1="12" y1="21" x2="12" y2="12"/>
+                        <line x1="12" y1="8" x2="12" y2="3"/>
+                        <line x1="20" y1="21" x2="20" y2="16"/>
+                        <line x1="20" y1="12" x2="20" y2="3"/>
+                        <line x1="1" y1="14" x2="7" y2="14"/>
+                        <line x1="9" y1="8" x2="15" y2="8"/>
+                        <line x1="17" y1="16" x2="23" y2="16"/>
+                    </svg>
+                    Filter
+                </button>
+            </div>
+
+            <table class="claims-table">
+                <thead>
+                    <tr>
+                        <th>Sr. No.</th>
+                        <th>
+                            Insured Name
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Claim ID
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Plan
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Insurance Category
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Estimated Premium
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Status
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>
+                            Submission Date
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M7 15l5 5 5-5"/>
+                                <path d="M7 9l5-5 5 5"/>
+                            </svg>
+                        </th>
+                        <th>View</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr data-claim-id="1">
+                        <td>01</td>
+                        <td>Md Ali Hasan</td>
+                        <td>CID-2025-001</td>
+                        <td>Vromon</td>
+                        <td>Travel</td>
+                        <td>৳ 25,000</td>
+                        <td><span class="status approved">Approved</span></td>
+                        <td>09-02-2026</td>
+                        <td>
+                            <button class="icon-btn view-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-btn edit-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-claim-id="2">
+                        <td>02</td>
+                        <td>Md Akbar Ali</td>
+                        <td>CID-2025-001</td>
+                        <td>Rokkhi</td>
+                        <td>Auto</td>
+                        <td>৳ 25,000</td>
+                        <td><span class="status requested">Requested</span></td>
+                        <td>09-02-2026</td>
+                        <td>
+                            <button class="icon-btn view-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-btn edit-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-claim-id="3">
+                        <td>03</td>
+                        <td>Kabir Mahmud</td>
+                        <td>CID-2025-001</td>
+                        <td>Rokkhi</td>
+                        <td>Auto</td>
+                        <td>৳ 25,000</td>
+                        <td><span class="status settled">Settled</span></td>
+                        <td>09-02-2026</td>
+                        <td>
+                            <button class="icon-btn view-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-btn edit-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-claim-id="4">
+                        <td>04</td>
+                        <td>Helena Khatun</td>
+                        <td>CID-2025-001</td>
+                        <td>Vromon</td>
+                        <td>Travel</td>
+                        <td>৳ 25,000</td>
+                        <td><span class="status under-review">Under Review</span></td>
+                        <td>09-02-2026</td>
+                        <td>
+                            <button class="icon-btn view-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-btn edit-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr data-claim-id="5">
+                        <td>05</td>
+                        <td>Mousumi Jaman</td>
+                        <td>CID-2025-001</td>
+                        <td>Rokkhi</td>
+                        <td>Auto</td>
+                        <td>৳ 25,000</td>
+                        <td><span class="status rejected">Rejected</span></td>
+                        <td>09-02-2026</td>
+                        <td>
+                            <button class="icon-btn view-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
+                                    <circle cx="12" cy="12" r="3"/>
+                                </svg>
+                            </button>
+                        </td>
+                        <td>
+                            <button class="icon-btn edit-btn">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 3a2.828 2.828 0 114 4L7.5 20.5 2 22l1.5-5.5L17 3z"/>
+                                </svg>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="pagination">
+                <button class="page-btn prev">Previous</button>
+                <button class="page-btn active">1</button>
+                <button class="page-btn">2</button>
+                <button class="page-btn">3</button>
+                <button class="page-btn next">Next</button>
+            </div>
+        </div>
+    </main>
+
+    <!-- Claim Details Modal -->
+    <div class="modal-overlay" id="claimModal">
+        <div class="modal">
+            <div class="modal-header">
+                <h2>Claim Details</h2>
+                <button class="close-btn" id="closeModal">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <circle cx="12" cy="12" r="10"/>
+                        <line x1="15" y1="9" x2="9" y2="15"/>
+                        <line x1="9" y1="9" x2="15" y2="15"/>
+                    </svg>
+                </button>
+            </div>
+
+            <div class="modal-controls">
+                <div class="modal-tabs">
+                    <button class="modal-tab active" data-tab="user-info">User Info.</button>
+                    <button class="modal-tab" data-tab="insurance-info">Insurance Info.</button>
+                </div>
+                <div class="modal-actions">
+                    <div class="contact-section">
+                        <span>Contact with user</span>
+                        <div class="contact-buttons">
+                            <button class="contact-btn video">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polygon points="23 7 16 12 23 17 23 7"/>
+                                    <rect x="1" y="5" width="15" height="14" rx="2" ry="2"/>
+                                </svg>
+                            </button>
+                            <button class="contact-btn phone">
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07 19.5 19.5 0 01-6-6 19.79 19.79 0 01-3.07-8.67A2 2 0 014.11 2h3a2 2 0 012 1.72 12.84 12.84 0 00.7 2.81 2 2 0 01-.45 2.11L8.09 9.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45 12.84 12.84 0 002.81.7A2 2 0 0122 16.92z"/>
+                                </svg>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="status-section">
+                        <span>Change Status</span>
+                        <div class="status-dropdown">
+                            <button class="status-trigger">
+                                <span>Under Review</span>
+                                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <polyline points="6 9 12 15 18 9"/>
+                                </svg>
+                            </button>
+                            <div class="status-options">
+                                <div class="status-option" data-value="settle">Settle</div>
+                                <div class="status-option" data-value="approve">Approve</div>
+                                <div class="status-option" data-value="under-review">Under Review</div>
+                                <div class="status-option" data-value="document-request">Document Request</div>
+                                <div class="status-option" data-value="reject">Reject</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- User Info Tab Panel -->
+            <div class="modal-panel active" id="user-info-panel">
+                <div class="info-card">
+                    <h3>User Info.</h3>
+                    <div class="info-grid">
+                        <div class="info-item">
+                            <label>Name</label>
+                            <p>Akbar Ali</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Occupation</label>
+                            <p>Job Holder</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Insurance taken for</label>
+                            <p>Self</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Income range</label>
+                            <p>50,000 - 100,000</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Date of birth</label>
+                            <p>17-11-1982</p>
+                        </div>
+                        <div class="info-item">
+                            <label>Mobile no.</label>
+                            <p>+88 017 1000 0000</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="info-card">
+                    <h3>Questionnaire</h3>
+                    <div class="questionnaire-grid">
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Do you have any pre-existing disease?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>Yes</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Any surgery or hospitalization in last 5 years?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>No</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Have you ever been diagnosed with or treated for:</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon star">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                </span>
+                                <span>Asthma</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Will you participate in adventure or hazardous activities?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>No</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Year of diagnosis?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon star">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="#22c55e">
+                                        <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                    </svg>
+                                </span>
+                                <span>5</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>What is your purpose of travel?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>Business</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Current Status?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>Controlled</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Do you smoke or use tobacco?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>No</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Medication Ongoing?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>Yes</span>
+                            </div>
+                        </div>
+                        <div class="question-item">
+                            <div class="question">
+                                <span class="question-icon">?</span>
+                                <span>Do you consume alcohol?</span>
+                            </div>
+                            <div class="answer">
+                                <span class="answer-icon green">
+                                    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3">
+                                        <circle cx="12" cy="12" r="10" fill="#22c55e"/>
+                                    </svg>
+                                </span>
+                                <span>No</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Insurance Info Tab Panel -->
+            <div class="modal-panel" id="insurance-info-panel">
+                <div class="insurance-banner">
+                    <img src="/images/travel-banner.jpg" alt="Travel Insurance" class="banner-img">
+                </div>
+
+                <div class="plan-header">
+                    <div class="plan-info">
+                        <h3 class="plan-name">Vromon</h3>
+                        <p class="coverage-label">Travel coverage up to</p>
+                        <span class="coverage-amount">৳ 65,000</span>
+                    </div>
+                    <div class="plan-details">
+                        <div class="plan-detail">
+                            <div class="detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/>
+                                </svg>
+                            </div>
+                            <div class="detail-text">
+                                <label>Premium price:</label>
+                                <span class="green">৳ 1,200</span>
+                            </div>
+                        </div>
+                        <div class="plan-detail">
+                            <div class="detail-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2">
+                                    <circle cx="12" cy="12" r="10"/>
+                                    <polyline points="12 6 12 12 16 14"/>
+                                </svg>
+                            </div>
+                            <div class="detail-text">
+                                <label>Policy duration:</label>
+                                <span class="green">1 year</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="coverages-section">
+                    <h4>Hospitalization Coverages</h4>
+                    <div class="coverage-tags">
+                        <div class="coverage-tag filled">
+                            <div class="tag-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M19 21V5a2 2 0 00-2-2H7a2 2 0 00-2 2v16m14 0h2m-2 0h-5m-9 0H3m2 0h5M9 7h1m-1 4h1m4-4h1m-1 4h1m-5 10v-5a1 1 0 011-1h2a1 1 0 011 1v5m-4 0h4"/>
+                                </svg>
+                            </div>
+                            <span>In-patient<br>treatment expenses</span>
+                        </div>
+                        <div class="coverage-tag">
+                            <div class="tag-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M3 9l9-7 9 7v11a2 2 0 01-2 2H5a2 2 0 01-2-2z"/>
+                                    <polyline points="9 22 9 12 15 12 15 22"/>
+                                </svg>
+                            </div>
+                            <span>Cabin room rent</span>
+                        </div>
+                        <div class="coverage-tag">
+                            <div class="tag-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                                    <line x1="8" y1="21" x2="16" y2="21"/>
+                                    <line x1="12" y1="17" x2="12" y2="21"/>
+                                </svg>
+                            </div>
+                            <span>ICU / CCU charges</span>
+                        </div>
+                        <div class="coverage-tag filled">
+                            <div class="tag-icon">
+                                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                                    <path d="M17 21v-2a4 4 0 00-4-4H5a4 4 0 00-4 4v2"/>
+                                    <circle cx="9" cy="7" r="4"/>
+                                    <path d="M23 21v-2a4 4 0 00-3-3.87"/>
+                                    <path d="M16 3.13a4 4 0 010 7.75"/>
+                                </svg>
+                            </div>
+                            <span>Doctor & specialist<br>consultation fees</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="excluded-section">
+                    <h4>Excluded Coverages</h4>
+                    <ul class="excluded-list">
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" fill="#ef4444"/>
+                                <line x1="15" y1="9" x2="9" y2="15" stroke="white" stroke-width="2"/>
+                                <line x1="9" y1="9" x2="15" y2="15" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>Cosmetic / aesthetic treatment</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" fill="#ef4444"/>
+                                <line x1="15" y1="9" x2="9" y2="15" stroke="white" stroke-width="2"/>
+                                <line x1="9" y1="9" x2="15" y2="15" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>Dental & vision (unless due to accident)</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" fill="#ef4444"/>
+                                <line x1="15" y1="9" x2="9" y2="15" stroke="white" stroke-width="2"/>
+                                <line x1="9" y1="9" x2="15" y2="15" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>Infertility treatments</span>
+                        </li>
+                        <li>
+                            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                                <circle cx="12" cy="12" r="10" fill="#ef4444"/>
+                                <line x1="15" y1="9" x2="9" y2="15" stroke="white" stroke-width="2"/>
+                                <line x1="9" y1="9" x2="15" y2="15" stroke="white" stroke-width="2"/>
+                            </svg>
+                            <span>Self-inflicted injuries</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="claim-settlement.js"></script>
+</body>
+</html>

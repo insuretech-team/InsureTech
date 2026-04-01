@@ -17,8 +17,5 @@ DocumentAnalysisResponse:
         type: string
     verification_passed:
       type: boolean
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for document analysis operation. Returns operation
     results and status.

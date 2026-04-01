@@ -1,0 +1,7 @@
+BusinessWorkflowRetrievalRequest:
+  type: object
+  properties:
+    business_workflow_id:
+      type: string
+  description: Request payload for retrieving business workflow retrieval information.
+    May include filters and pagination parameters.

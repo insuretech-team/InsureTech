@@ -1,0 +1,107 @@
+name: Deploy InsureTech
+
+on:
+  push:
+    branches:
+      - test
+
+env:
+  REGISTRY: ghcr.io
+
+jobs:
+  build-and-push-inscore:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    strategy:
+      matrix:
+        service: [
+          authn, authz, b2b, storage, gateway
+        ]
+      fail-fast: false
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Normalize image prefix
+        run: echo "IMAGE_PREFIX=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
+      - name: Build and push ${{ matrix.service }}
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: backend/infra/docker/${{ matrix.service }}/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}/inscore-${{ matrix.service }}:latest
+
+  build-and-push-b2b:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Log in to the Container registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Normalize image prefix
+        run: echo "IMAGE_PREFIX=ghcr.io/$(echo ${{ github.repository }} | tr '[:upper:]' '[:lower:]')" >> "$GITHUB_ENV"
+
+      - name: Build and push b2b_portal
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          file: backend/infra/docker/b2b_portal/Dockerfile
+          push: true
+          tags: ${{ env.IMAGE_PREFIX }}/b2b-portal:latest
+
+  deploy-to-droplet:
+    needs: [build-and-push-inscore, build-and-push-b2b]
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Copy docker-compose via SCP
+        uses: appleboy/scp-action@v0.1.7
+        with:
+          host: 146.190.97.242
+          username: insureadmin
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          source: "docker-compose.yml"
+          target: "/home/insureadmin/insuretech/"
+
+      - name: Execute Remote Deployment
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: 146.190.97.242
+          username: insureadmin
+          key: ${{ secrets.DROPLET_SSH_KEY }}
+          script: |
+            cd /home/insureadmin/insuretech
+            
+            # Login to ghcr.io
+            echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+            
+            # Restart Nginx to grab configuration updates synced manually or via other script
+            sudo systemctl reload nginx || true
+            
+            # Pull new images
+            docker compose pull
+            
+            # Bring up the cluster 
+            docker compose up -d --remove-orphans

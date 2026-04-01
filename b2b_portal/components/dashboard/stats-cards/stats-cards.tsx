@@ -3,7 +3,7 @@
 import * as React from "react";
 import { LuLoader } from "react-icons/lu";
 import StatsCard from "./card/stats-card";
-import type { DashboardStats } from "@/app/api/dashboard/stats/route";
+import type { DashboardStats, DashboardStatsResponse } from "@/app/api/dashboard/stats/route";
 
 type StatItem = {
   title: string;
@@ -86,16 +86,18 @@ const StatsCards = () => {
   const [role, setRole] = React.useState<string>("");
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
+  const [notice, setNotice] = React.useState("");
 
   React.useEffect(() => {
     let cancelled = false;
     void fetch("/api/dashboard/stats", { cache: "no-store" })
       .then((r) => r.json())
-      .then((payload: { ok: boolean; stats?: DashboardStats; role?: string; message?: string }) => {
+      .then((payload: DashboardStatsResponse) => {
         if (cancelled) return;
         if (payload.ok && payload.stats) {
           setStats(payload.stats);
           setRole(payload.role ?? "");
+          setNotice(payload.needsOrganisation ? (payload.message ?? "") : "");
         } else {
           setError(payload.message ?? "Failed to load stats");
         }
@@ -130,10 +132,17 @@ const StatsCards = () => {
     : buildB2BAdminStats(stats);
 
   return (
-    <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
-      {items.map((stat) => (
-        <StatsCard key={stat.title} {...stat} />
-      ))}
+    <div className="space-y-3">
+      {notice ? (
+        <div className="rounded-lg border border-amber-300/60 bg-amber-50 px-4 py-3 text-sm text-amber-900">
+          {notice}
+        </div>
+      ) : null}
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 xl:grid-cols-4">
+        {items.map((stat) => (
+          <StatsCard key={stat.title} {...stat} />
+        ))}
+      </div>
     </div>
   );
 };

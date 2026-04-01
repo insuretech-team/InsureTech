@@ -11,7 +11,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/casbin/casbin/v3/util"
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/cache"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/domain"
@@ -131,6 +130,12 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 		}
 	}
 
+	// Normalize domain early so cache key and Casbin both use the canonical form.
+	// "b2c:" (empty tenant from JWT) → "b2c:root"
+	if idx := strings.Index(req.Domain, ":"); idx != -1 && idx == len(req.Domain)-1 {
+		req.Domain = req.Domain + "root"
+	}
+
 	// 🚀 Check cache first
 	if s.permCache != nil {
 		if cached, found := s.permCache.Get(ctx, req.UserId, req.Domain, req.Object, req.Action); found {
@@ -153,7 +158,7 @@ func (s *AuthZService) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 		metrics.RecordCacheHit(false)
 	}
 
-	// Cache miss - query Casbin
+	// Cache miss - query Casbin (req.Domain already normalized above)
 	allowed, matchedRule, err := s.enforcer.Enforce(ctx, subject, req.Domain, req.Object, req.Action)
 	latencyMs := float64(time.Since(start).Milliseconds())
 	if err != nil {
@@ -444,7 +449,7 @@ func (s *AuthZService) checkB2BRootDomainFallback(
 		if _, ok := roleSet[policy.Subject]; !ok {
 			continue
 		}
-		if !util.KeyMatch2(req.Object, policy.Object) || !domain.ActionMatches(req.Action, policy.Action) {
+		if !domain.ObjMatch(req.Object, policy.Object) || !domain.ActionMatches(req.Action, policy.Action) {
 			continue
 		}
 		if policy.Effect == authzentityv1.PolicyEffect_POLICY_EFFECT_DENY {
@@ -673,6 +678,14 @@ func (s *AuthZService) ListPolicyRules(ctx context.Context, req *authzservicev1.
 
 // ── Portal Configuration ──────────────────────────────────────────────────────
 
+func (s *AuthZService) ListPortalConfigs(ctx context.Context, req *authzservicev1.ListPortalConfigsRequest) (*authzservicev1.ListPortalConfigsResponse, error) {
+	cfgs, err := s.portalRepo.List(ctx)
+	if err != nil {
+		return nil, errors.New("list portal configs: " + err.Error())
+	}
+	return &authzservicev1.ListPortalConfigsResponse{Configs: cfgs}, nil
+}
+
 func (s *AuthZService) GetPortalConfig(ctx context.Context, req *authzservicev1.GetPortalConfigRequest) (*authzservicev1.GetPortalConfigResponse, error) {
 	pc, err := s.portalRepo.GetByPortal(ctx, req.Portal)
 	if err != nil {
@@ -682,6 +695,14 @@ func (s *AuthZService) GetPortalConfig(ctx context.Context, req *authzservicev1.
 }
 
 func (s *AuthZService) UpdatePortalConfig(ctx context.Context, req *authzservicev1.UpdatePortalConfigRequest) (*authzservicev1.UpdatePortalConfigResponse, error) {
+	if req.Portal == authzentityv1.Portal_PORTAL_UNSPECIFIED {
+		pc, err := s.portalRepo.GetByPortal(ctx, authzentityv1.Portal_PORTAL_B2C)
+		if err != nil {
+			return nil, errors.New("get default portal config: " + err.Error())
+		}
+		return &authzservicev1.UpdatePortalConfigResponse{Config: pc}, nil
+	}
+
 	// UpdatePortalConfigRequest has flat fields (no .Config sub-message).
 	// Build a PortalConfig entity from the flat request fields.
 	pc := &authzentityv1.PortalConfig{

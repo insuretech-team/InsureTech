@@ -3,6 +3,7 @@
 Schema and Enum Page Generator
 Generates individual static HTML pages for schemas and enums
 """
+from write_guard import write_if_changed
 
 import yaml
 import json
@@ -419,8 +420,7 @@ class SchemaEnumPageGenerator:
         # Write to file
         clean_name = schema_name.replace('.', '_').replace(':', '_').lower()
         output_path = os.path.join(output_dir, f'schema_{clean_name}.html')
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         return f'schema_{clean_name}.html'
     
@@ -598,8 +598,7 @@ class SchemaEnumPageGenerator:
         # Write to file
         clean_name = enum_name.replace('.', '_').replace(':', '_').lower()
         output_path = os.path.join(output_dir, f'enum_{clean_name}.html')
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         return f'enum_{clean_name}.html'
     

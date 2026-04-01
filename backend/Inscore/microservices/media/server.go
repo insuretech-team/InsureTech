@@ -3,6 +3,9 @@ package media
 import (
 	"context"
 	"fmt"
+	"io"
+	"net/http"
+	"strings"
 
 	"github.com/jmoiron/sqlx"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/media/internal/config"
@@ -24,6 +27,12 @@ import (
 // requires []*worker.ProcessingJobRecord — this adapter bridges the two.
 type jobRepoAdapter struct {
 	repo *repository.ProcessingJobRepository
+}
+
+type mediaDownloaderAdapter struct {
+	repo          *repository.MediaRepository
+	storageClient service.StorageDownloadClient
+	httpClient    *http.Client
 }
 
 func (a *jobRepoAdapter) MarkJobStarted(ctx context.Context, jobID string) error {
@@ -57,6 +66,61 @@ func (a *jobRepoAdapter) GetPendingJobs(ctx context.Context, limit int) ([]*work
 		})
 	}
 	return out, nil
+}
+
+func (a *mediaDownloaderAdapter) DownloadFile(ctx context.Context, tenantID, mediaID string) ([]byte, string, error) {
+	if strings.TrimSpace(tenantID) == "" {
+		return nil, "", fmt.Errorf("tenant_id is required for media download")
+	}
+	if strings.TrimSpace(mediaID) == "" {
+		return nil, "", fmt.Errorf("media_id is required for media download")
+	}
+
+	media, err := a.repo.GetByID(ctx, tenantID, mediaID)
+	if err != nil {
+		return nil, "", fmt.Errorf("load media metadata: %w", err)
+	}
+	if a.storageClient == nil {
+		return nil, "", fmt.Errorf("storage download client is not configured")
+	}
+
+	resp, err := a.storageClient.GetDownloadURL(ctx, &storageservicev1.GetDownloadURLRequest{
+		TenantId: tenantID,
+		FileId:   media.FileId,
+	})
+	if err != nil {
+		return nil, "", fmt.Errorf("resolve download url: %w", err)
+	}
+	if strings.TrimSpace(resp.GetDownloadUrl()) == "" {
+		return nil, "", fmt.Errorf("storage service returned an empty download URL")
+	}
+
+	req, err := http.NewRequestWithContext(ctx, http.MethodGet, resp.GetDownloadUrl(), nil)
+	if err != nil {
+		return nil, "", fmt.Errorf("build download request: %w", err)
+	}
+
+	httpResp, err := a.httpClient.Do(req)
+	if err != nil {
+		return nil, "", fmt.Errorf("download media bytes: %w", err)
+	}
+	defer httpResp.Body.Close()
+
+	if httpResp.StatusCode < http.StatusOK || httpResp.StatusCode >= http.StatusMultipleChoices {
+		return nil, "", fmt.Errorf("download media bytes: unexpected status %s", httpResp.Status)
+	}
+
+	data, err := io.ReadAll(httpResp.Body)
+	if err != nil {
+		return nil, "", fmt.Errorf("read media bytes: %w", err)
+	}
+
+	mimeType := strings.TrimSpace(httpResp.Header.Get("Content-Type"))
+	if mimeType == "" {
+		mimeType = media.MimeType
+	}
+
+	return data, mimeType, nil
 }
 
 // MediaServer wraps the gRPC service with supporting infrastructure
@@ -121,7 +185,11 @@ func NewMediaServer(gormDB *gorm.DB, storageConn *grpc.ClientConn) (*MediaServer
 		cfg.WorkerCount,
 		cfg.ThumbnailWidth,
 		cfg.ThumbnailHeight,
-		mediaRepo,                      // implements worker.MediaDownloader
+		&mediaDownloaderAdapter{
+			repo:          mediaRepo,
+			storageClient: storageClient,
+			httpClient:    &http.Client{},
+		},
 		mediaRepo,                      // implements worker.MediaUpdater
 		&jobRepoAdapter{repo: jobRepo}, // adapts ProcessingJobRepository to worker.JobUpdater
 		kafkaPublisher,

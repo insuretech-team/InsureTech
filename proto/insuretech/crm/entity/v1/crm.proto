@@ -1,0 +1,634 @@
+syntax = "proto3";
+
+package insuretech.crm.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/crm/entity/v1;crmv1";
+option csharp_namespace = "Insuretech.Crm.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// Lead represents a prospective customer
+// Maps to 'leads' table in crm_schema
+message Lead {
+  option (insuretech.common.v1.table) = {
+    table_name: "leads"
+    schema_name: "crm_schema"
+    migration_order: 250
+    is_table: true
+    comment: "Prospective customers and sales leads"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string lead_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "lead_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Lead UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:lead_id;not null"
+
+  string title = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "title"
+      sql_type: "VARCHAR(20)"
+      comment: "Title (Mr, Mrs, Ms, Dr)"
+    }
+  ];
+  // @inject_tag: gorm:"column:title"
+
+  string first_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "first_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "First name"
+      index: {
+        index_name: "idx_leads_first_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:first_name;not null"
+
+  string last_name = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Last name"
+      index: {
+        index_name: "idx_leads_last_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:last_name;not null"
+
+  google.protobuf.Timestamp date_of_birth = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "date_of_birth"
+      sql_type: "DATE"
+      comment: "Date of birth"
+    }
+  ];
+  // @inject_tag: gorm:"column:date_of_birth;serializer:proto_timestamp"
+
+  string gender = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "gender"
+      sql_type: "VARCHAR(20)"
+      comment: "Gender (Male, Female, Other)"
+    }
+  ];
+  // @inject_tag: gorm:"column:gender"
+
+  string phone_number = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "phone_number"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      comment: "Primary phone number"
+    }
+  ];
+  // @inject_tag: gorm:"column:phone_number;not null"
+
+  string email_address = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "email_address"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Email address"
+      index: {
+        index_name: "idx_leads_email"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:email_address;not null"
+
+  string address = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "address"
+      sql_type: "TEXT"
+      comment: "Physical address"
+    }
+  ];
+  // @inject_tag: gorm:"column:address"
+
+  string alternate_phone_number = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "alternate_phone_number"
+      sql_type: "VARCHAR(20)"
+      comment: "Alternate phone"
+    }
+  ];
+  // @inject_tag: gorm:"column:alternate_phone_number"
+
+  string additional_email_address = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "additional_email_address"
+      sql_type: "VARCHAR(255)"
+      comment: "Secondary email"
+    }
+  ];
+  // @inject_tag: gorm:"column:additional_email_address"
+
+  LeadSource lead_source = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "lead_source"
+      sql_type: "VARCHAR(50)"
+      comment: "How the lead was acquired"
+      index: {
+        index_name: "idx_leads_source"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:lead_source;serializer:proto_enum"
+
+  LeadStatus lead_status = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "lead_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'NEW'"
+      comment: "Current lead status"
+      index: {
+        index_name: "idx_leads_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:lead_status;not null;serializer:proto_enum"
+
+  int32 lead_score = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "lead_score"
+      sql_type: "INTEGER"
+      default_value: "0"
+      comment: "Lead quality score (0-100)"
+    }
+  ];
+  // @inject_tag: gorm:"column:lead_score"
+
+  LeadPriority lead_priority = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "lead_priority"
+      sql_type: "VARCHAR(20)"
+      comment: "Lead priority level"
+    }
+  ];
+  // @inject_tag: gorm:"column:lead_priority;serializer:proto_enum"
+
+  string assigned_agent_id = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "assigned_agent_id"
+      sql_type: "UUID"
+      comment: "Agent assigned to this lead"
+      index: {
+        index_name: "idx_leads_assigned_agent"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:assigned_agent_id"
+
+  // Insurance specific fields
+  string desired_insurance_type = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "desired_insurance_type"
+      sql_type: "VARCHAR(50)"
+      comment: "Type of insurance interested in"
+    }
+  ];
+  // @inject_tag: gorm:"column:desired_insurance_type"
+
+  int64 desired_coverage_amount = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "desired_coverage_amount"
+      sql_type: "BIGINT"
+      comment: "Desired coverage amount"
+    }
+  ];
+  // @inject_tag: gorm:"column:desired_coverage_amount"
+
+  string specific_requirements = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "specific_requirements"
+      sql_type: "TEXT"
+      comment: "Specific policy requirements"
+    }
+  ];
+  // @inject_tag: gorm:"column:specific_requirements"
+
+  // Conversion tracking
+  QualificationStatus qualification_status = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "qualification_status"
+      sql_type: "VARCHAR(50)"
+      comment: "Lead qualification status"
+    }
+  ];
+  // @inject_tag: gorm:"column:qualification_status;serializer:proto_enum"
+
+  google.protobuf.Timestamp converted_at = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "When lead was converted to customer"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"
+
+  string converted_contact_id = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_contact_id"
+      sql_type: "UUID"
+      comment: "Contact ID after conversion"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_contact_id"
+
+  string conversion_reason = 23 [
+    (insuretech.common.v1.column) = {
+      column_name: "conversion_reason"
+      sql_type: "TEXT"
+      comment: "Reason for conversion/lost"
+    }
+  ];
+  // @inject_tag: gorm:"column:conversion_reason"
+
+  map<string, string> metadata = 24 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  string created_by = 25 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_by"
+      sql_type: "UUID"
+      not_null: true
+      comment: "User who created the lead"
+    }
+  ];
+  // @inject_tag: gorm:"column:created_by;not null"
+
+  google.protobuf.Timestamp created_at = 26 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 27 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 28 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum LeadSource {
+  LEAD_SOURCE_UNSPECIFIED = 0;
+  LEAD_SOURCE_WEBSITE = 1;
+  LEAD_SOURCE_REFERRAL = 2;
+  LEAD_SOURCE_SOCIAL_MEDIA = 3;
+  LEAD_SOURCE_EMAIL_CAMPAIGN = 4;
+  LEAD_SOURCE_PHONE_INQUIRY = 5;
+  LEAD_SOURCE_WALK_IN = 6;
+  LEAD_SOURCE_PARTNER = 7;
+  LEAD_SOURCE_ADVERTISEMENT = 8;
+  LEAD_SOURCE_EVENT = 9;
+  LEAD_SOURCE_OTHER = 10;
+}
+
+enum LeadStatus {
+  LEAD_STATUS_UNSPECIFIED = 0;
+  LEAD_STATUS_NEW = 1;
+  LEAD_STATUS_CONTACTED = 2;
+  LEAD_STATUS_QUALIFIED = 3;
+  LEAD_SOURCE_PROPOSAL = 4;
+  LEAD_STATUS_NEGOTIATION = 5;
+  LEAD_STATUS_CONVERTED = 6;
+  LEAD_STATUS_LOST = 7;
+  LEAD_STATUS_ON_HOLD = 8;
+}
+
+enum LeadPriority {
+  LEAD_PRIORITY_UNSPECIFIED = 0;
+  LEAD_PRIORITY_LOW = 1;
+  LEAD_PRIORITY_MEDIUM = 2;
+  LEAD_PRIORITY_HIGH = 3;
+  LEAD_PRIORITY_URGENT = 4;
+}
+
+enum QualificationStatus {
+  QUALIFICATION_STATUS_UNSPECIFIED = 0;
+  QUALIFICATION_STATUS_UNQUALIFIED = 1;
+  QUALIFICATION_STATUS_IN_PROGRESS = 2;
+  QUALIFICATION_STATUS_QUALIFIED = 3;
+  QUALIFICATION_STATUS_DISQUALIFIED = 4;
+}
+
+// Contact represents a customer/client
+// Maps to 'contacts' table in crm_schema
+message Contact {
+  option (insuretech.common.v1.table) = {
+    table_name: "contacts"
+    schema_name: "crm_schema"
+    migration_order: 251
+    is_table: true
+    comment: "Customer and client contact information"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string contact_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "contact_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Contact UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:contact_id;not null"
+
+  string first_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "first_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "First name"
+      index: {
+        index_name: "idx_contacts_first_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:first_name;not null"
+
+  string last_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Last name"
+      index: {
+        index_name: "idx_contacts_last_name"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:last_name;not null"
+
+  google.protobuf.Timestamp date_of_birth = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "date_of_birth"
+      sql_type: "DATE"
+      comment: "Date of birth"
+    }
+  ];
+  // @inject_tag: gorm:"column:date_of_birth;serializer:proto_timestamp"
+
+  string gender = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "gender"
+      sql_type: "VARCHAR(20)"
+      comment: "Gender"
+    }
+  ];
+  // @inject_tag: gorm:"column:gender"
+
+  string phone_number = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "phone_number"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      comment: "Primary phone"
+    }
+  ];
+  // @inject_tag: gorm:"column:phone_number;not null"
+
+  string email_address = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "email_address"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Email address"
+      index: {
+        index_name: "idx_contacts_email"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:email_address;not null"
+
+  string address = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "address"
+      sql_type: "TEXT"
+      comment: "Physical address"
+    }
+  ];
+  // @inject_tag: gorm:"column:address"
+
+  string alternate_phone_number = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "alternate_phone_number"
+      sql_type: "VARCHAR(20)"
+      comment: "Alternate phone"
+    }
+  ];
+  // @inject_tag: gorm:"column:alternate_phone_number"
+
+  string additional_email_address = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "additional_email_address"
+      sql_type: "VARCHAR(255)"
+      comment: "Secondary email"
+    }
+  ];
+  // @inject_tag: gorm:"column:additional_email_address"
+
+  PreferredContactMethod preferred_contact_method = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "preferred_contact_method"
+      sql_type: "VARCHAR(50)"
+      default_value: "'EMAIL'"
+      comment: "Preferred contact method"
+    }
+  ];
+  // @inject_tag: gorm:"column:preferred_contact_method;serializer:proto_enum"
+
+  string referral_source = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "referral_source"
+      sql_type: "VARCHAR(100)"
+      comment: "Who referred this contact"
+    }
+  ];
+  // @inject_tag: gorm:"column:referral_source"
+
+  string preferred_language = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "preferred_language"
+      sql_type: "VARCHAR(50)"
+      default_value: "'English'"
+      comment: "Preferred language"
+    }
+  ];
+  // @inject_tag: gorm:"column:preferred_language"
+
+  bool marketing_consent = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "marketing_consent"
+      sql_type: "BOOLEAN"
+      default_value: "false"
+      comment: "Consent for marketing communications"
+    }
+  ];
+  // @inject_tag: gorm:"column:marketing_consent"
+
+  string assigned_agent_id = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "assigned_agent_id"
+      sql_type: "UUID"
+      comment: "Assigned agent"
+      index: {
+        index_name: "idx_contacts_assigned_agent"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:assigned_agent_id"
+
+  ContactType contact_type = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "contact_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'INDIVIDUAL'"
+      comment: "Type of contact"
+    }
+  ];
+  // @inject_tag: gorm:"column:contact_type;not null;serializer:proto_enum"
+
+  ContactStatus contact_status = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "contact_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ACTIVE'"
+      comment: "Contact status"
+    }
+  ];
+  // @inject_tag: gorm:"column:contact_status;not null;serializer:proto_enum"
+
+  map<string, string> metadata = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  string created_by = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_by"
+      sql_type: "UUID"
+      not_null: true
+      comment: "User who created the contact"
+    }
+  ];
+  // @inject_tag: gorm:"column:created_by;not null"
+
+  google.protobuf.Timestamp created_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum PreferredContactMethod {
+  PREFERRED_CONTACT_METHOD_UNSPECIFIED = 0;
+  PREFERRED_CONTACT_METHOD_EMAIL = 1;
+  PREFERRED_CONTACT_METHOD_PHONE = 2;
+  PREFERRED_CONTACT_METHOD_SMS = 3;
+  PREFERRED_CONTACT_METHOD_WHATSAPP = 4;
+}
+
+enum ContactType {
+  CONTACT_TYPE_UNSPECIFIED = 0;
+  CONTACT_TYPE_INDIVIDUAL = 1;
+  CONTACT_TYPE_BUSINESS = 2;
+  CONTACT_TYPE_FAMILY = 3;
+}
+
+enum ContactStatus {
+  CONTACT_STATUS_UNSPECIFIED = 0;
+  CONTACT_STATUS_ACTIVE = 1;
+  CONTACT_STATUS_INACTIVE = 2;
+  CONTACT_STATUS_PROSPECT = 3;
+  CONTACT_STATUS_ARCHIVED = 4;
+}

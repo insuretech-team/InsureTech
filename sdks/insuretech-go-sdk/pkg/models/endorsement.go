@@ -6,18 +6,18 @@ import (
 
 // Endorsement represents a endorsement
 type Endorsement struct {
-	RequestedBy string `json:"requested_by"`
-	ApprovedBy string `json:"approved_by,omitempty"`
-	EffectiveDate time.Time `json:"effective_date"`
-	Id string `json:"id"`
-	EndorsementNumber string `json:"endorsement_number"`
-	Type *EndorsementType `json:"type"`
-	Changes string `json:"changes"`
-	PremiumRefundRequired bool `json:"premium_refund_required,omitempty"`
-	Status interface{} `json:"status"`
 	ApprovedAt time.Time `json:"approved_at,omitempty"`
+	ApprovedBy string `json:"approved_by,omitempty"`
 	AuditInfo interface{} `json:"audit_info"`
+	Changes string `json:"changes"`
+	EffectiveDate time.Time `json:"effective_date"`
+	EndorsementNumber string `json:"endorsement_number"`
+	Id string `json:"id"`
 	PolicyId string `json:"policy_id"`
-	Reason string `json:"reason"`
 	PremiumAdjustment *Money `json:"premium_adjustment,omitempty"`
+	PremiumRefundRequired bool `json:"premium_refund_required,omitempty"`
+	Reason string `json:"reason"`
+	RequestedBy string `json:"requested_by"`
+	Status interface{} `json:"status"`
+	Type *EndorsementType `json:"type"`
 }

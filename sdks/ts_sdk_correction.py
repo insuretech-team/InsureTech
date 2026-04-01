@@ -544,6 +544,129 @@ def test_build(sdk_path):
         print_warning("Build will be tested in the pipeline")
         return True  # Don't fail, just skip
 
+def package_sdk_tarball(sdk_path):
+    """
+    Pack the SDK into a tarball using npm pack.
+    This is what b2b_portal installs via: file:../sdks/insuretech-typescript-sdk/lifeplus-insuretech-sdk-0.1.0.tgz
+    """
+    print_step("Packaging SDK tarball (npm pack)...")
+
+    # Skip in CI — packaging done in the pipeline
+    if os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true':
+        print_success("Skipping npm pack in CI (handled by pipeline)")
+        return True
+
+    # Only pack if dist exists (build must run first)
+    dist_path = sdk_path / "dist"
+    if not dist_path.exists():
+        print_warning("dist/ not found — skipping npm pack (build first)")
+        return True
+
+    npm_cmd = 'npm.cmd' if sys.platform == 'win32' else 'npm'
+
+    try:
+        # Remove old tarballs
+        for old_tgz in sdk_path.glob("*.tgz"):
+            old_tgz.unlink()
+            print_warning(f"Removed old tarball: {old_tgz.name}")
+
+        result = subprocess.run(
+            [npm_cmd, 'pack'],
+            cwd=str(sdk_path),
+            capture_output=True,
+            text=True,
+            timeout=60,
+            shell=True
+        )
+
+        if result.returncode == 0:
+            # Find the newly created tarball
+            tarballs = list(sdk_path.glob("*.tgz"))
+            if tarballs:
+                tarball = tarballs[0]
+                print_success(f"Created tarball: {tarball.name} ({tarball.stat().st_size // 1024} KB)")
+                return True
+            else:
+                print_error("npm pack succeeded but no .tgz file found")
+                return False
+        else:
+            print_error(f"npm pack failed: {result.stderr}")
+            return False
+
+    except Exception as e:
+        print_warning(f"Could not run npm pack: {e}")
+        return True  # Don't fail the whole correction
+
+
+def reinstall_portal_sdks(sdk_path):
+    """
+    Reinstall the SDK in all portals that depend on it.
+    
+    Portal dependencies:
+    - b2b_portal:     file:../sdks/insuretech-typescript-sdk/lifeplus-insuretech-sdk-0.1.0.tgz (tarball)
+    - system_portal:  file:../sdks/insuretech-typescript-sdk (direct source link)
+    """
+    print_step("Reinstalling SDK in dependent portals...")
+
+    # Skip in CI
+    if os.environ.get('CI') == 'true' or os.environ.get('GITHUB_ACTIONS') == 'true':
+        print_success("Skipping portal reinstall in CI")
+        return True
+
+    # Skip if dist doesn't exist
+    dist_path = sdk_path / "dist"
+    if not dist_path.exists():
+        print_warning("dist/ not found — skipping portal reinstall")
+        return True
+
+    project_root = sdk_path.parent.parent  # sdks/ -> project root
+    npm_cmd = 'npm.cmd' if sys.platform == 'win32' else 'npm'
+
+    portals = [
+        ("b2b_portal",    project_root / "b2b_portal"),
+        ("system_portal", project_root / "system_portal"),
+    ]
+
+    all_ok = True
+    for portal_name, portal_path in portals:
+        if not portal_path.exists():
+            print_warning(f"{portal_name}: directory not found, skipping")
+            continue
+
+        pkg_json = portal_path / "package.json"
+        if not pkg_json.exists():
+            print_warning(f"{portal_name}: package.json not found, skipping")
+            continue
+
+        # Check this portal actually depends on our SDK
+        with open(pkg_json, 'r', encoding='utf-8') as f:
+            content = f.read()
+        if 'insuretech-sdk' not in content and 'lifeplus/insuretech' not in content:
+            print_warning(f"{portal_name}: no SDK dependency found, skipping")
+            continue
+
+        print_success(f"Reinstalling SDK in {portal_name}...")
+        try:
+            result = subprocess.run(
+                [npm_cmd, 'install', '--legacy-peer-deps'],
+                cwd=str(portal_path),
+                capture_output=True,
+                text=True,
+                timeout=120,
+                shell=True
+            )
+            if result.returncode == 0:
+                print_success(f"  {portal_name}: SDK reinstalled successfully")
+            else:
+                print_error(f"  {portal_name}: npm install failed")
+                print_error(f"  {result.stderr[-500:]}")
+                all_ok = False
+        except Exception as e:
+            print_warning(f"  {portal_name}: could not reinstall — {e}")
+
+    return all_ok
+
+
 def main():
     try:
         print("=" * 60)
@@ -553,54 +676,64 @@ def main():
         print("============================================================")
         print("  TypeScript SDK Post-Generation Correction")
         print("============================================================")
-    
+
     # Find SDK path
     script_dir = Path(__file__).parent
     sdk_path = script_dir / "insuretech-typescript-sdk"
-    
+
     if not sdk_path.exists():
         print_error(f"SDK not found at: {sdk_path}")
         sys.exit(1)
-    
+
     print_success(f"Found SDK at: {sdk_path}")
-    
+
     # Run corrections
     success = True
-    
+
     if not fix_class_names_with_colons(sdk_path):
         success = False
-    
+
     if not fix_method_names_with_colons(sdk_path):
         success = False
-    
+
     if not fix_http_client_types(sdk_path):
         success = False
-    
+
     if not fix_service_index(sdk_path):
         success = False
-    
+
     if not fix_method_names(sdk_path):
         success = False
-    
+
     if not fix_enum_conflicts(sdk_path):
         success = False
-    
+
     if not fix_duplicate_methods(sdk_path):
         success = False
-    
+
     remove_empty_subdirs(sdk_path)
-    
+
     if not test_build(sdk_path):
         success = False
-    
+
+    # Package tarball AFTER successful build (b2b_portal depends on this)
+    if success:
+        if not package_sdk_tarball(sdk_path):
+            print_warning("Tarball packaging failed — b2b_portal may need manual reinstall")
+            # Don't fail the whole correction for packaging issues
+
+        # Reinstall SDK in all dependent portals
+        reinstall_portal_sdks(sdk_path)
+
     # Summary
     print("\n" + "=" * 60)
     if success:
         print("  ✅ TypeScript SDK Correction Complete - SDK is ready!")
+        print("     Tarball packaged + portals reinstalled")
     else:
         print("  ❌ TypeScript SDK Correction Failed - Manual fixes needed")
     print("=" * 60)
-    
+
     sys.exit(0 if success else 1)
 
 if __name__ == "__main__":

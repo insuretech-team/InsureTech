@@ -1,0 +1,362 @@
+syntax = "proto3";
+
+package insuretech.policy.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1;policyv1";
+option csharp_namespace = "Insuretech.Policy.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// InsuranceProposal represents the insurer-decision step between payment confirmation
+// and policy issuance. A paid order must submit a proposal to the target insurer.
+// If the insurer approves, the order can be fulfilled into a policy. If rejected,
+// a refund must be initiated against the paid order.
+message InsuranceProposal {
+  option (insuretech.common.v1.table) = {
+    table_name: "insurance_proposals"
+    schema_name: "insurance_schema"
+    migration_order: 97
+    is_table: true
+    comment: "Insurer-facing proposals created from paid orders before policy issuance"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string proposal_id = 1 [(insuretech.common.v1.column) = {
+    column_name: "proposal_id"
+    sql_type: "UUID"
+    primary_key: true
+    not_null: true
+    default_value: "gen_random_uuid()"
+    comment: "Primary key - insurer proposal UUID"
+  }];
+  // @inject_tag: gorm:"primaryKey;column:proposal_id;not null"
+
+  string proposal_number = 2 [(insuretech.common.v1.column) = {
+    column_name: "proposal_number"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    unique: true
+    comment: "Human-readable insurer proposal number"
+    index: {
+      index_name: "idx_insurance_proposals_number"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:proposal_number;not null;uniqueIndex"
+
+  string tenant_id = 3 [(insuretech.common.v1.column) = {
+    column_name: "tenant_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Multi-tenant isolation key"
+    index: {
+      index_name: "idx_insurance_proposals_tenant_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:tenant_id;not null"
+
+  string order_id = 4 [(insuretech.common.v1.column) = {
+    column_name: "order_id"
+    sql_type: "UUID"
+    not_null: true
+    unique: true
+    comment: "One insurer proposal per paid order"
+    foreign_key: {
+      references_table: "orders"
+      references_column: "order_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_order_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_order_id"
+      index_type: INDEX_TYPE_BTREE
+      unique: true
+    }
+  }];
+  // @inject_tag: gorm:"column:order_id;not null;uniqueIndex"
+
+  string quotation_id = 5 [(insuretech.common.v1.column) = {
+    column_name: "quotation_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Source quotation converted into a paid order"
+    foreign_key: {
+      references_table: "quotations"
+      references_column: "quotation_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_quotation_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_quotation_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:quotation_id;not null"
+
+  string customer_id = 6 [(insuretech.common.v1.column) = {
+    column_name: "customer_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Customer/proposer linked to the order"
+    foreign_key: {
+      references_table: "users"
+      references_column: "user_id"
+      references_schema: "authn_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_customer_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_customer_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  string insurer_id = 7 [(insuretech.common.v1.column) = {
+    column_name: "insurer_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Target insurer responsible for accepting or rejecting the proposal"
+    foreign_key: {
+      references_table: "insurers"
+      references_column: "insurer_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_insurer_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_insurer_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:insurer_id;not null"
+
+  string product_id = 8 [(insuretech.common.v1.column) = {
+    column_name: "product_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Base product being proposed to the insurer"
+    foreign_key: {
+      references_table: "products"
+      references_column: "product_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_product_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_product_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string plan_id = 9 [(insuretech.common.v1.column) = {
+    column_name: "plan_id"
+    sql_type: "UUID"
+    not_null: true
+    comment: "Product plan chosen in the source quotation/order"
+    foreign_key: {
+      references_table: "product_plans"
+      references_column: "plan_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_RESTRICT
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_plan_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_plan_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:plan_id;not null"
+
+  insuretech.common.v1.Money proposed_premium = 10 [(insuretech.common.v1.column) = {
+    column_name: "proposed_premium"
+    sql_type: "BIGINT"
+    not_null: true
+    check_constraint: "proposed_premium > 0"
+    comment: "Premium amount submitted to the insurer in paisa"
+  }];
+  // @inject_tag: gorm:"column:proposed_premium;not null"
+
+  insuretech.common.v1.Money proposed_sum_insured = 11 [(insuretech.common.v1.column) = {
+    column_name: "proposed_sum_insured"
+    sql_type: "BIGINT"
+    not_null: true
+    check_constraint: "proposed_sum_insured > 0"
+    comment: "Coverage amount requested from the insurer in paisa"
+  }];
+  // @inject_tag: gorm:"column:proposed_sum_insured;not null"
+
+  ProposalStatus status = 12 [(insuretech.common.v1.column) = {
+    column_name: "status"
+    sql_type: "VARCHAR(50)"
+    not_null: true
+    default_value: "'PROPOSAL_STATUS_SUBMITTED'"
+    comment: "Current insurer proposal decision state"
+    index: {
+      index_name: "idx_insurance_proposals_status"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  string submission_payload = 13 [(insuretech.common.v1.column) = {
+    column_name: "submission_payload"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Serialized insurer request payload for audit/replay"
+  }];
+  // @inject_tag: gorm:"column:submission_payload"
+
+  string insurer_response_payload = 14 [(insuretech.common.v1.column) = {
+    column_name: "insurer_response_payload"
+    sql_type: "JSONB"
+    is_json: true
+    comment: "Serialized insurer decision payload"
+  }];
+  // @inject_tag: gorm:"column:insurer_response_payload"
+
+  string decision_reason = 15 [(insuretech.common.v1.column) = {
+    column_name: "decision_reason"
+    sql_type: "TEXT"
+    comment: "Insurer decision explanation or rejection reason"
+  }];
+  // @inject_tag: gorm:"column:decision_reason"
+
+  google.protobuf.Timestamp submitted_at = 16 [(insuretech.common.v1.column) = {
+    column_name: "submitted_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true
+    comment: "When the proposal was sent to the insurer"
+  }];
+  // @inject_tag: gorm:"column:submitted_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp reviewed_at = 17 [(insuretech.common.v1.column) = {
+    column_name: "reviewed_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    comment: "When the insurer decision was recorded"
+  }];
+  // @inject_tag: gorm:"column:reviewed_at;serializer:proto_timestamp"
+
+  string reviewed_by_user_id = 18 [(insuretech.common.v1.column) = {
+    column_name: "reviewed_by_user_id"
+    sql_type: "UUID"
+    comment: "Internal reviewer or insurer operator who recorded the decision"
+  }];
+  // @inject_tag: gorm:"column:reviewed_by_user_id"
+
+  string approved_policy_id = 19 [(insuretech.common.v1.column) = {
+    column_name: "approved_policy_id"
+    sql_type: "UUID"
+    comment: "Issued policy created after proposal approval"
+    foreign_key: {
+      references_table: "policies"
+      references_column: "policy_id"
+      references_schema: "insurance_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_approved_policy_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_approved_policy_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:approved_policy_id"
+
+  string refund_id = 20 [(insuretech.common.v1.column) = {
+    column_name: "refund_id"
+    sql_type: "UUID"
+    comment: "Refund created if the insurer rejects a paid order proposal"
+    foreign_key: {
+      references_table: "refunds"
+      references_column: "refund_id"
+      references_schema: "payment_schema"
+      on_delete: REFERENTIAL_ACTION_SET_NULL
+      on_update: REFERENTIAL_ACTION_CASCADE
+      constraint_name: "fk_insurance_proposals_refund_id"
+    }
+    index: {
+      index_name: "idx_insurance_proposals_refund_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:refund_id"
+
+  string correlation_id = 21 [(insuretech.common.v1.column) = {
+    column_name: "correlation_id"
+    sql_type: "TEXT"
+    comment: "Saga/tracing correlation id shared with order and payment"
+  }];
+  // @inject_tag: gorm:"column:correlation_id"
+
+  google.protobuf.Timestamp created_at = 22 [(insuretech.common.v1.column) = {
+    column_name: "created_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true
+    default_value: "CURRENT_TIMESTAMP"
+    exclude_from_insert: true
+    exclude_from_update: true
+  }];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 23 [(insuretech.common.v1.column) = {
+    column_name: "updated_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    not_null: true
+    default_value: "CURRENT_TIMESTAMP"
+    exclude_from_insert: true
+  }];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 24 [(insuretech.common.v1.column) = {
+    column_name: "deleted_at"
+    sql_type: "TIMESTAMP WITH TIME ZONE"
+    comment: "Soft delete timestamp"
+  }];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+
+  string proposed_premium_currency = 10001 [(insuretech.common.v1.column) = {
+    column_name: "proposed_premium_currency"
+    sql_type: "VARCHAR(3)"
+    not_null: true
+    default_value: "'BDT'"
+    comment: "Currency for proposed_premium"
+  }];
+  // @inject_tag: gorm:"column:proposed_premium_currency;not null"
+
+  string proposed_sum_insured_currency = 10002 [(insuretech.common.v1.column) = {
+    column_name: "proposed_sum_insured_currency"
+    sql_type: "VARCHAR(3)"
+    not_null: true
+    default_value: "'BDT'"
+    comment: "Currency for proposed_sum_insured"
+  }];
+  // @inject_tag: gorm:"column:proposed_sum_insured_currency;not null"
+}
+
+enum ProposalStatus {
+  PROPOSAL_STATUS_UNSPECIFIED = 0;
+  PROPOSAL_STATUS_DRAFT = 1;
+  PROPOSAL_STATUS_SUBMITTED = 2;
+  PROPOSAL_STATUS_IN_REVIEW = 3;
+  PROPOSAL_STATUS_APPROVED = 4;
+  PROPOSAL_STATUS_REJECTED = 5;
+  PROPOSAL_STATUS_REFUND_INITIATED = 6;
+  PROPOSAL_STATUS_REFUNDED = 7;
+  PROPOSAL_STATUS_CANCELLED = 8;
+}

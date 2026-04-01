@@ -38,7 +38,7 @@ service VoiceService {
   // End voice session
   rpc EndVoiceSession(EndVoiceSessionRequest) returns (EndVoiceSessionResponse) {
     option (google.api.http) = {
-      post: "/v1/voice-sessions/{voice_session_id}?action=end"
+      post: "/v1/voice-sessions/{voice_session_id}:end"
       body: "*"
     };
   }

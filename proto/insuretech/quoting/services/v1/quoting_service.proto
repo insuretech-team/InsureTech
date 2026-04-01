@@ -1,0 +1,218 @@
+syntax = "proto3";
+
+package insuretech.quoting.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/quoting/services/v1;quotingservicev1";
+option csharp_namespace = "Insuretech.Quoting.Services.V1";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/quoting/entity/v1/quote.proto";
+
+// QuotingService provides dynamic insurance quote generation and management
+service QuotingService {
+  // Generate a new quote
+  rpc GenerateQuote(GenerateQuoteRequest) returns (GenerateQuoteResponse);
+
+  // Get a quote by ID
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+
+  // Get a quote by quote number
+  rpc GetQuoteByNumber(GetQuoteByNumberRequest) returns (GetQuoteResponse);
+
+  // List quotes with filters
+  rpc ListQuotes(ListQuotesRequest) returns (ListQuotesResponse);
+
+  // Revise an existing quote
+  rpc ReviseQuote(ReviseQuoteRequest) returns (ReviseQuoteResponse);
+
+  // Compare multiple quotes
+  rpc CompareQuotes(CompareQuotesRequest) returns (CompareQuotesResponse);
+
+  // Convert quote to policy
+  rpc ConvertQuoteToPolicy(ConvertQuoteToPolicyRequest) returns (ConvertQuoteToPolicyResponse);
+
+  // Expire a quote
+  rpc ExpireQuote(ExpireQuoteRequest) returns (ExpireQuoteResponse);
+
+  // Delete a quote
+  rpc DeleteQuote(DeleteQuoteRequest) returns (DeleteQuoteResponse);
+
+  // Get quote statistics
+  rpc GetQuoteStatistics(GetQuoteStatisticsRequest) returns (GetQuoteStatisticsResponse);
+
+  // Calculate premium without creating a quote
+  rpc CalculatePremium(CalculatePremiumRequest) returns (CalculatePremiumResponse);
+}
+
+message GenerateQuoteRequest {
+  string product_id = 1;
+  string customer_id = 2;
+  string agent_id = 3; // Optional
+  entity.v1.QuoteParameters parameters = 4;
+  int32 validity_days = 5; // Default 30 days
+  map<string, string> metadata = 6;
+}
+
+message GenerateQuoteResponse {
+  entity.v1.Quote quote = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetQuoteRequest {
+  string quote_id = 1;
+}
+
+message GetQuoteByNumberRequest {
+  string quote_number = 1;
+}
+
+message GetQuoteResponse {
+  entity.v1.Quote quote = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListQuotesRequest {
+  string customer_id = 1;
+  string product_id = 2;
+  string agent_id = 3;
+  entity.v1.QuoteStatus status = 4;
+  string filter = 5;
+  string order_by = 6;
+  int32 page_size = 7;
+  string page_token = 8;
+}
+
+message ListQuotesResponse {
+  repeated entity.v1.Quote quotes = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ReviseQuoteRequest {
+  string quote_id = 1;
+  entity.v1.QuoteParameters new_parameters = 2;
+  string revision_reason = 3;
+  int32 validity_days = 4;
+}
+
+message ReviseQuoteResponse {
+  entity.v1.Quote quote = 1; // New revised quote
+  entity.v1.Quote parent_quote = 2; // Original quote
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message CompareQuotesRequest {
+  repeated string quote_ids = 1;
+}
+
+message CompareQuotesResponse {
+  repeated QuoteComparison comparisons = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message QuoteComparison {
+  string quote_id = 1;
+  string quote_number = 2;
+  string product_name = 3;
+  insuretech.common.v1.Money total_premium = 4;
+  int32 coverage_count = 5;
+  int32 discount_count = 6;
+  google.protobuf.Timestamp valid_until = 7;
+  entity.v1.QuoteStatus status = 8;
+  repeated CoverageComparison coverages = 9;
+  repeated DiscountComparison discounts = 10;
+}
+
+message CoverageComparison {
+  string coverage_id = 1;
+  string name = 2;
+  bool is_included = 3;
+  insuretech.common.v1.Money premium = 4;
+}
+
+message DiscountComparison {
+  string discount_id = 1;
+  string name = 2;
+  insuretech.common.v1.Money amount = 3;
+  double percentage = 4;
+}
+
+message ConvertQuoteToPolicyRequest {
+  string quote_id = 1;
+  string policy_id = 2; // Pre-generated policy ID
+  string converted_by = 3;
+}
+
+message ConvertQuoteToPolicyResponse {
+  string quote_id = 1;
+  string policy_id = 2;
+  google.protobuf.Timestamp converted_at = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ExpireQuoteRequest {
+  string quote_id = 1;
+}
+
+message ExpireQuoteResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteQuoteRequest {
+  string quote_id = 1;
+  bool permanent = 2; // If true, hard delete
+}
+
+message DeleteQuoteResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetQuoteStatisticsRequest {
+  string customer_id = 1;
+  string product_id = 2;
+  string agent_id = 3;
+  google.protobuf.Timestamp start_date = 4;
+  google.protobuf.Timestamp end_date = 5;
+}
+
+message GetQuoteStatisticsResponse {
+  int32 total_quotes = 1;
+  int32 draft_quotes = 2;
+  int32 sent_quotes = 3;
+  int32 accepted_quotes = 4;
+  int32 declined_quotes = 5;
+  int32 expired_quotes = 6;
+  int32 converted_quotes = 7;
+  double conversion_rate = 8; // Percentage
+  insuretech.common.v1.Money total_premium_value = 9;
+  insuretech.common.v1.Money average_premium = 10;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 11;
+}
+
+message CalculatePremiumRequest {
+  string product_id = 1;
+  entity.v1.QuoteParameters parameters = 2;
+}
+
+message CalculatePremiumResponse {
+  entity.v1.PremiumCalculation calculation = 1;
+  repeated entity.v1.Coverage coverages = 2;
+  repeated entity.v1.Discount discounts = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}

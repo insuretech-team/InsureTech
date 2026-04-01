@@ -1,0 +1,10 @@
+QuotingQuoteDeletionRequest:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    permanent:
+      type: boolean
+      description: If true, hard delete
+  description: Request payload for quote deletion operation. Contains parameters required
+    to execute the operation.

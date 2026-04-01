@@ -1,0 +1,7 @@
+FindPortalUserResponse:
+  type: object
+  properties:
+    user:
+      $ref: '#/components/schemas/PortalUserSummary'
+  description: Response payload for find portal user operation. Returns operation
+    results and status.

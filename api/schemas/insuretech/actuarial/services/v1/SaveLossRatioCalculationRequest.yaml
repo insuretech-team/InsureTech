@@ -1,0 +1,7 @@
+SaveLossRatioCalculationRequest:
+  type: object
+  properties:
+    loss_ratio:
+      $ref: '#/components/schemas/LossRatioCalculation'
+  description: Request payload for save loss ratio calculation operation. Contains
+    parameters required to execute the operation.

@@ -36,7 +36,7 @@ service EndorsementService {
   // Approve endorsement
   rpc ApproveEndorsement(ApproveEndorsementRequest) returns (ApproveEndorsementResponse) {
     option (google.api.http) = {
-      post: "/v1/endorsements/{endorsement_id}?action=approve"
+      post: "/v1/endorsements/{endorsement_id}:approve"
       body: "*"
     };
   }
@@ -44,7 +44,7 @@ service EndorsementService {
   // Reject endorsement
   rpc RejectEndorsement(RejectEndorsementRequest) returns (RejectEndorsementResponse) {
     option (google.api.http) = {
-      post: "/v1/endorsements/{endorsement_id}?action=reject"
+      post: "/v1/endorsements/{endorsement_id}:reject"
       body: "*"
     };
   }

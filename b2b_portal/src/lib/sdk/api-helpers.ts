@@ -1,102 +1,130 @@
 /**
  * api-helpers.ts
- * ──────────────
  * Shared utilities for Next.js API route handlers.
+ * Aligned with the new unified ApiResponse<T> gateway envelope.
  */
 
-import { NextResponse } from "next/server";
-
-import type { JsonMap } from "./shared";
-export type { JsonMap };
+import { NextResponse } from 'next/server'
+import type { JsonMap, GatewayResponse } from './shared'
+import { unwrapGateway, extractGatewayError } from './shared'
+export type { JsonMap }
+export { unwrapGateway, extractGatewayError }
 
 export function getApiBaseUrl(): string {
   return (
     process.env.INSURETECH_API_BASE_URL ??
     process.env.NEXT_PUBLIC_INSURETECH_API_BASE_URL ??
-    "http://localhost:8080"
-  );
+    'http://localhost:8080'
+  )
 }
 
 export function getCookieValue(cookieHeader: string, name: string): string {
-  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`));
-  return match ? decodeURIComponent(match[1]) : "";
+  const match = cookieHeader.match(new RegExp(`(?:^|;\\s*)${name}=([^;]*)`))
+  return match ? decodeURIComponent(match[1]) : ''
 }
 
 export function getCsrfToken(cookieHeader: string): string {
-  return getCookieValue(cookieHeader, "csrf_token");
+  return getCookieValue(cookieHeader, 'csrf_token')
 }
 
 export function getRecord(value: unknown): JsonMap {
-  if (value && typeof value === "object" && !Array.isArray(value)) return value as JsonMap;
-  return {};
+  if (value && typeof value === 'object' && !Array.isArray(value)) return value as JsonMap
+  return {}
 }
 
 export function getStringField(source: JsonMap, ...keys: string[]): string {
   for (const key of keys) {
-    const value = source[key];
-    if (typeof value === "string" && value.trim()) return value;
+    const value = source[key]
+    if (typeof value === 'string' && value.trim()) return value
   }
-  return "";
+  return ''
 }
 
 export function getNumberField(source: JsonMap, ...keys: string[]): number {
   for (const key of keys) {
-    const value = source[key];
-    if (typeof value === "number") return value;
-    if (typeof value === "string" && value.trim()) {
-      const parsed = Number.parseInt(value, 10);
-      if (!Number.isNaN(parsed)) return parsed;
+    const value = source[key]
+    if (typeof value === 'number') return value
+    if (typeof value === 'string' && value.trim()) {
+      const parsed = Number.parseInt(value, 10)
+      if (!Number.isNaN(parsed)) return parsed
     }
   }
-  return 0;
+  return 0
 }
 
 export function parseMoneyDecimal(value: unknown): number {
-  if (value == null) return 0;
-  if (typeof value === "bigint") return Number(value) / 100;
-  if (typeof value === "number") return value;
-  if (typeof value === "string") {
-    const p = Number.parseFloat(value);
-    return Number.isNaN(p) ? 0 : p;
+  if (value == null) return 0
+  if (typeof value === 'bigint') return Number(value) / 100
+  if (typeof value === 'number') return value
+  if (typeof value === 'string') {
+    const p = Number.parseFloat(value)
+    return Number.isNaN(p) ? 0 : p
   }
-  if (typeof value === "object") {
-    const bag = value as JsonMap;
-    const decimal = bag.decimal_amount ?? bag.decimalAmount;
-    if (typeof decimal === "number") return decimal;
-    if (typeof decimal === "string") { const p = Number.parseFloat(decimal); if (!Number.isNaN(p)) return p; }
-    const raw = bag.amount;
-    if (typeof raw === "bigint") return Number(raw) / 100;
-    if (typeof raw === "number") return raw / 100;
-    if (typeof raw === "string") { const p = Number.parseFloat(raw); return Number.isNaN(p) ? 0 : p / 100; }
+  if (typeof value === 'object') {
+    const bag = value as JsonMap
+    const decimal = bag.decimal_amount ?? bag.decimalAmount
+    if (typeof decimal === 'number') return decimal
+    if (typeof decimal === 'string') {
+      const p = Number.parseFloat(decimal)
+      if (!Number.isNaN(p)) return p
+    }
+    const amount = bag.amount
+    if (typeof amount === 'number') return amount / 100
+    if (typeof amount === 'string') {
+      const p = Number.parseFloat(amount)
+      if (!Number.isNaN(p)) return p
+    }
   }
-  return 0;
+  return 0
+}
+
+// ─── Standard BFF response builders ──────────────────────────────────────────
+
+/**
+ * sdkErrorMessage — extracts a user-facing error message from an SDK result.
+ * The SDK result now carries a GatewayResponse envelope in result.data.
+ */
+export function sdkErrorMessage(result: unknown): string {
+  return extractGatewayError(result)
 }
 
 /**
- * Safely extract error message from a @hey-api/client-fetch SDK result.
- *
- * The SDK result union is:
- *   { data: T; error: undefined; request: Request; response: Response }
- * | { data: undefined; error: Error; request: Request; response: Response }
- *
- * So `error` only exists on the second branch. Use `result.response.ok` to
- * discriminate, then cast to extract the message.
+ * unwrapSdkResult — extracts the payload from an SDK call result.
+ * The SDK client interceptor already strips the ApiResponse envelope,
+ * so result.data is the inner T directly.
  */
-export function sdkErrorMessage(result: { response: Response; error?: unknown }): string {
-  const err = result.error;
-  if (!err) return "Request failed";
-  if (err instanceof Error) return err.message;
-  if (err && typeof err === "object") {
-    const m = (err as JsonMap).message;
-    if (typeof m === "string") return m;
+export function unwrapSdkResult<T>(result: { data?: T | null; error?: unknown; response?: Response }) {
+  if (result.error || !result.response?.ok) {
+    const msg = typeof result.error === 'string'
+      ? result.error
+      : (result.error && typeof result.error === 'object' && 'message' in result.error)
+        ? String((result.error as Record<string, unknown>).message)
+        : 'An unexpected error occurred';
+    return { ok: false as const, message: msg, code: 'ERROR', status: result.response?.status ?? 500 }
   }
-  return "Request failed";
+  return { ok: true as const, data: result.data as T, meta: undefined }
 }
 
-export function badRequest(message: string) {
-  return NextResponse.json({ ok: false, message }, { status: 400 });
+export function badRequest(message: string): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status: 400 })
 }
 
-export function gatewayError(message: string) {
-  return NextResponse.json({ ok: false, message }, { status: 502 });
+export function gatewayError(message: string, status = 502): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status })
+}
+
+export function notFound(message = 'Not found'): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status: 404 })
+}
+
+export function unauthorized(message = 'Unauthorized'): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status: 401 })
+}
+
+export function forbidden(message = 'Forbidden'): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status: 403 })
+}
+
+export function internalError(message = 'Internal error'): NextResponse {
+  return NextResponse.json({ ok: false, message }, { status: 500 })
 }

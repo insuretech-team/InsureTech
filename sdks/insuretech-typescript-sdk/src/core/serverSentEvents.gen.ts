@@ -94,7 +94,7 @@ export const createSseClient = <TData = unknown>({
 }: ServerSentEventsOptions): ServerSentEventsResult<TData> => {
   let lastEventId: string | undefined;
 
-  const sleep = sseSleepFn ?? ((ms: number) => new Promise(resolve => setTimeout(resolve, ms)));
+  const sleep = sseSleepFn ?? ((ms: number) => new Promise((resolve) => setTimeout(resolve, ms)));
 
   const createStream = async function* () {
     let retryDelay: number = sseDefaultRetryDelay ?? 3000;

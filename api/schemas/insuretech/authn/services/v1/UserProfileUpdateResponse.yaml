@@ -3,9 +3,5 @@ UserProfileUpdateResponse:
   properties:
     profile:
       $ref: '#/components/schemas/UserProfile'
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for user profile update operation. Returns operation
     results and status.

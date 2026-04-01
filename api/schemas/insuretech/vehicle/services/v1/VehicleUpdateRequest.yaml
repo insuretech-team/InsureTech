@@ -1,0 +1,28 @@
+VehicleUpdateRequest:
+  type: object
+  properties:
+    vehicle_id:
+      type: string
+    model:
+      type: string
+    type:
+      $ref: '#/components/schemas/VehicleType'
+    price:
+      type: string
+      format: int64
+    manufacturer:
+      type: string
+    year:
+      type: integer
+      format: int32
+    image_uri:
+      type: string
+    is_active:
+      type: boolean
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing vehicle update. Contains fields
+    to be modified.

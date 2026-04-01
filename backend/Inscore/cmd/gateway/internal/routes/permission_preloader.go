@@ -9,11 +9,12 @@ import (
 	"time"
 
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/metrics"
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 // PermissionSet holds a user's permissions for a specific portal
@@ -87,7 +88,7 @@ func (p *PermissionPreloader) PreloadPermissions(ctx context.Context, userID, po
 	domain := buildDomain(portal, tenantID)
 
 	// Get user roles
-	authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+	authzCtx := internalrpc.OutgoingContext(ctx, "gateway")
 
 	rolesResp, err := p.authzClient.ListUserRoles(authzCtx, &authzservicev1.ListUserRolesRequest{
 		UserId: userID,
@@ -216,7 +217,7 @@ func (p *PermissionPreloader) PermissionsHandler() http.HandlerFunc {
 		tenantID := r.Header.Get("X-Tenant-ID")
 
 		if userID == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 			return
 		}
 
@@ -240,7 +241,7 @@ func (p *PermissionPreloader) PermissionsHandler() http.HandlerFunc {
 
 		if err != nil {
 			logger.Error("Failed to load permissions", zap.Error(err), zap.String("user_id", userID))
-			http.Error(w, "Failed to load permissions", http.StatusInternalServerError)
+			respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "Failed to load permissions")
 			return
 		}
 
@@ -250,7 +251,7 @@ func (p *PermissionPreloader) PermissionsHandler() http.HandlerFunc {
 
 		if err := json.NewEncoder(w).Encode(permSet); err != nil {
 			logger.Error("Failed to encode permissions", zap.Error(err))
-			http.Error(w, "Failed to encode permissions", http.StatusInternalServerError)
+			respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "Failed to encode permissions")
 			return
 		}
 	}
@@ -333,7 +334,7 @@ func (p *PermissionPreloader) BatchCheckPermissions(ctx context.Context, userID,
 	// In production, this method can be optimized by adding BatchCheckAccess to the authz proto
 	results := make(map[string]bool)
 	for _, check := range checks {
-		authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+		authzCtx := internalrpc.OutgoingContext(ctx, "gateway")
 		resp, err := p.authzClient.CheckAccess(authzCtx, &authzservicev1.CheckAccessRequest{
 			UserId: userID,
 			Domain: domain,

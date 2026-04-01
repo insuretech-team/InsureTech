@@ -22,6 +22,9 @@ UserDocument:
     verified_by:
       type: string
       description: '@inject_tag: gorm:"column:verified_by"'
+    rejection_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:rejection_reason"'
     verified_at:
       type: string
       format: date-time

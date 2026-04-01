@@ -1,0 +1,15 @@
+QuoteViewedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    customer_id:
+      type: string
+    viewed_at:
+      type: string
+      format: date-time
+  description: QuoteViewedEvent is emitted when customer views a quote

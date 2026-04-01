@@ -1,0 +1,12 @@
+ReservesCalculationRequest:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    input:
+      $ref: '#/components/schemas/ReserveInput'
+    calculation_reference:
+      type: string
+    calculated_by:
+      type: string
+  description: Reserve calculation

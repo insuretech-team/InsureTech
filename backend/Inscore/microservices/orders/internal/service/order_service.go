@@ -18,6 +18,7 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/domain"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/events"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/middleware"
+	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/repository"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	ordersv1 "github.com/newage-saint/insuretech/gen/go/insuretech/orders/entity/v1"
@@ -32,6 +33,11 @@ type OrderServiceImpl struct {
 	repo          domain.OrderRepository
 	publisher     *events.Publisher
 	paymentClient paymentservicev1.PaymentServiceClient // nil = stubbed (dev mode)
+}
+
+type purchaseOrderBootstrapRepo interface {
+	GetPurchaseOrderBootstrap(ctx context.Context, purchaseOrderID string) (*repository.PurchaseOrderBootstrap, error)
+	EnsureApprovedQuotation(ctx context.Context, purchaseOrderID, businessID, planID string) (string, error)
 }
 
 // Compile-time interface check.
@@ -70,12 +76,15 @@ func (s *OrderServiceImpl) CreateOrder(ctx context.Context, req *orderservicev1.
 	rctx := middleware.ExtractRequestContext(ctx)
 
 	// Resolve tenant — prefer request field, fall back to metadata, then env default.
+	// BUG FIX: B2C users have ins_tenant="root" (non-UUID string) in JWT.
+	// Validate that the resolved tenant is a valid UUID; fall back to root sentinel if not.
+	const rootTenantSentinel = "00000000-0000-0000-0000-000000000001"
 	tenantID := req.GetTenantId()
 	if tenantID == "" {
 		tenantID = rctx.TenantID
 	}
-	if tenantID == "" {
-		tenantID = "00000000-0000-0000-0000-000000000001"
+	if tenantID == "" || !isValidUUID(tenantID) {
+		tenantID = rootTenantSentinel
 	}
 
 	// Resolve customer — prefer request field, fall back to authenticated user.
@@ -540,16 +549,53 @@ func (s *OrderServiceImpl) CreateOrderForB2BPurchaseOrder(
 		return fmt.Errorf("%w: purchase_order_id is required", ErrInvalidArgument)
 	}
 
+	bootstrapRepo, ok := s.repo.(purchaseOrderBootstrapRepo)
+	if !ok {
+		return fmt.Errorf("%w: purchase order bootstrap is not supported by repository", ErrNotImplemented)
+	}
+
+	po, err := bootstrapRepo.GetPurchaseOrderBootstrap(ctx, purchaseOrderID)
+	if err != nil {
+		if errors.Is(err, domain.ErrNotFound) {
+			return fmt.Errorf("%w: purchase order %s not found", ErrNotFound, purchaseOrderID)
+		}
+		return fmt.Errorf("CreateOrderForB2BPurchaseOrder resolve purchase order: %w", err)
+	}
+
+	customerID := strings.TrimSpace(po.RequestedBy)
+	if customerID == "" {
+		customerID = middleware.ExtractRequestContext(ctx).UserID
+	}
+	if customerID == "" {
+		return fmt.Errorf("%w: purchase order %s is missing requested_by user", ErrInvalidArgument, purchaseOrderID)
+	}
+
+	if strings.TrimSpace(organisationID) == "" {
+		organisationID = po.BusinessID
+	}
+	if totalAmount == nil {
+		totalAmount = po.EstimatedPremium
+	}
+
+	quotationID, err := bootstrapRepo.EnsureApprovedQuotation(ctx, purchaseOrderID, po.BusinessID, po.PlanID)
+	if err != nil {
+		return fmt.Errorf("CreateOrderForB2BPurchaseOrder ensure quotation: %w", err)
+	}
+
 	req := &orderservicev1.CreateOrderRequest{
+		QuotationId:     quotationID,
+		CustomerId:      customerID,
 		PurchaseOrderId: purchaseOrderID,
 		OrganisationId:  organisationID,
 		TenantId:        tenantID,
 		TotalPayable:    totalAmount,
-		PaymentMethod:   "BANK_TRANSFER",      // B2B always starts with bank transfer
+		PaymentMethod:   "BANK_TRANSFER",
 		IdempotencyKey:  "b2b-po-" + purchaseOrderID,
+		ProductId:       po.ProductID,
+		PlanId:          po.PlanID,
 	}
 
-	_, err := s.CreateOrder(ctx, req)
+	_, err = s.CreateOrder(ctx, req)
 	if err != nil {
 		return fmt.Errorf("CreateOrderForB2BPurchaseOrder po=%s: %w", purchaseOrderID, err)
 	}
@@ -564,3 +610,13 @@ func min(a, b int) int {
 	}
 	return b
 }
+// isValidUUID checks if a string is a valid UUID v4 format.
+// Used to validate tenant IDs that may come as non-UUID strings (e.g. "root").
+func isValidUUID(s string) bool {
+	if len(s) != 36 {
+		return false
+	}
+	_, err := uuid.Parse(s)
+	return err == nil
+}
+

@@ -1,0 +1,11 @@
+RatingFormulaDeletionRequest:
+  type: object
+  properties:
+    formula_id:
+      type: string
+    permanent:
+      type: boolean
+    deleted_by:
+      type: string
+  description: Request payload for rating formula deletion operation. Contains parameters
+    required to execute the operation.

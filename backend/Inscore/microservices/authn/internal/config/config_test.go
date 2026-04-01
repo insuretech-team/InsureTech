@@ -16,6 +16,8 @@ func TestLoadAndHelpers(t *testing.T) {
 	t.Setenv("JWT_PUBLIC_KEY_PATH", "pub.pem")
 	t.Setenv("JWT_KEY_ID", "kid")
 	t.Setenv("OTP_EXPIRY", "7m")
+	t.Setenv("LOGIN_MAX_ATTEMPTS", "9")
+	t.Setenv("LOGIN_LOCKOUT_DURATION", "12m")
 	t.Setenv("EMAIL_TLS", "false")
 	t.Setenv("CSV", "a,b")
 
@@ -23,6 +25,8 @@ func TestLoadAndHelpers(t *testing.T) {
 	require.NoError(t, err)
 	require.Equal(t, "pw", cfg.Database.Password)
 	require.Equal(t, 7*time.Minute, cfg.Security.OTPExpiry)
+	require.Equal(t, 9, cfg.Security.LoginMaxAttempts)
+	require.Equal(t, 12*time.Minute, cfg.Security.LoginLockoutDuration)
 	require.False(t, cfg.Email.TLS)
 
 	require.Equal(t, 10, getEnvAsInt("MISSING_INT", 10))

@@ -1,0 +1,7 @@
+MyEmployeeCoverageRetrievalResponse:
+  type: object
+  properties:
+    coverage:
+      $ref: '#/components/schemas/EmployeeCoverageView'
+  description: Response payload for my employee coverage retrieval operation. Returns
+    operation results and status.

@@ -1,12 +1,13 @@
 import { NextResponse } from "next/server";
 
-import {
-  getSetCookieHeaders,
-  loginWithMobile,
-  toPortalSessionFromLogin,
-} from "@lib/auth/backend-auth";
+import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
 import { SESSION_COOKIE_NAME } from "@lib/auth/session";
+import { toPortalSessionFromLogin, getSetCookieHeaders } from "@lib/auth/backend-auth";
 import type { LoginRequest } from "@lib/types/auth";
+import {
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+} from "@/src/lib/utils/bd-mobile";
 
 /**
  * Maps backend errors (gRPC codes, HTTP status codes, raw strings) to clean,
@@ -27,6 +28,22 @@ function toUserFriendlyLoginError(error: unknown, httpStatus: number): string {
 
   // ── gRPC / HTTP status → friendly message map ──────────────────────────────
 
+  // Account locked / too many attempts
+  if (
+    lower.includes("locked") ||
+    lower.includes("too many") ||
+    lower.includes("rate limit") ||
+    lower.includes("max attempt") ||
+    lower.includes("blocked") ||
+    httpStatus === 422 ||
+    httpStatus === 429
+  ) {
+    if (raw.trim()) {
+      return raw.trim().replace(/\.$/, "");
+    }
+    return "Your account has been temporarily locked due to too many failed attempts. Please try again later.";
+  }
+
   // Wrong password / user not found
   if (
     httpStatus === 401 ||
@@ -40,18 +57,6 @@ function toUserFriendlyLoginError(error: unknown, httpStatus: number): string {
     lower.includes("user not found")
   ) {
     return "Mobile number or password is incorrect. Please try again.";
-  }
-
-  // Account locked / too many attempts
-  if (
-    lower.includes("locked") ||
-    lower.includes("too many") ||
-    lower.includes("rate limit") ||
-    lower.includes("max attempt") ||
-    lower.includes("blocked") ||
-    httpStatus === 429
-  ) {
-    return "Your account has been temporarily locked due to too many failed attempts. Please try again later.";
   }
 
   // Account not active / disabled
@@ -104,58 +109,12 @@ function extractCookieValue(setCookieHeader: string, cookieName: string): string
   return nameValue.slice(separatorIndex + 1);
 }
 
-// Valid Bangladesh operator prefixes: 013,014,015,016,017,018,019
-const BD_PHONE_RE = /^880(13|14|15|16|17|18|19)\d{8}$/;
-
-/**
- * Normalizes a Bangladesh mobile number to canonical E.164 form (+880XXXXXXXXXX).
- *
- * Accepted input variants (spaces, dashes, dots freely ignored):
- *   01712345678          → +8801712345678
- *   1712345678           → +8801712345678   (10 digits, no leading 0)
- *   8801712345678        → +8801712345678
- *   00 8801712345678     → +8801712345678
- *   +880 171-234-5678    → +8801712345678
- *   +88 01712345678      → +8801712345678   (typo with 88 instead of 880)
- *
- * Returns null when the number cannot be recognized as a valid BD number.
- */
-function normalizeMobileNumber(value: string): string | null {
-  // Strip everything except digits and a leading +
-  const stripped = value.trim().replace(/[^\d+]/g, "");
-
-  // Drop the leading + so we work purely with digits from here
-  const digits = stripped.startsWith("+") ? stripped.slice(1) : stripped;
-
-  let e164Digits: string; // will hold 880XXXXXXXXXX (13 digits)
-
-  if (digits.startsWith("00880")) {
-    // 008801712345678 → 8801712345678
-    e164Digits = digits.slice(2);
-  } else if (digits.startsWith("880")) {
-    // 8801712345678
-    e164Digits = digits;
-  } else if (digits.startsWith("0088")) {
-    // 00881712345678 — uncommon but handle gracefully
-    e164Digits = "880" + digits.slice(4);
-  } else if (digits.startsWith("88") && digits.length === 13) {
-    // 88 followed by 01XXXXXXXXX — missing a zero: treat as typo
-    e164Digits = "880" + digits.slice(2);
-  } else if (digits.startsWith("0")) {
-    // 01712345678 (11 digits local)
-    e164Digits = "880" + digits.slice(1);
-  } else if (digits.length === 10) {
-    // 1712345678 — 10 digits without leading 0
-    e164Digits = "880" + digits;
-  } else {
-    return null;
-  }
-
-  if (!BD_PHONE_RE.test(e164Digits)) {
-    return null;
-  }
-
-  return `+${e164Digits}`;
+function getApiBaseUrl(): string {
+  return (
+    process.env.INSURETECH_API_BASE_URL ??
+    process.env.NEXT_PUBLIC_INSURETECH_API_BASE_URL ??
+    "http://localhost:8080"
+  );
 }
 
 export async function POST(request: Request) {
@@ -180,54 +139,114 @@ export async function POST(request: Request) {
     );
   }
 
-  const normalizedMobile = normalizeMobileNumber(mobileRaw);
+  const normalizedMobile = normalizeBangladeshMobile(mobileRaw);
   if (!normalizedMobile) {
     return NextResponse.json(
       {
         ok: false,
-        message:
-          "Invalid mobile number. Please enter a valid Bangladesh number " +
-          "(e.g. 01712345678, +8801712345678 or 008801712345678).",
+        message: getBangladeshMobileValidationMessage(),
       },
       { status: 400 }
     );
   }
 
-  const result = await loginWithMobile({
-    mobileNumber: normalizedMobile,
-    password: payload.password,
-    deviceId: payload.deviceId,
-  });
-
-  if (result.error) {
-    const httpStatus = result.response?.status || 500;
+  const requestCookie = request.headers.get("cookie");
+  let backendResponse: Response;
+  let rawBackendBody = "";
+  try {
+    backendResponse = await fetch(`${getApiBaseUrl()}/v1/auth/login`, {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        ...(requestCookie ? { cookie: requestCookie } : {}),
+      },
+      body: JSON.stringify({
+        mobile_number: normalizedMobile,
+        password: payload.password,
+        device_id: payload.deviceId ?? "b2b-portal-web",
+        device_type: "WEB",
+        device_name: "B2B Portal Web",
+      }),
+      cache: "no-store",
+    });
+    rawBackendBody = await backendResponse.text();
+  } catch (error) {
     return NextResponse.json(
-      { ok: false, message: toUserFriendlyLoginError(result.error, httpStatus) },
+      { ok: false, message: toUserFriendlyLoginError(error, 502) },
+      { status: 502 }
+    );
+  }
+
+  let backendPayload: Record<string, unknown> = {};
+  if (rawBackendBody) {
+    try {
+      backendPayload = JSON.parse(rawBackendBody) as Record<string, unknown>;
+    } catch {
+      backendPayload = {};
+    }
+  }
+
+  const backendError =
+    backendPayload && typeof backendPayload.error === "object"
+      ? (backendPayload.error as Record<string, unknown>)
+      : undefined;
+
+  if (!backendResponse.ok || backendPayload.success === false) {
+    const httpStatus =
+      (typeof backendError?.http_status_code === "number" ? backendError.http_status_code : undefined) ??
+      (backendResponse.status || 500);
+    return NextResponse.json(
+      {
+        ok: false,
+        message: toUserFriendlyLoginError(backendError ?? rawBackendBody, httpStatus),
+      },
       { status: httpStatus }
     );
   }
 
-  const response = NextResponse.json({ ok: true }, { status: result.response.status || 200 });
-  const setCookieHeaders = getSetCookieHeaders(result.response.headers);
-  const backendSessionCookie = setCookieHeaders.find((value) =>
-    value.startsWith(`${SESSION_COOKIE_NAME}=`)
-  );
-  const sessionToken = backendSessionCookie
-    ? extractCookieValue(backendSessionCookie, SESSION_COOKIE_NAME)
-    : undefined;
+  const loginData =
+    backendPayload && typeof backendPayload.data === "object"
+      ? (backendPayload.data as Record<string, unknown>)
+      : backendPayload;
+
+  const response = NextResponse.json({ ok: true }, { status: backendResponse.status || 200 });
+
+  // Primary: read session_token from the JSON response body.
+  // The gateway Login handler keeps session_token in the proto JSON body (in addition
+  // to setting the HttpOnly cookie) specifically so the Next.js BFF can read it here
+  // without relying on Set-Cookie header forwarding.
+  // Set-Cookie is a forbidden header in the Fetch API Headers constructor for the
+  // generated SDK path, so we read the backend response headers directly here.
+  let sessionToken: string | undefined =
+    typeof loginData?.session_token === "string" && loginData.session_token
+      ? loginData.session_token
+      : undefined;
+
+  // Fallback: try reading from Set-Cookie headers (works when no SDK interceptor is involved).
+  if (!sessionToken) {
+    const setCookieHeaders = getSetCookieHeaders(backendResponse.headers);
+    const backendSessionCookie = setCookieHeaders.find((value) =>
+      value.startsWith(`${SESSION_COOKIE_NAME}=`)
+    );
+    sessionToken = backendSessionCookie
+      ? extractCookieValue(backendSessionCookie, SESSION_COOKIE_NAME)
+      : undefined;
+  }
   if (sessionToken) {
     response.cookies.set({
       name: SESSION_COOKIE_NAME,
       value: sessionToken,
       path: "/",
       httpOnly: true,
-      sameSite: "strict",
+      sameSite: "lax",
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 12,
     });
   }
 
-  const csrfToken = result.response.headers.get("x-csrf-token") ?? result.data?.csrf_token;
+  const csrfToken =
+    backendResponse.headers.get("x-csrf-token") ??
+    (typeof loginData?.csrf_token === "string" ? loginData.csrf_token : undefined);
   if (csrfToken) {
     response.cookies.set({
       name: CSRF_COOKIE_NAME,
@@ -241,7 +260,16 @@ export async function POST(request: Request) {
   }
 
   const sessionCookieHeader = sessionToken ? `${SESSION_COOKIE_NAME}=${sessionToken}` : undefined;
-  const session = await toPortalSessionFromLogin(result.data ?? {}, sessionCookieHeader);
+  // loginData is the unwrapped LoginResponse from the gateway ApiResponse envelope.
+  const session = await toPortalSessionFromLogin(loginData ?? {}, sessionCookieHeader);
+
+  // Store the session in the in-memory session store using the backend token as the key.
+  // This allows requireServerSession() to find it on the fast path without calling the gateway.
+  if (sessionToken && session?.principal) {
+    const { createSession } = await import("@lib/auth/session-store");
+    createSession(session.principal, sessionToken);
+  }
+
   const finalResponse = NextResponse.json({ ok: true, session }, { status: response.status });
   for (const cookie of response.cookies.getAll()) {
     finalResponse.cookies.set(cookie);
@@ -258,48 +286,134 @@ export async function POST(request: Request) {
 
   // user_id may not be in the login JSON response body — it lives in the HttpOnly session cookie.
   // Prefer: from toPortalSessionFromLogin, then from result.data directly, then from getCurrentSession.
-  let portalUserId = session.principal.user?.userId ?? (result.data as Record<string, unknown>)?.user_id as string ?? "";
+  let portalUserId = session.principal.user?.userId ?? (loginData as Record<string, unknown>)?.user_id as string ?? "";
 
   // If user_id is still empty, call getCurrentSession using the new session token to resolve it.
   // This handles gateways that don't return user_id in the login JSON body.
   if (!portalUserId && sessionToken) {
     try {
-      const { authServiceGetCurrentSession, createInsureTechClient } = await import("@lifeplus/insuretech-sdk");
-      const { getApiBaseUrl } = await import("@lib/sdk/api-helpers");
       const { toPortalSessionFromCurrentSession } = await import("@lib/auth/backend-auth");
-      const tempClient = createInsureTechClient({ baseUrl: getApiBaseUrl(), apiKey: process.env.INSURETECH_API_KEY ?? "" });
       const cookieStr = `${SESSION_COOKIE_NAME}=${sessionToken}`;
-      const sessionRes = await authServiceGetCurrentSession({
-        client: tempClient,
-        headers: { Cookie: cookieStr },
-        throwOnError: false,
-      });
-      if (sessionRes.response.ok && sessionRes.data) {
+      // Build a fake Request carrying the new session cookie so makeSdkClient can forward it.
+      const tempReq = new Request(request.url, { headers: { cookie: cookieStr } });
+      const tempSdk = makeSdkClient(tempReq);
+      const sessionRes = await tempSdk.getCurrentSession();
+      if (sessionRes.response?.ok && sessionRes.data) {
         const portalSession = await toPortalSessionFromCurrentSession(sessionRes.data, cookieStr);
         portalUserId = portalSession?.principal?.user?.userId ?? "";
       }
     } catch { /* ignore — userId will remain empty */ }
   }
+
+  let resolvedKycVerified: boolean | undefined = loginData?.user
+    ? Boolean((loginData.user as Record<string, unknown>)?.kyc_verified)
+    : undefined;
+
+  // "pending_review" means the user completed eKYC but manual approval is still pending.
+  // We track this separately so the login cookie can be set to "pending_review" (no gate)
+  // rather than "false" (gate re-triggers). Starts as false; set to true if KYC status
+  // is PENDING_REVIEW in the backend record.
+  let kycIsPendingReview = false;
+
+  if (sessionToken && portalUserId) {
+    try {
+      const cookieStr = `${SESSION_COOKIE_NAME}=${sessionToken}`;
+      const tempReq = new Request(request.url, { headers: { cookie: cookieStr } });
+      const tempSdk = makeSdkClient(tempReq);
+
+      // 1. Fetch user profile to get kyc_verified boolean
+      if (resolvedKycVerified === undefined) {
+        const profileRes = await tempSdk.getUserProfile({ path: { user_id: portalUserId } });
+        if (profileRes.response?.ok && profileRes.data) {
+          const rawProfile = profileRes.data as Record<string, unknown>;
+          const profile = (rawProfile.profile ?? rawProfile) as Record<string, unknown>;
+          resolvedKycVerified = Boolean(profile.kyc_verified);
+        }
+      }
+
+      // 2. If profile says not verified, check the KYC record status.
+      //    A user who finished eKYC (PENDING_REVIEW or VERIFIED in the KYC record)
+      //    must NOT be re-gated to /kyc — the profile update may have raced or the
+      //    admin approval step is still pending.
+      if (!resolvedKycVerified) {
+        const gatewayUrl = process.env.INSURETECH_GATEWAY_URL ?? process.env.INSURETECH_API_BASE_URL ?? "http://localhost:8080";
+        const kycStatusRes = await fetch(`${gatewayUrl}/v1/auth/users/${portalUserId}/kyc`, {
+          headers: {
+            cookie: `${SESSION_COOKIE_NAME}=${sessionToken}`,
+            "x-portal": "b2b",
+          },
+          cache: "no-store",
+        }).catch(() => null);
+        if (kycStatusRes?.ok) {
+          const kycBody = await kycStatusRes.json().catch(() => ({})) as Record<string, unknown>;
+          const kycData = (kycBody.data ?? kycBody) as Record<string, unknown>;
+          const kycStatus = ((kycData.status ?? "") as string).toUpperCase();
+          if (kycStatus === "PENDING_REVIEW") {
+            kycIsPendingReview = true;
+          } else if (kycStatus === "VERIFIED") {
+            // KYC record says VERIFIED but profile not yet updated — treat as verified
+            resolvedKycVerified = true;
+          }
+        }
+      }
+    } catch {
+      // Ignore lookup errors and fall back to the safe default below.
+    }
+  }
+
   const cookieOpts = {
     path: "/",
     httpOnly: false, // must be readable by edge middleware + session-headers helper
-    sameSite: "strict" as const,
+    sameSite: "lax" as const,
     secure: process.env.NODE_ENV === "production",
     maxAge: 60 * 60 * 12,
   };
 
-  finalResponse.cookies.set({ name: "portal_role", value: portalRole, ...cookieOpts });
-  finalResponse.cookies.set({ name: "portal_user_id", value: portalUserId, ...cookieOpts });
-  finalResponse.cookies.set({ name: "portal_biz_id", value: portalBizId, ...cookieOpts });
+  const passwordChangeRequired = Boolean(
+    (loginData as Record<string, unknown>)?.password_change_required ??
+    session?.passwordChangeRequired
+  );
+
+  finalResponse.cookies.set({ name: "portal_role",    value: portalRole,    ...cookieOpts });
+  finalResponse.cookies.set({ name: "portal_user_id", value: portalUserId,  ...cookieOpts });
+  finalResponse.cookies.set({ name: "portal_biz_id",  value: portalBizId,   ...cookieOpts });
+  finalResponse.cookies.set({
+    name: "portal_password_change_required",
+    value: passwordChangeRequired ? "true" : "false",
+    ...cookieOpts,
+  });
+
+  // KYC verification status cookie — read by edge middleware to gate unverified admins.
+  // "false"         → redirect to /kyc on every page navigation until verified.
+  // "true"          → fully verified, no gate.
+  // "pending_review"→ submitted but awaiting manual approval, no gate.
+  // Absent/unknown  → no gate (backward compat for existing sessions).
+  //
+  // IMPORTANT: Only set "false" when we have a *confirmed* false from the backend
+  // AND the KYC record is not already PENDING_REVIEW or VERIFIED.
+  // If the profile fetch failed or returned nothing (resolvedKycVerified === undefined),
+  // we must NOT default to "false" — that would trap the user in an infinite /kyc
+  // redirect loop. Omitting the cookie causes the middleware to skip the gate entirely
+  // (safe backward-compat path).
+  if (resolvedKycVerified === true) {
+    finalResponse.cookies.set({ name: "portal_kyc_verified", value: "true", ...cookieOpts });
+  } else if (kycIsPendingReview) {
+    // User completed eKYC; awaiting admin approval — allow access, show pending UI.
+    finalResponse.cookies.set({ name: "portal_kyc_verified", value: "pending_review", ...cookieOpts });
+  } else if (resolvedKycVerified === false) {
+    finalResponse.cookies.set({ name: "portal_kyc_verified", value: "false", ...cookieOpts });
+  }
+  // If resolvedKycVerified is undefined (profile unavailable), we intentionally skip
+  // setting portal_kyc_verified. The /kyc page itself will re-check the DB on load.
 
   // Store user contact info cookies so the My Profile page can display
   // mobile_number and email — these live on the User record, not UserProfile.
   // They are read-only identity fields (auth credentials), not profile fields.
-  const portalMobile = (result.data as Record<string, unknown>)?.user
-    ? ((result.data as Record<string, unknown>).user as Record<string, unknown>)?.mobile_number as string ?? ""
+  const portalMobile = loginData?.user
+    ? ((loginData.user as Record<string, unknown>)?.mobile_number as string) ?? ""
     : "";
-  const portalEmail = (result.data as Record<string, unknown>)?.user
-    ? ((result.data as Record<string, unknown>).user as Record<string, unknown>)?.email as string ?? ""
+  const portalEmail = loginData?.user
+    ? ((loginData.user as Record<string, unknown>)?.email as string) ?? ""
     : "";
   finalResponse.cookies.set({ name: "portal_mobile", value: portalMobile, ...cookieOpts });
   finalResponse.cookies.set({ name: "portal_email", value: portalEmail, ...cookieOpts });

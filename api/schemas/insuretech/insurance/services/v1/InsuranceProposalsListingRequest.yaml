@@ -1,0 +1,19 @@
+InsuranceProposalsListingRequest:
+  type: object
+  properties:
+    order_id:
+      type: string
+    insurer_id:
+      type: string
+    customer_id:
+      type: string
+    status:
+      $ref: '#/components/schemas/ProposalStatus'
+    page:
+      type: integer
+      format: int32
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing insurance proposals listing items. Supports
+    filtering, sorting, and pagination.

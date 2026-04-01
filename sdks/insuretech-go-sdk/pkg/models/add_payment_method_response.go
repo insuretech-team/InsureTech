@@ -5,5 +5,4 @@ package models
 type AddPaymentMethodResponse struct {
 	MethodId string `json:"method_id,omitempty"`
 	Success bool `json:"success,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

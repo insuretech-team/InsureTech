@@ -9,6 +9,8 @@ using Moq;
 using PoliSync.Policy.GrpcServices;
 using PoliSync.Policy.Infrastructure;
 using PolicyEntity = Insuretech.Policy.Entity.V1.Policy;
+using ProposalEntity = Insuretech.Policy.Entity.V1.InsuranceProposal;
+using ProposalStatus = Insuretech.Policy.Entity.V1.ProposalStatus;
 using Xunit;
 
 namespace PoliSync.Policy.Tests;
@@ -18,6 +20,7 @@ public class PolicyGrpcServiceTests
     private sealed class FakePolicyDataGateway : IPolicyDataGateway
     {
         private readonly Dictionary<string, PolicyEntity> _store = new();
+        private readonly Dictionary<string, ProposalEntity> _proposalStore = new();
 
         public Task<PolicyEntity> CreatePolicyAsync(PolicyEntity policy, CancellationToken cancellationToken = default)
         {
@@ -47,6 +50,48 @@ public class PolicyGrpcServiceTests
         public Task DeletePolicyAsync(string policyId, CancellationToken cancellationToken = default)
         {
             _store.Remove(policyId);
+            return Task.CompletedTask;
+        }
+
+        public Task<ProposalEntity> CreateInsuranceProposalAsync(ProposalEntity proposal, CancellationToken cancellationToken = default)
+        {
+            _proposalStore[proposal.ProposalId] = proposal;
+            return Task.FromResult(proposal);
+        }
+
+        public Task<ProposalEntity?> GetInsuranceProposalAsync(string proposalId, CancellationToken cancellationToken = default)
+            => Task.FromResult(_proposalStore.TryGetValue(proposalId, out var proposal) ? proposal : null);
+
+        public Task<ProposalEntity> UpdateInsuranceProposalAsync(ProposalEntity proposal, CancellationToken cancellationToken = default)
+        {
+            _proposalStore[proposal.ProposalId] = proposal;
+            return Task.FromResult(proposal);
+        }
+
+        public Task<IReadOnlyList<ProposalEntity>> ListInsuranceProposalsAsync(
+            string? orderId,
+            string? insurerId,
+            string? customerId,
+            ProposalStatus? status,
+            int page,
+            int pageSize,
+            CancellationToken cancellationToken = default)
+        {
+            var items = _proposalStore.Values
+                .Where(x => string.IsNullOrWhiteSpace(orderId) || x.OrderId == orderId)
+                .Where(x => string.IsNullOrWhiteSpace(insurerId) || x.InsurerId == insurerId)
+                .Where(x => string.IsNullOrWhiteSpace(customerId) || x.CustomerId == customerId)
+                .Where(x => !status.HasValue || status == ProposalStatus.Unspecified || x.Status == status.Value)
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            return Task.FromResult<IReadOnlyList<ProposalEntity>>(items);
+        }
+
+        public Task DeleteInsuranceProposalAsync(string proposalId, CancellationToken cancellationToken = default)
+        {
+            _proposalStore.Remove(proposalId);
             return Task.CompletedTask;
         }
     }

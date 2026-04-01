@@ -1,0 +1,23 @@
+QuoteParameters:
+  type: object
+  properties:
+    coverage_type:
+      type: string
+    coverage_plan:
+      type: string
+    asset_value:
+      type: number
+      format: double
+    coverage_duration_months:
+      type: integer
+      format: int32
+    optional_coverages:
+      type: array
+      items:
+        $ref: '#/components/schemas/OptionalCoverage'
+    additional_data:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: QuoteParameters represents the input parameters for quote generation

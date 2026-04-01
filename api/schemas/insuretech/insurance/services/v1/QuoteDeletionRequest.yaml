@@ -1,4 +1,4 @@
-QuoteDeletionRequest:
+InsuranceQuoteDeletionRequest:
   type: object
   properties:
     quote_id:

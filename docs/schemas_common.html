@@ -232,7 +232,7 @@
             </div>
             <div class="stats">
                 <div class="stat">
-                    <div class="stat-value">302</div>
+                    <div class="stat-value">381</div>
                     <div class="stat-label">Schemas</div>
                 </div>
             </div>
@@ -363,8 +363,8 @@
                     <span class="schema-name">AccessDecisionAudit</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">---------------------------------------------------------------------------
- 7. AccessDecisionAudit — immutable audit log of every Casbin enforcement call
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 7. AccessDecisionAudit — immutable audit log of every Casbin enforcement call
  ---------------------------------------------------------------------------</td>
                 <td class="props-cell">12 properties</td>
             </tr>
@@ -374,7 +374,7 @@
                     <span class="schema-name">AccessDeniedEvent</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">AccessDeniedEvent — emitted every time Casbin returns DENY
+                <td class="desc-cell">AccessDeniedEvent — emitted every time Casbin returns DENY
  Consumed by: security monitoring, anomaly detection, SIEM</td>
                 <td class="props-cell">11 properties</td>
             </tr>
@@ -397,6 +397,25 @@
                 <td class="props-cell">5 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_actuarialcalculation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ActuarialCalculation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ActuarialCalculation represents a P&C actuarial calculation result
+ Maps to 'actuarial_calculations' table in actuarial_schema</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_actuarialvariable.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ActuarialVariable</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ActuarialVariable represents a variable definition for rating formulas</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_address.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">Address</span>
@@ -404,6 +423,15 @@
                 </td>
                 <td class="desc-cell">Address information</td>
                 <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ageadditionconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">AgeAdditionConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">AgeAdditionConfig - Configuration for age-based premium additions</td>
+                <td class="props-cell">3 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_agent.html'" style="cursor: pointer;">
@@ -651,6 +679,15 @@
                 <td class="props-cell">7 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_bonusconfig.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BonusConfig</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">BonusConfig - Discount/bonus configuration</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_businessbeneficiary.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">BusinessBeneficiary</span>
@@ -667,6 +704,34 @@
                 </td>
                 <td class="desc-cell">BusinessMetrics for KPIs and dashboards
  Maps to 'business_metrics' table in analytics_schema</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businessrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">BusinessRule represents a single rule within a workflow
+ This is the Microsoft RulesEngine compatible structure</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businessrulefailedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessRuleFailedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">BusinessRuleFailedEvent is emitted when a specific business rule fails</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_businessruleresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">BusinessRuleResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Result of a single rule evaluation</td>
                 <td class="props-cell">6 properties</td>
             </tr>
             
@@ -693,11 +758,11 @@
                     <span class="schema-name">CasbinRule</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">---------------------------------------------------------------------------
- 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
-    Casbin gorm-adapter reads/writes this table directly.
-    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
-    g-type rows: ptype="g"  → role assignment: sub, dom, role
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+    Casbin gorm-adapter reads/writes this table directly.
+    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+    g-type rows: ptype="g"  → role assignment: sub, dom, role
  ---------------------------------------------------------------------------</td>
                 <td class="props-cell">8 properties</td>
             </tr>
@@ -829,12 +894,49 @@
                 <td class="props-cell">10 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_conditionmultiplier.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ConditionMultiplier</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ConditionMultiplier - Health condition risk multipliers</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_connectionstats.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">ConnectionStats</span>
                     <span class="badge badge-type">object</span>
                 </td>
                 <td class="desc-cell">Domain entity representing connection stats. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contact.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Contact</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Contact represents a customer/client
+ Maps to 'contacts' table in crm_schema</td>
+                <td class="props-cell">22 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contactcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ContactCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ContactCreatedEvent is emitted when a new contact is created</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contactdeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ContactDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ContactDeletedEvent is emitted when a contact is deleted</td>
                 <td class="props-cell">6 properties</td>
             </tr>
             
@@ -845,6 +947,24 @@
                 </td>
                 <td class="desc-cell">Contact information</td>
                 <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contactstatuschangedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ContactStatusChangedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ContactStatusChangedEvent is emitted when contact status changes</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_contactupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ContactUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ContactUpdatedEvent is emitted when a contact is updated</td>
+                <td class="props-cell">7 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_conversation.html'" style="cursor: pointer;">
@@ -873,6 +993,24 @@
                 </td>
                 <td class="desc-cell">Event: Conversation started</td>
                 <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_coverage.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Coverage</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Coverage represents a coverage item in the quote</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_coveragecomparison.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">CoverageComparison</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing coverage comparison. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_customerqueryhandledevent.html'" style="cursor: pointer;">
@@ -1010,6 +1148,24 @@
                 <td class="props-cell">9 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_discount.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Discount</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Discount represents an applied discount</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_discountcomparison.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">DiscountComparison</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing discount comparison. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_emailloginfailedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">EmailLoginFailedEvent</span>
@@ -1051,11 +1207,20 @@
                     <span class="schema-name">Employee</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Employee represents a corporate employee in the B2B portal.
- business_id is the organisation_id from b2b_schema.organisations — the tenant
- isolation key. user_id links to authn_schema.users when portal access is
+                <td class="desc-cell">Employee represents a corporate employee in the B2B portal.
+ business_id is the organisation_id from b2b_schema.organisations — the tenant
+ isolation key. user_id links to authn_schema.users when portal access is
  granted (B2C bridge).</td>
                 <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeecoverageview.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeCoverageView</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing employee coverage view. Core business object in the system.</td>
+                <td class="props-cell">10 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_employeecreatedevent.html'" style="cursor: pointer;">
@@ -1074,6 +1239,15 @@
                 </td>
                 <td class="desc-cell">EmployeeDeletedEvent is published when an employee is deleted</td>
                 <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_employeeloginorganisation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">EmployeeLoginOrganisation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing employee login organisation. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_employeestatuschangedevent.html'" style="cursor: pointer;">
@@ -1174,6 +1348,15 @@
                 </td>
                 <td class="desc-cell">FAQ (FR-110)</td>
                 <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_factorbreakdown.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">FactorBreakdown</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing factor breakdown. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_fieldsorting.html'" style="cursor: pointer;">
@@ -1357,6 +1540,15 @@
                 <td class="props-cell">6 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_healthcondition.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">HealthCondition</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing health condition. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_healthdeclarationsubmittedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">HealthDeclarationSubmittedEvent</span>
@@ -1400,6 +1592,27 @@
                 </td>
                 <td class="desc-cell">Individual (B2C) beneficiary details</td>
                 <td class="props-cell">17 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insuranceproposal.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsuranceProposal</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">InsuranceProposal represents the insurer-decision step between payment confirmation
+ and policy issuance. A paid order must submit a proposal to the target insurer.
+ If the insurer approves, the order can be fulfilled into a policy. If rejected,
+ a refund must be initiated against the paid order.</td>
+                <td class="props-cell">26 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_insuredperson.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">InsuredPerson</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">InsuredPerson - Details of the person being insured</td>
+                <td class="props-cell">8 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_insurer.html'" style="cursor: pointer;">
@@ -1452,7 +1665,7 @@
                     <span class="schema-name">Invoice</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Invoice represents a billing invoice covering one or more insurance orders/policies.
+                <td class="desc-cell">Invoice represents a billing invoice covering one or more insurance orders/policies.
  Supports both B2C (single order) and B2B (group purchase order) scenarios.</td>
                 <td class="props-cell">27 properties</td>
             </tr>
@@ -1521,6 +1734,15 @@
                 <td class="props-cell">13 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_jwk.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">JWK</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing jwk. Core business object in the system.</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_kpithresholdbreachedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">KPIThresholdBreachedEvent</span>
@@ -1530,6 +1752,33 @@
                 <td class="props-cell">9 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_kycdetection.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCDetection</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing kyc detection. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kyceyestate.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCEyeState</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing kyc eye state. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycheadpose.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCHeadPose</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing kyc head pose. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_kycrejectedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">KYCRejectedEvent</span>
@@ -1537,6 +1786,24 @@
                 </td>
                 <td class="desc-cell">Kafka event: KYC rejected</td>
                 <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycstep.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCStep</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing kyc step. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_kycstepresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">KYCStepResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing kyc step result. Core business object in the system.</td>
+                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_kycverification.html'" style="cursor: pointer;">
@@ -1575,6 +1842,116 @@
                 <td class="props-cell">12 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_lead.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Lead</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Lead represents a prospective customer
+ Maps to 'leads' table in crm_schema</td>
+                <td class="props-cell">28 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_leadassignedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LeadAssignedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LeadAssignedEvent is emitted when a lead is assigned to an agent</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_leadconvertedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LeadConvertedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LeadConvertedEvent is emitted when a lead is converted to contact</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_leadcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LeadCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LeadCreatedEvent is emitted when a new lead is created</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_leaddeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LeadDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LeadDeletedEvent is emitted when a lead is deleted</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_leadupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LeadUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LeadUpdatedEvent is emitted when a lead is updated</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifepremiumbreakdown.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifePremiumBreakdown</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PremiumBreakdown - Detailed premium calculation</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifepremiumcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifePremiumCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PremiumCalculatedEvent is emitted when premium is calculated</td>
+                <td class="props-cell">10 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifequote.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeQuote</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeQuote represents a calculated life insurance quote
+ Maps to 'life_quotes' table in life_schema</td>
+                <td class="props-cell">25 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifequoteconvertedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeQuoteConvertedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeQuoteConvertedEvent is emitted when a quote is converted to policy</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifequoteexpiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeQuoteExpiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeQuoteExpiredEvent is emitted when a quote expires</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifequotegeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeQuoteGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeQuoteGeneratedEvent is emitted when a quote is generated</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_location.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">Location</span>
@@ -1591,6 +1968,43 @@
                 </td>
                 <td class="desc-cell">Event: Login failed (security monitoring)</td>
                 <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lossratiocalculation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LossRatioCalculation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LossRatioCalculation represents a loss ratio analysis
+ Maps to 'loss_ratio_calculations' table in actuarial_schema</td>
+                <td class="props-cell">21 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lossratioinput.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LossRatioInput</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LossRatioInput represents input for loss ratio calculations</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lossratioresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LossRatioResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LossRatioResult represents the result of loss ratio calculations</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_losstrendsegment.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LossTrendSegment</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing loss trend segment. Core business object in the system.</td>
+                <td class="props-cell">7 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_mcpserver.html'" style="cursor: pointer;">
@@ -1856,15 +2270,24 @@
                 <td class="props-cell">3 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_optionalcoverage.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">OptionalCoverage</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing optional coverage. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_order.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">Order</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Order represents a purchase order for an insurance policy.
- Created from an approved quotation → payment → policy issuance flow.
+                <td class="desc-cell">Order represents a purchase order for an insurance policy.
+ Created from an approved quotation → payment → insurer proposal → policy issuance/refund flow.
  Maps to 'orders' table in insurance_schema.</td>
-                <td class="props-cell">32 properties</td>
+                <td class="props-cell">39 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_ordercancelledevent.html'" style="cursor: pointer;">
@@ -1917,9 +2340,9 @@
                     <span class="schema-name">OrgMember</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">OrgMember links a platform user (authn_schema.users) to an Organisation with
- a role. This is how we know which organisation a logged-in admin/HR belongs
- to. The business_id stored in every JWT-derived session maps to
+                <td class="desc-cell">OrgMember links a platform user (authn_schema.users) to an Organisation with
+ a role. This is how we know which organisation a logged-in admin/HR belongs
+ to. The business_id stored in every JWT-derived session maps to
  organisation_id here.</td>
                 <td class="props-cell">9 properties</td>
             </tr>
@@ -1947,9 +2370,9 @@
                     <span class="schema-name">Organisation</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Organisation represents a corporate client (B2B tenant) enrolled in the
- platform. Each organisation belongs to a parent InsureTech tenant
- (tenant_id). An organisation has one or more OrgMembers (admins, HR staff)
+                <td class="desc-cell">Organisation represents a corporate client (B2B tenant) enrolled in the
+ platform. Each organisation belongs to a parent InsureTech tenant
+ (tenant_id). An organisation has one or more OrgMembers (admins, HR staff)
  and many employees.</td>
                 <td class="props-cell">13 properties</td>
             </tr>
@@ -1996,6 +2419,15 @@
                     <span class="badge badge-type">object</span>
                 </td>
                 <td class="desc-cell">OrganisationUpdatedEvent is published when an organisation is updated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_paginationmeta.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PaginationMeta</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Standard pagination metadata for all list endpoints.</td>
                 <td class="props-cell">7 properties</td>
             </tr>
             
@@ -2085,8 +2517,8 @@
                     <span class="schema-name">PortalConfig</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">---------------------------------------------------------------------------
- 5. PortalConfig — per-portal MFA and session configuration
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 5. PortalConfig — per-portal MFA and session configuration
  ---------------------------------------------------------------------------</td>
                 <td class="props-cell">12 properties</td>
             </tr>
@@ -2100,22 +2532,31 @@
                 <td class="props-cell">5 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_premiumbreakdown.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_premiumcalculation.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">PremiumBreakdown</span>
+                    <span class="schema-name">PremiumCalculation</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Domain entity representing premium breakdown. Core business object in the system.</td>
-                <td class="props-cell">3 properties</td>
+                <td class="desc-cell">PremiumCalculation represents the calculated premium breakdown</td>
+                <td class="props-cell">9 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_premiumcalculatedevent.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_premiumcalculationinput.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">PremiumCalculatedEvent</span>
+                    <span class="schema-name">PremiumCalculationInput</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Event: Premium calculated (for analytics)</td>
+                <td class="desc-cell">PremiumCalculationInput represents input for premium calculations</td>
                 <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_premiumcalculationresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PremiumCalculationResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PremiumCalculationResult represents the result of premium calculations</td>
+                <td class="props-cell">7 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_pricingconfig.html'" style="cursor: pointer;">
@@ -2126,15 +2567,6 @@
                 <td class="desc-cell">Product pricing configuration
  Maps to 'pricing_configs' table in product_schema</td>
                 <td class="props-cell">7 properties</td>
-            </tr>
-            
-            <tr onclick="window.location.href='schema_pricingrule.html'" style="cursor: pointer;">
-                <td class="name-cell">
-                    <span class="schema-name">PricingRule</span>
-                    <span class="badge badge-type">object</span>
-                </td>
-                <td class="desc-cell">Pricing rule (stored as JSONB in pricing_configs table)</td>
-                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_pricingrulecreatedevent.html'" style="cursor: pointer;">
@@ -2228,49 +2660,67 @@
                 <td class="props-cell">4 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_pushdevicetoken.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PushDeviceToken</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PushDeviceToken stores mobile and web push registration tokens for each user.</td>
+                <td class="props-cell">11 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_quotation.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">Quotation</span>
                     <span class="badge badge-type">object</span>
                 </td>
                 <td class="desc-cell">Quotation represents a B2B or B2C insurance quote request</td>
-                <td class="props-cell">20 properties</td>
-            </tr>
-            
-            <tr onclick="window.location.href='schema_quote.html'" style="cursor: pointer;">
-                <td class="name-cell">
-                    <span class="schema-name">Quote</span>
-                    <span class="badge badge-type">object</span>
-                </td>
-                <td class="desc-cell">Quote entity - premium quote before policy issuance</td>
                 <td class="props-cell">21 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_quoteconvertedevent.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_quoteacceptedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">QuoteConvertedEvent</span>
+                    <span class="schema-name">QuoteAcceptedEvent</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Kafka event: Quote converted to policy</td>
-                <td class="props-cell">5 properties</td>
+                <td class="desc-cell">QuoteAcceptedEvent is emitted when customer accepts a quote</td>
+                <td class="props-cell">6 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_quoteexpiredevent.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_quotecomparison.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">QuoteExpiredEvent</span>
+                    <span class="schema-name">QuoteComparison</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Kafka event: Quote expired</td>
-                <td class="props-cell">5 properties</td>
+                <td class="desc-cell">Domain entity representing quote comparison. Core business object in the system.</td>
+                <td class="props-cell">10 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_quotegeneratedevent.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_quotedeclinedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">QuoteGeneratedEvent</span>
+                    <span class="schema-name">QuoteDeclinedEvent</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Kafka event: Quote generated</td>
-                <td class="props-cell">7 properties</td>
+                <td class="desc-cell">QuoteDeclinedEvent is emitted when customer declines a quote</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotedeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteDeletedEvent is emitted when a quote is deleted</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoteparameters.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteParameters</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteParameters represents the input parameters for quote generation</td>
+                <td class="props-cell">6 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_quoterequestedevent.html'" style="cursor: pointer;">
@@ -2280,6 +2730,108 @@
                 </td>
                 <td class="desc-cell">Kafka event: Quote requested</td>
                 <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoterevisedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteRevisedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteRevisedEvent is emitted when a quote is revised</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotesentevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteSentEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteSentEvent is emitted when a quote is sent to customer</td>
+                <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quoteviewedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuoteViewedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteViewedEvent is emitted when customer views a quote</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingpremiumbreakdown.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingPremiumBreakdown</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing premium breakdown. Core business object in the system.</td>
+                <td class="props-cell">4 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingpremiumcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingPremiumCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PremiumCalculatedEvent is emitted when premium is calculated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingpricingrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingPricingRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PricingRule represents a pricing calculation rule
+ Maps to 'pricing_rules' table in quoting_schema</td>
+                <td class="props-cell">14 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingquote.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingQuote</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Quote represents a dynamically generated insurance quote
+ Maps to 'quotes' table in quoting_schema</td>
+                <td class="props-cell">22 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingquoteconvertedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingQuoteConvertedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteConvertedEvent is emitted when a quote is converted to a policy</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingquoteexpiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingQuoteExpiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteExpiredEvent is emitted when a quote expires</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_quotingquotegeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">QuotingQuoteGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">QuoteGeneratedEvent is emitted when a new quote is generated</td>
+                <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_ratingformula.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">RatingFormula</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">RatingFormula represents a P&C rating formula for premium calculation
+ Maps to 'rating_formulas' table in actuarial_schema</td>
+                <td class="props-cell">18 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_receiptgeneratedevent.html'" style="cursor: pointer;">
@@ -2296,8 +2848,8 @@
                     <span class="schema-name">Refund</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Refund for policy cancellation (FR-093 to FR-097)</td>
-                <td class="props-cell">18 properties</td>
+                <td class="desc-cell">Refund for policy cancellation or paid-order reversal after insurer/proposal rejection.</td>
+                <td class="props-cell">20 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_refundapprovedevent.html'" style="cursor: pointer;">
@@ -2470,6 +3022,43 @@
                 </td>
                 <td class="desc-cell">Domain entity representing request context. Core business object in the system.</td>
                 <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reservecalculation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReserveCalculation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ReserveCalculation represents a reserve calculation for claims
+ Maps to 'reserve_calculations' table in actuarial_schema</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reserveinput.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReserveInput</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ReserveInput represents input for reserve calculations</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_reserveresult.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ReserveResult</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">ReserveResult represents the result of reserve calculations</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_responsemeta.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ResponseMeta</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Metadata attached to every API response for tracing and pagination.</td>
+                <td class="props-cell">4 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_revenuemodelamount.html'" style="cursor: pointer;">
@@ -2821,7 +3410,7 @@
                     <span class="schema-name">TigerBeetleAccount</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">TigerBeetle Account Ledger (not stored in PostgreSQL - managed by TigerBeetle)
+                <td class="desc-cell">TigerBeetle Account Ledger (not stored in PostgreSQL - managed by TigerBeetle)
  This is for documentation purposes only</td>
                 <td class="props-cell">11 properties</td>
             </tr>
@@ -2840,8 +3429,8 @@
                     <span class="schema-name">TokenConfig</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">---------------------------------------------------------------------------
- 6. TokenConfig — RS256 signing key configuration (per environment)
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 6. TokenConfig — RS256 signing key configuration (per environment)
  ---------------------------------------------------------------------------</td>
                 <td class="props-cell">7 properties</td>
             </tr>
@@ -2955,6 +3544,42 @@
                 <td class="props-cell">19 properties</td>
             </tr>
             
+            <tr onclick="window.location.href='schema_underwritingquote.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingQuote</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Quote entity - premium quote before policy issuance</td>
+                <td class="props-cell">21 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingquoteconvertedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingQuoteConvertedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote converted to policy</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingquoteexpiredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingQuoteExpiredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote expired</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_underwritingquotegeneratedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">UnderwritingQuoteGeneratedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Kafka event: Quote generated</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
             <tr onclick="window.location.href='schema_underwritingrejectedevent.html'" style="cursor: pointer;">
                 <td class="name-cell">
                     <span class="schema-name">UnderwritingRejectedEvent</span>
@@ -2962,6 +3587,90 @@
                 </td>
                 <td class="desc-cell">Kafka event: Underwriting rejected</td>
                 <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicle.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">Vehicle</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Vehicle represents a vehicle model/type in the database
+ Maps to 'vehicles' table in vehicle_schema</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehiclecreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleCreatedEvent is emitted when a new vehicle model is created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicledeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleDeletedEvent is emitted when a vehicle is deleted</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehiclepremiumcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehiclePremiumCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">PremiumCalculatedEvent is emitted when premium is calculated</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehiclepremiumcalculation.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehiclePremiumCalculation</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehiclePremiumCalculation stores calculated premiums
+ Maps to 'vehicle_premium_calculations' table in vehicle_schema</td>
+                <td class="props-cell">16 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicleregisteredevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleRegisteredEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleRegisteredEvent is emitted when a vehicle is registered</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicleregistration.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleRegistration</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleRegistration represents a specific registered vehicle instance
+ Maps to 'vehicle_registrations' table in vehicle_schema</td>
+                <td class="props-cell">12 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicleregistrationupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleRegistrationUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleRegistrationUpdatedEvent is emitted when registration is updated</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_vehicleupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">VehicleUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">VehicleUpdatedEvent is emitted when a vehicle is updated</td>
+                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_videoconfig.html'" style="cursor: pointer;">
@@ -2998,6 +3707,24 @@
                 </td>
                 <td class="desc-cell">Voice interaction transcript</td>
                 <td class="props-cell">9 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_webhookdeliveryattempt.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WebhookDeliveryAttempt</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">WebhookDeliveryAttempt stores retryable outbound webhook deliveries.</td>
+                <td class="props-cell">15 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_webhooksubscription.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">WebhookSubscription</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">WebhookSubscription stores downstream subscribers for signed lifecycle fanout.</td>
+                <td class="props-cell">13 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_widgetdata.html'" style="cursor: pointer;">

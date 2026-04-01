@@ -36,7 +36,7 @@ export async function PATCH(request: Request, { params }: RouteContext) {
     const body = (await request.json()) as Record<string, unknown>;
     const result = await sdk.updateDepartment({ path: { department_id: id }, body: { department_id: id, name: String(body.name ?? "") } });
     if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    return NextResponse.json({ ok: true, message: result.data?.message ?? "Updated", department: result.data?.department ? mapDept(result.data.department) : null });
+    return NextResponse.json({ ok: true, message: "Updated", department: result.data?.department ? mapDept(result.data.department) : null });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error" }, { status: 502 });
   }

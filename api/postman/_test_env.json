@@ -1,0 +1,447 @@
+{
+  "id": "4d7196a4-6782-54d3-8d7b-706172a8724c",
+  "name": "InsureTech — Newman Test",
+  "values": [
+    {
+      "key": "base_url",
+      "value": "http://localhost:8080",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "access_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "refresh_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "session_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "csrf_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "session_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "session_type",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "user_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "user_mobile_number",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "user_email",
+      "value": "noreply@labaidinsuretech.com",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "full_name",
+      "value": "Postman Test User",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "tenant_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "device_id",
+      "value": "postman-device",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "device_name",
+      "value": "Postman Desktop",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "login_password",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "old_password",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "new_password",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "login_device_type",
+      "value": "ANDROID",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "login_expect_session_type",
+      "value": "JWT",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "otp_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "otp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "mfa_session_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "device_credential",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "totp_secret",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "totp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "provisioning_uri",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "biometric_token",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "mobile_otp_type",
+      "value": "login",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "mobile_otp_channel",
+      "value": "sms",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "mobile_otp_use_masking",
+      "value": "true",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "mobile_otp_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "mobile_otp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "mobile_otp_verified",
+      "value": "false",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "last_b2c_otp_login",
+      "value": "false",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "last_b2c_device_credential_login",
+      "value": "false",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_full_name",
+      "value": "B2C Test User",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_full_name_updated",
+      "value": "B2C Test User Updated",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_date_of_birth",
+      "value": "1990-01-01T00:00:00Z",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_gender",
+      "value": "MALE",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_address_line1",
+      "value": "House 10, Road 5",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_address_line2",
+      "value": "Apt 4B",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_city",
+      "value": "Dhaka",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_city_updated",
+      "value": "Chittagong",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_district",
+      "value": "Dhaka",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_division",
+      "value": "Dhaka",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_country",
+      "value": "Bangladesh",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "profile_nid_number",
+      "value": "1234567890123",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "email_otp_type",
+      "value": "email_login",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "email_otp_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "email_otp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "email_login_otp_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "email_login_otp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "email_verification_otp_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "email_verification_otp_code",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "email_verified",
+      "value": "false",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "authz_domain",
+      "value": "system:root",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "authz_object",
+      "value": "svc:dashboard/read",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "authz_resource",
+      "value": "dashboard",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "authz_action",
+      "value": "read",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "api_key",
+      "value": "",
+      "enabled": true,
+      "type": "secret"
+    },
+    {
+      "key": "mock_sms_url",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "policy_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "claim_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "payment_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "order_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "product_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "quote_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "ticket_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "partner_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "kyc_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "invoice_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "document_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    },
+    {
+      "key": "proposal_id",
+      "value": "",
+      "enabled": true,
+      "type": "default"
+    }
+  ],
+  "_postman_variable_scope": "environment",
+  "_postman_exported_at": "",
+  "_postman_exported_using": "insuretech-postman-sync"
+}

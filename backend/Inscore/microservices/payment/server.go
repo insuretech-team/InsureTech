@@ -5,6 +5,7 @@ import (
 	"net"
 	"os"
 	"os/signal"
+	"strconv"
 	"strings"
 	"syscall"
 
@@ -18,6 +19,7 @@ import (
 	paymentservice "github.com/newage-saint/insuretech/backend/inscore/microservices/payment/internal/service"
 	kafkaproducer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	paymentservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/services/v1"
 	"github.com/newage-saint/insuretech/ops/config"
@@ -28,7 +30,10 @@ import (
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
+	"gopkg.in/yaml.v3"
 )
+
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func Run() {
 	if err := logger.Initialize(logger.NoFileConfig()); err != nil {
@@ -38,6 +43,27 @@ func Run() {
 
 	logger.Info("Starting Payment Service...")
 	_ = env.Load()
+
+	servicesConfigPath, err := config.ResolveConfigPath("services.yaml")
+	if err != nil {
+		logger.Fatal("Failed to resolve services.yaml path", zap.Error(err))
+	}
+	servicesData, err := os.ReadFile(servicesConfigPath)
+	if err != nil {
+		logger.Fatal("Failed to read services.yaml", zap.Error(err))
+	}
+	var svcConfig ServicesConfig
+	if err := yaml.Unmarshal(servicesData, &svcConfig); err != nil {
+		logger.Fatal("Failed to parse services.yaml", zap.Error(err))
+	}
+
+	paymentSvc, ok := svcConfig.Services["payment"]
+	if !ok {
+		logger.Fatal("Configuration for 'payment' service not found in services.yaml")
+	}
+	if os.Getenv("PAYMENT_PORT") != "" || os.Getenv("PAYMENT_GRPC_PORT") != "" || os.Getenv("PAYMENT_HTTP_PORT") != "" {
+		logger.Warn("PAYMENT_PORT/PAYMENT_GRPC_PORT/PAYMENT_HTTP_PORT env values are ignored; using backend/inscore/configs/services.yaml")
+	}
 
 	dbConfigPath, err := config.ResolveConfigPath("database.yaml")
 	if err != nil {
@@ -80,10 +106,7 @@ func Run() {
 	svc := paymentservice.NewPaymentService(repo, publisher, cfg, gatewayClient)
 	handler := paymentgrpc.NewPaymentHandler(svc)
 
-	grpcPort := getEnvOrDefault("PAYMENT_GRPC_PORT", "50190")
-	if grpcPort != "" && grpcPort[0] != ':' {
-		grpcPort = ":" + grpcPort
-	}
+	grpcPort := ":" + strconv.Itoa(paymentSvc.Ports.Grpc)
 
 	lis, err := net.Listen("tcp", grpcPort)
 	if err != nil {
@@ -93,11 +116,16 @@ func Run() {
 	// ── AuthZ gRPC client ──────────────────────────────────────────────────────
 	// Connect to the authz-service for Casbin policy checks. Dial is non-blocking;
 	// the interceptor handles unavailability gracefully (fail-open with a warning).
-	authzAddr := getEnvOrDefault("AUTHZ_GRPC_ADDR", "authz-service:50153")
-	authzConn, err := grpc.NewClient(authzAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
-	if err != nil {
-		// Non-fatal: log and continue with fail-open behavior in the interceptor.
-		logger.Warn("Failed to connect to authz-service, payment AuthZ will fail open", zap.String("addr", authzAddr), zap.Error(err))
+	authzAddr := resolveServiceAddr(getEnvOrDefault("AUTHZ_GRPC_ADDR", getEnvOrDefault("AUTHZ_SERVICE_URL", "")), svcConfig.Services, "authz")
+	var authzConn *grpc.ClientConn
+	if authzAddr == "" {
+		logger.Warn("AuthZ service address not resolved — payment AuthZ will fail open until authz is reachable")
+	} else {
+		authzConn, err = grpc.NewClient(authzAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		if err != nil {
+			// Non-fatal: log and continue with fail-open behavior in the interceptor.
+			logger.Warn("Failed to connect to authz-service, payment AuthZ will fail open", zap.String("addr", authzAddr), zap.Error(err))
+		}
 	}
 	var authzInterceptor *paymentmw.PaymentAuthZInterceptor
 	if authzConn != nil {
@@ -150,4 +178,8 @@ func getEnvOrDefault(key, defaultValue string) string {
 		return strings.TrimSpace(value)
 	}
 	return defaultValue
+}
+
+func resolveServiceAddr(explicit string, services map[string]serviceaddr.Service, key string) string {
+	return serviceaddr.ResolveFromServicesMap(explicit, services, os.Getenv("PAYMENT_SERVICE_DISCOVERY_HOST"), key)
 }

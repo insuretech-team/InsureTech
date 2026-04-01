@@ -14,7 +14,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file insuretech/notification/entity/v1/notification.proto.
  */
 export const file_insuretech_notification_entity_v1_notification: GenFile = /*@__PURE__*/
-  fileDesc("CjRpbnN1cmV0ZWNoL25vdGlmaWNhdGlvbi9lbnRpdHkvdjEvbm90aWZpY2F0aW9uLnByb3RvEiFpbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEiwxIKDE5vdGlmaWNhdGlvbhJsCg9ub3RpZmljYXRpb25faWQYASABKAlCU5K1GE8KD25vdGlmaWNhdGlvbl9pZBIEVVVJRBgBKAE6EWdlbl9yYW5kb21fdXVpZCgpWh9QcmltYXJ5IGtleSAtIE5vdGlmaWNhdGlvbiBVVUlEErUBCgxyZWNpcGllbnRfaWQYAiABKAlCngGStRiZAQoMcmVjaXBpZW50X2lkEgRVVUlEGAFKQQoFdXNlcnMSB3VzZXJfaWQaDGF1dGhuX3NjaGVtYSADKAMyHWZrX25vdGlmaWNhdGlvbnNfcmVjaXBpZW50X2lkUiIKHmlkeF9ub3RpZmljYXRpb25zX3JlY2lwaWVudF9pZBACWhpGb3JlaWduIGtleSB0byB1c2VycyB0YWJsZRKLAQoEdHlwZRgDIAEoDjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25UeXBlQkiStRhECgR0eXBlEgtWQVJDSEFSKDUwKRgBUhoKFmlkeF9ub3RpZmljYXRpb25zX3R5cGUQAloRTm90aWZpY2F0aW9uIHR5cGUSvwEKB2NoYW5uZWwYBCABKA4yNi5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uQ2hhbm5lbEJ2krUYcgoHY2hhbm5lbBILVkFSQ0hBUig1MCkYAVIdChlpZHhfbm90aWZpY2F0aW9uc19jaGFubmVsEAJaOU5vdGlmaWNhdGlvbiBjaGFubmVsIChTTVMsIEVNQUlMLCBQVVNILCBXSEFUU0FQUCwgSU5fQVBQKRJGCgdzdWJqZWN0GAUgASgJQjWStRgxCgdzdWJqZWN0EgxWQVJDSEFSKDUwMClaGFN1YmplY3QgbGluZSAoZm9yIGVtYWlsKRJ0CgdtZXNzYWdlGAYgASgJQmOStRgsCgdtZXNzYWdlEgRURVhUGAFaGU5vdGlmaWNhdGlvbiBtZXNzYWdlIGJvZHnQtRgB4LUYAYK2GCdDdXN0b21lciBub3RpZmljYXRpb24gYW5kIGNvbW11bmljYXRpb24SuwEKDXRlbXBsYXRlX2RhdGEYByADKAsyQS5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uLlRlbXBsYXRlRGF0YUVudHJ5QmGStRg0Cg10ZW1wbGF0ZV9kYXRhEgVKU09OQloaVGVtcGxhdGUgdmFyaWFibGVzIGFzIEpTT054AdC1GAHgtRgBgrYYHVRlbXBsYXRlIHBlcnNvbmFsaXphdGlvbiBkYXRhEokBCghwcmlvcml0eRgIIAEoDjI3Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25Qcmlvcml0eUI+krUYOgoIcHJpb3JpdHkSC1ZBUkNIQVIoMjApGAE6CCdOT1JNQUwnWhVOb3RpZmljYXRpb24gcHJpb3JpdHkSnwEKBnN0YXR1cxgJIAEoDjI1Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25TdGF0dXNCWJK1GFQKBnN0YXR1cxILVkFSQ0hBUigyMCkYAToIJ1FVRVVFRCdSHAoYaWR4X25vdGlmaWNhdGlvbnNfc3RhdHVzEAJaE05vdGlmaWNhdGlvbiBzdGF0dXMSsQEKDHNjaGVkdWxlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCf5K1GHsKDHNjaGVkdWxlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FUiIKHmlkeF9ub3RpZmljYXRpb25zX3NjaGVkdWxlZF9hdBACWi1TY2hlZHVsZWQgc2VuZCB0aW1lIChOVUxMID0gc2VuZCBpbW1lZGlhdGVseSkScQoHc2VudF9hdBgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCRJK1GEAKB3NlbnRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVobTm90aWZpY2F0aW9uIHNlbnQgdGltZXN0YW1wEoABCgxkZWxpdmVyZWRfYXQYDCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQk6StRhKCgxkZWxpdmVyZWRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVogTm90aWZpY2F0aW9uIGRlbGl2ZXJlZCB0aW1lc3RhbXASgAEKB3JlYWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQlOStRhPCgdyZWFkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVaKlVzZXIgcmVhZCB0aW1lc3RhbXAgKGluLWFwcCBub3RpZmljYXRpb25zKRJzCgpjcmVhdGVkX2F0GA4gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoARJ6CgtyZXRyeV9jb3VudBgPIAEoBUJlkrUYYQoLcmV0cnlfY291bnQSB0lOVEVHRVIYAToBMEIlcmV0cnlfY291bnQgPj0gMCBBTkQgcmV0cnlfY291bnQgPD0gM1odUmV0cnkgYXR0ZW1wdCBjb3VudGVyIChtYXggMykSSQoNZXJyb3JfbWVzc2FnZRgQIAEoCUIykrUYLgoNZXJyb3JfbWVzc2FnZRIEVEVYVFoXRXJyb3IgbWVzc2FnZSBpZiBmYWlsZWQaMwoRVGVtcGxhdGVEYXRhRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ATp1irUYcQoNbm90aWZpY2F0aW9ucxITbm90aWZpY2F0aW9uX3NjaGVtYRg/IAEqN1VzZXIgbm90aWZpY2F0aW9ucyAoU01TLCBFbWFpbCwgUHVzaCwgV2hhdHNBcHAsIEluLUFwcClAAUgDUgpjcmVhdGVkX2F0IpwKChROb3RpZmljYXRpb25UZW1wbGF0ZRJgCgt0ZW1wbGF0ZV9pZBgBIAEoCUJLkrUYRwoLdGVtcGxhdGVfaWQSBFVVSUQYASgBOhFnZW5fcmFuZG9tX3V1aWQoKVobUHJpbWFyeSBrZXkgLSBUZW1wbGF0ZSBVVUlEEoIBCg10ZW1wbGF0ZV9uYW1lGAIgASgJQmuStRhnCg10ZW1wbGF0ZV9uYW1lEgxWQVJDSEFSKDEwMCkYASABUi4KKGlkeF9ub3RpZmljYXRpb25fdGVtcGxhdGVzX3RlbXBsYXRlX25hbWUQAhgBWhRVbmlxdWUgdGVtcGxhdGUgbmFtZRKUAQoEdHlwZRgDIAEoDjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25UeXBlQlGStRhNCgR0eXBlEgtWQVJDSEFSKDUwKRgBUiMKH2lkeF9ub3RpZmljYXRpb25fdGVtcGxhdGVzX3R5cGUQAloRTm90aWZpY2F0aW9uIHR5cGUSowEKB2NoYW5uZWwYBCABKA4yNi5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uQ2hhbm5lbEJakrUYVgoHY2hhbm5lbBILVkFSQ0hBUig1MCkYAVImCiJpZHhfbm90aWZpY2F0aW9uX3RlbXBsYXRlc19jaGFubmVsEAJaFE5vdGlmaWNhdGlvbiBjaGFubmVsEmYKEHN1YmplY3RfdGVtcGxhdGUYBSABKAlCTJK1GEgKEHN1YmplY3RfdGVtcGxhdGUSDFZBUkNIQVIoNTAwKVomU3ViamVjdCB0ZW1wbGF0ZSB3aXRoIHt7cGxhY2Vob2xkZXJzfX0SVwoNYm9keV90ZW1wbGF0ZRgGIAEoCUJAkrUYPAoNYm9keV90ZW1wbGF0ZRIEVEVYVBgBWiNCb2R5IHRlbXBsYXRlIHdpdGgge3twbGFjZWhvbGRlcnN9fRJ+CghsYW5ndWFnZRgHIAEoCUJskrUYaAoIbGFuZ3VhZ2USClZBUkNIQVIoNSkYAToEJ2VuJ0IYbGFuZ3VhZ2UgSU4gKCdlbicsICdibicpWi5UZW1wbGF0ZSBsYW5ndWFnZSAoZW4gPSBFbmdsaXNoLCBibiA9IEJlbmdhbGkpEnMKCmNyZWF0ZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkOStRg/CgpjcmVhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgAWgBEnEKCnVwZGF0ZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkGStRg9Cgp1cGRhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgARJLCglpc19hY3RpdmUYCiABKAhCOJK1GDQKCWlzX2FjdGl2ZRIHQk9PTEVBThgBOgR0cnVlWhZUZW1wbGF0ZSBhY3RpdmUgc3RhdHVzOmqKtRhmChZub3RpZmljYXRpb25fdGVtcGxhdGVzEhNub3RpZmljYXRpb25fc2NoZW1hGEAgASoxUmV1c2FibGUgbm90aWZpY2F0aW9uIHRlbXBsYXRlcyB3aXRoIHBsYWNlaG9sZGVyczgBIuQBChZOb3RpZmljYXRpb25QcmVmZXJlbmNlEg8KB3VzZXJfaWQYASABKAkSUQoTY2hhbm5lbF9wcmVmZXJlbmNlcxgCIAMoCzI0Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5DaGFubmVsUHJlZmVyZW5jZRIYChBtYXJrZXRpbmdfb3B0X2luGAMgASgIEhwKFHRyYW5zYWN0aW9uYWxfb3B0X2luGAQgASgIEi4KCnVwZGF0ZWRfYXQYBSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wIroBChFDaGFubmVsUHJlZmVyZW5jZRJHCgdjaGFubmVsGAEgASgOMjYuaW5zdXJldGVjaC5ub3RpZmljYXRpb24uZW50aXR5LnYxLk5vdGlmaWNhdGlvbkNoYW5uZWwSDwoHZW5hYmxlZBgCIAEoCBJLCg5leGNsdWRlZF90eXBlcxgDIAMoDjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25UeXBlKqYDChBOb3RpZmljYXRpb25UeXBlEiEKHU5PVElGSUNBVElPTl9UWVBFX1VOU1BFQ0lGSUVEEAASGQoVTk9USUZJQ0FUSU9OX1RZUEVfT1RQEAESIwofTk9USUZJQ0FUSU9OX1RZUEVfUE9MSUNZX0lTU1VFRBACEioKJk5PVElGSUNBVElPTl9UWVBFX1BBWU1FTlRfQ09ORklSTUFUSU9OEAMSJQohTk9USUZJQ0FUSU9OX1RZUEVfQ0xBSU1fU1VCTUlUVEVEEAQSJAogTk9USUZJQ0FUSU9OX1RZUEVfQ0xBSU1fQVBQUk9WRUQQBRIkCiBOT1RJRklDQVRJT05fVFlQRV9DTEFJTV9SRUpFQ1RFRBAGEiYKIk5PVElGSUNBVElPTl9UWVBFX1JFTkVXQUxfUkVNSU5ERVIQBxIiCh5OT1RJRklDQVRJT05fVFlQRV9HUkFDRV9QRVJJT0QQCBIjCh9OT1RJRklDQVRJT05fVFlQRV9QT0xJQ1lfTEFQU0VEEAkSHwobTk9USUZJQ0FUSU9OX1RZUEVfTUFSS0VUSU5HEAoq3AEKE05vdGlmaWNhdGlvbkNoYW5uZWwSJAogTk9USUZJQ0FUSU9OX0NIQU5ORUxfVU5TUEVDSUZJRUQQABIcChhOT1RJRklDQVRJT05fQ0hBTk5FTF9TTVMQARIeChpOT1RJRklDQVRJT05fQ0hBTk5FTF9FTUFJTBACEh0KGU5PVElGSUNBVElPTl9DSEFOTkVMX1BVU0gQAxIhCh1OT1RJRklDQVRJT05fQ0hBTk5FTF9XSEFUU0FQUBAEEh8KG05PVElGSUNBVElPTl9DSEFOTkVMX0lOX0FQUBAFKsABChROb3RpZmljYXRpb25Qcmlvcml0eRIlCiFOT1RJRklDQVRJT05fUFJJT1JJVFlfVU5TUEVDSUZJRUQQABIdChlOT1RJRklDQVRJT05fUFJJT1JJVFlfTE9XEAESIAocTk9USUZJQ0FUSU9OX1BSSU9SSVRZX05PUk1BTBACEh4KGk5PVElGSUNBVElPTl9QUklPUklUWV9ISUdIEAMSIAocTk9USUZJQ0FUSU9OX1BSSU9SSVRZX1VSR0VOVBAEKpoCChJOb3RpZmljYXRpb25TdGF0dXMSIwofTk9USUZJQ0FUSU9OX1NUQVRVU19VTlNQRUNJRklFRBAAEh4KGk5PVElGSUNBVElPTl9TVEFUVVNfUVVFVUVEEAESHwobTk9USUZJQ0FUSU9OX1NUQVRVU19TRU5ESU5HEAISHAoYTk9USUZJQ0FUSU9OX1NUQVRVU19TRU5UEAMSIQodTk9USUZJQ0FUSU9OX1NUQVRVU19ERUxJVkVSRUQQBBIcChhOT1RJRklDQVRJT05fU1RBVFVTX1JFQUQQBRIeChpOT1RJRklDQVRJT05fU1RBVFVTX0ZBSUxFRBAGEh8KG05PVElGSUNBVElPTl9TVEFUVVNfQk9VTkNFRBAHQrcCCiVjb20uaW5zdXJldGVjaC5ub3RpZmljYXRpb24uZW50aXR5LnYxQhFOb3RpZmljYXRpb25Qcm90b1ABWlRnaXRodWIuY29tL25ld2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL25vdGlmaWNhdGlvbi9lbnRpdHkvdjE7ZW50aXR5djGiAgNJTkWqAiFJbnN1cmV0ZWNoLk5vdGlmaWNhdGlvbi5FbnRpdHkuVjHKAiFJbnN1cmV0ZWNoXE5vdGlmaWNhdGlvblxFbnRpdHlcVjHiAi1JbnN1cmV0ZWNoXE5vdGlmaWNhdGlvblxFbnRpdHlcVjFcR1BCTWV0YWRhdGHqAiRJbnN1cmV0ZWNoOjpOb3RpZmljYXRpb246OkVudGl0eTo6VjFiBnByb3RvMw", [file_google_protobuf_timestamp, file_insuretech_common_v1_security, file_insuretech_common_v1_db]);
+  fileDesc("CjRpbnN1cmV0ZWNoL25vdGlmaWNhdGlvbi9lbnRpdHkvdjEvbm90aWZpY2F0aW9uLnByb3RvEiFpbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEiwxIKDE5vdGlmaWNhdGlvbhJsCg9ub3RpZmljYXRpb25faWQYASABKAlCU5K1GE8KD25vdGlmaWNhdGlvbl9pZBIEVVVJRBgBKAE6EWdlbl9yYW5kb21fdXVpZCgpWh9QcmltYXJ5IGtleSAtIE5vdGlmaWNhdGlvbiBVVUlEErUBCgxyZWNpcGllbnRfaWQYAiABKAlCngGStRiZAQoMcmVjaXBpZW50X2lkEgRVVUlEGAFKQQoFdXNlcnMSB3VzZXJfaWQaDGF1dGhuX3NjaGVtYSADKAMyHWZrX25vdGlmaWNhdGlvbnNfcmVjaXBpZW50X2lkUiIKHmlkeF9ub3RpZmljYXRpb25zX3JlY2lwaWVudF9pZBACWhpGb3JlaWduIGtleSB0byB1c2VycyB0YWJsZRKLAQoEdHlwZRgDIAEoDjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25UeXBlQkiStRhECgR0eXBlEgtWQVJDSEFSKDUwKRgBUhoKFmlkeF9ub3RpZmljYXRpb25zX3R5cGUQAloRTm90aWZpY2F0aW9uIHR5cGUSvwEKB2NoYW5uZWwYBCABKA4yNi5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uQ2hhbm5lbEJ2krUYcgoHY2hhbm5lbBILVkFSQ0hBUig1MCkYAVIdChlpZHhfbm90aWZpY2F0aW9uc19jaGFubmVsEAJaOU5vdGlmaWNhdGlvbiBjaGFubmVsIChTTVMsIEVNQUlMLCBQVVNILCBXSEFUU0FQUCwgSU5fQVBQKRJGCgdzdWJqZWN0GAUgASgJQjWStRgxCgdzdWJqZWN0EgxWQVJDSEFSKDUwMClaGFN1YmplY3QgbGluZSAoZm9yIGVtYWlsKRJ0CgdtZXNzYWdlGAYgASgJQmOStRgsCgdtZXNzYWdlEgRURVhUGAFaGU5vdGlmaWNhdGlvbiBtZXNzYWdlIGJvZHnQtRgB4LUYAYK2GCdDdXN0b21lciBub3RpZmljYXRpb24gYW5kIGNvbW11bmljYXRpb24SuwEKDXRlbXBsYXRlX2RhdGEYByADKAsyQS5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uLlRlbXBsYXRlRGF0YUVudHJ5QmGStRg0Cg10ZW1wbGF0ZV9kYXRhEgVKU09OQloaVGVtcGxhdGUgdmFyaWFibGVzIGFzIEpTT054AdC1GAHgtRgBgrYYHVRlbXBsYXRlIHBlcnNvbmFsaXphdGlvbiBkYXRhEokBCghwcmlvcml0eRgIIAEoDjI3Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25Qcmlvcml0eUI+krUYOgoIcHJpb3JpdHkSC1ZBUkNIQVIoMjApGAE6CCdOT1JNQUwnWhVOb3RpZmljYXRpb24gcHJpb3JpdHkSnwEKBnN0YXR1cxgJIAEoDjI1Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25TdGF0dXNCWJK1GFQKBnN0YXR1cxILVkFSQ0hBUigyMCkYAToIJ1FVRVVFRCdSHAoYaWR4X25vdGlmaWNhdGlvbnNfc3RhdHVzEAJaE05vdGlmaWNhdGlvbiBzdGF0dXMSsQEKDHNjaGVkdWxlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCf5K1GHsKDHNjaGVkdWxlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FUiIKHmlkeF9ub3RpZmljYXRpb25zX3NjaGVkdWxlZF9hdBACWi1TY2hlZHVsZWQgc2VuZCB0aW1lIChOVUxMID0gc2VuZCBpbW1lZGlhdGVseSkScQoHc2VudF9hdBgLIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCRJK1GEAKB3NlbnRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVobTm90aWZpY2F0aW9uIHNlbnQgdGltZXN0YW1wEoABCgxkZWxpdmVyZWRfYXQYDCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQk6StRhKCgxkZWxpdmVyZWRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORVogTm90aWZpY2F0aW9uIGRlbGl2ZXJlZCB0aW1lc3RhbXASgAEKB3JlYWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQlOStRhPCgdyZWFkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVaKlVzZXIgcmVhZCB0aW1lc3RhbXAgKGluLWFwcCBub3RpZmljYXRpb25zKRJzCgpjcmVhdGVkX2F0GA4gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoARJ6CgtyZXRyeV9jb3VudBgPIAEoBUJlkrUYYQoLcmV0cnlfY291bnQSB0lOVEVHRVIYAToBMEIlcmV0cnlfY291bnQgPj0gMCBBTkQgcmV0cnlfY291bnQgPD0gM1odUmV0cnkgYXR0ZW1wdCBjb3VudGVyIChtYXggMykSSQoNZXJyb3JfbWVzc2FnZRgQIAEoCUIykrUYLgoNZXJyb3JfbWVzc2FnZRIEVEVYVFoXRXJyb3IgbWVzc2FnZSBpZiBmYWlsZWQaMwoRVGVtcGxhdGVEYXRhRW50cnkSCwoDa2V5GAEgASgJEg0KBXZhbHVlGAIgASgJOgI4ATp1irUYcQoNbm90aWZpY2F0aW9ucxITbm90aWZpY2F0aW9uX3NjaGVtYRg/IAEqN1VzZXIgbm90aWZpY2F0aW9ucyAoU01TLCBFbWFpbCwgUHVzaCwgV2hhdHNBcHAsIEluLUFwcClAAUgDUgpjcmVhdGVkX2F0IpwKChROb3RpZmljYXRpb25UZW1wbGF0ZRJgCgt0ZW1wbGF0ZV9pZBgBIAEoCUJLkrUYRwoLdGVtcGxhdGVfaWQSBFVVSUQYASgBOhFnZW5fcmFuZG9tX3V1aWQoKVobUHJpbWFyeSBrZXkgLSBUZW1wbGF0ZSBVVUlEEoIBCg10ZW1wbGF0ZV9uYW1lGAIgASgJQmuStRhnCg10ZW1wbGF0ZV9uYW1lEgxWQVJDSEFSKDEwMCkYASABUi4KKGlkeF9ub3RpZmljYXRpb25fdGVtcGxhdGVzX3RlbXBsYXRlX25hbWUQAhgBWhRVbmlxdWUgdGVtcGxhdGUgbmFtZRKUAQoEdHlwZRgDIAEoDjIzLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25UeXBlQlGStRhNCgR0eXBlEgtWQVJDSEFSKDUwKRgBUiMKH2lkeF9ub3RpZmljYXRpb25fdGVtcGxhdGVzX3R5cGUQAloRTm90aWZpY2F0aW9uIHR5cGUSowEKB2NoYW5uZWwYBCABKA4yNi5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uQ2hhbm5lbEJakrUYVgoHY2hhbm5lbBILVkFSQ0hBUig1MCkYAVImCiJpZHhfbm90aWZpY2F0aW9uX3RlbXBsYXRlc19jaGFubmVsEAJaFE5vdGlmaWNhdGlvbiBjaGFubmVsEmYKEHN1YmplY3RfdGVtcGxhdGUYBSABKAlCTJK1GEgKEHN1YmplY3RfdGVtcGxhdGUSDFZBUkNIQVIoNTAwKVomU3ViamVjdCB0ZW1wbGF0ZSB3aXRoIHt7cGxhY2Vob2xkZXJzfX0SVwoNYm9keV90ZW1wbGF0ZRgGIAEoCUJAkrUYPAoNYm9keV90ZW1wbGF0ZRIEVEVYVBgBWiNCb2R5IHRlbXBsYXRlIHdpdGgge3twbGFjZWhvbGRlcnN9fRJ+CghsYW5ndWFnZRgHIAEoCUJskrUYaAoIbGFuZ3VhZ2USClZBUkNIQVIoNSkYAToEJ2VuJ0IYbGFuZ3VhZ2UgSU4gKCdlbicsICdibicpWi5UZW1wbGF0ZSBsYW5ndWFnZSAoZW4gPSBFbmdsaXNoLCBibiA9IEJlbmdhbGkpEnMKCmNyZWF0ZWRfYXQYCCABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkOStRg/CgpjcmVhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgAWgBEnEKCnVwZGF0ZWRfYXQYCSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkGStRg9Cgp1cGRhdGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1FU1RBTVBgARJLCglpc19hY3RpdmUYCiABKAhCOJK1GDQKCWlzX2FjdGl2ZRIHQk9PTEVBThgBOgR0cnVlWhZUZW1wbGF0ZSBhY3RpdmUgc3RhdHVzOmqKtRhmChZub3RpZmljYXRpb25fdGVtcGxhdGVzEhNub3RpZmljYXRpb25fc2NoZW1hGEAgASoxUmV1c2FibGUgbm90aWZpY2F0aW9uIHRlbXBsYXRlcyB3aXRoIHBsYWNlaG9sZGVyczgBItoLCg9QdXNoRGV2aWNlVG9rZW4SXgoIdG9rZW5faWQYASABKAlCTJK1GEgKCHRva2VuX2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClaH1ByaW1hcnkga2V5IC0gZGV2aWNlIHRva2VuIFVVSUQSngEKB3VzZXJfaWQYAiABKAlCjAGStRiHAQoHdXNlcl9pZBIEVVVJRBgBSkEKBXVzZXJzEgd1c2VyX2lkGgxhdXRobl9zY2hlbWEgAygDMh1ma19wdXNoX2RldmljZV90b2tlbnNfdXNlcl9pZFIiCh5pZHhfcHVzaF9kZXZpY2VfdG9rZW5zX3VzZXJfaWQQAloNT3duZXIgdXNlciBJRBKLAQoIcHJvdmlkZXIYAyABKAlCeZK1GHUKCHByb3ZpZGVyEgtWQVJDSEFSKDIwKRgBQiZwcm92aWRlciBJTiAoJ0ZDTScsICdBUE5TJywgJ1dFQlBVU0gnKVIjCh9pZHhfcHVzaF9kZXZpY2VfdG9rZW5zX3Byb3ZpZGVyEAJaDVB1c2ggcHJvdmlkZXISjAEKCHBsYXRmb3JtGAQgASgJQnqStRh2CghwbGF0Zm9ybRILVkFSQ0hBUigyMCkYAUIlcGxhdGZvcm0gSU4gKCdhbmRyb2lkJywgJ2lvcycsICd3ZWInKVIjCh9pZHhfcHVzaF9kZXZpY2VfdG9rZW5zX3BsYXRmb3JtEAJaD0NsaWVudCBwbGF0Zm9ybRJ3CgxkZXZpY2VfdG9rZW4YBSABKAlCYZK1GF0KDGRldmljZV90b2tlbhIEVEVYVBgBUicKI2lkeF9wdXNoX2RldmljZV90b2tlbnNfZGV2aWNlX3Rva2VuEAJaHFByb3ZpZGVyLWlzc3VlZCBkZXZpY2UgdG9rZW4SUAoJZGV2aWNlX2lkGAYgASgJQj2StRg5CglkZXZpY2VfaWQSDFZBUkNIQVIoMjU1KVoeQXBwLXNwZWNpZmljIGRldmljZSBpZGVudGlmaWVyEkIKBmFwcF9pZBgHIAEoCUIykrUYLgoGYXBwX2lkEgxWQVJDSEFSKDI1NSlaFkFwcGxpY2F0aW9uIGlkZW50aWZpZXISjwEKCWlzX2FjdGl2ZRgIIAEoCEJ8krUYeAoJaXNfYWN0aXZlEgdCT09MRUFOGAE6BHRydWVSJAogaWR4X3B1c2hfZGV2aWNlX3Rva2Vuc19pc19hY3RpdmUQAlo0V2hldGhlciB0aGlzIHRva2VuIHNob3VsZCByZWNlaXZlIHB1c2ggbm90aWZpY2F0aW9ucxKuAQoMbGFzdF9zZWVuX2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJ8krUYeAoMbGFzdF9zZWVuX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVSJwojaWR4X3B1c2hfZGV2aWNlX3Rva2Vuc19sYXN0X3NlZW5fYXQQAlolTGFzdCBoZWFydGJlYXQvdXBkYXRlIGZyb20gdGhlIGRldmljZRJzCgpjcmVhdGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoARJxCgp1cGRhdGVkX2F0GAsgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJBkrUYPQoKdXBkYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAE6b4q1GGsKEnB1c2hfZGV2aWNlX3Rva2VucxITbm90aWZpY2F0aW9uX3NjaGVtYRhBIAEqPFJlZ2lzdGVyZWQgcHVzaCBkZXZpY2UgdG9rZW5zIGZvciBGQ00vQVBOcy93ZWIgcHVzaCBkZWxpdmVyeSK2DAoTV2ViaG9va1N1YnNjcmlwdGlvbhJ0Cg9zdWJzY3JpcHRpb25faWQYASABKAlCW5K1GFcKD3N1YnNjcmlwdGlvbl9pZBIEVVVJRBgBKAE6EWdlbl9yYW5kb21fdXVpZCgpWidQcmltYXJ5IGtleSAtIHdlYmhvb2sgc3Vic2NyaXB0aW9uIFVVSUQSXgoPc3Vic2NyaWJlcl9uYW1lGAIgASgJQkWStRhBCg9zdWJzY3JpYmVyX25hbWUSDFZBUkNIQVIoMjU1KRgBWh5IdW1hbi1yZWFkYWJsZSBzdWJzY3JpYmVyIG5hbWUSQgoKdGFyZ2V0X3VybBgDIAEoCUIukrUYKgoKdGFyZ2V0X3VybBIEVEVYVBgBWhRXZWJob29rIGNhbGxiYWNrIFVSTBI5CgZzZWNyZXQYBCABKAlCKZK1GCUKBnNlY3JldBIEVEVYVBgBWhNITUFDIHNpZ25pbmcgc2VjcmV0EoMBCgtldmVudF90eXBlcxgFIAMoCUJukrUYagoLZXZlbnRfdHlwZXMSBlRFWFRbXRgBUikKJWlkeF93ZWJob29rX3N1YnNjcmlwdGlvbnNfZXZlbnRfdHlwZXMQBFomTGlmZWN5Y2xlIGV2ZW50cyB0aGlzIHN1YnNjcmliZXIgd2FudHMSggEKDHRvcGljX2dyb3VwcxgGIAMoCUJskrUYaAoMdG9waWNfZ3JvdXBzEgZURVhUW10YAVIqCiZpZHhfd2ViaG9va19zdWJzY3JpcHRpb25zX3RvcGljX2dyb3VwcxAEWiJUb3BpYyBncm91cHMgdGhpcyBzdWJzY3JpYmVyIHdhbnRzEnoKBnRvcGljcxgHIAMoCUJqkrUYZgoGdG9waWNzEgZURVhUW10YAVIkCiBpZHhfd2ViaG9va19zdWJzY3JpcHRpb25zX3RvcGljcxAEWixTcGVjaWZpYyBzb3VyY2UgdG9waWNzIHRoaXMgc3Vic2NyaWJlciB3YW50cxJ/CghjaGFubmVscxgIIAMoCUJtkrUYaQoIY2hhbm5lbHMSBlRFWFRbXRgBUiYKImlkeF93ZWJob29rX3N1YnNjcmlwdGlvbnNfY2hhbm5lbHMQBForTm90aWZpY2F0aW9uIGNoYW5uZWxzIHRoaXMgc3Vic2NyaWJlciB3YW50cxJyCg90aW1lb3V0X3NlY29uZHMYCSABKAVCWZK1GFUKD3RpbWVvdXRfc2Vjb25kcxIHSU5URUdFUhgBOgIxMEITdGltZW91dF9zZWNvbmRzID4gMFoeUGVyLXJlcXVlc3QgdGltZW91dCBpbiBzZWNvbmRzEmMKDG1heF9hdHRlbXB0cxgKIAEoBUJNkrUYSQoMbWF4X2F0dGVtcHRzEgdJTlRFR0VSGAE6ATVCEG1heF9hdHRlbXB0cyA+IDBaGU1heGltdW0gZGVsaXZlcnkgYXR0ZW1wdHMSgAEKCWlzX2FjdGl2ZRgLIAEoCEJtkrUYaQoJaXNfYWN0aXZlEgdCT09MRUFOGAE6BHRydWVSJwojaWR4X3dlYmhvb2tfc3Vic2NyaXB0aW9uc19pc19hY3RpdmUQAloiV2hldGhlciB0aGUgc3Vic2NyaXB0aW9uIGlzIGFjdGl2ZRJzCgpjcmVhdGVkX2F0GAwgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoARJxCgp1cGRhdGVkX2F0GA0gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJBkrUYPQoKdXBkYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAE6foq1GHoKFXdlYmhvb2tfc3Vic2NyaXB0aW9ucxITbm90aWZpY2F0aW9uX3NjaGVtYRhCIAEqSEV4dGVybmFsIHN1YnNjcmliZXJzIHRoYXQgcmVjZWl2ZSBzaWduZWQgbm90aWZpY2F0aW9uIGxpZmVjeWNsZSB3ZWJob29rcyKOEQoWV2ViaG9va0RlbGl2ZXJ5QXR0ZW1wdBJlCgphdHRlbXB0X2lkGAEgASgJQlGStRhNCgphdHRlbXB0X2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKClaIlByaW1hcnkga2V5IC0gd2ViaG9vayBhdHRlbXB0IFVVSUQS+QEKD3N1YnNjcmlwdGlvbl9pZBgCIAEoCULfAZK1GNoBCg9zdWJzY3JpcHRpb25faWQSBFVVSUQYAUpvChV3ZWJob29rX3N1YnNjcmlwdGlvbnMSD3N1YnNjcmlwdGlvbl9pZBoTbm90aWZpY2F0aW9uX3NjaGVtYSADKAMyLGZrX3dlYmhvb2tfZGVsaXZlcnlfYXR0ZW1wdHNfc3Vic2NyaXB0aW9uX2lkUjEKLWlkeF93ZWJob29rX2RlbGl2ZXJ5X2F0dGVtcHRzX3N1YnNjcmlwdGlvbl9pZBACWhtUYXJnZXQgd2ViaG9vayBzdWJzY3JpcHRpb24SmQIKD25vdGlmaWNhdGlvbl9pZBgDIAEoCUL/AZK1GPoBCg9ub3RpZmljYXRpb25faWQSBFVVSURKZwoNbm90aWZpY2F0aW9ucxIPbm90aWZpY2F0aW9uX2lkGhNub3RpZmljYXRpb25fc2NoZW1hIAMoAzIsZmtfd2ViaG9va19kZWxpdmVyeV9hdHRlbXB0c19ub3RpZmljYXRpb25faWRSMQotaWR4X3dlYmhvb2tfZGVsaXZlcnlfYXR0ZW1wdHNfbm90aWZpY2F0aW9uX2lkEAJaRVJlbGF0ZWQgbm90aWZpY2F0aW9uIElEIHdoZW4gZGVsaXZlcnkgY2FtZSBmcm9tIGEgcXVldWVkIG5vdGlmaWNhdGlvbhKGAQoPbGlmZWN5Y2xlX2V2ZW50GAQgASgJQm2StRhpCg9saWZlY3ljbGVfZXZlbnQSC1ZBUkNIQVIoNjQpGAFSMQotaWR4X3dlYmhvb2tfZGVsaXZlcnlfYXR0ZW1wdHNfbGlmZWN5Y2xlX2V2ZW50EAJaFExpZmVjeWNsZSBldmVudCBuYW1lEmwKDHNvdXJjZV90b3BpYxgFIAEoCUJWkrUYUgoMc291cmNlX3RvcGljEgxWQVJDSEFSKDI1NSlaNE9yaWdpbmFsIGJ1c2luZXNzIHRvcGljIHRoYXQgbGVkIHRvIHRoZSBub3RpZmljYXRpb24SUgoHcGF5bG9hZBgGIAEoCUJBkrUYPQoHcGF5bG9hZBIFSlNPTkIYAToLJ3t9Jzo6anNvbmJaGlNlcmlhbGl6ZWQgd2ViaG9vayBwYXlsb2FkeAESrAEKBnN0YXR1cxgHIAEoCUKbAZK1GJYBCgZzdGF0dXMSC1ZBUkNIQVIoMjApGAE6CCdRVUVVRUQnQjFzdGF0dXMgSU4gKCdRVUVVRUQnLCAnU0VORElORycsICdTRU5UJywgJ0ZBSUxFRCcpUigKJGlkeF93ZWJob29rX2RlbGl2ZXJ5X2F0dGVtcHRzX3N0YXR1cxACWhZEZWxpdmVyeSBhdHRlbXB0IHN0YXRlEl8KD3Jlc3BvbnNlX3N0YXR1cxgIIAEoBUJGkrUYQgoPcmVzcG9uc2Vfc3RhdHVzEgdJTlRFR0VSWiZIVFRQIHN0YXR1cyByZXR1cm5lZCBieSB0aGUgc3Vic2NyaWJlchJWCg1yZXNwb25zZV9ib2R5GAkgASgJQj+StRg7Cg1yZXNwb25zZV9ib2R5EgRURVhUWiRSZXNwb25zZSBib2R5IGNhcHR1cmVkIGZvciBkZWJ1Z2dpbmcSVQoLcmV0cnlfY291bnQYCiABKAVCQJK1GDwKC3JldHJ5X2NvdW50EgdJTlRFR0VSGAE6ATBCEHJldHJ5X2NvdW50ID49IDBaDVJldHJ5IGNvdW50ZXISRQoNZXJyb3JfbWVzc2FnZRgLIAEoCUIukrUYKgoNZXJyb3JfbWVzc2FnZRIEVEVYVFoTTGFzdCBkZWxpdmVyeSBlcnJvchKrAQoMc2NoZWR1bGVkX2F0GAwgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJ5krUYdQoMc2NoZWR1bGVkX2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVSLgoqaWR4X3dlYmhvb2tfZGVsaXZlcnlfYXR0ZW1wdHNfc2NoZWR1bGVkX2F0EAJaG05leHQgc2NoZWR1bGVkIGF0dGVtcHQgdGltZRKHAQoRbGFzdF9hdHRlbXB0ZWRfYXQYDSABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQlCStRhMChFsYXN0X2F0dGVtcHRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FWh1MYXN0IHRpbWUgYW4gYXR0ZW1wdCB3YXMgbWFkZRJzCgpjcmVhdGVkX2F0GA4gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoKY3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAFoARJxCgp1cGRhdGVkX2F0GA8gASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJBkrUYPQoKdXBkYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRfVElNRVNUQU1QYAE6gwGKtRh/Chl3ZWJob29rX2RlbGl2ZXJ5X2F0dGVtcHRzEhNub3RpZmljYXRpb25fc2NoZW1hGEMgASpJUmV0cnlhYmxlIG91dGJvdW5kIHdlYmhvb2sgZGVsaXZlcmllcyBlbWl0dGVkIGJ5IHRoZSBub3RpZmljYXRpb24gc2VydmljZSLkAQoWTm90aWZpY2F0aW9uUHJlZmVyZW5jZRIPCgd1c2VyX2lkGAEgASgJElEKE2NoYW5uZWxfcHJlZmVyZW5jZXMYAiADKAsyNC5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuQ2hhbm5lbFByZWZlcmVuY2USGAoQbWFya2V0aW5nX29wdF9pbhgDIAEoCBIcChR0cmFuc2FjdGlvbmFsX29wdF9pbhgEIAEoCBIuCgp1cGRhdGVkX2F0GAUgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcCK6AQoRQ2hhbm5lbFByZWZlcmVuY2USRwoHY2hhbm5lbBgBIAEoDjI2Lmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MS5Ob3RpZmljYXRpb25DaGFubmVsEg8KB2VuYWJsZWQYAiABKAgSSwoOZXhjbHVkZWRfdHlwZXMYAyADKA4yMy5pbnN1cmV0ZWNoLm5vdGlmaWNhdGlvbi5lbnRpdHkudjEuTm90aWZpY2F0aW9uVHlwZSqmAwoQTm90aWZpY2F0aW9uVHlwZRIhCh1OT1RJRklDQVRJT05fVFlQRV9VTlNQRUNJRklFRBAAEhkKFU5PVElGSUNBVElPTl9UWVBFX09UUBABEiMKH05PVElGSUNBVElPTl9UWVBFX1BPTElDWV9JU1NVRUQQAhIqCiZOT1RJRklDQVRJT05fVFlQRV9QQVlNRU5UX0NPTkZJUk1BVElPThADEiUKIU5PVElGSUNBVElPTl9UWVBFX0NMQUlNX1NVQk1JVFRFRBAEEiQKIE5PVElGSUNBVElPTl9UWVBFX0NMQUlNX0FQUFJPVkVEEAUSJAogTk9USUZJQ0FUSU9OX1RZUEVfQ0xBSU1fUkVKRUNURUQQBhImCiJOT1RJRklDQVRJT05fVFlQRV9SRU5FV0FMX1JFTUlOREVSEAcSIgoeTk9USUZJQ0FUSU9OX1RZUEVfR1JBQ0VfUEVSSU9EEAgSIwofTk9USUZJQ0FUSU9OX1RZUEVfUE9MSUNZX0xBUFNFRBAJEh8KG05PVElGSUNBVElPTl9UWVBFX01BUktFVElORxAKKtwBChNOb3RpZmljYXRpb25DaGFubmVsEiQKIE5PVElGSUNBVElPTl9DSEFOTkVMX1VOU1BFQ0lGSUVEEAASHAoYTk9USUZJQ0FUSU9OX0NIQU5ORUxfU01TEAESHgoaTk9USUZJQ0FUSU9OX0NIQU5ORUxfRU1BSUwQAhIdChlOT1RJRklDQVRJT05fQ0hBTk5FTF9QVVNIEAMSIQodTk9USUZJQ0FUSU9OX0NIQU5ORUxfV0hBVFNBUFAQBBIfChtOT1RJRklDQVRJT05fQ0hBTk5FTF9JTl9BUFAQBSrAAQoUTm90aWZpY2F0aW9uUHJpb3JpdHkSJQohTk9USUZJQ0FUSU9OX1BSSU9SSVRZX1VOU1BFQ0lGSUVEEAASHQoZTk9USUZJQ0FUSU9OX1BSSU9SSVRZX0xPVxABEiAKHE5PVElGSUNBVElPTl9QUklPUklUWV9OT1JNQUwQAhIeChpOT1RJRklDQVRJT05fUFJJT1JJVFlfSElHSBADEiAKHE5PVElGSUNBVElPTl9QUklPUklUWV9VUkdFTlQQBCqaAgoSTm90aWZpY2F0aW9uU3RhdHVzEiMKH05PVElGSUNBVElPTl9TVEFUVVNfVU5TUEVDSUZJRUQQABIeChpOT1RJRklDQVRJT05fU1RBVFVTX1FVRVVFRBABEh8KG05PVElGSUNBVElPTl9TVEFUVVNfU0VORElORxACEhwKGE5PVElGSUNBVElPTl9TVEFUVVNfU0VOVBADEiEKHU5PVElGSUNBVElPTl9TVEFUVVNfREVMSVZFUkVEEAQSHAoYTk9USUZJQ0FUSU9OX1NUQVRVU19SRUFEEAUSHgoaTk9USUZJQ0FUSU9OX1NUQVRVU19GQUlMRUQQBhIfChtOT1RJRklDQVRJT05fU1RBVFVTX0JPVU5DRUQQB0K3AgolY29tLmluc3VyZXRlY2gubm90aWZpY2F0aW9uLmVudGl0eS52MUIRTm90aWZpY2F0aW9uUHJvdG9QAVpUZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC9ub3RpZmljYXRpb24vZW50aXR5L3YxO2VudGl0eXYxogIDSU5FqgIhSW5zdXJldGVjaC5Ob3RpZmljYXRpb24uRW50aXR5LlYxygIhSW5zdXJldGVjaFxOb3RpZmljYXRpb25cRW50aXR5XFYx4gItSW5zdXJldGVjaFxOb3RpZmljYXRpb25cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIkSW5zdXJldGVjaDo6Tm90aWZpY2F0aW9uOjpFbnRpdHk6OlYxYgZwcm90bzM", [file_google_protobuf_timestamp, file_insuretech_common_v1_security, file_insuretech_common_v1_db]);
 
 /**
  * Notification represents a notification to be sent
@@ -227,6 +227,321 @@ export const NotificationTemplateSchema: GenMessage<NotificationTemplate> = /*@_
   messageDesc(file_insuretech_notification_entity_v1_notification, 1);
 
 /**
+ * PushDeviceToken stores mobile and web push registration tokens for each user.
+ *
+ * @generated from message insuretech.notification.entity.v1.PushDeviceToken
+ */
+export type PushDeviceToken = Message<"insuretech.notification.entity.v1.PushDeviceToken"> & {
+  /**
+   * @inject_tag: gorm:"primaryKey;column:token_id;not null"
+   *
+   * @generated from field: string token_id = 1;
+   */
+  tokenId: string;
+
+  /**
+   * @inject_tag: gorm:"column:user_id;not null"
+   *
+   * @generated from field: string user_id = 2;
+   */
+  userId: string;
+
+  /**
+   * @inject_tag: gorm:"column:provider;not null"
+   *
+   * @generated from field: string provider = 3;
+   */
+  provider: string;
+
+  /**
+   * @inject_tag: gorm:"column:platform;not null"
+   *
+   * @generated from field: string platform = 4;
+   */
+  platform: string;
+
+  /**
+   * @inject_tag: gorm:"column:device_token;not null"
+   *
+   * @generated from field: string device_token = 5;
+   */
+  deviceToken: string;
+
+  /**
+   * @inject_tag: gorm:"column:device_id"
+   *
+   * @generated from field: string device_id = 6;
+   */
+  deviceId: string;
+
+  /**
+   * @inject_tag: gorm:"column:app_id"
+   *
+   * @generated from field: string app_id = 7;
+   */
+  appId: string;
+
+  /**
+   * @inject_tag: gorm:"column:is_active;not null"
+   *
+   * @generated from field: bool is_active = 8;
+   */
+  isActive: boolean;
+
+  /**
+   * @inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp last_seen_at = 9;
+   */
+  lastSeenAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp created_at = 10;
+   */
+  createdAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp updated_at = 11;
+   */
+  updatedAt?: Timestamp;
+};
+
+/**
+ * Describes the message insuretech.notification.entity.v1.PushDeviceToken.
+ * Use `create(PushDeviceTokenSchema)` to create a new message.
+ */
+export const PushDeviceTokenSchema: GenMessage<PushDeviceToken> = /*@__PURE__*/
+  messageDesc(file_insuretech_notification_entity_v1_notification, 2);
+
+/**
+ * WebhookSubscription stores downstream subscribers for signed lifecycle fanout.
+ *
+ * @generated from message insuretech.notification.entity.v1.WebhookSubscription
+ */
+export type WebhookSubscription = Message<"insuretech.notification.entity.v1.WebhookSubscription"> & {
+  /**
+   * @inject_tag: gorm:"primaryKey;column:subscription_id;not null"
+   *
+   * @generated from field: string subscription_id = 1;
+   */
+  subscriptionId: string;
+
+  /**
+   * @inject_tag: gorm:"column:subscriber_name;not null"
+   *
+   * @generated from field: string subscriber_name = 2;
+   */
+  subscriberName: string;
+
+  /**
+   * @inject_tag: gorm:"column:target_url;not null"
+   *
+   * @generated from field: string target_url = 3;
+   */
+  targetUrl: string;
+
+  /**
+   * @inject_tag: gorm:"column:secret;not null"
+   *
+   * @generated from field: string secret = 4;
+   */
+  secret: string;
+
+  /**
+   * @inject_tag: gorm:"column:event_types;serializer:json"
+   *
+   * @generated from field: repeated string event_types = 5;
+   */
+  eventTypes: string[];
+
+  /**
+   * @inject_tag: gorm:"column:topic_groups;serializer:json"
+   *
+   * @generated from field: repeated string topic_groups = 6;
+   */
+  topicGroups: string[];
+
+  /**
+   * @inject_tag: gorm:"column:topics;serializer:json"
+   *
+   * @generated from field: repeated string topics = 7;
+   */
+  topics: string[];
+
+  /**
+   * @inject_tag: gorm:"column:channels;serializer:json"
+   *
+   * @generated from field: repeated string channels = 8;
+   */
+  channels: string[];
+
+  /**
+   * @inject_tag: gorm:"column:timeout_seconds;not null"
+   *
+   * @generated from field: int32 timeout_seconds = 9;
+   */
+  timeoutSeconds: number;
+
+  /**
+   * @inject_tag: gorm:"column:max_attempts;not null"
+   *
+   * @generated from field: int32 max_attempts = 10;
+   */
+  maxAttempts: number;
+
+  /**
+   * @inject_tag: gorm:"column:is_active;not null"
+   *
+   * @generated from field: bool is_active = 11;
+   */
+  isActive: boolean;
+
+  /**
+   * @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp created_at = 12;
+   */
+  createdAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp updated_at = 13;
+   */
+  updatedAt?: Timestamp;
+};
+
+/**
+ * Describes the message insuretech.notification.entity.v1.WebhookSubscription.
+ * Use `create(WebhookSubscriptionSchema)` to create a new message.
+ */
+export const WebhookSubscriptionSchema: GenMessage<WebhookSubscription> = /*@__PURE__*/
+  messageDesc(file_insuretech_notification_entity_v1_notification, 3);
+
+/**
+ * WebhookDeliveryAttempt stores retryable outbound webhook deliveries.
+ *
+ * @generated from message insuretech.notification.entity.v1.WebhookDeliveryAttempt
+ */
+export type WebhookDeliveryAttempt = Message<"insuretech.notification.entity.v1.WebhookDeliveryAttempt"> & {
+  /**
+   * @inject_tag: gorm:"primaryKey;column:attempt_id;not null"
+   *
+   * @generated from field: string attempt_id = 1;
+   */
+  attemptId: string;
+
+  /**
+   * @inject_tag: gorm:"column:subscription_id;not null"
+   *
+   * @generated from field: string subscription_id = 2;
+   */
+  subscriptionId: string;
+
+  /**
+   * @inject_tag: gorm:"column:notification_id"
+   *
+   * @generated from field: string notification_id = 3;
+   */
+  notificationId: string;
+
+  /**
+   * @inject_tag: gorm:"column:lifecycle_event;not null"
+   *
+   * @generated from field: string lifecycle_event = 4;
+   */
+  lifecycleEvent: string;
+
+  /**
+   * @inject_tag: gorm:"column:source_topic"
+   *
+   * @generated from field: string source_topic = 5;
+   */
+  sourceTopic: string;
+
+  /**
+   * @inject_tag: gorm:"column:payload;not null"
+   *
+   * @generated from field: string payload = 6;
+   */
+  payload: string;
+
+  /**
+   * @inject_tag: gorm:"column:status;not null"
+   *
+   * @generated from field: string status = 7;
+   */
+  status: string;
+
+  /**
+   * @inject_tag: gorm:"column:response_status"
+   *
+   * @generated from field: int32 response_status = 8;
+   */
+  responseStatus: number;
+
+  /**
+   * @inject_tag: gorm:"column:response_body"
+   *
+   * @generated from field: string response_body = 9;
+   */
+  responseBody: string;
+
+  /**
+   * @inject_tag: gorm:"column:retry_count;not null"
+   *
+   * @generated from field: int32 retry_count = 10;
+   */
+  retryCount: number;
+
+  /**
+   * @inject_tag: gorm:"column:error_message"
+   *
+   * @generated from field: string error_message = 11;
+   */
+  errorMessage: string;
+
+  /**
+   * @inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp scheduled_at = 12;
+   */
+  scheduledAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:last_attempted_at;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp last_attempted_at = 13;
+   */
+  lastAttemptedAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp created_at = 14;
+   */
+  createdAt?: Timestamp;
+
+  /**
+   * @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+   *
+   * @generated from field: google.protobuf.Timestamp updated_at = 15;
+   */
+  updatedAt?: Timestamp;
+};
+
+/**
+ * Describes the message insuretech.notification.entity.v1.WebhookDeliveryAttempt.
+ * Use `create(WebhookDeliveryAttemptSchema)` to create a new message.
+ */
+export const WebhookDeliveryAttemptSchema: GenMessage<WebhookDeliveryAttempt> = /*@__PURE__*/
+  messageDesc(file_insuretech_notification_entity_v1_notification, 4);
+
+/**
  * NotificationPreference for user preferences (stored in users table as JSONB or separate table)
  *
  * @generated from message insuretech.notification.entity.v1.NotificationPreference
@@ -265,7 +580,7 @@ export type NotificationPreference = Message<"insuretech.notification.entity.v1.
  * Use `create(NotificationPreferenceSchema)` to create a new message.
  */
 export const NotificationPreferenceSchema: GenMessage<NotificationPreference> = /*@__PURE__*/
-  messageDesc(file_insuretech_notification_entity_v1_notification, 2);
+  messageDesc(file_insuretech_notification_entity_v1_notification, 5);
 
 /**
  * @generated from message insuretech.notification.entity.v1.ChannelPreference
@@ -294,7 +609,7 @@ export type ChannelPreference = Message<"insuretech.notification.entity.v1.Chann
  * Use `create(ChannelPreferenceSchema)` to create a new message.
  */
 export const ChannelPreferenceSchema: GenMessage<ChannelPreference> = /*@__PURE__*/
-  messageDesc(file_insuretech_notification_entity_v1_notification, 3);
+  messageDesc(file_insuretech_notification_entity_v1_notification, 6);
 
 /**
  * @generated from enum insuretech.notification.entity.v1.NotificationType

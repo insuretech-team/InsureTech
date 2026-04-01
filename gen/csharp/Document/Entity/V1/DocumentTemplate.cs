@@ -57,16 +57,17 @@ namespace Insuretech.Document.Entity.V1 {
             "RE9DVU1FTlRfVFlQRV9FTkRPUlNFTUVOVF9OT1RJQ0UQBBIgChxET0NVTUVO",
             "VF9UWVBFX1JFTkVXQUxfTk9USUNFEAUSJQohRE9DVU1FTlRfVFlQRV9DQU5D",
             "RUxMQVRJT05fTk9USUNFEAYSGQoVRE9DVU1FTlRfVFlQRV9SRUNFSVBUEAcS",
-            "GQoVRE9DVU1FTlRfVFlQRV9JTlZPSUNFEAgqdAoMT3V0cHV0Rm9ybWF0Eh0K",
-            "GU9VVFBVVF9GT1JNQVRfVU5TUEVDSUZJRUQQABIVChFPVVRQVVRfRk9STUFU",
-            "X1BERhABEhYKEk9VVFBVVF9GT1JNQVRfSFRNTBACEhYKEk9VVFBVVF9GT1JN",
-            "QVRfRE9DWBADQqMCCiFjb20uaW5zdXJldGVjaC5kb2N1bWVudC5lbnRpdHku",
-            "djFCFURvY3VtZW50VGVtcGxhdGVQcm90b1ABWlBnaXRodWIuY29tL25ld2Fn",
-            "ZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL2RvY3VtZW50",
-            "L2VudGl0eS92MTtlbnRpdHl2MaICA0lERaoCHUluc3VyZXRlY2guRG9jdW1l",
-            "bnQuRW50aXR5LlYxygIdSW5zdXJldGVjaFxEb2N1bWVudFxFbnRpdHlcVjHi",
-            "AilJbnN1cmV0ZWNoXERvY3VtZW50XEVudGl0eVxWMVxHUEJNZXRhZGF0YeoC",
-            "IEluc3VyZXRlY2g6OkRvY3VtZW50OjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "GQoVRE9DVU1FTlRfVFlQRV9JTlZPSUNFEAgqjAEKDE91dHB1dEZvcm1hdBId",
+            "ChlPVVRQVVRfRk9STUFUX1VOU1BFQ0lGSUVEEAASFQoRT1VUUFVUX0ZPUk1B",
+            "VF9QREYQARIWChJPVVRQVVRfRk9STUFUX0hUTUwQAhIWChJPVVRQVVRfRk9S",
+            "TUFUX0RPQ1gQAxIWChJPVVRQVVRfRk9STUFUX1hMU1gQBEKjAgohY29tLmlu",
+            "c3VyZXRlY2guZG9jdW1lbnQuZW50aXR5LnYxQhVEb2N1bWVudFRlbXBsYXRl",
+            "UHJvdG9QAVpQZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9n",
+            "ZW4vZ28vaW5zdXJldGVjaC9kb2N1bWVudC9lbnRpdHkvdjE7ZW50aXR5djGi",
+            "AgNJREWqAh1JbnN1cmV0ZWNoLkRvY3VtZW50LkVudGl0eS5WMcoCHUluc3Vy",
+            "ZXRlY2hcRG9jdW1lbnRcRW50aXR5XFYx4gIpSW5zdXJldGVjaFxEb2N1bWVu",
+            "dFxFbnRpdHlcVjFcR1BCTWV0YWRhdGHqAiBJbnN1cmV0ZWNoOjpEb2N1bWVu",
+            "dDo6RW50aXR5OjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Document.Entity.V1.DocumentType), typeof(global::Insuretech.Document.Entity.V1.OutputFormat), }, null, new pbr::GeneratedClrTypeInfo[] {
@@ -94,6 +95,7 @@ namespace Insuretech.Document.Entity.V1 {
     [pbr::OriginalName("OUTPUT_FORMAT_PDF")] Pdf = 1,
     [pbr::OriginalName("OUTPUT_FORMAT_HTML")] Html = 2,
     [pbr::OriginalName("OUTPUT_FORMAT_DOCX")] Docx = 3,
+    [pbr::OriginalName("OUTPUT_FORMAT_XLSX")] Xlsx = 4,
   }
 
   #endregion

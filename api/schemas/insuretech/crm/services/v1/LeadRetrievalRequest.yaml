@@ -1,0 +1,7 @@
+LeadRetrievalRequest:
+  type: object
+  properties:
+    lead_id:
+      type: string
+  description: Request payload for retrieving lead retrieval information. May include
+    filters and pagination parameters.

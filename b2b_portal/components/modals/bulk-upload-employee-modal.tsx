@@ -46,6 +46,7 @@ import {
   DialogTitle,
 } from "@/components/ui/dialog";
 import { Button } from "@/components/ui/button";
+import { BD_MOBILE_EXAMPLES } from "@lib/utils/bd-mobile";
 
 // ─── Constants ─────────────────────────────────────────────────────────────────
 
@@ -242,7 +243,7 @@ export default function BulkUploadEmployeeModal({
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">employee_id</td><td className="px-2 py-1.5 text-green-700 font-medium">Yes</td><td className="px-2 py-1.5 text-muted-foreground">Unique employee ID (e.g. EMP001)</td></tr>
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">department_name</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">Plain text name (e.g. Engineering) — matched or created automatically</td></tr>
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">email</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">Work email address</td></tr>
-                  <tr><td className="px-2 py-1.5 font-mono text-primary/80">mobile_number</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">e.g. +8801712345678</td></tr>
+                  <tr><td className="px-2 py-1.5 font-mono text-primary/80">mobile_number</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">Accepts {BD_MOBILE_EXAMPLES} and stores as +8801XXXXXXXXX</td></tr>
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">date_of_birth</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">DD/MM/YYYY or YYYY-MM-DD</td></tr>
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">date_of_joining</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">DD/MM/YYYY or YYYY-MM-DD (defaults to today)</td></tr>
                   <tr><td className="px-2 py-1.5 font-mono text-primary/80">gender</td><td className="px-2 py-1.5 text-muted-foreground">No</td><td className="px-2 py-1.5 text-muted-foreground">MALE / FEMALE / OTHER</td></tr>

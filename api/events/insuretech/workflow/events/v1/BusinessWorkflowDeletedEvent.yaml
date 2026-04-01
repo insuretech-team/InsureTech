@@ -1,0 +1,18 @@
+BusinessWorkflowDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    business_workflow_id:
+      type: string
+    workflow_name:
+      type: string
+    permanent:
+      type: boolean
+    deleted_by:
+      type: string
+    deleted_at:
+      type: string
+      format: date-time
+  description: BusinessWorkflowDeletedEvent is emitted when a business workflow is
+    deleted

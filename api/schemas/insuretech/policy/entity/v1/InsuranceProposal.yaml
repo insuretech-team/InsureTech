@@ -1,0 +1,117 @@
+InsuranceProposal:
+  type: object
+  properties:
+    proposal_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:proposal_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    proposal_number:
+      type: string
+      description: '@inject_tag: gorm:"column:proposal_number;not null;uniqueIndex"'
+      x-unique: true
+    tenant_id:
+      type: string
+      description: '@inject_tag: gorm:"column:tenant_id;not null"'
+    order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:order_id;not null;uniqueIndex"'
+      x-unique: true
+    quotation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:quotation_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    insurer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_id;not null"'
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    plan_id:
+      type: string
+      description: '@inject_tag: gorm:"column:plan_id;not null"'
+    proposed_premium:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:proposed_premium;not null"'
+    proposed_sum_insured:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:proposed_sum_insured;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ProposalStatus'
+      x-database-default: PROPOSAL_STATUS_SUBMITTED
+    submission_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:submission_payload"'
+    insurer_response_payload:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_response_payload"'
+    decision_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:decision_reason"'
+    submitted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:submitted_at;not null;serializer:proto_timestamp"'
+    reviewed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:reviewed_at;serializer:proto_timestamp"'
+    reviewed_by_user_id:
+      type: string
+      description: '@inject_tag: gorm:"column:reviewed_by_user_id"'
+    approved_policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:approved_policy_id"'
+    refund_id:
+      type: string
+      description: '@inject_tag: gorm:"column:refund_id"'
+    correlation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:correlation_id"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+    proposed_premium_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:proposed_premium_currency;not null"'
+      default: BDT
+    proposed_sum_insured_currency:
+      type: string
+      description: '@inject_tag: gorm:"column:proposed_sum_insured_currency;not null"'
+      default: BDT
+  description: "InsuranceProposal represents the insurer-decision step between payment\
+    \ confirmation\n and policy issuance. A paid order must submit a proposal to the\
+    \ target insurer.\n If the insurer approves, the order can be fulfilled into a\
+    \ policy. If rejected,\n a refund must be initiated against the paid order."
+  required:
+  - proposal_id
+  - proposal_number
+  - tenant_id
+  - order_id
+  - quotation_id
+  - customer_id
+  - insurer_id
+  - product_id
+  - plan_id
+  - proposed_premium
+  - proposed_sum_insured
+  - status
+  - submitted_at
+  - created_at
+  - updated_at
+  - proposed_premium_currency
+  - proposed_sum_insured_currency

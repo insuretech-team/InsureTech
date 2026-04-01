@@ -28,7 +28,7 @@ Agent:
       x-requires-consent: true
       x-data-purpose: Agent contact information
     status:
-      $ref: '#/components/schemas/PartnerAgentStatus'
+      $ref: '#/components/schemas/InsuranceAgentStatus'
       description: '@inject_tag: gorm:"column:status;not null;serializer:proto_enum"'
     commission_rate:
       type: number

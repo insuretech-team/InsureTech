@@ -3,15 +3,16 @@ package repository
 import (
 	"context"
 	"database/sql"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
 
-	"gorm.io/gorm"
-	"google.golang.org/protobuf/types/known/timestamppb"
-
-	policyv1 "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
+	policyv1 "github.com/newage-saint/insuretech/gen/go/insuretech/policy/entity/v1"
+	"google.golang.org/protobuf/encoding/protojson"
+	"google.golang.org/protobuf/types/known/timestamppb"
+	"gorm.io/gorm"
 )
 
 type QuotationRepository struct {
@@ -22,24 +23,56 @@ func NewQuotationRepository(db *gorm.DB) *QuotationRepository {
 	return &QuotationRepository{db: db}
 }
 
+var quotationProtoJSONMarshaler = protojson.MarshalOptions{UseProtoNames: true, EmitUnpopulated: false}
+var quotationProtoJSONUnmarshaler = protojson.UnmarshalOptions{DiscardUnknown: true}
+// nullUUID converts an empty string to sql.NullString{Valid:false} so Postgres
+// stores NULL instead of an empty string in uuid columns.
+func nullUUID(s string) sql.NullString {
+	if s == "" {
+		return sql.NullString{Valid: false}
+	}
+	return sql.NullString{String: s, Valid: true}
+}
+
+func scanQuotationMoney(raw sql.NullString) *commonv1.Money {
+	if !raw.Valid || strings.TrimSpace(raw.String) == "" || raw.String == "null" {
+		return nil
+	}
+
+	var money commonv1.Money
+	if err := quotationProtoJSONUnmarshaler.Unmarshal([]byte(raw.String), &money); err != nil {
+		_ = json.Unmarshal([]byte(raw.String), &money)
+	}
+
+	return &money
+}
+
+func marshalQuotationMoney(m *commonv1.Money) (string, error) {
+	if m == nil {
+		return "null", nil
+	}
+
+	b, err := quotationProtoJSONMarshaler.Marshal(m)
+	if err != nil {
+		return "", err
+	}
+
+	return string(b), nil
+}
+
 func (r *QuotationRepository) Create(ctx context.Context, quotation *policyv1.Quotation) (*policyv1.Quotation, error) {
 	if quotation.QuotationId == "" {
 		return nil, fmt.Errorf("quotation_id is required")
 	}
 
-	// Handle Money types
-	estimatedPremium := int64(0)
-	estimatedPremiumCurrency := "BDT"
-	if quotation.EstimatedPremium != nil {
-		estimatedPremium = quotation.EstimatedPremium.Amount
-		estimatedPremiumCurrency = quotation.EstimatedPremium.Currency
+	estimatedPremiumJSON, err := marshalQuotationMoney(quotation.EstimatedPremium)
+	if err != nil {
+		return nil, fmt.Errorf("marshal estimated_premium: %w", err)
 	}
 
-	quotedAmount := int64(0)
-	quotedAmountCurrency := "BDT"
-	if quotation.QuotedAmount != nil {
-		quotedAmount = quotation.QuotedAmount.Amount
-		quotedAmountCurrency = quotation.QuotedAmount.Currency
+	quotedAmountJSON, err := marshalQuotationMoney(quotation.QuotedAmount)
+	if err != nil {
+		return nil, fmt.Errorf("marshal quoted_amount: %w", err)
 	}
 
 	var submissionDate, validUntil, approvedAt sql.NullTime
@@ -53,35 +86,39 @@ func (r *QuotationRepository) Create(ctx context.Context, quotation *policyv1.Qu
 		approvedAt = sql.NullTime{Time: quotation.ApprovedAt.AsTime(), Valid: true}
 	}
 
-	err := r.db.WithContext(ctx).Exec(`
+	// Use the proto enum string as-is (DB stores full proto enum names like "INSURANCE_TYPE_LIFE")
+	// Default to INSURANCE_TYPE_LIFE for B2C quotations when unspecified
+	categoryStr := strings.ToUpper(quotation.InsuranceCategory.String())
+	if categoryStr == "" || strings.HasSuffix(categoryStr, "_UNSPECIFIED") {
+		categoryStr = "INSURANCE_TYPE_LIFE" // Default for B2C quotations
+	}
+
+	err = r.db.WithContext(ctx).Exec(`
 		INSERT INTO insurance_schema.quotations
 			(quotation_id, business_id, insurer_name, plan_id, insurance_category, department_id,
-			 employee_no, estimated_premium, estimated_premium_currency, quoted_amount, quoted_amount_currency,
+			 employee_no, estimated_premium, quoted_amount,
 			 status, submission_date, valid_until, quotation_number, plan_name,
 			 created_by_user_id, approved_by_user_id, approved_at, rejection_reason)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, $20)`,
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8::jsonb, $9::jsonb, $10, $11, $12, $13, $14, $15, $16, $17, $18)`,
 		quotation.QuotationId,
-		quotation.BusinessId,
+		nullUUID(quotation.BusinessId),
 		quotation.InsurerName,
-		quotation.PlanId,
-		strings.ToUpper(quotation.InsuranceCategory.String()),
-		quotation.DepartmentId,
+		nullUUID(quotation.PlanId),
+		categoryStr,
+		nullUUID(quotation.DepartmentId),
 		quotation.EmployeeNo,
-		estimatedPremium,
-		estimatedPremiumCurrency,
-		quotedAmount,
-		quotedAmountCurrency,
+		estimatedPremiumJSON,
+		quotedAmountJSON,
 		strings.ToUpper(quotation.Status.String()),
 		submissionDate,
 		validUntil,
 		quotation.QuotationNumber,
 		quotation.PlanName,
-		quotation.CreatedByUserId,
-		quotation.ApprovedByUserId,
+		nullUUID(quotation.CreatedByUserId),
+		nullUUID(quotation.ApprovedByUserId),
 		approvedAt,
 		quotation.RejectionReason,
 	).Error
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to insert quotation: %w", err)
 	}
@@ -91,33 +128,32 @@ func (r *QuotationRepository) Create(ctx context.Context, quotation *policyv1.Qu
 
 func (r *QuotationRepository) GetByID(ctx context.Context, quotationID string) (*policyv1.Quotation, error) {
 	var (
-		quot                      policyv1.Quotation
-		insuranceCategoryStr      sql.NullString
-		statusStr                 sql.NullString
-		businessID                sql.NullString
-		insurerName               sql.NullString
-		planID                    sql.NullString
-		departmentID              sql.NullString
-		estimatedPremium          int64
-		estimatedPremiumCurrency  string
-		quotedAmount              int64
-		quotedAmountCurrency      string
-		submissionDate            sql.NullTime
-		validUntil                sql.NullTime
-		quotationNumber           sql.NullString
-		planName                  sql.NullString
-		createdByUserID           sql.NullString
-		approvedByUserID          sql.NullString
-		approvedAt                sql.NullTime
-		rejectionReason           sql.NullString
-		createdAt                 time.Time
-		updatedAt                 time.Time
-		deletedAt                 sql.NullTime
+		quot                 policyv1.Quotation
+		insuranceCategoryStr sql.NullString
+		statusStr            sql.NullString
+		businessID           sql.NullString
+		insurerName          sql.NullString
+		planID               sql.NullString
+		departmentID         sql.NullString
+		estimatedPremiumJSON sql.NullString
+		quotedAmountJSON     sql.NullString
+		submissionDate       sql.NullTime
+		validUntil           sql.NullTime
+		quotationNumber      sql.NullString
+		planName             sql.NullString
+		createdByUserID      sql.NullString
+		approvedByUserID     sql.NullString
+		approvedAt           sql.NullTime
+		rejectionReason      sql.NullString
+		createdAt            time.Time
+		updatedAt            time.Time
+		deletedAt            sql.NullTime
 	)
 
 	err := r.db.WithContext(ctx).Raw(`
 		SELECT quotation_id, business_id, insurer_name, plan_id, insurance_category, department_id,
-		       employee_no, estimated_premium, estimated_premium_currency, quoted_amount, quoted_amount_currency,
+		       employee_no, COALESCE(estimated_premium::text, 'null') AS estimated_premium,
+		       COALESCE(quoted_amount::text, 'null') AS quoted_amount,
 		       status, submission_date, valid_until, quotation_number, plan_name,
 		       created_by_user_id, approved_by_user_id, approved_at, rejection_reason,
 		       created_at, updated_at, deleted_at
@@ -132,10 +168,8 @@ func (r *QuotationRepository) GetByID(ctx context.Context, quotationID string) (
 		&insuranceCategoryStr,
 		&departmentID,
 		&quot.EmployeeNo,
-		&estimatedPremium,
-		&estimatedPremiumCurrency,
-		&quotedAmount,
-		&quotedAmountCurrency,
+		&estimatedPremiumJSON,
+		&quotedAmountJSON,
 		&statusStr,
 		&submissionDate,
 		&validUntil,
@@ -149,7 +183,6 @@ func (r *QuotationRepository) GetByID(ctx context.Context, quotationID string) (
 		&updatedAt,
 		&deletedAt,
 	)
-
 	if err != nil {
 		if err == sql.ErrNoRows {
 			return nil, gorm.ErrRecordNotFound
@@ -199,15 +232,8 @@ func (r *QuotationRepository) GetByID(ctx context.Context, quotationID string) (
 		}
 	}
 
-	quot.EstimatedPremium = &commonv1.Money{
-		Amount:   estimatedPremium,
-		Currency: estimatedPremiumCurrency,
-	}
-
-	quot.QuotedAmount = &commonv1.Money{
-		Amount:   quotedAmount,
-		Currency: quotedAmountCurrency,
-	}
+	quot.EstimatedPremium = scanQuotationMoney(estimatedPremiumJSON)
+	quot.QuotedAmount = scanQuotationMoney(quotedAmountJSON)
 
 	if submissionDate.Valid {
 		quot.SubmissionDate = timestamppb.New(submissionDate.Time)
@@ -226,18 +252,14 @@ func (r *QuotationRepository) GetByID(ctx context.Context, quotationID string) (
 }
 
 func (r *QuotationRepository) Update(ctx context.Context, quotation *policyv1.Quotation) (*policyv1.Quotation, error) {
-	estimatedPremium := int64(0)
-	estimatedPremiumCurrency := "BDT"
-	if quotation.EstimatedPremium != nil {
-		estimatedPremium = quotation.EstimatedPremium.Amount
-		estimatedPremiumCurrency = quotation.EstimatedPremium.Currency
+	estimatedPremiumJSON, err := marshalQuotationMoney(quotation.EstimatedPremium)
+	if err != nil {
+		return nil, fmt.Errorf("marshal estimated_premium: %w", err)
 	}
 
-	quotedAmount := int64(0)
-	quotedAmountCurrency := "BDT"
-	if quotation.QuotedAmount != nil {
-		quotedAmount = quotation.QuotedAmount.Amount
-		quotedAmountCurrency = quotation.QuotedAmount.Currency
+	quotedAmountJSON, err := marshalQuotationMoney(quotation.QuotedAmount)
+	if err != nil {
+		return nil, fmt.Errorf("marshal quoted_amount: %w", err)
 	}
 
 	var submissionDate, validUntil, approvedAt sql.NullTime
@@ -251,7 +273,7 @@ func (r *QuotationRepository) Update(ctx context.Context, quotation *policyv1.Qu
 		approvedAt = sql.NullTime{Time: quotation.ApprovedAt.AsTime(), Valid: true}
 	}
 
-	err := r.db.WithContext(ctx).Exec(`
+	err = r.db.WithContext(ctx).Exec(`
 		UPDATE insurance_schema.quotations
 		SET business_id = $2,
 		    insurer_name = $3,
@@ -259,43 +281,38 @@ func (r *QuotationRepository) Update(ctx context.Context, quotation *policyv1.Qu
 		    insurance_category = $5,
 		    department_id = $6,
 		    employee_no = $7,
-		    estimated_premium = $8,
-		    estimated_premium_currency = $9,
-		    quoted_amount = $10,
-		    quoted_amount_currency = $11,
-		    status = $12,
-		    submission_date = $13,
-		    valid_until = $14,
-		    quotation_number = $15,
-		    plan_name = $16,
-		    created_by_user_id = $17,
-		    approved_by_user_id = $18,
-		    approved_at = $19,
-		    rejection_reason = $20,
+		    estimated_premium = $8::jsonb,
+		    quoted_amount = $9::jsonb,
+		    status = $10,
+		    submission_date = $11,
+		    valid_until = $12,
+		    quotation_number = $13,
+		    plan_name = $14,
+		    created_by_user_id = $15,
+		    approved_by_user_id = $16,
+		    approved_at = $17,
+		    rejection_reason = $18,
 		    updated_at = NOW()
 		WHERE quotation_id = $1 AND deleted_at IS NULL`,
 		quotation.QuotationId,
-		quotation.BusinessId,
+		nullUUID(quotation.BusinessId),
 		quotation.InsurerName,
-		quotation.PlanId,
+		nullUUID(quotation.PlanId),
 		strings.ToUpper(quotation.InsuranceCategory.String()),
-		quotation.DepartmentId,
+		nullUUID(quotation.DepartmentId),
 		quotation.EmployeeNo,
-		estimatedPremium,
-		estimatedPremiumCurrency,
-		quotedAmount,
-		quotedAmountCurrency,
+		estimatedPremiumJSON,
+		quotedAmountJSON,
 		strings.ToUpper(quotation.Status.String()),
 		submissionDate,
 		validUntil,
 		quotation.QuotationNumber,
 		quotation.PlanName,
-		quotation.CreatedByUserId,
-		quotation.ApprovedByUserId,
+		nullUUID(quotation.CreatedByUserId),
+		nullUUID(quotation.ApprovedByUserId),
 		approvedAt,
 		quotation.RejectionReason,
 	).Error
-
 	if err != nil {
 		return nil, fmt.Errorf("failed to update quotation: %w", err)
 	}
@@ -310,7 +327,6 @@ func (r *QuotationRepository) Delete(ctx context.Context, quotationID string) er
 		WHERE quotation_id = $1 AND deleted_at IS NULL`,
 		quotationID,
 	).Error
-
 	if err != nil {
 		return fmt.Errorf("failed to delete quotation: %w", err)
 	}
@@ -328,7 +344,6 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 
 	offset := (page - 1) * pageSize
 
-	// Get total count
 	var total int64
 	countQuery := `SELECT COUNT(*) FROM insurance_schema.quotations WHERE deleted_at IS NULL`
 	if businessID != "" {
@@ -344,16 +359,15 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 		}
 	}
 
-	// Get quotations
 	query := `
 		SELECT quotation_id, business_id, insurer_name, plan_id, insurance_category, department_id,
-		       employee_no, estimated_premium, estimated_premium_currency, quoted_amount, quoted_amount_currency,
+		       employee_no, COALESCE(estimated_premium::text, 'null') AS estimated_premium,
+		       COALESCE(quoted_amount::text, 'null') AS quoted_amount,
 		       status, submission_date, valid_until, quotation_number, plan_name,
 		       created_by_user_id, approved_by_user_id, approved_at, rejection_reason,
 		       created_at, updated_at, deleted_at
 		FROM insurance_schema.quotations
 		WHERE deleted_at IS NULL`
-
 	if businessID != "" {
 		query += ` AND business_id = $1`
 		query += fmt.Sprintf(` ORDER BY created_at DESC LIMIT %d OFFSET %d`, pageSize, offset)
@@ -361,14 +375,15 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 		query += fmt.Sprintf(` ORDER BY created_at DESC LIMIT %d OFFSET %d`, pageSize, offset)
 	}
 
-	var rows *sql.Rows
-	var err error
+	var (
+		rows *sql.Rows
+		err  error
+	)
 	if businessID != "" {
 		rows, err = r.db.WithContext(ctx).Raw(query, businessID).Rows()
 	} else {
 		rows, err = r.db.WithContext(ctx).Raw(query).Rows()
 	}
-
 	if err != nil {
 		return nil, 0, fmt.Errorf("failed to list quotations: %w", err)
 	}
@@ -377,42 +392,38 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 	quotations := make([]*policyv1.Quotation, 0)
 	for rows.Next() {
 		var (
-			quot                     policyv1.Quotation
-			insuranceCategoryStr     sql.NullString
-			statusStr                sql.NullString
-			businessID               sql.NullString
-			insurerName              sql.NullString
-			planID                   sql.NullString
-			departmentID             sql.NullString
-			estimatedPremium         int64
-			estimatedPremiumCurrency string
-			quotedAmount             int64
-			quotedAmountCurrency     string
-			submissionDate           sql.NullTime
-			validUntil               sql.NullTime
-			quotationNumber          sql.NullString
-			planName                 sql.NullString
-			createdByUserID          sql.NullString
-			approvedByUserID         sql.NullString
-			approvedAt               sql.NullTime
-			rejectionReason          sql.NullString
-			createdAt                time.Time
-			updatedAt                time.Time
-			deletedAt                sql.NullTime
+			quot                 policyv1.Quotation
+			insuranceCategoryStr sql.NullString
+			statusStr            sql.NullString
+			rowBusinessID        sql.NullString
+			insurerName          sql.NullString
+			planID               sql.NullString
+			departmentID         sql.NullString
+			estimatedPremiumJSON sql.NullString
+			quotedAmountJSON     sql.NullString
+			submissionDate       sql.NullTime
+			validUntil           sql.NullTime
+			quotationNumber      sql.NullString
+			planName             sql.NullString
+			createdByUserID      sql.NullString
+			approvedByUserID     sql.NullString
+			approvedAt           sql.NullTime
+			rejectionReason      sql.NullString
+			createdAt            time.Time
+			updatedAt            time.Time
+			deletedAt            sql.NullTime
 		)
 
 		err := rows.Scan(
 			&quot.QuotationId,
-			&businessID,
+			&rowBusinessID,
 			&insurerName,
 			&planID,
 			&insuranceCategoryStr,
 			&departmentID,
 			&quot.EmployeeNo,
-			&estimatedPremium,
-			&estimatedPremiumCurrency,
-			&quotedAmount,
-			&quotedAmountCurrency,
+			&estimatedPremiumJSON,
+			&quotedAmountJSON,
 			&statusStr,
 			&submissionDate,
 			&validUntil,
@@ -426,13 +437,12 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 			&updatedAt,
 			&deletedAt,
 		)
-
 		if err != nil {
 			return nil, 0, fmt.Errorf("failed to scan quotation: %w", err)
 		}
 
-		if businessID.Valid {
-			quot.BusinessId = businessID.String
+		if rowBusinessID.Valid {
+			quot.BusinessId = rowBusinessID.String
 		}
 		if insurerName.Valid {
 			quot.InsurerName = insurerName.String
@@ -473,15 +483,8 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 			}
 		}
 
-		quot.EstimatedPremium = &commonv1.Money{
-			Amount:   estimatedPremium,
-			Currency: estimatedPremiumCurrency,
-		}
-
-		quot.QuotedAmount = &commonv1.Money{
-			Amount:   quotedAmount,
-			Currency: quotedAmountCurrency,
-		}
+		quot.EstimatedPremium = scanQuotationMoney(estimatedPremiumJSON)
+		quot.QuotedAmount = scanQuotationMoney(quotedAmountJSON)
 
 		if submissionDate.Valid {
 			quot.SubmissionDate = timestamppb.New(submissionDate.Time)
@@ -501,3 +504,5 @@ func (r *QuotationRepository) List(ctx context.Context, businessID string, page,
 
 	return quotations, total, nil
 }
+
+

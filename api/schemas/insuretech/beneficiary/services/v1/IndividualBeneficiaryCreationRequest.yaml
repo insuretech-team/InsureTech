@@ -13,6 +13,7 @@ BeneficiaryIndividualBeneficiaryCreationRequest:
       type: string
     mobile_number:
       type: string
+      description: Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
     email:
       type: string
     partner_id:

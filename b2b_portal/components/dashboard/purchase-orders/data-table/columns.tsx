@@ -5,7 +5,7 @@ import { ColumnDef } from "@tanstack/react-table";
 import { LuEye, LuTrash2, LuLoader, LuX } from "react-icons/lu";
 import { SortHeader } from "@/components/ui/sort-header";
 import { StatusBadge } from "@/components/ui/status-badge";
-import { purchaseOrderClient } from "@lib/sdk/purchase-order-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 
 export type PurchaseOrder = {
   id: string;
@@ -76,7 +76,7 @@ function POActionsCell({ po, onRefresh }: { po: PurchaseOrder; onRefresh?: () =>
     if (!confirm(`Delete purchase order "${po.purchaseOrderNumber}"?\nThis cannot be undone.`)) return;
     setDeleting(true);
     try {
-      const result = await purchaseOrderClient.delete(po.id);
+      const result = await bffClient.purchaseOrders.delete(po.id);
       if (!result.ok) {
         alert(result.message ?? "Failed to delete purchase order");
         return;

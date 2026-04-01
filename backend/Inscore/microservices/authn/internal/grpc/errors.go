@@ -31,7 +31,10 @@ func toGRPCError(err error) error {
 		return status.Error(codes.NotFound, msg)
 
 	// ── AlreadyExists ───────────────────────────────────────────────────────
-	case contains(lower, "already exists", "duplicate", "already registered", "already verified"):
+	case contains(lower,
+		"already exists", "duplicate", "already registered", "already verified",
+		"already enabled",
+	):
 		return status.Error(codes.AlreadyExists, msg)
 
 	// ── Unauthenticated ─────────────────────────────────────────────────────
@@ -43,11 +46,18 @@ func toGRPCError(err error) error {
 		"invalid api key", "api key not found", "api key revoked",
 		"biometric token mismatch", "biometric not enrolled",
 		"unauthorized",
+		"no valid token", "mismatch", "reuse attack",
+		"is not a refresh token",
+		"session inactive", "session revoked",
+		"mfa session token",
 	):
 		return status.Error(codes.Unauthenticated, msg)
 
 	// ── PermissionDenied ────────────────────────────────────────────────────
-	case contains(lower, "forbidden", "permission denied", "not allowed", "access denied"):
+	case contains(lower,
+		"forbidden", "permission denied", "not allowed", "access denied",
+		"does not belong",
+	):
 		return status.Error(codes.PermissionDenied, msg)
 
 	// ── ResourceExhausted (rate limiting) ───────────────────────────────────
@@ -56,9 +66,10 @@ func toGRPCError(err error) error {
 
 	// ── InvalidArgument ─────────────────────────────────────────────────────
 	case contains(lower,
-		"invalid", "required", "must be", "malformed",
+		"invalid", "required", "must be", "malformed", "unsupported",
 		"password too short", "weak password", "invalid email",
 		"invalid phone", "invalid mobile",
+		"no updatable fields",
 	):
 		return status.Error(codes.InvalidArgument, msg)
 
@@ -66,11 +77,17 @@ func toGRPCError(err error) error {
 	case contains(lower,
 		"not verified", "email not verified", "phone not verified",
 		"account disabled", "account locked", "account suspended",
+		"account is locked", "account is not active",
+		"not enabled", "not available", "not configured",
+		"is not enabled",
 	):
 		return status.Error(codes.FailedPrecondition, msg)
 
 	// ── Unavailable (downstream/SMS/email failures) ──────────────────────────
-	case contains(lower, "sms failed", "email failed", "provider error", "send failed"):
+	case contains(lower,
+		"sms failed", "email failed", "provider error", "send failed",
+		"failed to send sms", "failed to send email",
+	):
 		return status.Error(codes.Unavailable, msg)
 
 	// ── Default: Internal ───────────────────────────────────────────────────

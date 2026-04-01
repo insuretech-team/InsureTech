@@ -12,11 +12,11 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/payment/internal/domain"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/payment/internal/events"
 	paymentrepo "github.com/newage-saint/insuretech/backend/inscore/microservices/payment/internal/repository"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	paymententityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/entity/v1"
 	paymenteventsv1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/events/v1"
 	paymentservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/services/v1"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -513,7 +513,7 @@ func (s *PaymentService) GetRefundStatus(ctx context.Context, req *paymentservic
 }
 
 func (s *PaymentService) ListPaymentMethods(context.Context, *paymentservicev1.ListPaymentMethodsRequest) (*paymentservicev1.ListPaymentMethodsResponse, error) {
-	methods := []*paymentservicev1.PaymentMethod{
+	methods := []*paymentservicev1.PaymentMethodDetails{
 		{
 			MethodId:    "bank_transfer_b2b",
 			MethodType:  "BANK_TRANSFER",
@@ -939,16 +939,7 @@ func resolveUserID(ctx context.Context, fallback string) string {
 	if strings.TrimSpace(fallback) != "" {
 		return strings.TrimSpace(fallback)
 	}
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	// Only read from the authoritative gateway-set header — x-user-id.
-	// x-customer-id and x-subject are NOT set by the gateway and must not be used.
-	if values := md.Get("x-user-id"); len(values) > 0 && strings.TrimSpace(values[0]) != "" {
-		return strings.TrimSpace(values[0])
-	}
-	return ""
+	return grpcmeta.FirstFromContext(ctx, "x-user-id")
 }
 
 // paymentRequestContext is a lightweight caller-identity snapshot read from gRPC metadata.
@@ -965,27 +956,13 @@ type paymentRequestContext struct {
 // extractPaymentContext reads the gateway-set metadata headers from ctx.
 // Returns zero-value struct if metadata is absent (e.g. webhook callbacks, unit tests).
 func extractPaymentContext(ctx context.Context) paymentRequestContext {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return paymentRequestContext{}
-	}
-	first := func(key string) string {
-		for _, v := range md.Get(key) {
-			if v = strings.TrimSpace(v); v != "" {
-				return v
-			}
-		}
-		return ""
-	}
-	rawPortal := first("x-portal")
-	portal := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(rawPortal), "PORTAL_"))
 	return paymentRequestContext{
-		userID:    first("x-user-id"),
-		tenantID:  first("x-tenant-id"),
-		orgID:     first("x-business-id"),
-		portal:    portal,
-		sessionID: first("x-session-id"),
-		tokenID:   first("x-token-id"),
+		userID:    grpcmeta.FirstFromContext(ctx, "x-user-id"),
+		tenantID:  grpcmeta.FirstFromContext(ctx, "x-tenant-id"),
+		orgID:     grpcmeta.FirstFromContext(ctx, "x-business-id"),
+		portal:    grpcmeta.NormalizePortal(grpcmeta.FirstFromContext(ctx, "x-portal")),
+		sessionID: grpcmeta.FirstFromContext(ctx, "x-session-id"),
+		tokenID:   grpcmeta.FirstFromContext(ctx, "x-token-id"),
 	}
 }
 
@@ -1340,4 +1317,3 @@ func (s *PaymentService) publishReceiptGenerated(ctx context.Context, payment *p
 }
 
 // ─── Phase 2 RPC implementations ─────────────────────────────────────────────
-

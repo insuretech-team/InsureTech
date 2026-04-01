@@ -1,0 +1,97 @@
+Contact:
+  type: object
+  properties:
+    contact_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:contact_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    first_name:
+      type: string
+      description: '@inject_tag: gorm:"column:first_name;not null"'
+    last_name:
+      type: string
+      description: '@inject_tag: gorm:"column:last_name;not null"'
+    date_of_birth:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:date_of_birth;serializer:proto_timestamp"'
+    gender:
+      type: string
+      description: '@inject_tag: gorm:"column:gender"'
+    phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:phone_number;not null"'
+    email_address:
+      type: string
+      description: '@inject_tag: gorm:"column:email_address;not null"'
+    address:
+      type: string
+      description: '@inject_tag: gorm:"column:address"'
+    alternate_phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:alternate_phone_number"'
+    additional_email_address:
+      type: string
+      description: '@inject_tag: gorm:"column:additional_email_address"'
+    preferred_contact_method:
+      allOf:
+      - $ref: '#/components/schemas/PreferredContactMethod'
+      x-database-default: EMAIL
+    referral_source:
+      type: string
+      description: '@inject_tag: gorm:"column:referral_source"'
+    preferred_language:
+      type: string
+      description: '@inject_tag: gorm:"column:preferred_language"'
+      default: English
+    marketing_consent:
+      type: boolean
+      description: '@inject_tag: gorm:"column:marketing_consent"'
+      default: false
+    assigned_agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_agent_id"'
+    contact_type:
+      allOf:
+      - $ref: '#/components/schemas/ContactType'
+      x-database-default: INDIVIDUAL
+    contact_status:
+      allOf:
+      - $ref: '#/components/schemas/ContactStatus'
+      x-database-default: ACTIVE
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_by:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Contact represents a customer/client\n Maps to 'contacts' table in\
+    \ crm_schema"
+  required:
+  - contact_id
+  - first_name
+  - last_name
+  - phone_number
+  - email_address
+  - contact_type
+  - contact_status
+  - created_by
+  - created_at
+  - updated_at

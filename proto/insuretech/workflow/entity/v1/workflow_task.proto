@@ -53,7 +53,7 @@ message WorkflowTask {
   }];
   // @inject_tag: gorm:"column:step_name;not null"
   
-  TaskType type = 4 [(insuretech.common.v1.column) = {
+  WorkflowTaskType type = 4 [(insuretech.common.v1.column) = {
     column_name: "type"
     sql_type: "VARCHAR(20)"
     not_null: true
@@ -76,7 +76,7 @@ message WorkflowTask {
   }];
   // @inject_tag: gorm:"column:assigned_to"
   
-  TaskStatus status = 6 [(insuretech.common.v1.column) = {
+  WorkflowTaskStatus status = 6 [(insuretech.common.v1.column) = {
     column_name: "status"
     sql_type: "VARCHAR(20)"
     not_null: true
@@ -123,22 +123,22 @@ message WorkflowTask {
       comment: "Audit trail stored as JSON"
     }
   ];
-  // @inject_tag: gorm:"column:audit_info;not null"
+  // @inject_tag: gorm:"-"
 }
 
-enum TaskType {
-  TASK_TYPE_UNSPECIFIED = 0;
-  TASK_TYPE_APPROVAL = 1;
-  TASK_TYPE_REVIEW = 2;
-  TASK_TYPE_NOTIFICATION = 3;
-  TASK_TYPE_ACTION = 4;
+enum WorkflowTaskType {
+  WORKFLOW_TASK_TYPE_UNSPECIFIED = 0;
+  WORKFLOW_TASK_TYPE_APPROVAL = 1;
+  WORKFLOW_TASK_TYPE_REVIEW = 2;
+  WORKFLOW_TASK_TYPE_NOTIFICATION = 3;
+  WORKFLOW_TASK_TYPE_ACTION = 4;
 }
 
-enum TaskStatus {
-  TASK_STATUS_UNSPECIFIED = 0;
-  TASK_STATUS_PENDING = 1;
-  TASK_STATUS_IN_PROGRESS = 2;
-  TASK_STATUS_COMPLETED = 3;
-  TASK_STATUS_SKIPPED = 4;
+enum WorkflowTaskStatus {
+  WORKFLOW_TASK_STATUS_UNSPECIFIED = 0;
+  WORKFLOW_TASK_STATUS_PENDING = 1;
+  WORKFLOW_TASK_STATUS_IN_PROGRESS = 2;
+  WORKFLOW_TASK_STATUS_COMPLETED = 3;
+  WORKFLOW_TASK_STATUS_SKIPPED = 4;
 }
 

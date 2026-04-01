@@ -1,0 +1,11 @@
+ProvisionEmployeeUserResponse:
+  type: object
+  properties:
+    user_id:
+      type: string
+    created:
+      type: boolean
+    password_change_required:
+      type: boolean
+  description: Response payload for provision employee user operation. Returns operation
+    results and status.

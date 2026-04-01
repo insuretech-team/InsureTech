@@ -250,14 +250,14 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">User represents a registered user in the system
+            <div class="description">User represents a registered user in the system
  Maps to 'users' table in public schema</div>
         </div>
         
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">33</div>
+                    <div class="stat-value">34</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -265,7 +265,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">33</div>
+                    <div class="stat-value">34</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -312,7 +312,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">@inject_tag: gorm:"column:mobile_number;not null"</td>
+                <td class="field-description">@inject_tag: gorm:"column:mobile_number"</td>
             </tr>
             
             <tr>
@@ -564,8 +564,9 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER use
- email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth
+                <td class="field-description">UserType determines auth method: BUSINESS_BENEFICIARY, B2B_BENEFICIARY,
+ and SYSTEM_USER use email auth (web portal). B2C_CUSTOMER and AGENT use
+ mobile/SMS auth.
  @inject_tag: gorm:"column:user_type;not null;serializer:proto_enum"</td>
             </tr>
             
@@ -636,7 +637,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">biometric_token_enc: AES-256-GCM encrypted biometric token (device-side public key / FIDO attestation)
+                <td class="field-description">biometric_token_enc: AES-256-GCM encrypted biometric token (device-side public key / FIDO attestation)
  @inject_tag: gorm:"column:biometric_token_enc"</td>
             </tr>
             
@@ -651,7 +652,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc equality lookup
+                <td class="field-description">biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc equality lookup
  @inject_tag: gorm:"column:biometric_token_idx"</td>
             </tr>
             
@@ -666,7 +667,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number equality lookup
+                <td class="field-description">mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number equality lookup
  @inject_tag: gorm:"column:mobile_number_idx"</td>
             </tr>
             
@@ -681,7 +682,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">email_idx: HMAC-SHA256 blind index for encrypted email equality lookup
+                <td class="field-description">email_idx: HMAC-SHA256 blind index for encrypted email equality lookup
  @inject_tag: gorm:"column:email_idx"</td>
             </tr>
             
@@ -711,6 +712,20 @@
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
                 <td class="field-description">@inject_tag: gorm:"column:totp_secret_enc"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>password_change_required</strong>
+                </td>
+                <td class="field-type">
+                    <code>boolean</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:password_change_required;not null"</td>
             </tr>
             
             <tr>

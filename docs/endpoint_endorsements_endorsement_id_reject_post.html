@@ -1,0 +1,585 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>POST /v1/endorsements/{endorsement_id}:reject - InsureTech API</title>
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: #f5f7fa;
+            line-height: 1.6;
+        }
+        
+        .header {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 30px 40px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        
+        .header-content {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        
+        .breadcrumb {
+            opacity: 0.9;
+            margin-bottom: 15px;
+            font-size: 0.9em;
+        }
+        
+        .breadcrumb a {
+            color: white;
+            text-decoration: none;
+        }
+        
+        .breadcrumb a:hover {
+            text-decoration: underline;
+        }
+        
+        .endpoint-title {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+        
+        .method-badge {
+            background: #2196f3;
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 600;
+            font-size: 1.1em;
+        }
+        
+        .endpoint-path {
+            font-size: 1.8em;
+            font-weight: 600;
+            font-family: 'Courier New', monospace;
+        }
+        
+        .endpoint-summary {
+            font-size: 1.2em;
+            opacity: 0.95;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 40px;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.05);
+        }
+        
+        h2 {
+            color: #333;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #e0e0e0;
+        }
+        
+        .param {
+            background: #f8f9fa;
+            border-left: 4px solid #667eea;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        
+        .param-header {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+            margin-bottom: 8px;
+        }
+        
+        .param-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 1.1em;
+            color: #333;
+        }
+        
+        .param-badge {
+            padding: 3px 8px;
+            border-radius: 4px;
+            font-size: 0.75em;
+            font-weight: 600;
+            text-transform: uppercase;
+        }
+        
+        .badge-query { background: #e3f2fd; color: #1565c0; }
+        .badge-path { background: #fff3e0; color: #ef6c00; }
+        .badge-header { background: #f3e5f5; color: #7b1fa2; }
+        .badge-body { background: #e8f5e9; color: #2e7d32; }
+        
+        .param-type {
+            color: #666;
+            font-family: 'Courier New', monospace;
+            font-size: 0.9em;
+        }
+        
+        .param-required {
+            color: #f44336;
+            font-size: 0.85em;
+        }
+        
+        .param-description {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .response {
+            background: #f8f9fa;
+            border-left: 4px solid #666;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+        
+        .response-success { border-color: #4caf50; }
+        .response-error { border-color: #f44336; }
+        .response-info { border-color: #2196f3; }
+        
+        .response-header {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+        
+        .response-code {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            font-size: 1.2em;
+            color: #333;
+        }
+        
+        .response-desc {
+            color: #666;
+        }
+        
+        .response-example {
+            margin-top: 10px;
+        }
+        
+        .example-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        
+        .response-schema {
+            margin-top: 10px;
+            color: #666;
+        }
+        
+        .schema-ref {
+            font-family: 'Courier New', monospace;
+            background: #e3f2fd;
+            padding: 10px;
+            border-radius: 4px;
+            margin-bottom: 10px;
+        }
+        
+        .description {
+            color: #555;
+            line-height: 1.8;
+            margin-bottom: 20px;
+        }
+        
+        .json-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            font-family: 'Consolas', 'Monaco', 'Courier New', monospace;
+            font-size: 0.95em;
+            line-height: 1.6;
+            margin: 15px 0;
+        }
+        
+        .json-block pre {
+            margin: 0;
+            color: #d4d4d4;
+        }
+        
+        .json-key {
+            color: #9cdcfe;
+            font-weight: 600;
+        }
+        
+        .json-type {
+            color: #ce9178;
+        }
+        
+        .json-ref {
+            color: #4ec9b0;
+            font-style: italic;
+        }
+        
+        .json-comment {
+            color: #6a9955;
+            font-style: italic;
+        }
+        
+        .json-required {
+            color: #f48771;
+            font-weight: 600;
+            font-size: 0.85em;
+        }
+        
+        .schema-ref-name {
+            font-family: 'Courier New', monospace;
+            font-weight: 600;
+            color: #667eea;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+            padding: 8px 12px;
+            background: #f0f4ff;
+            border-radius: 6px;
+            display: inline-block;
+        }
+        
+        .schema-properties {
+            margin: 10px 0;
+        }
+        
+        .content-type-badge {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 4px;
+            font-size: 0.85em;
+            font-weight: 600;
+            margin-bottom: 15px;
+        }
+        
+        .section-description {
+            background: #f8f9fa;
+            padding: 15px;
+            border-left: 4px solid #667eea;
+            margin-bottom: 20px;
+            border-radius: 4px;
+            color: #555;
+            line-height: 1.6;
+        }
+        
+        .response-body {
+            margin-top: 15px;
+        }
+        
+        .request-body {
+            margin-top: 15px;
+        }
+        
+        .back-link {
+            display: inline-block;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 12px 24px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-weight: 600;
+            transition: transform 0.3s;
+        }
+        
+        .back-link:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="header-content">
+            <div class="breadcrumb">
+                <a href="index.html">← Back to Documentation</a> / 
+                <a href="index.html#endorsements">Endorsements</a>
+            </div>
+            <div class="endpoint-title">
+                <span class="method-badge">POST</span>
+                <span class="endpoint-path">/v1/endorsements/{endorsement_id}:reject</span>
+            </div>
+            <div class="endpoint-summary">Reject endorsement</div>
+        </div>
+    </div>
+    
+    <div class="container">
+        <div class="card"><div class="description">Reject endorsement</div></div>
+        
+        <div class="card"><h2>Parameters</h2><div class="params-list">
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">endorsement_id</span>
+                        <span class="param-badge badge-path">path</span>
+                        <span class="param-type">string</span>
+                        <span class="param-required">(required)</span>
+                    </div>
+                    <div class="param-description">No description</div>
+                </div>
+                
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">page</span>
+                        <span class="param-badge badge-query">query</span>
+                        <span class="param-type">integer</span>
+                        <span class="param-required">(optional)</span>
+                    </div>
+                    <div class="param-description">Page number (1-based)</div>
+                </div>
+                
+                <div class="param">
+                    <div class="param-header">
+                        <span class="param-name">page_size</span>
+                        <span class="param-badge badge-query">query</span>
+                        <span class="param-type">integer</span>
+                        <span class="param-required">(optional)</span>
+                    </div>
+                    <div class="param-description">Number of items per page</div>
+                </div>
+                </div></div>
+        
+        <div class="card">
+                <h2>Request Body</h2>
+                
+                <div class="request-body">
+                    <div class="content-type-badge">application/json</div>
+                    <div class="schema-ref-name">EndorsementRejectionRequest</div><div class="schema-properties"><div class="json-block"><pre>{
+  "<span class="json-key">endorsement_id</span>": <span class="json-type">"string"</span>, <span class="json-required">(required)</span>
+  "<span class="json-key">reason</span>": <span class="json-type">"string"</span>,
+}</pre></div></div>
+                </div>
+                </div>
+        
+        <div class="card">
+            <h2>Responses</h2><div class="responses-list">
+            <div class="response response-success">
+                <div class="response-header">
+                    <span class="response-code">200</span>
+                    <span class="response-desc">Successful response</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": true,
+  "data": {},
+  "error": null,
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "pagination": null
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">400</span>
+                    <span class="response-desc">Bad request - Malformed request body or invalid parameters</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Bad request - Malformed request body or invalid parameters",
+    "error_id": "err_example",
+    "http_status_code": 400,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">401</span>
+                    <span class="response-desc">Unauthorized - Valid authentication token required</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Unauthorized - Valid authentication token required",
+    "error_id": "err_example",
+    "http_status_code": 401,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">403</span>
+                    <span class="response-desc">Forbidden - Insufficient permissions for this operation</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Forbidden - Insufficient permissions for this operation",
+    "error_id": "err_example",
+    "http_status_code": 403,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">404</span>
+                    <span class="response-desc">Not found - The requested resource does not exist</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Not found - The requested resource does not exist",
+    "error_id": "err_example",
+    "http_status_code": 404,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">409</span>
+                    <span class="response-desc">Conflict - Resource already exists or state conflict</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Conflict - Resource already exists or state conflict",
+    "error_id": "err_example",
+    "http_status_code": 409,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">422</span>
+                    <span class="response-desc">Unprocessable Entity - Request is valid but failed business validation. See error.field_violations for field-level details</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Unprocessable Entity - Request is valid but failed business validation. See error.field_violations for field-level details",
+    "error_id": "err_example",
+    "http_status_code": 422,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">429</span>
+                    <span class="response-desc">Too Many Requests - Rate limit exceeded. Retry after the indicated delay</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Too Many Requests - Rate limit exceeded. Retry after the indicated delay",
+    "error_id": "err_example",
+    "http_status_code": 429,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">500</span>
+                    <span class="response-desc">Internal server error - Unexpected server-side error</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Internal server error - Unexpected server-side error",
+    "error_id": "err_example",
+    "http_status_code": 500,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            </div>
+        </div>
+        
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="index.html" class="back-link">← Back to Documentation Hub</a>
+        </div>
+    </div>
+</body>
+</html>

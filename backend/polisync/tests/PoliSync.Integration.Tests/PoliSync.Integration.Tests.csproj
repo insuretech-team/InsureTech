@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <IsPackable>false</IsPackable>
@@ -23,13 +23,4 @@
     <ProjectReference Include="..\..\src\PoliSync.ApiHost\PoliSync.ApiHost.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Compile Remove="CurrentUserTests.cs" />
-    <Compile Remove="GrpcClientFactoryTests.cs" />
-    <Compile Remove="MoneyTests.cs" />
-    <Compile Remove="ResultTests.cs" />
-  </ItemGroup>
-
 </Project>
-
-

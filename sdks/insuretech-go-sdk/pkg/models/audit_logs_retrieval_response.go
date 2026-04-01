@@ -5,5 +5,4 @@ package models
 type AuditLogsRetrievalResponse struct {
 	AuditLogs []*AuditLog `json:"audit_logs,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

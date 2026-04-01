@@ -16,11 +16,15 @@ flve:
   
   # HuggingFace Space URL (use the hf.space domain)
   hf_endpoint: "https://farukhannan-flve.hf.space"
-  hf_token: "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"
+  hf_token: "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"
   
-  # Models S3 Bucket (CDN)
+  # Storage — DigitalOcean Spaces (S3-compatible)
+  # Profile images captured during eKYC are uploaded here by FLVE HF Space.
+  # Set PROFILE_PATH_PREFIX=insuretech/kyc/profile in the HF Space secrets.
+  # The ACCESS_KEY / SECRET_KEY below are also set as HF Space secrets so FLVE
+  # can upload directly without routing through InsureTech backend.
   main_cdn: "https://lcst.sgp1.cdn.digitaloceanspaces.com"
-  cdn_url: "https://lcst.sgp1.cdn.digitaloceanspaces.com/labaidai/models"
+  cdn_url: "https://lcst.sgp1.cdn.digitaloceanspaces.com/insuretech/kyc/models"
   access_key: "DO00KHVNHGMWXAGZCBCB"
   secret_key: "POboLPZf/VTXo7gwapINAgZWDAHk5fPcJ/0WpRfMFk4"
   
@@ -52,3 +56,14 @@ flve:
   # Authentication & Security
   # --------------------------------------------
   jwt_secret: "dev-secret-change-in-production"
+
+  # FLVE HuggingFace Space API token.
+  # This is sent as "Authorization: Bearer <flve_api_token>" by FLVEAdapter
+  # on every request to the HF Space. Must match the FLVE_API_TOKEN secret
+  # set in the HuggingFace Space settings.
+  # In production: use a long random secret (e.g. openssl rand -hex 32).
+  # Override via FLVE_API_TOKEN env var (takes precedence over this file).
+  # The HuggingFace Space is private — requests must carry the HF user token
+  # as the Bearer token (HF proxy validates it before the app sees the request).
+  # Set FLVE_API_TOKEN=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 in the environment.
+  flve_api_token: "${FLVE_API_TOKEN}"

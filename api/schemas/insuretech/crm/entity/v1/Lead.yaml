@@ -1,0 +1,114 @@
+Lead:
+  type: object
+  properties:
+    lead_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:lead_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    title:
+      type: string
+      description: '@inject_tag: gorm:"column:title"'
+    first_name:
+      type: string
+      description: '@inject_tag: gorm:"column:first_name;not null"'
+    last_name:
+      type: string
+      description: '@inject_tag: gorm:"column:last_name;not null"'
+    date_of_birth:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:date_of_birth;serializer:proto_timestamp"'
+    gender:
+      type: string
+      description: '@inject_tag: gorm:"column:gender"'
+    phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:phone_number;not null"'
+    email_address:
+      type: string
+      description: '@inject_tag: gorm:"column:email_address;not null"'
+    address:
+      type: string
+      description: '@inject_tag: gorm:"column:address"'
+    alternate_phone_number:
+      type: string
+      description: '@inject_tag: gorm:"column:alternate_phone_number"'
+    additional_email_address:
+      type: string
+      description: '@inject_tag: gorm:"column:additional_email_address"'
+    lead_source:
+      $ref: '#/components/schemas/LeadSource'
+      description: '@inject_tag: gorm:"column:lead_source;serializer:proto_enum"'
+    lead_status:
+      allOf:
+      - $ref: '#/components/schemas/LeadStatus'
+      x-database-default: NEW
+    lead_score:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:lead_score"'
+      default: 0
+    lead_priority:
+      $ref: '#/components/schemas/LeadPriority'
+      description: '@inject_tag: gorm:"column:lead_priority;serializer:proto_enum"'
+    assigned_agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:assigned_agent_id"'
+    desired_insurance_type:
+      type: string
+      description: "Insurance specific fields\n @inject_tag: gorm:\"column:desired_insurance_type\""
+    desired_coverage_amount:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:desired_coverage_amount"'
+    specific_requirements:
+      type: string
+      description: '@inject_tag: gorm:"column:specific_requirements"'
+    qualification_status:
+      $ref: '#/components/schemas/QualificationStatus'
+      description: "Conversion tracking\n @inject_tag: gorm:\"column:qualification_status;serializer:proto_enum\""
+    converted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"'
+    converted_contact_id:
+      type: string
+      description: '@inject_tag: gorm:"column:converted_contact_id"'
+    conversion_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:conversion_reason"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_by:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Lead represents a prospective customer\n Maps to 'leads' table in\
+    \ crm_schema"
+  required:
+  - lead_id
+  - first_name
+  - last_name
+  - phone_number
+  - email_address
+  - lead_status
+  - created_by
+  - created_at
+  - updated_at

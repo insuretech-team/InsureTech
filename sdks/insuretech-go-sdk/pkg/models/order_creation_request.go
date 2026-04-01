@@ -6,17 +6,17 @@ import (
 
 // OrderCreationRequest represents a order_creation_request
 type OrderCreationRequest struct {
+	CoverageEndAt time.Time `json:"coverage_end_at,omitempty"`
+	CoverageStartAt time.Time `json:"coverage_start_at,omitempty"`
 	CustomerId string `json:"customer_id"`
-	PaymentMethod string `json:"payment_method,omitempty"`
-	TenantId string `json:"tenant_id"`
 	IdempotencyKey string `json:"idempotency_key,omitempty"`
-	TotalPayable *Money `json:"total_payable,omitempty"`
+	OrganisationId string `json:"organisation_id"`
+	PaymentDueAt time.Time `json:"payment_due_at,omitempty"`
+	PaymentMethod string `json:"payment_method,omitempty"`
+	PlanId string `json:"plan_id"`
+	ProductId string `json:"product_id"`
 	PurchaseOrderId string `json:"purchase_order_id"`
 	QuotationId string `json:"quotation_id"`
-	OrganisationId string `json:"organisation_id"`
-	CoverageStartAt time.Time `json:"coverage_start_at,omitempty"`
-	CoverageEndAt time.Time `json:"coverage_end_at,omitempty"`
-	PaymentDueAt time.Time `json:"payment_due_at,omitempty"`
-	ProductId string `json:"product_id"`
-	PlanId string `json:"plan_id"`
+	TenantId string `json:"tenant_id"`
+	TotalPayable *Money `json:"total_payable,omitempty"`
 }

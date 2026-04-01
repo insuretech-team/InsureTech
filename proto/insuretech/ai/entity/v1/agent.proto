@@ -74,7 +74,7 @@ message AIAgent {
   ];
   // @inject_tag: gorm:"column:model_name;not null"
 
-  AgentStatus status = 5 [
+  AIAgentStatus status = 5 [
     (insuretech.common.v1.column) = {
       column_name: "status"
       sql_type: "VARCHAR(50)"
@@ -137,7 +137,7 @@ enum AgentType {
   AGENT_TYPE_DOCUMENT_ANALYZER = 6; // OCR and document processing
 }
 
-enum AgentStatus {
+enum AIAgentStatus {
   AGENT_STATUS_UNSPECIFIED = 0;
   AGENT_STATUS_IDLE = 1;
   AGENT_STATUS_PROCESSING = 2;

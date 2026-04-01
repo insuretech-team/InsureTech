@@ -13,7 +13,33 @@ KYCStatusRetrievalResponse:
     reviewed_at:
       type: string
       format: date-time
-    error:
-      $ref: '#/components/schemas/Error'
+    provider:
+      type: string
+      description: e.g. "FLVE_HF"
+    provider_reference:
+      type: string
+      description: FLVE session_id
+    session_state:
+      type: string
+      description: current FLVE state
+    current_step:
+      $ref: '#/components/schemas/KYCStep'
+      description: current challenge
+    completed_steps:
+      type: integer
+      format: int32
+      description: steps done
+    total_steps:
+      type: integer
+      format: int32
+      description: total challenges
+    overall_progress:
+      type: number
+      format: double
+      description: "0.0\u20131.0"
+    remaining_seconds:
+      type: integer
+      format: int32
+      description: time left
   description: Response payload for kyc status retrieval operation. Returns operation
     results and status.

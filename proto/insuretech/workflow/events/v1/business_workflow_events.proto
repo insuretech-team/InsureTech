@@ -1,0 +1,68 @@
+syntax = "proto3";
+
+package insuretech.workflow.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/events/v1;workfloweventsv1";
+option csharp_namespace = "Insuretech.Workflow.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/workflow/entity/v1/business_workflow.proto";
+
+// BusinessWorkflowCreatedEvent is emitted when a new business workflow is created
+message BusinessWorkflowCreatedEvent {
+  string event_id = 1;
+  string business_workflow_id = 2;
+  string workflow_name = 3;
+  entity.v1.BusinessWorkflowType workflow_type = 4;
+  string created_by = 5;
+  google.protobuf.Timestamp created_at = 6;
+}
+
+// BusinessWorkflowUpdatedEvent is emitted when a business workflow is updated
+message BusinessWorkflowUpdatedEvent {
+  string event_id = 1;
+  string business_workflow_id = 2;
+  string workflow_name = 3;
+  int32 version = 4;
+  string updated_by = 5;
+  google.protobuf.Timestamp updated_at = 6;
+  repeated string changed_fields = 7;
+}
+
+// BusinessWorkflowDeletedEvent is emitted when a business workflow is deleted
+message BusinessWorkflowDeletedEvent {
+  string event_id = 1;
+  string business_workflow_id = 2;
+  string workflow_name = 3;
+  bool permanent = 4;
+  string deleted_by = 5;
+  google.protobuf.Timestamp deleted_at = 6;
+}
+
+// BusinessWorkflowExecutedEvent is emitted when a business workflow is executed
+message BusinessWorkflowExecutedEvent {
+  string event_id = 1;
+  string execution_id = 2;
+  string business_workflow_id = 3;
+  string workflow_name = 4;
+  string entity_type = 5;
+  string entity_id = 6;
+  bool is_success = 7;
+  int32 rules_passed = 8;
+  int32 rules_failed = 9;
+  int32 execution_time_ms = 10;
+  string executed_by = 11;
+  google.protobuf.Timestamp executed_at = 12;
+}
+
+// BusinessRuleFailedEvent is emitted when a specific business rule fails
+message BusinessRuleFailedEvent {
+  string event_id = 1;
+  string execution_id = 2;
+  string business_workflow_id = 3;
+  string rule_name = 4;
+  string error_message = 5;
+  string entity_type = 6;
+  string entity_id = 7;
+  google.protobuf.Timestamp failed_at = 8;
+}

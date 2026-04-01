@@ -1,0 +1,10 @@
+EmployeeLoginOrganisationsListingRequest:
+  type: object
+  properties:
+    query:
+      type: string
+    page_size:
+      type: integer
+      format: int32
+  description: Request payload for listing employee login organisations listing items.
+    Supports filtering, sorting, and pagination.

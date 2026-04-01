@@ -1,0 +1,909 @@
+syntax = "proto3";
+
+package insuretech.actuarial.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/actuarial/entity/v1;actuarialv1";
+option csharp_namespace = "Insuretech.Actuarial.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// ActuarialCalculation represents a P&C actuarial calculation result
+// Maps to 'actuarial_calculations' table in actuarial_schema
+message ActuarialCalculation {
+  option (insuretech.common.v1.table) = {
+    table_name: "actuarial_calculations"
+    schema_name: "actuarial_schema"
+    migration_order: 300
+    is_table: true
+    comment: "P&C actuarial calculations including premiums, reserves, and loss ratios"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string calculation_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Calculation UUID"
+    }
+  ];
+
+  string calculation_reference = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_reference"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Human-readable reference (e.g., ACT-2024-000001)"
+      index: {
+        index_name: "idx_act_calc_reference"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+
+  ActuarialCalculationType calculation_type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of actuarial calculation"
+      index: {
+        index_name: "idx_act_calc_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+
+  string entity_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "entity_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Entity type (POLICY, CLAIM, PRODUCT, etc.)"
+    }
+  ];
+
+  string entity_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "entity_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "ID of the entity being calculated"
+      index: {
+        index_name: "idx_act_calc_entity"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+
+  // Input parameters for the calculation
+  string parameters_json = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "parameters_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Calculation input parameters as JSON"
+      is_json: true
+    }
+  ];
+
+  // Calculation results
+  string results_json = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "results_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Calculation results as JSON"
+      is_json: true
+    }
+  ];
+
+  // Status and validation
+  CalculationStatus status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'PENDING'"
+    }
+  ];
+
+  string validation_errors = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "validation_errors"
+      sql_type: "JSONB"
+      comment: "Validation errors if any"
+      is_json: true
+    }
+  ];
+
+  // Calculated values (denormalized for querying)
+  double calculated_premium = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculated_premium"
+      sql_type: "DECIMAL(18,4)"
+      comment: "Calculated premium amount"
+    }
+  ];
+
+  double loss_ratio = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "loss_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Loss ratio (0-1)"
+    }
+  ];
+
+  double combined_ratio = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "combined_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Combined ratio (0-1)"
+    }
+  ];
+
+  double reserve_amount = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "reserve_amount"
+      sql_type: "DECIMAL(18,4)"
+      comment: "Reserve amount calculated"
+    }
+  ];
+
+  // Metadata
+  string calculated_by = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculated_by"
+      sql_type: "UUID"
+      comment: "User/system that performed calculation"
+    }
+  ];
+
+  google.protobuf.Timestamp calculated_at = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+
+  // Effective date for the calculation
+  google.protobuf.Timestamp effective_date = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "effective_date"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Date this calculation is effective from"
+    }
+  ];
+
+  map<string, string> metadata = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+
+  google.protobuf.Timestamp updated_at = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+
+  google.protobuf.Timestamp deleted_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+}
+
+enum ActuarialCalculationType {
+  ACTUARIAL_CALCULATION_TYPE_UNSPECIFIED = 0;
+  ACTUARIAL_CALCULATION_TYPE_PREMIUM = 1;
+  ACTUARIAL_CALCULATION_TYPE_RESERVE = 2;
+  ACTUARIAL_CALCULATION_TYPE_LOSS_RATIO = 3;
+  ACTUARIAL_CALCULATION_TYPE_COMBINED_RATIO = 4;
+  ACTUARIAL_CALCULATION_TYPE_RISK_FACTOR = 5;
+  ACTUARIAL_CALCULATION_TYPE_PROFIT_TESTING = 6;
+  ACTUARIAL_CALCULATION_TYPE_SOLVENCY = 7;
+}
+
+enum CalculationStatus {
+  CALCULATION_STATUS_UNSPECIFIED = 0;
+  CALCULATION_STATUS_PENDING = 1;
+  CALCULATION_STATUS_CALCULATING = 2;
+  CALCULATION_STATUS_COMPLETED = 3;
+  CALCULATION_STATUS_FAILED = 4;
+  CALCULATION_STATUS_VALIDATED = 5;
+}
+
+// RatingFormula represents a P&C rating formula for premium calculation
+// Maps to 'rating_formulas' table in actuarial_schema
+message RatingFormula {
+  option (insuretech.common.v1.table) = {
+    table_name: "rating_formulas"
+    schema_name: "actuarial_schema"
+    migration_order: 301
+    is_table: true
+    comment: "P&C rating formulas for actuarial calculations"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string formula_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "formula_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+
+  string formula_code = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "formula_code"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Unique formula code (e.g., AUTO_BASE_RATE)"
+      index: {
+        index_name: "idx_rating_formula_code"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+
+  string formula_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "formula_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Human-readable name"
+    }
+  ];
+
+  string description = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "description"
+      sql_type: "TEXT"
+      comment: "Formula description"
+    }
+  ];
+
+  FormulaCategory category = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "category"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Formula category"
+    }
+  ];
+
+  string insurance_type = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "insurance_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Insurance line (AUTO, PROPERTY, LIABILITY, etc.)"
+      index: {
+        index_name: "idx_rating_formula_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+
+  // The formula expression
+  string formula_expression = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "formula_expression"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Mathematical formula expression"
+    }
+  ];
+
+  // Variable definitions
+  string variables_json = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "variables_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Variable definitions as JSON"
+      is_json: true
+    }
+  ];
+
+  // Sort order for calculation sequence
+  int32 sort_order = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "sort_order"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "100"
+      comment: "Calculation order (lower first)"
+    }
+  ];
+
+  // Versioning
+  int32 version = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "version"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "1"
+      comment: "Formula version"
+    }
+  ];
+
+  string parent_formula_id = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "parent_formula_id"
+      sql_type: "UUID"
+      comment: "Parent formula if this is a version update"
+    }
+  ];
+
+  // Status
+  FormulaStatus status = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'DRAFT'"
+    }
+  ];
+
+  // Validity period
+  google.protobuf.Timestamp valid_from = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_from"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+
+  google.protobuf.Timestamp valid_until = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_until"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Expiration date (null = no expiration)"
+    }
+  ];
+
+  map<string, string> metadata = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+
+  google.protobuf.Timestamp updated_at = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+
+  google.protobuf.Timestamp deleted_at = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+    }
+  ];
+}
+
+enum FormulaCategory {
+  FORMULA_CATEGORY_UNSPECIFIED = 0;
+  FORMULA_CATEGORY_BASE_RATE = 1;
+  FORMULA_CATEGORY_RATING_FACTOR = 2;
+  FORMULA_CATEGORY_LOADING = 3;
+  FORMULA_CATEGORY_DISCOUNT = 4;
+  FORMULA_CATEGORY_RESERVE = 5;
+  FORMULA_CATEGORY_LOSS_RATIO = 6;
+  FORMULA_CATEGORY_EXPENSE = 7;
+  FORMULA_CATEGORY_PROFIT = 8;
+}
+
+enum FormulaStatus {
+  FORMULA_STATUS_UNSPECIFIED = 0;
+  FORMULA_STATUS_DRAFT = 1;
+  FORMULA_STATUS_ACTIVE = 2;
+  FORMULA_STATUS_DEPRECATED = 3;
+  FORMULA_STATUS_RETIRED = 4;
+}
+
+// ReserveCalculation represents a reserve calculation for claims
+// Maps to 'reserve_calculations' table in actuarial_schema
+message ReserveCalculation {
+  option (insuretech.common.v1.table) = {
+    table_name: "reserve_calculations"
+    schema_name: "actuarial_schema"
+    migration_order: 302
+    is_table: true
+    comment: "Claim reserve calculations including IBNR"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string reserve_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "reserve_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+
+  string claim_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "claim_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to claims"
+      index: {
+        index_name: "idx_reserve_claim_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+
+  string policy_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "policy_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to policies"
+    }
+  ];
+
+  ReserveType reserve_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "reserve_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of reserve"
+    }
+  ];
+
+  // Reserve amounts
+  insuretech.common.v1.Money case_reserve = 5;
+  // @inject_tag: gorm:"column:case_reserve;serializer:proto_money"
+  insuretech.common.v1.Money ibnr_reserve = 6;
+  // @inject_tag: gorm:"column:ibnr_reserve;serializer:proto_money"
+  insuretech.common.v1.Money expense_reserve = 7;
+  // @inject_tag: gorm:"column:expense_reserve;serializer:proto_money"
+  insuretech.common.v1.Money total_reserve = 8;
+  // @inject_tag: gorm:"column:total_reserve;serializer:proto_money"
+
+  // Calculation method
+  string calculation_method = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_method"
+      sql_type: "VARCHAR(100)"
+      comment: "Method used (ChainLadder, BF, Mack, etc.)"
+    }
+  ];
+
+  // Confidence interval
+  double confidence_level = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "confidence_level"
+      sql_type: "DECIMAL(3,2)"
+      default_value: "0.95"
+      comment: "Confidence level (0-1)"
+    }
+  ];
+
+  insuretech.common.v1.Money lower_bound = 11;
+  // @inject_tag: gorm:"column:lower_bound;serializer:proto_money"
+  insuretech.common.v1.Money upper_bound = 12;
+  // @inject_tag: gorm:"column:upper_bound;serializer:proto_money"
+
+  // Triangular data for chain ladder
+  string triangle_data_json = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "triangle_data_json"
+      sql_type: "JSONB"
+      comment: "Loss triangle data as JSON"
+      is_json: true
+    }
+  ];
+
+  // Status
+  ReserveStatus status = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'PENDING'"
+    }
+  ];
+
+  string reviewed_by = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "reviewed_by"
+      sql_type: "UUID"
+      comment: "Actuary who reviewed"
+    }
+  ];
+
+  google.protobuf.Timestamp reviewed_at = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "reviewed_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Review timestamp"
+    }
+  ];
+
+  map<string, string> metadata = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+
+  google.protobuf.Timestamp updated_at = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+
+  google.protobuf.Timestamp deleted_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+    }
+  ];
+}
+
+enum ReserveType {
+  RESERVE_TYPE_UNSPECIFIED = 0;
+  RESERVE_TYPE_CASE = 1;
+  RESERVE_TYPE_IBNR = 2;
+  RESERVE_TYPE_IBNER = 3; // Incurred But Not Enough Reported
+  RESERVE_TYPE_EXPENSE = 4;
+  RESERVE_TYPE_TOTAL = 5;
+}
+
+enum ReserveStatus {
+  RESERVE_STATUS_UNSPECIFIED = 0;
+  RESERVE_STATUS_PENDING = 1;
+  RESERVE_STATUS_CALCULATED = 2;
+  RESERVE_STATUS_REVIEWED = 3;
+  RESERVE_STATUS_APPROVED = 4;
+  RESERVE_STATUS_ADJUSTED = 5;
+}
+
+// LossRatioCalculation represents a loss ratio analysis
+// Maps to 'loss_ratio_calculations' table in actuarial_schema
+message LossRatioCalculation {
+  option (insuretech.common.v1.table) = {
+    table_name: "loss_ratio_calculations"
+    schema_name: "actuarial_schema"
+    migration_order: 303
+    is_table: true
+    comment: "Loss ratio calculations and analysis"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string loss_ratio_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "loss_ratio_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+
+  string product_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      comment: "Product analyzed (null = all products)"
+      index: {
+        index_name: "idx_lr_product_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+
+  string line_of_business = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "line_of_business"
+      sql_type: "VARCHAR(50)"
+      comment: "Line of business"
+    }
+  ];
+
+  // Analysis period
+  google.protobuf.Timestamp period_start = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "period_start"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+    }
+  ];
+
+  google.protobuf.Timestamp period_end = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "period_end"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+    }
+  ];
+
+  // Premium components
+  insuretech.common.v1.Money earned_premium = 6;
+  // @inject_tag: gorm:"column:earned_premium;serializer:proto_money"
+  insuretech.common.v1.Money written_premium = 7;
+  // @inject_tag: gorm:"column:written_premium;serializer:proto_money"
+
+  // Loss components
+  insuretech.common.v1.Money incurred_losses = 8;
+  // @inject_tag: gorm:"column:incurred_losses;serializer:proto_money"
+  insuretech.common.v1.Money loss_adjustment_expenses = 9;
+  // @inject_tag: gorm:"column:loss_adjustment_expenses;serializer:proto_money"
+  insuretech.common.v1.Money total_incurred = 10;
+  // @inject_tag: gorm:"column:total_incurred;serializer:proto_money"
+
+  // Calculated ratios
+  double loss_ratio = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "loss_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Loss ratio as decimal (0-1)"
+    }
+  ];
+
+  double expense_ratio = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "expense_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Expense ratio as decimal (0-1)"
+    }
+  ];
+
+  double combined_ratio = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "combined_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Combined ratio as decimal (0-1)"
+    }
+  ];
+
+  // Detailed breakdown
+  string breakdown_json = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "breakdown_json"
+      sql_type: "JSONB"
+      comment: "Detailed breakdown by segment"
+      is_json: true
+    }
+  ];
+
+  // Development factors
+  string development_factors_json = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "development_factors_json"
+      sql_type: "JSONB"
+      comment: "Loss development factors"
+      is_json: true
+    }
+  ];
+
+  // Target and comparison
+  double target_loss_ratio = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "target_loss_ratio"
+      sql_type: "DECIMAL(5,4)"
+      comment: "Target loss ratio for comparison"
+    }
+  ];
+
+  string comparison_period_id = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "comparison_period_id"
+      sql_type: "UUID"
+      comment: "Previous period for comparison"
+    }
+  ];
+
+  map<string, string> metadata = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+
+  google.protobuf.Timestamp updated_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+
+  google.protobuf.Timestamp deleted_at = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+    }
+  ];
+}
+
+// PremiumCalculationInput represents input for premium calculations
+message PremiumCalculationInput {
+  string product_id = 1;
+  string coverage_type = 2;
+  double sum_insured = 3;
+  int32 coverage_period_months = 4;
+  map<string, double> rating_factors = 5;
+  map<string, string> risk_characteristics = 6;
+  repeated string loadings = 7;
+  repeated string discounts = 8;
+}
+
+// PremiumCalculationResult represents the result of premium calculations
+message PremiumCalculationResult {
+  double base_premium = 1;
+  double net_premium = 2;
+  double gross_premium = 3;
+  double total_loadings = 4;
+  double total_discounts = 5;
+  repeated FactorBreakdown factor_breakdown = 6;
+  string currency = 7;
+}
+
+message FactorBreakdown {
+  string factor_name = 1;
+  string factor_type = 2; // RATING_FACTOR, LOADING, DISCOUNT
+  double factor_value = 3;
+  double amount = 4;
+  string description = 5;
+}
+
+// LossRatioInput represents input for loss ratio calculations
+message LossRatioInput {
+  string product_id = 1;
+  string line_of_business = 2;
+  google.protobuf.Timestamp period_start = 3;
+  google.protobuf.Timestamp period_end = 4;
+  double earned_premium = 5;
+  double written_premium = 6;
+  double incurred_losses = 7;
+  double loss_adjustment_expenses = 8;
+  double operating_expenses = 9;
+}
+
+// LossRatioResult represents the result of loss ratio calculations
+message LossRatioResult {
+  double loss_ratio = 1;
+  double expense_ratio = 2;
+  double combined_ratio = 3;
+  double underwriting_profit_margin = 4;
+  string interpretation = 5; // PROFITABLE, BREAK_EVEN, LOSS_MAKING
+}
+
+// ReserveInput represents input for reserve calculations
+message ReserveInput {
+  string claim_id = 1;
+  string calculation_method = 2; // CHAIN_LADDER, BORNHUETTER_FERGUSON, MACK, etc.
+  string triangle_data_json = 3;
+  double case_reserve = 4;
+  double reported_claims = 5;
+  double paid_claims = 6;
+  int32 development_periods = 7;
+  double confidence_level = 8;
+}
+
+// ReserveResult represents the result of reserve calculations
+message ReserveResult {
+  double case_reserve = 1;
+  double ibnr_reserve = 2;
+  double ibner_reserve = 3;
+  double expense_reserve = 4;
+  double total_reserve = 5;
+  double lower_bound = 6;
+  double upper_bound = 7;
+  string method_used = 8;
+}
+
+// ActuarialVariable represents a variable definition for rating formulas
+message ActuarialVariable {
+  string variable_name = 1;
+  string variable_type = 2; // STRING, DOUBLE, BOOLEAN, DATE
+  string description = 3;
+  bool is_required = 4;
+  string default_value = 5;
+  double min_value = 6;
+  double max_value = 7;
+  repeated string allowed_values = 8;
+}

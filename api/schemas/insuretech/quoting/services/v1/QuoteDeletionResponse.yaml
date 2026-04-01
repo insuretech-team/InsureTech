@@ -1,0 +1,7 @@
+QuoteDeletionResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for quote deletion operation. Returns operation results
+    and status.

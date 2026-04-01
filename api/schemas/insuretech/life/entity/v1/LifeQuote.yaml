@@ -1,0 +1,124 @@
+LifeQuote:
+  type: object
+  properties:
+    quote_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:quote_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    quote_number:
+      type: string
+      description: '@inject_tag: gorm:"column:quote_number;not null"'
+      x-unique: true
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"column:product_id;not null"'
+    customer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:customer_id;not null"'
+    agent_id:
+      type: string
+      description: '@inject_tag: gorm:"column:agent_id"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/LifeQuoteStatus'
+      x-database-default: DRAFT
+    insured_person_json:
+      type: string
+      description: "Insured person details\n @inject_tag: gorm:\"column:insured_person_json;not\
+        \ null\""
+    age_at_entry:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:age_at_entry;not null"'
+    policy_term_years:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:policy_term_years;not null"'
+    sum_assured:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:sum_assured;not null"'
+    base_premium:
+      type: string
+      format: int64
+      description: "Premium calculation breakdown\n @inject_tag: gorm:\"column:base_premium;not\
+        \ null\""
+    age_addition:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:age_addition;not null"'
+    condition_multiplier:
+      type: number
+      format: float
+      description: '@inject_tag: gorm:"column:condition_multiplier;not null"'
+    condition_addition:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:condition_addition;not null"'
+    bonus_discount:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:bonus_discount;not null"'
+      default: '0'
+    total_premium:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:total_premium;not null"'
+    health_conditions_json:
+      type: string
+      description: "Health conditions applied\n @inject_tag: gorm:\"column:health_conditions_json\""
+    bonuses_applied_json:
+      type: string
+      description: "Bonuses applied\n @inject_tag: gorm:\"column:bonuses_applied_json\""
+    valid_until:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"'
+    converted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"'
+    converted_policy_id:
+      type: string
+      description: '@inject_tag: gorm:"column:converted_policy_id"'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "LifeQuote represents a calculated life insurance quote\n Maps to 'life_quotes'\
+    \ table in life_schema"
+  required:
+  - quote_id
+  - quote_number
+  - product_id
+  - customer_id
+  - status
+  - insured_person_json
+  - age_at_entry
+  - policy_term_years
+  - sum_assured
+  - base_premium
+  - age_addition
+  - condition_multiplier
+  - condition_addition
+  - bonus_discount
+  - total_premium
+  - valid_until
+  - created_at
+  - updated_at

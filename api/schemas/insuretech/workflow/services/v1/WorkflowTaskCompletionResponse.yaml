@@ -1,0 +1,5 @@
+WorkflowTaskCompletionResponse:
+  type: object
+  properties: {}
+  description: Response payload for workflow task completion operation. Returns operation
+    results and status.

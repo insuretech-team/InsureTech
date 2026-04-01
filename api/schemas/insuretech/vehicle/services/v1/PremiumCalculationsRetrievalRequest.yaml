@@ -1,0 +1,12 @@
+PremiumCalculationsRetrievalRequest:
+  type: object
+  properties:
+    registration_id:
+      type: string
+    page_size:
+      type: integer
+      format: int32
+    page_token:
+      type: string
+  description: Request payload for retrieving premium calculations retrieval information.
+    May include filters and pagination parameters.

@@ -6,9 +6,9 @@ import (
 
 // GatewayWebhookHandlingRequest represents a gateway_webhook_handling_request
 type GatewayWebhookHandlingRequest struct {
-	Provider string `json:"provider"`
 	Headers map[string]interface{} `json:"headers,omitempty"`
+	Provider string `json:"provider"`
 	RawPayload string `json:"raw_payload,omitempty"`
-	RemoteAddr string `json:"remote_addr,omitempty"`
 	ReceivedAt time.Time `json:"received_at,omitempty"`
+	RemoteAddr string `json:"remote_addr,omitempty"`
 }

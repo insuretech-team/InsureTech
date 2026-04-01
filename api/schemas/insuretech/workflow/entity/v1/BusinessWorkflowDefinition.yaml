@@ -1,0 +1,75 @@
+BusinessWorkflowDefinition:
+  type: object
+  properties:
+    business_workflow_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:business_workflow_id;not
+        null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    workflow_name:
+      type: string
+      description: '@inject_tag: gorm:"column:workflow_name;not null"'
+      x-unique: true
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    workflow_type:
+      $ref: '#/components/schemas/BusinessWorkflowType'
+      description: '@inject_tag: gorm:"column:workflow_type;not null;serializer:proto_enum"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/BusinessWorkflowStatus'
+      x-database-default: ACTIVE
+    version:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:version;not null"'
+      default: 1
+    rules_config:
+      type: string
+      description: "Microsoft RulesEngine compatible rules stored as JSON\n Contains\
+        \ array of Rule objects with RuleName, Expression, SuccessEvent, etc.\n @inject_tag:\
+        \ gorm:\"column:rules_config;not null\""
+    input_schema:
+      type: string
+      description: Input parameter schema - defines what inputs this workflow expects
+    output_schema:
+      type: string
+      description: Output result schema - defines what outputs this workflow produces
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_by:
+      type: string
+      description: '@inject_tag: gorm:"column:created_by;not null"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "BusinessWorkflowDefinition represents a business rules workflow using\
+    \ Microsoft RulesEngine\n Maps to 'business_workflow_definitions' table in workflow_schema\n\
+    \ This is separate from approval workflows - it's for automated business rule\
+    \ evaluation"
+  required:
+  - business_workflow_id
+  - workflow_name
+  - workflow_type
+  - status
+  - version
+  - rules_config
+  - created_by
+  - created_at
+  - updated_at

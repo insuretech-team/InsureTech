@@ -1,10 +1,13 @@
 package middleware
 
 import (
+	"bytes"
 	"context"
 	"net/http"
+	"sync"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -32,6 +35,74 @@ func (rw *responseWriter) Flush() {
 	if f, ok := rw.ResponseWriter.(http.Flusher); ok {
 		f.Flush()
 	}
+}
+
+type timeoutResponseWriter struct {
+	mu          sync.Mutex
+	header      http.Header
+	body        bytes.Buffer
+	statusCode  int
+	wroteHeader bool
+	timedOut    bool
+}
+
+func newTimeoutResponseWriter() *timeoutResponseWriter {
+	return &timeoutResponseWriter{
+		header:     make(http.Header),
+		statusCode: http.StatusOK,
+	}
+}
+
+func (tw *timeoutResponseWriter) Header() http.Header {
+	return tw.header
+}
+
+func (tw *timeoutResponseWriter) WriteHeader(code int) {
+	tw.mu.Lock()
+	defer tw.mu.Unlock()
+	if tw.timedOut || tw.wroteHeader {
+		return
+	}
+	tw.statusCode = code
+	tw.wroteHeader = true
+}
+
+func (tw *timeoutResponseWriter) Write(b []byte) (int, error) {
+	tw.mu.Lock()
+	defer tw.mu.Unlock()
+	if tw.timedOut {
+		return len(b), nil
+	}
+	if !tw.wroteHeader {
+		tw.statusCode = http.StatusOK
+		tw.wroteHeader = true
+	}
+	return tw.body.Write(b)
+}
+
+func (tw *timeoutResponseWriter) Flush() {}
+
+func (tw *timeoutResponseWriter) Timeout() {
+	tw.mu.Lock()
+	defer tw.mu.Unlock()
+	tw.timedOut = true
+	tw.header = make(http.Header)
+	tw.body.Reset()
+}
+
+func (tw *timeoutResponseWriter) WriteTo(w http.ResponseWriter) {
+	tw.mu.Lock()
+	defer tw.mu.Unlock()
+	if tw.timedOut {
+		return
+	}
+	for key, values := range tw.header {
+		for _, value := range values {
+			w.Header().Add(key, value)
+		}
+	}
+	w.WriteHeader(tw.statusCode)
+	_, _ = w.Write(tw.body.Bytes())
 }
 
 // Metrics middleware logs request metrics
@@ -84,19 +155,22 @@ func Timeout(timeout time.Duration) func(http.Handler) http.Handler {
 
 			// Channel to signal completion
 			done := make(chan struct{})
+			tw := newTimeoutResponseWriter()
 
 			// Execute handler in goroutine
 			go func() {
-				next.ServeHTTP(w, r.WithContext(ctx))
+				next.ServeHTTP(tw, r.WithContext(ctx))
 				close(done)
 			}()
 
 			// Wait for completion or timeout
 			select {
 			case <-done:
+				tw.WriteTo(w)
 				return
 			case <-ctx.Done():
-				http.Error(w, "Request timeout", http.StatusGatewayTimeout)
+				tw.Timeout()
+				respond.Error(w, r, http.StatusGatewayTimeout, "DEADLINE_EXCEEDED", "Request timeout")
 			}
 		})
 	}

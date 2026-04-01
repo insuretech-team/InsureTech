@@ -22,7 +22,7 @@
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:fillViewport="true"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toBottomOf="@+id/btnContinueToPay"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/purchase_plan_toolbar">
@@ -114,7 +114,7 @@
                                 android:layout_height="wrap_content"
                                 android:layout_marginTop="4dp"
                                 android:text="৳ 25,000"
-                                android:textColor="#8B3FBF"
+                                android:textColor="#03A765"
                                 android:textSize="18sp"
                                 android:textStyle="bold"
                                 android:fontFamily="@font/karla_bold" />
@@ -160,7 +160,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="৳ 800"
-                                        android:textColor="#333333"
+                                        android:textColor="#03A765"
                                         android:textSize="12sp"
                                         android:textStyle="bold"
                                         android:fontFamily="@font/karla_bold" />
@@ -180,8 +180,7 @@
                                 <ImageView
                                     android:layout_width="16dp"
                                     android:layout_height="16dp"
-                                    android:src="@drawable/ic_calendar"
-                                    android:tint="#8B3FBF"
+                                    android:src="@drawable/ic_clock"
                                     android:contentDescription="Duration" />
 
                                 <LinearLayout
@@ -203,7 +202,7 @@
                                         android:layout_width="wrap_content"
                                         android:layout_height="wrap_content"
                                         android:text="1 year"
-                                        android:textColor="#333333"
+                                        android:textColor="#03A765"
                                         android:textSize="12sp"
                                         android:textStyle="bold"
                                         android:fontFamily="@font/karla_bold" />
@@ -254,7 +253,7 @@
                 app:endIconDrawable="@drawable/ic_arrow_down"
                 app:endIconTint="#666666"
                 app:startIconDrawable="@drawable/ic_spouse"
-                app:startIconTint="#8B3FBF"
+                app:startIconTint="#03A765"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@id/tvInformationTitle">
@@ -318,7 +317,7 @@
                 app:boxCornerRadiusTopStart="8dp"
                 app:boxStrokeColor="#E0E0E0"
                 app:endIconDrawable="@drawable/ic_calendar"
-                app:endIconTint="#8B3FBF"
+                app:endIconTint="#03A765"
                 app:endIconMode="custom"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -461,7 +460,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Upload front side of your NID"
-                    android:textColor="#8B3FBF"
+                    android:textColor="#03A765"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/karla_bold" />
@@ -505,7 +504,7 @@
                     android:layout_marginTop="8dp"
                     android:gravity="center"
                     android:text="Upload back side of your NID"
-                    android:textColor="#8B3FBF"
+                    android:textColor="#03A765"
                     android:textSize="14sp"
                     android:textStyle="bold"
                     android:fontFamily="@font/karla_bold" />
@@ -533,14 +532,14 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:backgroundTint="#8B3FBF"
         android:text="Continue to Pay"
         android:textAllCaps="false"
         android:textColor="@android:color/white"
         android:textSize="16sp"
         android:textStyle="bold"
         android:fontFamily="@font/karla_bold"
-        app:cornerRadius="8dp"
+        android:background="@drawable/button_background"
+        app:backgroundTint="@null"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent" />

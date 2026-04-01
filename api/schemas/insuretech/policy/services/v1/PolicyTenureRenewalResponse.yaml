@@ -1,0 +1,11 @@
+PolicyTenureRenewalResponse:
+  type: object
+  properties:
+    new_policy_id:
+      type: string
+    new_policy_number:
+      type: string
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+  description: Response payload for policy tenure renewal operation. Returns operation
+    results and status.

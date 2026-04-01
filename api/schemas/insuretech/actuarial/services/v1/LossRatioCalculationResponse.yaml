@@ -1,0 +1,20 @@
+LossRatioCalculationResponse:
+  type: object
+  properties:
+    loss_ratio_id:
+      type: string
+    calculation_reference:
+      type: string
+    result:
+      $ref: '#/components/schemas/LossRatioResult'
+    success:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+    calculated_at:
+      type: string
+      format: date-time
+  description: Response payload for loss ratio calculation operation. Returns operation
+    results and status.

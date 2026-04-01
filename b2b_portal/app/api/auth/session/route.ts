@@ -1,10 +1,7 @@
 import { NextResponse } from "next/server";
 
-import {
-  getCurrentSession,
-  getErrorMessage,
-  toPortalSessionFromCurrentSession,
-} from "@lib/auth/backend-auth";
+import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
+import { toPortalSessionFromCurrentSession } from "@lib/auth/backend-auth";
 import { SESSION_COOKIE_NAME } from "@lib/auth/session";
 
 export async function GET(request: Request) {
@@ -15,22 +12,20 @@ export async function GET(request: Request) {
       return NextResponse.json({ ok: false, message: "No active session" }, { status: 401 });
     }
 
-    let result: Awaited<ReturnType<typeof getCurrentSession>>;
+    const sdk = makeSdkClient(request);
+    let result: Awaited<ReturnType<typeof sdk.getCurrentSession>>;
     try {
-      result = await getCurrentSession(cookieHeader);
+      result = await sdk.getCurrentSession();
     } catch (error) {
-      return NextResponse.json(
-        { ok: false, message: getErrorMessage(error, "Session service unavailable") },
-        { status: 502 }
-      );
+      const msg = error instanceof Error ? error.message : "Session service unavailable";
+      return NextResponse.json({ ok: false, message: msg }, { status: 502 });
     }
 
-    if (result.error) {
-      const status = result.response?.status ?? 401;
-      return NextResponse.json(
-        { ok: false, message: getErrorMessage(result.error, "No active session") },
-        { status }
-      );
+    if (!result.response.ok) {
+      const status = result.response.status ?? 401;
+      const errPayload = "error" in result ? result.error as Record<string, unknown> | undefined : undefined;
+      const errMsg = typeof errPayload?.message === "string" ? errPayload.message : "No active session";
+      return NextResponse.json({ ok: false, message: errMsg }, { status });
     }
 
     const session = await toPortalSessionFromCurrentSession(result.data ?? {}, cookieHeader);
@@ -51,13 +46,18 @@ export async function GET(request: Request) {
     const cookieOpts = {
       path: "/",
       httpOnly: false, // must be readable by edge middleware + session-headers helper
-      sameSite: "strict" as const,
+      sameSite: "lax" as const,
       secure: process.env.NODE_ENV === "production",
       maxAge: 60 * 60 * 12,
     };
     response.cookies.set({ name: "portal_role",    value: portalRole,    ...cookieOpts });
     response.cookies.set({ name: "portal_user_id", value: portalUserId,  ...cookieOpts });
     response.cookies.set({ name: "portal_biz_id",  value: portalBizId,   ...cookieOpts });
+    response.cookies.set({
+      name: "portal_password_change_required",
+      value: session.passwordChangeRequired ? "true" : "false",
+      ...cookieOpts,
+    });
 
     // Re-mint contact info cookies on every session refresh so they stay in sync.
     // These are sourced from existing cookies (set at login) — if empty, preserve
@@ -74,9 +74,7 @@ export async function GET(request: Request) {
 
     return response;
   } catch (error) {
-    return NextResponse.json(
-      { ok: false, message: getErrorMessage(error, "Session endpoint failed") },
-      { status: 502 }
-    );
+    const msg = error instanceof Error ? error.message : "Session endpoint failed";
+    return NextResponse.json({ ok: false, message: msg }, { status: 502 });
   }
 }

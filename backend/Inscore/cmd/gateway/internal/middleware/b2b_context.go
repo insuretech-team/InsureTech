@@ -5,10 +5,11 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	authnv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	b2bservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 // B2BContextMiddleware resolves organisation context for B2B requests
@@ -53,7 +54,7 @@ func (m *B2BContextMiddleware) InjectOrganisationContext(next http.Handler) http
 			}
 		}
 		if userIDStr == "" {
-			http.Error(w, "Unauthorized", http.StatusUnauthorized)
+			respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 			return
 		}
 
@@ -61,7 +62,7 @@ func (m *B2BContextMiddleware) InjectOrganisationContext(next http.Handler) http
 			UserId: userIDStr,
 		})
 		if err != nil {
-			http.Error(w, "No organisation found for user", http.StatusForbidden)
+			respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "No organisation found for user")
 			return
 		}
 
@@ -97,12 +98,11 @@ func withOrganisationContext(r *http.Request, organisationID, orgRole string) *h
 		ctx = context.WithValue(ctx, "org_member_role", orgRole)
 	}
 
-	md := metadata.New(map[string]string{
-		"x-business-id": organisationID,
-		"x-user-id":     r.Header.Get("X-User-ID"),
-		"x-org-role":    orgRole,
-	})
-	ctx = metadata.NewOutgoingContext(ctx, md)
+	ctx = grpcmeta.WithOutgoingMetadata(ctx,
+		"x-business-id", organisationID,
+		"x-user-id", r.Header.Get("X-User-ID"),
+		"x-org-role", orgRole,
+	)
 	return r.WithContext(ctx)
 }
 
@@ -113,7 +113,7 @@ func InjectUserContext(authClient authnv1.AuthServiceClient) func(http.Handler) 
 			// Extract session token from cookie
 			cookie, err := r.Cookie("session_token")
 			if err != nil {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 
@@ -122,7 +122,7 @@ func InjectUserContext(authClient authnv1.AuthServiceClient) func(http.Handler) 
 				SessionId: cookie.Value,
 			})
 			if err != nil || resp == nil || !resp.Valid || resp.UserId == "" {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 

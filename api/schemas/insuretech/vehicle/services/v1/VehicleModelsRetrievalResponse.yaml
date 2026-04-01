@@ -1,0 +1,9 @@
+VehicleModelsRetrievalResponse:
+  type: object
+  properties:
+    models:
+      type: array
+      items:
+        type: string
+  description: Response payload for vehicle models retrieval operation. Returns operation
+    results and status.

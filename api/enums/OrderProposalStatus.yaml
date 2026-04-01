@@ -1,0 +1,13 @@
+OrderProposalStatus:
+  type: string
+  enum:
+  - ORDER_PROPOSAL_STATUS_UNSPECIFIED
+  - ORDER_PROPOSAL_STATUS_NOT_SUBMITTED
+  - ORDER_PROPOSAL_STATUS_SUBMITTED
+  - ORDER_PROPOSAL_STATUS_IN_REVIEW
+  - ORDER_PROPOSAL_STATUS_APPROVED
+  - ORDER_PROPOSAL_STATUS_REJECTED
+  - ORDER_PROPOSAL_STATUS_REFUND_INITIATED
+  - ORDER_PROPOSAL_STATUS_REFUNDED
+  description: "OrderProposalStatus captures the insurer decision leg between payment\
+    \ confirmation\n and policy issuance/refund."

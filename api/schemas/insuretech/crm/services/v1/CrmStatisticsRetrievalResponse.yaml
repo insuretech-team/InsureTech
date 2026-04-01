@@ -1,0 +1,37 @@
+CrmStatisticsRetrievalResponse:
+  type: object
+  properties:
+    total_leads:
+      type: integer
+      format: int32
+    new_leads:
+      type: integer
+      format: int32
+    contacted_leads:
+      type: integer
+      format: int32
+    qualified_leads:
+      type: integer
+      format: int32
+    converted_leads:
+      type: integer
+      format: int32
+    lost_leads:
+      type: integer
+      format: int32
+    total_contacts:
+      type: integer
+      format: int32
+    active_contacts:
+      type: integer
+      format: int32
+    conversion_rate:
+      type: number
+      format: double
+    leads_by_source:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Response payload for crm statistics retrieval operation. Returns operation
+    results and status.

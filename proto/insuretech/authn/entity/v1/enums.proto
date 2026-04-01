@@ -43,6 +43,7 @@ enum UserType {
   USER_TYPE_REGULATOR = 6; // Regulatory body / auditor (read-only portal)
   USER_TYPE_BUSINESS_ADMIN = 7;
   USER_TYPE_B2B_ORG_ADMIN = 8;
+  USER_TYPE_B2B_BENEFICIARY = 9; // B2B employee self-service user
 }
 
 // Session type enum - determines authentication method

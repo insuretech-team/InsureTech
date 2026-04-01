@@ -1,0 +1,9 @@
+CompareQuotesRequest:
+  type: object
+  properties:
+    quote_ids:
+      type: array
+      items:
+        type: string
+  description: Request payload for compare quotes operation. Contains parameters required
+    to execute the operation.

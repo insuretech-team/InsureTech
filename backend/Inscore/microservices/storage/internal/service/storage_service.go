@@ -19,10 +19,39 @@ import (
 
 // StorageService handles file storage operations
 type StorageService struct {
-	fileRepo       *repository.FileRepository
-	s3Client       *s3.Client
-	eventPublisher *events.Publisher
+	fileRepo       fileRepository
+	s3Client       objectStore
+	eventPublisher eventPublisher
 	userFileIndex  *index.UserFileIndex
+}
+
+type fileRepository interface {
+	Create(ctx context.Context, tenantID string, file *storageentityv1.StoredFile) (*storageentityv1.StoredFile, error)
+	GetByID(ctx context.Context, tenantID string, fileID string) (*storageentityv1.StoredFile, error)
+	List(ctx context.Context, tenantID string, fileType storageentityv1.FileType, referenceID string, referenceType string, limit, offset int32) ([]*storageentityv1.StoredFile, int, error)
+	ListAllByUploadedBy(ctx context.Context, tenantID string, uploadedBy string) ([]*storageentityv1.StoredFile, error)
+	Delete(ctx context.Context, tenantID string, fileID string) error
+	UpdateAfterDirectUpload(ctx context.Context, tenantID string, file *storageentityv1.StoredFile) (*storageentityv1.StoredFile, error)
+	UpdateMetadata(ctx context.Context, tenantID, fileID string, patch *repository.FileMetadataPatch) (*storageentityv1.StoredFile, error)
+}
+
+type objectStore interface {
+	GenerateInsuranceKey(tenantID string, fileID string, referenceType string, referenceID string, filename string) string
+	UploadFile(ctx context.Context, key string, content []byte, contentType string, isPublic bool) (string, string, error)
+	DeleteFile(ctx context.Context, key string) error
+	HeadObject(ctx context.Context, key string) (int64, string, error)
+	GetPresignedUploadURL(ctx context.Context, key string, expiresIn time.Duration) (string, error)
+	GetPresignedDownloadURL(ctx context.Context, key string, expiresIn time.Duration) (string, error)
+	GetBucket() string
+	BuildObjectURLs(key string) (string, string)
+}
+
+type eventPublisher interface {
+	PublishFileUploaded(ctx context.Context, file *storageentityv1.StoredFile, source, uploadedBy string) error
+	PublishUploadURLIssued(ctx context.Context, tenantID, fileID, filename, storageKey, referenceID, referenceType string, isPublic bool, expiresAt time.Time, requestedBy string) error
+	PublishFileUploadFinalized(ctx context.Context, file *storageentityv1.StoredFile, finalizedBy string) error
+	PublishFileMetadataUpdated(ctx context.Context, tenantID, fileID string, updatedFields []string, updatedBy string) error
+	PublishFileDeleted(ctx context.Context, tenantID, fileID, storageKey, deletedBy string) error
 }
 
 var (
@@ -70,11 +99,20 @@ func NewStorageServiceWithPublisher(
 	s3Client *s3.Client,
 	eventPublisher *events.Publisher,
 ) *StorageService {
+	return newStorageService(fileRepo, s3Client, eventPublisher, index.NewUserFileIndex())
+}
+
+func newStorageService(
+	fileRepo fileRepository,
+	s3Client objectStore,
+	eventPublisher eventPublisher,
+	userFileIndex *index.UserFileIndex,
+) *StorageService {
 	return &StorageService{
 		fileRepo:       fileRepo,
 		s3Client:       s3Client,
 		eventPublisher: eventPublisher,
-		userFileIndex:  index.NewUserFileIndex(),
+		userFileIndex:  userFileIndex,
 	}
 }
 
@@ -395,7 +433,7 @@ func (s *StorageService) GetPresignedUploadURL(
 		return "", "", "", fmt.Errorf("failed to generate presigned URL: %w", err)
 	}
 
-	// Persist placeholder metadata for finalize step.
+	// Persist pending metadata so finalize can verify and enrich the stored file record.
 	url, cdnURL := s.s3Client.BuildObjectURLs(s3Key)
 	file := &storageentityv1.StoredFile{
 		FileId:        fileID,
@@ -589,12 +627,16 @@ func (s *StorageService) ListFiles(
 	uploadedBy string,
 	limit, offset int32,
 ) ([]*storageentityv1.StoredFile, int, error) {
-	if strings.TrimSpace(tenantID) == "" {
-		return nil, 0, fmt.Errorf("%w: tenant_id is required", ErrInvalidInput)
+	// BUG FIX: Allow empty tenantID for B2C users (root tenant is not a UUID).
+	// When tenantID is empty but uploadedBy is set, list files by uploaded_by only.
+	tenantID = strings.TrimSpace(tenantID)
+	if tenantID == "" && strings.TrimSpace(uploadedBy) == "" && referenceID == "" {
+		return nil, 0, fmt.Errorf("%w: tenant_id or uploaded_by is required", ErrInvalidInput)
 	}
 	uploadedBy = strings.TrimSpace(uploadedBy)
 	if uploadedBy != "" {
-		if s.userFileIndex != nil {
+		// For non-empty tenantID, try in-memory index first
+		if tenantID != "" && s.userFileIndex != nil {
 			if files, total, ok := s.userFileIndex.List(tenantID, uploadedBy, fileType, referenceID, referenceType, limit, offset); ok {
 				return files, total, nil
 			}
@@ -604,7 +646,7 @@ func (s *StorageService) ListFiles(
 		if err != nil {
 			return nil, 0, err
 		}
-		if s.userFileIndex != nil {
+		if tenantID != "" && s.userFileIndex != nil {
 			s.userFileIndex.WarmUser(tenantID, uploadedBy, allUserFiles)
 			if files, total, ok := s.userFileIndex.List(tenantID, uploadedBy, fileType, referenceID, referenceType, limit, offset); ok {
 				return files, total, nil

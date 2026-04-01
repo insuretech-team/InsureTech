@@ -1,0 +1,382 @@
+syntax = "proto3";
+
+package insuretech.workflow.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/entity/v1;workflowv1";
+option csharp_namespace = "Insuretech.Workflow.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+
+// BusinessWorkflowDefinition represents a business rules workflow using Microsoft RulesEngine
+// Maps to 'business_workflow_definitions' table in workflow_schema
+// This is separate from approval workflows - it's for automated business rule evaluation
+message BusinessWorkflowDefinition {
+  option (insuretech.common.v1.table) = {
+    table_name: "business_workflow_definitions"
+    schema_name: "workflow_schema"
+    migration_order: 60
+    is_table: true
+    comment: "Business rule workflows using Microsoft RulesEngine for automated decisions"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string business_workflow_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "business_workflow_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Business Workflow UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:business_workflow_id;not null"
+
+  string workflow_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "workflow_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      unique: true
+      comment: "Unique workflow name"
+      index: {
+        index_name: "idx_business_workflows_name"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:workflow_name;not null"
+
+  string description = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "description"
+      sql_type: "TEXT"
+      comment: "Workflow description"
+    }
+  ];
+  // @inject_tag: gorm:"column:description"
+
+  BusinessWorkflowType workflow_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "workflow_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of business workflow"
+      index: {
+        index_name: "idx_business_workflows_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:workflow_type;not null;serializer:proto_enum"
+
+  BusinessWorkflowStatus status = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ACTIVE'"
+      comment: "Workflow status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  int32 version = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "version"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "1"
+      comment: "Workflow version"
+    }
+  ];
+  // @inject_tag: gorm:"column:version;not null"
+
+  // Microsoft RulesEngine compatible rules stored as JSON
+  // Contains array of Rule objects with RuleName, Expression, SuccessEvent, etc.
+  string rules_config = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "rules_config"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Microsoft RulesEngine rules configuration JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:rules_config;not null"
+
+  // Input parameter schema - defines what inputs this workflow expects
+  string input_schema = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "input_schema"
+      sql_type: "JSONB"
+      comment: "JSON Schema for expected inputs"
+      is_json: true
+    }
+  ];
+
+  // Output result schema - defines what outputs this workflow produces
+  string output_schema = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "output_schema"
+      sql_type: "JSONB"
+      comment: "JSON Schema for output results"
+      is_json: true
+    }
+  ];
+
+  map<string, string> metadata = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+
+  string created_by = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_by"
+      sql_type: "UUID"
+      not_null: true
+      comment: "User who created the workflow"
+    }
+  ];
+  // @inject_tag: gorm:"column:created_by;not null"
+
+  google.protobuf.Timestamp created_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+// BusinessRule represents a single rule within a workflow
+// This is the Microsoft RulesEngine compatible structure
+message BusinessRule {
+  string rule_id = 1;
+  string rule_name = 2;
+  string expression = 3; // Lambda expression like "input1.age >= 18 AND input1.creditScore >= 600"
+  RuleExpressionType expression_type = 4;
+  string success_event = 5; // Value returned on success (e.g., "ELIGIBLE", "10" for discount %)
+  string error_message = 6; // Error message on failure
+  ErrorType error_type = 7;
+  int32 priority = 8; // Execution priority (lower = first)
+  bool is_enabled = 9;
+  repeated BusinessRule child_rules = 10; // Nested rules for complex logic
+  map<string, string> properties = 11; // Additional rule properties
+}
+
+enum RuleExpressionType {
+  RULE_EXPRESSION_TYPE_UNSPECIFIED = 0;
+  RULE_EXPRESSION_TYPE_LAMBDA = 1; // C# lambda expression
+  RULE_EXPRESSION_TYPE_CUSTOM = 2; // Custom expression type
+}
+
+enum ErrorType {
+  ERROR_TYPE_UNSPECIFIED = 0;
+  ERROR_TYPE_ERROR = 1; // Hard failure
+  ERROR_TYPE_WARNING = 2; // Soft failure, continues evaluation
+}
+
+enum BusinessWorkflowType {
+  BUSINESS_WORKFLOW_TYPE_UNSPECIFIED = 0;
+  BUSINESS_WORKFLOW_TYPE_UNDERWRITING_ELIGIBILITY = 1;
+  BUSINESS_WORKFLOW_TYPE_CLAIMS_APPROVAL = 2;
+  BUSINESS_WORKFLOW_TYPE_DISCOUNT_CALCULATION = 3;
+  BUSINESS_WORKFLOW_TYPE_PRICING = 4;
+  BUSINESS_WORKFLOW_TYPE_FRAUD_DETECTION = 5;
+  BUSINESS_WORKFLOW_TYPE_RISK_ASSESSMENT = 6;
+  BUSINESS_WORKFLOW_TYPE_ELIGIBILITY_CHECK = 7;
+  BUSINESS_WORKFLOW_TYPE_CUSTOM = 8;
+}
+
+enum BusinessWorkflowStatus {
+  BUSINESS_WORKFLOW_STATUS_UNSPECIFIED = 0;
+  BUSINESS_WORKFLOW_STATUS_ACTIVE = 1;
+  BUSINESS_WORKFLOW_STATUS_INACTIVE = 2;
+  BUSINESS_WORKFLOW_STATUS_DEPRECATED = 3;
+}
+
+// BusinessWorkflowExecution tracks rule evaluations
+// Maps to 'business_workflow_executions' table in workflow_schema
+message BusinessWorkflowExecution {
+  option (insuretech.common.v1.table) = {
+    table_name: "business_workflow_executions"
+    schema_name: "workflow_schema"
+    migration_order: 61
+    is_table: true
+    comment: "Execution log for business rule workflows"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string execution_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "execution_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Execution UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:execution_id;not null"
+
+  string business_workflow_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "business_workflow_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to business_workflow_definitions"
+      foreign_key: {
+        references_table: "business_workflow_definitions"
+        references_column: "business_workflow_id"
+        references_schema: "workflow_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_exec_business_workflow_id"
+      }
+      index: {
+        index_name: "idx_exec_business_workflow_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:business_workflow_id;not null"
+
+  string entity_type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "entity_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of entity (POLICY, CLAIM, QUOTE, CUSTOMER)"
+    }
+  ];
+  // @inject_tag: gorm:"column:entity_type;not null"
+
+  string entity_id = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "entity_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "ID of evaluated entity"
+      index: {
+        index_name: "idx_exec_entity_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:entity_id;not null"
+
+  bool is_success = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_success"
+      sql_type: "BOOLEAN"
+      not_null: true
+      comment: "Whether all rules passed"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_success;not null"
+
+  // Individual rule results
+  repeated BusinessRuleResult results = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "results"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Rule evaluation results as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:results;not null;serializer:proto_json"
+
+  // Input data used for evaluation
+  string inputs_json = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "inputs_json"
+      sql_type: "JSONB"
+      comment: "Input data as JSON"
+      is_json: true
+    }
+  ];
+
+  // Output data from evaluation
+  string outputs_json = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "outputs_json"
+      sql_type: "JSONB"
+      comment: "Output data as JSON"
+      is_json: true
+    }
+  ];
+
+  string executed_by = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "executed_by"
+      sql_type: "UUID"
+      comment: "User or service that executed"
+    }
+  ];
+  // @inject_tag: gorm:"column:executed_by"
+
+  google.protobuf.Timestamp executed_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "executed_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+  // @inject_tag: gorm:"column:executed_at;not null;serializer:proto_timestamp"
+
+  int32 execution_time_ms = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "execution_time_ms"
+      sql_type: "INTEGER"
+      comment: "Execution time in milliseconds"
+    }
+  ];
+  // @inject_tag: gorm:"column:execution_time_ms"
+}
+
+// Result of a single rule evaluation
+message BusinessRuleResult {
+  string rule_name = 1;
+  bool is_success = 2;
+  string success_event = 3; // Value from success_event if passed
+  string error_message = 4; // Error message if failed
+  repeated string child_results = 5; // Names of child rule results
+  int32 execution_time_ms = 6;
+}

@@ -84,7 +84,7 @@ service B2BService {
   // Assign a platform user as an OrgAdmin.
   rpc AssignOrgAdmin(AssignOrgAdminRequest) returns (AssignOrgAdminResponse) {
     option (google.api.http) = {
-      post : "/v1/b2b/organisations/{organisation_id}/admins"
+      post : "/v1/b2b/organisations/{organisation_id}/admins:assign"
       body : "*"
     };
   }
@@ -160,6 +160,14 @@ service B2BService {
     };
   }
 
+  // List organisations matching a partial name/code for employee activation.
+  rpc ListEmployeeLoginOrganisations(ListEmployeeLoginOrganisationsRequest)
+      returns (ListEmployeeLoginOrganisationsResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b/organisations:employee-login"
+    };
+  }
+
   // Create a new employee.
   rpc CreateEmployee(CreateEmployeeRequest) returns (CreateEmployeeResponse) {
     option (google.api.http) = {
@@ -180,6 +188,32 @@ service B2BService {
   rpc DeleteEmployee(DeleteEmployeeRequest) returns (DeleteEmployeeResponse) {
     option (google.api.http) = {
       delete : "/v1/b2b/employees/{employee_uuid}"
+    };
+  }
+
+  // Start employee self-service activation using organisation code +
+  // employee_id + email.
+  rpc ActivateEmployee(ActivateEmployeeRequest)
+      returns (ActivateEmployeeResponse) {
+    option (google.api.http) = {
+      post : "/v1/b2b/employees:activate"
+      body : "*"
+    };
+  }
+
+  // Resolve the authenticated employee's own profile.
+  rpc GetMyEmployeeProfile(GetMyEmployeeProfileRequest)
+      returns (GetMyEmployeeProfileResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b-self/profile"
+    };
+  }
+
+  // Resolve the authenticated employee's assigned plan and coverage.
+  rpc GetMyEmployeeCoverage(GetMyEmployeeCoverageRequest)
+      returns (GetMyEmployeeCoverageResponse) {
+    option (google.api.http) = {
+      get : "/v1/b2b-self/coverage"
     };
   }
 
@@ -251,6 +285,28 @@ message PurchaseOrderCatalogItem {
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
   insuretech.common.v1.Money premium_amount = 6
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message EmployeeLoginOrganisation {
+  string organisation_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string organisation_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string organisation_code = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message EmployeeCoverageView {
+  string organisation_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string organisation_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string employee_uuid = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string employee_id = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string assigned_plan_id = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string assigned_plan_name = 6 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.InsuranceType insurance_category = 7
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Money coverage_amount = 8
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Money premium_amount = 9
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 number_of_dependent = 10 [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
 // ─── ORGANISATION MESSAGES ───────────────────────────────────────────────────
@@ -495,6 +551,18 @@ message GetEmployeeResponse {
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
+message ListEmployeeLoginOrganisationsRequest {
+  string query = 1 [ (google.api.field_behavior) = REQUIRED ];
+  int32 page_size = 2 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ListEmployeeLoginOrganisationsResponse {
+  repeated EmployeeLoginOrganisation organisations = 1
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
 message CreateEmployeeRequest {
   string name = 1 [ (google.api.field_behavior) = REQUIRED ];
   string employee_id = 2 [ (google.api.field_behavior) = REQUIRED ];
@@ -511,11 +579,12 @@ message CreateEmployeeRequest {
 
   // New PII fields
   string email = 9 [ (google.api.field_behavior) = OPTIONAL ];
-  string mobile_number = 10 [ (google.api.field_behavior) = OPTIONAL ];
+  string mobile_number = 10 [ (google.api.field_behavior) = OPTIONAL ]; // Accepts 017..., +880..., or 00880... and is stored as +8801XXXXXXXXX.
   string date_of_birth = 11 [ (google.api.field_behavior) = OPTIONAL ];
   string date_of_joining = 12 [ (google.api.field_behavior) = OPTIONAL ];
   insuretech.b2b.entity.v1.EmployeeGender gender = 13
       [ (google.api.field_behavior) = OPTIONAL ];
+  string user_id = 14 [ (google.api.field_behavior) = OPTIONAL ];
 }
 
 message CreateEmployeeResponse {
@@ -533,7 +602,7 @@ message UpdateEmployeeRequest {
   string name = 2 [ (google.api.field_behavior) = OPTIONAL ];
   string department_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
   string email = 4 [ (google.api.field_behavior) = OPTIONAL ];
-  string mobile_number = 5 [ (google.api.field_behavior) = OPTIONAL ];
+  string mobile_number = 5 [ (google.api.field_behavior) = OPTIONAL ]; // Accepts 017..., +880..., or 00880... and is stored as +8801XXXXXXXXX.
   string date_of_birth = 6 [ (google.api.field_behavior) = OPTIONAL ];
   string date_of_joining = 7 [ (google.api.field_behavior) = OPTIONAL ];
   insuretech.b2b.entity.v1.EmployeeGender gender = 8
@@ -547,6 +616,7 @@ message UpdateEmployeeRequest {
   int32 number_of_dependent = 12 [ (google.api.field_behavior) = OPTIONAL ];
   insuretech.b2b.entity.v1.EmployeeStatus status = 13
       [ (google.api.field_behavior) = OPTIONAL ];
+  string user_id = 14 [ (google.api.field_behavior) = OPTIONAL ];
 }
 
 message UpdateEmployeeResponse {
@@ -562,6 +632,38 @@ message DeleteEmployeeRequest {
 
 message DeleteEmployeeResponse {
   string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message ActivateEmployeeRequest {
+  string organisation_code = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string employee_id = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string email = 3 [ (google.api.field_behavior) = REQUIRED ];
+  string organisation_id = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message ActivateEmployeeResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string otp_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string message = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  int32 expires_in_seconds = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 5
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetMyEmployeeProfileRequest {}
+
+message GetMyEmployeeProfileResponse {
+  EmployeeView employee = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message GetMyEmployeeCoverageRequest {}
+
+message GetMyEmployeeCoverageResponse {
+  EmployeeCoverageView coverage = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
   insuretech.common.v1.Error error = 2
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }

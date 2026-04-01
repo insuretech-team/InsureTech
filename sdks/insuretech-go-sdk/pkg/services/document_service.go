@@ -11,63 +11,30 @@ type DocumentService struct {
 	Client Client
 }
 
-// CreateDocumentTemplate Create template
-func (s *DocumentService) CreateDocumentTemplate(ctx context.Context, req *models.DocumentTemplateCreationRequest) (*models.DocumentTemplateCreationResponse, error) {
-	path := "/v1/document-templates"
-	var result models.DocumentTemplateCreationResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
 // ListDocumentTemplates List templates
-func (s *DocumentService) ListDocumentTemplates(ctx context.Context) (*models.DocumentTemplatesListingResponse, error) {
+func (s *DocumentService) ListDocumentTemplates(ctx context.Context) error {
 	path := "/v1/document-templates"
-	var result models.DocumentTemplatesListingResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 
-// ListDocuments List documents for entity
-func (s *DocumentService) ListDocuments(ctx context.Context, entityType string, entityId string) (*models.DocumentsListingResponse, error) {
-	path := "/v1/entities/{entity_type}/{entity_id}/documents"
-	path = strings.ReplaceAll(path, "{entity_type}", entityType)
-	path = strings.ReplaceAll(path, "{entity_id}", entityId)
-	var result models.DocumentsListingResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+// CreateDocumentTemplate Create template
+func (s *DocumentService) CreateDocumentTemplate(ctx context.Context, req *models.DocumentTemplateCreationRequest) error {
+	path := "/v1/document-templates"
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // GetDocumentTemplate Get template
-func (s *DocumentService) GetDocumentTemplate(ctx context.Context, templateId string) (*models.DocumentTemplateRetrievalResponse, error) {
+func (s *DocumentService) GetDocumentTemplate(ctx context.Context, templateId string) error {
 	path := "/v1/document-templates/{template_id}"
 	path = strings.ReplaceAll(path, "{template_id}", templateId)
-	var result models.DocumentTemplateRetrievalResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 
 // UpdateDocumentTemplate Update template
-func (s *DocumentService) UpdateDocumentTemplate(ctx context.Context, templateId string, req *models.DocumentTemplateUpdateRequest) (*models.DocumentTemplateUpdateResponse, error) {
+func (s *DocumentService) UpdateDocumentTemplate(ctx context.Context, templateId string, req *models.DocumentTemplateUpdateRequest) error {
 	path := "/v1/document-templates/{template_id}"
 	path = strings.ReplaceAll(path, "{template_id}", templateId)
-	var result models.DocumentTemplateUpdateResponse
-	err := s.Client.DoRequest(ctx, "PATCH", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "PATCH", path, req, nil)
 }
 
 // DeleteDocumentTemplate Delete template
@@ -77,16 +44,18 @@ func (s *DocumentService) DeleteDocumentTemplate(ctx context.Context, templateId
 	return s.Client.DoRequest(ctx, "DELETE", path, nil, nil)
 }
 
+// DeactivateDocumentTemplate Deactivate template
+func (s *DocumentService) DeactivateDocumentTemplate(ctx context.Context, templateId string, req *models.DocumentTemplateDeactivationRequest) error {
+	path := "/v1/document-templates/{template_id}:deactivate"
+	path = strings.ReplaceAll(path, "{template_id}", templateId)
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
+}
+
 // GetDocument Get document
-func (s *DocumentService) GetDocument(ctx context.Context, documentId string) (*models.DocumentRetrievalResponse, error) {
+func (s *DocumentService) GetDocument(ctx context.Context, documentId string) error {
 	path := "/v1/documents/{document_id}"
 	path = strings.ReplaceAll(path, "{document_id}", documentId)
-	var result models.DocumentRetrievalResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 
 // DeleteDocument Delete document
@@ -97,37 +66,23 @@ func (s *DocumentService) DeleteDocument(ctx context.Context, documentId string)
 }
 
 // DownloadDocument Download document
-func (s *DocumentService) DownloadDocument(ctx context.Context, documentId string) (*models.DocumentDownloadResponse, error) {
+func (s *DocumentService) DownloadDocument(ctx context.Context, documentId string) error {
 	path := "/v1/documents/{document_id}/download"
 	path = strings.ReplaceAll(path, "{document_id}", documentId)
-	var result models.DocumentDownloadResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// DeactivateDocumentTemplate Deactivate template
-func (s *DocumentService) DeactivateDocumentTemplate(ctx context.Context, templateId string, req *models.DocumentTemplateDeactivationRequest) (*models.DocumentTemplateDeactivationResponse, error) {
-	path := "/v1/document-templates/{template_id}:deactivate"
-	path = strings.ReplaceAll(path, "{template_id}", templateId)
-	var result models.DocumentTemplateDeactivationResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 
 // GenerateDocument Generate document
-func (s *DocumentService) GenerateDocument(ctx context.Context, req *models.DocumentGenerationRequest) (*models.DocumentGenerationResponse, error) {
-	path := "/v1/documents"
-	var result models.DocumentGenerationResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+func (s *DocumentService) GenerateDocument(ctx context.Context, req *models.DocumentGenerationRequest) error {
+	path := "/v1/documents:generate"
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
+}
+
+// ListDocuments List documents for entity
+func (s *DocumentService) ListDocuments(ctx context.Context, entityType string, entityId string) error {
+	path := "/v1/entities/{entity_type}/{entity_id}/documents"
+	path = strings.ReplaceAll(path, "{entity_type}", entityType)
+	path = strings.ReplaceAll(path, "{entity_id}", entityId)
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 

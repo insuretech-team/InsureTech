@@ -1,0 +1,21 @@
+BonusConfig:
+  type: object
+  properties:
+    bonus_code:
+      type: string
+    bonus_name:
+      type: string
+    bonus_type:
+      type: string
+      description: PERCENTAGE, FIXED_AMOUNT
+    percentage:
+      type: number
+      format: float
+      description: If percentage type
+    fixed_amount:
+      type: string
+      format: int64
+      description: If fixed amount type
+    description:
+      type: string
+  description: BonusConfig - Discount/bonus configuration

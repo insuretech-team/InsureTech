@@ -5,7 +5,5 @@ OrgMembersListingResponse:
       type: array
       items:
         $ref: '#/components/schemas/OrgMember'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for org members listing operation. Returns operation
     results and status.

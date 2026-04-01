@@ -1,0 +1,17 @@
+QuoteDeclinedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    customer_id:
+      type: string
+    decline_reason:
+      type: string
+    declined_at:
+      type: string
+      format: date-time
+  description: QuoteDeclinedEvent is emitted when customer declines a quote

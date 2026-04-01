@@ -28,49 +28,52 @@ namespace Insuretech.Workflow.Entity.V1 {
             "LnByb3RvEh1pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0eS52MRogaW5zdXJl",
             "dGVjaC9jb21tb24vdjEvdHlwZXMucHJvdG8aH2dvb2dsZS9wcm90b2J1Zi90",
             "aW1lc3RhbXAucHJvdG8aHWluc3VyZXRlY2gvY29tbW9uL3YxL2RiLnByb3Rv",
-            "Iq0JCgxXb3JrZmxvd1Rhc2sSOgoCaWQYASABKAlCKpK1GCYKB3Rhc2tfaWQS",
+            "Ir0JCgxXb3JrZmxvd1Rhc2sSOgoCaWQYASABKAlCKpK1GCYKB3Rhc2tfaWQS",
             "BFVVSUQYASgBOhFnZW5fcmFuZG9tX3V1aWQoKVICaWQSrgEKFHdvcmtmbG93",
             "X2luc3RhbmNlX2lkGAIgASgJQnyStRh4ChR3b3JrZmxvd19pbnN0YW5jZV9p",
             "ZBIEVVVJRBgBSjQKEndvcmtmbG93X2luc3RhbmNlcxILaW5zdGFuY2VfaWQa",
             "D3dvcmtmbG93X3NjaGVtYSADUiIKHmlkeF93b3JrZmxvd190YXNrc19pbnN0",
             "YW5jZV9pZBACUhJ3b3JrZmxvd0luc3RhbmNlSWQSPAoJc3RlcF9uYW1lGAMg",
             "ASgJQh+StRgbCglzdGVwX25hbWUSDFZBUkNIQVIoMTAwKRgBUghzdGVwTmFt",
-            "ZRJWCgR0eXBlGAQgASgOMicuaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHku",
-            "djEuVGFza1R5cGVCGZK1GBUKBHR5cGUSC1ZBUkNIQVIoMjApGAFSBHR5cGUS",
-            "fgoLYXNzaWduZWRfdG8YBSABKAlCXZK1GFkKC2Fzc2lnbmVkX3RvEgRVVUlE",
-            "SiAKBXVzZXJzEgd1c2VyX2lkGgxhdXRobl9zY2hlbWEgBFIiCh5pZHhfd29y",
-            "a2Zsb3dfdGFza3NfYXNzaWduZWRfdG8QAlIKYXNzaWduZWRUbxKIAQoGc3Rh",
-            "dHVzGAYgASgOMikuaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjEuVGFz",
-            "a1N0YXR1c0JFkrUYQQoGc3RhdHVzEgtWQVJDSEFSKDIwKRgBOgknUEVORElO",
-            "RydSHQoZaWR4X3dvcmtmbG93X3Rhc2tzX3N0YXR1cxACUgZzdGF0dXMSVQoI",
-            "ZGVjaXNpb24YByABKAlCOZK1GDUKCGRlY2lzaW9uEgtWQVJDSEFSKDIwKVoc",
-            "QVBQUk9WRUQsIFJFSkVDVEVELCBSRVRVUk5FRFIIZGVjaXNpb24SMAoIY29t",
-            "bWVudHMYCCABKAlCFJK1GBAKCGNvbW1lbnRzEgRURVhUUghjb21tZW50cxJS",
-            "CghkdWVfZGF0ZRgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBC",
-            "G5K1GBcKCGR1ZV9kYXRlEgtUSU1FU1RBTVBUWlIHZHVlRGF0ZRJeCgxjb21w",
-            "bGV0ZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQh+S",
-            "tRgbCgxjb21wbGV0ZWRfYXQSC1RJTUVTVEFNUFRaUgtjb21wbGV0ZWRBdBKE",
-            "AQoKYXVkaXRfaW5mbxgLIAEoCzIfLmluc3VyZXRlY2guY29tbW9uLnYxLkF1",
-            "ZGl0SW5mb0JEkrUYQAoKYXVkaXRfaW5mbxIFSlNPTkIYAToLJ3t9Jzo6anNv",
-            "bmJaGkF1ZGl0IHRyYWlsIHN0b3JlZCBhcyBKU09OeAFSCWF1ZGl0SW5mbzpL",
-            "irUYRwoOd29ya2Zsb3dfdGFza3MSD3dvcmtmbG93X3NjaGVtYRg9IAEqHklu",
-            "ZGl2aWR1YWwgd29ya2Zsb3cgc3RlcCB0YXNrczgBKoUBCghUYXNrVHlwZRIZ",
-            "ChVUQVNLX1RZUEVfVU5TUEVDSUZJRUQQABIWChJUQVNLX1RZUEVfQVBQUk9W",
-            "QUwQARIUChBUQVNLX1RZUEVfUkVWSUVXEAISGgoWVEFTS19UWVBFX05PVElG",
-            "SUNBVElPThADEhQKEFRBU0tfVFlQRV9BQ1RJT04QBCqTAQoKVGFza1N0YXR1",
-            "cxIbChdUQVNLX1NUQVRVU19VTlNQRUNJRklFRBAAEhcKE1RBU0tfU1RBVFVT",
-            "X1BFTkRJTkcQARIbChdUQVNLX1NUQVRVU19JTl9QUk9HUkVTUxACEhkKFVRB",
-            "U0tfU1RBVFVTX0NPTVBMRVRFRBADEhcKE1RBU0tfU1RBVFVTX1NLSVBQRUQQ",
-            "BEKfAgohY29tLmluc3VyZXRlY2gud29ya2Zsb3cuZW50aXR5LnYxQhFXb3Jr",
-            "Zmxvd1Rhc2tQcm90b1ABWlBnaXRodWIuY29tL25ld2FnZS1zYWludC9pbnN1",
-            "cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL3dvcmtmbG93L2VudGl0eS92MTtl",
-            "bnRpdHl2MaICA0lXRaoCHUluc3VyZXRlY2guV29ya2Zsb3cuRW50aXR5LlYx",
-            "ygIdSW5zdXJldGVjaFxXb3JrZmxvd1xFbnRpdHlcVjHiAilJbnN1cmV0ZWNo",
-            "XFdvcmtmbG93XEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCIEluc3VyZXRlY2g6",
-            "OldvcmtmbG93OjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "ZRJeCgR0eXBlGAQgASgOMi8uaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHku",
+            "djEuV29ya2Zsb3dUYXNrVHlwZUIZkrUYFQoEdHlwZRILVkFSQ0hBUigyMCkY",
+            "AVIEdHlwZRJ+Cgthc3NpZ25lZF90bxgFIAEoCUJdkrUYWQoLYXNzaWduZWRf",
+            "dG8SBFVVSURKIAoFdXNlcnMSB3VzZXJfaWQaDGF1dGhuX3NjaGVtYSAEUiIK",
+            "HmlkeF93b3JrZmxvd190YXNrc19hc3NpZ25lZF90bxACUgphc3NpZ25lZFRv",
+            "EpABCgZzdGF0dXMYBiABKA4yMS5pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0",
+            "eS52MS5Xb3JrZmxvd1Rhc2tTdGF0dXNCRZK1GEEKBnN0YXR1cxILVkFSQ0hB",
+            "UigyMCkYAToJJ1BFTkRJTkcnUh0KGWlkeF93b3JrZmxvd190YXNrc19zdGF0",
+            "dXMQAlIGc3RhdHVzElUKCGRlY2lzaW9uGAcgASgJQjmStRg1CghkZWNpc2lv",
+            "bhILVkFSQ0hBUigyMClaHEFQUFJPVkVELCBSRUpFQ1RFRCwgUkVUVVJORURS",
+            "CGRlY2lzaW9uEjAKCGNvbW1lbnRzGAggASgJQhSStRgQCghjb21tZW50cxIE",
+            "VEVYVFIIY29tbWVudHMSUgoIZHVlX2RhdGUYCSABKAsyGi5nb29nbGUucHJv",
+            "dG9idWYuVGltZXN0YW1wQhuStRgXCghkdWVfZGF0ZRILVElNRVNUQU1QVFpS",
+            "B2R1ZURhdGUSXgoMY29tcGxldGVkX2F0GAogASgLMhouZ29vZ2xlLnByb3Rv",
+            "YnVmLlRpbWVzdGFtcEIfkrUYGwoMY29tcGxldGVkX2F0EgtUSU1FU1RBTVBU",
+            "WlILY29tcGxldGVkQXQShAEKCmF1ZGl0X2luZm8YCyABKAsyHy5pbnN1cmV0",
+            "ZWNoLmNvbW1vbi52MS5BdWRpdEluZm9CRJK1GEAKCmF1ZGl0X2luZm8SBUpT",
+            "T05CGAE6Cyd7fSc6Ompzb25iWhpBdWRpdCB0cmFpbCBzdG9yZWQgYXMgSlNP",
+            "TngBUglhdWRpdEluZm86S4q1GEcKDndvcmtmbG93X3Rhc2tzEg93b3JrZmxv",
+            "d19zY2hlbWEYPSABKh5JbmRpdmlkdWFsIHdvcmtmbG93IHN0ZXAgdGFza3M4",
+            "ASq6AQoQV29ya2Zsb3dUYXNrVHlwZRIiCh5XT1JLRkxPV19UQVNLX1RZUEVf",
+            "VU5TUEVDSUZJRUQQABIfChtXT1JLRkxPV19UQVNLX1RZUEVfQVBQUk9WQUwQ",
+            "ARIdChlXT1JLRkxPV19UQVNLX1RZUEVfUkVWSUVXEAISIwofV09SS0ZMT1df",
+            "VEFTS19UWVBFX05PVElGSUNBVElPThADEh0KGVdPUktGTE9XX1RBU0tfVFlQ",
+            "RV9BQ1RJT04QBCrIAQoSV29ya2Zsb3dUYXNrU3RhdHVzEiQKIFdPUktGTE9X",
+            "X1RBU0tfU1RBVFVTX1VOU1BFQ0lGSUVEEAASIAocV09SS0ZMT1dfVEFTS19T",
+            "VEFUVVNfUEVORElORxABEiQKIFdPUktGTE9XX1RBU0tfU1RBVFVTX0lOX1BS",
+            "T0dSRVNTEAISIgoeV09SS0ZMT1dfVEFTS19TVEFUVVNfQ09NUExFVEVEEAMS",
+            "IAocV09SS0ZMT1dfVEFTS19TVEFUVVNfU0tJUFBFRBAEQp8CCiFjb20uaW5z",
+            "dXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjFCEVdvcmtmbG93VGFza1Byb3Rv",
+            "UAFaUGdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dv",
+            "L2luc3VyZXRlY2gvd29ya2Zsb3cvZW50aXR5L3YxO2VudGl0eXYxogIDSVdF",
+            "qgIdSW5zdXJldGVjaC5Xb3JrZmxvdy5FbnRpdHkuVjHKAh1JbnN1cmV0ZWNo",
+            "XFdvcmtmbG93XEVudGl0eVxWMeICKUluc3VyZXRlY2hcV29ya2Zsb3dcRW50",
+            "aXR5XFYxXEdQQk1ldGFkYXRh6gIgSW5zdXJldGVjaDo6V29ya2Zsb3c6OkVu",
+            "dGl0eTo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Workflow.Entity.V1.TaskType), typeof(global::Insuretech.Workflow.Entity.V1.TaskStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Workflow.Entity.V1.WorkflowTaskType), typeof(global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Entity.V1.WorkflowTask), global::Insuretech.Workflow.Entity.V1.WorkflowTask.Parser, new[]{ "Id", "WorkflowInstanceId", "StepName", "Type", "AssignedTo", "Status", "Decision", "Comments", "DueDate", "CompletedAt", "AuditInfo" }, null, null, null, null)
           }));
     }
@@ -78,20 +81,20 @@ namespace Insuretech.Workflow.Entity.V1 {
 
   }
   #region Enums
-  public enum TaskType {
-    [pbr::OriginalName("TASK_TYPE_UNSPECIFIED")] Unspecified = 0,
-    [pbr::OriginalName("TASK_TYPE_APPROVAL")] Approval = 1,
-    [pbr::OriginalName("TASK_TYPE_REVIEW")] Review = 2,
-    [pbr::OriginalName("TASK_TYPE_NOTIFICATION")] Notification = 3,
-    [pbr::OriginalName("TASK_TYPE_ACTION")] Action = 4,
+  public enum WorkflowTaskType {
+    [pbr::OriginalName("WORKFLOW_TASK_TYPE_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("WORKFLOW_TASK_TYPE_APPROVAL")] Approval = 1,
+    [pbr::OriginalName("WORKFLOW_TASK_TYPE_REVIEW")] Review = 2,
+    [pbr::OriginalName("WORKFLOW_TASK_TYPE_NOTIFICATION")] Notification = 3,
+    [pbr::OriginalName("WORKFLOW_TASK_TYPE_ACTION")] Action = 4,
   }
 
-  public enum TaskStatus {
-    [pbr::OriginalName("TASK_STATUS_UNSPECIFIED")] Unspecified = 0,
-    [pbr::OriginalName("TASK_STATUS_PENDING")] Pending = 1,
-    [pbr::OriginalName("TASK_STATUS_IN_PROGRESS")] InProgress = 2,
-    [pbr::OriginalName("TASK_STATUS_COMPLETED")] Completed = 3,
-    [pbr::OriginalName("TASK_STATUS_SKIPPED")] Skipped = 4,
+  public enum WorkflowTaskStatus {
+    [pbr::OriginalName("WORKFLOW_TASK_STATUS_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("WORKFLOW_TASK_STATUS_PENDING")] Pending = 1,
+    [pbr::OriginalName("WORKFLOW_TASK_STATUS_IN_PROGRESS")] InProgress = 2,
+    [pbr::OriginalName("WORKFLOW_TASK_STATUS_COMPLETED")] Completed = 3,
+    [pbr::OriginalName("WORKFLOW_TASK_STATUS_SKIPPED")] Skipped = 4,
   }
 
   #endregion
@@ -202,13 +205,13 @@ namespace Insuretech.Workflow.Entity.V1 {
 
     /// <summary>Field number for the "type" field.</summary>
     public const int TypeFieldNumber = 4;
-    private global::Insuretech.Workflow.Entity.V1.TaskType type_ = global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified;
+    private global::Insuretech.Workflow.Entity.V1.WorkflowTaskType type_ = global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified;
     /// <summary>
     /// @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Insuretech.Workflow.Entity.V1.TaskType Type {
+    public global::Insuretech.Workflow.Entity.V1.WorkflowTaskType Type {
       get { return type_; }
       set {
         type_ = value;
@@ -232,13 +235,13 @@ namespace Insuretech.Workflow.Entity.V1 {
 
     /// <summary>Field number for the "status" field.</summary>
     public const int StatusFieldNumber = 6;
-    private global::Insuretech.Workflow.Entity.V1.TaskStatus status_ = global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified;
+    private global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus status_ = global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified;
     /// <summary>
     /// @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public global::Insuretech.Workflow.Entity.V1.TaskStatus Status {
+    public global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus Status {
       get { return status_; }
       set {
         status_ = value;
@@ -309,7 +312,7 @@ namespace Insuretech.Workflow.Entity.V1 {
     public const int AuditInfoFieldNumber = 11;
     private global::Insuretech.Common.V1.AuditInfo auditInfo_;
     /// <summary>
-    /// @inject_tag: gorm:"column:audit_info;not null"
+    /// @inject_tag: gorm:"-"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -356,9 +359,9 @@ namespace Insuretech.Workflow.Entity.V1 {
       if (Id.Length != 0) hash ^= Id.GetHashCode();
       if (WorkflowInstanceId.Length != 0) hash ^= WorkflowInstanceId.GetHashCode();
       if (StepName.Length != 0) hash ^= StepName.GetHashCode();
-      if (Type != global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified) hash ^= Type.GetHashCode();
+      if (Type != global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified) hash ^= Type.GetHashCode();
       if (AssignedTo.Length != 0) hash ^= AssignedTo.GetHashCode();
-      if (Status != global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified) hash ^= Status.GetHashCode();
+      if (Status != global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified) hash ^= Status.GetHashCode();
       if (Decision.Length != 0) hash ^= Decision.GetHashCode();
       if (Comments.Length != 0) hash ^= Comments.GetHashCode();
       if (dueDate_ != null) hash ^= DueDate.GetHashCode();
@@ -394,7 +397,7 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(26);
         output.WriteString(StepName);
       }
-      if (Type != global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified) {
+      if (Type != global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified) {
         output.WriteRawTag(32);
         output.WriteEnum((int) Type);
       }
@@ -402,7 +405,7 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(42);
         output.WriteString(AssignedTo);
       }
-      if (Status != global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified) {
+      if (Status != global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified) {
         output.WriteRawTag(48);
         output.WriteEnum((int) Status);
       }
@@ -448,7 +451,7 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(26);
         output.WriteString(StepName);
       }
-      if (Type != global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified) {
+      if (Type != global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified) {
         output.WriteRawTag(32);
         output.WriteEnum((int) Type);
       }
@@ -456,7 +459,7 @@ namespace Insuretech.Workflow.Entity.V1 {
         output.WriteRawTag(42);
         output.WriteString(AssignedTo);
       }
-      if (Status != global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified) {
+      if (Status != global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified) {
         output.WriteRawTag(48);
         output.WriteEnum((int) Status);
       }
@@ -499,13 +502,13 @@ namespace Insuretech.Workflow.Entity.V1 {
       if (StepName.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(StepName);
       }
-      if (Type != global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified) {
+      if (Type != global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Type);
       }
       if (AssignedTo.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(AssignedTo);
       }
-      if (Status != global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified) {
+      if (Status != global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified) {
         size += 1 + pb::CodedOutputStream.ComputeEnumSize((int) Status);
       }
       if (Decision.Length != 0) {
@@ -544,13 +547,13 @@ namespace Insuretech.Workflow.Entity.V1 {
       if (other.StepName.Length != 0) {
         StepName = other.StepName;
       }
-      if (other.Type != global::Insuretech.Workflow.Entity.V1.TaskType.Unspecified) {
+      if (other.Type != global::Insuretech.Workflow.Entity.V1.WorkflowTaskType.Unspecified) {
         Type = other.Type;
       }
       if (other.AssignedTo.Length != 0) {
         AssignedTo = other.AssignedTo;
       }
-      if (other.Status != global::Insuretech.Workflow.Entity.V1.TaskStatus.Unspecified) {
+      if (other.Status != global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus.Unspecified) {
         Status = other.Status;
       }
       if (other.Decision.Length != 0) {
@@ -609,7 +612,7 @@ namespace Insuretech.Workflow.Entity.V1 {
             break;
           }
           case 32: {
-            Type = (global::Insuretech.Workflow.Entity.V1.TaskType) input.ReadEnum();
+            Type = (global::Insuretech.Workflow.Entity.V1.WorkflowTaskType) input.ReadEnum();
             break;
           }
           case 42: {
@@ -617,7 +620,7 @@ namespace Insuretech.Workflow.Entity.V1 {
             break;
           }
           case 48: {
-            Status = (global::Insuretech.Workflow.Entity.V1.TaskStatus) input.ReadEnum();
+            Status = (global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus) input.ReadEnum();
             break;
           }
           case 58: {
@@ -681,7 +684,7 @@ namespace Insuretech.Workflow.Entity.V1 {
             break;
           }
           case 32: {
-            Type = (global::Insuretech.Workflow.Entity.V1.TaskType) input.ReadEnum();
+            Type = (global::Insuretech.Workflow.Entity.V1.WorkflowTaskType) input.ReadEnum();
             break;
           }
           case 42: {
@@ -689,7 +692,7 @@ namespace Insuretech.Workflow.Entity.V1 {
             break;
           }
           case 48: {
-            Status = (global::Insuretech.Workflow.Entity.V1.TaskStatus) input.ReadEnum();
+            Status = (global::Insuretech.Workflow.Entity.V1.WorkflowTaskStatus) input.ReadEnum();
             break;
           }
           case 58: {

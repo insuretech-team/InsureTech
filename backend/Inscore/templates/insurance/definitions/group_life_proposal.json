@@ -1,0 +1,104 @@
+{
+  "id": "group_life_proposal",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "GROUP LIFE & HEALTH INSURANCE — FINANCIAL PROPOSAL" },
+    { "type": "subtitle", "text": "Prepared for: {{ client_name }}   |   Date: {{ proposal_date }}", "bold": true },
+    { "type": "divider" },
+    { "type": "heading", "text": "I.  CLIENT / GROUP DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Company / Organization Name", "value": "{{ client_name }}" },
+        { "number": "2.", "label": "Company Registration No.", "value": "{{ company_reg_number }}" },
+        { "number": "3.", "label": "Industry / Sector", "value": "{{ industry_sector }}" },
+        { "number": "4.", "label": "Contact Person & Designation", "value": "{{ contact_person }}" },
+        { "number": "5.", "label": "Contact Phone & Email", "value": "{{ contact_phone_email }}" },
+        { "number": "6.", "label": "Total Employees to be Covered", "value": "{{ total_employees }}" },
+        { "number": "7.", "label": "Average Age of Workforce", "value": "{{ average_age }}" },
+        { "number": "8.", "label": "Male / Female Split", "value": "{{ gender_split }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  PROPOSED COVERAGE STRUCTURE", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Coverage Section", "Benefit Description", "Sum Insured (Tk.)", "Premium Rate", "Annual Premium (Tk.)"],
+      "rows_key": "coverage_sections",
+      "columns": ["section", "description", "sum_insured", "rate", "annual_premium"],
+      "col_widths": [1.0, 2.0, 1.16, 1.0, 1.3]
+    },
+    { "type": "heading", "text": "III.  PREMIUM SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "", "label": "Total Annual Premium (Tk.)", "value": "{{ total_annual_premium }}" },
+        { "number": "", "label": "Stamp Duty (Tk.)", "value": "{{ stamp_duty }}" },
+        { "number": "", "label": "VAT (7%) (Tk.)", "value": "{{ vat_amount }}" },
+        { "number": "", "label": "TOTAL PAYABLE (Tk.)", "value": "{{ total_payable }}" },
+        { "number": "", "label": "Mode of Payment", "value": "{{ payment_mode }}" },
+        { "number": "", "label": "Coverage Period From", "value": "{{ coverage_start_date }}" },
+        { "number": "", "label": "Coverage Period To", "value": "{{ coverage_end_date }}" }
+      ]
+    },
+    { "type": "heading", "text": "IV.  KEY TERMS & CONDITIONS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "1.", "label": "Waiting Period", "value": "{{ waiting_period }}" },
+        { "number": "2.", "label": "Pre-existing Condition Exclusion", "value": "{{ pre_existing_exclusion }}" },
+        { "number": "3.", "label": "Maternity Benefit", "value": "{{ maternity_benefit }}" },
+        { "number": "4.", "label": "Dental Benefit", "value": "{{ dental_benefit }}" },
+        { "number": "5.", "label": "Optical Benefit", "value": "{{ optical_benefit }}" },
+        { "number": "6.", "label": "Room Rent Limit", "value": "{{ room_rent_limit }}" },
+        { "number": "7.", "label": "Sub-limit on ICU Charges", "value": "{{ icu_limit }}" },
+        { "number": "8.", "label": "Cashless / Reimbursement", "value": "{{ cashless_reimbursement }}" },
+        { "number": "9.", "label": "Network Hospitals", "value": "{{ network_hospitals }}" },
+        { "number": "10.", "label": "Claim Submission Deadline", "value": "{{ claim_deadline }}" }
+      ]
+    },
+    { "type": "heading", "text": "V.  GENERAL EXCLUSIONS (KEY)", "level": 1 },
+    {
+      "type": "paragraph",
+      "text": "This policy does not cover: (1) Pre-existing diseases during waiting period; (2) Cosmetic or aesthetic treatments; (3) Self-inflicted injuries or suicide; (4) War, invasion or civil commotion; (5) Experimental treatments; (6) Dental treatment except arising from accident; (7) Eyesight correction surgery; (8) Infertility treatment; (9) Obesity treatment; (10) Drug or alcohol abuse."
+    },
+    { "type": "heading", "text": "VI.  INSURER DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Insurer Name", "value": "Pragati Insurance PLC" },
+        { "number": "", "label": "License No.", "value": "{{ insurer_license }}" },
+        { "number": "", "label": "Reinsurance Arrangement", "value": "{{ reinsurance }}" },
+        { "number": "", "label": "Claims Settlement TAT", "value": "{{ claims_tat }}" },
+        { "number": "", "label": "TPA / Third Party Administrator", "value": "{{ tpa_name }}" },
+        { "number": "", "label": "Proposal Valid Until", "value": "{{ proposal_validity }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "This financial proposal is prepared in good faith based on the information provided by the group/employer. The final premium and terms are subject to underwriting review, declaration of actual member count, and acceptance by Pragati Insurance PLC. This proposal is valid for 30 days from the date of issue unless otherwise stated."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Prepared By (Insuretech / Broker)", "name": "{{ prepared_by }}" },
+        { "label": "Authorised Signatory (Insurer)", "name": "" },
+        { "label": "Client Acceptance & Date", "name": "{{ client_name }}" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Proposal Ref: {{ proposal_id }}   |   Client: {{ client_name }}   |   Generated: {{ generated_at }}" }
+  ]
+}

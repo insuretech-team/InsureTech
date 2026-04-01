@@ -5,9 +5,8 @@ import (
 	"errors"
 	"strings"
 
-	"google.golang.org/grpc/metadata"
-
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/media/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	mediav1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1"
 	mediaservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/services/v1"
@@ -26,41 +25,11 @@ func NewMediaHandler(mediaService *service.MediaService) *MediaHandler {
 
 // actorFromContext extracts the user/actor ID from gRPC metadata.
 func actorFromContext(ctx context.Context, fallback string) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return fallback
-	}
-	keys := []string{"x-user-id", "x-actor-id", "x-sub", "user-id"}
-	for _, k := range keys {
-		vals := md.Get(k)
-		if len(vals) == 0 {
-			continue
-		}
-		v := strings.TrimSpace(vals[0])
-		if v != "" {
-			return v
-		}
-	}
-	return fallback
+	return grpcmeta.ActorID(ctx, fallback)
 }
 
 func tenantFromContext(ctx context.Context, fallback string) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return fallback
-	}
-	keys := []string{"x-tenant-id", "tenant-id", "x-tenant"}
-	for _, k := range keys {
-		vals := md.Get(k)
-		if len(vals) == 0 {
-			continue
-		}
-		v := strings.TrimSpace(vals[0])
-		if v != "" {
-			return v
-		}
-	}
-	return fallback
+	return grpcmeta.TenantID(ctx, fallback)
 }
 
 func invalidArg(msg string) *commonv1.Error {

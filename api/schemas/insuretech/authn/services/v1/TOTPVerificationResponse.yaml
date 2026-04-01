@@ -3,10 +3,6 @@ TOTPVerificationResponse:
   properties:
     verified:
       type: boolean
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
     access_token:
       type: string
       description: "Session tokens \u2014 only populated when mfa_session_token was\

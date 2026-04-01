@@ -4,18 +4,21 @@ import (
 	"context"
 	"fmt"
 	"os"
-	"time"
+	"regexp"
+	"strings"
 
 	"github.com/google/uuid"
-	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/sms"
 	"golang.org/x/crypto/bcrypt"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/repository"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
 )
+
+var adminEmailRegex = regexp.MustCompile(`^[A-Za-z0-9._%+-]+@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$`)
 
 // SeedAdminUser bootstraps a default SYSTEM_USER account on first deploy.
 //
@@ -27,23 +30,28 @@ import (
 //
 // Behavior:
 // - If any env var is missing, seeding is skipped.
-// - If the user exists by email, we update password + status + email_verified.
+// - If the user already exists by email, seeding is skipped to avoid
+//   clobbering credentials that were changed through normal product flows.
 // - If it does not exist, we create it.
 func SeedAdminUser(ctx context.Context, db *gorm.DB) error {
-	adminEmail := os.Getenv("ADMIN_EMAIL")
-	adminMobileRaw := os.Getenv("ADMIN_MOBILE")
-	adminPassword := os.Getenv("ADMIN_PASSWORD")
+	adminEmailRaw := normalizeSeedEnvValue(os.Getenv("ADMIN_EMAIL"))
+	adminMobileRaw := normalizeSeedEnvValue(os.Getenv("ADMIN_MOBILE"))
+	adminPassword := normalizeSeedEnvValue(os.Getenv("ADMIN_PASSWORD"))
 	if adminPassword == "" {
-		legacyPassword := os.Getenv("ADMIN_PASSWARD")
+		legacyPassword := normalizeSeedEnvValue(os.Getenv("ADMIN_PASSWARD"))
 		if legacyPassword != "" {
 			adminPassword = legacyPassword
 			appLogger.Warn("Admin seeder: using legacy env ADMIN_PASSWARD; prefer ADMIN_PASSWORD")
 		}
 	}
 
-	if adminEmail == "" || adminMobileRaw == "" || adminPassword == "" {
+	if adminEmailRaw == "" || adminMobileRaw == "" || adminPassword == "" {
 		appLogger.Info("Admin seeder: skipped (ADMIN_EMAIL / ADMIN_MOBILE / ADMIN_PASSWORD or ADMIN_PASSWARD not set)")
 		return nil
+	}
+	adminEmail, err := normalizeAdminEmail(adminEmailRaw)
+	if err != nil {
+		return fmt.Errorf("admin seeder: invalid ADMIN_EMAIL %q: %w", adminEmailRaw, err)
 	}
 	adminMobile, err := normalizeAdminMobile(adminMobileRaw)
 	if err != nil {
@@ -64,20 +72,7 @@ func SeedAdminUser(ctx context.Context, db *gorm.DB) error {
 	// Check if exists
 	existing, err := userRepo.GetByEmail(ctx, adminEmail)
 	if err == nil && existing != nil {
-		// Best-effort updates (repository methods are safer than full update due to schema drift).
-		_ = userRepo.UpdatePassword(ctx, existing.UserId, string(hash))
-		_ = userRepo.UpdateStatus(ctx, existing.UserId, authnentityv1.UserStatus_USER_STATUS_ACTIVE)
-		_ = userRepo.UpdateEmailVerified(ctx, existing.UserId)
-		if existing.MobileNumber != adminMobile {
-			_ = db.WithContext(ctx).
-				Table("authn_schema.users").
-				Where("user_id = ?", existing.UserId).
-				Updates(map[string]any{
-					"mobile_number": adminMobile,
-					"updated_at":    time.Now(),
-				}).Error
-		}
-		appLogger.Infof("Admin seeder: admin user already exists, ensured active (email=%s user_id=%s)", adminEmail, existing.UserId)
+		appLogger.Infof("Admin seeder: admin user already exists, skipping bootstrap update (email=%s user_id=%s)", adminEmail, existing.UserId)
 		return nil
 	}
 
@@ -105,13 +100,23 @@ func SeedAdminUser(ctx context.Context, db *gorm.DB) error {
 
 // SeedB2bAdminUser bootstraps a default B2B_ORG_ADMIN account.
 func SeedB2bAdminUser(ctx context.Context, db *gorm.DB) error {
-	adminEmail := os.Getenv("B2B_ADMIN")
-	adminMobileRaw := os.Getenv("B2B_ADMIN_MOBILE")
-	adminPassword := os.Getenv("B2B_ADMIN_PASSWARD")
+	adminEmailRaw := normalizeSeedEnvValue(os.Getenv("B2B_ADMIN"))
+	adminMobileRaw := normalizeSeedEnvValue(os.Getenv("B2B_ADMIN_MOBILE"))
+	adminPassword := normalizeSeedEnvValue(os.Getenv("B2B_ADMIN_PASSWORD"))
+	if adminPassword == "" {
+		adminPassword = normalizeSeedEnvValue(os.Getenv("B2B_ADMIN_PASSWARD"))
+		if adminPassword != "" {
+			appLogger.Warn("B2B Admin seeder: using legacy env B2B_ADMIN_PASSWARD; prefer B2B_ADMIN_PASSWORD")
+		}
+	}
 
-	if adminEmail == "" || adminMobileRaw == "" || adminPassword == "" {
-		appLogger.Info("B2B Admin seeder: skipped (B2B_ADMIN / B2B_ADMIN_MOBILE / B2B_ADMIN_PASSWARD not set)")
+	if adminEmailRaw == "" || adminMobileRaw == "" || adminPassword == "" {
+		appLogger.Info("B2B Admin seeder: skipped (B2B_ADMIN / B2B_ADMIN_MOBILE / B2B_ADMIN_PASSWORD or B2B_ADMIN_PASSWARD not set)")
 		return nil
+	}
+	adminEmail, err := normalizeAdminEmail(adminEmailRaw)
+	if err != nil {
+		return fmt.Errorf("b2b admin seeder: invalid B2B_ADMIN %q: %w", adminEmailRaw, err)
 	}
 	adminMobile, err := normalizeAdminMobile(adminMobileRaw)
 	if err != nil {
@@ -132,20 +137,7 @@ func SeedB2bAdminUser(ctx context.Context, db *gorm.DB) error {
 	// Check if exists
 	existing, err := userRepo.GetByEmail(ctx, adminEmail)
 	if err == nil && existing != nil {
-		// Best-effort updates
-		_ = userRepo.UpdatePassword(ctx, existing.UserId, string(hash))
-		_ = userRepo.UpdateStatus(ctx, existing.UserId, authnentityv1.UserStatus_USER_STATUS_ACTIVE)
-		_ = userRepo.UpdateEmailVerified(ctx, existing.UserId)
-		if existing.MobileNumber != adminMobile {
-			_ = db.WithContext(ctx).
-				Table("authn_schema.users").
-				Where("user_id = ?", existing.UserId).
-				Updates(map[string]any{
-					"mobile_number": adminMobile,
-					"updated_at":    time.Now(),
-				}).Error
-		}
-		appLogger.Infof("B2B Admin seeder: b2b admin user already exists, ensured active (email=%s user_id=%s)", adminEmail, existing.UserId)
+		appLogger.Infof("B2B Admin seeder: b2b admin user already exists, skipping bootstrap update (email=%s user_id=%s)", adminEmail, existing.UserId)
 		return nil
 	}
 
@@ -171,14 +163,29 @@ func SeedB2bAdminUser(ctx context.Context, db *gorm.DB) error {
 	return nil
 }
 
-func normalizeAdminMobile(mobile string) (string, error) {
-	normalized, err := sms.NormalizePhoneNumber(mobile)
-	if err != nil {
-		return "", err
+func normalizeAdminMobile(raw string) (string, error) {
+	return mobile.NormalizeBangladeshMobileE164(raw)
+}
+
+func normalizeAdminEmail(email string) (string, error) {
+	email = strings.ToLower(normalizeSeedEnvValue(email))
+	if email == "" {
+		return "", fmt.Errorf("empty email")
 	}
-	// DB constraint requires leading '+' in E.164-like format:
-	// ^\+8801[0-9]{9}$
-	return "+" + normalized, nil
+	if !adminEmailRegex.MatchString(email) {
+		return "", fmt.Errorf("must be a valid email address")
+	}
+	return email, nil
+}
+
+func normalizeSeedEnvValue(value string) string {
+	value = strings.TrimSpace(value)
+	if len(value) >= 2 {
+		if (value[0] == '"' && value[len(value)-1] == '"') || (value[0] == '\'' && value[len(value)-1] == '\'') {
+			value = strings.TrimSpace(value[1 : len(value)-1])
+		}
+	}
+	return value
 }
 
 // SeedDocumentTypes seeds the default document types (idempotent upsert by code).

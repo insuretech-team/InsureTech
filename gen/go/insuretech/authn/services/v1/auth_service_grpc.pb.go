@@ -35,14 +35,18 @@ const (
 	AuthService_ValidateCSRF_FullMethodName                  = "/insuretech.authn.services.v1.AuthService/ValidateCSRF"
 	AuthService_GetCurrentSession_FullMethodName             = "/insuretech.authn.services.v1.AuthService/GetCurrentSession"
 	AuthService_RevokeAllSessions_FullMethodName             = "/insuretech.authn.services.v1.AuthService/RevokeAllSessions"
+	AuthService_FindPortalUser_FullMethodName                = "/insuretech.authn.services.v1.AuthService/FindPortalUser"
+	AuthService_SetTemporaryPassword_FullMethodName          = "/insuretech.authn.services.v1.AuthService/SetTemporaryPassword"
 	AuthService_RegisterEmailUser_FullMethodName             = "/insuretech.authn.services.v1.AuthService/RegisterEmailUser"
 	AuthService_SendEmailOTP_FullMethodName                  = "/insuretech.authn.services.v1.AuthService/SendEmailOTP"
 	AuthService_VerifyEmail_FullMethodName                   = "/insuretech.authn.services.v1.AuthService/VerifyEmail"
 	AuthService_EmailLogin_FullMethodName                    = "/insuretech.authn.services.v1.AuthService/EmailLogin"
+	AuthService_EmailPasswordLogin_FullMethodName            = "/insuretech.authn.services.v1.AuthService/EmailPasswordLogin"
 	AuthService_RequestPasswordResetByEmail_FullMethodName   = "/insuretech.authn.services.v1.AuthService/RequestPasswordResetByEmail"
 	AuthService_ResetPasswordByEmail_FullMethodName          = "/insuretech.authn.services.v1.AuthService/ResetPasswordByEmail"
 	AuthService_BiometricAuthenticate_FullMethodName         = "/insuretech.authn.services.v1.AuthService/BiometricAuthenticate"
 	AuthService_UpdateDLRStatus_FullMethodName               = "/insuretech.authn.services.v1.AuthService/UpdateDLRStatus"
+	AuthService_ProvisionEmployeeUser_FullMethodName         = "/insuretech.authn.services.v1.AuthService/ProvisionEmployeeUser"
 	AuthService_CreateAPIKey_FullMethodName                  = "/insuretech.authn.services.v1.AuthService/CreateAPIKey"
 	AuthService_ListAPIKeys_FullMethodName                   = "/insuretech.authn.services.v1.AuthService/ListAPIKeys"
 	AuthService_RevokeAPIKey_FullMethodName                  = "/insuretech.authn.services.v1.AuthService/RevokeAPIKey"
@@ -61,12 +65,10 @@ const (
 	AuthService_SubmitKYCFrame_FullMethodName                = "/insuretech.authn.services.v1.AuthService/SubmitKYCFrame"
 	AuthService_CompleteKYCSession_FullMethodName            = "/insuretech.authn.services.v1.AuthService/CompleteKYCSession"
 	AuthService_ApproveKYC_FullMethodName                    = "/insuretech.authn.services.v1.AuthService/ApproveKYC"
-	AuthService_RejectKYC_FullMethodName                     = "/insuretech.authn.services.v1.AuthService/RejectKYC"
 	AuthService_VerifyDocument_FullMethodName                = "/insuretech.authn.services.v1.AuthService/VerifyDocument"
 	AuthService_CreateVoiceSession_FullMethodName            = "/insuretech.authn.services.v1.AuthService/CreateVoiceSession"
-	AuthService_GetVoiceSession_FullMethodName               = "/insuretech.authn.services.v1.AuthService/GetVoiceSession"
-	AuthService_EndVoiceSession_FullMethodName               = "/insuretech.authn.services.v1.AuthService/EndVoiceSession"
 	AuthService_GetProfilePhotoUploadURL_FullMethodName      = "/insuretech.authn.services.v1.AuthService/GetProfilePhotoUploadURL"
+	AuthService_GetNotificationPreferences_FullMethodName    = "/insuretech.authn.services.v1.AuthService/GetNotificationPreferences"
 	AuthService_UpdateNotificationPreferences_FullMethodName = "/insuretech.authn.services.v1.AuthService/UpdateNotificationPreferences"
 	AuthService_EnableTOTP_FullMethodName                    = "/insuretech.authn.services.v1.AuthService/EnableTOTP"
 	AuthService_VerifyTOTP_FullMethodName                    = "/insuretech.authn.services.v1.AuthService/VerifyTOTP"
@@ -74,7 +76,6 @@ const (
 	AuthService_InitiateVoiceSession_FullMethodName          = "/insuretech.authn.services.v1.AuthService/InitiateVoiceSession"
 	AuthService_SubmitVoiceSample_FullMethodName             = "/insuretech.authn.services.v1.AuthService/SubmitVoiceSample"
 	AuthService_VerifyVoiceSession_FullMethodName            = "/insuretech.authn.services.v1.AuthService/VerifyVoiceSession"
-	AuthService_GetJWKS_FullMethodName                       = "/insuretech.authn.services.v1.AuthService/GetJWKS"
 )
 
 // AuthServiceClient is the client API for AuthService service.
@@ -116,6 +117,10 @@ type AuthServiceClient interface {
 	GetCurrentSession(ctx context.Context, in *GetCurrentSessionRequest, opts ...grpc.CallOption) (*GetCurrentSessionResponse, error)
 	// Revoke all sessions for a user (logout from all devices)
 	RevokeAllSessions(ctx context.Context, in *RevokeAllSessionsRequest, opts ...grpc.CallOption) (*RevokeAllSessionsResponse, error)
+	// Find a portal user by exact email or mobile number.
+	FindPortalUser(ctx context.Context, in *FindPortalUserRequest, opts ...grpc.CallOption) (*FindPortalUserResponse, error)
+	// Set a temporary password and require the user to change it on next login.
+	SetTemporaryPassword(ctx context.Context, in *SetTemporaryPasswordRequest, opts ...grpc.CallOption) (*SetTemporaryPasswordResponse, error)
 	// Register a portal user with email (requires email, triggers email
 	// verification OTP)
 	RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error)
@@ -126,6 +131,8 @@ type AuthServiceClient interface {
 	// Login via email + OTP (Business Beneficiary / System User only →
 	// SERVER_SIDE session)
 	EmailLogin(ctx context.Context, in *EmailLoginRequest, opts ...grpc.CallOption) (*EmailLoginResponse, error)
+	// Login via email + password (B2B beneficiary self-service).
+	EmailPasswordLogin(ctx context.Context, in *EmailPasswordLoginRequest, opts ...grpc.CallOption) (*EmailPasswordLoginResponse, error)
 	// Request password reset via email OTP
 	RequestPasswordResetByEmail(ctx context.Context, in *RequestPasswordResetByEmailRequest, opts ...grpc.CallOption) (*RequestPasswordResetByEmailResponse, error)
 	// Complete password reset using email OTP
@@ -134,6 +141,8 @@ type AuthServiceClient interface {
 	BiometricAuthenticate(ctx context.Context, in *BiometricAuthenticateRequest, opts ...grpc.CallOption) (*BiometricAuthenticateResponse, error)
 	// Update SMS delivery report status (called by DLR webhook handler)
 	UpdateDLRStatus(ctx context.Context, in *UpdateDLRStatusRequest, opts ...grpc.CallOption) (*UpdateDLRStatusResponse, error)
+	// Provision or fetch a managed B2B employee portal user.
+	ProvisionEmployeeUser(ctx context.Context, in *ProvisionEmployeeUserRequest, opts ...grpc.CallOption) (*ProvisionEmployeeUserResponse, error)
 	// Create a new API key for a user or service
 	CreateAPIKey(ctx context.Context, in *CreateAPIKeyRequest, opts ...grpc.CallOption) (*CreateAPIKeyResponse, error)
 	// List API keys for an owner
@@ -157,16 +166,14 @@ type AuthServiceClient interface {
 	SubmitKYCFrame(ctx context.Context, in *SubmitKYCFrameRequest, opts ...grpc.CallOption) (*SubmitKYCFrameResponse, error)
 	CompleteKYCSession(ctx context.Context, in *CompleteKYCSessionRequest, opts ...grpc.CallOption) (*CompleteKYCSessionResponse, error)
 	ApproveKYC(ctx context.Context, in *ApproveKYCRequest, opts ...grpc.CallOption) (*ApproveKYCResponse, error)
-	RejectKYC(ctx context.Context, in *RejectKYCRequest, opts ...grpc.CallOption) (*RejectKYCResponse, error)
 	// ── Document Verification (Admin) ──
 	VerifyDocument(ctx context.Context, in *VerifyDocumentRequest, opts ...grpc.CallOption) (*VerifyDocumentResponse, error)
 	// ── Voice Sessions ──
 	CreateVoiceSession(ctx context.Context, in *CreateVoiceSessionRequest, opts ...grpc.CallOption) (*CreateVoiceSessionResponse, error)
-	GetVoiceSession(ctx context.Context, in *GetVoiceSessionRequest, opts ...grpc.CallOption) (*GetVoiceSessionResponse, error)
-	EndVoiceSession(ctx context.Context, in *EndVoiceSessionRequest, opts ...grpc.CallOption) (*EndVoiceSessionResponse, error)
 	// ── Profile Photo Upload URL ──
 	GetProfilePhotoUploadURL(ctx context.Context, in *GetProfilePhotoUploadURLRequest, opts ...grpc.CallOption) (*GetProfilePhotoUploadURLResponse, error)
 	// ── Notification Preferences ──
+	GetNotificationPreferences(ctx context.Context, in *GetNotificationPreferencesRequest, opts ...grpc.CallOption) (*GetNotificationPreferencesResponse, error)
 	UpdateNotificationPreferences(ctx context.Context, in *UpdateNotificationPreferencesRequest, opts ...grpc.CallOption) (*UpdateNotificationPreferencesResponse, error)
 	// 🔐 TOTP / 2FA 🔐
 	EnableTOTP(ctx context.Context, in *EnableTOTPRequest, opts ...grpc.CallOption) (*EnableTOTPResponse, error)
@@ -176,8 +183,6 @@ type AuthServiceClient interface {
 	InitiateVoiceSession(ctx context.Context, in *InitiateVoiceSessionRequest, opts ...grpc.CallOption) (*InitiateVoiceSessionResponse, error)
 	SubmitVoiceSample(ctx context.Context, in *SubmitVoiceSampleRequest, opts ...grpc.CallOption) (*SubmitVoiceSampleResponse, error)
 	VerifyVoiceSession(ctx context.Context, in *VerifyVoiceSessionRequest, opts ...grpc.CallOption) (*VerifyVoiceSessionResponse, error)
-	// 🔑 JWKS 🔑
-	GetJWKS(ctx context.Context, in *GetJWKSRequest, opts ...grpc.CallOption) (*GetJWKSResponse, error)
 }
 
 type authServiceClient struct {
@@ -348,6 +353,26 @@ func (c *authServiceClient) RevokeAllSessions(ctx context.Context, in *RevokeAll
 	return out, nil
 }
 
+func (c *authServiceClient) FindPortalUser(ctx context.Context, in *FindPortalUserRequest, opts ...grpc.CallOption) (*FindPortalUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(FindPortalUserResponse)
+	err := c.cc.Invoke(ctx, AuthService_FindPortalUser_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) SetTemporaryPassword(ctx context.Context, in *SetTemporaryPasswordRequest, opts ...grpc.CallOption) (*SetTemporaryPasswordResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(SetTemporaryPasswordResponse)
+	err := c.cc.Invoke(ctx, AuthService_SetTemporaryPassword_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authServiceClient) RegisterEmailUser(ctx context.Context, in *RegisterEmailUserRequest, opts ...grpc.CallOption) (*RegisterEmailUserResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RegisterEmailUserResponse)
@@ -388,6 +413,16 @@ func (c *authServiceClient) EmailLogin(ctx context.Context, in *EmailLoginReques
 	return out, nil
 }
 
+func (c *authServiceClient) EmailPasswordLogin(ctx context.Context, in *EmailPasswordLoginRequest, opts ...grpc.CallOption) (*EmailPasswordLoginResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(EmailPasswordLoginResponse)
+	err := c.cc.Invoke(ctx, AuthService_EmailPasswordLogin_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authServiceClient) RequestPasswordResetByEmail(ctx context.Context, in *RequestPasswordResetByEmailRequest, opts ...grpc.CallOption) (*RequestPasswordResetByEmailResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(RequestPasswordResetByEmailResponse)
@@ -422,6 +457,16 @@ func (c *authServiceClient) UpdateDLRStatus(ctx context.Context, in *UpdateDLRSt
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateDLRStatusResponse)
 	err := c.cc.Invoke(ctx, AuthService_UpdateDLRStatus_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) ProvisionEmployeeUser(ctx context.Context, in *ProvisionEmployeeUserRequest, opts ...grpc.CallOption) (*ProvisionEmployeeUserResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ProvisionEmployeeUserResponse)
+	err := c.cc.Invoke(ctx, AuthService_ProvisionEmployeeUser_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -608,16 +653,6 @@ func (c *authServiceClient) ApproveKYC(ctx context.Context, in *ApproveKYCReques
 	return out, nil
 }
 
-func (c *authServiceClient) RejectKYC(ctx context.Context, in *RejectKYCRequest, opts ...grpc.CallOption) (*RejectKYCResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RejectKYCResponse)
-	err := c.cc.Invoke(ctx, AuthService_RejectKYC_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *authServiceClient) VerifyDocument(ctx context.Context, in *VerifyDocumentRequest, opts ...grpc.CallOption) (*VerifyDocumentResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(VerifyDocumentResponse)
@@ -638,30 +673,20 @@ func (c *authServiceClient) CreateVoiceSession(ctx context.Context, in *CreateVo
 	return out, nil
 }
 
-func (c *authServiceClient) GetVoiceSession(ctx context.Context, in *GetVoiceSessionRequest, opts ...grpc.CallOption) (*GetVoiceSessionResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetVoiceSessionResponse)
-	err := c.cc.Invoke(ctx, AuthService_GetVoiceSession_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
-func (c *authServiceClient) EndVoiceSession(ctx context.Context, in *EndVoiceSessionRequest, opts ...grpc.CallOption) (*EndVoiceSessionResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(EndVoiceSessionResponse)
-	err := c.cc.Invoke(ctx, AuthService_EndVoiceSession_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 func (c *authServiceClient) GetProfilePhotoUploadURL(ctx context.Context, in *GetProfilePhotoUploadURLRequest, opts ...grpc.CallOption) (*GetProfilePhotoUploadURLResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetProfilePhotoUploadURLResponse)
 	err := c.cc.Invoke(ctx, AuthService_GetProfilePhotoUploadURL_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *authServiceClient) GetNotificationPreferences(ctx context.Context, in *GetNotificationPreferencesRequest, opts ...grpc.CallOption) (*GetNotificationPreferencesResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetNotificationPreferencesResponse)
+	err := c.cc.Invoke(ctx, AuthService_GetNotificationPreferences_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -738,16 +763,6 @@ func (c *authServiceClient) VerifyVoiceSession(ctx context.Context, in *VerifyVo
 	return out, nil
 }
 
-func (c *authServiceClient) GetJWKS(ctx context.Context, in *GetJWKSRequest, opts ...grpc.CallOption) (*GetJWKSResponse, error) {
-	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(GetJWKSResponse)
-	err := c.cc.Invoke(ctx, AuthService_GetJWKS_FullMethodName, in, out, cOpts...)
-	if err != nil {
-		return nil, err
-	}
-	return out, nil
-}
-
 // AuthServiceServer is the server API for AuthService service.
 // All implementations should embed UnimplementedAuthServiceServer
 // for forward compatibility.
@@ -787,6 +802,10 @@ type AuthServiceServer interface {
 	GetCurrentSession(context.Context, *GetCurrentSessionRequest) (*GetCurrentSessionResponse, error)
 	// Revoke all sessions for a user (logout from all devices)
 	RevokeAllSessions(context.Context, *RevokeAllSessionsRequest) (*RevokeAllSessionsResponse, error)
+	// Find a portal user by exact email or mobile number.
+	FindPortalUser(context.Context, *FindPortalUserRequest) (*FindPortalUserResponse, error)
+	// Set a temporary password and require the user to change it on next login.
+	SetTemporaryPassword(context.Context, *SetTemporaryPasswordRequest) (*SetTemporaryPasswordResponse, error)
 	// Register a portal user with email (requires email, triggers email
 	// verification OTP)
 	RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error)
@@ -797,6 +816,8 @@ type AuthServiceServer interface {
 	// Login via email + OTP (Business Beneficiary / System User only →
 	// SERVER_SIDE session)
 	EmailLogin(context.Context, *EmailLoginRequest) (*EmailLoginResponse, error)
+	// Login via email + password (B2B beneficiary self-service).
+	EmailPasswordLogin(context.Context, *EmailPasswordLoginRequest) (*EmailPasswordLoginResponse, error)
 	// Request password reset via email OTP
 	RequestPasswordResetByEmail(context.Context, *RequestPasswordResetByEmailRequest) (*RequestPasswordResetByEmailResponse, error)
 	// Complete password reset using email OTP
@@ -805,6 +826,8 @@ type AuthServiceServer interface {
 	BiometricAuthenticate(context.Context, *BiometricAuthenticateRequest) (*BiometricAuthenticateResponse, error)
 	// Update SMS delivery report status (called by DLR webhook handler)
 	UpdateDLRStatus(context.Context, *UpdateDLRStatusRequest) (*UpdateDLRStatusResponse, error)
+	// Provision or fetch a managed B2B employee portal user.
+	ProvisionEmployeeUser(context.Context, *ProvisionEmployeeUserRequest) (*ProvisionEmployeeUserResponse, error)
 	// Create a new API key for a user or service
 	CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error)
 	// List API keys for an owner
@@ -828,16 +851,14 @@ type AuthServiceServer interface {
 	SubmitKYCFrame(context.Context, *SubmitKYCFrameRequest) (*SubmitKYCFrameResponse, error)
 	CompleteKYCSession(context.Context, *CompleteKYCSessionRequest) (*CompleteKYCSessionResponse, error)
 	ApproveKYC(context.Context, *ApproveKYCRequest) (*ApproveKYCResponse, error)
-	RejectKYC(context.Context, *RejectKYCRequest) (*RejectKYCResponse, error)
 	// ── Document Verification (Admin) ──
 	VerifyDocument(context.Context, *VerifyDocumentRequest) (*VerifyDocumentResponse, error)
 	// ── Voice Sessions ──
 	CreateVoiceSession(context.Context, *CreateVoiceSessionRequest) (*CreateVoiceSessionResponse, error)
-	GetVoiceSession(context.Context, *GetVoiceSessionRequest) (*GetVoiceSessionResponse, error)
-	EndVoiceSession(context.Context, *EndVoiceSessionRequest) (*EndVoiceSessionResponse, error)
 	// ── Profile Photo Upload URL ──
 	GetProfilePhotoUploadURL(context.Context, *GetProfilePhotoUploadURLRequest) (*GetProfilePhotoUploadURLResponse, error)
 	// ── Notification Preferences ──
+	GetNotificationPreferences(context.Context, *GetNotificationPreferencesRequest) (*GetNotificationPreferencesResponse, error)
 	UpdateNotificationPreferences(context.Context, *UpdateNotificationPreferencesRequest) (*UpdateNotificationPreferencesResponse, error)
 	// 🔐 TOTP / 2FA 🔐
 	EnableTOTP(context.Context, *EnableTOTPRequest) (*EnableTOTPResponse, error)
@@ -847,8 +868,6 @@ type AuthServiceServer interface {
 	InitiateVoiceSession(context.Context, *InitiateVoiceSessionRequest) (*InitiateVoiceSessionResponse, error)
 	SubmitVoiceSample(context.Context, *SubmitVoiceSampleRequest) (*SubmitVoiceSampleResponse, error)
 	VerifyVoiceSession(context.Context, *VerifyVoiceSessionRequest) (*VerifyVoiceSessionResponse, error)
-	// 🔑 JWKS 🔑
-	GetJWKS(context.Context, *GetJWKSRequest) (*GetJWKSResponse, error)
 }
 
 // UnimplementedAuthServiceServer should be embedded to have
@@ -906,6 +925,12 @@ func (UnimplementedAuthServiceServer) GetCurrentSession(context.Context, *GetCur
 func (UnimplementedAuthServiceServer) RevokeAllSessions(context.Context, *RevokeAllSessionsRequest) (*RevokeAllSessionsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RevokeAllSessions not implemented")
 }
+func (UnimplementedAuthServiceServer) FindPortalUser(context.Context, *FindPortalUserRequest) (*FindPortalUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method FindPortalUser not implemented")
+}
+func (UnimplementedAuthServiceServer) SetTemporaryPassword(context.Context, *SetTemporaryPasswordRequest) (*SetTemporaryPasswordResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method SetTemporaryPassword not implemented")
+}
 func (UnimplementedAuthServiceServer) RegisterEmailUser(context.Context, *RegisterEmailUserRequest) (*RegisterEmailUserResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RegisterEmailUser not implemented")
 }
@@ -918,6 +943,9 @@ func (UnimplementedAuthServiceServer) VerifyEmail(context.Context, *VerifyEmailR
 func (UnimplementedAuthServiceServer) EmailLogin(context.Context, *EmailLoginRequest) (*EmailLoginResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method EmailLogin not implemented")
 }
+func (UnimplementedAuthServiceServer) EmailPasswordLogin(context.Context, *EmailPasswordLoginRequest) (*EmailPasswordLoginResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method EmailPasswordLogin not implemented")
+}
 func (UnimplementedAuthServiceServer) RequestPasswordResetByEmail(context.Context, *RequestPasswordResetByEmailRequest) (*RequestPasswordResetByEmailResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RequestPasswordResetByEmail not implemented")
 }
@@ -929,6 +957,9 @@ func (UnimplementedAuthServiceServer) BiometricAuthenticate(context.Context, *Bi
 }
 func (UnimplementedAuthServiceServer) UpdateDLRStatus(context.Context, *UpdateDLRStatusRequest) (*UpdateDLRStatusResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateDLRStatus not implemented")
+}
+func (UnimplementedAuthServiceServer) ProvisionEmployeeUser(context.Context, *ProvisionEmployeeUserRequest) (*ProvisionEmployeeUserResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ProvisionEmployeeUser not implemented")
 }
 func (UnimplementedAuthServiceServer) CreateAPIKey(context.Context, *CreateAPIKeyRequest) (*CreateAPIKeyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateAPIKey not implemented")
@@ -984,23 +1015,17 @@ func (UnimplementedAuthServiceServer) CompleteKYCSession(context.Context, *Compl
 func (UnimplementedAuthServiceServer) ApproveKYC(context.Context, *ApproveKYCRequest) (*ApproveKYCResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ApproveKYC not implemented")
 }
-func (UnimplementedAuthServiceServer) RejectKYC(context.Context, *RejectKYCRequest) (*RejectKYCResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method RejectKYC not implemented")
-}
 func (UnimplementedAuthServiceServer) VerifyDocument(context.Context, *VerifyDocumentRequest) (*VerifyDocumentResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyDocument not implemented")
 }
 func (UnimplementedAuthServiceServer) CreateVoiceSession(context.Context, *CreateVoiceSessionRequest) (*CreateVoiceSessionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreateVoiceSession not implemented")
 }
-func (UnimplementedAuthServiceServer) GetVoiceSession(context.Context, *GetVoiceSessionRequest) (*GetVoiceSessionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetVoiceSession not implemented")
-}
-func (UnimplementedAuthServiceServer) EndVoiceSession(context.Context, *EndVoiceSessionRequest) (*EndVoiceSessionResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method EndVoiceSession not implemented")
-}
 func (UnimplementedAuthServiceServer) GetProfilePhotoUploadURL(context.Context, *GetProfilePhotoUploadURLRequest) (*GetProfilePhotoUploadURLResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetProfilePhotoUploadURL not implemented")
+}
+func (UnimplementedAuthServiceServer) GetNotificationPreferences(context.Context, *GetNotificationPreferencesRequest) (*GetNotificationPreferencesResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetNotificationPreferences not implemented")
 }
 func (UnimplementedAuthServiceServer) UpdateNotificationPreferences(context.Context, *UpdateNotificationPreferencesRequest) (*UpdateNotificationPreferencesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateNotificationPreferences not implemented")
@@ -1022,9 +1047,6 @@ func (UnimplementedAuthServiceServer) SubmitVoiceSample(context.Context, *Submit
 }
 func (UnimplementedAuthServiceServer) VerifyVoiceSession(context.Context, *VerifyVoiceSessionRequest) (*VerifyVoiceSessionResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method VerifyVoiceSession not implemented")
-}
-func (UnimplementedAuthServiceServer) GetJWKS(context.Context, *GetJWKSRequest) (*GetJWKSResponse, error) {
-	return nil, status.Errorf(codes.Unimplemented, "method GetJWKS not implemented")
 }
 func (UnimplementedAuthServiceServer) testEmbeddedByValue() {}
 
@@ -1334,6 +1356,42 @@ func _AuthService_RevokeAllSessions_Handler(srv interface{}, ctx context.Context
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_FindPortalUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(FindPortalUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).FindPortalUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_FindPortalUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).FindPortalUser(ctx, req.(*FindPortalUserRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_SetTemporaryPassword_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(SetTemporaryPasswordRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).SetTemporaryPassword(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_SetTemporaryPassword_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).SetTemporaryPassword(ctx, req.(*SetTemporaryPasswordRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_RegisterEmailUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RegisterEmailUserRequest)
 	if err := dec(in); err != nil {
@@ -1406,6 +1464,24 @@ func _AuthService_EmailLogin_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthService_EmailPasswordLogin_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(EmailPasswordLoginRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).EmailPasswordLogin(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_EmailPasswordLogin_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).EmailPasswordLogin(ctx, req.(*EmailPasswordLoginRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthService_RequestPasswordResetByEmail_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(RequestPasswordResetByEmailRequest)
 	if err := dec(in); err != nil {
@@ -1474,6 +1550,24 @@ func _AuthService_UpdateDLRStatus_Handler(srv interface{}, ctx context.Context, 
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).UpdateDLRStatus(ctx, req.(*UpdateDLRStatusRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_ProvisionEmployeeUser_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ProvisionEmployeeUserRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).ProvisionEmployeeUser(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_ProvisionEmployeeUser_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).ProvisionEmployeeUser(ctx, req.(*ProvisionEmployeeUserRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -1802,24 +1896,6 @@ func _AuthService_ApproveKYC_Handler(srv interface{}, ctx context.Context, dec f
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_RejectKYC_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RejectKYCRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).RejectKYC(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_RejectKYC_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).RejectKYC(ctx, req.(*RejectKYCRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _AuthService_VerifyDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(VerifyDocumentRequest)
 	if err := dec(in); err != nil {
@@ -1856,42 +1932,6 @@ func _AuthService_CreateVoiceSession_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_GetVoiceSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetVoiceSessionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).GetVoiceSession(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_GetVoiceSession_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetVoiceSession(ctx, req.(*GetVoiceSessionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
-func _AuthService_EndVoiceSession_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(EndVoiceSessionRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).EndVoiceSession(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_EndVoiceSession_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).EndVoiceSession(ctx, req.(*EndVoiceSessionRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 func _AuthService_GetProfilePhotoUploadURL_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetProfilePhotoUploadURLRequest)
 	if err := dec(in); err != nil {
@@ -1906,6 +1946,24 @@ func _AuthService_GetProfilePhotoUploadURL_Handler(srv interface{}, ctx context.
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(AuthServiceServer).GetProfilePhotoUploadURL(ctx, req.(*GetProfilePhotoUploadURLRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _AuthService_GetNotificationPreferences_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetNotificationPreferencesRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthServiceServer).GetNotificationPreferences(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthService_GetNotificationPreferences_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthServiceServer).GetNotificationPreferences(ctx, req.(*GetNotificationPreferencesRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -2036,24 +2094,6 @@ func _AuthService_VerifyVoiceSession_Handler(srv interface{}, ctx context.Contex
 	return interceptor(ctx, in, info, handler)
 }
 
-func _AuthService_GetJWKS_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(GetJWKSRequest)
-	if err := dec(in); err != nil {
-		return nil, err
-	}
-	if interceptor == nil {
-		return srv.(AuthServiceServer).GetJWKS(ctx, in)
-	}
-	info := &grpc.UnaryServerInfo{
-		Server:     srv,
-		FullMethod: AuthService_GetJWKS_FullMethodName,
-	}
-	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(AuthServiceServer).GetJWKS(ctx, req.(*GetJWKSRequest))
-	}
-	return interceptor(ctx, in, info, handler)
-}
-
 // AuthService_ServiceDesc is the grpc.ServiceDesc for AuthService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -2126,6 +2166,14 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_RevokeAllSessions_Handler,
 		},
 		{
+			MethodName: "FindPortalUser",
+			Handler:    _AuthService_FindPortalUser_Handler,
+		},
+		{
+			MethodName: "SetTemporaryPassword",
+			Handler:    _AuthService_SetTemporaryPassword_Handler,
+		},
+		{
 			MethodName: "RegisterEmailUser",
 			Handler:    _AuthService_RegisterEmailUser_Handler,
 		},
@@ -2142,6 +2190,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_EmailLogin_Handler,
 		},
 		{
+			MethodName: "EmailPasswordLogin",
+			Handler:    _AuthService_EmailPasswordLogin_Handler,
+		},
+		{
 			MethodName: "RequestPasswordResetByEmail",
 			Handler:    _AuthService_RequestPasswordResetByEmail_Handler,
 		},
@@ -2156,6 +2208,10 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateDLRStatus",
 			Handler:    _AuthService_UpdateDLRStatus_Handler,
+		},
+		{
+			MethodName: "ProvisionEmployeeUser",
+			Handler:    _AuthService_ProvisionEmployeeUser_Handler,
 		},
 		{
 			MethodName: "CreateAPIKey",
@@ -2230,10 +2286,6 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_ApproveKYC_Handler,
 		},
 		{
-			MethodName: "RejectKYC",
-			Handler:    _AuthService_RejectKYC_Handler,
-		},
-		{
 			MethodName: "VerifyDocument",
 			Handler:    _AuthService_VerifyDocument_Handler,
 		},
@@ -2242,16 +2294,12 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _AuthService_CreateVoiceSession_Handler,
 		},
 		{
-			MethodName: "GetVoiceSession",
-			Handler:    _AuthService_GetVoiceSession_Handler,
-		},
-		{
-			MethodName: "EndVoiceSession",
-			Handler:    _AuthService_EndVoiceSession_Handler,
-		},
-		{
 			MethodName: "GetProfilePhotoUploadURL",
 			Handler:    _AuthService_GetProfilePhotoUploadURL_Handler,
+		},
+		{
+			MethodName: "GetNotificationPreferences",
+			Handler:    _AuthService_GetNotificationPreferences_Handler,
 		},
 		{
 			MethodName: "UpdateNotificationPreferences",
@@ -2280,10 +2328,6 @@ var AuthService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "VerifyVoiceSession",
 			Handler:    _AuthService_VerifyVoiceSession_Handler,
-		},
-		{
-			MethodName: "GetJWKS",
-			Handler:    _AuthService_GetJWKS_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

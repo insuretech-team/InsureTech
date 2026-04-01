@@ -1,4 +1,4 @@
-TaskTaskCompletionRequest:
+TaskCompletionRequest:
   type: object
   properties:
     task_id:

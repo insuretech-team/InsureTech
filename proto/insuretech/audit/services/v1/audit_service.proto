@@ -67,7 +67,7 @@ service AuditService {
   // Generate compliance report
   rpc GenerateComplianceReport(GenerateComplianceReportRequest) returns (GenerateComplianceReportResponse) {
     option (google.api.http) = {
-      post: "/v1/compliance-reports?action=generate"
+      post: "/v1/compliance-reports:generate"
       body: "*"
     };
   }

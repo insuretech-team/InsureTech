@@ -250,7 +250,7 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">Session represents user authentication session (HYBRID: Server-side + JWT)
+            <div class="description">Session represents user authentication session (HYBRID: Server-side + JWT)
  Maps to 'sessions' table in authn_schema</div>
         </div>
         
@@ -326,8 +326,8 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Session type determines authentication method (SERVER_SIDE for web, JWT for
- mobile)
+                <td class="field-description">Session type determines authentication method (SERVER_SIDE for web, JWT for
+ mobile)
  @inject_tag: gorm:"column:session_type;not null;serializer:proto_enum"</td>
             </tr>
             
@@ -342,8 +342,8 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Bcrypt hash of session token for server-side sessions (web portals)
- Only populated when session_type = SERVER_SIDE
+                <td class="field-description">Bcrypt hash of session token for server-side sessions (web portals)
+ Only populated when session_type = SERVER_SIDE
  @inject_tag: gorm:"column:session_token_hash"</td>
             </tr>
             
@@ -358,13 +358,13 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Deterministic lookup hash (sha256 hex) of the plain session token.
- Used to find the session row quickly, then the plain token is verified against
- bcrypt session_token_hash.
- Only populated when session_type = SERVER_SIDE.
- @inject_tag: gorm:"column:session_token_lookup"
- ========================================
- JWT SESSION FIELDS (Mobile/API)
+                <td class="field-description">Deterministic lookup hash (sha256 hex) of the plain session token.
+ Used to find the session row quickly, then the plain token is verified against
+ bcrypt session_token_hash.
+ Only populated when session_type = SERVER_SIDE.
+ @inject_tag: gorm:"column:session_token_lookup"
+ ========================================
+ JWT SESSION FIELDS (Mobile/API)
  ========================================</td>
             </tr>
             
@@ -379,7 +379,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">JWT ID for access token (only for JWT sessions)
+                <td class="field-description">JWT ID for access token (only for JWT sessions)
  @inject_tag: gorm:"column:access_token_jti"</td>
             </tr>
             
@@ -394,7 +394,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">JWT ID for refresh token (only for JWT sessions)
+                <td class="field-description">JWT ID for refresh token (only for JWT sessions)
  @inject_tag: gorm:"column:refresh_token_jti"</td>
             </tr>
             
@@ -409,7 +409,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">@inject_tag: gorm:"column:access_token_expires_at;serializer:proto_timestamp"
+                <td class="field-description">@inject_tag: gorm:"column:access_token_expires_at;serializer:proto_timestamp"
  gorm:"column:access_token_expires_at;serializer:proto_timestamp"</td>
             </tr>
             
@@ -424,7 +424,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">@inject_tag: gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"
+                <td class="field-description">@inject_tag: gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"
  gorm:"column:refresh_token_expires_at;serializer:proto_timestamp"</td>
             </tr>
             
@@ -439,7 +439,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Session expiry: 12 hours for SERVER_SIDE, 7 days for JWT
+                <td class="field-description">Session expiry: 12 hours for SERVER_SIDE, 7 days for JWT
  @inject_tag: gorm:"column:expires_at;not null;serializer:proto_timestamp"</td>
             </tr>
             
@@ -505,8 +505,8 @@
                 </td>
                 <td class="field-type">
                     <code>reference</code>
-                    <br><small>AuthnDeviceType</small>
-                    <a href="schema_authndevicetype.html" class="ref-link">→ AuthnDeviceType</a>
+                    <br><small>DeviceType</small>
+                    <a href="schema_devicetype.html" class="ref-link">→ DeviceType</a>
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
@@ -538,7 +538,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">@inject_tag: gorm:"column:last_activity_at;not null;serializer:proto_timestamp"
+                <td class="field-description">@inject_tag: gorm:"column:last_activity_at;not null;serializer:proto_timestamp"
  null;serializer:proto_timestamp"</td>
             </tr>
             
@@ -567,7 +567,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">CSRF token for server-side sessions (web portals only)
+                <td class="field-description">CSRF token for server-side sessions (web portals only)
  @inject_tag: gorm:"column:csrf_token"</td>
             </tr>
             

@@ -2,6 +2,6 @@ QuoteUpdateResponse:
   type: object
   properties:
     quote:
-      $ref: '#/components/schemas/Quote'
+      $ref: '#/components/schemas/UnderwritingQuote'
   description: Response payload for quote update operation. Returns operation results
     and status.

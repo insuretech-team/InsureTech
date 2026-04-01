@@ -256,15 +256,15 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">2</div>
+                    <div class="stat-value">4</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">1</div>
+                    <div class="stat-value">2</div>
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">1</div>
+                    <div class="stat-value">2</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -312,6 +312,35 @@
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
                 <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>device_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">Device binding: if provided with ANDROID or IOS device_type, the response
+ will include a one-time device_credential for WhatsApp-style login.</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>device_type</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">ANDROID | IOS</td>
             </tr>
             
                 </tbody>

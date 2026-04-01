@@ -1,4 +1,4 @@
-PremiumCalculationResponse:
+ProductsPremiumCalculationResponse:
   type: object
   properties:
     base_premium:
@@ -10,9 +10,6 @@ PremiumCalculationResponse:
     breakdown:
       type: array
       items:
-        $ref: '#/components/schemas/PremiumBreakdown'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+        $ref: '#/components/schemas/ProductsPremiumBreakdown'
   description: Response payload for premium calculation operation. Returns operation
     results and status.

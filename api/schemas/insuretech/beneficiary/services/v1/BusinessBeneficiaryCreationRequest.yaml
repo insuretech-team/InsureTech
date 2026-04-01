@@ -13,6 +13,7 @@ BeneficiaryBusinessBeneficiaryCreationRequest:
       type: string
     focal_person_mobile:
       type: string
+      description: Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
     partner_id:
       type: string
   description: Request payload for creating a new business beneficiary creation. Contains

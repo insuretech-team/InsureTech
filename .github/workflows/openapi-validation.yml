@@ -1,0 +1,334 @@
+name: OpenAPI Validation & Documentation
+
+on:
+  push:
+    branches: [ main, develop ]
+    paths:
+      - 'proto/**'
+      - 'api/**'
+      - 'docs/**'
+      - '.github/workflows/openapi-validation.yml'
+  pull_request:
+    branches: [ main, develop ]
+    paths:
+      - 'proto/**'
+      - 'api/**'
+  workflow_dispatch:
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  validate-openapi:
+    name: Validate OpenAPI Spec
+    runs-on: ubuntu-latest
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml
+      
+      - name: Run Enhanced Validator
+        id: validate
+        run: |
+          cd api/generator
+          python enhanced_validator.py ../openapi.yaml --report ../validation_report.json --html ../validation_report.html
+        continue-on-error: true
+      
+      - name: Upload Validation Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: validation-report
+          path: |
+            api/validation_report.json
+            api/validation_report.html
+      
+      - name: Check for critical errors
+        run: |
+          cd api
+          ERRORS=$(python -c "import json; report = json.load(open('validation_report.json')); print(report['summary']['errors'])")
+          echo "Critical Errors: $ERRORS"
+          if [ "$ERRORS" -gt "0" ]; then
+            echo "::error::OpenAPI spec has $ERRORS critical errors"
+            exit 1
+          fi
+      
+      - name: Comment PR with validation results
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const fs = require('fs');
+            const report = JSON.parse(fs.readFileSync('api/validation_report.json', 'utf8'));
+            
+            const comment = `## 🔍 OpenAPI Validation Report
+            
+            **Metrics:**
+            - 📊 Total Schemas: ${report.metrics.total_schemas}
+            - 🛣️ Total Paths: ${report.metrics.total_paths}
+            - ⚡ Total Operations: ${report.metrics.total_operations}
+            - 📝 Description Coverage: ${report.metrics.description_coverage.toFixed(1)}%
+            - 🔒 Security Coverage: ${report.metrics.security_coverage.toFixed(1)}%
+            
+            **Issues:**
+            - ❌ Errors: ${report.summary.errors}
+            - ⚠️ Warnings: ${report.summary.warnings}
+            - ℹ️ Info: ${report.summary.info}
+            
+            [View Full Report](https://github.com/${{ github.repository }}/actions/runs/${{ github.run_id }})
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+
+  deploy-pages:
+    name: Deploy GitHub Pages (disabled - use docpublish.yml)
+    runs-on: ubuntu-latest
+    needs: build-documentation
+    if: false  # Disabled: pages deployment moved to docpublish.yml
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
+  
+  build-documentation:
+    name: Build API Documentation
+    runs-on: ubuntu-latest
+    needs: validate-openapi
+    permissions:
+      contents: read
+      pages: write
+      id-token: write
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install Python dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml protobuf psycopg2-binary python-dotenv
+      
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+        with:
+          version: '1.47.2'
+      
+      - name: Generate Enhanced Documentation
+        run: |
+          echo "🔨 Generating enhanced API documentation..."
+          cd api/generator
+          
+          # Run the complete pipeline
+          python main.py --discover --proto-root ../../proto --api-root ..
+          
+          echo "✅ Enhanced documentation generated"
+        continue-on-error: true
+      
+      - name: Verify documentation files
+        run: |
+          echo "📋 Checking generated files..."
+          ls -la api/docs/ || echo "⚠️ api/docs/ not found"
+          ls -la api/*.json || echo "⚠️ JSON files not found"
+          
+          if [ -f api/docs/index.html ]; then
+            echo "✅ Enhanced index.html found"
+          else
+            echo "⚠️ Enhanced index.html not found"
+          fi
+
+      - name: Generate Redoc HTML
+        uses: seeebiii/redoc-cli-github-action@v10
+        with:
+          args: 'bundle api/openapi.yaml -o docs/redoc.html'
+
+      - name: Prepare documentation site
+        run: |
+          # Ensure docs directory exists
+          mkdir -p docs
+          
+          # Copy ALL files from api/docs/ to root docs/ folder
+          # This maintains the complete documentation structure for GitHub Pages
+          echo "📋 Copying all documentation files from api/docs/ to docs/..."
+          
+          if [ -d "api/docs" ]; then
+            # Use rsync to copy all files, preserving structure
+            rsync -av --delete api/docs/ docs/
+            echo "✅ All files copied from api/docs/ to docs/"
+          else
+            echo "⚠️ api/docs/ directory not found"
+          fi
+          
+          # Also copy additional files from api/ root
+          if [ -f api/openapi.yaml ]; then
+            cp api/openapi.yaml docs/openapi.yaml
+            echo "✅ Copied openapi.yaml"
+          fi
+          
+          if [ -f api/validation_report.html ]; then
+            cp api/validation_report.html docs/validation_report.html
+            echo "✅ Copied validation_report.html"
+          fi
+          
+          if [ -f api/validation_report.json ]; then
+            cp api/validation_report.json docs/validation_report.json
+            echo "✅ Copied validation_report.json"
+          fi
+          
+          # Copy schema summary files if they exist
+          if [ -f api/proto_schema_summary.json ]; then
+            cp api/proto_schema_summary.json docs/proto_schema_summary.json
+            echo "✅ Copied proto_schema_summary.json"
+          fi
+          
+          if [ -f api/schema_api_mapping.json ]; then
+            cp api/schema_api_mapping.json docs/schema_api_mapping.json
+            echo "✅ Copied schema_api_mapping.json"
+          fi
+          
+          # Fix paths for GitHub Pages (base path is /InsureTech/)
+          # Update swagger.html to use correct path
+          if [ -f docs/swagger.html ]; then
+            sed -i 's|url: "/openapi.yaml"|url: "openapi.yaml"|g' docs/swagger.html
+            echo "✅ Fixed swagger.html paths"
+          fi
+          
+          # Update redoc.html to use correct path
+          if [ -f docs/redoc.html ]; then
+            sed -i 's|spec-url="/openapi.yaml"|spec-url="openapi.yaml"|g' docs/redoc.html
+            echo "✅ Fixed redoc.html paths"
+          fi
+          
+          # Update index_old.html if it exists
+          if [ -f docs/index_old.html ]; then
+            sed -i 's|href="../openapi.yaml"|href="openapi.yaml"|g' docs/index_old.html
+            echo "✅ Fixed index_old.html paths"
+          fi
+          
+          echo "✅ Documentation site prepared successfully"
+      
+      - name: Sync to Apidog
+        if: github.ref == 'refs/heads/main' && github.event_name == 'push'
+        env:
+          API_DOG_TOKEN: ${{ secrets.API_DOG_TOKEN }}
+        run: |
+          if [ -n "$API_DOG_TOKEN" ]; then
+            echo "Syncing to Apidog..."
+            cd api/generator
+            pip install requests pyyaml
+            python sync_apidog.py || echo "Apidog sync failed, continuing..."
+          else
+            echo "API_DOG_TOKEN not found, skipping Apidog sync"
+          fi
+        continue-on-error: true
+      
+      - name: Upload Pages artifact (disabled - use docpublish.yml)
+        if: false  # Disabled: pages deployment moved to docpublish.yml
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./docs
+      
+      - name: Comment PR with documentation link
+        if: github.event_name == 'pull_request'
+        uses: actions/github-script@v6
+        with:
+          script: |
+            const comment = `## 📚 API Documentation
+            
+            Documentation has been generated and validated:
+            - 📘 [Redoc Documentation](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/docs/redoc.html)
+            - 🔧 [Swagger UI](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/docs/swagger.html)
+            - 🏠 [Documentation Hub](https://github.com/${{ github.repository }}/blob/${{ github.head_ref }}/docs/index.html)
+            
+            To view locally:
+            \`\`\`bash
+            cd docs
+            python -m http.server 8000
+            # Visit http://localhost:8000
+            \`\`\`
+            `;
+            
+            github.rest.issues.createComment({
+              issue_number: context.issue.number,
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              body: comment
+            });
+  
+  regenerate-on-proto-change:
+    name: Regenerate OpenAPI on Proto Changes
+    runs-on: ubuntu-latest
+    if: contains(github.event.head_commit.modified, 'proto/')
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+      
+      - name: Set up Python
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.11'
+      
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install pyyaml protobuf
+      
+      - name: Regenerate OpenAPI spec
+        run: |
+          cd api/generator
+          python main.py --descriptor ../input/descriptors.pb --api-root ..
+      
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code api/openapi.yaml || echo "::set-output name=changed::true"
+      
+      - name: Create Pull Request
+        if: steps.git-check.outputs.changed == 'true'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+          commit-message: 'chore: regenerate OpenAPI spec from proto changes'
+          title: '🤖 Auto-generated OpenAPI spec update'
+          body: |
+            ## Auto-generated OpenAPI Update
+            
+            This PR was automatically created because proto files were modified.
+            
+            **Changes:**
+            - Regenerated OpenAPI spec from updated proto files
+            - All transformations and validations applied
+            
+            Please review the changes and merge if correct.
+          branch: auto-openapi-update
+          delete-branch: true

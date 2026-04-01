@@ -20,7 +20,7 @@ VALUES (
   'DEFAULT-B2B',
   'Insurance',
   'b2b-admin@lifeplus.local',
-  '+8801000000000',
+  '+8801710000000',
   'Dhaka, Bangladesh',
   'ORGANISATION_STATUS_ACTIVE',
   0
@@ -70,7 +70,7 @@ DECLARE
   default_admin_mobile TEXT;
   default_admin_role_id UUID;
 BEGIN
-  SELECT u.user_id, COALESCE(u.email, 'b2b-admin@lifeplus.local'), COALESCE(u.mobile_number, '+8801000000000')
+  SELECT u.user_id, COALESCE(u.email, 'b2b-admin@lifeplus.local'), COALESCE(u.mobile_number, '+8801710000000')
   INTO default_admin_user_id, default_admin_email, default_admin_mobile
   FROM authn_schema.users u
   WHERE u.deleted_at IS NULL

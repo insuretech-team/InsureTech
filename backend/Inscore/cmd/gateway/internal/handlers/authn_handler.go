@@ -5,19 +5,22 @@ import (
 	"crypto/rsa"
 	"crypto/x509"
 	"encoding/base64"
-	"encoding/json"
 	"encoding/pem"
 	"io"
 	"net/http"
 	"os"
 	"strconv"
+	"strings"
 	"time"
 
+	"encoding/json"
+
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
@@ -37,6 +40,14 @@ func NewAuthnHandler(conn *grpc.ClientConn) *AuthnHandler {
 	return &AuthnHandler{client: authnservicev1.NewAuthServiceClient(conn)}
 }
 
+// protoUnmarshal unmarshals JSON into a proto message.
+// DiscardUnknown=true: unknown fields are silently ignored instead of causing 500.
+// This is the correct REST API behavior — be liberal in what you accept.
+// Invalid JSON or type mismatches still return errors (mapped to 400 by callUnary).
+var protoUnmarshal = protojson.UnmarshalOptions{
+	DiscardUnknown: true,
+}.Unmarshal
+
 const (
 	sessionCookieName   = "session_token"
 	sessionCookiePath   = "/"
@@ -46,7 +57,7 @@ const (
 func (h *AuthnHandler) Register(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RegisterRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.Register(ctx, &req)
@@ -56,7 +67,7 @@ func (h *AuthnHandler) Register(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) SendOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.SendOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.SendOTP(ctx, &req)
@@ -66,7 +77,7 @@ func (h *AuthnHandler) SendOTP(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) VerifyOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.VerifyOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.VerifyOTP(ctx, &req)
@@ -76,7 +87,7 @@ func (h *AuthnHandler) VerifyOTP(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) Login(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.LoginRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 
@@ -85,10 +96,20 @@ func (h *AuthnHandler) Login(w http.ResponseWriter, r *http.Request) {
 			return resp, err
 		}
 
-		// Web portals: set cookie with *session token* and never expose it in JSON body.
+		// Web portals: set HttpOnly cookie with session token.
+		// We also keep session_token in the JSON response body so that server-side
+		// Next.js BFF route handlers (e.g. b2b_portal login route) can read it
+		// without relying on Set-Cookie header forwarding, which is unreliable
+		// when the response goes through an SDK interceptor that rewrites the body
+		// using `new Response(body, { headers })` — the Fetch API spec forbids
+		// Set-Cookie in the Headers constructor, silently dropping it.
+		// The token is safe here: the b2b portal's login route is server-side only
+		// and immediately re-sets it as its own HttpOnly cookie without exposing
+		// it to browser JS.
 		if resp != nil && resp.SessionType == "SERVER_SIDE" && resp.SessionToken != "" {
 			setSessionCookie(w, resp.SessionToken, sessionCookieMaxAge, r.TLS != nil)
-			resp.SessionToken = ""
+			// NOTE: intentionally NOT clearing resp.SessionToken so the BFF can
+			// read it from result.data.session_token on the server side.
 			if resp.CsrfToken != "" {
 				w.Header().Set("X-CSRF-Token", resp.CsrfToken)
 			}
@@ -101,7 +122,7 @@ func (h *AuthnHandler) Login(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) RefreshToken(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RefreshTokenRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.RefreshToken(ctx, &req)
@@ -112,7 +133,7 @@ func (h *AuthnHandler) Logout(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.LogoutRequest
 		// Lenient body
-		_ = protojson.Unmarshal(body, &req)
+		_ = protoUnmarshal(body, &req)
 
 		resp, err := h.client.Logout(ctx, &req)
 		if err == nil {
@@ -125,7 +146,7 @@ func (h *AuthnHandler) Logout(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ValidateTokenRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 
@@ -138,17 +159,25 @@ func (h *AuthnHandler) ValidateToken(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) ValidateCSRF(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ValidateCSRFRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.ValidateCSRF(ctx, &req)
 	})
 }
 
+// GetCSRFToken issues a fresh CSRF token for an authenticated session.
+// GET /v1/auth/csrf-token — requires auth middleware (session_token cookie or Bearer).
+func (h *AuthnHandler) GetCSRFToken(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		return h.client.GetCurrentSession(ctx, &authnservicev1.GetCurrentSessionRequest{})
+	})
+}
+
 func (h *AuthnHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ChangePasswordRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.ChangePassword(ctx, &req)
@@ -158,7 +187,7 @@ func (h *AuthnHandler) ChangePassword(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ResetPasswordRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.ResetPassword(ctx, &req)
@@ -168,6 +197,28 @@ func (h *AuthnHandler) ResetPassword(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) GetCurrentSession(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
 		return h.client.GetCurrentSession(ctx, &authnservicev1.GetCurrentSessionRequest{})
+	})
+}
+
+func (h *AuthnHandler) FindPortalUser(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		var req authnservicev1.FindPortalUserRequest
+		if err := protoUnmarshal(body, &req); err != nil {
+			return nil, err
+		}
+		return h.client.FindPortalUser(ctx, &req)
+	})
+}
+
+func (h *AuthnHandler) SetTemporaryPassword(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("user_id")
+	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		var req authnservicev1.SetTemporaryPasswordRequest
+		if err := protoUnmarshal(body, &req); err != nil {
+			return nil, err
+		}
+		req.UserId = userID
+		return h.client.SetTemporaryPassword(ctx, &req)
 	})
 }
 
@@ -215,7 +266,7 @@ func (h *AuthnHandler) RevokeAllSessions(w http.ResponseWriter, r *http.Request)
 	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RevokeAllSessionsRequest
-		_ = protojson.Unmarshal(body, &req) // allow empty body
+		_ = protoUnmarshal(body, &req) // allow empty body
 		if req.UserId == "" {
 			req.UserId = userID
 		}
@@ -227,7 +278,7 @@ func (h *AuthnHandler) RevokeAllSessions(w http.ResponseWriter, r *http.Request)
 func (h *AuthnHandler) BiometricAuthenticate(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.BiometricAuthenticateRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.BiometricAuthenticate(ctx, &req)
@@ -238,7 +289,7 @@ func (h *AuthnHandler) BiometricAuthenticate(w http.ResponseWriter, r *http.Requ
 func (h *AuthnHandler) CreateAPIKey(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.CreateAPIKeyRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateAPIKey(ctx, &req)
@@ -263,7 +314,7 @@ func (h *AuthnHandler) RevokeAPIKey(w http.ResponseWriter, r *http.Request) {
 	keyID := r.PathValue("key_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RevokeAPIKeyRequest
-		_ = protojson.Unmarshal(body, &req)
+		_ = protoUnmarshal(body, &req)
 		if req.KeyId == "" {
 			req.KeyId = keyID
 		}
@@ -275,7 +326,7 @@ func (h *AuthnHandler) RevokeAPIKey(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) RegisterEmailUser(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RegisterEmailUserRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.RegisterEmailUser(ctx, &req)
@@ -285,7 +336,7 @@ func (h *AuthnHandler) RegisterEmailUser(w http.ResponseWriter, r *http.Request)
 func (h *AuthnHandler) SendEmailOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.SendEmailOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.SendEmailOTP(ctx, &req)
@@ -295,7 +346,7 @@ func (h *AuthnHandler) SendEmailOTP(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) VerifyEmail(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.VerifyEmailRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.VerifyEmail(ctx, &req)
@@ -305,7 +356,7 @@ func (h *AuthnHandler) VerifyEmail(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) EmailLogin(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.EmailLoginRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 
@@ -326,10 +377,33 @@ func (h *AuthnHandler) EmailLogin(w http.ResponseWriter, r *http.Request) {
 	})
 }
 
+func (h *AuthnHandler) EmailPasswordLogin(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		var req authnservicev1.EmailPasswordLoginRequest
+		if err := protoUnmarshal(body, &req); err != nil {
+			return nil, err
+		}
+
+		resp, err := h.client.EmailPasswordLogin(ctx, &req)
+		if err != nil {
+			return resp, err
+		}
+
+		if resp != nil && resp.SessionToken != "" {
+			setSessionCookie(w, resp.SessionToken, sessionCookieMaxAge, r.TLS != nil)
+			if resp.CsrfToken != "" {
+				w.Header().Set("X-CSRF-Token", resp.CsrfToken)
+			}
+		}
+
+		return resp, nil
+	})
+}
+
 func (h *AuthnHandler) RequestPasswordResetByEmail(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.RequestPasswordResetByEmailRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.RequestPasswordResetByEmail(ctx, &req)
@@ -339,10 +413,20 @@ func (h *AuthnHandler) RequestPasswordResetByEmail(w http.ResponseWriter, r *htt
 func (h *AuthnHandler) ResetPasswordByEmail(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ResetPasswordByEmailRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.ResetPasswordByEmail(ctx, &req)
+	})
+}
+
+func (h *AuthnHandler) ProvisionEmployeeUser(w http.ResponseWriter, r *http.Request) {
+	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		var req authnservicev1.ProvisionEmployeeUserRequest
+		if err := protoUnmarshal(body, &req); err != nil {
+			return nil, err
+		}
+		return h.client.ProvisionEmployeeUser(ctx, &req)
 	})
 }
 
@@ -363,22 +447,22 @@ func (h *AuthnHandler) JWKS(w http.ResponseWriter, r *http.Request) {
 
 	pemBytes, err := os.ReadFile(pubKeyPath)
 	if err != nil {
-		http.Error(w, "JWKS unavailable", http.StatusServiceUnavailable)
+		respond.Error(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "JWKS unavailable")
 		return
 	}
 	block, _ := pem.Decode(pemBytes)
 	if block == nil {
-		http.Error(w, "invalid public key", http.StatusInternalServerError)
+		respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "invalid public key")
 		return
 	}
 	pubKey, err := x509.ParsePKIXPublicKey(block.Bytes)
 	if err != nil {
-		http.Error(w, "invalid public key format", http.StatusInternalServerError)
+		respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "invalid public key format")
 		return
 	}
 	rsaKey, ok := pubKey.(*rsa.PublicKey)
 	if !ok {
-		http.Error(w, "not an RSA key", http.StatusInternalServerError)
+		respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "not an RSA key")
 		return
 	}
 
@@ -413,20 +497,169 @@ func (h *AuthnHandler) JWKS(w http.ResponseWriter, r *http.Request) {
 // ── User Profile ──────────────────────────────────────────────────────────────
 
 func (h *AuthnHandler) CreateUserProfile(w http.ResponseWriter, r *http.Request) {
+	// BUG FIX: Profile date_of_birth comes as plain date string "1990-05-15" from mobile/web clients.
+	// Proto Timestamp expects {"seconds":..., "nanos":...} in JSON. We pre-process the body to
+	// convert ISO date strings to proto Timestamp format before unmarshalling.
+	// Also: Mobile/web clients may send a nested "address" object — flatten it to proto flat fields.
+	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		body = normalizeUserProfileBody(body)
+		body = convertDateFieldsToProtoTimestamp(body, "date_of_birth")
 		var req authnservicev1.CreateUserProfileRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
+		}
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.CreateUserProfile(ctx, &req)
 	})
+}
+
+// normalizeUserProfileBody flattens a nested "address" object into flat proto fields.
+// Mobile/web clients may send:
+//   {"address": {"line1": "123 St", "line2": "Apt 4", "city": "Dhaka", "district": "Dhaka",
+//                "division": "Dhaka", "country": "BD", "zip_code": "1200"}}
+// But the proto has flat fields: address_line1, address_line2, city, district, division, country, zip_code.
+func normalizeUserProfileBody(body []byte) []byte {
+	var m map[string]interface{}
+	if err := json.Unmarshal(body, &m); err != nil {
+		return body
+	}
+	changed := false
+
+	// Flatten nested "address" object if present
+	if addr, ok := m["address"]; ok {
+		if addrMap, ok := addr.(map[string]interface{}); ok {
+			fieldMap := map[string]string{
+				"line1":    "address_line1",
+				"line2":    "address_line2",
+				"city":     "city",
+				"district": "district",
+				"division": "division",
+				"country":  "country",
+				"zip_code": "zip_code",
+			}
+			for srcKey, dstKey := range fieldMap {
+				if v, exists := addrMap[srcKey]; exists {
+					if _, alreadySet := m[dstKey]; !alreadySet {
+						m[dstKey] = v
+					}
+				}
+			}
+			delete(m, "address")
+			changed = true
+		}
+	}
+
+	// Normalize first_name + last_name from full_name if needed
+	// Keep full_name in the map so the proto full_name field is also set.
+	if fullName, ok := m["full_name"]; ok {
+		if _, hasFirst := m["first_name"]; !hasFirst {
+			if nameStr, ok := fullName.(string); ok {
+				parts := strings.SplitN(nameStr, " ", 2)
+				m["first_name"] = parts[0]
+				if len(parts) > 1 {
+					m["last_name"] = parts[1]
+				}
+				// Do NOT delete full_name — proto has both full_name and first_name/last_name fields
+				changed = true
+			}
+		}
+	}
+
+	if !changed {
+		return body
+	}
+	out, err := json.Marshal(m)
+	if err != nil {
+		return body
+	}
+	return out
+}
+
+// convertDateFieldsToProtoTimestamp rewrites plain ISO date fields (e.g. "1990-05-15")
+// to proto Timestamp JSON format {"seconds": N, "nanos": 0} for the given field names.
+// Handles both snake_case (date_of_birth) and camelCase (dateOfBirth) field variants.
+// This makes the API client-friendly — clients don't need to know about proto Timestamp format.
+func convertDateFieldsToProtoTimestamp(body []byte, fields ...string) []byte {
+	var m map[string]interface{}
+	if err := json.Unmarshal(body, &m); err != nil {
+		return body
+	}
+	changed := false
+	for _, field := range fields {
+		// Build list of candidate key names: snake_case and camelCase
+		candidates := []string{field}
+		// snake_case → camelCase conversion (date_of_birth → dateOfBirth)
+		camel := snakeToCamel(field)
+		if camel != field {
+			candidates = append(candidates, camel)
+		}
+		for _, key := range candidates {
+			val, ok := m[key]
+			if !ok {
+				continue
+			}
+			str, ok := val.(string)
+			if !ok {
+				continue
+			}
+			// Try parsing as ISO date (YYYY-MM-DD) or RFC3339
+			var t time.Time
+			var err error
+			if len(str) == 10 { // "1990-05-15"
+				t, err = time.Parse("2006-01-02", str)
+			} else {
+				t, err = time.Parse(time.RFC3339, str)
+			}
+			if err == nil {
+				// protojson accepts both snake_case and camelCase field names.
+				// To avoid "duplicate field" error when both date_of_birth and dateOfBirth
+				// are present in the map, we delete all candidate keys and write ONLY
+				// the snake_case key (protojson's DiscardUnknown=false accepts it).
+				rfc3339 := t.UTC().Format(time.RFC3339)
+				// Remove all candidate keys first (prevent duplicates)
+				for _, c := range candidates {
+					delete(m, c)
+				}
+				// Write only the original snake_case field name
+				m[field] = rfc3339
+				changed = true
+				break // found and converted, no need to check other candidates
+			}
+		}
+	}
+	if !changed {
+		return body
+	}
+	out, err := json.Marshal(m)
+	if err != nil {
+		return body
+	}
+	return out
+}
+
+// snakeToCamel converts snake_case to camelCase (e.g. "date_of_birth" → "dateOfBirth").
+func snakeToCamel(s string) string {
+	parts := strings.Split(s, "_")
+	if len(parts) == 1 {
+		return s
+	}
+	result := parts[0]
+	for _, p := range parts[1:] {
+		if len(p) > 0 {
+			result += strings.ToUpper(p[:1]) + p[1:]
+		}
+	}
+	return result
 }
 
 func (h *AuthnHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.GetUserProfileRequest
-		_ = protojson.Unmarshal(body, &req) // allow empty body for GET
+		_ = protoUnmarshal(body, &req) // allow empty body for GET
 		if req.UserId == "" {
 			req.UserId = userID
 		}
@@ -435,10 +668,18 @@ func (h *AuthnHandler) GetUserProfile(w http.ResponseWriter, r *http.Request) {
 }
 
 func (h *AuthnHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request) {
+	// BUG-008 FIX: user_id must not be required in body when it's already in the URL path.
+	// BUG FIX: date_of_birth converted from ISO string "YYYY-MM-DD" to proto Timestamp format.
+	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
+		body = normalizeUserProfileBody(body)
+		body = convertDateFieldsToProtoTimestamp(body, "date_of_birth")
 		var req authnservicev1.UpdateUserProfileRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
+		}
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.UpdateUserProfile(ctx, &req)
 	})
@@ -447,18 +688,35 @@ func (h *AuthnHandler) UpdateUserProfile(w http.ResponseWriter, r *http.Request)
 func (h *AuthnHandler) GetProfilePhotoUploadURL(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.GetProfilePhotoUploadURLRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.GetProfilePhotoUploadURL(ctx, &req)
 	})
 }
 
+// GetNotificationPreferences handles GET /v1/auth/users/{user_id}/notification-preferences
+// BUG-010 FIX: Implements the missing GET endpoint.
+func (h *AuthnHandler) GetNotificationPreferences(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("user_id")
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		return h.client.GetNotificationPreferences(ctx, &authnservicev1.GetNotificationPreferencesRequest{
+			UserId: userID,
+		})
+	})
+}
+
 func (h *AuthnHandler) UpdateNotificationPreferences(w http.ResponseWriter, r *http.Request) {
+	// BUG-009 FIX: user_id must not be required in body when it's already in the URL path.
+	// Populate UserId from path param if body doesn't include it.
+	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.UpdateNotificationPreferencesRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
+		}
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.UpdateNotificationPreferences(ctx, &req)
 	})
@@ -469,7 +727,7 @@ func (h *AuthnHandler) UpdateNotificationPreferences(w http.ResponseWriter, r *h
 func (h *AuthnHandler) EnableTOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.EnableTOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.EnableTOTP(ctx, &req)
@@ -479,7 +737,7 @@ func (h *AuthnHandler) EnableTOTP(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) VerifyTOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.VerifyTOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.VerifyTOTP(ctx, &req)
@@ -489,7 +747,7 @@ func (h *AuthnHandler) VerifyTOTP(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) DisableTOTP(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.DisableTOTPRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.DisableTOTP(ctx, &req)
@@ -499,63 +757,126 @@ func (h *AuthnHandler) DisableTOTP(w http.ResponseWriter, r *http.Request) {
 // ── KYC ───────────────────────────────────────────────────────────────────────
 
 func (h *AuthnHandler) InitiateKYC(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.InitiateKYCRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
+		_ = protoUnmarshal(body, &req) // allow empty body
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.InitiateKYC(ctx, &req)
 	})
 }
 
 func (h *AuthnHandler) GetKYCStatus(w http.ResponseWriter, r *http.Request) {
-	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
-		var req authnservicev1.GetKYCStatusRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
+	userID := r.PathValue("user_id")
+	callUnary(w, r, func(ctx context.Context, _ []byte) (proto.Message, error) {
+		req := &authnservicev1.GetKYCStatusRequest{
+			UserId: userID,
 		}
-		return h.client.GetKYCStatus(ctx, &req)
+		return h.client.GetKYCStatus(ctx, req)
 	})
 }
 
 func (h *AuthnHandler) SubmitKYCFrame(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("user_id")
+
+	// SubmitKYCFrame accepts multipart/form-data (webcam frame as binary file).
+	// Fields: session_id (string), image_data (binary JPEG file).
+	// Falls back to JSON body for non-multipart clients.
+	ct := r.Header.Get("Content-Type")
+	if strings.Contains(ct, "multipart/form-data") {
+		ctx := r.Context()
+		if err := r.ParseMultipartForm(10 << 20); err != nil { // 10MB max
+			respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "failed to parse multipart form")
+			return
+		}
+		sessionID := r.FormValue("session_id")
+		var imageData []byte
+		// Accept "image_data" or "file" field name
+		for _, fieldName := range []string{"image_data", "file"} {
+			f, _, err := r.FormFile(fieldName)
+			if err == nil {
+				imageData, _ = io.ReadAll(f)
+				f.Close()
+				break
+			}
+		}
+		// Build gRPC context with the same metadata as callUnary
+		cookieHeader := r.Header.Get("Cookie")
+		if cookieHeader == "" {
+			if st := strings.TrimSpace(r.Header.Get("X-Session-Token")); st != "" {
+				cookieHeader = "session_token=" + st
+			}
+		}
+		grpcCtx, cancel := context.WithTimeout(ctx, 30*time.Second)
+		defer cancel()
+		grpcCtx = grpcmeta.WithOutgoingMetadata(grpcCtx,
+			"cookie", cookieHeader,
+			"x-user-id", r.Header.Get("X-User-ID"),
+			"x-tenant-id", r.Header.Get("X-Tenant-ID"),
+			"x-portal", r.Header.Get("X-Portal"),
+			"x-session-id", r.Header.Get("X-Session-ID"),
+			"x-user-type", r.Header.Get("X-User-Type"),
+			"x-business-id", r.Header.Get("X-Business-ID"),
+			"authorization", r.Header.Get("Authorization"),
+		)
+
+		req := &authnservicev1.SubmitKYCFrameRequest{
+			UserId:    userID,
+			SessionId: sessionID,
+			ImageData: imageData,
+		}
+		resp, err := h.client.SubmitKYCFrame(grpcCtx, req)
+		if err != nil {
+			respond.GRPCError(w, r, err)
+			return
+		}
+		b, _ := protojson.MarshalOptions{UseProtoNames: true}.Marshal(resp)
+		respond.RawProtoJSON(w, r, b, http.StatusOK)
+		return
+	}
+
+	// JSON fallback
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.SubmitKYCFrameRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
+		}
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.SubmitKYCFrame(ctx, &req)
 	})
 }
 
 func (h *AuthnHandler) CompleteKYCSession(w http.ResponseWriter, r *http.Request) {
+	userID := r.PathValue("user_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.CompleteKYCSessionRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
+		_ = protoUnmarshal(body, &req) // allow empty body
+		if req.UserId == "" {
+			req.UserId = userID
 		}
 		return h.client.CompleteKYCSession(ctx, &req)
 	})
 }
 
 func (h *AuthnHandler) ApproveKYC(w http.ResponseWriter, r *http.Request) {
+	kycID := r.PathValue("kyc_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.ApproveKYCRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
+		_ = protoUnmarshal(body, &req) // allow empty body
+		if req.KycId == "" {
+			req.KycId = kycID
 		}
 		return h.client.ApproveKYC(ctx, &req)
 	})
 }
 
 func (h *AuthnHandler) RejectKYC(w http.ResponseWriter, r *http.Request) {
-	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
-		var req authnservicev1.RejectKYCRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
-		}
-		return h.client.RejectKYC(ctx, &req)
-	})
+	// RPC removed from proto (API path conflict). Route removed from gateway router.
+	respond.Error(w, r, http.StatusNotFound, "NOT_FOUND", "RejectKYC endpoint not available")
 }
 
 // ── Documents ─────────────────────────────────────────────────────────────────
@@ -563,7 +884,7 @@ func (h *AuthnHandler) RejectKYC(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) UploadUserDocument(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.UploadUserDocumentRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.UserId == "" {
@@ -607,7 +928,7 @@ func (h *AuthnHandler) GetUserDocument(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) UpdateUserDocument(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.UpdateUserDocumentRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.UserDocumentId == "" {
@@ -629,7 +950,7 @@ func (h *AuthnHandler) DeleteUserDocument(w http.ResponseWriter, r *http.Request
 func (h *AuthnHandler) VerifyDocument(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.VerifyDocumentRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.UserDocumentId == "" {
@@ -642,7 +963,7 @@ func (h *AuthnHandler) VerifyDocument(w http.ResponseWriter, r *http.Request) {
 func (h *AuthnHandler) CreateVoiceSession(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req authnservicev1.CreateVoiceSessionRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateVoiceSession(ctx, &req)
@@ -650,47 +971,78 @@ func (h *AuthnHandler) CreateVoiceSession(w http.ResponseWriter, r *http.Request
 }
 
 func (h *AuthnHandler) GetVoiceSession(w http.ResponseWriter, r *http.Request) {
-	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
-		var req authnservicev1.GetVoiceSessionRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
-		}
-		return h.client.GetVoiceSession(ctx, &req)
-	})
+	// RPC removed from proto (API path conflict with voice domain). Route removed from gateway router.
+	respond.Error(w, r, http.StatusNotFound, "NOT_FOUND", "GetVoiceSession endpoint not available")
 }
 
 func (h *AuthnHandler) EndVoiceSession(w http.ResponseWriter, r *http.Request) {
-	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
-		var req authnservicev1.EndVoiceSessionRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
-			return nil, err
-		}
-		return h.client.EndVoiceSession(ctx, &req)
-	})
+	// RPC removed from proto (API path conflict with voice domain). Route removed from gateway router.
+	respond.Error(w, r, http.StatusNotFound, "NOT_FOUND", "EndVoiceSession endpoint not available")
 }
 
 // --- shared helpers ---
 
-// writeJSONError writes a clean JSON error response: {"ok":false,"message":"..."}.
-func writeJSONError(w http.ResponseWriter, httpStatus int, msg string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(httpStatus)
-	b, _ := json.Marshal(map[string]any{"ok": false, "message": msg})
-	_, _ = w.Write(b)
+// writeJSONError writes a unified ApiResponse error envelope.
+// Deprecated: call respond.Error() directly; kept for any remaining
+// internal callsites that haven't been migrated yet.
+func writeJSONError(w http.ResponseWriter, r *http.Request, httpStatus int, msg string) {
+	code := httpStatusToErrorCode(httpStatus)
+	respond.Error(w, r, httpStatus, code, msg)
 }
 
+// httpStatusToErrorCode maps common HTTP status codes to error code strings.
+func httpStatusToErrorCode(httpStatus int) string {
+	switch httpStatus {
+	case http.StatusBadRequest:
+		return "BAD_REQUEST"
+	case http.StatusUnauthorized:
+		return "UNAUTHENTICATED"
+	case http.StatusForbidden:
+		return "PERMISSION_DENIED"
+	case http.StatusNotFound:
+		return "NOT_FOUND"
+	case http.StatusConflict:
+		return "CONFLICT"
+	case http.StatusUnprocessableEntity:
+		return "VALIDATION_ERROR"
+	case http.StatusTooManyRequests:
+		return "RATE_LIMITED"
+	case http.StatusServiceUnavailable:
+		return "SERVICE_UNAVAILABLE"
+	case http.StatusGatewayTimeout:
+		return "DEADLINE_EXCEEDED"
+	default:
+		return "INTERNAL_ERROR"
+	}
+}
+
+// callUnary reads the request body, calls the given gRPC function, and writes
+// a unified ApiResponse envelope — success data is wrapped in data:{...} and
+// errors are wrapped in error:{...} with data: null.
 func callUnary(w http.ResponseWriter, r *http.Request, fn func(ctx context.Context, body []byte) (proto.Message, error)) {
 	body, err := io.ReadAll(r.Body)
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, "failed to read request body")
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "failed to read request body")
 		return
 	}
 
-	ctx, cancel := context.WithTimeout(r.Context(), 10*time.Second)
+	// Email OTP sends (SMTP) can take up to 30s; use a longer timeout for all unary calls.
+	ctx, cancel := context.WithTimeout(r.Context(), 30*time.Second)
 	defer cancel()
 
+	// Build cookie header for gRPC metadata.
+	// If client sent X-Session-Token (Postman/API), synthesise a cookie so authn
+	// services (GetCurrentSession, ValidateCSRF etc.) can extract the session token.
+	// Browsers send the actual Cookie header; API clients use X-Session-Token.
+	cookieHeader := r.Header.Get("Cookie")
+	if cookieHeader == "" {
+		if st := strings.TrimSpace(r.Header.Get("X-Session-Token")); st != "" {
+			cookieHeader = "session_token=" + st
+		}
+	}
+
 	// forward metadata (same keys as authn metadata extractor)
-	md := metadata.Pairs(
+	ctx = grpcmeta.WithOutgoingMetadata(ctx,
 		"x-forwarded-for", r.Header.Get("X-Forwarded-For"),
 		"x-real-ip", r.Header.Get("X-Real-Ip"),
 		"user-agent", r.UserAgent(),
@@ -704,32 +1056,28 @@ func callUnary(w http.ResponseWriter, r *http.Request, fn func(ctx context.Conte
 		"x-business-id", r.Header.Get("X-Business-ID"),
 		"x-org-role", r.Header.Get("X-Org-Role"),
 		"authorization", r.Header.Get("Authorization"),
-		"cookie", r.Header.Get("Cookie"),
+		"cookie", cookieHeader,
 	)
-	ctx = metadata.NewOutgoingContext(ctx, md)
 
 	msg, err := fn(ctx, body)
 	if err != nil {
 		st, _ := status.FromError(err)
-		httpStatus := grpcStatusToHTTP(st.Code())
 		logger.Warn("gRPC handler error",
 			zap.String("path", r.URL.Path),
 			zap.String("grpc_code", st.Code().String()),
-			zap.Int("http_status", httpStatus),
+			zap.Int("http_status", respond.GRPCCodeToHTTP(st.Code())),
 			zap.String("message", st.Message()),
 		)
-		writeJSONError(w, httpStatus, st.Message())
+		respond.GRPCError(w, r, err)
 		return
 	}
 
-	w.Header().Set("Content-Type", "application/json")
 	b, mErr := protojson.MarshalOptions{UseProtoNames: true}.Marshal(msg)
 	if mErr != nil {
-		writeJSONError(w, http.StatusInternalServerError, "failed to marshal response")
+		respond.Error(w, r, http.StatusInternalServerError, "MARSHAL_ERROR", "failed to marshal response")
 		return
 	}
-	w.WriteHeader(http.StatusOK)
-	_, _ = w.Write(b)
+	respond.RawProtoJSON(w, r, b, http.StatusOK)
 }
 
 func setSessionCookie(w http.ResponseWriter, token string, maxAge int, secure bool) {

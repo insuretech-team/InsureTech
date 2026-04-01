@@ -80,22 +80,22 @@ public class ClaimAggregate
             FraudCheckId = Guid.NewGuid().ToString(),
             ClaimId = ClaimId,
             FraudScore = fraudScore,
-            CheckedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow)
+            ReviewedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow)
         };
         
-        fraudCheck.FraudFlags.AddRange(fraudFlags);
+        fraudCheck.RiskFactors.AddRange(fraudFlags);
         
         _claim.FraudCheck = fraudCheck;
         
         if (fraudScore > FRAUD_FLAG_THRESHOLD)
         {
-            _claim.Status = ClaimStatus.FraudCheck;
+            _claim.Status = ClaimStatus.UnderReview; // FraudCheck status doesn't exist — use UnderReview
             _domainEvents.Add(new ClaimFlaggedForFraudEvent(ClaimId, fraudScore));
         }
         else if (fraudScore < AUTO_APPROVE_FRAUD_SCORE && _claim.ClaimedAmount.Amount <= ZHTC_THRESHOLD)
         {
             // Auto-approve for ZHTC
-            _claim.ProcessingType = ClaimProcessingType.Automated;
+            _claim.ProcessingType = ClaimProcessingType.AutoAdjudicated;
         }
         
         _claim.UpdatedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
@@ -173,7 +173,7 @@ public class ClaimAggregate
             _claim.RejectionReason = notes;
             _domainEvents.Add(new ClaimRejectedEvent(ClaimId, notes));
         }
-        else if (decision == ApprovalDecision.Escalated)
+        else if (decision == ApprovalDecision.NeedsMoreInfo)
         {
             _claim.Status = ClaimStatus.UnderReview;
             _domainEvents.Add(new ClaimEscalatedEvent(ClaimId, approvalLevel + 1));

@@ -7,6 +7,7 @@ import (
 	"os"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"go.uber.org/zap"
@@ -41,14 +42,14 @@ func (h *DLRHandler) ServeHTTP(w http.ResponseWriter, r *http.Request) {
 		logger.Warn("DLR webhook: unauthorized request",
 			zap.String("remote_addr", r.RemoteAddr),
 		)
-		http.Error(w, "Unauthorized", http.StatusUnauthorized)
+		respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 		return
 	}
 
 	var body dlrBody
 	if err := json.NewDecoder(r.Body).Decode(&body); err != nil {
 		logger.Warn("DLR webhook: failed to decode body", zap.Error(err))
-		http.Error(w, "Bad Request", http.StatusBadRequest)
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "Bad Request")
 		return
 	}
 

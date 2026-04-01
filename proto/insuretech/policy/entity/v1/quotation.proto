@@ -154,6 +154,13 @@ message Quotation {
     comment : "Reason for rejection if status is REJECTED"
   } ];
   // @inject_tag: gorm:"column:rejection_reason"
+
+  google.protobuf.Timestamp deleted_at = 21 [ (insuretech.common.v1.column) = {
+    column_name : "deleted_at"
+    sql_type : "TIMESTAMP WITH TIME ZONE"
+    comment : "Soft delete timestamp"
+  } ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 }
 
 enum QuotationStatus {

@@ -5,7 +5,6 @@ import (
 	"database/sql"
 	"fmt"
 	"strings"
-	"time"
 
 	"gorm.io/gorm"
 
@@ -25,14 +24,10 @@ func (r *FraudRuleRepository) Create(ctx context.Context, rule *fraudv1.FraudRul
 		return nil, fmt.Errorf("fraud_rule_id is required")
 	}
 
-	// Get valid user UUID for audit_info
-	var createdBy string
-	err := r.db.WithContext(ctx).Raw(`SELECT user_id FROM authn_schema.users LIMIT 1`).Scan(&createdBy).Error
-	if err != nil || createdBy == "" {
-		return nil, fmt.Errorf("failed to get valid user for created_by: %w", err)
+	auditInfoJSON, err := newAuditInfoJSON(ctx)
+	if err != nil {
+		return nil, err
 	}
-
-	auditInfoJSON := fmt.Sprintf(`{"created_by":"%s","created_at":"%s"}`, createdBy, time.Now().UTC().Format(time.RFC3339))
 
 	err = r.db.WithContext(ctx).Exec(`
 		INSERT INTO insurance_schema.fraud_rules

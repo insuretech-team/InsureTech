@@ -102,23 +102,23 @@ type StoredFile struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty"`                                                    // @inject_tag: gorm:"primaryKey;column:file_id;not null"
-	TenantId      string                 `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty"`                                              // @inject_tag: gorm:"column:tenant_id"
-	Filename      string                 `protobuf:"bytes,3,opt,name=filename,proto3" json:"filename,omitempty"`                                                              // @inject_tag: gorm:"column:filename;not null"
-	ContentType   string                 `protobuf:"bytes,4,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty"`                                     // @inject_tag: gorm:"column:content_type;not null"
-	SizeBytes     int64                  `protobuf:"varint,5,opt,name=size_bytes,json=sizeBytes,proto3" json:"size_bytes,omitempty"`                                          // @inject_tag: gorm:"column:size_bytes;not null"
-	StorageKey    string                 `protobuf:"bytes,6,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty"`                                        // @inject_tag: gorm:"column:storage_key;not null"
-	Bucket        string                 `protobuf:"bytes,7,opt,name=bucket,proto3" json:"bucket,omitempty"`                                                                  // @inject_tag: gorm:"column:bucket;not null"
-	Url           string                 `protobuf:"bytes,8,opt,name=url,proto3" json:"url,omitempty"`                                                                        // @inject_tag: gorm:"column:url;not null"
-	CdnUrl        string                 `protobuf:"bytes,9,opt,name=cdn_url,json=cdnUrl,proto3" json:"cdn_url,omitempty"`                                                    // @inject_tag: gorm:"column:cdn_url"
-	FileType      FileType               `protobuf:"varint,10,opt,name=file_type,json=fileType,proto3,enum=insuretech.storage.entity.v1.FileType" json:"file_type,omitempty"` // @inject_tag: gorm:"column:file_type;not null;serializer:proto_enum"
-	ReferenceId   string                 `protobuf:"bytes,11,opt,name=reference_id,json=referenceId,proto3" json:"reference_id,omitempty"`                                    // @inject_tag: gorm:"column:reference_id"
-	ReferenceType string                 `protobuf:"bytes,12,opt,name=reference_type,json=referenceType,proto3" json:"reference_type,omitempty"`                              // @inject_tag: gorm:"column:reference_type"
-	IsPublic      bool                   `protobuf:"varint,13,opt,name=is_public,json=isPublic,proto3" json:"is_public,omitempty"`                                            // @inject_tag: gorm:"column:is_public;not null"
-	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`                                          // @inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                          // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                          // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	UploadedBy    string                 `protobuf:"bytes,17,opt,name=uploaded_by,json=uploadedBy,proto3" json:"uploaded_by,omitempty"`                                       // @inject_tag: gorm:"column:uploaded_by;not null"
+	FileId        string                 `protobuf:"bytes,1,opt,name=file_id,json=fileId,proto3" json:"file_id,omitempty" gorm:"primaryKey;column:file_id;not null"`
+	TenantId      string                 `protobuf:"bytes,2,opt,name=tenant_id,json=tenantId,proto3" json:"tenant_id,omitempty" gorm:"column:tenant_id"`
+	Filename      string                 `protobuf:"bytes,3,opt,name=filename,proto3" json:"filename,omitempty" gorm:"column:filename;not null"`
+	ContentType   string                 `protobuf:"bytes,4,opt,name=content_type,json=contentType,proto3" json:"content_type,omitempty" gorm:"column:content_type;not null"`
+	SizeBytes     int64                  `protobuf:"varint,5,opt,name=size_bytes,json=sizeBytes,proto3" json:"size_bytes,omitempty" gorm:"column:size_bytes;not null"`
+	StorageKey    string                 `protobuf:"bytes,6,opt,name=storage_key,json=storageKey,proto3" json:"storage_key,omitempty" gorm:"column:storage_key;not null"`
+	Bucket        string                 `protobuf:"bytes,7,opt,name=bucket,proto3" json:"bucket,omitempty" gorm:"column:bucket;not null"`
+	Url           string                 `protobuf:"bytes,8,opt,name=url,proto3" json:"url,omitempty" gorm:"column:url;not null"`
+	CdnUrl        string                 `protobuf:"bytes,9,opt,name=cdn_url,json=cdnUrl,proto3" json:"cdn_url,omitempty" gorm:"column:cdn_url"`
+	FileType      FileType               `protobuf:"varint,10,opt,name=file_type,json=fileType,proto3,enum=insuretech.storage.entity.v1.FileType" json:"file_type,omitempty" gorm:"column:file_type;not null;serializer:proto_enum"`
+	ReferenceId   string                 `protobuf:"bytes,11,opt,name=reference_id,json=referenceId,proto3" json:"reference_id,omitempty" gorm:"column:reference_id"`
+	ReferenceType string                 `protobuf:"bytes,12,opt,name=reference_type,json=referenceType,proto3" json:"reference_type,omitempty" gorm:"column:reference_type"`
+	IsPublic      bool                   `protobuf:"varint,13,opt,name=is_public,json=isPublic,proto3" json:"is_public,omitempty" gorm:"column:is_public;not null"`
+	ExpiresAt     *timestamppb.Timestamp `protobuf:"bytes,14,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;serializer:proto_timestamp"`
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,15,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	UploadedBy    string                 `protobuf:"bytes,17,opt,name=uploaded_by,json=uploadedBy,proto3" json:"uploaded_by,omitempty" gorm:"column:uploaded_by;not null"`
 }
 
 func (x *StoredFile) Reset() {

@@ -1,0 +1,9 @@
+CompareQuotesResponse:
+  type: object
+  properties:
+    comparisons:
+      type: array
+      items:
+        $ref: '#/components/schemas/QuoteComparison'
+  description: Response payload for compare quotes operation. Returns operation results
+    and status.

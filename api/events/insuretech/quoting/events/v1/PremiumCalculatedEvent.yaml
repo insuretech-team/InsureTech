@@ -1,0 +1,21 @@
+QuotingPremiumCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    calculation_id:
+      type: string
+    product_id:
+      type: string
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    rule_count:
+      type: integer
+      format: int32
+    execution_time_ms:
+      type: integer
+      format: int32
+    calculated_at:
+      type: string
+      format: date-time
+  description: PremiumCalculatedEvent is emitted when premium is calculated

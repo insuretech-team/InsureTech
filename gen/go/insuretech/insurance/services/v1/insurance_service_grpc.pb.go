@@ -33,6 +33,7 @@ const (
 	InsuranceService_ListRiders_FullMethodName                        = "/insuretech.insurance.services.v1.InsuranceService/ListRiders"
 	InsuranceService_CreatePricingConfig_FullMethodName               = "/insuretech.insurance.services.v1.InsuranceService/CreatePricingConfig"
 	InsuranceService_GetPricingConfig_FullMethodName                  = "/insuretech.insurance.services.v1.InsuranceService/GetPricingConfig"
+	InsuranceService_ListPricingConfigs_FullMethodName                = "/insuretech.insurance.services.v1.InsuranceService/ListPricingConfigs"
 	InsuranceService_CreatePolicy_FullMethodName                      = "/insuretech.insurance.services.v1.InsuranceService/CreatePolicy"
 	InsuranceService_GetPolicy_FullMethodName                         = "/insuretech.insurance.services.v1.InsuranceService/GetPolicy"
 	InsuranceService_UpdatePolicy_FullMethodName                      = "/insuretech.insurance.services.v1.InsuranceService/UpdatePolicy"
@@ -41,6 +42,8 @@ const (
 	InsuranceService_CreateClaim_FullMethodName                       = "/insuretech.insurance.services.v1.InsuranceService/CreateClaim"
 	InsuranceService_GetClaim_FullMethodName                          = "/insuretech.insurance.services.v1.InsuranceService/GetClaim"
 	InsuranceService_UpdateClaim_FullMethodName                       = "/insuretech.insurance.services.v1.InsuranceService/UpdateClaim"
+	InsuranceService_CreateClaimDocument_FullMethodName               = "/insuretech.insurance.services.v1.InsuranceService/CreateClaimDocument"
+	InsuranceService_CreateClaimApproval_FullMethodName               = "/insuretech.insurance.services.v1.InsuranceService/CreateClaimApproval"
 	InsuranceService_DeleteClaim_FullMethodName                       = "/insuretech.insurance.services.v1.InsuranceService/DeleteClaim"
 	InsuranceService_ListClaims_FullMethodName                        = "/insuretech.insurance.services.v1.InsuranceService/ListClaims"
 	InsuranceService_CreateQuote_FullMethodName                       = "/insuretech.insurance.services.v1.InsuranceService/CreateQuote"
@@ -128,6 +131,11 @@ const (
 	InsuranceService_UpdateQuotation_FullMethodName                   = "/insuretech.insurance.services.v1.InsuranceService/UpdateQuotation"
 	InsuranceService_DeleteQuotation_FullMethodName                   = "/insuretech.insurance.services.v1.InsuranceService/DeleteQuotation"
 	InsuranceService_ListQuotations_FullMethodName                    = "/insuretech.insurance.services.v1.InsuranceService/ListQuotations"
+	InsuranceService_CreateInsuranceProposal_FullMethodName           = "/insuretech.insurance.services.v1.InsuranceService/CreateInsuranceProposal"
+	InsuranceService_GetInsuranceProposal_FullMethodName              = "/insuretech.insurance.services.v1.InsuranceService/GetInsuranceProposal"
+	InsuranceService_UpdateInsuranceProposal_FullMethodName           = "/insuretech.insurance.services.v1.InsuranceService/UpdateInsuranceProposal"
+	InsuranceService_DeleteInsuranceProposal_FullMethodName           = "/insuretech.insurance.services.v1.InsuranceService/DeleteInsuranceProposal"
+	InsuranceService_ListInsuranceProposals_FullMethodName            = "/insuretech.insurance.services.v1.InsuranceService/ListInsuranceProposals"
 	InsuranceService_CreatePolicyServiceRequest_FullMethodName        = "/insuretech.insurance.services.v1.InsuranceService/CreatePolicyServiceRequest"
 	InsuranceService_GetPolicyServiceRequest_FullMethodName           = "/insuretech.insurance.services.v1.InsuranceService/GetPolicyServiceRequest"
 	InsuranceService_UpdatePolicyServiceRequest_FullMethodName        = "/insuretech.insurance.services.v1.InsuranceService/UpdatePolicyServiceRequest"
@@ -163,6 +171,7 @@ type InsuranceServiceClient interface {
 	// ========== PRICING CONFIG CRUD ==========
 	CreatePricingConfig(ctx context.Context, in *CreatePricingConfigRequest, opts ...grpc.CallOption) (*CreatePricingConfigResponse, error)
 	GetPricingConfig(ctx context.Context, in *GetPricingConfigRequest, opts ...grpc.CallOption) (*GetPricingConfigResponse, error)
+	ListPricingConfigs(ctx context.Context, in *ListPricingConfigsRequest, opts ...grpc.CallOption) (*ListPricingConfigsResponse, error)
 	// ========== POLICY CRUD ==========
 	CreatePolicy(ctx context.Context, in *CreatePolicyRequest, opts ...grpc.CallOption) (*CreatePolicyResponse, error)
 	GetPolicy(ctx context.Context, in *GetPolicyRequest, opts ...grpc.CallOption) (*GetPolicyResponse, error)
@@ -173,6 +182,8 @@ type InsuranceServiceClient interface {
 	CreateClaim(ctx context.Context, in *CreateClaimRequest, opts ...grpc.CallOption) (*CreateClaimResponse, error)
 	GetClaim(ctx context.Context, in *GetClaimRequest, opts ...grpc.CallOption) (*GetClaimResponse, error)
 	UpdateClaim(ctx context.Context, in *UpdateClaimRequest, opts ...grpc.CallOption) (*UpdateClaimResponse, error)
+	CreateClaimDocument(ctx context.Context, in *CreateClaimDocumentRequest, opts ...grpc.CallOption) (*CreateClaimDocumentResponse, error)
+	CreateClaimApproval(ctx context.Context, in *CreateClaimApprovalRequest, opts ...grpc.CallOption) (*CreateClaimApprovalResponse, error)
 	DeleteClaim(ctx context.Context, in *DeleteClaimRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListClaims(ctx context.Context, in *ListClaimsRequest, opts ...grpc.CallOption) (*ListClaimsResponse, error)
 	// ========== QUOTE CRUD ==========
@@ -277,6 +288,12 @@ type InsuranceServiceClient interface {
 	UpdateQuotation(ctx context.Context, in *UpdateQuotationRequest, opts ...grpc.CallOption) (*UpdateQuotationResponse, error)
 	DeleteQuotation(ctx context.Context, in *DeleteQuotationRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
 	ListQuotations(ctx context.Context, in *ListQuotationsRequest, opts ...grpc.CallOption) (*ListQuotationsResponse, error)
+	// ========== INSURANCE PROPOSAL CRUD ==========
+	CreateInsuranceProposal(ctx context.Context, in *CreateInsuranceProposalRequest, opts ...grpc.CallOption) (*CreateInsuranceProposalResponse, error)
+	GetInsuranceProposal(ctx context.Context, in *GetInsuranceProposalRequest, opts ...grpc.CallOption) (*GetInsuranceProposalResponse, error)
+	UpdateInsuranceProposal(ctx context.Context, in *UpdateInsuranceProposalRequest, opts ...grpc.CallOption) (*UpdateInsuranceProposalResponse, error)
+	DeleteInsuranceProposal(ctx context.Context, in *DeleteInsuranceProposalRequest, opts ...grpc.CallOption) (*emptypb.Empty, error)
+	ListInsuranceProposals(ctx context.Context, in *ListInsuranceProposalsRequest, opts ...grpc.CallOption) (*ListInsuranceProposalsResponse, error)
 	// ========== POLICY SERVICE REQUEST CRUD ==========
 	CreatePolicyServiceRequest(ctx context.Context, in *CreatePolicyServiceRequestRequest, opts ...grpc.CallOption) (*CreatePolicyServiceRequestResponse, error)
 	GetPolicyServiceRequest(ctx context.Context, in *GetPolicyServiceRequestRequest, opts ...grpc.CallOption) (*GetPolicyServiceRequestResponse, error)
@@ -429,6 +446,16 @@ func (c *insuranceServiceClient) GetPricingConfig(ctx context.Context, in *GetPr
 	return out, nil
 }
 
+func (c *insuranceServiceClient) ListPricingConfigs(ctx context.Context, in *ListPricingConfigsRequest, opts ...grpc.CallOption) (*ListPricingConfigsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListPricingConfigsResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_ListPricingConfigs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *insuranceServiceClient) CreatePolicy(ctx context.Context, in *CreatePolicyRequest, opts ...grpc.CallOption) (*CreatePolicyResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreatePolicyResponse)
@@ -503,6 +530,26 @@ func (c *insuranceServiceClient) UpdateClaim(ctx context.Context, in *UpdateClai
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(UpdateClaimResponse)
 	err := c.cc.Invoke(ctx, InsuranceService_UpdateClaim_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) CreateClaimDocument(ctx context.Context, in *CreateClaimDocumentRequest, opts ...grpc.CallOption) (*CreateClaimDocumentResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateClaimDocumentResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_CreateClaimDocument_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) CreateClaimApproval(ctx context.Context, in *CreateClaimApprovalRequest, opts ...grpc.CallOption) (*CreateClaimApprovalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateClaimApprovalResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_CreateClaimApproval_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
 	}
@@ -1379,6 +1426,56 @@ func (c *insuranceServiceClient) ListQuotations(ctx context.Context, in *ListQuo
 	return out, nil
 }
 
+func (c *insuranceServiceClient) CreateInsuranceProposal(ctx context.Context, in *CreateInsuranceProposalRequest, opts ...grpc.CallOption) (*CreateInsuranceProposalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(CreateInsuranceProposalResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_CreateInsuranceProposal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) GetInsuranceProposal(ctx context.Context, in *GetInsuranceProposalRequest, opts ...grpc.CallOption) (*GetInsuranceProposalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetInsuranceProposalResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_GetInsuranceProposal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) UpdateInsuranceProposal(ctx context.Context, in *UpdateInsuranceProposalRequest, opts ...grpc.CallOption) (*UpdateInsuranceProposalResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(UpdateInsuranceProposalResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_UpdateInsuranceProposal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) DeleteInsuranceProposal(ctx context.Context, in *DeleteInsuranceProposalRequest, opts ...grpc.CallOption) (*emptypb.Empty, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(emptypb.Empty)
+	err := c.cc.Invoke(ctx, InsuranceService_DeleteInsuranceProposal_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+func (c *insuranceServiceClient) ListInsuranceProposals(ctx context.Context, in *ListInsuranceProposalsRequest, opts ...grpc.CallOption) (*ListInsuranceProposalsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListInsuranceProposalsResponse)
+	err := c.cc.Invoke(ctx, InsuranceService_ListInsuranceProposals_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *insuranceServiceClient) CreatePolicyServiceRequest(ctx context.Context, in *CreatePolicyServiceRequestRequest, opts ...grpc.CallOption) (*CreatePolicyServiceRequestResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(CreatePolicyServiceRequestResponse)
@@ -1502,6 +1599,7 @@ type InsuranceServiceServer interface {
 	// ========== PRICING CONFIG CRUD ==========
 	CreatePricingConfig(context.Context, *CreatePricingConfigRequest) (*CreatePricingConfigResponse, error)
 	GetPricingConfig(context.Context, *GetPricingConfigRequest) (*GetPricingConfigResponse, error)
+	ListPricingConfigs(context.Context, *ListPricingConfigsRequest) (*ListPricingConfigsResponse, error)
 	// ========== POLICY CRUD ==========
 	CreatePolicy(context.Context, *CreatePolicyRequest) (*CreatePolicyResponse, error)
 	GetPolicy(context.Context, *GetPolicyRequest) (*GetPolicyResponse, error)
@@ -1512,6 +1610,8 @@ type InsuranceServiceServer interface {
 	CreateClaim(context.Context, *CreateClaimRequest) (*CreateClaimResponse, error)
 	GetClaim(context.Context, *GetClaimRequest) (*GetClaimResponse, error)
 	UpdateClaim(context.Context, *UpdateClaimRequest) (*UpdateClaimResponse, error)
+	CreateClaimDocument(context.Context, *CreateClaimDocumentRequest) (*CreateClaimDocumentResponse, error)
+	CreateClaimApproval(context.Context, *CreateClaimApprovalRequest) (*CreateClaimApprovalResponse, error)
 	DeleteClaim(context.Context, *DeleteClaimRequest) (*emptypb.Empty, error)
 	ListClaims(context.Context, *ListClaimsRequest) (*ListClaimsResponse, error)
 	// ========== QUOTE CRUD ==========
@@ -1616,6 +1716,12 @@ type InsuranceServiceServer interface {
 	UpdateQuotation(context.Context, *UpdateQuotationRequest) (*UpdateQuotationResponse, error)
 	DeleteQuotation(context.Context, *DeleteQuotationRequest) (*emptypb.Empty, error)
 	ListQuotations(context.Context, *ListQuotationsRequest) (*ListQuotationsResponse, error)
+	// ========== INSURANCE PROPOSAL CRUD ==========
+	CreateInsuranceProposal(context.Context, *CreateInsuranceProposalRequest) (*CreateInsuranceProposalResponse, error)
+	GetInsuranceProposal(context.Context, *GetInsuranceProposalRequest) (*GetInsuranceProposalResponse, error)
+	UpdateInsuranceProposal(context.Context, *UpdateInsuranceProposalRequest) (*UpdateInsuranceProposalResponse, error)
+	DeleteInsuranceProposal(context.Context, *DeleteInsuranceProposalRequest) (*emptypb.Empty, error)
+	ListInsuranceProposals(context.Context, *ListInsuranceProposalsRequest) (*ListInsuranceProposalsResponse, error)
 	// ========== POLICY SERVICE REQUEST CRUD ==========
 	CreatePolicyServiceRequest(context.Context, *CreatePolicyServiceRequestRequest) (*CreatePolicyServiceRequestResponse, error)
 	GetPolicyServiceRequest(context.Context, *GetPolicyServiceRequestRequest) (*GetPolicyServiceRequestResponse, error)
@@ -1676,6 +1782,9 @@ func (UnimplementedInsuranceServiceServer) CreatePricingConfig(context.Context, 
 func (UnimplementedInsuranceServiceServer) GetPricingConfig(context.Context, *GetPricingConfigRequest) (*GetPricingConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPricingConfig not implemented")
 }
+func (UnimplementedInsuranceServiceServer) ListPricingConfigs(context.Context, *ListPricingConfigsRequest) (*ListPricingConfigsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPricingConfigs not implemented")
+}
 func (UnimplementedInsuranceServiceServer) CreatePolicy(context.Context, *CreatePolicyRequest) (*CreatePolicyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicy not implemented")
 }
@@ -1699,6 +1808,12 @@ func (UnimplementedInsuranceServiceServer) GetClaim(context.Context, *GetClaimRe
 }
 func (UnimplementedInsuranceServiceServer) UpdateClaim(context.Context, *UpdateClaimRequest) (*UpdateClaimResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method UpdateClaim not implemented")
+}
+func (UnimplementedInsuranceServiceServer) CreateClaimDocument(context.Context, *CreateClaimDocumentRequest) (*CreateClaimDocumentResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateClaimDocument not implemented")
+}
+func (UnimplementedInsuranceServiceServer) CreateClaimApproval(context.Context, *CreateClaimApprovalRequest) (*CreateClaimApprovalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateClaimApproval not implemented")
 }
 func (UnimplementedInsuranceServiceServer) DeleteClaim(context.Context, *DeleteClaimRequest) (*emptypb.Empty, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteClaim not implemented")
@@ -1960,6 +2075,21 @@ func (UnimplementedInsuranceServiceServer) DeleteQuotation(context.Context, *Del
 }
 func (UnimplementedInsuranceServiceServer) ListQuotations(context.Context, *ListQuotationsRequest) (*ListQuotationsResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListQuotations not implemented")
+}
+func (UnimplementedInsuranceServiceServer) CreateInsuranceProposal(context.Context, *CreateInsuranceProposalRequest) (*CreateInsuranceProposalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method CreateInsuranceProposal not implemented")
+}
+func (UnimplementedInsuranceServiceServer) GetInsuranceProposal(context.Context, *GetInsuranceProposalRequest) (*GetInsuranceProposalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetInsuranceProposal not implemented")
+}
+func (UnimplementedInsuranceServiceServer) UpdateInsuranceProposal(context.Context, *UpdateInsuranceProposalRequest) (*UpdateInsuranceProposalResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method UpdateInsuranceProposal not implemented")
+}
+func (UnimplementedInsuranceServiceServer) DeleteInsuranceProposal(context.Context, *DeleteInsuranceProposalRequest) (*emptypb.Empty, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method DeleteInsuranceProposal not implemented")
+}
+func (UnimplementedInsuranceServiceServer) ListInsuranceProposals(context.Context, *ListInsuranceProposalsRequest) (*ListInsuranceProposalsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListInsuranceProposals not implemented")
 }
 func (UnimplementedInsuranceServiceServer) CreatePolicyServiceRequest(context.Context, *CreatePolicyServiceRequestRequest) (*CreatePolicyServiceRequestResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CreatePolicyServiceRequest not implemented")
@@ -2245,6 +2375,24 @@ func _InsuranceService_GetPricingConfig_Handler(srv interface{}, ctx context.Con
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InsuranceService_ListPricingConfigs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPricingConfigsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).ListPricingConfigs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_ListPricingConfigs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).ListPricingConfigs(ctx, req.(*ListPricingConfigsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _InsuranceService_CreatePolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreatePolicyRequest)
 	if err := dec(in); err != nil {
@@ -2385,6 +2533,42 @@ func _InsuranceService_UpdateClaim_Handler(srv interface{}, ctx context.Context,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
 		return srv.(InsuranceServiceServer).UpdateClaim(ctx, req.(*UpdateClaimRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_CreateClaimDocument_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateClaimDocumentRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).CreateClaimDocument(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_CreateClaimDocument_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).CreateClaimDocument(ctx, req.(*CreateClaimDocumentRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_CreateClaimApproval_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateClaimApprovalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).CreateClaimApproval(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_CreateClaimApproval_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).CreateClaimApproval(ctx, req.(*CreateClaimApprovalRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }
@@ -3955,6 +4139,96 @@ func _InsuranceService_ListQuotations_Handler(srv interface{}, ctx context.Conte
 	return interceptor(ctx, in, info, handler)
 }
 
+func _InsuranceService_CreateInsuranceProposal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(CreateInsuranceProposalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).CreateInsuranceProposal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_CreateInsuranceProposal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).CreateInsuranceProposal(ctx, req.(*CreateInsuranceProposalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_GetInsuranceProposal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetInsuranceProposalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).GetInsuranceProposal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_GetInsuranceProposal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).GetInsuranceProposal(ctx, req.(*GetInsuranceProposalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_UpdateInsuranceProposal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(UpdateInsuranceProposalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).UpdateInsuranceProposal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_UpdateInsuranceProposal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).UpdateInsuranceProposal(ctx, req.(*UpdateInsuranceProposalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_DeleteInsuranceProposal_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(DeleteInsuranceProposalRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).DeleteInsuranceProposal(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_DeleteInsuranceProposal_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).DeleteInsuranceProposal(ctx, req.(*DeleteInsuranceProposalRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
+func _InsuranceService_ListInsuranceProposals_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListInsuranceProposalsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(InsuranceServiceServer).ListInsuranceProposals(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: InsuranceService_ListInsuranceProposals_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(InsuranceServiceServer).ListInsuranceProposals(ctx, req.(*ListInsuranceProposalsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _InsuranceService_CreatePolicyServiceRequest_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(CreatePolicyServiceRequestRequest)
 	if err := dec(in); err != nil {
@@ -4195,6 +4469,10 @@ var InsuranceService_ServiceDesc = grpc.ServiceDesc{
 			Handler:    _InsuranceService_GetPricingConfig_Handler,
 		},
 		{
+			MethodName: "ListPricingConfigs",
+			Handler:    _InsuranceService_ListPricingConfigs_Handler,
+		},
+		{
 			MethodName: "CreatePolicy",
 			Handler:    _InsuranceService_CreatePolicy_Handler,
 		},
@@ -4225,6 +4503,14 @@ var InsuranceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "UpdateClaim",
 			Handler:    _InsuranceService_UpdateClaim_Handler,
+		},
+		{
+			MethodName: "CreateClaimDocument",
+			Handler:    _InsuranceService_CreateClaimDocument_Handler,
+		},
+		{
+			MethodName: "CreateClaimApproval",
+			Handler:    _InsuranceService_CreateClaimApproval_Handler,
 		},
 		{
 			MethodName: "DeleteClaim",
@@ -4573,6 +4859,26 @@ var InsuranceService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListQuotations",
 			Handler:    _InsuranceService_ListQuotations_Handler,
+		},
+		{
+			MethodName: "CreateInsuranceProposal",
+			Handler:    _InsuranceService_CreateInsuranceProposal_Handler,
+		},
+		{
+			MethodName: "GetInsuranceProposal",
+			Handler:    _InsuranceService_GetInsuranceProposal_Handler,
+		},
+		{
+			MethodName: "UpdateInsuranceProposal",
+			Handler:    _InsuranceService_UpdateInsuranceProposal_Handler,
+		},
+		{
+			MethodName: "DeleteInsuranceProposal",
+			Handler:    _InsuranceService_DeleteInsuranceProposal_Handler,
+		},
+		{
+			MethodName: "ListInsuranceProposals",
+			Handler:    _InsuranceService_ListInsuranceProposals_Handler,
 		},
 		{
 			MethodName: "CreatePolicyServiceRequest",

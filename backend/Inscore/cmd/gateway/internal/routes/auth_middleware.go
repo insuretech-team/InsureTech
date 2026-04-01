@@ -5,11 +5,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 // Cookie name used by AuthN metadata extractor.
@@ -25,7 +26,7 @@ func AuthMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 		logger.Error("Auth middleware created without authn connection")
 		return func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "Authentication service unavailable", http.StatusServiceUnavailable)
+				respond.Error(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "Authentication service unavailable")
 			})
 		}
 	}
@@ -37,20 +38,38 @@ func AuthMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 			ctx := r.Context()
 
 			jwt := bearerToken(r.Header.Get("Authorization"))
+
+			// Server-side session token resolution (priority order):
+			//   1. Cookie: session_token=<value>  — canonical for B2B web portal (browser clients)
+			//   2. X-Session-Token: <value>        — fallback for Postman / non-browser API clients
+			//      (the raw session token returned in login response body as data.session_token)
+			// NOTE: X-Session-Id carries the UUID, NOT the cryptographic token — do not use for auth.
+			// B2C mobile sends JWT Bearer token instead; no session cookie/token needed.
 			sessionToken := ""
 			if c, err := r.Cookie(SessionCookieName); err == nil {
 				sessionToken = c.Value
 			}
+			if sessionToken == "" {
+				sessionToken = strings.TrimSpace(r.Header.Get("X-Session-Token"))
+			}
 
-			ctx = metadata.NewOutgoingContext(ctx, metadata.MD{
-				"authorization":   []string{r.Header.Get("Authorization")},
-				"cookie":          []string{r.Header.Get("Cookie")},
-				"x-csrf-token":    []string{r.Header.Get("X-CSRF-Token")},
-				"x-device-id":     []string{r.Header.Get("X-Device-Id")},
-				"x-forwarded-for": []string{r.Header.Get("X-Forwarded-For")},
-				"x-real-ip":       []string{r.Header.Get("X-Real-Ip")},
-				"user-agent":      []string{r.UserAgent()},
-			})
+			// Build cookie header for gRPC metadata.
+			// If client sent X-Session-Token (Postman/API), synthesise a cookie header
+			// so upstream authn services (GetCurrentSession etc.) can find the session token.
+			cookieHeader := r.Header.Get("Cookie")
+			if sessionToken != "" && cookieHeader == "" {
+				cookieHeader = SessionCookieName + "=" + sessionToken
+			}
+
+			ctx = grpcmeta.WithOutgoingMetadata(ctx,
+				"authorization", r.Header.Get("Authorization"),
+				"cookie", cookieHeader,
+				"x-csrf-token", r.Header.Get("X-CSRF-Token"),
+				"x-device-id", r.Header.Get("X-Device-Id"),
+				"x-forwarded-for", r.Header.Get("X-Forwarded-For"),
+				"x-real-ip", r.Header.Get("X-Real-Ip"),
+				"user-agent", r.UserAgent(),
+			)
 
 			resp, err := client.ValidateToken(ctx, &authnservicev1.ValidateTokenRequest{
 				AccessToken: jwt,
@@ -58,17 +77,17 @@ func AuthMiddleware(authnConn *grpc.ClientConn) func(http.Handler) http.Handler 
 			})
 			if err != nil {
 				logger.Warn("ValidateToken failed", zap.Error(err), zap.String("path", r.URL.Path))
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 			if resp == nil || !resp.Valid {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 			// Device binding check for JWT: if client supplies X-Device-Id, it must match token claim.
 			requestDeviceID := strings.TrimSpace(r.Header.Get("X-Device-Id"))
 			if requestDeviceID != "" && resp.SessionType == "JWT" && resp.DeviceId != "" && requestDeviceID != resp.DeviceId {
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized: device mismatch")
 				return
 			}
 

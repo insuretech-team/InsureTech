@@ -6,9 +6,9 @@ import (
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 
+	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/service"
 	authzentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
-	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/service"
 )
 
 // AuthZHandler implements authzservicev1.AuthZServiceServer by delegating
@@ -40,7 +40,7 @@ func (h *AuthZHandler) CheckAccess(ctx context.Context, req *authzservicev1.Chec
 	}
 	resp, err := h.svc.CheckAccess(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "access check failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -57,7 +57,7 @@ func (h *AuthZHandler) BatchCheckAccess(ctx context.Context, req *authzservicev1
 	}
 	resp, err := h.svc.BatchCheckAccess(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "batch check failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -73,7 +73,7 @@ func (h *AuthZHandler) CreateRole(ctx context.Context, req *authzservicev1.Creat
 	}
 	resp, err := h.svc.CreateRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "create role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -84,7 +84,7 @@ func (h *AuthZHandler) GetRole(ctx context.Context, req *authzservicev1.GetRoleR
 	}
 	resp, err := h.svc.GetRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "get role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -95,7 +95,7 @@ func (h *AuthZHandler) UpdateRole(ctx context.Context, req *authzservicev1.Updat
 	}
 	resp, err := h.svc.UpdateRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "update role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -106,7 +106,7 @@ func (h *AuthZHandler) DeleteRole(ctx context.Context, req *authzservicev1.Delet
 	}
 	resp, err := h.svc.DeleteRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "delete role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -114,7 +114,7 @@ func (h *AuthZHandler) DeleteRole(ctx context.Context, req *authzservicev1.Delet
 func (h *AuthZHandler) ListRoles(ctx context.Context, req *authzservicev1.ListRolesRequest) (*authzservicev1.ListRolesResponse, error) {
 	resp, err := h.svc.ListRoles(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "list roles failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -130,7 +130,7 @@ func (h *AuthZHandler) AssignRole(ctx context.Context, req *authzservicev1.Assig
 	}
 	resp, err := h.svc.AssignRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "assign role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -144,7 +144,7 @@ func (h *AuthZHandler) RemoveRole(ctx context.Context, req *authzservicev1.Remov
 	}
 	resp, err := h.svc.RemoveRole(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "remove role failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -155,7 +155,7 @@ func (h *AuthZHandler) ListUserRoles(ctx context.Context, req *authzservicev1.Li
 	}
 	resp, err := h.svc.ListUserRoles(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "list user roles failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -169,7 +169,7 @@ func (h *AuthZHandler) GetUserPermissions(ctx context.Context, req *authzservice
 	}
 	resp, err := h.svc.GetUserPermissions(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "get user permissions failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -182,7 +182,7 @@ func (h *AuthZHandler) CreatePolicyRule(ctx context.Context, req *authzservicev1
 	}
 	resp, err := h.svc.CreatePolicyRule(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "create policy rule failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -193,7 +193,7 @@ func (h *AuthZHandler) UpdatePolicyRule(ctx context.Context, req *authzservicev1
 	}
 	resp, err := h.svc.UpdatePolicyRule(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "update policy rule failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -204,7 +204,7 @@ func (h *AuthZHandler) DeletePolicyRule(ctx context.Context, req *authzservicev1
 	}
 	resp, err := h.svc.DeletePolicyRule(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "delete policy rule failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -212,12 +212,20 @@ func (h *AuthZHandler) DeletePolicyRule(ctx context.Context, req *authzservicev1
 func (h *AuthZHandler) ListPolicyRules(ctx context.Context, req *authzservicev1.ListPolicyRulesRequest) (*authzservicev1.ListPolicyRulesResponse, error) {
 	resp, err := h.svc.ListPolicyRules(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "list policy rules failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
 
 // ── Portal Configuration ──────────────────────────────────────────────────────
+
+func (h *AuthZHandler) ListPortalConfigs(ctx context.Context, req *authzservicev1.ListPortalConfigsRequest) (*authzservicev1.ListPortalConfigsResponse, error) {
+	resp, err := h.svc.ListPortalConfigs(ctx, req)
+	if err != nil {
+		return nil, toGRPCError(err)
+	}
+	return resp, nil
+}
 
 func (h *AuthZHandler) GetPortalConfig(ctx context.Context, req *authzservicev1.GetPortalConfigRequest) (*authzservicev1.GetPortalConfigResponse, error) {
 	if req.Portal == 0 {
@@ -225,7 +233,7 @@ func (h *AuthZHandler) GetPortalConfig(ctx context.Context, req *authzservicev1.
 	}
 	resp, err := h.svc.GetPortalConfig(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "get portal config failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -236,7 +244,7 @@ func (h *AuthZHandler) UpdatePortalConfig(ctx context.Context, req *authzservice
 	}
 	resp, err := h.svc.UpdatePortalConfig(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "update portal config failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -246,7 +254,7 @@ func (h *AuthZHandler) UpdatePortalConfig(ctx context.Context, req *authzservice
 func (h *AuthZHandler) ListAccessDecisionAudits(ctx context.Context, req *authzservicev1.ListAccessDecisionAuditsRequest) (*authzservicev1.ListAccessDecisionAuditsResponse, error) {
 	resp, err := h.svc.ListAccessDecisionAudits(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "list audits failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -256,7 +264,7 @@ func (h *AuthZHandler) ListAccessDecisionAudits(ctx context.Context, req *authzs
 func (h *AuthZHandler) InvalidatePolicyCache(ctx context.Context, req *authzservicev1.InvalidatePolicyCacheRequest) (*authzservicev1.InvalidatePolicyCacheResponse, error) {
 	resp, err := h.svc.InvalidatePolicyCache(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "invalidate cache failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }
@@ -266,7 +274,7 @@ func (h *AuthZHandler) InvalidatePolicyCache(ctx context.Context, req *authzserv
 func (h *AuthZHandler) GetJWKS(ctx context.Context, req *authzservicev1.GetJWKSRequest) (*authzservicev1.GetJWKSResponse, error) {
 	resp, err := h.svc.GetJWKS(ctx, req)
 	if err != nil {
-		return nil, status.Errorf(codes.Internal, "get JWKS failed: %v", err)
+		return nil, toGRPCError(err)
 	}
 	return resp, nil
 }

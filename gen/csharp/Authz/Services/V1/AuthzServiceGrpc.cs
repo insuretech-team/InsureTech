@@ -122,6 +122,10 @@ namespace Insuretech.Authz.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authz.Services.V1.ListPolicyRulesResponse> __Marshaller_insuretech_authz_services_v1_ListPolicyRulesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authz.Services.V1.ListPolicyRulesResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest> __Marshaller_insuretech_authz_services_v1_ListPortalConfigsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse> __Marshaller_insuretech_authz_services_v1_ListPortalConfigsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authz.Services.V1.GetPortalConfigRequest> __Marshaller_insuretech_authz_services_v1_GetPortalConfigRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authz.Services.V1.GetPortalConfigRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authz.Services.V1.GetPortalConfigResponse> __Marshaller_insuretech_authz_services_v1_GetPortalConfigResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authz.Services.V1.GetPortalConfigResponse.Parser));
@@ -261,6 +265,14 @@ namespace Insuretech.Authz.Services.V1 {
         "ListPolicyRules",
         __Marshaller_insuretech_authz_services_v1_ListPolicyRulesRequest,
         __Marshaller_insuretech_authz_services_v1_ListPolicyRulesResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest, global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse> __Method_ListPortalConfigs = new grpc::Method<global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest, global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ListPortalConfigs",
+        __Marshaller_insuretech_authz_services_v1_ListPortalConfigsRequest,
+        __Marshaller_insuretech_authz_services_v1_ListPortalConfigsResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authz.Services.V1.GetPortalConfigRequest, global::Insuretech.Authz.Services.V1.GetPortalConfigResponse> __Method_GetPortalConfig = new grpc::Method<global::Insuretech.Authz.Services.V1.GetPortalConfigRequest, global::Insuretech.Authz.Services.V1.GetPortalConfigResponse>(
@@ -424,6 +436,12 @@ namespace Insuretech.Authz.Services.V1 {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authz.Services.V1.ListPolicyRulesResponse> ListPolicyRules(global::Insuretech.Authz.Services.V1.ListPolicyRulesRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse> ListPortalConfigs(global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -921,6 +939,26 @@ namespace Insuretech.Authz.Services.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_ListPolicyRules, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse ListPortalConfigs(global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListPortalConfigs(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse ListPortalConfigs(global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ListPortalConfigs, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse> ListPortalConfigsAsync(global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListPortalConfigsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse> ListPortalConfigsAsync(global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ListPortalConfigs, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Insuretech.Authz.Services.V1.GetPortalConfigResponse GetPortalConfig(global::Insuretech.Authz.Services.V1.GetPortalConfigRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return GetPortalConfig(request, new grpc::CallOptions(headers, deadline, cancellationToken));
@@ -1109,6 +1147,7 @@ namespace Insuretech.Authz.Services.V1 {
           .AddMethod(__Method_UpdatePolicyRule, serviceImpl.UpdatePolicyRule)
           .AddMethod(__Method_DeletePolicyRule, serviceImpl.DeletePolicyRule)
           .AddMethod(__Method_ListPolicyRules, serviceImpl.ListPolicyRules)
+          .AddMethod(__Method_ListPortalConfigs, serviceImpl.ListPortalConfigs)
           .AddMethod(__Method_GetPortalConfig, serviceImpl.GetPortalConfig)
           .AddMethod(__Method_UpdatePortalConfig, serviceImpl.UpdatePortalConfig)
           .AddMethod(__Method_GetJWKS, serviceImpl.GetJWKS)
@@ -1138,6 +1177,7 @@ namespace Insuretech.Authz.Services.V1 {
       serviceBinder.AddMethod(__Method_UpdatePolicyRule, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.UpdatePolicyRuleRequest, global::Insuretech.Authz.Services.V1.UpdatePolicyRuleResponse>(serviceImpl.UpdatePolicyRule));
       serviceBinder.AddMethod(__Method_DeletePolicyRule, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.DeletePolicyRuleRequest, global::Insuretech.Authz.Services.V1.DeletePolicyRuleResponse>(serviceImpl.DeletePolicyRule));
       serviceBinder.AddMethod(__Method_ListPolicyRules, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.ListPolicyRulesRequest, global::Insuretech.Authz.Services.V1.ListPolicyRulesResponse>(serviceImpl.ListPolicyRules));
+      serviceBinder.AddMethod(__Method_ListPortalConfigs, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.ListPortalConfigsRequest, global::Insuretech.Authz.Services.V1.ListPortalConfigsResponse>(serviceImpl.ListPortalConfigs));
       serviceBinder.AddMethod(__Method_GetPortalConfig, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.GetPortalConfigRequest, global::Insuretech.Authz.Services.V1.GetPortalConfigResponse>(serviceImpl.GetPortalConfig));
       serviceBinder.AddMethod(__Method_UpdatePortalConfig, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.UpdatePortalConfigRequest, global::Insuretech.Authz.Services.V1.UpdatePortalConfigResponse>(serviceImpl.UpdatePortalConfig));
       serviceBinder.AddMethod(__Method_GetJWKS, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authz.Services.V1.GetJWKSRequest, global::Insuretech.Authz.Services.V1.GetJWKSResponse>(serviceImpl.GetJWKS));

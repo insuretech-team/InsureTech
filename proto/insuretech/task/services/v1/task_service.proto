@@ -43,7 +43,7 @@ service TaskService {
   // Assign task
   rpc AssignTask(AssignTaskRequest) returns (AssignTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/tasks/{task_id}?action=assign"
+      post: "/v1/tasks/{task_id}:assign"
       body: "*"
     };
   }
@@ -51,7 +51,7 @@ service TaskService {
   // Complete task
   rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/tasks/{task_id}?action=complete"
+      post: "/v1/tasks/{task_id}:complete"
       body: "*"
     };
   }

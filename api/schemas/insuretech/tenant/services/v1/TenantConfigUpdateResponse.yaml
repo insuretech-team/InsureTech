@@ -1,10 +1,5 @@
 TenantConfigUpdateResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+  properties: {}
   description: Response payload for tenant config update operation. Returns operation
     results and status.

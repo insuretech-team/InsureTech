@@ -17,13 +17,24 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { LuLoader, LuRefreshCw, LuShield, LuTrash2, LuUserPlus } from "react-icons/lu";
+import { LuLoader, LuRefreshCw, LuSearch, LuShield, LuTrash2, LuUserPlus } from "react-icons/lu";
 import { useOrganisationForm } from "@/src/hooks/useOrganisationForm";
 import { ToastBanner } from "@/components/ui/toast-banner";
 import { useToast } from "@/src/hooks/useToast";
-import { organisationClient } from "@lib/sdk/organisation-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
+import type { PortalUserLookup } from "@lib/sdk/b2b-sdk-client";
 import type { OrgFormValues } from "@/src/hooks/useOrganisationForm";
 import type { OrgMember } from "@lifeplus/insuretech-sdk";
+import {
+  BD_MOBILE_EXAMPLES,
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+  normalizeBangladeshMobileOrRaw,
+} from "@/src/lib/utils/bd-mobile";
+import {
+  getPasswordValidationMessage,
+  PASSWORD_REQUIREMENTS_HINT,
+} from "@/src/lib/utils/password";
 
 type Props = {
   open: boolean;
@@ -40,6 +51,19 @@ type AdminDraft = {
   mobileNumber: string;
 };
 
+type AdminDraftErrors = {
+  email?: string;
+  password?: string;
+  mobileNumber?: string;
+};
+
+type ExistingAdminDraftErrors = {
+  identifier?: string;
+  temporaryPassword?: string;
+};
+
+type CreateAdminMode = "create" | "assign";
+
 const focusPurple = "focus-visible:ring-primary focus-visible:border-primary focus-visible:ring-2";
 
 const EMPTY_ADMIN_DRAFT: AdminDraft = {
@@ -49,29 +73,18 @@ const EMPTY_ADMIN_DRAFT: AdminDraft = {
   mobileNumber: "",
 };
 
-function looksLikeBangladeshMobile(raw: string): boolean {
-  const digits = raw.replace(/\D/g, "");
-  return /^(?:880|0)?1[3-9]\d{8}$/.test(digits) || /^1[3-9]\d{8}$/.test(digits);
-}
-
-function validateAdminDraft(values: AdminDraft): string | null {
-  if (!values.email.trim() || !values.password.trim() || !values.mobileNumber.trim()) {
-    return "Email, password, and mobile number are required";
+function validateAdminDraft(values: AdminDraft): AdminDraftErrors {
+  const errors: AdminDraftErrors = {};
+  if (!values.email.trim()) {
+    errors.email = "Admin email is required.";
   }
-
-  const hasUpper = /[A-Z]/.test(values.password);
-  const hasLower = /[a-z]/.test(values.password);
-  const hasDigit = /\d/.test(values.password);
-  const hasSymbol = /[^A-Za-z0-9]/.test(values.password);
-  if (values.password.length < 8 || !hasUpper || !hasLower || !hasDigit || !hasSymbol) {
-    return "Use 8+ chars with upper, lower, number, and symbol";
+  errors.password = getPasswordValidationMessage(values.password, "Admin password") ?? undefined;
+  if (!values.mobileNumber.trim()) {
+    errors.mobileNumber = "Admin mobile number is required.";
+  } else if (!normalizeBangladeshMobile(values.mobileNumber.trim())) {
+    errors.mobileNumber = getBangladeshMobileValidationMessage("Admin mobile number");
   }
-
-  if (!looksLikeBangladeshMobile(values.mobileNumber.trim())) {
-    return "Use a valid BD mobile number";
-  }
-
-  return null;
+  return errors;
 }
 
 function readMemberString(member: OrgMember, ...keys: string[]) {
@@ -154,7 +167,7 @@ function AdminFields({
             required
           />
           {!errors.adminPassword && (
-            <p className="mt-1 text-xs text-muted-foreground">Use 8+ characters with uppercase, lowercase, number, and symbol.</p>
+            <p className="mt-1 text-xs text-muted-foreground">{PASSWORD_REQUIREMENTS_HINT}</p>
           )}
           {errors.adminPassword && <p className="mt-1 text-xs text-red-500">{errors.adminPassword}</p>}
         </Field>
@@ -166,11 +179,12 @@ function AdminFields({
             placeholder="Admin Mobile Number*"
             value={values.adminMobileNumber}
             onChange={(e) => setField("adminMobileNumber", e.target.value)}
+            onBlur={(e) => setField("adminMobileNumber", normalizeBangladeshMobileOrRaw(e.target.value))}
             className={`${focusPurple} ${errors.adminMobileNumber ? "border-red-500" : ""}`}
             required
           />
           {!errors.adminMobileNumber && (
-            <p className="mt-1 text-xs text-muted-foreground">Accepted formats: `01712345678`, `8801712345678`, `+8801712345678`.</p>
+            <p className="mt-1 text-xs text-muted-foreground">Accepted formats: {BD_MOBILE_EXAMPLES}.</p>
           )}
           {errors.adminMobileNumber && <p className="mt-1 text-xs text-red-500">{errors.adminMobileNumber}</p>}
         </Field>
@@ -183,10 +197,12 @@ function OrganisationFields({
   values,
   errors,
   setField,
+  isEdit,
 }: {
   values: OrgFormValues;
   errors: Record<string, string | undefined>;
   setField: <K extends keyof OrgFormValues>(field: K, value: OrgFormValues[K]) => void;
+  isEdit: boolean;
 }) {
   return (
     <FieldGroup className="space-y-4 gap-0">
@@ -208,11 +224,15 @@ function OrganisationFields({
           <Label htmlFor="org-code" className="sr-only">Organisation Code</Label>
           <Input
             id="org-code"
-            placeholder="Organisation Code"
+            placeholder={isEdit ? "Organisation Code" : "Generated Automatically"}
             value={values.code}
-            onChange={(e) => setField("code", e.target.value)}
             className={focusPurple}
+            readOnly
+            disabled
           />
+          <p className="mt-1 text-xs text-muted-foreground">
+            Organisation code is generated automatically and cannot be edited here.
+          </p>
         </Field>
       </div>
 
@@ -246,11 +266,16 @@ function OrganisationFields({
           <Label htmlFor="org-phone" className="sr-only">Contact Phone</Label>
           <Input
             id="org-phone"
-            placeholder="Contact Phone"
+            placeholder={`Contact Phone (${BD_MOBILE_EXAMPLES})`}
             value={values.contactPhone}
             onChange={(e) => setField("contactPhone", e.target.value)}
-            className={focusPurple}
+            onBlur={(e) => setField("contactPhone", normalizeBangladeshMobileOrRaw(e.target.value))}
+            className={`${focusPurple} ${errors.contactPhone ? "border-red-500" : ""}`}
           />
+          {!errors.contactPhone && (
+            <p className="mt-1 text-xs text-muted-foreground">Accepted formats: {BD_MOBILE_EXAMPLES}.</p>
+          )}
+          {errors.contactPhone && <p className="mt-1 text-xs text-red-500">{errors.contactPhone}</p>}
         </Field>
 
         <Field>
@@ -272,11 +297,19 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
   const isEdit = Boolean(orgId);
   const { toast, showToast } = useToast();
   const [activeTab, setActiveTab] = React.useState("organisation");
+  const [createAdminMode, setCreateAdminMode] = React.useState<CreateAdminMode>("create");
   const [members, setMembers] = React.useState<OrgMember[]>([]);
   const [membersLoading, setMembersLoading] = React.useState(false);
   const [memberActionId, setMemberActionId] = React.useState("");
   const [adminDraft, setAdminDraft] = React.useState<AdminDraft>(EMPTY_ADMIN_DRAFT);
+  const [adminDraftErrors, setAdminDraftErrors] = React.useState<AdminDraftErrors>({});
   const [adminSubmitting, setAdminSubmitting] = React.useState(false);
+  const [existingAdminIdentifier, setExistingAdminIdentifier] = React.useState("");
+  const [existingAdminUser, setExistingAdminUser] = React.useState<PortalUserLookup | null>(null);
+  const [existingAdminTemporaryPassword, setExistingAdminTemporaryPassword] = React.useState("");
+  const [existingAdminErrors, setExistingAdminErrors] = React.useState<ExistingAdminDraftErrors>({});
+  const [existingAdminSearching, setExistingAdminSearching] = React.useState(false);
+  const [existingAdminSubmitting, setExistingAdminSubmitting] = React.useState(false);
 
   const { values, errors, submitting, setField, submit } = useOrganisationForm({
     mode: isEdit ? "edit" : "create",
@@ -293,7 +326,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
     if (!orgId) return;
     setMembersLoading(true);
     try {
-      const result = await organisationClient.listMembers(orgId);
+      const result = await bffClient.organisations.listMembers(orgId);
       if (!result.ok) {
         showToast("error", result.message ?? "Failed to load organisation members");
         return;
@@ -307,7 +340,13 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
   React.useEffect(() => {
     if (!open) return;
     setActiveTab("organisation");
+    setCreateAdminMode("create");
     setAdminDraft(EMPTY_ADMIN_DRAFT);
+    setAdminDraftErrors({});
+    setExistingAdminIdentifier("");
+    setExistingAdminUser(null);
+    setExistingAdminTemporaryPassword("");
+    setExistingAdminErrors({});
     if (isEdit) {
       void loadMembers();
     }
@@ -315,18 +354,21 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
 
   const handleCreateAdmin = React.useCallback(async () => {
     if (!orgId) return;
-    const validationMessage = validateAdminDraft(adminDraft);
-    if (validationMessage) {
-      showToast("error", validationMessage);
+    const validationErrors = validateAdminDraft(adminDraft);
+    setAdminDraftErrors(validationErrors);
+    const firstValidationError = Object.values(validationErrors).find(Boolean);
+    if (firstValidationError) {
+      showToast("error", firstValidationError);
       return;
     }
+    const normalizedMobileNumber = normalizeBangladeshMobile(adminDraft.mobileNumber.trim());
     setAdminSubmitting(true);
     try {
-      const result = await organisationClient.createAdmin(orgId, {
+      const result = await bffClient.organisations.createAdmin(orgId, {
         fullName: adminDraft.fullName.trim() || undefined,
         email: adminDraft.email.trim(),
         password: adminDraft.password,
-        mobileNumber: adminDraft.mobileNumber.trim(),
+        mobileNumber: normalizedMobileNumber ?? adminDraft.mobileNumber.trim(),
       });
       if (!result.ok) {
         showToast("error", result.message ?? "Failed to create B2B admin");
@@ -334,6 +376,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
       }
       showToast("success", result.message ?? "B2B admin created");
       setAdminDraft(EMPTY_ADMIN_DRAFT);
+      setAdminDraftErrors({});
       await loadMembers();
       onSaved?.();
     } finally {
@@ -345,7 +388,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
     if (!orgId || !memberId) return;
     setMemberActionId(memberId);
     try {
-      const result = await organisationClient.assignAdmin(orgId, memberId);
+      const result = await bffClient.organisations.assignAdmin(orgId, memberId);
       if (!result.ok) {
         showToast("error", result.message ?? "Failed to assign admin");
         return;
@@ -363,7 +406,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
     if (!confirm("Remove this organisation member?")) return;
     setMemberActionId(memberId);
     try {
-      const result = await organisationClient.removeMember(orgId, memberId);
+      const result = await bffClient.organisations.removeMember(orgId, memberId);
       if (!result.ok) {
         showToast("error", result.message ?? "Failed to remove member");
         return;
@@ -375,6 +418,119 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
       setMemberActionId("");
     }
   }, [loadMembers, onSaved, orgId, showToast]);
+
+  const handleFindExistingUser = React.useCallback(async () => {
+    const identifier = existingAdminIdentifier.trim();
+    if (!identifier) {
+      setExistingAdminErrors({ identifier: "Email or mobile number is required." });
+      setExistingAdminUser(null);
+      return;
+    }
+
+    setExistingAdminSearching(true);
+    setExistingAdminErrors({});
+    setExistingAdminUser(null);
+    try {
+      const lookupIdentifier = identifier.includes("@")
+        ? identifier
+        : normalizeBangladeshMobileOrRaw(identifier);
+      const result = await bffClient.auth.findPortalUser(lookupIdentifier);
+      if (!result.ok || !result.user?.userId) {
+        setExistingAdminErrors({ identifier: result.message ?? "No matching user found." });
+        return;
+      }
+      setExistingAdminIdentifier(lookupIdentifier);
+      setExistingAdminUser(result.user);
+    } finally {
+      setExistingAdminSearching(false);
+    }
+  }, [existingAdminIdentifier]);
+
+  const handleAssignExistingUser = React.useCallback(async () => {
+    if (!orgId || !existingAdminUser?.userId) return;
+
+    const nextErrors: ExistingAdminDraftErrors = {};
+    if (!existingAdminIdentifier.trim()) {
+      nextErrors.identifier = "Email or mobile number is required.";
+    }
+    nextErrors.temporaryPassword =
+      getPasswordValidationMessage(existingAdminTemporaryPassword, "Temporary password") ?? undefined;
+    setExistingAdminErrors(nextErrors);
+
+    const firstError = Object.values(nextErrors).find(Boolean);
+    if (firstError) {
+      showToast("error", firstError);
+      return;
+    }
+
+    setExistingAdminSubmitting(true);
+    try {
+      const result = await bffClient.organisations.assignExistingAdmin(
+        orgId,
+        existingAdminUser.userId,
+        existingAdminTemporaryPassword
+      );
+      if (!result.ok) {
+        showToast("error", result.message ?? "Failed to assign existing user as B2B admin");
+        return;
+      }
+      showToast("success", result.message ?? "B2B admin assigned");
+      setExistingAdminIdentifier("");
+      setExistingAdminUser(null);
+      setExistingAdminTemporaryPassword("");
+      setExistingAdminErrors({});
+      await loadMembers();
+      onSaved?.();
+    } finally {
+      setExistingAdminSubmitting(false);
+    }
+  }, [
+    existingAdminIdentifier,
+    existingAdminTemporaryPassword,
+    existingAdminUser,
+    loadMembers,
+    onSaved,
+    orgId,
+    showToast,
+  ]);
+
+  const handleCreateOrganisationSubmit = React.useCallback((e: React.FormEvent<HTMLFormElement>) => {
+    if (createAdminMode === "create") {
+      void submit(e);
+      return;
+    }
+
+    e.preventDefault();
+    if (!existingAdminUser?.userId) {
+      setExistingAdminErrors({ identifier: "Find an existing user before creating the organisation." });
+      showToast("error", "Find an existing user before creating the organisation.");
+      return;
+    }
+
+    const passwordError =
+      getPasswordValidationMessage(existingAdminTemporaryPassword, "Temporary password") ?? undefined;
+    if (passwordError) {
+      setExistingAdminErrors({ temporaryPassword: passwordError });
+      showToast("error", passwordError);
+      return;
+    }
+
+    void submit(e, {
+      requireDefaultAdmin: false,
+      createPayload: {
+        adminAssignment: {
+          userId: existingAdminUser.userId,
+          temporaryPassword: existingAdminTemporaryPassword,
+        },
+      },
+    });
+  }, [
+    createAdminMode,
+    existingAdminTemporaryPassword,
+    existingAdminUser,
+    showToast,
+    submit,
+  ]);
 
   const renderMembers = () => {
     if (membersLoading) {
@@ -442,9 +598,94 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
         <ToastBanner toast={toast} />
 
         {!isEdit ? (
-          <form onSubmit={submit} className="space-y-6 px-6 py-6">
-            <OrganisationFields values={values} errors={errors} setField={setField} />
-            <AdminFields values={values} errors={errors} setField={setField} />
+          <form onSubmit={handleCreateOrganisationSubmit} className="space-y-6 px-6 py-6">
+            <OrganisationFields values={values} errors={errors} setField={setField} isEdit={false} />
+            <div className="space-y-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4">
+              <div>
+                <div className="text-sm font-semibold text-foreground">First B2B Admin</div>
+                <div className="text-xs text-muted-foreground">
+                  Choose whether to create a brand new admin or assign an existing portal user to this organisation.
+                </div>
+              </div>
+              <Tabs value={createAdminMode} onValueChange={(value) => setCreateAdminMode(value as CreateAdminMode)}>
+                <TabsList className="mb-4">
+                  <TabsTrigger value="create">Create Admin</TabsTrigger>
+                  <TabsTrigger value="assign">Assign Existing User</TabsTrigger>
+                </TabsList>
+                <TabsContent value="create" className="space-y-4">
+                  <AdminFields values={values} errors={errors} setField={setField} />
+                </TabsContent>
+                <TabsContent value="assign" className="space-y-4">
+                  <div className="space-y-4 rounded-lg border bg-background p-4">
+                    <div>
+                      <div className="text-sm font-semibold text-foreground">Assign Existing User</div>
+                      <div className="text-xs text-muted-foreground">
+                        Search by exact email or mobile number, then set the temporary password they will use for their first sign-in.
+                      </div>
+                    </div>
+                    <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
+                      <div>
+                        <Input
+                          placeholder={`Email or mobile (${BD_MOBILE_EXAMPLES})`}
+                          value={existingAdminIdentifier}
+                          onChange={(e) => {
+                            setExistingAdminIdentifier(e.target.value);
+                            setExistingAdminErrors((prev) => ({ ...prev, identifier: undefined }));
+                          }}
+                          onBlur={(e) => {
+                            const value = e.target.value;
+                            if (!value.includes("@")) {
+                              setExistingAdminIdentifier(normalizeBangladeshMobileOrRaw(value));
+                            }
+                          }}
+                          className={`${focusPurple} ${existingAdminErrors.identifier ? "border-red-500" : ""}`}
+                        />
+                        <p className={`mt-1 text-xs ${existingAdminErrors.identifier ? "text-red-500" : "text-muted-foreground"}`}>
+                          {existingAdminErrors.identifier ?? `Mobile accepts ${BD_MOBILE_EXAMPLES}, or use an email address.`}
+                        </p>
+                      </div>
+                      <Button type="button" variant="outline" onClick={() => void handleFindExistingUser()} disabled={existingAdminSearching}>
+                        {existingAdminSearching ? <LuLoader className="animate-spin" /> : <LuSearch />}
+                        Find User
+                      </Button>
+                    </div>
+
+                    {existingAdminUser ? (
+                      <div className="space-y-3 rounded-lg border bg-background p-4">
+                        <div className="space-y-1">
+                          <div className="text-sm font-medium text-foreground">
+                            {existingAdminUser.fullName || existingAdminUser.email || existingAdminUser.mobileNumber || existingAdminUser.userId}
+                          </div>
+                          <div className="text-xs text-muted-foreground">User ID: {existingAdminUser.userId}</div>
+                          <div className="text-xs text-muted-foreground">
+                            {existingAdminUser.email || "No email"} | {existingAdminUser.mobileNumber || "No mobile"}
+                          </div>
+                          <div className="text-xs text-muted-foreground">
+                            Type: {existingAdminUser.userType || "UNKNOWN"} | KYC: {existingAdminUser.kycVerified ? "Verified" : "Required"}
+                          </div>
+                        </div>
+
+                        <div>
+                          <Input
+                            placeholder="Temporary Password*"
+                            type="password"
+                            value={existingAdminTemporaryPassword}
+                            onChange={(e) => {
+                              setExistingAdminTemporaryPassword(e.target.value);
+                              setExistingAdminErrors((prev) => ({ ...prev, temporaryPassword: undefined }));
+                            }}
+                            className={`${focusPurple} ${existingAdminErrors.temporaryPassword ? "border-red-500" : ""}`}
+                          />
+                          <p className={`mt-1 text-xs ${existingAdminErrors.temporaryPassword ? "text-red-500" : "text-muted-foreground"}`}>
+                            {existingAdminErrors.temporaryPassword ?? "After sign-in, this user will be sent to eKYC first and then to the new-password page."}
+                          </p>
+                        </div>
+                      </div>
+                    ) : null}
+                  </div>
+                </TabsContent>
+              </Tabs>
+            </div>
             <DialogFooter>
               <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={submitting}>
                 Cancel
@@ -455,7 +696,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
                     <LuLoader className="animate-spin" />
                     Creating…
                   </span>
-                ) : "Create Organisation"}
+                ) : createAdminMode === "assign" ? "Create Organisation & Assign Admin" : "Create Organisation"}
               </Button>
             </DialogFooter>
           </form>
@@ -468,7 +709,7 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
 
             <TabsContent value="organisation">
               <form onSubmit={submit} className="space-y-6">
-                <OrganisationFields values={values} errors={errors} setField={setField} />
+                <OrganisationFields values={values} errors={errors} setField={setField} isEdit />
                 <DialogFooter>
                   <Button type="button" variant="outline" onClick={() => onOpenChange(false)} disabled={submitting}>
                     Cancel
@@ -489,12 +730,87 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
               <div className="flex items-center justify-between">
                 <div>
                   <div className="text-sm font-semibold text-foreground">Organisation Admins</div>
-                  <div className="text-xs text-muted-foreground">Create a new B2B admin or promote an existing member.</div>
+                  <div className="text-xs text-muted-foreground">Assign an existing user with a temporary password, create a new admin, or promote an existing member.</div>
                 </div>
                 <Button type="button" variant="outline" size="sm" onClick={() => void loadMembers()} disabled={membersLoading}>
                   {membersLoading ? <LuLoader className="animate-spin" /> : <LuRefreshCw />}
                   Refresh
                 </Button>
+              </div>
+
+              <div className="space-y-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4">
+                <div>
+                  <div className="text-sm font-semibold text-foreground">Assign Existing User</div>
+                  <div className="text-xs text-muted-foreground">
+                    Search by exact email or mobile number, then set the temporary password they will use for their first sign-in.
+                  </div>
+                </div>
+                <div className="grid grid-cols-1 gap-4 md:grid-cols-[minmax(0,1fr)_auto]">
+                  <div>
+                    <Input
+                      placeholder={`Email or mobile (${BD_MOBILE_EXAMPLES})`}
+                      value={existingAdminIdentifier}
+                      onChange={(e) => {
+                        setExistingAdminIdentifier(e.target.value);
+                        setExistingAdminErrors((prev) => ({ ...prev, identifier: undefined }));
+                      }}
+                      onBlur={(e) => {
+                        const value = e.target.value;
+                        if (!value.includes("@")) {
+                          setExistingAdminIdentifier(normalizeBangladeshMobileOrRaw(value));
+                        }
+                      }}
+                      className={`${focusPurple} ${existingAdminErrors.identifier ? "border-red-500" : ""}`}
+                    />
+                    <p className={`mt-1 text-xs ${existingAdminErrors.identifier ? "text-red-500" : "text-muted-foreground"}`}>
+                      {existingAdminErrors.identifier ?? `Mobile accepts ${BD_MOBILE_EXAMPLES}, or use an email address.`}
+                    </p>
+                  </div>
+                  <Button type="button" variant="outline" onClick={() => void handleFindExistingUser()} disabled={existingAdminSearching}>
+                    {existingAdminSearching ? <LuLoader className="animate-spin" /> : <LuSearch />}
+                    Find User
+                  </Button>
+                </div>
+
+                {existingAdminUser ? (
+                  <div className="space-y-3 rounded-lg border bg-background p-4">
+                    <div className="space-y-1">
+                      <div className="text-sm font-medium text-foreground">
+                        {existingAdminUser.fullName || existingAdminUser.email || existingAdminUser.mobileNumber || existingAdminUser.userId}
+                      </div>
+                      <div className="text-xs text-muted-foreground">User ID: {existingAdminUser.userId}</div>
+                      <div className="text-xs text-muted-foreground">
+                        {existingAdminUser.email || "No email"} | {existingAdminUser.mobileNumber || "No mobile"}
+                      </div>
+                      <div className="text-xs text-muted-foreground">
+                        Type: {existingAdminUser.userType || "UNKNOWN"} | KYC: {existingAdminUser.kycVerified ? "Verified" : "Required"}
+                      </div>
+                    </div>
+
+                    <div>
+                      <Input
+                        placeholder="Temporary Password*"
+                        type="password"
+                        value={existingAdminTemporaryPassword}
+                        onChange={(e) => {
+                          setExistingAdminTemporaryPassword(e.target.value);
+                          setExistingAdminErrors((prev) => ({ ...prev, temporaryPassword: undefined }));
+                        }}
+                        className={`${focusPurple} ${existingAdminErrors.temporaryPassword ? "border-red-500" : ""}`}
+                      />
+                      <p className={`mt-1 text-xs ${existingAdminErrors.temporaryPassword ? "text-red-500" : "text-muted-foreground"}`}>
+                        {existingAdminErrors.temporaryPassword ?? "After sign-in, this user will be sent to eKYC first and then to the new-password page."}
+                      </p>
+                    </div>
+
+                    <div className="flex justify-end">
+                      <Button type="button" onClick={() => void handleAssignExistingUser()} disabled={existingAdminSubmitting}>
+                        {existingAdminSubmitting ? <LuLoader className="animate-spin" /> : <LuShield />}
+                        Assign Existing User
+                      </Button>
+                    </div>
+                  </div>
+                ) : null}
               </div>
 
               <div className="space-y-4 rounded-lg border border-dashed border-primary/30 bg-primary/5 p-4">
@@ -510,24 +826,48 @@ export default function AddOrganisationModal({ open, onOpenChange, orgId, initia
                     placeholder="Email*"
                     type="email"
                     value={adminDraft.email}
-                    onChange={(e) => setAdminDraft((prev) => ({ ...prev, email: e.target.value }))}
-                    className={focusPurple}
+                    onChange={(e) => {
+                      setAdminDraft((prev) => ({ ...prev, email: e.target.value }));
+                      setAdminDraftErrors((prev) => ({ ...prev, email: undefined }));
+                    }}
+                    className={`${focusPurple} ${adminDraftErrors.email ? "border-red-500" : ""}`}
                   />
                 </div>
+                {adminDraftErrors.email && <p className="text-xs text-red-500">{adminDraftErrors.email}</p>}
                 <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-                  <Input
-                    placeholder="Password*"
-                    type="password"
-                    value={adminDraft.password}
-                    onChange={(e) => setAdminDraft((prev) => ({ ...prev, password: e.target.value }))}
-                    className={focusPurple}
-                  />
-                  <Input
-                    placeholder="Mobile Number*"
-                    value={adminDraft.mobileNumber}
-                    onChange={(e) => setAdminDraft((prev) => ({ ...prev, mobileNumber: e.target.value }))}
-                    className={focusPurple}
-                  />
+                  <div>
+                    <Input
+                      placeholder="Password*"
+                      type="password"
+                      value={adminDraft.password}
+                      onChange={(e) => {
+                        setAdminDraft((prev) => ({ ...prev, password: e.target.value }));
+                        setAdminDraftErrors((prev) => ({ ...prev, password: undefined }));
+                      }}
+                      className={`${focusPurple} ${adminDraftErrors.password ? "border-red-500" : ""}`}
+                    />
+                    <p className={`mt-1 text-xs ${adminDraftErrors.password ? "text-red-500" : "text-muted-foreground"}`}>
+                      {adminDraftErrors.password ?? PASSWORD_REQUIREMENTS_HINT}
+                    </p>
+                  </div>
+                  <div>
+                    <Input
+                      placeholder="Mobile Number*"
+                      value={adminDraft.mobileNumber}
+                      onChange={(e) => {
+                        setAdminDraft((prev) => ({ ...prev, mobileNumber: e.target.value }));
+                        setAdminDraftErrors((prev) => ({ ...prev, mobileNumber: undefined }));
+                      }}
+                      onBlur={(e) => {
+                        const nextValue = normalizeBangladeshMobileOrRaw(e.target.value);
+                        setAdminDraft((prev) => ({ ...prev, mobileNumber: nextValue }));
+                      }}
+                      className={`${focusPurple} ${adminDraftErrors.mobileNumber ? "border-red-500" : ""}`}
+                    />
+                    <p className={`mt-1 text-xs ${adminDraftErrors.mobileNumber ? "text-red-500" : "text-muted-foreground"}`}>
+                      {adminDraftErrors.mobileNumber ?? `Accepted formats: ${BD_MOBILE_EXAMPLES}.`}
+                    </p>
+                  </div>
                 </div>
                 <div className="flex justify-end">
                   <Button type="button" onClick={() => void handleCreateAdmin()} disabled={adminSubmitting}>

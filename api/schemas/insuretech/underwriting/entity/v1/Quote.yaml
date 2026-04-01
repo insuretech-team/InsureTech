@@ -1,4 +1,4 @@
-Quote:
+UnderwritingQuote:
   type: object
   properties:
     id:
@@ -18,7 +18,7 @@ Quote:
       description: '@inject_tag: gorm:"column:insurer_product_id;not null"'
     status:
       allOf:
-      - $ref: '#/components/schemas/QuoteStatus'
+      - $ref: '#/components/schemas/UnderwritingQuoteStatus'
       x-database-default: DRAFT
     sum_assured:
       $ref: '#/components/schemas/Money'

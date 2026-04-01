@@ -50,7 +50,7 @@ func TestPublisher_AllMethods_Produce(t *testing.T) {
 	mp := &mockProducer{}
 	p := NewPublisher(mp)
 
-	require.NoError(t, p.PublishUserRegistered(ctx, "u1", "+8801xxx", "a@b.com", "1.1.1.1", "WEB"))
+	require.NoError(t, p.PublishUserRegistered(ctx, "u1", "+8801xxx", "a@b.com", "1.1.1.1", "WEB", "b2c", "root"))
 	require.NoError(t, p.PublishUserLoggedIn(ctx, "u1", "s1", "JWT", "1.1.1.1", "MOBILE", "ua"))
 	require.NoError(t, p.PublishUserLoggedOut(ctx, "u1", "s1", "JWT", "user_initiated", "1.1.1.1", ""))
 	require.NoError(t, p.PublishOTPSent(ctx, "o1", "+8801***", "login", "sms", "sslwireless", "", "", true))

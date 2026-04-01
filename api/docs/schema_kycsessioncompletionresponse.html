@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">7</div>
+                    <div class="stat-value">11</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">7</div>
+                    <div class="stat-value">11</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -358,7 +358,7 @@
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>message</strong>
+                    ⚪ <strong>provider_reference</strong>
                 </td>
                 <td class="field-type">
                     <code>string</code>
@@ -367,21 +367,77 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">FLVE session_id</td>
             </tr>
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>error</strong>
+                    ⚪ <strong>session_state</strong>
                 </td>
                 <td class="field-type">
-                    <code>reference</code>
-                    <br><small>Error</small>
-                    <a href="schema_error.html" class="ref-link">→ Error</a>
+                    <code>string</code>
+                    
+                    
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">"EKYC_SESSION_COMPLETED"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>identity_match</strong>
+                </td>
+                <td class="field-type">
+                    <code>boolean</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">face match result</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>match_score</strong>
+                </td>
+                <td class="field-type">
+                    <code>number</code>
+                    <br><small>double</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">cosine similarity</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>summary</strong>
+                </td>
+                <td class="field-type">
+                    <code>reference</code>
+                    <br><small>KYCSessionSummary</small>
+                    <a href="schema_kycsessionsummary.html" class="ref-link">→ KYCSessionSummary</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">step-by-step results</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>completed_at</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">ISO timestamp</td>
             </tr>
             
                 </tbody>

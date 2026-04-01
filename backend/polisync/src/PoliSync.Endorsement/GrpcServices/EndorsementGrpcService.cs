@@ -45,32 +45,22 @@ public sealed class EndorsementGrpcService : EndorsementService.EndorsementServi
             };
         }
 
-        var endorsementId = Guid.NewGuid().ToString("N");
-        var now = DateTime.UtcNow;
-        var endorsement = new EndorsementEntity
-        {
-            Id = endorsementId,
-            EndorsementNumber = $"END-{now:yyyyMMdd}-{Random.Shared.Next(100000, 999999)}",
-            PolicyId = request.PolicyId,
-            Type = endorsementType,
-            Reason = request.Reason,
-            Changes = request.Changes,
-            PremiumAdjustment = CalculatePremiumAdjustment(endorsementType),
-            PremiumRefundRequired = endorsementType == EndorsementType.RiderRemoval,
-            Status = EndorsementStatus.Pending,
-            RequestedBy = "SYSTEM",
-            EffectiveDate = ParseDateOrDefault(request.EffectiveDate, now.Date.AddDays(1))
-        };
-
         try
         {
-            var created = await _dataGateway.CreateEndorsementAsync(endorsement, GetCancellationToken(context));
-            _logger.LogInformation("Endorsement requested: {EndorsementId}", created.Id);
+            var result = await _mediator.Send(
+                new Application.Commands.RequestEndorsementCommand(
+                    request.PolicyId, request.Type, request.Reason,
+                    request.Changes, request.EffectiveDate),
+                GetCancellationToken(context));
 
+            if (result.IsFailure)
+                return new RequestEndorsementResponse { Error = BuildError(result.Error!.Code, result.Error.Message) };
+
+            _logger.LogInformation("Endorsement requested: {EndorsementId}", result.Value!.EndorsementId);
             return new RequestEndorsementResponse
             {
-                EndorsementId = created.Id,
-                EndorsementNumber = created.EndorsementNumber,
+                EndorsementId = result.Value.EndorsementId,
+                EndorsementNumber = result.Value.EndorsementNumber,
                 Message = "Endorsement request submitted"
             };
         }
@@ -155,37 +145,20 @@ public sealed class EndorsementGrpcService : EndorsementService.EndorsementServi
     {
         try
         {
-            var endorsement = await _dataGateway.GetEndorsementAsync(request.EndorsementId, GetCancellationToken(context));
-            if (endorsement is null)
-            {
-                return new ApproveEndorsementResponse
-                {
-                    Error = BuildError("NOT_FOUND", "Endorsement not found")
-                };
-            }
+            var result = await _mediator.Send(
+                new Application.Commands.ApproveEndorsementCommand(
+                    request.EndorsementId, request.ApprovedBy, request.Comments),
+                GetCancellationToken(context));
 
-            endorsement.Status = EndorsementStatus.Applied;
-            endorsement.ApprovedBy = request.ApprovedBy;
-            endorsement.ApprovedAt = Timestamp.FromDateTime(DateTime.UtcNow);
-            if (!string.IsNullOrWhiteSpace(request.Comments))
-            {
-                endorsement.Changes = $"{endorsement.Changes};comments={request.Comments}";
-            }
+            if (result.IsFailure)
+                return new ApproveEndorsementResponse { Error = BuildError(result.Error!.Code, result.Error.Message) };
 
-            await _dataGateway.UpdateEndorsementAsync(endorsement, GetCancellationToken(context));
-
-            return new ApproveEndorsementResponse
-            {
-                Message = "Endorsement approved and applied"
-            };
+            return new ApproveEndorsementResponse { Message = "Endorsement approved and applied" };
         }
         catch (RpcException ex)
         {
             _logger.LogError(ex, "Failed to approve endorsement {EndorsementId}", request.EndorsementId);
-            return new ApproveEndorsementResponse
-            {
-                Error = BuildError("UPSTREAM_ERROR", ex.Status.Detail)
-            };
+            return new ApproveEndorsementResponse { Error = BuildError("UPSTREAM_ERROR", ex.Status.Detail) };
         }
     }
 
@@ -193,31 +166,20 @@ public sealed class EndorsementGrpcService : EndorsementService.EndorsementServi
     {
         try
         {
-            var endorsement = await _dataGateway.GetEndorsementAsync(request.EndorsementId, GetCancellationToken(context));
-            if (endorsement is null)
-            {
-                return new RejectEndorsementResponse
-                {
-                    Error = BuildError("NOT_FOUND", "Endorsement not found")
-                };
-            }
+            var result = await _mediator.Send(
+                new Application.Commands.RejectEndorsementCommand(
+                    request.EndorsementId, "SYSTEM", request.Reason),
+                GetCancellationToken(context));
 
-            endorsement.Status = EndorsementStatus.Rejected;
-            endorsement.Reason = request.Reason;
-            await _dataGateway.UpdateEndorsementAsync(endorsement, GetCancellationToken(context));
+            if (result.IsFailure)
+                return new RejectEndorsementResponse { Error = BuildError(result.Error!.Code, result.Error.Message) };
 
-            return new RejectEndorsementResponse
-            {
-                Message = "Endorsement rejected"
-            };
+            return new RejectEndorsementResponse { Message = "Endorsement rejected" };
         }
         catch (RpcException ex)
         {
             _logger.LogError(ex, "Failed to reject endorsement {EndorsementId}", request.EndorsementId);
-            return new RejectEndorsementResponse
-            {
-                Error = BuildError("UPSTREAM_ERROR", ex.Status.Detail)
-            };
+            return new RejectEndorsementResponse { Error = BuildError("UPSTREAM_ERROR", ex.Status.Detail) };
         }
     }
 

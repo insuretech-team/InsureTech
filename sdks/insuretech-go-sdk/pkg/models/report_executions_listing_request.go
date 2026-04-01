@@ -7,6 +7,6 @@ type ReportExecutionsListingRequest struct {
 	Page int `json:"page,omitempty"`
 	PageSize int `json:"page_size,omitempty"`
 	ReportDefinitionId string `json:"report_definition_id"`
-	Status string `json:"status,omitempty"`
 	StartDate string `json:"start_date,omitempty"`
+	Status string `json:"status,omitempty"`
 }

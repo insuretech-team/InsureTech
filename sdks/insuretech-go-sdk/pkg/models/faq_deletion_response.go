@@ -1,8 +1,4 @@
 package models
 
-
-// FAQDeletionResponse represents a faq_deletion_response
-type FAQDeletionResponse struct {
-	Message string `json:"message,omitempty"`
-	Error *Error `json:"error,omitempty"`
-}
+// FAQDeletionResponse represents a faq_deletion_response (empty response)
+type FAQDeletionResponse struct{}

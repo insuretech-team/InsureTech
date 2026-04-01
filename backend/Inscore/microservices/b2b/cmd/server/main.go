@@ -6,8 +6,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"strconv"
-	"strings"
 	"syscall"
 	"time"
 
@@ -19,29 +17,24 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/b2b/internal/middleware"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/b2b/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/b2b/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	kafkaproducer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
+	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	b2bservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1"
 	configpkg "github.com/newage-saint/insuretech/ops/config"
 	"github.com/newage-saint/insuretech/ops/env"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
-	"google.golang.org/grpc/metadata"
 	"gopkg.in/yaml.v3"
 )
 
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// 1. Initialize Logger
@@ -94,6 +87,12 @@ func main() {
 	cfg.AuthZServiceURL = authzAddr
 	appLogger.Info("Connecting to AuthZ service", zap.String("addr", cfg.AuthZServiceURL))
 
+	authnAddr := resolveServiceAddr(cfg.AuthNServiceURL, svcConfig.Services, "authn")
+	if authnAddr == "" {
+		appLogger.Fatal("authn address is empty; configure AUTHN_SERVICE_URL or services.yaml entry")
+	}
+	appLogger.Info("Connecting to AuthN service", zap.String("addr", authnAddr))
+
 	// Initialize database using shared database manager
 	dbConfigPath, err := configpkg.ResolveConfigPath("database.yaml")
 	if err != nil {
@@ -134,25 +133,34 @@ func main() {
 	svc := service.NewB2BService(repo, publisher)
 
 	// Connect to AuthZ service
-	authzConn, err := grpc.Dial(cfg.AuthZServiceURL, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	authzConn, err := grpcclient.NewClient(cfg.AuthZServiceURL)
 	if err != nil {
 		appLogger.Fatalf("Failed to connect to AuthZ service: %v", err)
 	}
 	defer authzConn.Close()
 
 	authzClient := authzservicev1.NewAuthZServiceClient(authzConn)
+	authnConn, err := grpcclient.NewClient(authnAddr)
+	if err != nil {
+		appLogger.Fatalf("Failed to connect to AuthN service: %v", err)
+	}
+	defer authnConn.Close()
+	authnClient := authnservicev1.NewAuthServiceClient(authnConn)
 
 	// Create wrapper for middleware
 	authzClientWrapper := &authzClientAdapter{client: authzClient}
+	authnClientWrapper := &authnClientAdapter{client: authnClient}
+	svc.WithEmployeeIdentity(authnClientWrapper, authzClientWrapper)
 
 	// Initialize authorization interceptor
 	authzInterceptor := middleware.NewAuthZInterceptor(authzClientWrapper)
 
 	// Initialize event consumer
-	if kafkaProducer != nil {
-		consumer := consumers.NewEventConsumer(authzClientWrapper)
-		go startEventConsumer(cfg, consumer)
-	}
+	var (
+		eventConsumer *kafkaapp.ManagedConsumer
+	)
+	consumer := consumers.NewEventConsumer(authzClientWrapper)
+	eventConsumer = startEventConsumer(cfg, consumer)
 
 	// Create gRPC server with interceptors
 	grpcServer := grpc.NewServer(
@@ -183,12 +191,15 @@ func main() {
 
 	appLogger.Info("Shutting down B2B microservice...")
 	grpcServer.GracefulStop()
+	if eventConsumer != nil {
+		_ = eventConsumer.Close()
+	}
 	if kafkaProducer != nil {
 		kafkaProducer.Close()
 	}
 }
 
-func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) {
+func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) *kafkaapp.ManagedConsumer {
 	// Subscribe to B2B events
 	b2bTopics := []string{
 		events.TopicOrganisationCreated,
@@ -242,39 +253,27 @@ func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) {
 		DLQTopic: "b2b-service-dlq", // Dead letter queue for failed messages
 	}
 
-	kafkaConsumer, err := kafkaconsumer.NewConsumerGroup(consumerCfg)
+	kafkaConsumer, err := kafkaapp.StartConsumerGroup(consumerCfg)
 	if err != nil {
 		appLogger.Errorf("Failed to create Kafka consumer: %v", err)
-		return
+		return nil
 	}
 
 	appLogger.Infof("B2B event consumer started, listening to topics: %v", allTopics)
-
-	// Start consuming in blocking mode
-	kafkaConsumer.Start(context.Background())
+	return kafkaConsumer
 }
 
-func resolveServiceAddr(explicit string, services map[string]struct {
-	Name  string `yaml:"name"`
-	Ports struct {
-		Grpc int `yaml:"grpc"`
-		Http int `yaml:"http"`
-	} `yaml:"ports"`
-}, key string) string {
-	v := strings.TrimSpace(explicit)
-	if v != "" {
-		return v
-	}
-	svc, ok := services[key]
-	if !ok || svc.Ports.Grpc <= 0 {
-		return ""
-	}
-	return key + ":" + strconv.Itoa(svc.Ports.Grpc)
+func resolveServiceAddr(explicit string, services map[string]serviceaddr.Service, key string) string {
+	return serviceaddr.ResolveFromServicesMap(explicit, services, os.Getenv("B2B_SERVICE_DISCOVERY_HOST"), key)
 }
 
 // authzClientAdapter adapts the gRPC client to the interface expected by middleware and consumers
 type authzClientAdapter struct {
 	client authzservicev1.AuthZServiceClient
+}
+
+type authnClientAdapter struct {
+	client authnservicev1.AuthServiceClient
 }
 
 func (a *authzClientAdapter) CheckAccess(ctx context.Context, req *authzservicev1.CheckAccessRequest) (*authzservicev1.CheckAccessResponse, error) {
@@ -293,12 +292,14 @@ func (a *authzClientAdapter) ListRoles(ctx context.Context, req *authzservicev1.
 	return a.client.ListRoles(withInternalServiceContext(ctx, "b2b-service"), req)
 }
 
-func withInternalServiceContext(ctx context.Context, serviceName string) context.Context {
-	if md, ok := metadata.FromOutgoingContext(ctx); ok {
-		cloned := md.Copy()
-		cloned.Set("x-internal-service", serviceName)
-		return metadata.NewOutgoingContext(ctx, cloned)
-	}
+func (a *authnClientAdapter) ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error) {
+	return a.client.ProvisionEmployeeUser(withInternalServiceContext(ctx, "b2b-service"), req)
+}
 
-	return metadata.NewOutgoingContext(ctx, metadata.Pairs("x-internal-service", serviceName))
+func (a *authnClientAdapter) RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error) {
+	return a.client.RequestPasswordResetByEmail(withInternalServiceContext(ctx, "b2b-service"), req)
+}
+
+func withInternalServiceContext(ctx context.Context, serviceName string) context.Context {
+	return internalrpc.OutgoingContext(ctx, serviceName)
 }

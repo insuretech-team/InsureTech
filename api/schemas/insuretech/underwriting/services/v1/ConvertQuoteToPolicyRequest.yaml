@@ -1,4 +1,4 @@
-ConvertQuoteToPolicyRequest:
+UnderwritingConvertQuoteToPolicyRequest:
   type: object
   properties:
     quote_id:

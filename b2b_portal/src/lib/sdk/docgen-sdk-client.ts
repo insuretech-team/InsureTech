@@ -1,211 +1,137 @@
 /**
  * docgen-sdk-client.ts
- * ─────────────────────
- * Server-side docgen helpers for Next.js API route handlers.
+ * ────────────────────
+ * Server-side client factory for Document Service (docgen) API route handlers.
  *
- * The docgen service is NOT in the generated SDK (@lifeplus/insuretech-sdk).
- * It is exposed by the gateway under /v1/documents and /v1/document-templates.
- * We use makeDirectHttp (same cookie/CSRF auth as makeSdkClient) for all calls.
+ * The generated SDK does not yet include docgen service functions, so this
+ * module uses direct HTTP calls to the gateway REST endpoints.
  *
- * Types are imported from src/lib/proto-generated — the canonical generated types.
- * The gateway serialises proto responses as JSON with snake_case field names
- * (protojson UseProtoNames=true), so field names on wire match the proto field names
- * (e.g. document_id, file_url, template_id, entity_type…).
+ * Endpoints:
+ *   GET    /v1/document-templates              → listTemplates
+ *   POST   /v1/document-templates              → createTemplate
+ *   GET    /v1/document-templates/{template_id} → getTemplate
+ *   PATCH  /v1/document-templates/{template_id} → updateTemplate
+ *   DELETE /v1/document-templates/{template_id} → deleteTemplate
  */
 
-import { makeDirectHttp } from "./b2b-sdk-client";
-import type {
-  GenerateDocumentResponse,
-  GetDocumentResponse,
-  ListDocumentsResponse,
-  DownloadDocumentResponse,
-  DeleteDocumentResponse,
-  CreateDocumentTemplateResponse,
-  GetDocumentTemplateResponse,
-  ListDocumentTemplatesResponse,
-  UpdateDocumentTemplateResponse,
-  DeactivateDocumentTemplateResponse,
-  DeleteDocumentTemplateResponse,
-} from "@lib/proto-generated/insuretech/document/services/v1/document_service_pb";
-
-// Re-export proto types for convenience so callers only need this file.
-export type {
-  GenerateDocumentResponse,
-  GetDocumentResponse,
-  ListDocumentsResponse,
-  DownloadDocumentResponse,
-  DeleteDocumentResponse,
-  CreateDocumentTemplateResponse,
-  GetDocumentTemplateResponse,
-  ListDocumentTemplatesResponse,
-  UpdateDocumentTemplateResponse,
-  DeactivateDocumentTemplateResponse,
-  DeleteDocumentTemplateResponse,
-};
-
-export type {
-  DocumentGeneration,
-  GenerationStatus,
-} from "@lib/proto-generated/insuretech/document/entity/v1/document_generation_pb";
-
-export type {
-  DocumentTemplate,
-  DocumentType,
-  OutputFormat,
-} from "@lib/proto-generated/insuretech/document/entity/v1/document_template_pb";
-
-// ─── Payload shapes (what we POST to the gateway — snake_case to match proto JSON) ──
-
-export interface GenerateDocumentPayload {
-  template_id: string;
-  entity_type: string;
-  entity_id: string;
-  /** Key/value pairs merged into the template */
-  data?: Record<string, unknown>;
-  include_qr_code?: boolean;
-}
+// ─── Types ────────────────────────────────────────────────────────────────────
 
 export interface CreateDocumentTemplatePayload {
   name: string;
-  type: string;
+  type?: string;
+  content?: string;
   description?: string;
-  template_content: string;
-  output_format: string;
-  variables?: string[];
+  [key: string]: unknown;
 }
 
 export interface UpdateDocumentTemplatePayload {
-  template?: {
-    name?: string;
-    description?: string;
-    template_content?: string;
-    output_format?: string;
-    is_active?: boolean;
-  };
+  name?: string;
+  type?: string;
+  content?: string;
+  description?: string;
+  is_active?: boolean;
+  [key: string]: unknown;
+}
+
+interface ListTemplatesParams {
+  type?: string;
+  activeOnly?: boolean;
+  pageSize?: number;
+  pageToken?: string;
+}
+
+interface DocgenResult<T = unknown> {
+  status: number;
+  data: T;
+}
+
+// ─── Helpers ──────────────────────────────────────────────────────────────────
+
+function getBaseUrl(): string {
+  return (
+    process.env.INSURETECH_API_BASE_URL ??
+    process.env.NEXT_PUBLIC_INSURETECH_API_BASE_URL ??
+    "http://localhost:8080"
+  );
+}
+
+function extractCsrf(cookieHeader: string): string {
+  const m = cookieHeader.match(/(?:^|;\s*)csrf_token=([^;]*)/);
+  return m ? decodeURIComponent(m[1]) : "";
 }
 
 // ─── Factory ──────────────────────────────────────────────────────────────────
 
-/**
- * makeDocgenClient — wraps makeDirectHttp with typed docgen helpers.
- * Call from API route handlers (server-side only).
- *
- * Usage:
- *   const docgen = makeDocgenClient(request, hdrs ?? undefined);
- *   const res = await docgen.generate({ template_id: "...", entity_type: "employee", entity_id: "..." });
- */
 export function makeDocgenClient(
   request: Request,
-  sessionOverrides?: { portal?: string; userId?: string; businessId?: string; tenantId?: string }
+  sessionOverrides?: Record<string, string>
 ) {
-  const http = makeDirectHttp(request, sessionOverrides);
+  const cookieHeader = request.headers.get("cookie") ?? "";
+  const csrf = extractCsrf(cookieHeader);
+
+  const headers: Record<string, string> = {
+    "Content-Type": "application/json",
+  };
+  if (cookieHeader) headers["cookie"] = cookieHeader;
+  if (csrf) headers["X-CSRF-Token"] = csrf;
+
+  // Forward portal / business context headers
+  if (sessionOverrides) {
+    for (const [k, v] of Object.entries(sessionOverrides)) {
+      if (v) headers[k] = v;
+    }
+  } else {
+    for (const h of ["x-portal", "x-business-id", "x-user-id", "x-tenant-id"]) {
+      const v = request.headers.get(h);
+      if (v) headers[h] = v;
+    }
+  }
+
+  const base = getBaseUrl();
+
+  async function gw<T>(
+    method: string,
+    path: string,
+    body?: unknown
+  ): Promise<DocgenResult<T>> {
+    const res = await fetch(`${base}${path}`, {
+      method,
+      headers,
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    const json = res.status === 204 ? null : await res.json();
+    return { status: res.status, data: json as T };
+  }
 
   return {
-    // ── Documents ────────────────────────────────────────────────────────────
-
-    async generate(payload: GenerateDocumentPayload) {
-      return http.post("/v1/documents", payload) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<GenerateDocumentResponse> & Record<string, unknown>;
-      }>;
+    listTemplates(params?: ListTemplatesParams) {
+      const q = new URLSearchParams();
+      if (params?.type) q.set("type", params.type);
+      if (params?.activeOnly) q.set("active_only", "true");
+      if (params?.pageSize) q.set("page_size", String(params.pageSize));
+      if (params?.pageToken) q.set("page_token", params.pageToken);
+      const qs = q.toString();
+      return gw("GET", `/v1/document-templates${qs ? `?${qs}` : ""}`);
     },
 
-    async getDocument(documentId: string) {
-      return http.get(`/v1/documents/${documentId}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<GetDocumentResponse> & Record<string, unknown>;
-      }>;
+    getTemplate(templateId: string) {
+      return gw("GET", `/v1/document-templates/${encodeURIComponent(templateId)}`);
     },
 
-    async listDocuments(options: {
-      entityType: string;
-      entityId: string;
-      status?: string;
-      page?: number;
-      pageSize?: number;
-    }) {
-      const params = new URLSearchParams({
-        entity_type: options.entityType,
-        entity_id: options.entityId,
-      });
-      if (options.status) params.set("status", options.status);
-      if (options.page) params.set("page", String(options.page));
-      if (options.pageSize) params.set("page_size", String(options.pageSize));
-      return http.get(`/v1/entities/${options.entityType}/${options.entityId}/documents?${params}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<ListDocumentsResponse> & Record<string, unknown>;
-      }>;
+    createTemplate(payload: CreateDocumentTemplatePayload) {
+      return gw("POST", "/v1/document-templates", payload);
     },
 
-    async downloadDocument(documentId: string) {
-      return http.get(`/v1/documents/${documentId}/download`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<DownloadDocumentResponse> & Record<string, unknown>;
-      }>;
+    updateTemplate(templateId: string, payload: UpdateDocumentTemplatePayload) {
+      return gw(
+        "PATCH",
+        `/v1/document-templates/${encodeURIComponent(templateId)}`,
+        payload
+      );
     },
 
-    async deleteDocument(documentId: string) {
-      return http.delete(`/v1/documents/${documentId}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<DeleteDocumentResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    // ── Templates ────────────────────────────────────────────────────────────
-
-    async createTemplate(payload: CreateDocumentTemplatePayload) {
-      return http.post("/v1/document-templates", payload) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<CreateDocumentTemplateResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    async getTemplate(templateId: string) {
-      return http.get(`/v1/document-templates/${templateId}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<GetDocumentTemplateResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    async listTemplates(options?: {
-      type?: string;
-      activeOnly?: boolean;
-      pageSize?: number;
-      pageToken?: string;
-    }) {
-      const params = new URLSearchParams();
-      if (options?.type) params.set("type", options.type);
-      if (options?.activeOnly) params.set("active_only", "true");
-      if (options?.pageSize) params.set("page_size", String(options.pageSize));
-      if (options?.pageToken) params.set("page_token", options.pageToken);
-      const qs = params.toString() ? `?${params}` : "";
-      return http.get(`/v1/document-templates${qs}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<ListDocumentTemplatesResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    async updateTemplate(templateId: string, payload: UpdateDocumentTemplatePayload) {
-      return http.patch(`/v1/document-templates/${templateId}`, payload) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<UpdateDocumentTemplateResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    async deactivateTemplate(templateId: string, reason?: string) {
-      return http.post(`/v1/document-templates/${templateId}/deactivate`, { reason: reason ?? "" }) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<DeactivateDocumentTemplateResponse> & Record<string, unknown>;
-      }>;
-    },
-
-    async deleteTemplate(templateId: string) {
-      return http.delete(`/v1/document-templates/${templateId}`) as Promise<{
-        ok: boolean; status: number;
-        data: Partial<DeleteDocumentTemplateResponse> & Record<string, unknown>;
-      }>;
+    deleteTemplate(templateId: string) {
+      return gw("DELETE", `/v1/document-templates/${encodeURIComponent(templateId)}`);
     },
   };
 }
-
-export type DocgenClient = ReturnType<typeof makeDocgenClient>;

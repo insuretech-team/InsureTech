@@ -1,0 +1,19 @@
+LeadConvertedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    lead_id:
+      type: string
+    contact_id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    assigned_agent_id:
+      type: string
+    converted_at:
+      type: string
+      format: date-time
+  description: LeadConvertedEvent is emitted when a lead is converted to contact

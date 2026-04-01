@@ -5,9 +5,5 @@ VoiceSessionCreationResponse:
       type: string
     status:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for voice session creation operation. Returns operation
     results and status.

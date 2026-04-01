@@ -21,40 +21,40 @@ type Client struct {
 	
 	// Service clients - auto-generated from OpenAPI spec
 	// These will be populated during generation
-		Audit *services.AuditService
-	Fraud *services.FraudService
-	Payment *services.PaymentService
-	Product *services.ProductService
-	Ai *services.AiService
-	Beneficiary *services.BeneficiaryService
+		Ai *services.AiService
+	Analytics *services.AnalyticsService
 	Apikey *services.ApikeyService
-	Mfs *services.MfsService
-	Authz *services.AuthzService
-	Renewal *services.RenewalService
-	Task *services.TaskService
-	Insurer *services.InsurerService
-	Claim *services.ClaimService
-	Refund *services.RefundService
-	Report *services.ReportService
+	Audit *services.AuditService
 	Auth *services.AuthService
-	Kyc *services.KycService
-	Tenant *services.TenantService
-	Support *services.SupportService
+	Authz *services.AuthzService
+	B2b *services.B2bService
+	Beneficiary *services.BeneficiaryService
+	Billing *services.BillingService
+	Claim *services.ClaimService
+	Commission *services.CommissionService
 	Document *services.DocumentService
 	Endorsement *services.EndorsementService
-	Workflow *services.WorkflowService
-	Partner *services.PartnerService
-	Notification *services.NotificationService
-	Billing *services.BillingService
-	Analytics *services.AnalyticsService
-	B2b *services.B2bService
-	Underwriting *services.UnderwritingService
-	Order *services.OrderService
-	Voice *services.VoiceService
-	Media *services.MediaService
+	Fraud *services.FraudService
+	Insurer *services.InsurerService
 	Iot *services.IotService
+	Kyc *services.KycService
+	Media *services.MediaService
+	Mfs *services.MfsService
+	Notification *services.NotificationService
+	Order *services.OrderService
+	Partner *services.PartnerService
+	Payment *services.PaymentService
 	Policy *services.PolicyService
-	Commission *services.CommissionService
+	Product *services.ProductService
+	Refund *services.RefundService
+	Renewal *services.RenewalService
+	Report *services.ReportService
+	Support *services.SupportService
+	Task *services.TaskService
+	Tenant *services.TenantService
+	Underwriting *services.UnderwritingService
+	Voice *services.VoiceService
+	Workflow *services.WorkflowService
 
 }
 
@@ -76,40 +76,40 @@ func NewClient(opts ...ClientOption) *Client {
 	}
 	
 	// Initialize service clients - auto-generated
-		c.Audit = &services.AuditService{Client: c}
-	c.Fraud = &services.FraudService{Client: c}
-	c.Payment = &services.PaymentService{Client: c}
-	c.Product = &services.ProductService{Client: c}
-	c.Ai = &services.AiService{Client: c}
-	c.Beneficiary = &services.BeneficiaryService{Client: c}
+		c.Ai = &services.AiService{Client: c}
+	c.Analytics = &services.AnalyticsService{Client: c}
 	c.Apikey = &services.ApikeyService{Client: c}
-	c.Mfs = &services.MfsService{Client: c}
-	c.Authz = &services.AuthzService{Client: c}
-	c.Renewal = &services.RenewalService{Client: c}
-	c.Task = &services.TaskService{Client: c}
-	c.Insurer = &services.InsurerService{Client: c}
-	c.Claim = &services.ClaimService{Client: c}
-	c.Refund = &services.RefundService{Client: c}
-	c.Report = &services.ReportService{Client: c}
+	c.Audit = &services.AuditService{Client: c}
 	c.Auth = &services.AuthService{Client: c}
-	c.Kyc = &services.KycService{Client: c}
-	c.Tenant = &services.TenantService{Client: c}
-	c.Support = &services.SupportService{Client: c}
+	c.Authz = &services.AuthzService{Client: c}
+	c.B2b = &services.B2bService{Client: c}
+	c.Beneficiary = &services.BeneficiaryService{Client: c}
+	c.Billing = &services.BillingService{Client: c}
+	c.Claim = &services.ClaimService{Client: c}
+	c.Commission = &services.CommissionService{Client: c}
 	c.Document = &services.DocumentService{Client: c}
 	c.Endorsement = &services.EndorsementService{Client: c}
-	c.Workflow = &services.WorkflowService{Client: c}
-	c.Partner = &services.PartnerService{Client: c}
-	c.Notification = &services.NotificationService{Client: c}
-	c.Billing = &services.BillingService{Client: c}
-	c.Analytics = &services.AnalyticsService{Client: c}
-	c.B2b = &services.B2bService{Client: c}
-	c.Underwriting = &services.UnderwritingService{Client: c}
-	c.Order = &services.OrderService{Client: c}
-	c.Voice = &services.VoiceService{Client: c}
-	c.Media = &services.MediaService{Client: c}
+	c.Fraud = &services.FraudService{Client: c}
+	c.Insurer = &services.InsurerService{Client: c}
 	c.Iot = &services.IotService{Client: c}
+	c.Kyc = &services.KycService{Client: c}
+	c.Media = &services.MediaService{Client: c}
+	c.Mfs = &services.MfsService{Client: c}
+	c.Notification = &services.NotificationService{Client: c}
+	c.Order = &services.OrderService{Client: c}
+	c.Partner = &services.PartnerService{Client: c}
+	c.Payment = &services.PaymentService{Client: c}
 	c.Policy = &services.PolicyService{Client: c}
-	c.Commission = &services.CommissionService{Client: c}
+	c.Product = &services.ProductService{Client: c}
+	c.Refund = &services.RefundService{Client: c}
+	c.Renewal = &services.RenewalService{Client: c}
+	c.Report = &services.ReportService{Client: c}
+	c.Support = &services.SupportService{Client: c}
+	c.Task = &services.TaskService{Client: c}
+	c.Tenant = &services.TenantService{Client: c}
+	c.Underwriting = &services.UnderwritingService{Client: c}
+	c.Voice = &services.VoiceService{Client: c}
+	c.Workflow = &services.WorkflowService{Client: c}
 
 	
 	return c

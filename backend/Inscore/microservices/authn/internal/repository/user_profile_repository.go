@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"hash/fnv"
 	"strings"
 	"time"
 
@@ -29,6 +30,23 @@ func genderDBValue(g authnv1.Gender) string {
 	return s
 }
 
+func placeholderNID(userID string) string {
+	h := fnv.New32a()
+	_, _ = h.Write([]byte(userID))
+	// Always produce a stable 10-digit numeric placeholder that satisfies the DB constraint.
+	return "9" + formatNIDSuffix(h.Sum32())
+}
+
+func formatNIDSuffix(sum uint32) string {
+	const digits = 9
+	buf := make([]byte, digits)
+	for i := digits - 1; i >= 0; i-- {
+		buf[i] = byte('0' + (sum % 10))
+		sum /= 10
+	}
+	return string(buf)
+}
+
 func (r *UserProfileRepository) Create(ctx context.Context, p *authnv1.UserProfile) error {
 	now := time.Now().UTC()
 
@@ -48,7 +66,7 @@ func (r *UserProfileRepository) Create(ctx context.Context, p *authnv1.UserProfi
 	// the auto-create row passes the constraint. The user can update it later.
 	nid := p.NidNumber
 	if nid == "" {
-		nid = "0000000000" // 10-digit placeholder — satisfies '^[0-9]{10}$'
+		nid = placeholderNID(p.UserId)
 	}
 
 	// country defaults to 'Bangladesh' in DB; use supplied value or the default.
@@ -106,13 +124,21 @@ func (r *UserProfileRepository) SetKYCVerified(ctx context.Context, userID strin
 		Updates(upd).Error
 }
 
+// SetProfilePhotoURL updates the profile photo URL for a user.
+func (r *UserProfileRepository) SetProfilePhotoURL(ctx context.Context, userID string, url string) error {
+	return r.db.WithContext(ctx).
+		Table("authn_schema.user_profiles").
+		Where("user_id = ?", userID).
+		Updates(map[string]any{"profile_photo_url": url, "updated_at": time.Now()}).Error
+}
+
 func (r *UserProfileRepository) Update(ctx context.Context, p *authnv1.UserProfile) error {
 	// nid_number has CHECK (~ '^[0-9]{10}$|^[0-9]{13}$|^[0-9]{17}$') NOT NULL.
 	// If caller sends empty string (profile not yet filled), use placeholder so
 	// the constraint is not violated. User can provide real NID later.
 	nid := p.NidNumber
 	if nid == "" {
-		nid = "0000000000"
+		nid = placeholderNID(p.UserId)
 	}
 
 	// country NOT NULL — fall back to default if empty.

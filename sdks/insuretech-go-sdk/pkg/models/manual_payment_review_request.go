@@ -3,9 +3,9 @@ package models
 
 // ManualPaymentReviewRequest represents a manual_payment_review_request
 type ManualPaymentReviewRequest struct {
-	PaymentId string `json:"payment_id"`
 	Approved bool `json:"approved,omitempty"`
-	ReviewedBy string `json:"reviewed_by,omitempty"`
-	ReviewNotes string `json:"review_notes,omitempty"`
+	PaymentId string `json:"payment_id"`
 	RejectionReason string `json:"rejection_reason,omitempty"`
+	ReviewNotes string `json:"review_notes,omitempty"`
+	ReviewedBy string `json:"reviewed_by,omitempty"`
 }

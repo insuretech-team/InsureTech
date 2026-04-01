@@ -81,19 +81,23 @@ func scanOrganisation(row interface{ Scan(...any) error }) (*b2bv1.Organisation,
 		}
 	}
 	o.TotalEmployees = totalEmployees.Int32
-	if !createdAt.IsZero() { o.CreatedAt = timestamppb.New(createdAt) }
-	if !updatedAt.IsZero() { o.UpdatedAt = timestamppb.New(updatedAt) }
+	if !createdAt.IsZero() {
+		o.CreatedAt = timestamppb.New(createdAt)
+	}
+	if !updatedAt.IsZero() {
+		o.UpdatedAt = timestamppb.New(updatedAt)
+	}
 	return &o, nil
 }
 
 func scanOrgMember(row interface{ Scan(...any) error }) (*b2bv1.OrgMember, error) {
 	var (
-		m          b2bv1.OrgMember
-		roleStr    sql.NullString
-		statusStr  sql.NullString
-		joinedAt   time.Time
-		createdAt  time.Time
-		updatedAt  time.Time
+		m         b2bv1.OrgMember
+		roleStr   sql.NullString
+		statusStr sql.NullString
+		joinedAt  time.Time
+		createdAt time.Time
+		updatedAt time.Time
 	)
 
 	if err := row.Scan(
@@ -128,9 +132,15 @@ func scanOrgMember(row interface{ Scan(...any) error }) (*b2bv1.OrgMember, error
 			m.Status = b2bv1.OrgMemberStatus(v)
 		}
 	}
-	if !joinedAt.IsZero()  { m.JoinedAt = timestamppb.New(joinedAt) }
-	if !createdAt.IsZero() { m.CreatedAt = timestamppb.New(createdAt) }
-	if !updatedAt.IsZero() { m.UpdatedAt = timestamppb.New(updatedAt) }
+	if !joinedAt.IsZero() {
+		m.JoinedAt = timestamppb.New(joinedAt)
+	}
+	if !createdAt.IsZero() {
+		m.CreatedAt = timestamppb.New(createdAt)
+	}
+	if !updatedAt.IsZero() {
+		m.UpdatedAt = timestamppb.New(updatedAt)
+	}
 	return &m, nil
 }
 
@@ -143,6 +153,69 @@ func (r *PortalRepository) GetOrganisation(ctx context.Context, organisationID s
 	)
 	row := r.db.WithContext(ctx).Raw(query, organisationID).Row()
 	return scanOrganisation(row)
+}
+
+func (r *PortalRepository) GetOrganisationByCode(ctx context.Context, code string) (*b2bv1.Organisation, error) {
+	query := fmt.Sprintf(
+		`SELECT %s FROM b2b_schema.organisations WHERE UPPER(code) = UPPER($1) AND deleted_at IS NULL LIMIT 1`,
+		organisationCols,
+	)
+	row := r.db.WithContext(ctx).Raw(query, strings.TrimSpace(code)).Row()
+	return scanOrganisation(row)
+}
+
+func (r *PortalRepository) SearchOrganisationsForEmployeeActivation(ctx context.Context, query string, limit int) ([]*b2bv1.Organisation, error) {
+	query = strings.TrimSpace(query)
+	if query == "" {
+		return []*b2bv1.Organisation{}, nil
+	}
+	if limit <= 0 {
+		limit = 8
+	}
+	if limit > 10 {
+		limit = 10
+	}
+
+	rows, err := r.db.WithContext(ctx).Raw(
+		fmt.Sprintf(`
+			SELECT %s
+			  FROM b2b_schema.organisations
+			 WHERE deleted_at IS NULL
+			   AND status = 'ORGANISATION_STATUS_ACTIVE'
+			   AND (
+			     name ILIKE '%%' || $1 || '%%'
+			     OR code ILIKE '%%' || $1 || '%%'
+			   )
+			 ORDER BY
+			   CASE
+			     WHEN LOWER(name) = LOWER($1) THEN 0
+			     WHEN LOWER(name) LIKE LOWER($1) || '%%' THEN 1
+			     WHEN LOWER(code) = LOWER($1) THEN 2
+			     WHEN LOWER(code) LIKE LOWER($1) || '%%' THEN 3
+			     ELSE 4
+			   END,
+			   LENGTH(name),
+			   name ASC
+			 LIMIT $2`,
+			organisationCols,
+		),
+		query,
+		limit,
+	).Rows()
+	if err != nil {
+		return nil, fmt.Errorf("search organisations for employee activation: %w", err)
+	}
+	defer rows.Close()
+
+	items := make([]*b2bv1.Organisation, 0, limit)
+	for rows.Next() {
+		item, scanErr := scanOrganisation(rows)
+		if scanErr != nil {
+			return nil, scanErr
+		}
+		items = append(items, item)
+	}
+	return items, rows.Err()
 }
 
 func (r *PortalRepository) ListOrganisations(

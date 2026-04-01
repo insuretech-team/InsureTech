@@ -52,6 +52,8 @@ export type CreateIndividualBeneficiaryRequest = Message<"insuretech.beneficiary
   nidNumber: string;
 
   /**
+   * Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+   *
    * @generated from field: string mobile_number = 6;
    */
   mobileNumber: string;
@@ -138,6 +140,8 @@ export type CreateBusinessBeneficiaryRequest = Message<"insuretech.beneficiary.s
   focalPersonName: string;
 
   /**
+   * Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+   *
    * @generated from field: string focal_person_mobile = 6;
    */
   focalPersonMobile: string;
@@ -250,6 +254,8 @@ export type UpdateBeneficiaryRequest = Message<"insuretech.beneficiary.services.
   beneficiaryId: string;
 
   /**
+   * Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+   *
    * @generated from field: string mobile_number = 2;
    */
   mobileNumber: string;

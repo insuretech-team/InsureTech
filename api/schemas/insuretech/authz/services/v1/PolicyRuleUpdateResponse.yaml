@@ -3,7 +3,5 @@ PolicyRuleUpdateResponse:
   properties:
     policy:
       $ref: '#/components/schemas/PolicyRule'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for policy rule update operation. Returns operation
     results and status.

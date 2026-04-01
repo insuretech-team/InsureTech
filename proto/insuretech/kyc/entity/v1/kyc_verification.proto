@@ -178,6 +178,7 @@ enum VerificationMethod {
   VERIFICATION_METHOD_PASSPORT = 3;
   VERIFICATION_METHOD_MANUAL = 4;
   VERIFICATION_METHOD_TRADE_LICENSE = 5;
+  VERIFICATION_METHOD_FLVE_EKYC = 6;
 }
 
 enum VerificationStatus {
@@ -187,6 +188,10 @@ enum VerificationStatus {
   VERIFICATION_STATUS_VERIFIED = 3;
   VERIFICATION_STATUS_REJECTED = 4;
   VERIFICATION_STATUS_EXPIRED = 5;
+  // PENDING_REVIEW: FLVE eKYC session completed successfully on the provider side;
+  // the InsureTech compliance team has not yet approved. Sits between IN_PROGRESS
+  // and VERIFIED. Set by CompleteKYCSession; cleared by ApproveKYC/rejectKYCInternal.
+  VERIFICATION_STATUS_PENDING_REVIEW = 6;
 }
 
 

@@ -1,0 +1,15 @@
+OptionalCoverage:
+  type: object
+  properties:
+    coverage_id:
+      type: string
+    name:
+      type: string
+    selected_limit:
+      type: number
+      format: double
+    selected_deductible:
+      type: number
+      format: double
+  description: Domain entity representing optional coverage. Core business object
+    in the system.

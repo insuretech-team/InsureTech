@@ -24,6 +24,10 @@ import { useEmployeeForm } from "@/src/hooks/useEmployeeForm";
 import { useToast } from "@/src/hooks/useToast";
 import { ToastBanner } from "@/components/ui/toast-banner";
 import type { EmployeeFormValues } from "@/src/lib/types/employee-form";
+import {
+  BD_MOBILE_EXAMPLES,
+  normalizeBangladeshMobileOrRaw,
+} from "@/src/lib/utils/bd-mobile";
 
 // ─── Types ───────────────────────────────────────────────────────────────────
 
@@ -78,11 +82,16 @@ function PersonalInfoSection({
           <Input
             id="emp-email"
             type="email"
-            placeholder="Work Email"
+            placeholder="Work Email*"
             value={values.email}
             onChange={(e) => setField("email", e.target.value)}
-            className={focusPurple}
+            className={`${focusPurple} ${errors.email ? "border-red-500" : ""}`}
           />
+          {errors.email ? (
+            <p className="text-xs text-red-500 mt-1">{errors.email}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground mt-1">Used for employee activation and email/password sign-in.</p>
+          )}
         </Field>
       </div>
 
@@ -91,11 +100,17 @@ function PersonalInfoSection({
           <Label htmlFor="emp-mobile" className="sr-only">Mobile</Label>
           <Input
             id="emp-mobile"
-            placeholder="Mobile Number (+880...)"
+            placeholder={`Mobile Number (${BD_MOBILE_EXAMPLES})`}
             value={values.mobileNumber}
             onChange={(e) => setField("mobileNumber", e.target.value)}
-            className={focusPurple}
+            onBlur={(e) => setField("mobileNumber", normalizeBangladeshMobileOrRaw(e.target.value))}
+            className={`${focusPurple} ${errors.mobileNumber ? "border-red-500" : ""}`}
           />
+          {errors.mobileNumber ? (
+            <p className="text-xs text-red-500 mt-1">{errors.mobileNumber}</p>
+          ) : (
+            <p className="text-xs text-muted-foreground mt-1">Accepted formats: {BD_MOBILE_EXAMPLES}.</p>
+          )}
         </Field>
 
         <Field>
@@ -336,9 +351,18 @@ const AddEmployeeModal = ({
       .finally(() => { if (!cancelled) setLoadingDepts(false); });
 
     return () => { cancelled = true; };
-    // values.businessId changes after the edit-mode fetch resolves — reload depts then
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [open, organisationId, values.businessId]);
+
+  // Keep the hidden businessId field in sync for create mode.
+  // The modal stays mounted while the selected organisation scope can change later,
+  // so relying on the hook's initial state leaves businessId empty and submit appears
+  // to do nothing because validation fails with no visible field.
+  React.useEffect(() => {
+    if (!open || isEdit) return;
+    if (!organisationId) return;
+    if (values.businessId === organisationId) return;
+    setField("businessId", organisationId);
+  }, [open, isEdit, organisationId, values.businessId, setField]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>

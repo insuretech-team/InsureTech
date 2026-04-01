@@ -3,13 +3,24 @@ package service
 import (
 	"context"
 	"errors"
+	"os"
+	"strings"
 	"time"
 
+	"github.com/aws/aws-sdk-go-v2/aws"
+	awscfg "github.com/aws/aws-sdk-go-v2/config"
+	"github.com/aws/aws-sdk-go-v2/credentials"
+	"github.com/aws/aws-sdk-go-v2/service/s3"
 	"github.com/google/uuid"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
+	storageentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/entity/v1"
+	storageservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/service/v1"
+	"google.golang.org/grpc"
+	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -214,4 +225,158 @@ func parseGender(s string) authnentityv1.Gender {
 		return authnentityv1.Gender(v)
 	}
 	return authnentityv1.Gender_GENDER_UNSPECIFIED
+}
+
+// ── GetProfilePhotoUploadURL ──────────────────────────────────────────────────
+
+// GetProfilePhotoUploadURL generates a presigned S3/Storage upload URL for the user's profile photo.
+// Tries the Storage microservice first; falls back to direct S3 presign if unavailable.
+func (s *AuthService) GetProfilePhotoUploadURL(ctx context.Context, req *authnservicev1.GetProfilePhotoUploadURLRequest) (*authnservicev1.GetProfilePhotoUploadURLResponse, error) {
+	contentType := req.ContentType
+	if contentType == "" {
+		contentType = "image/jpeg"
+	}
+	fileExt := ".jpg"
+	if strings.Contains(contentType, "png") {
+		fileExt = ".png"
+	} else if strings.Contains(contentType, "webp") {
+		fileExt = ".webp"
+	}
+
+	legacyFallback := func() (*authnservicev1.GetProfilePhotoUploadURLResponse, error) {
+		bucket := os.Getenv("S3_BUCKET")
+		if bucket == "" {
+			bucket = "insuretech-user-media"
+		}
+		region := os.Getenv("AWS_REGION")
+		if region == "" {
+			region = "ap-southeast-1"
+		}
+		objectKey := "profile-photos/" + req.UserId + "/" + uuid.New().String() + fileExt
+		fileURL := "https://" + bucket + ".s3." + region + ".amazonaws.com/" + objectKey
+
+		loadOpts := []func(*awscfg.LoadOptions) error{awscfg.WithRegion(region)}
+		accessKey := os.Getenv("AWS_ACCESS_KEY_ID")
+		secretKey := os.Getenv("AWS_SECRET_ACCESS_KEY")
+		if accessKey != "" && secretKey != "" {
+			sessionToken := os.Getenv("AWS_SESSION_TOKEN")
+			loadOpts = append(loadOpts, awscfg.WithCredentialsProvider(
+				credentials.NewStaticCredentialsProvider(accessKey, secretKey, sessionToken),
+			))
+		}
+		awsConfig, err := awscfg.LoadDefaultConfig(ctx, loadOpts...)
+		if err != nil {
+			return nil, errors.New("load AWS config")
+		}
+		s3Client := s3.NewFromConfig(awsConfig)
+		presignClient := s3.NewPresignClient(s3Client)
+		presignedReq, err := presignClient.PresignPutObject(ctx, &s3.PutObjectInput{
+			Bucket:      aws.String(bucket),
+			Key:         aws.String(objectKey),
+			ContentType: aws.String(contentType),
+		}, func(opts *s3.PresignOptions) {
+			opts.Expires = 15 * time.Minute
+		})
+		if err != nil {
+			return nil, errors.New("generate presigned upload url")
+		}
+		return &authnservicev1.GetProfilePhotoUploadURLResponse{
+			UploadUrl:        presignedReq.URL,
+			FileUrl:          fileURL,
+			ExpiresInSeconds: 900,
+		}, nil
+	}
+
+	storageAddr := os.Getenv("STORAGE_SERVICE_ADDRESS")
+	if storageAddr == "" {
+		port := os.Getenv("STORAGE_GRPC_PORT")
+		if port == "" {
+			port = "50290"
+		}
+		storageAddr = "localhost:" + port
+	}
+
+	dialCtx, cancel := context.WithTimeout(ctx, 5*time.Second)
+	defer cancel()
+	conn, err := grpc.DialContext(dialCtx, storageAddr, grpc.WithTransportCredentials(insecure.NewCredentials()), grpc.WithBlock()) //nolint:staticcheck
+	if err != nil {
+		logger.Errorf("GetProfilePhotoUploadURL: dial storage service: %v", err)
+		return legacyFallback()
+	}
+	defer func() { _ = conn.Close() }()
+
+	tenantID := grpcmeta.TenantID(ctx, os.Getenv("DEFAULT_TENANT_ID"))
+	if tenantID == "" {
+		tenantID = "00000000-0000-0000-0000-000000000001"
+	}
+
+	filename := "profile-" + req.UserId + fileExt
+	client := storageservicev1.NewStorageServiceClient(conn)
+	uploadResp, err := client.GetUploadURL(ctx, &storageservicev1.GetUploadURLRequest{
+		TenantId:         tenantID,
+		Filename:         filename,
+		ContentType:      contentType,
+		FileType:         storageentityv1.FileType_FILE_TYPE_IMAGE,
+		ExpiresInMinutes: 15,
+		ReferenceId:      req.UserId,
+		ReferenceType:    "USER_KYC_PROFILE",
+		IsPublic:         false,
+	})
+	if err != nil {
+		logger.Errorf("GetProfilePhotoUploadURL: storage get upload url: %v", err)
+		return legacyFallback()
+	}
+
+	fileURL := ""
+	if cdn := strings.TrimRight(os.Getenv("SPACES_CDN_ENDPOINT"), "/"); cdn != "" {
+		fileURL = cdn + "/" + strings.TrimLeft(uploadResp.StorageKey, "/")
+	} else if endpoint := strings.TrimRight(os.Getenv("SPACES_ENDPOINT"), "/"); endpoint != "" {
+		fileURL = endpoint + "/" + strings.TrimLeft(uploadResp.StorageKey, "/")
+	}
+
+	return &authnservicev1.GetProfilePhotoUploadURLResponse{
+		UploadUrl:        uploadResp.UploadUrl,
+		FileUrl:          fileURL,
+		ExpiresInSeconds: 900,
+	}, nil
+}
+
+// ── UpdateNotificationPreferences ────────────────────────────────────────────
+
+// GetNotificationPreferences returns the current notification preferences for a user.
+// BUG-010 FIX: Added missing GET endpoint — previously only PATCH/update existed.
+func (s *AuthService) GetNotificationPreferences(ctx context.Context, req *authnservicev1.GetNotificationPreferencesRequest) (*authnservicev1.GetNotificationPreferencesResponse, error) {
+	if req.GetUserId() == "" {
+		return nil, errors.New("user_id is required")
+	}
+	user, err := s.userRepo.GetByID(ctx, req.GetUserId())
+	if err != nil {
+		if err.Error() == "record not found" || err.Error() == "sql: no rows in result set" {
+			return nil, errors.New("user not found")
+		}
+		appLogger.Errorf("GetNotificationPreferences: %v", err)
+		return nil, errors.New("get notification preferences")
+	}
+	return &authnservicev1.GetNotificationPreferencesResponse{
+		UserId:                 req.GetUserId(),
+		NotificationPreference: user.NotificationPreference,
+		PreferredLanguage:      user.PreferredLanguage,
+	}, nil
+}
+
+// UpdateNotificationPreferences updates the user's notification channel and language preferences.
+func (s *AuthService) UpdateNotificationPreferences(ctx context.Context, req *authnservicev1.UpdateNotificationPreferencesRequest) (*authnservicev1.UpdateNotificationPreferencesResponse, error) {
+	user, err := s.userRepo.GetByID(ctx, req.UserId)
+	if err != nil {
+		appLogger.Errorf("UpdateNotificationPreferences: user not found: %v", err)
+		return nil, errors.New("user not found")
+	}
+	_ = user
+	if err := s.userRepo.UpdateNotificationPreferences(ctx, req.UserId, req.NotificationPreference, req.PreferredLanguage); err != nil {
+		appLogger.Errorf("UpdateNotificationPreferences: %v", err)
+		return nil, errors.New("update notification preferences")
+	}
+	return &authnservicev1.UpdateNotificationPreferencesResponse{
+		Message: "Notification preferences updated",
+	}, nil
 }

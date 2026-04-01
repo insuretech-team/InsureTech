@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"google.golang.org/grpc"
@@ -43,27 +44,17 @@ func (i *AuthZInterceptor) UnaryServerInterceptor() grpc.UnaryServerInterceptor 
 			return nil, status.Error(codes.Unauthenticated, "missing metadata")
 		}
 
-		userIDs := md.Get("x-user-id")
-		if len(userIDs) == 0 {
+		userID := grpcmeta.First(md, "x-user-id")
+		if userID == "" {
 			return nil, status.Error(codes.Unauthenticated, "missing user_id")
 		}
-		userID := userIDs[0]
 
 		// Detect portal: PORTAL_SYSTEM users (super_admin) must bypass org context checks.
 		// The gateway sets x-portal = "PORTAL_SYSTEM" for system user JWTs.
-		portalRaw := firstNonEmpty(md.Get("x-portal"))
-		portalNorm := strings.ToLower(strings.TrimSpace(strings.TrimPrefix(portalRaw, "PORTAL_")))
+		portalNorm := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
 		isSystemPortal := portalNorm == "system"
 
-		orgIDs := md.Get("x-business-id")
-		organisationID := ""
-		for _, candidate := range orgIDs {
-			candidate = strings.TrimSpace(candidate)
-			if candidate != "" {
-				organisationID = candidate
-				break
-			}
-		}
+		organisationID := grpcmeta.First(md, "x-business-id")
 
 		// For non-system portals with no org context:
 		// - Methods that allow no-org calls (e.g. ResolveMyOrganisation) pass through without Casbin.
@@ -122,6 +113,11 @@ func mapMethodToResourceAction(method string) (resource, action string) {
 	// ResolveMyOrganisation is a bootstrap call — no authz needed (user just logged in).
 	case strings.HasPrefix(methodName, "ResolveMyOrganisation"):
 		return "", ""
+	case strings.HasPrefix(methodName, "GetMyEmployeeProfile"),
+		strings.HasPrefix(methodName, "GetMyEmployeeCoverage"),
+		strings.HasPrefix(methodName, "ListEmployeeLoginOrganisations"),
+		strings.HasPrefix(methodName, "ActivateEmployee"):
+		return "", ""
 
 	// READ operations
 	case strings.HasPrefix(methodName, "Get"), strings.HasPrefix(methodName, "List"):
@@ -149,10 +145,8 @@ func mapMethodToResourceAction(method string) (resource, action string) {
 }
 
 func resolveAuthzDomain(md metadata.MD, organisationID string) string {
-	portal := firstNonEmpty(md.Get("x-portal"))
-	tenantID := firstNonEmpty(md.Get("x-tenant-id"))
-
-	portal = strings.ToLower(strings.TrimSpace(strings.TrimPrefix(portal, "PORTAL_")))
+	portal := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
+	tenantID := grpcmeta.First(md, "x-tenant-id")
 	switch portal {
 	case "system":
 		return "system:root"
@@ -175,16 +169,6 @@ func resolveAuthzDomain(md metadata.MD, organisationID string) string {
 	}
 }
 
-func firstNonEmpty(values []string) string {
-	for _, value := range values {
-		value = strings.TrimSpace(value)
-		if value != "" {
-			return value
-		}
-	}
-	return ""
-}
-
 // isNoOrgContextMethod returns true for methods that are allowed to proceed
 // without an x-business-id header AND without a Casbin check.
 // Only truly public/bootstrap methods belong here — all others must go through
@@ -195,6 +179,10 @@ func isNoOrgContextMethod(method string) bool {
 	// an org_id in the request because that's exactly what it returns.
 	noAuthMethods := []string{
 		"ResolveMyOrganisation",
+		"GetMyEmployeeProfile",
+		"GetMyEmployeeCoverage",
+		"ListEmployeeLoginOrganisations",
+		"ActivateEmployee",
 	}
 	for _, m := range noAuthMethods {
 		if strings.Contains(method, m) {

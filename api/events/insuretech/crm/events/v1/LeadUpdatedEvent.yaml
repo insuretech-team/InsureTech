@@ -1,0 +1,17 @@
+LeadUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    lead_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/LeadStatus'
+    new_status:
+      $ref: '#/components/schemas/LeadStatus'
+    updated_by:
+      type: string
+    updated_at:
+      type: string
+      format: date-time
+  description: LeadUpdatedEvent is emitted when a lead is updated

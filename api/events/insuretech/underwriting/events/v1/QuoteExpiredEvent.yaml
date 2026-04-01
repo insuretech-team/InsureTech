@@ -1,4 +1,4 @@
-QuoteExpiredEvent:
+UnderwritingQuoteExpiredEvent:
   type: object
   properties:
     event_id:

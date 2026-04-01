@@ -66,54 +66,55 @@ namespace Insuretech.Workflow.Services.V1 {
             "c3BvbnNlEkEKBXRhc2tzGAEgAygLMisuaW5zdXJldGVjaC53b3JrZmxvdy5l",
             "bnRpdHkudjEuV29ya2Zsb3dUYXNrUgV0YXNrcxIfCgt0b3RhbF9jb3VudBgC",
             "IAEoBVIKdG90YWxDb3VudBIxCgVlcnJvchgDIAEoCzIbLmluc3VyZXRlY2gu",
-            "Y29tbW9uLnYxLkVycm9yUgVlcnJvciJmChNDb21wbGV0ZVRhc2tSZXF1ZXN0",
-            "EhcKB3Rhc2tfaWQYASABKAlSBnRhc2tJZBIaCghkZWNpc2lvbhgCIAEoCVII",
-            "ZGVjaXNpb24SGgoIY29tbWVudHMYAyABKAlSCGNvbW1lbnRzImMKFENvbXBs",
-            "ZXRlVGFza1Jlc3BvbnNlEhgKB21lc3NhZ2UYASABKAlSB21lc3NhZ2USMQoF",
-            "ZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5FcnJvclIFZXJy",
-            "b3IiWQoZR2V0V29ya2Zsb3dIaXN0b3J5UmVxdWVzdBIfCgtlbnRpdHlfdHlw",
-            "ZRgBIAEoCVIKZW50aXR5VHlwZRIbCgllbnRpdHlfaWQYAiABKAlSCGVudGl0",
-            "eUlkIq8BChpHZXRXb3JrZmxvd0hpc3RvcnlSZXNwb25zZRJeChJ3b3JrZmxv",
-            "d19pbnN0YW5jZXMYASADKAsyLy5pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0",
-            "eS52MS5Xb3JrZmxvd0luc3RhbmNlUhF3b3JrZmxvd0luc3RhbmNlcxIxCgVl",
-            "cnJvchgCIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yUgVlcnJv",
-            "cjK/CgoPV29ya2Zsb3dTZXJ2aWNlEsQBChhDcmVhdGVXb3JrZmxvd0RlZmlu",
-            "aXRpb24SQC5pbnN1cmV0ZWNoLndvcmtmbG93LnNlcnZpY2VzLnYxLkNyZWF0",
-            "ZVdvcmtmbG93RGVmaW5pdGlvblJlcXVlc3QaQS5pbnN1cmV0ZWNoLndvcmtm",
-            "bG93LnNlcnZpY2VzLnYxLkNyZWF0ZVdvcmtmbG93RGVmaW5pdGlvblJlc3Bv",
-            "bnNlIiOC0+STAh0iGC92MS93b3JrZmxvdy1kZWZpbml0aW9uczoBKhLRAQoV",
-            "R2V0V29ya2Zsb3dEZWZpbml0aW9uEj0uaW5zdXJldGVjaC53b3JrZmxvdy5z",
-            "ZXJ2aWNlcy52MS5HZXRXb3JrZmxvd0RlZmluaXRpb25SZXF1ZXN0Gj4uaW5z",
-            "dXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRXb3JrZmxvd0RlZmlu",
-            "aXRpb25SZXNwb25zZSI5gtPkkwIzEjEvdjEvd29ya2Zsb3ctZGVmaW5pdGlv",
-            "bnMve3dvcmtmbG93X2RlZmluaXRpb25faWR9EqEBCg1TdGFydFdvcmtmbG93",
-            "EjUuaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5TdGFydFdvcmtm",
-            "bG93UmVxdWVzdBo2Lmluc3VyZXRlY2gud29ya2Zsb3cuc2VydmljZXMudjEu",
-            "U3RhcnRXb3JrZmxvd1Jlc3BvbnNlIiGC0+STAhsiFi92MS93b3JrZmxvdy1p",
-            "bnN0YW5jZXM6ASoSxwEKE0dldFdvcmtmbG93SW5zdGFuY2USOy5pbnN1cmV0",
-            "ZWNoLndvcmtmbG93LnNlcnZpY2VzLnYxLkdldFdvcmtmbG93SW5zdGFuY2VS",
-            "ZXF1ZXN0GjwuaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRX",
-            "b3JrZmxvd0luc3RhbmNlUmVzcG9uc2UiNYLT5JMCLxItL3YxL3dvcmtmbG93",
-            "LWluc3RhbmNlcy97d29ya2Zsb3dfaW5zdGFuY2VfaWR9EpoBCgpHZXRNeVRh",
-            "c2tzEjIuaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRNeVRh",
-            "c2tzUmVxdWVzdBozLmluc3VyZXRlY2gud29ya2Zsb3cuc2VydmljZXMudjEu",
-            "R2V0TXlUYXNrc1Jlc3BvbnNlIiOC0+STAh0SGy92MS93b3JrZmxvdy10YXNr",
-            "cy9teS10YXNrcxK0AQoMQ29tcGxldGVUYXNrEjQuaW5zdXJldGVjaC53b3Jr",
-            "Zmxvdy5zZXJ2aWNlcy52MS5Db21wbGV0ZVRhc2tSZXF1ZXN0GjUuaW5zdXJl",
-            "dGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5Db21wbGV0ZVRhc2tSZXNwb25z",
-            "ZSI3gtPkkwIxIiwvdjEvd29ya2Zsb3ctdGFza3Mve3Rhc2tfaWR9P2FjdGlv",
-            "bj1jb21wbGV0ZToBKhLOAQoSR2V0V29ya2Zsb3dIaXN0b3J5EjouaW5zdXJl",
-            "dGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRXb3JrZmxvd0hpc3RvcnlS",
-            "ZXF1ZXN0GjsuaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRX",
-            "b3JrZmxvd0hpc3RvcnlSZXNwb25zZSI/gtPkkwI5EjcvdjEvZW50aXRpZXMv",
-            "e2VudGl0eV90eXBlfS97ZW50aXR5X2lkfS93b3JrZmxvdy1oaXN0b3J5QrAC",
-            "CiNjb20uaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MUIUV29ya2Zs",
-            "b3dTZXJ2aWNlUHJvdG9QAVpUZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5z",
-            "dXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC93b3JrZmxvdy9zZXJ2aWNlcy92",
-            "MTtzZXJ2aWNlc3YxogIDSVdTqgIfSW5zdXJldGVjaC5Xb3JrZmxvdy5TZXJ2",
-            "aWNlcy5WMcoCH0luc3VyZXRlY2hcV29ya2Zsb3dcU2VydmljZXNcVjHiAitJ",
-            "bnN1cmV0ZWNoXFdvcmtmbG93XFNlcnZpY2VzXFYxXEdQQk1ldGFkYXRh6gIi",
-            "SW5zdXJldGVjaDo6V29ya2Zsb3c6OlNlcnZpY2VzOjpWMWIGcHJvdG8z"));
+            "Y29tbW9uLnYxLkVycm9yUgVlcnJvciJuChtDb21wbGV0ZVdvcmtmbG93VGFz",
+            "a1JlcXVlc3QSFwoHdGFza19pZBgBIAEoCVIGdGFza0lkEhoKCGRlY2lzaW9u",
+            "GAIgASgJUghkZWNpc2lvbhIaCghjb21tZW50cxgDIAEoCVIIY29tbWVudHMi",
+            "awocQ29tcGxldGVXb3JrZmxvd1Rhc2tSZXNwb25zZRIYCgdtZXNzYWdlGAEg",
+            "ASgJUgdtZXNzYWdlEjEKBWVycm9yGAIgASgLMhsuaW5zdXJldGVjaC5jb21t",
+            "b24udjEuRXJyb3JSBWVycm9yIlkKGUdldFdvcmtmbG93SGlzdG9yeVJlcXVl",
+            "c3QSHwoLZW50aXR5X3R5cGUYASABKAlSCmVudGl0eVR5cGUSGwoJZW50aXR5",
+            "X2lkGAIgASgJUghlbnRpdHlJZCKvAQoaR2V0V29ya2Zsb3dIaXN0b3J5UmVz",
+            "cG9uc2USXgoSd29ya2Zsb3dfaW5zdGFuY2VzGAEgAygLMi8uaW5zdXJldGVj",
+            "aC53b3JrZmxvdy5lbnRpdHkudjEuV29ya2Zsb3dJbnN0YW5jZVIRd29ya2Zs",
+            "b3dJbnN0YW5jZXMSMQoFZXJyb3IYAiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1v",
+            "bi52MS5FcnJvclIFZXJyb3IyyAoKD1dvcmtmbG93U2VydmljZRLEAQoYQ3Jl",
+            "YXRlV29ya2Zsb3dEZWZpbml0aW9uEkAuaW5zdXJldGVjaC53b3JrZmxvdy5z",
+            "ZXJ2aWNlcy52MS5DcmVhdGVXb3JrZmxvd0RlZmluaXRpb25SZXF1ZXN0GkEu",
+            "aW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5DcmVhdGVXb3JrZmxv",
+            "d0RlZmluaXRpb25SZXNwb25zZSIjgtPkkwIdIhgvdjEvd29ya2Zsb3ctZGVm",
+            "aW5pdGlvbnM6ASoS0QEKFUdldFdvcmtmbG93RGVmaW5pdGlvbhI9Lmluc3Vy",
+            "ZXRlY2gud29ya2Zsb3cuc2VydmljZXMudjEuR2V0V29ya2Zsb3dEZWZpbml0",
+            "aW9uUmVxdWVzdBo+Lmluc3VyZXRlY2gud29ya2Zsb3cuc2VydmljZXMudjEu",
+            "R2V0V29ya2Zsb3dEZWZpbml0aW9uUmVzcG9uc2UiOYLT5JMCMxIxL3YxL3dv",
+            "cmtmbG93LWRlZmluaXRpb25zL3t3b3JrZmxvd19kZWZpbml0aW9uX2lkfRKh",
+            "AQoNU3RhcnRXb3JrZmxvdxI1Lmluc3VyZXRlY2gud29ya2Zsb3cuc2Vydmlj",
+            "ZXMudjEuU3RhcnRXb3JrZmxvd1JlcXVlc3QaNi5pbnN1cmV0ZWNoLndvcmtm",
+            "bG93LnNlcnZpY2VzLnYxLlN0YXJ0V29ya2Zsb3dSZXNwb25zZSIhgtPkkwIb",
+            "IhYvdjEvd29ya2Zsb3ctaW5zdGFuY2VzOgEqEscBChNHZXRXb3JrZmxvd0lu",
+            "c3RhbmNlEjsuaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNlcy52MS5HZXRX",
+            "b3JrZmxvd0luc3RhbmNlUmVxdWVzdBo8Lmluc3VyZXRlY2gud29ya2Zsb3cu",
+            "c2VydmljZXMudjEuR2V0V29ya2Zsb3dJbnN0YW5jZVJlc3BvbnNlIjWC0+ST",
+            "Ai8SLS92MS93b3JrZmxvdy1pbnN0YW5jZXMve3dvcmtmbG93X2luc3RhbmNl",
+            "X2lkfRKaAQoKR2V0TXlUYXNrcxIyLmluc3VyZXRlY2gud29ya2Zsb3cuc2Vy",
+            "dmljZXMudjEuR2V0TXlUYXNrc1JlcXVlc3QaMy5pbnN1cmV0ZWNoLndvcmtm",
+            "bG93LnNlcnZpY2VzLnYxLkdldE15VGFza3NSZXNwb25zZSIjgtPkkwIdEhsv",
+            "djEvd29ya2Zsb3ctdGFza3MvbXktdGFza3MSvQEKDENvbXBsZXRlVGFzaxI8",
+            "Lmluc3VyZXRlY2gud29ya2Zsb3cuc2VydmljZXMudjEuQ29tcGxldGVXb3Jr",
+            "Zmxvd1Rhc2tSZXF1ZXN0Gj0uaW5zdXJldGVjaC53b3JrZmxvdy5zZXJ2aWNl",
+            "cy52MS5Db21wbGV0ZVdvcmtmbG93VGFza1Jlc3BvbnNlIjCC0+STAioiJS92",
+            "MS93b3JrZmxvdy10YXNrcy97dGFza19pZH06Y29tcGxldGU6ASoSzgEKEkdl",
+            "dFdvcmtmbG93SGlzdG9yeRI6Lmluc3VyZXRlY2gud29ya2Zsb3cuc2Vydmlj",
+            "ZXMudjEuR2V0V29ya2Zsb3dIaXN0b3J5UmVxdWVzdBo7Lmluc3VyZXRlY2gu",
+            "d29ya2Zsb3cuc2VydmljZXMudjEuR2V0V29ya2Zsb3dIaXN0b3J5UmVzcG9u",
+            "c2UiP4LT5JMCORI3L3YxL2VudGl0aWVzL3tlbnRpdHlfdHlwZX0ve2VudGl0",
+            "eV9pZH0vd29ya2Zsb3ctaGlzdG9yeUKwAgojY29tLmluc3VyZXRlY2gud29y",
+            "a2Zsb3cuc2VydmljZXMudjFCFFdvcmtmbG93U2VydmljZVByb3RvUAFaVGdp",
+            "dGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3Vy",
+            "ZXRlY2gvd29ya2Zsb3cvc2VydmljZXMvdjE7c2VydmljZXN2MaICA0lXU6oC",
+            "H0luc3VyZXRlY2guV29ya2Zsb3cuU2VydmljZXMuVjHKAh9JbnN1cmV0ZWNo",
+            "XFdvcmtmbG93XFNlcnZpY2VzXFYx4gIrSW5zdXJldGVjaFxXb3JrZmxvd1xT",
+            "ZXJ2aWNlc1xWMVxHUEJNZXRhZGF0YeoCIkluc3VyZXRlY2g6OldvcmtmbG93",
+            "OjpTZXJ2aWNlczo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Api.AnnotationsReflection.Descriptor, global::Google.Protobuf.WellKnownTypes.StructReflection.Descriptor, global::Insuretech.Common.V1.ErrorReflection.Descriptor, global::Insuretech.Workflow.Entity.V1.WorkflowDefinitionReflection.Descriptor, global::Insuretech.Workflow.Entity.V1.WorkflowInstanceReflection.Descriptor, global::Insuretech.Workflow.Entity.V1.WorkflowTaskReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -127,8 +128,8 @@ namespace Insuretech.Workflow.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.GetWorkflowInstanceResponse), global::Insuretech.Workflow.Services.V1.GetWorkflowInstanceResponse.Parser, new[]{ "WorkflowInstance", "Tasks", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.GetMyTasksRequest), global::Insuretech.Workflow.Services.V1.GetMyTasksRequest.Parser, new[]{ "Status", "Page", "PageSize" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.GetMyTasksResponse), global::Insuretech.Workflow.Services.V1.GetMyTasksResponse.Parser, new[]{ "Tasks", "TotalCount", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest), global::Insuretech.Workflow.Services.V1.CompleteTaskRequest.Parser, new[]{ "TaskId", "Decision", "Comments" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.CompleteTaskResponse), global::Insuretech.Workflow.Services.V1.CompleteTaskResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest), global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest.Parser, new[]{ "TaskId", "Decision", "Comments" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse), global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest), global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest.Parser, new[]{ "EntityType", "EntityId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryResponse), global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryResponse.Parser, new[]{ "WorkflowInstances", "Error" }, null, null, null, null)
           }));
@@ -2864,16 +2865,16 @@ namespace Insuretech.Workflow.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class CompleteTaskRequest : pb::IMessage<CompleteTaskRequest>
+  public sealed partial class CompleteWorkflowTaskRequest : pb::IMessage<CompleteWorkflowTaskRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<CompleteTaskRequest> _parser = new pb::MessageParser<CompleteTaskRequest>(() => new CompleteTaskRequest());
+    private static readonly pb::MessageParser<CompleteWorkflowTaskRequest> _parser = new pb::MessageParser<CompleteWorkflowTaskRequest>(() => new CompleteWorkflowTaskRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<CompleteTaskRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<CompleteWorkflowTaskRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -2889,7 +2890,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskRequest() {
+    public CompleteWorkflowTaskRequest() {
       OnConstruction();
     }
 
@@ -2897,7 +2898,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskRequest(CompleteTaskRequest other) : this() {
+    public CompleteWorkflowTaskRequest(CompleteWorkflowTaskRequest other) : this() {
       taskId_ = other.taskId_;
       decision_ = other.decision_;
       comments_ = other.comments_;
@@ -2906,8 +2907,8 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskRequest Clone() {
-      return new CompleteTaskRequest(this);
+    public CompleteWorkflowTaskRequest Clone() {
+      return new CompleteWorkflowTaskRequest(this);
     }
 
     /// <summary>Field number for the "task_id" field.</summary>
@@ -2952,12 +2953,12 @@ namespace Insuretech.Workflow.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as CompleteTaskRequest);
+      return Equals(other as CompleteWorkflowTaskRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(CompleteTaskRequest other) {
+    public bool Equals(CompleteWorkflowTaskRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3056,7 +3057,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(CompleteTaskRequest other) {
+    public void MergeFrom(CompleteWorkflowTaskRequest other) {
       if (other == null) {
         return;
       }
@@ -3139,16 +3140,16 @@ namespace Insuretech.Workflow.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class CompleteTaskResponse : pb::IMessage<CompleteTaskResponse>
+  public sealed partial class CompleteWorkflowTaskResponse : pb::IMessage<CompleteWorkflowTaskResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<CompleteTaskResponse> _parser = new pb::MessageParser<CompleteTaskResponse>(() => new CompleteTaskResponse());
+    private static readonly pb::MessageParser<CompleteWorkflowTaskResponse> _parser = new pb::MessageParser<CompleteWorkflowTaskResponse>(() => new CompleteWorkflowTaskResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<CompleteTaskResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<CompleteWorkflowTaskResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3164,7 +3165,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskResponse() {
+    public CompleteWorkflowTaskResponse() {
       OnConstruction();
     }
 
@@ -3172,7 +3173,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskResponse(CompleteTaskResponse other) : this() {
+    public CompleteWorkflowTaskResponse(CompleteWorkflowTaskResponse other) : this() {
       message_ = other.message_;
       error_ = other.error_ != null ? other.error_.Clone() : null;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
@@ -3180,8 +3181,8 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public CompleteTaskResponse Clone() {
-      return new CompleteTaskResponse(this);
+    public CompleteWorkflowTaskResponse Clone() {
+      return new CompleteWorkflowTaskResponse(this);
     }
 
     /// <summary>Field number for the "message" field.</summary>
@@ -3214,12 +3215,12 @@ namespace Insuretech.Workflow.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as CompleteTaskResponse);
+      return Equals(other as CompleteWorkflowTaskResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(CompleteTaskResponse other) {
+    public bool Equals(CompleteWorkflowTaskResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3305,7 +3306,7 @@ namespace Insuretech.Workflow.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(CompleteTaskResponse other) {
+    public void MergeFrom(CompleteWorkflowTaskResponse other) {
       if (other == null) {
         return;
       }

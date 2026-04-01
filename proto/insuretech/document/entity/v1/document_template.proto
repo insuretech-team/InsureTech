@@ -126,6 +126,7 @@ enum OutputFormat {
   OUTPUT_FORMAT_PDF = 1;
   OUTPUT_FORMAT_HTML = 2;
   OUTPUT_FORMAT_DOCX = 3;
+  OUTPUT_FORMAT_XLSX = 4;
 }
 
 

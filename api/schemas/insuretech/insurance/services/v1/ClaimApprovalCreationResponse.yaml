@@ -1,0 +1,7 @@
+ClaimApprovalCreationResponse:
+  type: object
+  properties:
+    approval:
+      $ref: '#/components/schemas/ClaimApproval'
+  description: Response payload for claim approval creation operation. Returns operation
+    results and status.

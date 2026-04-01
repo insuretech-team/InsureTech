@@ -1,0 +1,30 @@
+ContactUpdateRequest:
+  type: object
+  properties:
+    contact_id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    phone_number:
+      type: string
+    email_address:
+      type: string
+    address:
+      type: string
+    preferred_contact_method:
+      $ref: '#/components/schemas/PreferredContactMethod'
+    marketing_consent:
+      type: boolean
+    assigned_agent_id:
+      type: string
+    contact_status:
+      $ref: '#/components/schemas/ContactStatus'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing contact update. Contains fields
+    to be modified.

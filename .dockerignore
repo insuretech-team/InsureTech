@@ -2,21 +2,58 @@
 .gitignore
 .github
 .vscode
+.devcontainer
 
+# Build artifacts and IDE caches
 **/node_modules
 **/.next
 **/dist
 **/bin
+!bin/
 **/obj
 **/coverage
+.gocache
+.projindex
+.seek
+build
 
-logs
-docs
-documentation
+# Unused portals and platform-specific
 Android
 iOS
 customer_portal
+partner_portal
+system_portal
+backups
 
+# Docs and specs (not needed for builds)
+logs
+docs
+documentation
+api/docs
+api/templates
+api/postman
+api/generator/__pycache__
+proto
+rules
+specs
+
+# Temp and junk files
 **/*.log
 **/*.tmp
 **/.DS_Store
+
+# Large binary/archive files
+*.tar
+*.tar.gz
+*.zip
+*.tgz
+acli.exe
+check_ssl.go
+
+# Exclude sdks directory EXCEPT the specific SDK tgz needed by b2b_portal Dockerfile
+# NOTE: the !exception MUST come AFTER the *.tgz rule — last matching rule wins in Docker
+sdks
+!sdks/insuretech-typescript-sdk/lifeplus-insuretech-sdk-0.1.0.tgz
+
+# NOTE: b2b_portal is NOT excluded — the b2b_portal Dockerfile needs it.
+# **/node_modules and **/.next above already exclude the large subdirs inside it.

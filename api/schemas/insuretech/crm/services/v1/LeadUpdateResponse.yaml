@@ -1,0 +1,7 @@
+LeadUpdateResponse:
+  type: object
+  properties:
+    lead:
+      $ref: '#/components/schemas/Lead'
+  description: Response payload for lead update operation. Returns operation results
+    and status.

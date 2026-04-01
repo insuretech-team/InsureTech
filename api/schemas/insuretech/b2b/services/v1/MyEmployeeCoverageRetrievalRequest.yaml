@@ -1,0 +1,5 @@
+MyEmployeeCoverageRetrievalRequest:
+  type: object
+  properties: {}
+  description: Request payload for retrieving my employee coverage retrieval information.
+    May include filters and pagination parameters.

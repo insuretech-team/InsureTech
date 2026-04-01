@@ -12,8 +12,5 @@ VoiceCommandProcessingResponse:
     confidence_score:
       type: number
       format: float
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for voice command processing operation. Returns operation
     results and status.

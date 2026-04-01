@@ -17,8 +17,5 @@ RevenueShareReportRetrievalResponse:
       additionalProperties:
         type: string
       description: Map field (key-value pairs)
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for revenue share report retrieval operation. Returns
     operation results and status.

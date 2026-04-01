@@ -26,13 +26,10 @@ func (r *FraudAlertRepository) Create(ctx context.Context, alert *fraudv1.FraudA
 		return nil, fmt.Errorf("alert_id is required")
 	}
 
-	var createdBy string
-	err := r.db.WithContext(ctx).Raw(`SELECT user_id FROM authn_schema.users LIMIT 1`).Scan(&createdBy).Error
-	if err != nil || createdBy == "" {
-		return nil, fmt.Errorf("failed to get valid user for created_by: %w", err)
+	auditInfoJSON, err := newAuditInfoJSON(ctx)
+	if err != nil {
+		return nil, err
 	}
-
-	auditInfoJSON := fmt.Sprintf(`{"created_by":"%s","created_at":"%s"}`, createdBy, time.Now().UTC().Format(time.RFC3339))
 
 	var assignedTo sql.NullString
 	if alert.AssignedTo != "" {

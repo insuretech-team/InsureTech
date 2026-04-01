@@ -1,0 +1,98 @@
+name: Publish Documentation
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  publish:
+    name: Publish to GitHub Pages
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Configure GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Prepare documentation site
+        run: |
+          mkdir -p _site
+
+          # Copy all generated docs (these are the pre-built HTML files)
+          if [ -d "api/docs" ]; then
+            cp -r api/docs/* _site/
+            echo "Copied api/docs/ contents to _site/"
+          else
+            echo "::error::api/docs/ directory not found"
+            exit 1
+          fi
+
+          # Copy openapi spec files into the same directory as swagger/redoc
+          for f in openapi.yaml openapi.json validation_report.html validation_report.json proto_schema_summary.json schema_api_mapping.json; do
+            if [ -f "api/$f" ]; then
+              cp "api/$f" "_site/$f"
+              echo "Copied $f"
+            fi
+          done
+
+          # ── Fix all relative/absolute openapi.yaml references ──
+
+          # swagger.html: url: "../openapi.yaml" → url: "openapi.yaml"
+          if [ -f _site/swagger.html ]; then
+            sed -i 's|url: "\.\./openapi\.yaml"|url: "openapi.yaml"|g'        _site/swagger.html
+            sed -i 's|url: "/openapi\.yaml"|url: "openapi.yaml"|g'            _site/swagger.html
+            sed -i "s|url: '\.\./openapi\.yaml'|url: 'openapi.yaml'|g"        _site/swagger.html
+            echo "Fixed swagger.html openapi path"
+          fi
+
+          # redoc.html: spec-url="../openapi.yaml" → spec-url="openapi.yaml"
+          if [ -f _site/redoc.html ]; then
+            sed -i 's|spec-url="\.\./openapi\.yaml"|spec-url="openapi.yaml"|g'  _site/redoc.html
+            sed -i 's|spec-url="/openapi\.yaml"|spec-url="openapi.yaml"|g'      _site/redoc.html
+            echo "Fixed redoc.html openapi path"
+          fi
+
+          # index.html: window.open('/openapi.yaml' → window.open('openapi.yaml'
+          if [ -f _site/index.html ]; then
+            sed -i "s|window\.open('/openapi\.yaml'|window.open('openapi.yaml'|g"   _site/index.html
+            sed -i "s|window\.open('../openapi\.yaml'|window.open('openapi.yaml'|g" _site/index.html
+            sed -i 's|href="\.\./openapi\.yaml"|href="openapi.yaml"|g'              _site/index.html
+            sed -i 's|href="/openapi\.yaml"|href="openapi.yaml"|g'                  _site/index.html
+            echo "Fixed index.html openapi path"
+          fi
+
+          # index_old.html (if present)
+          if [ -f _site/index_old.html ]; then
+            sed -i 's|href="\.\./openapi\.yaml"|href="openapi.yaml"|g'  _site/index_old.html
+            sed -i 's|href="/openapi\.yaml"|href="openapi.yaml"|g'      _site/index_old.html
+            echo "Fixed index_old.html openapi path"
+          fi
+
+          echo "Site contents:"
+          ls _site/ | head -30
+          echo "..."
+          echo "Total files: $(find _site -type f | wc -l)"
+
+      - name: Upload Pages artifact
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: ./_site
+
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4

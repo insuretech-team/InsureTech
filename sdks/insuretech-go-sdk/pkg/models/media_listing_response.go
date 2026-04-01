@@ -5,5 +5,4 @@ package models
 type MediaListingResponse struct {
 	MediaFiles []*MediaFile `json:"media_files,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

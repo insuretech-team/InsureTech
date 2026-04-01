@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value">5</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value">5</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -316,7 +316,22 @@
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>message</strong>
+                    ⚪ <strong>file_bytes</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    <br><small>byte</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">file_bytes is populated when alt="media" is set in the request.
+ Contains raw document bytes (PDF, DOCX, XLSX, or HTML).</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>content_type</strong>
                 </td>
                 <td class="field-type">
                     <code>string</code>
@@ -325,21 +340,21 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">content_type is the MIME type of file_bytes (e.g. "application/pdf").</td>
             </tr>
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>error</strong>
+                    ⚪ <strong>filename</strong>
                 </td>
                 <td class="field-type">
-                    <code>reference</code>
-                    <br><small>Error</small>
-                    <a href="schema_error.html" class="ref-link">→ Error</a>
+                    <code>string</code>
+                    
+                    
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Error information if operation failed</td>
+                <td class="field-description">filename is the suggested download filename (e.g. "policy-123.xlsx").</td>
             </tr>
             
                 </tbody>

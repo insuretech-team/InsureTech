@@ -215,7 +215,7 @@ func (s *MediaService) ValidateMedia(ctx context.Context, tenantID, mediaID stri
 		return fmt.Errorf("failed to get media file: %w", err)
 	}
 
-	_ = validationRules // TODO: Implement validation rules processing.
+	_ = validationRules
 	validationStatus := mediav1.ValidationStatus_VALIDATION_STATUS_VALIDATED
 	validationErrors := ""
 	if media.FileSizeBytes > 10*1024*1024 {
@@ -227,7 +227,9 @@ func (s *MediaService) ValidateMedia(ctx context.Context, tenantID, mediaID stri
 		return fmt.Errorf("failed to update validation status: %w", err)
 	}
 
-	// TODO: Publish MediaValidationCompletedEvent.
+	if s.kafkaPublisher != nil {
+		go s.publishValidationCompletedAsync(ctx, mediaID, tenantID, validationStatus.String(), validationErrors)
+	}
 	return nil
 }
 
@@ -268,7 +270,9 @@ func (s *MediaService) RequestProcessing(ctx context.Context, tenantID, mediaID 
 		return "", fmt.Errorf("failed to create processing job: %w", err)
 	}
 
-	// TODO: Publish MediaProcessingJobCreatedEvent.
+	if s.kafkaPublisher != nil {
+		go s.publishProcessingRequestedAsync(ctx, createdJob.Id, mediaID, tenantID, processingType.String(), priority)
+	}
 	return createdJob.Id, nil
 }
 
@@ -363,7 +367,9 @@ func (s *MediaService) UpdateOCRText(ctx context.Context, tenantID, mediaID, ocr
 		return fmt.Errorf("failed to update OCR text: %w", err)
 	}
 
-	// TODO: Publish MediaOCRCompletedEvent.
+	if s.kafkaPublisher != nil {
+		go s.publishOCRCompletedAsync(ctx, mediaID, tenantID, len(ocrText))
+	}
 	return nil
 }
 
@@ -383,7 +389,9 @@ func (s *MediaService) UpdateVirusScanStatus(ctx context.Context, tenantID, medi
 		return fmt.Errorf("failed to update virus scan status: %w", err)
 	}
 
-	// TODO: Publish MediaVirusScanCompletedEvent.
+	if s.kafkaPublisher != nil {
+		go s.publishVirusScanCompletedAsync(ctx, mediaID, tenantID, status.String())
+	}
 	return nil
 }
 
@@ -439,6 +447,10 @@ func (s *MediaService) ResolveFileDownloadURL(ctx context.Context, tenantID, fil
 type kafkaPublisherInterface interface {
 	PublishFileUploaded(ctx context.Context, mediaID, tenantID, filename, mimeType string, sizeBytes int64) error
 	PublishFileDeleted(ctx context.Context, mediaID, tenantID string) error
+	PublishValidationCompleted(ctx context.Context, mediaID, tenantID, status, validationErrors string) error
+	PublishProcessingRequested(ctx context.Context, jobID, mediaID, tenantID, jobType string, priority int32) error
+	PublishOCRCompleted(ctx context.Context, mediaID, tenantID string, textLength int) error
+	PublishVirusScanCompleted(ctx context.Context, mediaID, tenantID, status string) error
 }
 
 // publishFileUploadedAsync publishes a file uploaded event asynchronously
@@ -457,6 +469,38 @@ func (s *MediaService) publishFileDeletedAsync(ctx context.Context, mediaID, ten
 		return
 	}
 	_ = pub.PublishFileDeleted(ctx, mediaID, tenantID)
+}
+
+func (s *MediaService) publishValidationCompletedAsync(ctx context.Context, mediaID, tenantID, status, validationErrors string) {
+	pub, ok := s.kafkaPublisher.(kafkaPublisherInterface)
+	if !ok || pub == nil {
+		return
+	}
+	_ = pub.PublishValidationCompleted(ctx, mediaID, tenantID, status, validationErrors)
+}
+
+func (s *MediaService) publishProcessingRequestedAsync(ctx context.Context, jobID, mediaID, tenantID, jobType string, priority int32) {
+	pub, ok := s.kafkaPublisher.(kafkaPublisherInterface)
+	if !ok || pub == nil {
+		return
+	}
+	_ = pub.PublishProcessingRequested(ctx, jobID, mediaID, tenantID, jobType, priority)
+}
+
+func (s *MediaService) publishOCRCompletedAsync(ctx context.Context, mediaID, tenantID string, textLength int) {
+	pub, ok := s.kafkaPublisher.(kafkaPublisherInterface)
+	if !ok || pub == nil {
+		return
+	}
+	_ = pub.PublishOCRCompleted(ctx, mediaID, tenantID, textLength)
+}
+
+func (s *MediaService) publishVirusScanCompletedAsync(ctx context.Context, mediaID, tenantID, status string) {
+	pub, ok := s.kafkaPublisher.(kafkaPublisherInterface)
+	if !ok || pub == nil {
+		return
+	}
+	_ = pub.PublishVirusScanCompleted(ctx, mediaID, tenantID, status)
 }
 
 // enqueueProcessingJobs enqueues processing jobs based on media MIME type

@@ -27,7 +27,7 @@ func (r *FraudAlertRepository) Create(ctx context.Context, alert *fraudv1.FraudA
 		alert.Id = uuid.NewString()
 	}
 	if alert.AlertNumber == "" {
-		alert.AlertNumber = "FAL-" + time.Now().UTC().Format("20060102-150405")
+		alert.AlertNumber = newSequenceNumber("FAL", time.Now().UTC())
 	}
 	if alert.Status == fraudv1.AlertStatus_ALERT_STATUS_UNSPECIFIED {
 		alert.Status = fraudv1.AlertStatus_ALERT_STATUS_OPEN

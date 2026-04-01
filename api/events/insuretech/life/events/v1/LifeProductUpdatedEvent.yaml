@@ -1,0 +1,17 @@
+LifeProductUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_name:
+      type: string
+    changed_fields:
+      type: array
+      items:
+        type: string
+    updated_at:
+      type: string
+      format: date-time
+  description: LifeProductUpdatedEvent is emitted when a life product is updated

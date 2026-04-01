@@ -41,7 +41,7 @@ proto/insuretech/           # Proto definitions with table annotations
 
 ```bash
 # From project root
-cd backend/inscore/cmd/dbmanager
+cd backend/inscore/cmd/dbx
 go run main.go migrate --target=primary
 ```
 
@@ -83,7 +83,7 @@ The migration system supports strict, declarative synchronization:
 Automatically drops columns that exist in the database but are NOT defined in Proto.
 
 ```bash
-dbmanager migrate --target=primary --prune
+dbx migrate --target=primary --prune
 ```
 
 **Warning:** This is a destructive operation. Use with caution.
@@ -92,7 +92,7 @@ dbmanager migrate --target=primary --prune
 Fails the migration if any schema drift is detected (zombie columns, type mismatches).
 
 ```bash
-dbmanager migrate --target=primary --strict
+dbx migrate --target=primary --strict
 ```
 
 **Use Case:** CI/CD pipelines to ensure database schema matches Proto definitions exactly.
@@ -100,10 +100,10 @@ dbmanager migrate --target=primary --strict
 ### Combined Usage
 ```bash
 # First run strict to check for drift
-dbmanager migrate --target=primary --strict
+dbx migrate --target=primary --strict
 
 # If drift found, run prune to fix it
-dbmanager migrate --target=primary --prune
+dbx migrate --target=primary --prune
 ```
 
 ---

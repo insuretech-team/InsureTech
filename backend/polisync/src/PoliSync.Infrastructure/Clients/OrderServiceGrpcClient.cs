@@ -14,6 +14,7 @@ public sealed class OrderServiceGrpcClient : IDisposable
 
     public OrderServiceGrpcClient(IConfiguration configuration)
     {
+        // Connects to the sync_order Go service (port 50142) — the persistence layer for PoliSync order domain
         var orderServiceUrl = configuration["GrpcClients:OrdersService"] ?? "http://localhost:50142";
         _channel = GrpcChannel.ForAddress(orderServiceUrl);
         _client = new OrderService.OrderServiceClient(_channel);

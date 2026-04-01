@@ -12,28 +12,39 @@ $RepoRoot = Split-Path -Parent $ScriptDir
 Write-Host "===========================================" -ForegroundColor Cyan
 Write-Host "InsureTech Proto Generation" -ForegroundColor Cyan
 Write-Host "===========================================" -ForegroundColor Cyan
-Write-Host "OS: Windows, PowerShell: $($PSVersionTable.PSVersion)" -ForegroundColor Gray
+Write-Host \"OS: $([System.Runtime.InteropServices.RuntimeInformation]::OSDescription), PowerShell: $($PSVersionTable.PSVersion)\" -ForegroundColor Gray
 Write-Host ""
 
-# Step 1: Verify tools
+# Step 1: Verify tools (auto-install if missing)
 Write-Host "[1/2] Verifying tools..." -ForegroundColor Yellow
-$requiredTools = @(
-    @{ Name = "buf"; Install = "go install github.com/bufbuild/buf/cmd/buf@latest" },
-    @{ Name = "protoc-gen-go"; Install = "go install google.golang.org/protobuf/cmd/protoc-gen-go@latest" }
-)
-
-foreach ($tool in $requiredTools) {
-    $cmd = Get-Command $tool.Name -ErrorAction SilentlyContinue
-    if (-not $cmd) {
-        Write-Host "  Installing $($tool.Name)..." -ForegroundColor Yellow
-        Invoke-Expression $tool.Install
-        if ($LASTEXITCODE -ne 0) {
-            Write-Host "  ERROR: Failed to install $($tool.Name)" -ForegroundColor Red
-            exit 1
+$bootstrapScript = Join-Path $ScriptDir "bootstrap.ps1"
+if (Test-Path $bootstrapScript) {
+    try {
+        & $bootstrapScript -GoOnly
+        if (-not $?) {
+            throw "Go prerequisite bootstrap failed"
         }
+    } catch {
+        Write-Host "  ERROR: Go prerequisite bootstrap failed: $($_.Exception.Message)" -ForegroundColor Red
+        exit 1
     }
-    else {
-        Write-Host "  OK: $($tool.Name)" -ForegroundColor Green
+    $global:LASTEXITCODE = 0
+} else {
+    # Fallback: inline check for the two minimum tools needed here
+    foreach ($tool in @(
+        @{ Name = "buf";          Install = "github.com/bufbuild/buf/cmd/buf@latest" },
+        @{ Name = "protoc-gen-go"; Install = "google.golang.org/protobuf/cmd/protoc-gen-go@latest" }
+    )) {
+        if (-not (Get-Command $tool.Name -ErrorAction SilentlyContinue)) {
+            Write-Host "  Installing $($tool.Name)..." -ForegroundColor Yellow
+            go install $tool.Install
+            if ($LASTEXITCODE -ne 0) {
+                Write-Host "  ERROR: Failed to install $($tool.Name)" -ForegroundColor Red
+                exit 1
+            }
+        } else {
+            Write-Host "  OK: $($tool.Name)" -ForegroundColor Green
+        }
     }
 }
 
@@ -52,9 +63,15 @@ if (Test-Path $envFile) {
 Write-Host ""
 Write-Host "[2/2] Running generation pipeline..." -ForegroundColor Yellow
 
+# Check that go is available
+if (-not (Get-Command go -ErrorAction SilentlyContinue)) {
+    Write-Host "  ERROR: 'go' command not found. Please ensure Go is installed and in PATH." -ForegroundColor Red
+    exit 1
+}
+
 Push-Location $RepoRoot
 try {
-    $goArgs = @("run", ".\scripts\inject_gorm_tags.go", "--generate")
+    $goArgs = @("run", "./scripts/inject_gorm_tags.go", "--generate")
     if (-not $SkipRegistry) { $goArgs += "--registry" }
     if ($Verbose) { $goArgs += "--verbose" }
     & go @goArgs

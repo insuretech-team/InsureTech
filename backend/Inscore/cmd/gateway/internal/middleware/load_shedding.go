@@ -5,6 +5,8 @@ import (
 	"strconv"
 	"sync/atomic"
 	"time"
+
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 )
 
 // LoadShedder protects the gateway from overload by limiting concurrent requests
@@ -42,7 +44,7 @@ func (ls *LoadShedder) Middleware(next http.Handler) http.Handler {
 			w.Header().Set("X-RateLimit-Remaining", "0")
 			w.Header().Set("X-Load-Shed", "true")
 
-			http.Error(w, "Service temporarily overloaded, please retry", http.StatusServiceUnavailable)
+			respond.ErrorRetryable(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "Service temporarily overloaded, please retry")
 			return
 		}
 

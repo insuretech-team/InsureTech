@@ -1,0 +1,7 @@
+ClaimApprovalCreationRequest:
+  type: object
+  properties:
+    approval:
+      $ref: '#/components/schemas/ClaimApproval'
+  description: Request payload for creating a new claim approval creation. Contains
+    all required fields and optional parameters for initialization.

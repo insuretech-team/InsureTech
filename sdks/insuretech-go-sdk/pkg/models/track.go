@@ -3,12 +3,12 @@ package models
 
 // Track represents a track
 type Track struct {
-	State interface{} `json:"state"`
-	Metadata map[string]interface{} `json:"metadata,omitempty"`
-	Settings interface{} `json:"settings"`
-	TrackId string `json:"track_id"`
-	PeerId string `json:"peer_id"`
-	Type *TrackType `json:"type"`
 	Label string `json:"label,omitempty"`
+	Metadata map[string]interface{} `json:"metadata,omitempty"`
 	Muted bool `json:"muted"`
+	PeerId string `json:"peer_id"`
+	Settings interface{} `json:"settings"`
+	State interface{} `json:"state"`
+	TrackId string `json:"track_id"`
+	Type *TrackType `json:"type"`
 }

@@ -34,6 +34,7 @@ const (
 	AuthZService_UpdatePolicyRule_FullMethodName         = "/insuretech.authz.services.v1.AuthZService/UpdatePolicyRule"
 	AuthZService_DeletePolicyRule_FullMethodName         = "/insuretech.authz.services.v1.AuthZService/DeletePolicyRule"
 	AuthZService_ListPolicyRules_FullMethodName          = "/insuretech.authz.services.v1.AuthZService/ListPolicyRules"
+	AuthZService_ListPortalConfigs_FullMethodName        = "/insuretech.authz.services.v1.AuthZService/ListPortalConfigs"
 	AuthZService_GetPortalConfig_FullMethodName          = "/insuretech.authz.services.v1.AuthZService/GetPortalConfig"
 	AuthZService_UpdatePortalConfig_FullMethodName       = "/insuretech.authz.services.v1.AuthZService/UpdatePortalConfig"
 	AuthZService_GetJWKS_FullMethodName                  = "/insuretech.authz.services.v1.AuthZService/GetJWKS"
@@ -82,6 +83,7 @@ type AuthZServiceClient interface {
 	UpdatePolicyRule(ctx context.Context, in *UpdatePolicyRuleRequest, opts ...grpc.CallOption) (*UpdatePolicyRuleResponse, error)
 	DeletePolicyRule(ctx context.Context, in *DeletePolicyRuleRequest, opts ...grpc.CallOption) (*DeletePolicyRuleResponse, error)
 	ListPolicyRules(ctx context.Context, in *ListPolicyRulesRequest, opts ...grpc.CallOption) (*ListPolicyRulesResponse, error)
+	ListPortalConfigs(ctx context.Context, in *ListPortalConfigsRequest, opts ...grpc.CallOption) (*ListPortalConfigsResponse, error)
 	GetPortalConfig(ctx context.Context, in *GetPortalConfigRequest, opts ...grpc.CallOption) (*GetPortalConfigResponse, error)
 	UpdatePortalConfig(ctx context.Context, in *UpdatePortalConfigRequest, opts ...grpc.CallOption) (*UpdatePortalConfigResponse, error)
 	// GetJWKS — serves the RS256 public key set for JWT verification
@@ -250,6 +252,16 @@ func (c *authZServiceClient) ListPolicyRules(ctx context.Context, in *ListPolicy
 	return out, nil
 }
 
+func (c *authZServiceClient) ListPortalConfigs(ctx context.Context, in *ListPortalConfigsRequest, opts ...grpc.CallOption) (*ListPortalConfigsResponse, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(ListPortalConfigsResponse)
+	err := c.cc.Invoke(ctx, AuthZService_ListPortalConfigs_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 func (c *authZServiceClient) GetPortalConfig(ctx context.Context, in *GetPortalConfigRequest, opts ...grpc.CallOption) (*GetPortalConfigResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
 	out := new(GetPortalConfigResponse)
@@ -341,6 +353,7 @@ type AuthZServiceServer interface {
 	UpdatePolicyRule(context.Context, *UpdatePolicyRuleRequest) (*UpdatePolicyRuleResponse, error)
 	DeletePolicyRule(context.Context, *DeletePolicyRuleRequest) (*DeletePolicyRuleResponse, error)
 	ListPolicyRules(context.Context, *ListPolicyRulesRequest) (*ListPolicyRulesResponse, error)
+	ListPortalConfigs(context.Context, *ListPortalConfigsRequest) (*ListPortalConfigsResponse, error)
 	GetPortalConfig(context.Context, *GetPortalConfigRequest) (*GetPortalConfigResponse, error)
 	UpdatePortalConfig(context.Context, *UpdatePortalConfigRequest) (*UpdatePortalConfigResponse, error)
 	// GetJWKS — serves the RS256 public key set for JWT verification
@@ -402,6 +415,9 @@ func (UnimplementedAuthZServiceServer) DeletePolicyRule(context.Context, *Delete
 }
 func (UnimplementedAuthZServiceServer) ListPolicyRules(context.Context, *ListPolicyRulesRequest) (*ListPolicyRulesResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method ListPolicyRules not implemented")
+}
+func (UnimplementedAuthZServiceServer) ListPortalConfigs(context.Context, *ListPortalConfigsRequest) (*ListPortalConfigsResponse, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method ListPortalConfigs not implemented")
 }
 func (UnimplementedAuthZServiceServer) GetPortalConfig(context.Context, *GetPortalConfigRequest) (*GetPortalConfigResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetPortalConfig not implemented")
@@ -708,6 +724,24 @@ func _AuthZService_ListPolicyRules_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _AuthZService_ListPortalConfigs_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(ListPortalConfigsRequest)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(AuthZServiceServer).ListPortalConfigs(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: AuthZService_ListPortalConfigs_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(AuthZServiceServer).ListPortalConfigs(ctx, req.(*ListPortalConfigsRequest))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 func _AuthZService_GetPortalConfig_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
 	in := new(GetPortalConfigRequest)
 	if err := dec(in); err != nil {
@@ -864,6 +898,10 @@ var AuthZService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "ListPolicyRules",
 			Handler:    _AuthZService_ListPolicyRules_Handler,
+		},
+		{
+			MethodName: "ListPortalConfigs",
+			Handler:    _AuthZService_ListPortalConfigs_Handler,
 		},
 		{
 			MethodName: "GetPortalConfig",

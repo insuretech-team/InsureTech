@@ -1,4 +1,4 @@
-KycKYCRejectionRequest:
+KYCRejectionRequest:
   type: object
   properties:
     kyc_verification_id:

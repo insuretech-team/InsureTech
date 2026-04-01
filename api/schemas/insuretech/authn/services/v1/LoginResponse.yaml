@@ -40,8 +40,7 @@ LoginResponse:
       type: string
       description: 'mfa_session_token: opaque 5-min token; pass back in VerifyTOTPRequest
         to get real session tokens.'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+    password_change_required:
+      type: boolean
   description: Response payload for login operation. Returns operation results and
     status.

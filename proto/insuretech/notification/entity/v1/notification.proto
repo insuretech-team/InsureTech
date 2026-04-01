@@ -399,6 +399,545 @@ message NotificationTemplate {
   // @inject_tag: gorm:"column:is_active;not null"
 }
 
+// PushDeviceToken stores mobile and web push registration tokens for each user.
+message PushDeviceToken {
+  option (insuretech.common.v1.table) = {
+    table_name: "push_device_tokens"
+    schema_name: "notification_schema"
+    migration_order: 65
+    is_table: true
+    comment: "Registered push device tokens for FCM/APNs/web push delivery"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string token_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "token_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - device token UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:token_id;not null"
+
+  string user_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "user_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Owner user ID"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_push_device_tokens_user_id"
+      }
+      index: {
+        index_name: "idx_push_device_tokens_user_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:user_id;not null"
+
+  string provider = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "provider"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      check_constraint: "provider IN ('FCM', 'APNS', 'WEBPUSH')"
+      comment: "Push provider"
+      index: {
+        index_name: "idx_push_device_tokens_provider"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:provider;not null"
+
+  string platform = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "platform"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      check_constraint: "platform IN ('android', 'ios', 'web')"
+      comment: "Client platform"
+      index: {
+        index_name: "idx_push_device_tokens_platform"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:platform;not null"
+
+  string device_token = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "device_token"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Provider-issued device token"
+      index: {
+        index_name: "idx_push_device_tokens_device_token"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:device_token;not null"
+
+  string device_id = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "device_id"
+      sql_type: "VARCHAR(255)"
+      comment: "App-specific device identifier"
+    }
+  ];
+  // @inject_tag: gorm:"column:device_id"
+
+  string app_id = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "app_id"
+      sql_type: "VARCHAR(255)"
+      comment: "Application identifier"
+    }
+  ];
+  // @inject_tag: gorm:"column:app_id"
+
+  bool is_active = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+      comment: "Whether this token should receive push notifications"
+      index: {
+        index_name: "idx_push_device_tokens_is_active"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  google.protobuf.Timestamp last_seen_at = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_seen_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Last heartbeat/update from the device"
+      index: {
+        index_name: "idx_push_device_tokens_last_seen_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:last_seen_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+// WebhookSubscription stores downstream subscribers for signed lifecycle fanout.
+message WebhookSubscription {
+  option (insuretech.common.v1.table) = {
+    table_name: "webhook_subscriptions"
+    schema_name: "notification_schema"
+    migration_order: 66
+    is_table: true
+    comment: "External subscribers that receive signed notification lifecycle webhooks"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string subscription_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "subscription_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - webhook subscription UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:subscription_id;not null"
+
+  string subscriber_name = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "subscriber_name"
+      sql_type: "VARCHAR(255)"
+      not_null: true
+      comment: "Human-readable subscriber name"
+    }
+  ];
+  // @inject_tag: gorm:"column:subscriber_name;not null"
+
+  string target_url = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "target_url"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Webhook callback URL"
+    }
+  ];
+  // @inject_tag: gorm:"column:target_url;not null"
+
+  string secret = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "secret"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "HMAC signing secret"
+    }
+  ];
+  // @inject_tag: gorm:"column:secret;not null"
+
+  repeated string event_types = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "event_types"
+      sql_type: "TEXT[]"
+      not_null: true
+      comment: "Lifecycle events this subscriber wants"
+      index: {
+        index_name: "idx_webhook_subscriptions_event_types"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:event_types;serializer:json"
+
+  repeated string topic_groups = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "topic_groups"
+      sql_type: "TEXT[]"
+      not_null: true
+      comment: "Topic groups this subscriber wants"
+      index: {
+        index_name: "idx_webhook_subscriptions_topic_groups"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:topic_groups;serializer:json"
+
+  repeated string topics = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "topics"
+      sql_type: "TEXT[]"
+      not_null: true
+      comment: "Specific source topics this subscriber wants"
+      index: {
+        index_name: "idx_webhook_subscriptions_topics"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:topics;serializer:json"
+
+  repeated string channels = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "channels"
+      sql_type: "TEXT[]"
+      not_null: true
+      comment: "Notification channels this subscriber wants"
+      index: {
+        index_name: "idx_webhook_subscriptions_channels"
+        index_type: INDEX_TYPE_GIN
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:channels;serializer:json"
+
+  int32 timeout_seconds = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "timeout_seconds"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "10"
+      check_constraint: "timeout_seconds > 0"
+      comment: "Per-request timeout in seconds"
+    }
+  ];
+  // @inject_tag: gorm:"column:timeout_seconds;not null"
+
+  int32 max_attempts = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "max_attempts"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "5"
+      check_constraint: "max_attempts > 0"
+      comment: "Maximum delivery attempts"
+    }
+  ];
+  // @inject_tag: gorm:"column:max_attempts;not null"
+
+  bool is_active = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+      comment: "Whether the subscription is active"
+      index: {
+        index_name: "idx_webhook_subscriptions_is_active"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  google.protobuf.Timestamp created_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+// WebhookDeliveryAttempt stores retryable outbound webhook deliveries.
+message WebhookDeliveryAttempt {
+  option (insuretech.common.v1.table) = {
+    table_name: "webhook_delivery_attempts"
+    schema_name: "notification_schema"
+    migration_order: 67
+    is_table: true
+    comment: "Retryable outbound webhook deliveries emitted by the notification service"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string attempt_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "attempt_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - webhook attempt UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:attempt_id;not null"
+
+  string subscription_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "subscription_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Target webhook subscription"
+      foreign_key: {
+        references_table: "webhook_subscriptions"
+        references_column: "subscription_id"
+        references_schema: "notification_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_webhook_delivery_attempts_subscription_id"
+      }
+      index: {
+        index_name: "idx_webhook_delivery_attempts_subscription_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:subscription_id;not null"
+
+  string notification_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "notification_id"
+      sql_type: "UUID"
+      comment: "Related notification ID when delivery came from a queued notification"
+      foreign_key: {
+        references_table: "notifications"
+        references_column: "notification_id"
+        references_schema: "notification_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_webhook_delivery_attempts_notification_id"
+      }
+      index: {
+        index_name: "idx_webhook_delivery_attempts_notification_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:notification_id"
+
+  string lifecycle_event = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "lifecycle_event"
+      sql_type: "VARCHAR(64)"
+      not_null: true
+      comment: "Lifecycle event name"
+      index: {
+        index_name: "idx_webhook_delivery_attempts_lifecycle_event"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:lifecycle_event;not null"
+
+  string source_topic = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "source_topic"
+      sql_type: "VARCHAR(255)"
+      comment: "Original business topic that led to the notification"
+    }
+  ];
+  // @inject_tag: gorm:"column:source_topic"
+
+  string payload = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "payload"
+      sql_type: "JSONB"
+      not_null: true
+      default_value: "'{}'::jsonb"
+      is_json: true
+      comment: "Serialized webhook payload"
+    }
+  ];
+  // @inject_tag: gorm:"column:payload;not null"
+
+  string status = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(20)"
+      not_null: true
+      default_value: "'QUEUED'"
+      check_constraint: "status IN ('QUEUED', 'SENDING', 'SENT', 'FAILED')"
+      comment: "Delivery attempt state"
+      index: {
+        index_name: "idx_webhook_delivery_attempts_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null"
+
+  int32 response_status = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "response_status"
+      sql_type: "INTEGER"
+      comment: "HTTP status returned by the subscriber"
+    }
+  ];
+  // @inject_tag: gorm:"column:response_status"
+
+  string response_body = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "response_body"
+      sql_type: "TEXT"
+      comment: "Response body captured for debugging"
+    }
+  ];
+  // @inject_tag: gorm:"column:response_body"
+
+  int32 retry_count = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "retry_count"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "0"
+      check_constraint: "retry_count >= 0"
+      comment: "Retry counter"
+    }
+  ];
+  // @inject_tag: gorm:"column:retry_count;not null"
+
+  string error_message = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "error_message"
+      sql_type: "TEXT"
+      comment: "Last delivery error"
+    }
+  ];
+  // @inject_tag: gorm:"column:error_message"
+
+  google.protobuf.Timestamp scheduled_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "scheduled_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Next scheduled attempt time"
+      index: {
+        index_name: "idx_webhook_delivery_attempts_scheduled_at"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp last_attempted_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "last_attempted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Last time an attempt was made"
+    }
+  ];
+  // @inject_tag: gorm:"column:last_attempted_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp created_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
 // NotificationPreference for user preferences (stored in users table as JSONB or separate table)
 message NotificationPreference {
   string user_id = 1;
@@ -413,4 +952,3 @@ message ChannelPreference {
   bool enabled = 2;
   repeated NotificationType excluded_types = 3; // Types to not receive on this channel
 }
-

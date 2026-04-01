@@ -13,6 +13,7 @@ import (
 	"time"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
@@ -81,6 +82,9 @@ func TestJWTInterceptor_SkipNoopAndParsePEM(t *testing.T) {
 	_, err = i.UnaryInterceptor()(context.Background(), "req", &grpc.UnaryServerInfo{FullMethod: "/skip"}, func(ctx context.Context, req interface{}) (interface{}, error) { return "ok", nil })
 	require.NoError(t, err)
 
+	_, err = i.UnaryInterceptor()(context.Background(), "req", &grpc.UnaryServerInfo{FullMethod: "/secure"}, func(ctx context.Context, req interface{}) (interface{}, error) { return "ok", nil })
+	require.Equal(t, codes.Unauthenticated, status.Code(err))
+
 	pubDER, err := x509.MarshalPKIXPublicKey(&priv.PublicKey)
 	require.NoError(t, err)
 	pemStr := string(pem.EncodeToMemory(&pem.Block{Type: "PUBLIC KEY", Bytes: pubDER}))
@@ -110,36 +114,17 @@ func TestJWTInterceptor_SkipNoopAndParsePEM(t *testing.T) {
 	require.Error(t, err)
 }
 
-func TestJWTInterceptor_InternalRoleManagementMethodsCanSkipJWT(t *testing.T) {
-	i := NewJWTInterceptor(newTestPublicKey(t), []string{
-		"/insuretech.authz.services.v1.AuthZService/ListRoles",
-		"/insuretech.authz.services.v1.AuthZService/AssignRole",
-		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
-	})
-
-	skipped := []string{
-		"/insuretech.authz.services.v1.AuthZService/ListRoles",
-		"/insuretech.authz.services.v1.AuthZService/AssignRole",
-		"/insuretech.authz.services.v1.AuthZService/CreatePolicyRule",
-	}
-	for _, method := range skipped {
-		_, err := i.UnaryInterceptor()(context.Background(), "req", &grpc.UnaryServerInfo{FullMethod: method}, func(ctx context.Context, req interface{}) (interface{}, error) {
-			return "ok", nil
-		})
-		require.NoError(t, err, method)
-	}
-}
-
 func TestJWTInterceptor_TrustedInternalServiceCanSkipJWT(t *testing.T) {
+	t.Setenv("INTERNAL_RPC_SHARED_SECRET", "test-secret")
 	i := NewJWTInterceptor(newTestPublicKey(t), nil)
 
-	ctx := metadata.NewIncomingContext(context.Background(), metadata.Pairs("x-internal-service", "gateway"))
+	ctx := signedInternalContext(t, "gateway")
 	_, err := i.UnaryInterceptor()(ctx, "req", &grpc.UnaryServerInfo{FullMethod: "/insuretech.authz.services.v1.AuthZService/AssignRole"}, func(ctx context.Context, req interface{}) (interface{}, error) {
 		return "ok", nil
 	})
 	require.NoError(t, err)
 
-	unknownCtx := metadata.NewIncomingContext(context.Background(), metadata.Pairs("x-internal-service", "unknown-service"))
+	unknownCtx := signedInternalContext(t, "unknown-service")
 	_, err = i.UnaryInterceptor()(unknownCtx, "req", &grpc.UnaryServerInfo{FullMethod: "/insuretech.authz.services.v1.AuthZService/AssignRole"}, func(ctx context.Context, req interface{}) (interface{}, error) {
 		return "ok", nil
 	})
@@ -166,4 +151,12 @@ func newTestPublicKey(t *testing.T) *rsa.PublicKey {
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	require.NoError(t, err)
 	return &priv.PublicKey
+}
+
+func signedInternalContext(t *testing.T, serviceName string) context.Context {
+	t.Helper()
+	ctx := internalrpc.OutgoingContext(context.Background(), serviceName)
+	outgoing, ok := metadata.FromOutgoingContext(ctx)
+	require.True(t, ok)
+	return metadata.NewIncomingContext(context.Background(), outgoing.Copy())
 }

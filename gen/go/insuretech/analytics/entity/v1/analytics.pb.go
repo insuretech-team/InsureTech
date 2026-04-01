@@ -142,12 +142,12 @@ type BusinessMetrics struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	MetricId   string                 `protobuf:"bytes,1,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty"`                         // @inject_tag: gorm:"primaryKey;column:metric_id;not null"
-	MetricName string                 `protobuf:"bytes,2,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty"`                   // @inject_tag: gorm:"column:metric_name;not null"
-	Type       MetricType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.MetricType" json:"type,omitempty"` // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	Value      float64                `protobuf:"fixed64,4,opt,name=value,proto3" json:"value,omitempty"`                                             // @inject_tag: gorm:"column:value;not null"
-	Dimensions map[string]string      `protobuf:"bytes,5,rep,name=dimensions,proto3" json:"dimensions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3"`
-	RecordedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=recorded_at,json=recordedAt,proto3" json:"recorded_at,omitempty"` // @inject_tag: gorm:"column:recorded_at;not null;serializer:proto_timestamp"
+	MetricId   string                 `protobuf:"bytes,1,opt,name=metric_id,json=metricId,proto3" json:"metric_id,omitempty" gorm:"primaryKey;column:metric_id;not null"`
+	MetricName string                 `protobuf:"bytes,2,opt,name=metric_name,json=metricName,proto3" json:"metric_name,omitempty" gorm:"column:metric_name;not null"`
+	Type       MetricType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.MetricType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	Value      float64                `protobuf:"fixed64,4,opt,name=value,proto3" json:"value,omitempty" gorm:"column:value;not null"`
+	Dimensions map[string]string      `protobuf:"bytes,5,rep,name=dimensions,proto3" json:"dimensions,omitempty" protobuf_key:"bytes,1,opt,name=key,proto3" protobuf_val:"bytes,2,opt,name=value,proto3" gorm:"column:dimensions"`
+	RecordedAt *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=recorded_at,json=recordedAt,proto3" json:"recorded_at,omitempty" gorm:"column:recorded_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *BusinessMetrics) Reset() {
@@ -230,12 +230,12 @@ type Dashboard struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	DashboardId   string                 `protobuf:"bytes,1,opt,name=dashboard_id,json=dashboardId,proto3" json:"dashboard_id,omitempty"`
-	DashboardName string                 `protobuf:"bytes,2,opt,name=dashboard_name,json=dashboardName,proto3" json:"dashboard_name,omitempty"`
-	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
-	Layout        string                 `protobuf:"bytes,4,opt,name=layout,proto3" json:"layout,omitempty"` // JSON layout configuration
-	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`
-	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`
+	DashboardId   string                 `protobuf:"bytes,1,opt,name=dashboard_id,json=dashboardId,proto3" json:"dashboard_id,omitempty" gorm:"column:dashboard_id"`
+	DashboardName string                 `protobuf:"bytes,2,opt,name=dashboard_name,json=dashboardName,proto3" json:"dashboard_name,omitempty" gorm:"column:dashboard_name"`
+	Description   string                 `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	Layout        string                 `protobuf:"bytes,4,opt,name=layout,proto3" json:"layout,omitempty" gorm:"column:layout"` // JSON layout configuration
+	CreatedAt     *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;serializer:proto_timestamp"`
+	UpdatedAt     *timestamppb.Timestamp `protobuf:"bytes,6,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;serializer:proto_timestamp"`
 }
 
 func (x *Dashboard) Reset() {
@@ -319,17 +319,17 @@ type Report struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	ReportId    string                 `protobuf:"bytes,1,opt,name=report_id,json=reportId,proto3" json:"report_id,omitempty"`                               // @inject_tag: gorm:"primaryKey;column:report_id;not null"
-	ReportName  string                 `protobuf:"bytes,2,opt,name=report_name,json=reportName,proto3" json:"report_name,omitempty"`                         // @inject_tag: gorm:"column:report_name;not null"
-	Type        ReportType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.ReportType" json:"type,omitempty"`       // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
-	PeriodStart *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty"`                      // @inject_tag: gorm:"column:period_start;not null;serializer:proto_timestamp"
-	PeriodEnd   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty"`                            // @inject_tag: gorm:"column:period_end;not null;serializer:proto_timestamp"
-	ReportData  string                 `protobuf:"bytes,6,opt,name=report_data,json=reportData,proto3" json:"report_data,omitempty"`                         // @inject_tag: gorm:"column:report_data;not null"
-	ReportUrl   string                 `protobuf:"bytes,7,opt,name=report_url,json=reportUrl,proto3" json:"report_url,omitempty"`                            // @inject_tag: gorm:"column:report_url"
-	Status      ReportStatus           `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.analytics.entity.v1.ReportStatus" json:"status,omitempty"` // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	GeneratedBy string                 `protobuf:"bytes,9,opt,name=generated_by,json=generatedBy,proto3" json:"generated_by,omitempty"`                      // @inject_tag: gorm:"column:generated_by"
-	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                           // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                           // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+	ReportId    string                 `protobuf:"bytes,1,opt,name=report_id,json=reportId,proto3" json:"report_id,omitempty" gorm:"primaryKey;column:report_id;not null"`
+	ReportName  string                 `protobuf:"bytes,2,opt,name=report_name,json=reportName,proto3" json:"report_name,omitempty" gorm:"column:report_name;not null"`
+	Type        ReportType             `protobuf:"varint,3,opt,name=type,proto3,enum=insuretech.analytics.entity.v1.ReportType" json:"type,omitempty" gorm:"column:type;not null;serializer:proto_enum"`
+	PeriodStart *timestamppb.Timestamp `protobuf:"bytes,4,opt,name=period_start,json=periodStart,proto3" json:"period_start,omitempty" gorm:"column:period_start;not null;serializer:proto_timestamp"`
+	PeriodEnd   *timestamppb.Timestamp `protobuf:"bytes,5,opt,name=period_end,json=periodEnd,proto3" json:"period_end,omitempty" gorm:"column:period_end;not null;serializer:proto_timestamp"`
+	ReportData  string                 `protobuf:"bytes,6,opt,name=report_data,json=reportData,proto3" json:"report_data,omitempty" gorm:"column:report_data;not null"`
+	ReportUrl   string                 `protobuf:"bytes,7,opt,name=report_url,json=reportUrl,proto3" json:"report_url,omitempty" gorm:"column:report_url"`
+	Status      ReportStatus           `protobuf:"varint,8,opt,name=status,proto3,enum=insuretech.analytics.entity.v1.ReportStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	GeneratedBy string                 `protobuf:"bytes,9,opt,name=generated_by,json=generatedBy,proto3" json:"generated_by,omitempty" gorm:"column:generated_by"`
+	CreatedAt   *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt   *timestamppb.Timestamp `protobuf:"bytes,11,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
 }
 
 func (x *Report) Reset() {

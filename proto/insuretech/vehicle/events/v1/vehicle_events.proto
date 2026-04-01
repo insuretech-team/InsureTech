@@ -1,0 +1,71 @@
+syntax = "proto3";
+
+package insuretech.vehicle.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/vehicle/events/v1;vehicleeventsv1";
+option csharp_namespace = "Insuretech.Vehicle.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/vehicle/entity/v1/vehicle.proto";
+
+// VehicleCreatedEvent is emitted when a new vehicle model is created
+message VehicleCreatedEvent {
+  string event_id = 1;
+  string vehicle_id = 2;
+  string model = 3;
+  entity.v1.VehicleType type = 4;
+  int64 price = 5;
+  string manufacturer = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+// VehicleUpdatedEvent is emitted when a vehicle is updated
+message VehicleUpdatedEvent {
+  string event_id = 1;
+  string vehicle_id = 2;
+  string model = 3;
+  repeated string changed_fields = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// VehicleDeletedEvent is emitted when a vehicle is deleted
+message VehicleDeletedEvent {
+  string event_id = 1;
+  string vehicle_id = 2;
+  string model = 3;
+  bool permanent = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+}
+
+// VehicleRegisteredEvent is emitted when a vehicle is registered
+message VehicleRegisteredEvent {
+  string event_id = 1;
+  string registration_id = 2;
+  string vehicle_id = 3;
+  string owner_id = 4;
+  string registration_number = 5;
+  int32 registration_year = 6;
+  string registration_state = 7;
+  google.protobuf.Timestamp registered_at = 8;
+}
+
+// PremiumCalculatedEvent is emitted when premium is calculated
+message PremiumCalculatedEvent {
+  string event_id = 1;
+  string calculation_id = 2;
+  string registration_id = 3;
+  string registration_number = 4;
+  int64 base_premium_amount = 5;
+  int64 tp_premium_1_year_amount = 6;
+  int64 comp_premium_1_year_amount = 7;
+  google.protobuf.Timestamp calculated_at = 8;
+}
+
+// VehicleRegistrationUpdatedEvent is emitted when registration is updated
+message VehicleRegistrationUpdatedEvent {
+  string event_id = 1;
+  string registration_id = 2;
+  entity.v1.RegistrationStatus old_status = 3;
+  entity.v1.RegistrationStatus new_status = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}

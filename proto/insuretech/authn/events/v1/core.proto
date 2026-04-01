@@ -16,6 +16,8 @@ message UserRegisteredEvent {
   google.protobuf.Timestamp timestamp = 5;
   string ip_address = 6;
   string device_type = 7;
+  string portal = 8;
+  string tenant_id = 9;
 }
 
 // Event: User logged in
@@ -181,9 +183,9 @@ message EmailVerifiedEvent {
 message EmailVerificationSentEvent {
   string event_id = 1;
   string user_id = 2;
-  string email_masked = 3;   // Masked: u***@domain.com
+  string email_masked = 3; // Masked: u***@domain.com
   string otp_id = 4;
-  string type = 5;           // email_verification, email_login, password_reset_email
+  string type = 5; // email_verification, email_login, password_reset_email
   google.protobuf.Timestamp timestamp = 6;
   string ip_address = 7;
 }
@@ -193,8 +195,8 @@ message EmailLoginSucceededEvent {
   string event_id = 1;
   string user_id = 2;
   string session_id = 3;
-  string email_masked = 4;   // Masked for audit logs
-  string user_type = 5;      // BUSINESS_BENEFICIARY or SYSTEM_USER
+  string email_masked = 4; // Masked for audit logs
+  string user_type = 5; // BUSINESS_BENEFICIARY or SYSTEM_USER
   google.protobuf.Timestamp timestamp = 6;
   string ip_address = 7;
   string user_agent = 8;

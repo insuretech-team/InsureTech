@@ -1,0 +1,106 @@
+LifeProduct:
+  type: object
+  properties:
+    product_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:product_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    product_code:
+      type: string
+      description: '@inject_tag: gorm:"column:product_code;not null"'
+      x-unique: true
+    product_name:
+      type: string
+      description: '@inject_tag: gorm:"column:product_name;not null"'
+    product_type:
+      $ref: '#/components/schemas/LifeProductType'
+      description: '@inject_tag: gorm:"column:product_type;not null;serializer:proto_enum"'
+    description:
+      type: string
+      description: '@inject_tag: gorm:"column:description"'
+    base_rate:
+      type: string
+      format: int64
+      description: "Base premium rate\n @inject_tag: gorm:\"column:base_rate;not null\""
+    age_addition_config:
+      $ref: '#/components/schemas/AgeAdditionConfig'
+      description: "Age addition configuration\n @inject_tag: gorm:\"column:age_addition_config;not\
+        \ null;serializer:json\""
+    condition_multipliers_json:
+      type: string
+      description: "Condition multipliers\n @inject_tag: gorm:\"column:condition_multipliers_json;not\
+        \ null\""
+    bonus_config_json:
+      type: string
+      description: "Bonus/discount configuration\n @inject_tag: gorm:\"column:bonus_config_json\""
+    min_sum_assured:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:min_sum_assured;not null"'
+    max_sum_assured:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:max_sum_assured;not null"'
+    min_entry_age:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:min_entry_age;not null"'
+      default: 18
+    max_entry_age:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_entry_age;not null"'
+      default: 65
+    min_policy_term:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:min_policy_term;not null"'
+      default: 5
+    max_policy_term:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_policy_term;not null"'
+      default: 30
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "LifeProduct represents a life insurance product\n Maps to 'life_products'\
+    \ table in life_schema"
+  required:
+  - product_id
+  - product_code
+  - product_name
+  - product_type
+  - base_rate
+  - age_addition_config
+  - condition_multipliers_json
+  - min_sum_assured
+  - max_sum_assured
+  - min_entry_age
+  - max_entry_age
+  - min_policy_term
+  - max_policy_term
+  - is_active
+  - created_at
+  - updated_at

@@ -250,21 +250,21 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">Refund for policy cancellation (FR-093 to FR-097)</div>
+            <div class="description">Refund for policy cancellation or paid-order reversal after insurer/proposal rejection.</div>
         </div>
         
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">18</div>
+                    <div class="stat-value">20</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">7</div>
+                    <div class="stat-value">6</div>
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">11</div>
+                    <div class="stat-value">14</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -316,16 +316,16 @@
             
             <tr>
                 <td class="field-name">
-                    🔴 <strong>policy_id</strong>
+                    ⚪ <strong>policy_id</strong>
                 </td>
                 <td class="field-type">
                     <code>string</code>
                     
                     
                 </td>
-                <td class="field-nullable">NO</td>
+                <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">@inject_tag: gorm:"column:policy_id;not null"</td>
+                <td class="field-description">@inject_tag: gorm:"column:policy_id"</td>
             </tr>
             
             <tr>
@@ -537,6 +537,34 @@
                 <td class="field-nullable">NO</td>
                 <td class="field-constraints"><small>—</small></td>
                 <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>order_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:order_id"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>proposal_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:proposal_id"</td>
             </tr>
             
                 </tbody>

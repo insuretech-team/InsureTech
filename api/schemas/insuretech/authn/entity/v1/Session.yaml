@@ -70,7 +70,7 @@ Session:
       type: string
       description: '@inject_tag: gorm:"column:device_name"'
     device_type:
-      $ref: '#/components/schemas/AuthnDeviceType'
+      $ref: '#/components/schemas/DeviceType'
       description: '@inject_tag: gorm:"column:device_type;not null;serializer:proto_enum"'
     created_at:
       type: string

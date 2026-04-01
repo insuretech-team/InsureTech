@@ -1,0 +1,104 @@
+{
+  "id": "fire_proposal",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "FIRE & ALLIED PERILS INSURANCE PROPOSAL FORM" },
+    { "type": "subtitle", "text": "(To be submitted in duplicate)", "italic": true, "size": 9 },
+    { "type": "divider" },
+    {
+      "type": "heading", "text": "I.  PROPOSER / INSURED DETAILS", "level": 1
+    },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Full Name / Company Name", "value": "{{ proposer_name }}" },
+        { "number": "2.", "label": "ID Card / Company Registration No.", "value": "{{ id_card_number }}" },
+        { "number": "3.", "label": "Phone Number & Mobile", "value": "{{ phone_number }}" },
+        { "number": "4.", "label": "Email Address", "value": "{{ email_address }}" },
+        { "number": "5.", "label": "Occupation / Nature of Business", "value": "{{ occupation }}" },
+        { "number": "6.", "label": "Years in Business", "value": "{{ years_in_business }}" },
+        { "number": "7.", "label": "Correspondence Address", "value": "{{ address }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  PROPERTY / RISK DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Property Type", "value": "{{ property_type }}" },
+        { "number": "2.", "label": "Year of Construction", "value": "{{ year_of_construction }}" },
+        { "number": "3.", "label": "No. of Storeys", "value": "{{ number_of_storeys }}" },
+        { "number": "4.", "label": "Total Floor Area (sq m)", "value": "{{ floor_area_sqm }}" },
+        { "number": "5.", "label": "Wall Construction", "value": "{{ wall_construction }}" },
+        { "number": "6.", "label": "Roof Construction", "value": "{{ roof_construction }}" },
+        { "number": "7.", "label": "Occupancy", "value": "{{ occupancy }}" },
+        { "number": "8.", "label": "Is property rented?", "value": "{{ is_rented }}" },
+        { "number": "9.", "label": "Risk / Property Address", "value": "{{ risk_address }}" }
+      ]
+    },
+    { "type": "heading", "text": "III.  SUM INSURED DETAILS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Item Description", "Sum Insured (Tk.)", "Basis of Valuation"],
+      "rows_key": "sum_insured_items",
+      "columns": ["description", "sum_insured", "basis"],
+      "col_widths": [2.96, 1.75, 1.75]
+    },
+    { "type": "heading", "text": "IV.  EXTENSIONS / ALLIED PERILS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Peril / Extension", "Required (Y/N)", "Sum Insured (Tk.)"],
+      "rows_key": "extensions",
+      "columns": ["peril", "required", "sum_insured"],
+      "col_widths": [3.2, 1.43, 1.83]
+    },
+    { "type": "heading", "text": "V.  LOSS HISTORY (Last 5 Years)", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Any losses in last 5 years?", "value": "{{ has_previous_losses }}" },
+        { "number": "2.", "label": "Number of Claims", "value": "{{ number_of_claims }}" },
+        { "number": "3.", "label": "Total Loss Amount (Tk.)", "value": "{{ total_loss_amount }}" }
+      ]
+    },
+    { "type": "heading", "text": "VI.  PREMIUM SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Coverage Period From", "value": "{{ coverage_start_date }}" },
+        { "number": "", "label": "Coverage Period To", "value": "{{ coverage_end_date }}" },
+        { "number": "", "label": "Basic Fire Premium (Tk.)", "value": "{{ basic_premium }}" },
+        { "number": "", "label": "Allied Perils Premium (Tk.)", "value": "{{ allied_perils_premium }}" },
+        { "number": "", "label": "Stamp Duty (Tk.)", "value": "{{ stamp_duty }}" },
+        { "number": "", "label": "VAT (7%) (Tk.)", "value": "{{ vat_amount }}" },
+        { "number": "", "label": "TOTAL PREMIUM (Tk.)", "value": "{{ total_premium }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/We hereby declare that the information provided in this proposal form is true, complete and accurate. I/We understand that any misrepresentation or non-disclosure of material facts may invalidate the policy. I/We consent to the collection and use of personal data for insurance processing purposes."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer / Insured Signature & Date", "name": "{{ proposer_name }}" },
+        { "label": "Agent / Broker Signature & Date", "name": "{{ agent_name }}" },
+        { "label": "For & On Behalf of Insurer", "name": "" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Proposal Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

@@ -65,4 +65,8 @@ Quotation:
     rejection_reason:
       type: string
       description: '@inject_tag: gorm:"column:rejection_reason"'
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
   description: Quotation represents a B2B or B2C insurance quote request

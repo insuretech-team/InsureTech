@@ -34,8 +34,8 @@ message OTP {
   string user_id = 2 [ (insuretech.common.v1.column) = {
     column_name : "user_id"
     sql_type : "UUID"
-    not_null : true
-    comment : "Associated user UUID"
+    not_null : false
+    comment : "Associated user UUID — nullable because OTP is sent before login (user unknown at send time)"
     foreign_key : {
       references_table : "users"
       references_column : "user_id"
@@ -44,7 +44,7 @@ message OTP {
     }
     index : {index_name : "idx_otps_user_id" index_type : INDEX_TYPE_BTREE}
   } ];
-  // @inject_tag: gorm:"column:user_id;not null"
+  // @inject_tag: gorm:"column:user_id"
 
   string otp_hash = 3 [ (insuretech.common.v1.column) = {
     column_name : "otp_hash"
@@ -142,8 +142,8 @@ message OTP {
 
   string sender_id = 14 [ (insuretech.common.v1.column) = {
     column_name : "sender_id"
-    sql_type : "VARCHAR(11)"
-    comment : "Alphanumeric sender ID (masking) e.g. LABAIDINS"
+    sql_type : "VARCHAR(64)"
+    comment : "Alphanumeric sender ID (masking/non-masking) e.g. LIFEPLUSBDBRAND"
   } ];
   // @inject_tag: gorm:"column:sender_id"
 

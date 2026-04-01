@@ -251,8 +251,8 @@
     <div class="container">
         <div class="card">
             <div class="description">Register Email User Request
- Only for user_type: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or
- B2B_ORG_ADMIN
+ Only for user_type: BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER,
+ AGENT, or B2B_ORG_ADMIN
  Email is REQUIRED. Triggers an email verification OTP automatically.</div>
         </div>
         
@@ -328,7 +328,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN</td>
+                <td class="field-description">BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN</td>
             </tr>
             
             <tr>
@@ -370,7 +370,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Optional for business users</td>
+                <td class="field-description">Optional for business users. Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.</td>
             </tr>
             
                 </tbody>

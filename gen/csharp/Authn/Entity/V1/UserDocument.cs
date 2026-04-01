@@ -27,7 +27,7 @@ namespace Insuretech.Authn.Entity.V1 {
             "Ci5pbnN1cmV0ZWNoL2F1dGhuL2VudGl0eS92MS91c2VyX2RvY3VtZW50LnBy",
             "b3RvEhppbnN1cmV0ZWNoLmF1dGhuLmVudGl0eS52MRofZ29vZ2xlL3Byb3Rv",
             "YnVmL3RpbWVzdGFtcC5wcm90bxodaW5zdXJldGVjaC9jb21tb24vdjEvZGIu",
-            "cHJvdG8i9wkKDFVzZXJEb2N1bWVudBJdChB1c2VyX2RvY3VtZW50X2lkGAEg",
+            "cHJvdG8i+goKDFVzZXJEb2N1bWVudBJdChB1c2VyX2RvY3VtZW50X2lkGAEg",
             "ASgJQjOStRgvChB1c2VyX2RvY3VtZW50X2lkEgRVVUlEGAEoAToRZ2VuX3Jh",
             "bmRvbV91dWlkKClSDnVzZXJEb2N1bWVudElkEpEBCgd1c2VyX2lkGAIgASgJ",
             "QniStRh0Cgd1c2VyX2lkEgRVVUlEGAFKPgoFdXNlcnMSB3VzZXJfaWQaDGF1",
@@ -45,27 +45,30 @@ namespace Insuretech.Authn.Entity.V1 {
             "aW9uX3N0YXR1cxILVkFSQ0hBUig1MCkYAToJJ1BFTkRJTkcnUhJ2ZXJpZmlj",
             "YXRpb25TdGF0dXMSYwoLdmVyaWZpZWRfYnkYByABKAlCQpK1GD4KC3Zlcmlm",
             "aWVkX2J5EgRVVUlEWilGb3JlaWduIGtleSB0byBhdXRobl9zY2hlbWEudXNl",
-            "cnMgKGFkbWluKVIKdmVyaWZpZWRCeRJoCgt2ZXJpZmllZF9hdBgIIAEoCzIa",
-            "Lmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCK5K1GCcKC3ZlcmlmaWVkX2F0",
-            "EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVSCnZlcmlmaWVkQXQSfgoKY3Jl",
-            "YXRlZF9hdBgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCQ5K1",
-            "GD8KCmNyZWF0ZWRfYXQSGFRJTUVTVEFNUCBXSVRIIFRJTUUgWk9ORRgBOhFD",
-            "VVJSRU5UX1RJTUVTVEFNUGABaAFSCWNyZWF0ZWRBdBJ8Cgp1cGRhdGVkX2F0",
-            "GAogASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJBkrUYPQoKdXBk",
-            "YXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJFTlRf",
-            "VElNRVNUQU1QYAFSCXVwZGF0ZWRBdDpVirUYUQoPdXNlcnNfZG9jdW1lbnRz",
-            "EgxhdXRobl9zY2hlbWEYYCABKiZMaW5rIHRhYmxlIGZvciB1c2VyIHVwbG9h",
-            "ZGVkIGRvY3VtZW50czABOAFAAUKNAgoeY29tLmluc3VyZXRlY2guYXV0aG4u",
-            "ZW50aXR5LnYxQhFVc2VyRG9jdW1lbnRQcm90b1ABWk1naXRodWIuY29tL25l",
-            "d2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL2F1dGhu",
-            "L2VudGl0eS92MTtlbnRpdHl2MaICA0lBRaoCGkluc3VyZXRlY2guQXV0aG4u",
-            "RW50aXR5LlYxygIaSW5zdXJldGVjaFxBdXRoblxFbnRpdHlcVjHiAiZJbnN1",
-            "cmV0ZWNoXEF1dGhuXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCHUluc3VyZXRl",
-            "Y2g6OkF1dGhuOjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "cnMgKGFkbWluKVIKdmVyaWZpZWRCeRKAAQoQcmVqZWN0aW9uX3JlYXNvbhgL",
+            "IAEoCUJVkrUYUQoQcmVqZWN0aW9uX3JlYXNvbhIEVEVYVFo3UmVhc29uIGZv",
+            "ciByZWplY3Rpb24gaWYgdmVyaWZpY2F0aW9uX3N0YXR1cyBpcyBSRUpFQ1RF",
+            "RFIPcmVqZWN0aW9uUmVhc29uEmgKC3ZlcmlmaWVkX2F0GAggASgLMhouZ29v",
+            "Z2xlLnByb3RvYnVmLlRpbWVzdGFtcEIrkrUYJwoLdmVyaWZpZWRfYXQSGFRJ",
+            "TUVTVEFNUCBXSVRIIFRJTUUgWk9ORVIKdmVyaWZpZWRBdBJ+CgpjcmVhdGVk",
+            "X2F0GAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEJDkrUYPwoK",
+            "Y3JlYXRlZF9hdBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FGAE6EUNVUlJF",
+            "TlRfVElNRVNUQU1QYAFoAVIJY3JlYXRlZEF0EnwKCnVwZGF0ZWRfYXQYCiAB",
+            "KAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQkGStRg9Cgp1cGRhdGVk",
+            "X2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkUYAToRQ1VSUkVOVF9USU1F",
+            "U1RBTVBgAVIJdXBkYXRlZEF0OlWKtRhRCg91c2Vyc19kb2N1bWVudHMSDGF1",
+            "dGhuX3NjaGVtYRhgIAEqJkxpbmsgdGFibGUgZm9yIHVzZXIgdXBsb2FkZWQg",
+            "ZG9jdW1lbnRzMAE4AUABQo0CCh5jb20uaW5zdXJldGVjaC5hdXRobi5lbnRp",
+            "dHkudjFCEVVzZXJEb2N1bWVudFByb3RvUAFaTWdpdGh1Yi5jb20vbmV3YWdl",
+            "LXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gvYXV0aG4vZW50",
+            "aXR5L3YxO2VudGl0eXYxogIDSUFFqgIaSW5zdXJldGVjaC5BdXRobi5FbnRp",
+            "dHkuVjHKAhpJbnN1cmV0ZWNoXEF1dGhuXEVudGl0eVxWMeICJkluc3VyZXRl",
+            "Y2hcQXV0aG5cRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIdSW5zdXJldGVjaDo6",
+            "QXV0aG46OkVudGl0eTo6VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Entity.V1.UserDocument), global::Insuretech.Authn.Entity.V1.UserDocument.Parser, new[]{ "UserDocumentId", "UserId", "DocumentTypeId", "PolicyId", "FileUrl", "VerificationStatus", "VerifiedBy", "VerifiedAt", "CreatedAt", "UpdatedAt" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Authn.Entity.V1.UserDocument), global::Insuretech.Authn.Entity.V1.UserDocument.Parser, new[]{ "UserDocumentId", "UserId", "DocumentTypeId", "PolicyId", "FileUrl", "VerificationStatus", "VerifiedBy", "RejectionReason", "VerifiedAt", "CreatedAt", "UpdatedAt" }, null, null, null, null)
           }));
     }
     #endregion
@@ -117,6 +120,7 @@ namespace Insuretech.Authn.Entity.V1 {
       fileUrl_ = other.fileUrl_;
       verificationStatus_ = other.verificationStatus_;
       verifiedBy_ = other.verifiedBy_;
+      rejectionReason_ = other.rejectionReason_;
       verifiedAt_ = other.verifiedAt_ != null ? other.verifiedAt_.Clone() : null;
       createdAt_ = other.createdAt_ != null ? other.createdAt_.Clone() : null;
       updatedAt_ = other.updatedAt_ != null ? other.updatedAt_.Clone() : null;
@@ -234,6 +238,21 @@ namespace Insuretech.Authn.Entity.V1 {
       }
     }
 
+    /// <summary>Field number for the "rejection_reason" field.</summary>
+    public const int RejectionReasonFieldNumber = 11;
+    private string rejectionReason_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:rejection_reason"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RejectionReason {
+      get { return rejectionReason_; }
+      set {
+        rejectionReason_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     /// <summary>Field number for the "verified_at" field.</summary>
     public const int VerifiedAtFieldNumber = 8;
     private global::Google.Protobuf.WellKnownTypes.Timestamp verifiedAt_;
@@ -301,6 +320,7 @@ namespace Insuretech.Authn.Entity.V1 {
       if (FileUrl != other.FileUrl) return false;
       if (VerificationStatus != other.VerificationStatus) return false;
       if (VerifiedBy != other.VerifiedBy) return false;
+      if (RejectionReason != other.RejectionReason) return false;
       if (!object.Equals(VerifiedAt, other.VerifiedAt)) return false;
       if (!object.Equals(CreatedAt, other.CreatedAt)) return false;
       if (!object.Equals(UpdatedAt, other.UpdatedAt)) return false;
@@ -318,6 +338,7 @@ namespace Insuretech.Authn.Entity.V1 {
       if (FileUrl.Length != 0) hash ^= FileUrl.GetHashCode();
       if (VerificationStatus.Length != 0) hash ^= VerificationStatus.GetHashCode();
       if (VerifiedBy.Length != 0) hash ^= VerifiedBy.GetHashCode();
+      if (RejectionReason.Length != 0) hash ^= RejectionReason.GetHashCode();
       if (verifiedAt_ != null) hash ^= VerifiedAt.GetHashCode();
       if (createdAt_ != null) hash ^= CreatedAt.GetHashCode();
       if (updatedAt_ != null) hash ^= UpdatedAt.GetHashCode();
@@ -379,6 +400,10 @@ namespace Insuretech.Authn.Entity.V1 {
         output.WriteRawTag(82);
         output.WriteMessage(UpdatedAt);
       }
+      if (RejectionReason.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(RejectionReason);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -429,6 +454,10 @@ namespace Insuretech.Authn.Entity.V1 {
         output.WriteRawTag(82);
         output.WriteMessage(UpdatedAt);
       }
+      if (RejectionReason.Length != 0) {
+        output.WriteRawTag(90);
+        output.WriteString(RejectionReason);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -459,6 +488,9 @@ namespace Insuretech.Authn.Entity.V1 {
       }
       if (VerifiedBy.Length != 0) {
         size += 1 + pb::CodedOutputStream.ComputeStringSize(VerifiedBy);
+      }
+      if (RejectionReason.Length != 0) {
+        size += 1 + pb::CodedOutputStream.ComputeStringSize(RejectionReason);
       }
       if (verifiedAt_ != null) {
         size += 1 + pb::CodedOutputStream.ComputeMessageSize(VerifiedAt);
@@ -501,6 +533,9 @@ namespace Insuretech.Authn.Entity.V1 {
       }
       if (other.VerifiedBy.Length != 0) {
         VerifiedBy = other.VerifiedBy;
+      }
+      if (other.RejectionReason.Length != 0) {
+        RejectionReason = other.RejectionReason;
       }
       if (other.verifiedAt_ != null) {
         if (verifiedAt_ == null) {
@@ -588,6 +623,10 @@ namespace Insuretech.Authn.Entity.V1 {
             input.ReadMessage(UpdatedAt);
             break;
           }
+          case 90: {
+            RejectionReason = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -654,6 +693,10 @@ namespace Insuretech.Authn.Entity.V1 {
               UpdatedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
             }
             input.ReadMessage(UpdatedAt);
+            break;
+          }
+          case 90: {
+            RejectionReason = input.ReadString();
             break;
           }
         }

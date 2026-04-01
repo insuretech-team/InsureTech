@@ -1,0 +1,204 @@
+{
+  "sections": [
+    {
+      "type": "paragraph",
+      "text": "Pragati Insurance Limited",
+      "bold": true,
+      "align": "center",
+      "font_size": 18
+    },
+    {
+      "type": "paragraph",
+      "text": "Head Office: Pragati Insurance Bhaban, 20-21 Kawran Bazar, Dhaka-1215\nTel: PABX: 9133680-2  |  Fax: 880-2-55013694\nE-mail: info@pragatiinsurance.com  |  Web: www.pragatiinsurance.com",
+      "align": "center",
+      "font_size": 9
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "title",
+      "text": "PROPOSAL FORM FOR OVERSEAS MEDICLAIM POLICY"
+    },
+    {
+      "type": "subtitle",
+      "text": "(BUSINESS AND HOLIDAYS)"
+    },
+    {
+      "type": "paragraph",
+      "text": "(To be submitted in original with two copies)\n(Available to persons in the age group 6 months to 79 years)",
+      "align": "center",
+      "italic": true,
+      "font_size": 10
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "paragraph",
+      "text": "THE OVERSEAS MEDICLAIM POLICY PROVIDES INDEMNITY FOR EXPENSES INCURRED FOR MEDICAL TREATMENT TO THE INSURED PERSON WHO TRAVELS ABROAD AS CORPORATE CLIENT, FOR ILLNESS, DISEASES CONTRACTED OR INJURY SUSTAINED DURING OVERSEAS TRAVEL AND WHICH IS PRIMARILY IN THE NATURE OF AN EMERGENCY AND WHICH IS NECESSARY TO BE UNDERTAKEN IMMEDIATELY, WITHOUT WHICH THE PROPOSER IS NOT ABLE TO LEAVE THE OVERSEAS COUNTRY UNDER MEDICAL ADVICE. THE ATTENTION OF THE PROPOSER IS DRAWN TO ITEM II (MEDICAL HISTORY) OF THE PROPOSAL FORM, ESPECIALLY IN RELATION TO PREVIOUS TREATMENT OF ILLNESS BY THE PROPOSER.",
+      "bold": true,
+      "font_size": 10
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "paragraph",
+      "text": "THE PROPOSAL FORM SHOULD BE COMPLETED TO THE BEST OF YOUR KNOWLEDGE AND BELIEF AND ALL MATERIAL FACTS * SHOULD BE DISCLOSED. FAILURE TO DO SO MAY NULLIFY COVER UNDER ANY POLICY ISSUED.\n\n* A material fact is one that is likely to influence the Insurer's acceptance or assessment of the proposal. You should consult Corporation/Company if you are in any doubt as to what constitutes a material fact.",
+      "bold": false,
+      "font_size": 10
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "heading",
+      "text": "I.  PROPOSER DETAILS",
+      "level": 1
+    },
+    {
+      "type": "key_value",
+      "rows": [
+        { "label": "1.  Name and status of proposer (in block letters) as in passport\n     State whether Mr. / Mrs. / Miss / Master", "value": "{{ proposer_name }}" },
+        { "label": "2.  Residence Address", "value": "{{ residence_address }}" },
+        { "label": "3.  Residence Telephone No. & Mobile No.", "value": "{{ phone_number }}" },
+        { "label": "4.  Proposer's Actual Occupation (specify)", "value": "{{ occupation }}" },
+        { "label": "5.  Office Name and Address, if any", "value": "{{ office_name_address }}" },
+        { "label": "6.  Office Telephone No.", "value": "{{ office_telephone }}" },
+        { "label": "7.  Age (in completed years)", "value": "{{ age }}" },
+        { "label": "8.  Passport Number (copy attached)", "value": "{{ passport_number }}" },
+        { "label": "9.  Plan Type\n     Schengen — Plan A (Worldwide excl. USA/Canada)\n     Schengen — Plan B (Worldwide incl. USA/Canada)\n     Non-Schengen — Plan A (Worldwide excl. USA/Canada)\n     Non-Schengen — Plan B (Worldwide incl. USA/Canada)", "value": "{{ plan_type }}" },
+        { "label": "10. Purpose of Trip\n     (Official / Holiday — conducted tour / Holiday — individual)", "value": "{{ trip_purpose }}" },
+        { "label": "11. Proposed date of departure from Bangladesh\n     (No extension can be granted)", "value": "{{ departure_date }}" },
+        { "label": "12. Number of days stay outside Bangladesh\n     (No extension can be granted)", "value": "{{ days_abroad }}" },
+        { "label": "13. Itinerary\n     (Countries and places to be visited with approximate days at each place)", "value": "{{ itinerary }}" },
+        { "label": "14. Name, Address and Registration No. of usual physician\n     Telephone No. (Consulting Room / Office / Residence)", "value": "{{ physician_name_address }}\n{{ physician_telephone }}" }
+      ]
+    },
+    {
+      "type": "page_break"
+    },
+    {
+      "type": "heading",
+      "text": "II.  MEDICAL HISTORY  —  TO BE COMPLETED BY THE PROPOSER / SPOUSE",
+      "level": 1
+    },
+    {
+      "type": "paragraph",
+      "text": "PLEASE ANSWER THE FOLLOWING QUESTIONS IN YES OR NO (A DASH IS NOT SUFFICIENT) AND GIVE FULL DETAILS.",
+      "bold": true,
+      "font_size": 11
+    },
+    {
+      "type": "key_value",
+      "rows": [
+        { "label": "1.  Are you in good health and free from physical and mental disease or infirmity?", "value": "{{ q1_good_health }}" },
+        { "label": "2(a). Any nervous, mental or psychiatric disease, slipped disc or other spinal disorder, fainting episode, blackout, fit or paralysis of any kind?", "value": "{{ q2a_nervous }}" },
+        { "label": "2(b). High blood pressure, heart diseases including ischemic heart disease, piles, varicose veins, other circulatory disorders or rheumatic fever?", "value": "{{ q2b_heart }}" },
+        { "label": "2(c). Hernia, any rheumatic or joint disease, urinary disease or diabetes?", "value": "{{ q2c_hernia }}" },
+        { "label": "2(d). Any respiratory or allergic disease, or any disorder of the stomach, bowel or gallbladder?", "value": "{{ q2d_respiratory }}" },
+        { "label": "2(e). Any other complaint requiring specialist's consultation or surgical or hospital treatment or investigations?", "value": "{{ q2e_specialist }}" },
+        { "label": "2(f). Any complaint or tendency that may necessitate such consultation or treatment in the future?", "value": "{{ q2f_future }}" },
+        { "label": "3.  Any additional facts affecting the proposed insurance which should be disclosed to Insurers?", "value": "{{ q3_additional_facts }}" },
+        { "label": "4.  Any intention of engaging in winter sports or pastimes rendering you liable to personal injury?", "value": "{{ q4_winter_sports }}" }
+      ]
+    },
+    {
+      "type": "paragraph",
+      "text": "5.  Give particulars of any other illness, disease or accident sustained during the 12 months preceding the first day of Insurance:",
+      "font_size": 11
+    },
+    {
+      "type": "table",
+      "headers": ["Nature of Illness / Disease and Treatment Received", "Date First Treated", "Name & Address of Attending Practitioner / Surgeon with Telephone No."],
+      "rows_key": "illness_history",
+      "columns": ["nature_of_illness", "date_first_treated", "practitioner_details"]
+    },
+    {
+      "type": "paragraph",
+      "text": "Please give details of any knowledge of any positive existence or presence of any ailment, sickness or injury which may require medical attention whilst on tour abroad:",
+      "font_size": 11
+    },
+    {
+      "type": "key_value",
+      "rows": [
+        { "label": "1.", "value": "{{ known_ailment_1 }}" },
+        { "label": "2.", "value": "{{ known_ailment_2 }}" },
+        { "label": "3.", "value": "{{ known_ailment_3 }}" },
+        { "label": "4.", "value": "{{ known_ailment_4 }}" }
+      ]
+    },
+    {
+      "type": "page_break"
+    },
+    {
+      "type": "heading",
+      "text": "I HEREBY DECLARE THAT:",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "1.  I will not be travelling against the advice of a physician.\n2.  I am not on a waiting list for any medical treatment.\n3.  I will not be travelling for the purpose of obtaining medical treatment.\n4.  I have not received a terminal prognosis for a medical condition before this day.",
+      "font_size": 11
+    },
+    {
+      "type": "paragraph",
+      "text": "I further declare and warrant that the above statements are true and complete. I consent to the insurers seeking medical information from any doctor who has at any time attended concerning anything which affects my physical or mental health, and I authorise the giving of such information as Van Ameyde UK Ltd. / Specialty Assist Ltd. and / or their Program Medical Advisor may require. I agree that this proposal shall form the basis of the contract should the insurance be effected.\n\nI am willing to accept the Policy, subject to the terms, exceptions and conditions prescribed by Corporation/ Company therein.",
+      "font_size": 11
+    },
+    {
+      "type": "signature_block",
+      "signatories": [
+        { "label": "Signature", "name": "{{ proposer_name }}" },
+        { "label": "Place", "name": "{{ signature_place }}" },
+        { "label": "Date (DD / MM / YY)", "name": "{{ signature_date }}" }
+      ]
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "heading",
+      "text": "List of Schengen Countries",
+      "level": 2
+    },
+    {
+      "type": "paragraph",
+      "text": "Austria, Belgium, Denmark, Finland, France, Germany, Iceland, Italy, Greece, Luxembourg, Netherlands, Norway, Portugal, Spain, Sweden, Estonia, Latvia, Lithuania, Poland, Czech Republic, Slovakia, Hungary, Slovenia, Malta, Cyprus, Switzerland and Liechtenstein",
+      "bold": true,
+      "font_size": 10,
+      "align": "center"
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "heading",
+      "text": "OVERSEAS MEDICLAIM POLICY (TRAVEL INSURANCE) — PRODUCT BENEFITS & LIMITATIONS",
+      "level": 1
+    },
+    {
+      "type": "table",
+      "headers": ["#", "Benefit / Coverage", "Limit"],
+      "rows_key": "product_benefits",
+      "columns": ["number", "benefit", "limit"]
+    },
+    {
+      "type": "paragraph",
+      "text": "NOTE: THE COMPANY WILL NOT BE LIABLE TO PROVIDE ANY ASSISTANCE WHICH ARISES DIRECTLY OR INDIRECTLY FROM ANY PRE-EXISTING MEDICAL CONDITION, SUICIDE OR ATTEMPTED SUICIDE, MENTAL ILLNESS, PREGNANCY OR CHILDBIRTH.",
+      "bold": true,
+      "font_size": 10
+    },
+    {
+      "type": "hr"
+    },
+    {
+      "type": "paragraph",
+      "text": "Proposal Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}",
+      "align": "center",
+      "font_size": 9,
+      "italic": true
+    }
+  ]
+}

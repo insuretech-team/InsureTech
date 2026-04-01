@@ -1,0 +1,68 @@
+name: Schema Drift Check
+
+on:
+  push:
+    branches: [main, develop]
+    paths:
+      - 'proto/**/*.proto'
+      - 'backend/inscore/db/migrations/**'
+  pull_request:
+    branches: [main, develop]
+    paths:
+      - 'proto/**/*.proto'
+      - 'backend/inscore/db/migrations/**'
+
+jobs:
+  schema-check:
+    runs-on: ubuntu-latest
+    
+    services:
+      postgres:
+        image: postgres:15
+        env:
+          POSTGRES_USER: testuser
+          POSTGRES_PASSWORD: testpass
+          POSTGRES_DB: insuretech_test
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd pg_isready
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: '1.25'
+
+      - name: Install Buf
+        uses: bufbuild/buf-setup-action@v1
+
+      - name: Generate Proto
+        run: |
+          # Clear any local plugin paths to force remote plugin usage
+          unset npm_config_prefix
+          unset npm_execpath
+          # Generate using only remote plugins
+          buf generate --template buf.gen.yaml
+
+      - name: Build dbx
+        run: |
+          go build -o backend/inscore/cmd/dbx/dbx ./backend/inscore/cmd/dbx
+
+      - name: Run Migrations (Strict Mode)
+        env:
+          DB_PRIMARY_DSN: "postgresql://testuser:testpass@localhost:5432/insuretech_test?sslmode=disable"
+        run: |
+          ./backend/inscore/cmd/dbx/dbx migrate --target=primary --strict
+
+      - name: Check for Schema Drift
+        env:
+          DB_PRIMARY_DSN: "postgresql://testuser:testpass@localhost:5432/insuretech_test?sslmode=disable"
+        run: |
+          # If strict mode passes, no drift was detected
+          echo "✅ No schema drift detected"

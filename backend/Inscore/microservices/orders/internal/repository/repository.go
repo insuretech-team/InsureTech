@@ -3,11 +3,13 @@
 // Hybrid pattern:
 //   - INSERT: map[string]any with raw Go types (string for enums, int64 for money, time.Time for timestamps)
 //   - READ:   raw SQL with orderScanRow (plain struct without proto fields)
-//             then convert with scanRowToProto() to construct proto Money and timestamps
+//     then convert with scanRowToProto() to construct proto Money and timestamps
 package repository
 
 import (
 	"context"
+	"database/sql"
+	"encoding/json"
 	"fmt"
 	"strings"
 	"time"
@@ -16,6 +18,7 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/domain"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	ordersv1 "github.com/newage-saint/insuretech/gen/go/insuretech/orders/entity/v1"
+	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/types/known/timestamppb"
 	"gorm.io/gorm"
 )
@@ -27,11 +30,21 @@ type OrderRepositoryImpl struct {
 	db *gorm.DB
 }
 
+type PurchaseOrderBootstrap struct {
+	BusinessID       string
+	ProductID        string
+	PlanID           string
+	RequestedBy      string
+	EstimatedPremium *commonv1.Money
+}
+
 var _ domain.OrderRepository = (*OrderRepositoryImpl)(nil)
 
 func NewOrderRepository(db *gorm.DB) *OrderRepositoryImpl {
 	return &OrderRepositoryImpl{db: db}
 }
+
+var orderProtoJSONUnmarshaler = protojson.UnmarshalOptions{DiscardUnknown: true}
 
 // ─── helpers ─────────────────────────────────────────────────────────────────
 
@@ -58,20 +71,20 @@ type orderScanRow struct {
 	UpdatedAt          time.Time  `gorm:"column:updated_at"`
 	PaidAt             *time.Time `gorm:"column:paid_at"`
 	// Phase-2 extended fields (fields 19–32)
-	InvoiceId          string     `gorm:"column:invoice_id"`
-	OrganisationId     string     `gorm:"column:organisation_id"`
-	IdempotencyKey     string     `gorm:"column:idempotency_key"`
-	CorrelationId      string     `gorm:"column:correlation_id"`
-	PaymentStatus      string     `gorm:"column:payment_status"`
-	BillingStatus      string     `gorm:"column:billing_status"`
-	FulfillmentStatus  string     `gorm:"column:fulfillment_status"`
-	ManualReviewReq    bool       `gorm:"column:manual_review_required"`
-	PaymentDueAt       *time.Time `gorm:"column:payment_due_at"`
-	CoverageStartAt    *time.Time `gorm:"column:coverage_start_at"`
-	CoverageEndAt      *time.Time `gorm:"column:coverage_end_at"`
-	ActorUserId        string     `gorm:"column:actor_user_id"`
-	Portal             string     `gorm:"column:portal"`
-	PurchaseOrderId    string     `gorm:"column:purchase_order_id"`
+	InvoiceId         string     `gorm:"column:invoice_id"`
+	OrganisationId    string     `gorm:"column:organisation_id"`
+	IdempotencyKey    string     `gorm:"column:idempotency_key"`
+	CorrelationId     string     `gorm:"column:correlation_id"`
+	PaymentStatus     string     `gorm:"column:payment_status"`
+	BillingStatus     string     `gorm:"column:billing_status"`
+	FulfillmentStatus string     `gorm:"column:fulfillment_status"`
+	ManualReviewReq   bool       `gorm:"column:manual_review_required"`
+	PaymentDueAt      *time.Time `gorm:"column:payment_due_at"`
+	CoverageStartAt   *time.Time `gorm:"column:coverage_start_at"`
+	CoverageEndAt     *time.Time `gorm:"column:coverage_end_at"`
+	ActorUserId       string     `gorm:"column:actor_user_id"`
+	Portal            string     `gorm:"column:portal"`
+	PurchaseOrderId   string     `gorm:"column:purchase_order_id"`
 }
 
 // scanRowToProto converts an orderScanRow to a proto Order by:
@@ -213,13 +226,13 @@ func (r *OrderRepositoryImpl) CreateOrder(ctx context.Context, input domain.Orde
 		"created_at":    now,
 		"updated_at":    now,
 		// Phase-2 extended fields
-		"payment_status":          input.PaymentStatus.String(),
-		"billing_status":          input.BillingStatus.String(),
-		"fulfillment_status":      input.FulfillmentStatus.String(),
-		"manual_review_required":  input.ManualReviewRequired,
-		"actor_user_id":           nullableUUID(input.ActorUserID),
-		"portal":                  input.Portal,
-		"correlation_id":          input.CorrelationID,
+		"payment_status":         input.PaymentStatus.String(),
+		"billing_status":         input.BillingStatus.String(),
+		"fulfillment_status":     input.FulfillmentStatus.String(),
+		"manual_review_required": input.ManualReviewRequired,
+		"actor_user_id":          nullableUUID(input.ActorUserID),
+		"portal":                 input.Portal,
+		"correlation_id":         input.CorrelationID,
 	}
 	// Only set nullable UUID columns when non-empty to avoid invalid UUID errors
 	if input.IdempotencyKey != "" {
@@ -582,4 +595,89 @@ func nullableUUID(s string) interface{} {
 		return nil
 	}
 	return s
+}
+
+func scanMoneyText(raw sql.NullString) *commonv1.Money {
+	if !raw.Valid || strings.TrimSpace(raw.String) == "" || raw.String == "null" {
+		return nil
+	}
+	var money commonv1.Money
+	if err := orderProtoJSONUnmarshaler.Unmarshal([]byte(raw.String), &money); err != nil {
+		_ = json.Unmarshal([]byte(raw.String), &money)
+	}
+	if money.Currency == "" && money.Amount == 0 && money.DecimalAmount == 0 {
+		return nil
+	}
+	return &money
+}
+
+func autoQuotationNumber(purchaseOrderID string) string {
+	compact := strings.ToUpper(strings.ReplaceAll(strings.TrimSpace(purchaseOrderID), "-", ""))
+	if len(compact) > 12 {
+		compact = compact[:12]
+	}
+	return "AUTO-PO-" + compact
+}
+
+func (r *OrderRepositoryImpl) GetPurchaseOrderBootstrap(ctx context.Context, purchaseOrderID string) (*PurchaseOrderBootstrap, error) {
+	var row struct {
+		BusinessID       string         `gorm:"column:business_id"`
+		ProductID        string         `gorm:"column:product_id"`
+		PlanID           string         `gorm:"column:plan_id"`
+		RequestedBy      string         `gorm:"column:requested_by"`
+		EstimatedPremium sql.NullString `gorm:"column:estimated_premium"`
+	}
+
+	err := r.db.WithContext(ctx).Raw(`
+		SELECT
+			COALESCE(business_id::text, '') AS business_id,
+			COALESCE(product_id::text, '') AS product_id,
+			COALESCE(plan_id::text, '') AS plan_id,
+			COALESCE(requested_by::text, '') AS requested_by,
+			COALESCE(estimated_premium::text, 'null') AS estimated_premium
+		FROM b2b_schema.purchase_orders
+		WHERE purchase_order_id = ? AND deleted_at IS NULL
+		LIMIT 1
+	`, purchaseOrderID).Scan(&row).Error
+	if err != nil {
+		return nil, fmt.Errorf("repository.GetPurchaseOrderBootstrap: %w", err)
+	}
+	if row.BusinessID == "" || row.PlanID == "" {
+		return nil, domain.ErrNotFound
+	}
+
+	return &PurchaseOrderBootstrap{
+		BusinessID:       row.BusinessID,
+		ProductID:        row.ProductID,
+		PlanID:           row.PlanID,
+		RequestedBy:      row.RequestedBy,
+		EstimatedPremium: scanMoneyText(row.EstimatedPremium),
+	}, nil
+}
+
+func (r *OrderRepositoryImpl) EnsureApprovedQuotation(ctx context.Context, purchaseOrderID, businessID, planID string) (string, error) {
+	number := autoQuotationNumber(purchaseOrderID)
+
+	var existingID string
+	if err := r.db.WithContext(ctx).Raw(`
+		SELECT quotation_id
+		FROM insurance_schema.quotations
+		WHERE quotation_number = ? AND deleted_at IS NULL
+		LIMIT 1
+	`, number).Scan(&existingID).Error; err != nil {
+		return "", fmt.Errorf("repository.EnsureApprovedQuotation lookup: %w", err)
+	}
+	if strings.TrimSpace(existingID) != "" {
+		return existingID, nil
+	}
+
+	quotationID := uuid.NewString()
+	if err := r.db.WithContext(ctx).Exec(`
+		INSERT INTO insurance_schema.quotations
+			(quotation_id, business_id, plan_id, status, quotation_number, created_at, updated_at)
+		VALUES (?, ?, ?, 'APPROVED', ?, NOW(), NOW())
+	`, quotationID, businessID, planID, number).Error; err != nil {
+		return "", fmt.Errorf("repository.EnsureApprovedQuotation insert: %w", err)
+	}
+	return quotationID, nil
 }

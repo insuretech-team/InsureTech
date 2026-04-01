@@ -6,7 +6,7 @@ OTP:
       description: '@inject_tag: gorm:"primaryKey;column:otp_id;not null"'
     user_id:
       type: string
-      description: '@inject_tag: gorm:"column:user_id;not null"'
+      description: '@inject_tag: gorm:"column:user_id"'
     otp_hash:
       type: string
       description: '@inject_tag: gorm:"column:otp_hash;not null"'

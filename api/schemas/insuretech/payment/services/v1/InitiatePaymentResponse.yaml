@@ -15,15 +15,12 @@ PaymentInitiatePaymentResponse:
     expires_at:
       type: string
       format: date-time
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
     provider:
       type: string
       description: "\u2500\u2500 Provider-specific response fields \u2500\u2500\u2500\
         \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
         \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
-        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\r\n sslcommerz, bkash, manual"
+        \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\n sslcommerz, bkash, manual"
     gateway_page_url:
       type: string
       description: Full redirect URL (SSLCommerz GW page)

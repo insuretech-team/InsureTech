@@ -6,12 +6,12 @@ import (
 
 // MetricDefinition represents a metric_definition
 type MetricDefinition struct {
-	Unit string `json:"unit,omitempty"`
-	Dimensions []string `json:"dimensions,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
-	UpdatedAt time.Time `json:"updated_at"`
+	Description string `json:"description,omitempty"`
+	Dimensions []string `json:"dimensions,omitempty"`
 	MetricId string `json:"metric_id"`
 	MetricName string `json:"metric_name"`
-	Description string `json:"description,omitempty"`
 	Type *MetricType `json:"type"`
+	Unit string `json:"unit,omitempty"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

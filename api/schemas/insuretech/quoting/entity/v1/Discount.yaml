@@ -1,0 +1,17 @@
+Discount:
+  type: object
+  properties:
+    discount_id:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    amount:
+      $ref: '#/components/schemas/Money'
+    percentage:
+      type: number
+      format: double
+    discount_type:
+      type: string
+  description: Discount represents an applied discount

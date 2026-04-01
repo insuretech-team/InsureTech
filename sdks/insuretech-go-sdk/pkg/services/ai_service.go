@@ -11,57 +11,32 @@ type AiService struct {
 }
 
 // Chat Chat with AI agent
-func (s *AiService) Chat(ctx context.Context, req *models.ChatRequest) (*models.ChatResponse, error) {
+func (s *AiService) Chat(ctx context.Context, req *models.ChatRequest) error {
 	path := "/v1/ai/chat"
-	var result models.ChatResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // EvaluateClaim Evaluate claim
-func (s *AiService) EvaluateClaim(ctx context.Context, req *models.ClaimEvaluationRequest) (*models.ClaimEvaluationResponse, error) {
+func (s *AiService) EvaluateClaim(ctx context.Context, req *models.ClaimEvaluationRequest) error {
 	path := "/v1/ai/claims:evaluate"
-	var result models.ClaimEvaluationResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// AssessRisk Assess risk
-func (s *AiService) AssessRisk(ctx context.Context, req *models.RiskAssessmentRequest) (*models.RiskAssessmentResponse, error) {
-	path := "/v1/ai/risk:assess"
-	var result models.RiskAssessmentResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // AnalyzeDocument Analyze document
-func (s *AiService) AnalyzeDocument(ctx context.Context, req *models.DocumentAnalysisRequest) (*models.DocumentAnalysisResponse, error) {
+func (s *AiService) AnalyzeDocument(ctx context.Context, req *models.DocumentAnalysisRequest) error {
 	path := "/v1/ai/documents:analyze"
-	var result models.DocumentAnalysisResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // DetectFraud Detect fraud
-func (s *AiService) DetectFraud(ctx context.Context, req *models.DetectFraudRequest) (*models.DetectFraudResponse, error) {
+func (s *AiService) DetectFraud(ctx context.Context, req *models.DetectFraudRequest) error {
 	path := "/v1/ai/fraud:detect"
-	var result models.DetectFraudResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
+}
+
+// AssessRisk Assess risk
+func (s *AiService) AssessRisk(ctx context.Context, req *models.RiskAssessmentRequest) error {
+	path := "/v1/ai/risk:assess"
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 

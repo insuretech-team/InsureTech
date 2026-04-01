@@ -10,6 +10,7 @@ import (
 	"github.com/stretchr/testify/require"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
+	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // ─────────────────────────────────────────────
@@ -37,8 +38,10 @@ type mockAuthService struct {
 	sendEmailOTPErr                error
 	verifyEmailErr                 error
 	emailLoginErr                  error
+	emailPasswordLoginErr          error
 	requestPasswordResetByEmailErr error
 	resetPasswordByEmailErr        error
+	provisionEmployeeUserErr       error
 	biometricAuthenticateErr       error
 	updateDLRStatusErr             error
 	createAPIKeyErr                error
@@ -46,17 +49,18 @@ type mockAuthService struct {
 	revokeAPIKeyErr                error
 	rotateAPIKeyErr                error
 	// profile / document
-	createUserProfileErr  error
-	getUserProfileErr     error
-	updateUserProfileErr  error
-	uploadUserDocumentErr error
-	getUserDocumentErr    error
-	updateUserDocumentErr error
-	listUserDocumentsErr  error
-	deleteUserDocumentErr error
-	listDocumentTypesErr  error
-	submitKYCFrameErr     error
-	completeKYCSessionErr error
+	createUserProfileErr     error
+	getUserProfileErr        error
+	updateUserProfileErr     error
+	uploadUserDocumentErr    error
+	getUserDocumentErr       error
+	updateUserDocumentErr    error
+	listUserDocumentsErr     error
+	deleteUserDocumentErr    error
+	listDocumentTypesErr     error
+	submitKYCFrameErr        error
+	completeKYCSessionErr    error
+	approveKYCErr            error
 	lastRegisterEmailUserReq *authnservicev1.RegisterEmailUserRequest
 }
 
@@ -105,6 +109,12 @@ func (m *mockAuthService) ValidateCSRF(_ context.Context, _ *authnservicev1.Vali
 func (m *mockAuthService) GetCurrentSession(_ context.Context, _ *authnservicev1.GetCurrentSessionRequest) (*authnservicev1.GetCurrentSessionResponse, error) {
 	return &authnservicev1.GetCurrentSessionResponse{}, m.getCurrentSessionErr
 }
+func (m *mockAuthService) FindPortalUser(_ context.Context, _ *authnservicev1.FindPortalUserRequest) (*authnservicev1.FindPortalUserResponse, error) {
+	return &authnservicev1.FindPortalUserResponse{}, nil
+}
+func (m *mockAuthService) SetTemporaryPassword(_ context.Context, _ *authnservicev1.SetTemporaryPasswordRequest) (*authnservicev1.SetTemporaryPasswordResponse, error) {
+	return &authnservicev1.SetTemporaryPasswordResponse{}, nil
+}
 func (m *mockAuthService) RevokeAllSessions(_ context.Context, _ *authnservicev1.RevokeAllSessionsRequest) (*authnservicev1.RevokeAllSessionsResponse, error) {
 	return &authnservicev1.RevokeAllSessionsResponse{}, m.revokeAllSessionsErr
 }
@@ -121,11 +131,17 @@ func (m *mockAuthService) VerifyEmail(_ context.Context, _ *authnservicev1.Verif
 func (m *mockAuthService) EmailLogin(_ context.Context, _ *authnservicev1.EmailLoginRequest) (*authnservicev1.EmailLoginResponse, error) {
 	return &authnservicev1.EmailLoginResponse{}, m.emailLoginErr
 }
+func (m *mockAuthService) EmailPasswordLogin(_ context.Context, _ *authnservicev1.EmailPasswordLoginRequest) (*authnservicev1.EmailPasswordLoginResponse, error) {
+	return &authnservicev1.EmailPasswordLoginResponse{}, m.emailPasswordLoginErr
+}
 func (m *mockAuthService) RequestPasswordResetByEmail(_ context.Context, _ *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error) {
 	return &authnservicev1.RequestPasswordResetByEmailResponse{}, m.requestPasswordResetByEmailErr
 }
 func (m *mockAuthService) ResetPasswordByEmail(_ context.Context, _ *authnservicev1.ResetPasswordByEmailRequest) (*authnservicev1.ResetPasswordByEmailResponse, error) {
 	return &authnservicev1.ResetPasswordByEmailResponse{}, m.resetPasswordByEmailErr
+}
+func (m *mockAuthService) ProvisionEmployeeUser(_ context.Context, _ *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error) {
+	return &authnservicev1.ProvisionEmployeeUserResponse{}, m.provisionEmployeeUserErr
 }
 func (m *mockAuthService) BiometricAuthenticate(_ context.Context, _ *authnservicev1.BiometricAuthenticateRequest) (*authnservicev1.BiometricAuthenticateResponse, error) {
 	return &authnservicev1.BiometricAuthenticateResponse{}, m.biometricAuthenticateErr
@@ -173,7 +189,7 @@ func (m *mockAuthService) ListDocumentTypes(_ context.Context, _ *authnservicev1
 	return &authnservicev1.ListDocumentTypesResponse{}, m.listDocumentTypesErr
 }
 
-// ── Profile / Document / KYC / Voice / TOTP stubs for the mock ────────────────
+// ── Profile / Document / KYC / Voice / TOTP methods for the mock ──────────────
 func (m *mockAuthService) InitiateKYC(_ context.Context, _ *authnservicev1.InitiateKYCRequest) (*authnservicev1.InitiateKYCResponse, error) {
 	return &authnservicev1.InitiateKYCResponse{}, nil
 }
@@ -187,25 +203,23 @@ func (m *mockAuthService) CompleteKYCSession(_ context.Context, _ *authnservicev
 	return &authnservicev1.CompleteKYCSessionResponse{}, m.completeKYCSessionErr
 }
 func (m *mockAuthService) ApproveKYC(_ context.Context, _ *authnservicev1.ApproveKYCRequest) (*authnservicev1.ApproveKYCResponse, error) {
-	return &authnservicev1.ApproveKYCResponse{}, nil
+	return &authnservicev1.ApproveKYCResponse{Message: "KYC approved successfully"}, m.approveKYCErr
 }
-func (m *mockAuthService) RejectKYC(_ context.Context, _ *authnservicev1.RejectKYCRequest) (*authnservicev1.RejectKYCResponse, error) {
-	return &authnservicev1.RejectKYCResponse{}, nil
-}
+
+// RejectKYC removed from proto (API path conflict) — no longer in AuthService interface.
 func (m *mockAuthService) VerifyDocument(_ context.Context, _ *authnservicev1.VerifyDocumentRequest) (*authnservicev1.VerifyDocumentResponse, error) {
 	return &authnservicev1.VerifyDocumentResponse{}, nil
 }
 func (m *mockAuthService) CreateVoiceSession(_ context.Context, _ *authnservicev1.CreateVoiceSessionRequest) (*authnservicev1.CreateVoiceSessionResponse, error) {
 	return &authnservicev1.CreateVoiceSessionResponse{}, nil
 }
-func (m *mockAuthService) GetVoiceSession(_ context.Context, _ *authnservicev1.GetVoiceSessionRequest) (*authnservicev1.GetVoiceSessionResponse, error) {
-	return &authnservicev1.GetVoiceSessionResponse{}, nil
-}
-func (m *mockAuthService) EndVoiceSession(_ context.Context, _ *authnservicev1.EndVoiceSessionRequest) (*authnservicev1.EndVoiceSessionResponse, error) {
-	return &authnservicev1.EndVoiceSessionResponse{}, nil
-}
+
+// GetVoiceSession / EndVoiceSession removed from proto (API path conflict) — no longer in AuthService interface.
 func (m *mockAuthService) GetProfilePhotoUploadURL(_ context.Context, _ *authnservicev1.GetProfilePhotoUploadURLRequest) (*authnservicev1.GetProfilePhotoUploadURLResponse, error) {
 	return &authnservicev1.GetProfilePhotoUploadURLResponse{}, nil
+}
+func (m *mockAuthService) GetNotificationPreferences(_ context.Context, _ *authnservicev1.GetNotificationPreferencesRequest) (*authnservicev1.GetNotificationPreferencesResponse, error) {
+	return &authnservicev1.GetNotificationPreferencesResponse{}, nil
 }
 func (m *mockAuthService) UpdateNotificationPreferences(_ context.Context, _ *authnservicev1.UpdateNotificationPreferencesRequest) (*authnservicev1.UpdateNotificationPreferencesResponse, error) {
 	return &authnservicev1.UpdateNotificationPreferencesResponse{}, nil
@@ -219,9 +233,8 @@ func (m *mockAuthService) VerifyTOTP(_ context.Context, _ *authnservicev1.Verify
 func (m *mockAuthService) DisableTOTP(_ context.Context, _ *authnservicev1.DisableTOTPRequest) (*authnservicev1.DisableTOTPResponse, error) {
 	return &authnservicev1.DisableTOTPResponse{}, nil
 }
-func (m *mockAuthService) GetJWKS(_ context.Context, _ *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error) {
-	return &authnservicev1.GetJWKSResponse{}, nil
-}
+
+// GetJWKS removed from proto (API path conflict) — no longer in AuthService interface.
 func (m *mockAuthService) InitiateVoiceSession(_ context.Context, _ *authnservicev1.InitiateVoiceSessionRequest) (*authnservicev1.InitiateVoiceSessionResponse, error) {
 	return &authnservicev1.InitiateVoiceSessionResponse{}, nil
 }
@@ -286,8 +299,36 @@ func TestLogin_MissingPassword(t *testing.T) {
 	h := newHandler(&mockAuthService{})
 	_, err := h.Login(context.Background(), &authnservicev1.LoginRequest{
 		MobileNumber: "8801712345678",
+		DeviceType:   "WEB",
 	})
 	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestLogin_EmptyPassword_AllowsJWTStyleOTPFlow(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+
+	cases := []struct {
+		name       string
+		deviceType string
+	}{
+		{name: "default", deviceType: ""},
+		{name: "api", deviceType: "API"},
+		{name: "android", deviceType: "ANDROID"},
+		{name: "mobile_android", deviceType: "MOBILE_ANDROID"},
+		{name: "ios", deviceType: "IOS"},
+		{name: "mobile_ios", deviceType: "MOBILE_IOS"},
+		{name: "desktop", deviceType: "DESKTOP"},
+	}
+
+	for _, tc := range cases {
+		t.Run(tc.name, func(t *testing.T) {
+			_, err := h.Login(context.Background(), &authnservicev1.LoginRequest{
+				MobileNumber: "8801712345678",
+				DeviceType:   tc.deviceType,
+			})
+			require.NoError(t, err)
+		})
+	}
 }
 
 func TestRegisterEmailUser_NormalizesMobileToPlusE164(t *testing.T) {
@@ -296,11 +337,33 @@ func TestRegisterEmailUser_NormalizesMobileToPlusE164(t *testing.T) {
 	_, err := h.RegisterEmailUser(context.Background(), &authnservicev1.RegisterEmailUserRequest{
 		Email:        "u@example.com",
 		Password:     "Pass123!@",
+		UserType:     "SYSTEM_USER",
+		FullName:     "User Example",
 		MobileNumber: "01712345678",
 	})
 	require.NoError(t, err)
 	require.NotNil(t, mockSvc.lastRegisterEmailUserReq)
 	require.Equal(t, "+8801712345678", mockSvc.lastRegisterEmailUserReq.MobileNumber)
+}
+
+func TestRegisterEmailUser_MissingUserType(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.RegisterEmailUser(context.Background(), &authnservicev1.RegisterEmailUserRequest{
+		Email:    "u@example.com",
+		Password: "Pass123!@",
+		FullName: "User Example",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestRegisterEmailUser_MissingFullName(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.RegisterEmailUser(context.Background(), &authnservicev1.RegisterEmailUserRequest{
+		Email:    "u@example.com",
+		Password: "Pass123!@",
+		UserType: "SYSTEM_USER",
+	})
+	assertCode(t, err, codes.InvalidArgument)
 }
 
 func TestValidateToken_MissingToken(t *testing.T) {
@@ -349,6 +412,26 @@ func TestCreateAPIKey_MissingName(t *testing.T) {
 	assertCode(t, err, codes.InvalidArgument)
 }
 
+func TestCreateAPIKey_MissingOwnerType(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.CreateAPIKey(context.Background(), &authnservicev1.CreateAPIKeyRequest{
+		OwnerId: "user-1",
+		Name:    "my-key",
+		Scopes:  []string{"auth:read"},
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestCreateAPIKey_MissingScopes(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.CreateAPIKey(context.Background(), &authnservicev1.CreateAPIKeyRequest{
+		OwnerId:   "user-1",
+		Name:      "my-key",
+		OwnerType: "USER",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
 func TestListAPIKeys_MissingOwnerId(t *testing.T) {
 	h := newHandler(&mockAuthService{})
 	_, err := h.ListAPIKeys(context.Background(), &authnservicev1.ListAPIKeysRequest{})
@@ -358,6 +441,86 @@ func TestListAPIKeys_MissingOwnerId(t *testing.T) {
 func TestRevokeAPIKey_MissingKeyId(t *testing.T) {
 	h := newHandler(&mockAuthService{})
 	_, err := h.RevokeAPIKey(context.Background(), &authnservicev1.RevokeAPIKeyRequest{})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestSendEmailOTP_MissingType(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.SendEmailOTP(context.Background(), &authnservicev1.SendEmailOTPRequest{
+		Email: "u@example.com",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestCreateUserProfile_MissingDateOfBirth(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.CreateUserProfile(context.Background(), &authnservicev1.CreateUserProfileRequest{
+		UserId:       "u1",
+		FullName:     "User One",
+		Gender:       "MALE",
+		AddressLine1: "Addr",
+		City:         "Dhaka",
+		District:     "Dhaka",
+		Division:     "Dhaka",
+		NidNumber:    "1234567890",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestCreateUserProfile_MissingGender(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.CreateUserProfile(context.Background(), &authnservicev1.CreateUserProfileRequest{
+		UserId:       "u1",
+		FullName:     "User One",
+		DateOfBirth:  timestamppb.Now(),
+		AddressLine1: "Addr",
+		City:         "Dhaka",
+		District:     "Dhaka",
+		Division:     "Dhaka",
+		NidNumber:    "1234567890",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestApproveKYC_MissingReviewerID(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.ApproveKYC(context.Background(), &authnservicev1.ApproveKYCRequest{
+		KycId: "k1",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestVerifyDocument_MissingVerificationStatus(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.VerifyDocument(context.Background(), &authnservicev1.VerifyDocumentRequest{
+		UserDocumentId: "d1",
+		VerifiedBy:     "reviewer-1",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestVerifyDocument_MissingVerifiedBy(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.VerifyDocument(context.Background(), &authnservicev1.VerifyDocumentRequest{
+		UserDocumentId:     "d1",
+		VerificationStatus: "VERIFIED",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestDisableTOTP_MissingTotpCode(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.DisableTOTP(context.Background(), &authnservicev1.DisableTOTPRequest{
+		UserId: "u1",
+	})
+	assertCode(t, err, codes.InvalidArgument)
+}
+
+func TestSubmitVoiceSample_MissingTranscript(t *testing.T) {
+	h := newHandler(&mockAuthService{})
+	_, err := h.SubmitVoiceSample(context.Background(), &authnservicev1.SubmitVoiceSampleRequest{
+		SessionId: "vs1",
+	})
 	assertCode(t, err, codes.InvalidArgument)
 }
 
@@ -474,8 +637,10 @@ func TestUpdateDLRStatus_MissingStatus(t *testing.T) {
 func TestCreateAPIKey_Success(t *testing.T) {
 	h := newHandler(&mockAuthService{})
 	_, err := h.CreateAPIKey(context.Background(), &authnservicev1.CreateAPIKeyRequest{
-		OwnerId: "user-1",
-		Name:    "my-key",
+		OwnerId:   "user-1",
+		Name:      "my-key",
+		OwnerType: "USER",
+		Scopes:    []string{"auth:read"},
 	})
 	if err != nil {
 		t.Fatalf("expected nil error, got: %v", err)
@@ -608,11 +773,16 @@ func TestAuthHandler_SuccessCoverage_AllMajorRPCs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ResetPassword: %v", err)
 	}
-	_, err = h.RegisterEmailUser(ctx, &authnservicev1.RegisterEmailUserRequest{Email: "u@example.com", Password: "Pass123!@"})
+	_, err = h.RegisterEmailUser(ctx, &authnservicev1.RegisterEmailUserRequest{
+		Email:    "u@example.com",
+		Password: "Pass123!@",
+		UserType: "SYSTEM_USER",
+		FullName: "User Example",
+	})
 	if err != nil {
 		t.Fatalf("RegisterEmailUser: %v", err)
 	}
-	_, err = h.SendEmailOTP(ctx, &authnservicev1.SendEmailOTPRequest{Email: "u@example.com"})
+	_, err = h.SendEmailOTP(ctx, &authnservicev1.SendEmailOTPRequest{Email: "u@example.com", Type: "email_login"})
 	if err != nil {
 		t.Fatalf("SendEmailOTP: %v", err)
 	}
@@ -640,9 +810,20 @@ func TestAuthHandler_SuccessCoverage_AllMajorRPCs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("ListAPIKeys: %v", err)
 	}
+	_, err = h.CreateAPIKey(ctx, &authnservicev1.CreateAPIKeyRequest{
+		OwnerId:   "u1",
+		Name:      "partner-key",
+		OwnerType: "USER",
+		Scopes:    []string{"auth:read"},
+	})
+	if err != nil {
+		t.Fatalf("CreateAPIKey: %v", err)
+	}
 	_, err = h.CreateUserProfile(ctx, &authnservicev1.CreateUserProfileRequest{
 		UserId:       "u1",
 		FullName:     "User One",
+		DateOfBirth:  timestamppb.Now(),
+		Gender:       "MALE",
 		AddressLine1: "Addr",
 		City:         "Dhaka",
 		District:     "Dhaka",
@@ -700,15 +881,15 @@ func TestAuthHandler_SuccessCoverage_AllMajorRPCs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CompleteKYCSession: %v", err)
 	}
-	_, err = h.ApproveKYC(ctx, &authnservicev1.ApproveKYCRequest{KycId: "k1"})
+	_, err = h.ApproveKYC(ctx, &authnservicev1.ApproveKYCRequest{KycId: "k1", ReviewerId: "reviewer-1"})
 	if err != nil {
 		t.Fatalf("ApproveKYC: %v", err)
 	}
-	_, err = h.RejectKYC(ctx, &authnservicev1.RejectKYCRequest{KycId: "k1", RejectionReason: "bad"})
-	if err != nil {
-		t.Fatalf("RejectKYC: %v", err)
-	}
-	_, err = h.VerifyDocument(ctx, &authnservicev1.VerifyDocumentRequest{UserDocumentId: "d1"})
+	_, err = h.VerifyDocument(ctx, &authnservicev1.VerifyDocumentRequest{
+		UserDocumentId:     "d1",
+		VerificationStatus: "VERIFIED",
+		VerifiedBy:         "reviewer-1",
+	})
 	if err != nil {
 		t.Fatalf("VerifyDocument: %v", err)
 	}
@@ -716,19 +897,11 @@ func TestAuthHandler_SuccessCoverage_AllMajorRPCs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("CreateVoiceSession: %v", err)
 	}
-	_, err = h.GetVoiceSession(ctx, &authnservicev1.GetVoiceSessionRequest{VoiceSessionId: "vs1"})
-	if err != nil {
-		t.Fatalf("GetVoiceSession: %v", err)
-	}
-	_, err = h.EndVoiceSession(ctx, &authnservicev1.EndVoiceSessionRequest{VoiceSessionId: "vs1"})
-	if err != nil {
-		t.Fatalf("EndVoiceSession: %v", err)
-	}
 	_, err = h.InitiateVoiceSession(ctx, &authnservicev1.InitiateVoiceSessionRequest{UserId: "u1"})
 	if err != nil {
 		t.Fatalf("InitiateVoiceSession: %v", err)
 	}
-	_, err = h.SubmitVoiceSample(ctx, &authnservicev1.SubmitVoiceSampleRequest{SessionId: "vs1"})
+	_, err = h.SubmitVoiceSample(ctx, &authnservicev1.SubmitVoiceSampleRequest{SessionId: "vs1", Transcript: "I authorize this login"})
 	if err != nil {
 		t.Fatalf("SubmitVoiceSample: %v", err)
 	}
@@ -752,12 +925,8 @@ func TestAuthHandler_SuccessCoverage_AllMajorRPCs(t *testing.T) {
 	if err != nil {
 		t.Fatalf("VerifyTOTP: %v", err)
 	}
-	_, err = h.DisableTOTP(ctx, &authnservicev1.DisableTOTPRequest{UserId: "u1"})
+	_, err = h.DisableTOTP(ctx, &authnservicev1.DisableTOTPRequest{UserId: "u1", TotpCode: "123456"})
 	if err != nil {
 		t.Fatalf("DisableTOTP: %v", err)
-	}
-	_, err = h.GetJWKS(ctx, &authnservicev1.GetJWKSRequest{})
-	if err != nil {
-		t.Fatalf("GetJWKS: %v", err)
 	}
 }

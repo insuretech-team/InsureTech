@@ -5,7 +5,5 @@ PurchaseOrderCatalogListingResponse:
       type: array
       items:
         $ref: '#/components/schemas/PurchaseOrderCatalogItem'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for purchase order catalog listing operation. Returns
     operation results and status.

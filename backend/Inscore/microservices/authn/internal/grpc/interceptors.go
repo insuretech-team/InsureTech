@@ -8,6 +8,7 @@ import (
 	"time"
 
 	"github.com/google/uuid"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	"github.com/redis/go-redis/v9"
 	"go.uber.org/zap"
@@ -23,17 +24,7 @@ const requestIDKey ctxKey = "request_id"
 
 // requestIDFromIncomingMD extracts request id from gRPC metadata.
 func requestIDFromIncomingMD(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	// common keys
-	for _, k := range []string{"x-request-id", "x-correlation-id", "request-id"} {
-		if v := md.Get(k); len(v) > 0 {
-			return v[0]
-		}
-	}
-	return ""
+	return grpcmeta.CorrelationID(ctx)
 }
 
 func withRequestID(ctx context.Context) (context.Context, string) {
@@ -184,15 +175,7 @@ func rateLimitUnaryInterceptor(rdb redis.UniversalClient) grpc.UnaryServerInterc
 		}
 
 		// Derive rate-limit key from client IP via gRPC metadata.
-		clientIP := "unknown"
-		if md, ok2 := metadata.FromIncomingContext(ctx); ok2 {
-			for _, hdr := range []string{"x-forwarded-for", "x-real-ip"} {
-				if v := md.Get(hdr); len(v) > 0 {
-					clientIP = v[0]
-					break
-				}
-			}
-		}
+		clientIP := grpcmeta.ExtractIPAddress(ctx)
 
 		rlKey := fmt.Sprintf("grpc_rl:%s:%s", info.FullMethod, clientIP)
 		pipe := rdb.Pipeline()

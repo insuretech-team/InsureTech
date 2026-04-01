@@ -1,0 +1,14 @@
+LifeProductsListingResponse:
+  type: object
+  properties:
+    products:
+      type: array
+      items:
+        $ref: '#/components/schemas/LifeProduct'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for life products listing operation. Returns operation
+    results and status.

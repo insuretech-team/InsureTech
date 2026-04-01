@@ -3,9 +3,5 @@ DLRStatusUpdateResponse:
   properties:
     updated:
       type: boolean
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for dlr status update operation. Returns operation
     results and status.

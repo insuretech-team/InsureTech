@@ -6,16 +6,16 @@ import (
 
 // ApiKeyUsage represents a api_key_usage
 type ApiKeyUsage struct {
-	Endpoint string `json:"endpoint"`
-	StatusCode int `json:"status_code"`
-	ResponseTimeMs int `json:"response_time_ms,omitempty"`
-	UserAgent string `json:"user_agent,omitempty"`
-	ResponsePayload string `json:"response_payload,omitempty"`
-	Id string `json:"id"`
 	ApiKeyId string `json:"api_key_id"`
+	Endpoint string `json:"endpoint"`
 	HttpMethod string `json:"http_method"`
+	Id string `json:"id"`
 	RequestIp string `json:"request_ip,omitempty"`
 	RequestPayload string `json:"request_payload,omitempty"`
-	TraceId string `json:"trace_id,omitempty"`
+	ResponsePayload string `json:"response_payload,omitempty"`
+	ResponseTimeMs int `json:"response_time_ms,omitempty"`
+	StatusCode int `json:"status_code"`
 	Timestamp time.Time `json:"timestamp"`
+	TraceId string `json:"trace_id,omitempty"`
+	UserAgent string `json:"user_agent,omitempty"`
 }

@@ -1,4 +1,4 @@
-VoiceVoiceSessionRetrievalResponse:
+VoiceSessionRetrievalResponse:
   type: object
   properties:
     voice_session:
@@ -7,8 +7,5 @@ VoiceVoiceSessionRetrievalResponse:
       type: array
       items:
         $ref: '#/components/schemas/VoiceCommand'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for voice session retrieval operation. Returns operation
     results and status.

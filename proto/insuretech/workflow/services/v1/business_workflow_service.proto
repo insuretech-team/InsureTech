@@ -1,0 +1,168 @@
+syntax = "proto3";
+
+package insuretech.workflow.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/workflow/services/v1;workflowservicev1";
+option csharp_namespace = "Insuretech.Workflow.Services.V1";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/workflow/entity/v1/business_workflow.proto";
+
+// BusinessWorkflowService provides business rule evaluation using Microsoft RulesEngine
+service BusinessWorkflowService {
+  // Evaluate a business workflow against provided inputs
+  rpc EvaluateBusinessWorkflow(EvaluateBusinessWorkflowRequest) returns (EvaluateBusinessWorkflowResponse);
+
+  // Create a new business workflow definition
+  rpc CreateBusinessWorkflow(CreateBusinessWorkflowRequest) returns (CreateBusinessWorkflowResponse);
+
+  // Get a business workflow by ID
+  rpc GetBusinessWorkflow(GetBusinessWorkflowRequest) returns (GetBusinessWorkflowResponse);
+
+  // Get a business workflow by name
+  rpc GetBusinessWorkflowByName(GetBusinessWorkflowByNameRequest) returns (GetBusinessWorkflowResponse);
+
+  // List all business workflows
+  rpc ListBusinessWorkflows(ListBusinessWorkflowsRequest) returns (ListBusinessWorkflowsResponse);
+
+  // Update an existing business workflow
+  rpc UpdateBusinessWorkflow(UpdateBusinessWorkflowRequest) returns (UpdateBusinessWorkflowResponse);
+
+  // Delete a business workflow (soft delete)
+  rpc DeleteBusinessWorkflow(DeleteBusinessWorkflowRequest) returns (DeleteBusinessWorkflowResponse);
+
+  // Get execution history for a workflow
+  rpc GetExecutionHistory(GetExecutionHistoryRequest) returns (GetExecutionHistoryResponse);
+
+  // Validate a rule expression without executing
+  rpc ValidateRuleExpression(ValidateRuleExpressionRequest) returns (ValidateRuleExpressionResponse);
+}
+
+message EvaluateBusinessWorkflowRequest {
+  string workflow_name = 1;
+  google.protobuf.Struct inputs = 2;
+  string entity_type = 3; // POLICY, CLAIM, QUOTE, CUSTOMER, etc.
+  string entity_id = 4;
+  string executed_by = 5;
+}
+
+message EvaluateBusinessWorkflowResponse {
+  string execution_id = 1;
+  string workflow_name = 2;
+  bool is_success = 3;
+  repeated entity.v1.BusinessRuleResult results = 4;
+  google.protobuf.Struct outputs = 5;
+  int32 execution_time_ms = 6;
+  google.protobuf.Timestamp executed_at = 7;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 8;
+}
+
+message CreateBusinessWorkflowRequest {
+  string workflow_name = 1;
+  string description = 2;
+  entity.v1.BusinessWorkflowType workflow_type = 3;
+  repeated entity.v1.BusinessRule rules = 4;
+  google.protobuf.Struct input_schema = 5;
+  google.protobuf.Struct output_schema = 6;
+  google.protobuf.Struct metadata = 7;
+  string created_by = 8;
+}
+
+message CreateBusinessWorkflowResponse {
+  entity.v1.BusinessWorkflowDefinition workflow = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetBusinessWorkflowRequest {
+  string business_workflow_id = 1;
+}
+
+message GetBusinessWorkflowByNameRequest {
+  string workflow_name = 1;
+}
+
+message GetBusinessWorkflowResponse {
+  entity.v1.BusinessWorkflowDefinition workflow = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListBusinessWorkflowsRequest {
+  entity.v1.BusinessWorkflowType workflow_type = 1;
+  entity.v1.BusinessWorkflowStatus status = 2;
+  string filter = 3;
+  string order_by = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListBusinessWorkflowsResponse {
+  repeated entity.v1.BusinessWorkflowDefinition workflows = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message UpdateBusinessWorkflowRequest {
+  string business_workflow_id = 1;
+  string workflow_name = 2;
+  string description = 3;
+  entity.v1.BusinessWorkflowType workflow_type = 4;
+  entity.v1.BusinessWorkflowStatus status = 5;
+  repeated entity.v1.BusinessRule rules = 6;
+  google.protobuf.Struct input_schema = 7;
+  google.protobuf.Struct output_schema = 8;
+  google.protobuf.Struct metadata = 9;
+}
+
+message UpdateBusinessWorkflowResponse {
+  entity.v1.BusinessWorkflowDefinition workflow = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteBusinessWorkflowRequest {
+  string business_workflow_id = 1;
+  bool permanent = 2; // If true, hard delete instead of soft delete
+}
+
+message DeleteBusinessWorkflowResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetExecutionHistoryRequest {
+  string business_workflow_id = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message GetExecutionHistoryResponse {
+  repeated entity.v1.BusinessWorkflowExecution executions = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ValidateRuleExpressionRequest {
+  string expression = 1;
+  entity.v1.RuleExpressionType expression_type = 2;
+  google.protobuf.Struct test_inputs = 3;
+}
+
+message ValidateRuleExpressionResponse {
+  bool is_valid = 1;
+  string error_message = 2;
+  bool test_passed = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}

@@ -38,7 +38,21 @@ func (r *OTPRepository) getOne(ctx context.Context, where string, args ...any) (
 // Create creates a new OTP record
 func (r *OTPRepository) Create(ctx context.Context, otp *authnentityv1.OTP) error {
 	otp.CreatedAt = timestamppb.Now()
-	return r.db.WithContext(ctx).Create(otp).Error
+	db := r.db.WithContext(ctx).Table("authn_schema.otps")
+	// GORM sends "" (empty string) for zero-value proto string fields.
+	// PostgreSQL rejects "" for UUID and INET columns — omit them when empty
+	// so the DB stores NULL instead.
+	var omitCols []string
+	if otp.UserId == "" {
+		omitCols = append(omitCols, "UserId")
+	}
+	if otp.IpAddress == "" {
+		omitCols = append(omitCols, "IpAddress")
+	}
+	if len(omitCols) > 0 {
+		db = db.Omit(omitCols...)
+	}
+	return db.Create(otp).Error
 }
 
 // GetByID retrieves an OTP by ID
@@ -60,6 +74,27 @@ func (r *OTPRepository) IncrementAttempts(ctx context.Context, otpID string) err
 		Error
 }
 
+// GetRecentlyVerifiedForMobile returns the most recently verified OTP for a mobile number
+// within the given duration window. Used by B2C OTP-only login flow.
+func (r *OTPRepository) GetRecentlyVerifiedForMobile(ctx context.Context, mobileNumber string, within time.Duration) (*authnentityv1.OTP, error) {
+	// Normalize mobile: strip leading '+' to match DB format (stored without '+' prefix)
+	recipient := mobileNumber
+	if len(recipient) > 0 && recipient[0] == '+' {
+		recipient = recipient[1:]
+	}
+	var otp authnentityv1.OTP
+	err := r.db.WithContext(ctx).
+		Table("authn_schema.otps").
+		Where("recipient = ? AND verified = true AND verified_at >= ? AND expires_at > ? AND purpose IN ('login','mobile_login')",
+			recipient, time.Now().Add(-within), time.Now()).
+		Order("verified_at DESC").
+		First(&otp).Error
+	if err != nil {
+		return nil, err
+	}
+	return &otp, nil
+}
+
 // MarkVerified marks an OTP as verified
 func (r *OTPRepository) MarkVerified(ctx context.Context, otpID string) error {
 	updates := map[string]interface{}{
@@ -73,11 +108,13 @@ func (r *OTPRepository) MarkVerified(ctx context.Context, otpID string) error {
 		Error
 }
 
-// ExpireOTP sets expires_at to now and marks the OTP as unusable.
-// We do NOT set verified=true, because that would semantically mean success.
+// ExpireOTP immediately invalidates an OTP by setting expires_at to a time
+// well in the past. This ensures GetRecentlyVerifiedForMobile (which checks
+// expires_at > NOW()) will never return this OTP again — no timing race possible.
+// Used after a successful OTP-based login to prevent OTP reuse attacks.
 func (r *OTPRepository) ExpireOTP(ctx context.Context, otpID string) error {
 	updates := map[string]any{
-		"expires_at": time.Now(),
+		"expires_at": time.Now().Add(-2 * time.Hour),
 	}
 	return r.db.WithContext(ctx).
 		Table("authn_schema.otps").

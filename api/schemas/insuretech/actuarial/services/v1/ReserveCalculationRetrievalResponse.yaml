@@ -1,0 +1,9 @@
+ReserveCalculationRetrievalResponse:
+  type: object
+  properties:
+    reserve:
+      $ref: '#/components/schemas/ReserveCalculation'
+    found:
+      type: boolean
+  description: Response payload for reserve calculation retrieval operation. Returns
+    operation results and status.

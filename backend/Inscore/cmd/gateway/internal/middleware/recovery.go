@@ -4,6 +4,7 @@ import (
 	"net/http"
 	"runtime/debug"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	"go.uber.org/zap"
 )
@@ -23,9 +24,7 @@ func Recovery(next http.Handler) http.Handler {
 				)
 
 				// Return 500 error to client
-				w.Header().Set("Content-Type", "application/json")
-				w.WriteHeader(http.StatusInternalServerError)
-				w.Write([]byte(`{"error": "Internal server error"}`))
+				respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "Internal server error")
 			}
 		}()
 

@@ -20,8 +20,30 @@ public class ClaimGrpcServiceTests
 
         public Task<ClaimEntity> CreateClaimAsync(ClaimEntity claim, CancellationToken cancellationToken = default)
         {
+            claim.Documents.Clear();
+            claim.Approvals.Clear();
             _store[claim.ClaimId] = claim;
             return Task.FromResult(claim);
+        }
+
+        public Task<ClaimDocument> CreateClaimDocumentAsync(ClaimDocument document, CancellationToken cancellationToken = default)
+        {
+            if (_store.TryGetValue(document.ClaimId, out var claim))
+            {
+                claim.Documents.Add(document);
+            }
+
+            return Task.FromResult(document);
+        }
+
+        public Task<ClaimApproval> CreateClaimApprovalAsync(ClaimApproval approval, CancellationToken cancellationToken = default)
+        {
+            if (_store.TryGetValue(approval.ClaimId, out var claim))
+            {
+                claim.Approvals.Add(approval);
+            }
+
+            return Task.FromResult(approval);
         }
 
         public Task<ClaimEntity?> GetClaimAsync(string claimId, CancellationToken cancellationToken = default)
@@ -73,6 +95,37 @@ public class ClaimGrpcServiceTests
     }
 
     [Fact]
+    public async Task SubmitAndUploadDocument_PersistsDocumentOnClaim()
+    {
+        var service = CreateService();
+
+        var submit = await service.SubmitClaim(new SubmitClaimRequest
+        {
+            PolicyId = $"pol-{Guid.NewGuid():N}",
+            CustomerId = $"cust-{Guid.NewGuid():N}",
+            Type = ClaimType.HealthHospitalization,
+            ClaimedAmount = new Money { Amount = 150_000, Currency = "BDT" },
+            IncidentDate = DateTime.UtcNow.ToString("yyyy-MM-dd"),
+            IncidentDescription = "Hospital admission",
+            DocumentUrls = { "https://files.example.test/admission-note.pdf" }
+        }, null!);
+
+        var upload = await service.UploadDocument(new UploadDocumentRequest
+        {
+            ClaimId = submit.ClaimId,
+            FileName = "invoice.pdf",
+            MimeType = "application/pdf",
+            DocumentType = "INVOICE"
+        }, null!);
+
+        var get = await service.GetClaim(new GetClaimRequest { ClaimId = submit.ClaimId }, null!);
+
+        upload.DocumentId.Should().NotBeNullOrWhiteSpace();
+        get.Claim.Documents.Should().HaveCount(2);
+        get.Claim.Documents.Select(x => x.DocumentType).Should().Contain(["SUPPORTING", "INVOICE"]);
+    }
+
+    [Fact]
     public async Task ApproveAndSettleClaim_UpdatesClaimStatusAndAmounts()
     {
         var service = CreateService();
@@ -108,5 +161,7 @@ public class ClaimGrpcServiceTests
         settle.SettledAmount.Amount.Should().Be(175_000);
         get.Claim.Status.Should().Be(ClaimStatus.Settled);
         get.Claim.SettledAmount.Amount.Should().Be(175_000);
+        get.Claim.Approvals.Should().ContainSingle();
+        get.Claim.Approvals[0].Decision.Should().Be(ApprovalDecision.Approved);
     }
 }

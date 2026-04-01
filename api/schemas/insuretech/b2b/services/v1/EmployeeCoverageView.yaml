@@ -1,0 +1,26 @@
+EmployeeCoverageView:
+  type: object
+  properties:
+    organisation_id:
+      type: string
+    organisation_name:
+      type: string
+    employee_uuid:
+      type: string
+    employee_id:
+      type: string
+    assigned_plan_id:
+      type: string
+    assigned_plan_name:
+      type: string
+    insurance_category:
+      $ref: '#/components/schemas/InsuranceType'
+    coverage_amount:
+      $ref: '#/components/schemas/Money'
+    premium_amount:
+      $ref: '#/components/schemas/Money'
+    number_of_dependent:
+      type: integer
+      format: int32
+  description: Domain entity representing employee coverage view. Core business object
+    in the system.

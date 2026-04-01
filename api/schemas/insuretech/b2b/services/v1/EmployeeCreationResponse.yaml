@@ -3,9 +3,5 @@ EmployeeCreationResponse:
   properties:
     employee:
       $ref: '#/components/schemas/EmployeeView'
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for employee creation operation. Returns operation
     results and status.

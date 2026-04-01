@@ -1,25 +1,10 @@
 import { NextResponse } from "next/server";
 
-import {
-  getCurrentSession,
-  getErrorMessage,
-  getSetCookieHeaders,
-  logoutCurrentSession,
-} from "@lib/auth/backend-auth";
+import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
+import { getSetCookieHeaders } from "@lib/auth/backend-auth";
 import { SESSION_COOKIE_NAME } from "@lib/auth/session";
 
 const CSRF_COOKIE_NAME = "csrf_token";
-
-function getCookieValue(cookieHeader: string, cookieName: string): string | undefined {
-  const target = `${cookieName}=`;
-  for (const rawPart of cookieHeader.split(";")) {
-    const part = rawPart.trim();
-    if (part.startsWith(target)) {
-      return decodeURIComponent(part.slice(target.length));
-    }
-  }
-  return undefined;
-}
 
 function expireSessionCookie(response: NextResponse) {
   response.cookies.set({
@@ -46,7 +31,15 @@ function expireCsrfCookie(response: NextResponse) {
 }
 
 function expirePortalCookies(response: NextResponse) {
-  for (const name of ["portal_role", "portal_user_id", "portal_biz_id"]) {
+  for (const name of [
+    "portal_role",
+    "portal_user_id",
+    "portal_biz_id",
+    "portal_password_change_required",
+    "portal_kyc_verified",
+    "portal_mobile",
+    "portal_email",
+  ]) {
     response.cookies.set({
       name,
       value: "",
@@ -60,12 +53,11 @@ function expirePortalCookies(response: NextResponse) {
 }
 
 export async function POST(request: Request) {
-  const cookieHeader = request.headers.get("cookie") ?? "";
-  const csrfToken = getCookieValue(cookieHeader, CSRF_COOKIE_NAME);
+  const sdk = makeSdkClient(request);
   let sessionId = "";
 
   try {
-    const currentSessionResult = await getCurrentSession(cookieHeader);
+    const currentSessionResult = await sdk.getCurrentSession();
     if (!currentSessionResult.error) {
       sessionId = currentSessionResult.data?.session?.session_id ?? "";
     }
@@ -81,25 +73,27 @@ export async function POST(request: Request) {
     return response;
   }
 
-  let result: Awaited<ReturnType<typeof logoutCurrentSession>>;
+  let result: Awaited<ReturnType<typeof sdk.logout>>;
   try {
-    result = await logoutCurrentSession(cookieHeader, csrfToken, sessionId);
+    result = await sdk.logout({
+      body: {
+        session_id: sessionId,
+        logout_reason: "user_initiated",
+      },
+    });
   } catch (error) {
-    const response = NextResponse.json(
-      { ok: false, message: getErrorMessage(error, "Logout failed") },
-      { status: 502 }
-    );
+    const msg = error instanceof Error ? error.message : "Logout failed";
+    const response = NextResponse.json({ ok: false, message: msg }, { status: 502 });
     expireSessionCookie(response);
     expireCsrfCookie(response);
     return response;
   }
 
-  if (result.error) {
-    const status = result.response?.status ?? 500;
-    const response = NextResponse.json(
-      { ok: false, message: getErrorMessage(result.error, "Logout failed") },
-      { status }
-    );
+  if (!result.response.ok) {
+    const status = result.response.status ?? 500;
+    const errPayload = "error" in result ? result.error as Record<string, unknown> | undefined : undefined;
+    const errMsg = typeof errPayload?.message === "string" ? errPayload.message : "Logout failed";
+    const response = NextResponse.json({ ok: false, message: errMsg }, { status });
     for (const setCookie of getSetCookieHeaders(result.response.headers)) {
       response.headers.append("set-cookie", setCookie);
     }

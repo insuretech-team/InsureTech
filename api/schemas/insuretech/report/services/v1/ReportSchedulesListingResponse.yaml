@@ -10,8 +10,5 @@ ReportSchedulesListingResponse:
     total_count:
       type: integer
       format: int32
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for report schedules listing operation. Returns operation
     results and status.

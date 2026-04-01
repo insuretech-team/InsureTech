@@ -1,0 +1,7 @@
+InsuranceProposalUpdateRequest:
+  type: object
+  properties:
+    proposal:
+      $ref: '#/components/schemas/InsuranceProposal'
+  description: Request payload for updating an existing insurance proposal update.
+    Contains fields to be modified.

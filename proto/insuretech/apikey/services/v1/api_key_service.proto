@@ -27,7 +27,7 @@ service ApiKeyService {
   // Rotate API key
   rpc RotateApiKey(RotateApiKeyRequest) returns (RotateApiKeyResponse) {
     option (google.api.http) = {
-      post: "/v1/api-keys/{api_key_id}?action=rotate"
+      post: "/v1/api-keys/{api_key_id}:rotate"
       body: "*"
     };
   }
@@ -49,7 +49,7 @@ service ApiKeyService {
   // Validate API key and check scopes
   rpc ValidateApiKey(ValidateApiKeyRequest) returns (ValidateApiKeyResponse) {
     option (google.api.http) = {
-      post: "/v1/api-keys?action=validate"
+      post: "/v1/api-keys:validate"
       body: "*"
     };
   }

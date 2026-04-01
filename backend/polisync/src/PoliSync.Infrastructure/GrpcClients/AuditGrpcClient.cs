@@ -1,5 +1,6 @@
 using Insuretech.Audit.Services.V1;
 using Microsoft.Extensions.Logging;
+using System.Text.Json;
 
 namespace PoliSync.Infrastructure.GrpcClients;
 
@@ -27,12 +28,18 @@ public sealed class AuditGrpcClient
         {
             await Client.CreateAuditLogAsync(new CreateAuditLogRequest
             {
-                UserId     = userId,
-                TenantId   = tenantId,
-                Action     = action,
-                Resource   = resource,
-                ResourceId = resourceId,
-                Details    = details,
+                EntityType = resource,
+                EntityId = resourceId,
+                Action = action,
+                OldValues = string.Empty,
+                NewValues = JsonSerializer.Serialize(new
+                {
+                    user_id = userId,
+                    tenant_id = tenantId,
+                    details
+                }),
+                UserAgent = $"polisync:{userId}",
+                IpAddress = string.Empty,
             }, cancellationToken: ct);
         }
         catch (Exception ex)

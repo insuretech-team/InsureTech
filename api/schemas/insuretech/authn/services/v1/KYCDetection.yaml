@@ -1,0 +1,19 @@
+KYCDetection:
+  type: object
+  properties:
+    detected:
+      type: boolean
+    x:
+      type: integer
+      format: int32
+    y:
+      type: integer
+      format: int32
+    width:
+      type: integer
+      format: int32
+    height:
+      type: integer
+      format: int32
+  description: Domain entity representing kyc detection. Core business object in the
+    system.

@@ -9,8 +9,8 @@ import (
 	"sync"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 )
 
 // Dialer provides cached gRPC client connections to backend services.
@@ -32,12 +32,16 @@ type Dialer struct {
 
 // NewDialer creates a new Dialer with sane defaults.
 func NewDialer() *Dialer {
-	return &Dialer{
-		pool: make(map[string]*grpc.ClientConn),
-		opts: []grpc.DialOption{
-			grpc.WithTransportCredentials(insecure.NewCredentials()),
+	opts, err := grpcclient.DefaultDialOptions()
+	if err != nil {
+		opts = []grpc.DialOption{
+			grpc.WithTransportCredentials(grpcclient.FallbackInsecureCredentials()),
 			grpc.WithDefaultServiceConfig(`{"loadBalancingPolicy":"pick_first"}`),
-		},
+		}
+	}
+	return &Dialer{
+		pool:  make(map[string]*grpc.ClientConn),
+		opts:  opts,
 		dTout: 5 * time.Second,
 	}
 }

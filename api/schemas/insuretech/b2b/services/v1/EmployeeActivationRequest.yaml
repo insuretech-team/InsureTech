@@ -1,0 +1,13 @@
+EmployeeActivationRequest:
+  type: object
+  properties:
+    organisation_code:
+      type: string
+    employee_id:
+      type: string
+    email:
+      type: string
+    organisation_id:
+      type: string
+  description: Request payload for employee activation operation. Contains parameters
+    required to execute the operation.

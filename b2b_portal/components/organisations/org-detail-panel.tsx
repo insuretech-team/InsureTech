@@ -4,8 +4,14 @@ import * as React from "react";
 import { useState } from "react";
 import { LuX, LuBuilding2, LuUsers, LuLayoutDashboard, LuCheck, LuTrash2, LuLoader } from "react-icons/lu";
 import { OrgMemberPanel } from "./org-member-panel";
-import { organisationClient } from "@lib/sdk/organisation-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import type { Organisation } from "@lib/types/b2b";
+import {
+  BD_MOBILE_EXAMPLES,
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+  normalizeBangladeshMobileOrRaw,
+} from "@lib/utils/bd-mobile";
 
 interface OrgDetailPanelProps {
   org: Organisation | null;
@@ -28,9 +34,9 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
   const [editAddress, setEditAddress] = useState(org?.address ?? "");
   const [saving, setSaving] = useState(false);
   const [editError, setEditError] = useState("");
+  const [phoneTouched, setPhoneTouched] = useState(false);
 
-  // Sync edit fields whenever the selected org changes (panel re-opened for different org)
-  // eslint-disable-next-line react-hooks/exhaustive-deps
+  // Sync edit fields whenever the selected org changes (panel re-opened for different org).
   React.useEffect(() => {
     if (org) {
       setEditName(org.name ?? "");
@@ -39,20 +45,25 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
       setEditPhone(org.contactPhone ?? "");
       setEditAddress(org.address ?? "");
       setEditError("");
+      setPhoneTouched(false);
     }
     setTab("info");
-  }, [org?.id, open]);
+  }, [org, open]);
 
   if (!open || !org) return null;
 
   const isPending = org.status === "Pending" || org.status === "ORGANISATION_STATUS_PENDING";
   const isSystemAdmin = currentUserRole === "SYSTEM_ADMIN";
+  const phoneError =
+    phoneTouched && editPhone.trim() && !normalizeBangladeshMobile(editPhone)
+      ? getBangladeshMobileValidationMessage("Contact phone")
+      : "";
 
   async function handleApprove() {
     if (!org) return;
     setApproving(true);
     try {
-      const result = await organisationClient.approve(org.id);
+      const result = await bffClient.organisations.approve(org.id);
       if (!result.ok) { alert(result.message ?? "Approve failed"); return; }
       onRefresh();
     } finally {
@@ -65,7 +76,7 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
     if (!confirm(`Delete organisation "${org.name}"? This cannot be undone.`)) return;
     setDeleting(true);
     try {
-      const result = await organisationClient.delete(org.id);
+      const result = await bffClient.organisations.delete(org.id);
       if (!result.ok) { alert(result.message ?? "Delete failed"); return; }
       onClose();
       onRefresh();
@@ -76,6 +87,11 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
 
   async function handleSave() {
     if (!org) return;
+    if (editPhone.trim() && !normalizeBangladeshMobile(editPhone)) {
+      setPhoneTouched(true);
+      setEditError(getBangladeshMobileValidationMessage("Contact phone"));
+      return;
+    }
     setSaving(true);
     setEditError("");
     try {
@@ -83,10 +99,10 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
       if (editName.trim()) payload.name = editName.trim();
       if (editIndustry.trim()) payload.industry = editIndustry.trim();
       if (editEmail.trim()) payload.contactEmail = editEmail.trim();
-      if (editPhone.trim()) payload.contactPhone = editPhone.trim();
+      if (editPhone.trim()) payload.contactPhone = normalizeBangladeshMobile(editPhone) ?? editPhone.trim();
       if (editAddress.trim()) payload.address = editAddress.trim();
       if (Object.keys(payload).length === 0) return;
-      const result = await organisationClient.update(org.id, payload);
+      const result = await bffClient.organisations.update(org.id, payload);
       if (!result.ok) { setEditError(result.message ?? "Update failed"); return; }
       onRefresh();
     } finally {
@@ -185,12 +201,32 @@ export function OrgDetailPanel({ org, currentUserRole, open, onClose, onRefresh 
                 ].map(({ label, setter, stateVal }) => (
                   <div key={label}>
                     <label className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">{label}</label>
+                    {(() => {
+                      const isPhoneField = label === "Contact Phone";
+                      return (
                     <input
-                      className="mt-1 w-full rounded-md border px-3 py-1.5 text-sm"
+                      className={`mt-1 w-full rounded-md border px-3 py-1.5 text-sm ${isPhoneField && phoneError ? "border-red-500" : ""}`}
                       value={stateVal}
-                      placeholder={`Enter ${label.toLowerCase()}`}
-                      onChange={(e) => setter(e.target.value)}
+                      placeholder={isPhoneField ? BD_MOBILE_EXAMPLES : `Enter ${label.toLowerCase()}`}
+                      onChange={(e) => {
+                        setter(e.target.value);
+                        if (isPhoneField) {
+                          setEditError("");
+                        }
+                      }}
+                      onBlur={(e) => {
+                        if (!isPhoneField) return;
+                        setPhoneTouched(true);
+                        setter(normalizeBangladeshMobileOrRaw(e.target.value));
+                      }}
                     />
+                      );
+                    })()}
+                    {label === "Contact Phone" && (
+                      <p className={`mt-1 text-xs ${phoneError ? "text-red-500" : "text-muted-foreground"}`}>
+                        {phoneError || `Accepted formats: ${BD_MOBILE_EXAMPLES}.`}
+                      </p>
+                    )}
                   </div>
                 ))}
               </div>

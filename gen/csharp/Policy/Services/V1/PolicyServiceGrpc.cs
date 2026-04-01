@@ -69,9 +69,9 @@ namespace Insuretech.Policy.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.CancelPolicyResponse> __Marshaller_insuretech_policy_services_v1_CancelPolicyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.CancelPolicyResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.RenewPolicyRequest> __Marshaller_insuretech_policy_services_v1_RenewPolicyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.RenewPolicyRequest.Parser));
+    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest> __Marshaller_insuretech_policy_services_v1_RenewPolicyTenureRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.RenewPolicyResponse> __Marshaller_insuretech_policy_services_v1_RenewPolicyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.RenewPolicyResponse.Parser));
+    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse> __Marshaller_insuretech_policy_services_v1_RenewPolicyTenureResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest> __Marshaller_insuretech_policy_services_v1_GeneratePolicyDocumentRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -122,12 +122,12 @@ namespace Insuretech.Policy.Services.V1 {
         __Marshaller_insuretech_policy_services_v1_CancelPolicyResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Policy.Services.V1.RenewPolicyRequest, global::Insuretech.Policy.Services.V1.RenewPolicyResponse> __Method_RenewPolicy = new grpc::Method<global::Insuretech.Policy.Services.V1.RenewPolicyRequest, global::Insuretech.Policy.Services.V1.RenewPolicyResponse>(
+    static readonly grpc::Method<global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest, global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse> __Method_RenewPolicy = new grpc::Method<global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest, global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "RenewPolicy",
-        __Marshaller_insuretech_policy_services_v1_RenewPolicyRequest,
-        __Marshaller_insuretech_policy_services_v1_RenewPolicyResponse);
+        __Marshaller_insuretech_policy_services_v1_RenewPolicyTenureRequest,
+        __Marshaller_insuretech_policy_services_v1_RenewPolicyTenureResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest, global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse> __Method_GeneratePolicyDocument = new grpc::Method<global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest, global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse>(
@@ -222,7 +222,7 @@ namespace Insuretech.Policy.Services.V1 {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Policy.Services.V1.RenewPolicyResponse> RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse> RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -529,7 +529,7 @@ namespace Insuretech.Policy.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Policy.Services.V1.RenewPolicyResponse RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return RenewPolicy(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -540,7 +540,7 @@ namespace Insuretech.Policy.Services.V1 {
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Policy.Services.V1.RenewPolicyResponse RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyRequest request, grpc::CallOptions options)
+      public virtual global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse RenewPolicy(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_RenewPolicy, null, options, request);
       }
@@ -553,7 +553,7 @@ namespace Insuretech.Policy.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Policy.Services.V1.RenewPolicyResponse> RenewPolicyAsync(global::Insuretech.Policy.Services.V1.RenewPolicyRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse> RenewPolicyAsync(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return RenewPolicyAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -564,7 +564,7 @@ namespace Insuretech.Policy.Services.V1 {
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Policy.Services.V1.RenewPolicyResponse> RenewPolicyAsync(global::Insuretech.Policy.Services.V1.RenewPolicyRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse> RenewPolicyAsync(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_RenewPolicy, null, options, request);
       }
@@ -700,7 +700,7 @@ namespace Insuretech.Policy.Services.V1 {
       serviceBinder.AddMethod(__Method_ListUserPolicies, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.ListUserPoliciesRequest, global::Insuretech.Policy.Services.V1.ListUserPoliciesResponse>(serviceImpl.ListUserPolicies));
       serviceBinder.AddMethod(__Method_UpdatePolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.UpdatePolicyRequest, global::Insuretech.Policy.Services.V1.UpdatePolicyResponse>(serviceImpl.UpdatePolicy));
       serviceBinder.AddMethod(__Method_CancelPolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.CancelPolicyRequest, global::Insuretech.Policy.Services.V1.CancelPolicyResponse>(serviceImpl.CancelPolicy));
-      serviceBinder.AddMethod(__Method_RenewPolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.RenewPolicyRequest, global::Insuretech.Policy.Services.V1.RenewPolicyResponse>(serviceImpl.RenewPolicy));
+      serviceBinder.AddMethod(__Method_RenewPolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest, global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse>(serviceImpl.RenewPolicy));
       serviceBinder.AddMethod(__Method_GeneratePolicyDocument, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest, global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse>(serviceImpl.GeneratePolicyDocument));
       serviceBinder.AddMethod(__Method_IssuePolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.IssuePolicyRequest, global::Insuretech.Policy.Services.V1.IssuePolicyResponse>(serviceImpl.IssuePolicy));
     }

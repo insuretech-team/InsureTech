@@ -1,0 +1,9 @@
+ConvertLeadToContactResponse:
+  type: object
+  properties:
+    contact:
+      $ref: '#/components/schemas/Contact'
+    lead:
+      $ref: '#/components/schemas/Lead'
+  description: Response payload for convert lead to contact operation. Returns operation
+    results and status.

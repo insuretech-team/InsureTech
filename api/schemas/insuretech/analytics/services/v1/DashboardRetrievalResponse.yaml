@@ -8,8 +8,5 @@ DashboardRetrievalResponse:
       additionalProperties:
         type: string
       description: widget_id -> data
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for dashboard retrieval operation. Returns operation
     results and status.

@@ -27,72 +27,83 @@ namespace Insuretech.Refund.Entity.V1 {
             "CihpbnN1cmV0ZWNoL3JlZnVuZC9lbnRpdHkvdjEvcmVmdW5kLnByb3RvEhtp",
             "bnN1cmV0ZWNoLnJlZnVuZC5lbnRpdHkudjEaH2dvb2dsZS9wcm90b2J1Zi90",
             "aW1lc3RhbXAucHJvdG8aHWluc3VyZXRlY2gvY29tbW9uL3YxL2RiLnByb3Rv",
-            "GiBpbnN1cmV0ZWNoL2NvbW1vbi92MS90eXBlcy5wcm90byKBDwoGUmVmdW5k",
+            "GiBpbnN1cmV0ZWNoL2NvbW1vbi92MS90eXBlcy5wcm90byLLEgoGUmVmdW5k",
             "EjwKAmlkGAEgASgJQiyStRgoCglyZWZ1bmRfaWQSBFVVSUQYASgBOhFnZW5f",
             "cmFuZG9tX3V1aWQoKVICaWQSagoNcmVmdW5kX251bWJlchgCIAEoCUJFkrUY",
             "QQoNcmVmdW5kX251bWJlchILVkFSQ0hBUig1MCkYASABUh8KGWlkeF9yZWZ1",
-            "bmRzX251bWJlcl91bmlxdWUQAhgBUgxyZWZ1bmROdW1iZXISegoJcG9saWN5",
-            "X2lkGAMgASgJQl2StRhZCglwb2xpY3lfaWQSBFVVSUQYAUopCghwb2xpY2ll",
-            "cxIJcG9saWN5X2lkGhBpbnN1cmFuY2Vfc2NoZW1hIANSGQoVaWR4X3JlZnVu",
-            "ZHNfcG9saWN5X2lkEAJSCHBvbGljeUlkEnYKBnJlYXNvbhgEIAEoDjIpLmlu",
-            "c3VyZXRlY2gucmVmdW5kLmVudGl0eS52MS5SZWZ1bmRSZWFzb25CM5K1GC8K",
-            "BnJlYXNvbhILVkFSQ0hBUig1MCkYAVIWChJpZHhfcmVmdW5kc19yZWFzb24Q",
-            "AlIGcmVhc29uEkEKDnJlYXNvbl9kZXRhaWxzGAUgASgJQhqStRgWCg5yZWFz",
-            "b25fZGV0YWlscxIEVEVYVFINcmVhc29uRGV0YWlscxJJChJ0b3RhbF9wcmVt",
-            "aXVtX3BhaWQYBiABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5Nb25leVIQ",
-            "dG90YWxQcmVtaXVtUGFpZBI+CgxwcmVtaXVtX3VzZWQYByABKAsyGy5pbnN1",
-            "cmV0ZWNoLmNvbW1vbi52MS5Nb25leVILcHJlbWl1bVVzZWQSTAoTY2FuY2Vs",
-            "bGF0aW9uX2NoYXJnZRgIIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLk1v",
-            "bmV5UhJjYW5jZWxsYXRpb25DaGFyZ2USSAoRcmVmdW5kYWJsZV9hbW91bnQY",
-            "CSABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5Nb25leVIQcmVmdW5kYWJs",
-            "ZUFtb3VudBJxChNjYWxjdWxhdGlvbl9kZXRhaWxzGAogASgJQkCStRg8ChNj",
-            "YWxjdWxhdGlvbl9kZXRhaWxzEgVKU09OQlocUmVmdW5kIGNhbGN1bGF0aW9u",
-            "IGJyZWFrZG93bngBUhJjYWxjdWxhdGlvbkRldGFpbHMSgQEKBnN0YXR1cxgL",
-            "IAEoDjIpLmluc3VyZXRlY2gucmVmdW5kLmVudGl0eS52MS5SZWZ1bmRTdGF0",
-            "dXNCPpK1GDoKBnN0YXR1cxILVkFSQ0hBUigyMCkYAToJJ1BFTkRJTkcnUhYK",
-            "EmlkeF9yZWZ1bmRzX3N0YXR1cxACUgZzdGF0dXMSXwoMcmVxdWVzdGVkX2J5",
-            "GAwgASgJQjyStRg4CgxyZXF1ZXN0ZWRfYnkSBFVVSUQYAUogCgV1c2VycxIH",
-            "dXNlcl9pZBoMYXV0aG5fc2NoZW1hIAJSC3JlcXVlc3RlZEJ5ElwKC2FwcHJv",
-            "dmVkX2J5GA0gASgJQjuStRg3CgthcHByb3ZlZF9ieRIEVVVJREoiCgV1c2Vy",
-            "cxIHdXNlcl9pZBoMYXV0aG5fc2NoZW1hIAQoA1IKYXBwcm92ZWRCeRJkCg5w",
-            "YXltZW50X21ldGhvZBgOIAEoCUI9krUYOQoOcGF5bWVudF9tZXRob2QSC1ZB",
-            "UkNIQVIoMjApWhpCQU5LX1RSQU5TRkVSLCBNRlMsIENIRVFVRVINcGF5bWVu",
-            "dE1ldGhvZBJSChFwYXltZW50X3JlZmVyZW5jZRgPIAEoCUIlkrUYIQoRcGF5",
-            "bWVudF9yZWZlcmVuY2USDFZBUkNIQVIoMTAwKVIQcGF5bWVudFJlZmVyZW5j",
-            "ZRLMAQoRcGF5bWVudF9yZWZ1bmRfaWQYECABKAlCnwGStRiaAQoRcGF5bWVu",
-            "dF9yZWZ1bmRfaWQSBFVVSURKLgoPcGF5bWVudF9yZWZ1bmRzEglyZWZ1bmRf",
-            "aWQaDnBheW1lbnRfc2NoZW1hIARSIQodaWR4X3JlZnVuZHNfcGF5bWVudF9y",
-            "ZWZ1bmRfaWQQAlosTGlua3MgYnVzaW5lc3MgcmVmdW5kIHRvIHBheW1lbnQg",
-            "dHJhbnNhY3Rpb25SD3BheW1lbnRSZWZ1bmRJZBJeCgxwcm9jZXNzZWRfYXQY",
-            "ESABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQh+StRgbCgxwcm9j",
-            "ZXNzZWRfYXQSC1RJTUVTVEFNUFRaUgtwcm9jZXNzZWRBdBKEAQoKYXVkaXRf",
-            "aW5mbxgSIAEoCzIfLmluc3VyZXRlY2guY29tbW9uLnYxLkF1ZGl0SW5mb0JE",
-            "krUYQAoKYXVkaXRfaW5mbxIFSlNPTkIYAToLJ3t9Jzo6anNvbmJaGkF1ZGl0",
-            "IHRyYWlsIHN0b3JlZCBhcyBKU09OeAFSCWF1ZGl0SW5mbzpNirUYSQoHcmVm",
-            "dW5kcxIOcGF5bWVudF9zY2hlbWEYJyABKihQcmVtaXVtIHJlZnVuZHMgZm9y",
-            "IHBvbGljeSBjYW5jZWxsYXRpb25zOAEqpwIKDFJlZnVuZFJlYXNvbhIdChlS",
-            "RUZVTkRfUkVBU09OX1VOU1BFQ0lGSUVEEAASKAokUkVGVU5EX1JFQVNPTl9G",
-            "UkVFX0xPT0tfQ0FOQ0VMTEFUSU9OEAESIgoeUkVGVU5EX1JFQVNPTl9DVVNU",
-            "T01FUl9SRVFVRVNUEAISKAokUkVGVU5EX1JFQVNPTl9VTkRFUldSSVRJTkdf",
-            "UkVKRUNUSU9OEAMSIgoeUkVGVU5EX1JFQVNPTl9EVVBMSUNBVEVfUE9MSUNZ",
-            "EAQSIgoeUkVGVU5EX1JFQVNPTl9ERUFUSF9PRl9JTlNVUkVEEAUSHwobUkVG",
-            "VU5EX1JFQVNPTl9QT0xJQ1lfTEFQU0VEEAYSFwoTUkVGVU5EX1JFQVNPTl9G",
-            "UkFVRBAHKvQBCgxSZWZ1bmRTdGF0dXMSHQoZUkVGVU5EX1NUQVRVU19VTlNQ",
-            "RUNJRklFRBAAEhkKFVJFRlVORF9TVEFUVVNfUEVORElORxABEh0KGVJFRlVO",
-            "RF9TVEFUVVNfQ0FMQ1VMQVRJTkcQAhIaChZSRUZVTkRfU1RBVFVTX0FQUFJP",
-            "VkVEEAMSHAoYUkVGVU5EX1NUQVRVU19QUk9DRVNTSU5HEAQSGwoXUkVGVU5E",
-            "X1NUQVRVU19DT01QTEVURUQQBRIYChRSRUZVTkRfU1RBVFVTX0ZBSUxFRBAG",
-            "EhoKFlJFRlVORF9TVEFUVVNfUkVKRUNURUQQB0KNAgofY29tLmluc3VyZXRl",
-            "Y2gucmVmdW5kLmVudGl0eS52MUILUmVmdW5kUHJvdG9QAVpOZ2l0aHViLmNv",
-            "bS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC9y",
-            "ZWZ1bmQvZW50aXR5L3YxO2VudGl0eXYxogIDSVJFqgIbSW5zdXJldGVjaC5S",
-            "ZWZ1bmQuRW50aXR5LlYxygIbSW5zdXJldGVjaFxSZWZ1bmRcRW50aXR5XFYx",
-            "4gInSW5zdXJldGVjaFxSZWZ1bmRcRW50aXR5XFYxXEdQQk1ldGFkYXRh6gIe",
-            "SW5zdXJldGVjaDo6UmVmdW5kOjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "bmRzX251bWJlcl91bmlxdWUQAhgBUgxyZWZ1bmROdW1iZXIStwEKCXBvbGlj",
+            "eV9pZBgDIAEoCUKZAZK1GJQBCglwb2xpY3lfaWQSBFVVSURKKQoIcG9saWNp",
+            "ZXMSCXBvbGljeV9pZBoQaW5zdXJhbmNlX3NjaGVtYSADUhkKFWlkeF9yZWZ1",
+            "bmRzX3BvbGljeV9pZBACWjtQb2xpY3kgbGlua2VkIHRvIHRoZSByZWZ1bmQg",
+            "d2hlbiB0aGUgcmVmdW5kIGlzIHBvbGljeS1iYXNlZFIIcG9saWN5SWQSdgoG",
+            "cmVhc29uGAQgASgOMikuaW5zdXJldGVjaC5yZWZ1bmQuZW50aXR5LnYxLlJl",
+            "ZnVuZFJlYXNvbkIzkrUYLwoGcmVhc29uEgtWQVJDSEFSKDUwKRgBUhYKEmlk",
+            "eF9yZWZ1bmRzX3JlYXNvbhACUgZyZWFzb24SQQoOcmVhc29uX2RldGFpbHMY",
+            "BSABKAlCGpK1GBYKDnJlYXNvbl9kZXRhaWxzEgRURVhUUg1yZWFzb25EZXRh",
+            "aWxzEkkKEnRvdGFsX3ByZW1pdW1fcGFpZBgGIAEoCzIbLmluc3VyZXRlY2gu",
+            "Y29tbW9uLnYxLk1vbmV5UhB0b3RhbFByZW1pdW1QYWlkEj4KDHByZW1pdW1f",
+            "dXNlZBgHIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLk1vbmV5UgtwcmVt",
+            "aXVtVXNlZBJMChNjYW5jZWxsYXRpb25fY2hhcmdlGAggASgLMhsuaW5zdXJl",
+            "dGVjaC5jb21tb24udjEuTW9uZXlSEmNhbmNlbGxhdGlvbkNoYXJnZRJIChFy",
+            "ZWZ1bmRhYmxlX2Ftb3VudBgJIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYx",
+            "Lk1vbmV5UhByZWZ1bmRhYmxlQW1vdW50EnEKE2NhbGN1bGF0aW9uX2RldGFp",
+            "bHMYCiABKAlCQJK1GDwKE2NhbGN1bGF0aW9uX2RldGFpbHMSBUpTT05CWhxS",
+            "ZWZ1bmQgY2FsY3VsYXRpb24gYnJlYWtkb3dueAFSEmNhbGN1bGF0aW9uRGV0",
+            "YWlscxKBAQoGc3RhdHVzGAsgASgOMikuaW5zdXJldGVjaC5yZWZ1bmQuZW50",
+            "aXR5LnYxLlJlZnVuZFN0YXR1c0I+krUYOgoGc3RhdHVzEgtWQVJDSEFSKDIw",
+            "KRgBOgknUEVORElORydSFgoSaWR4X3JlZnVuZHNfc3RhdHVzEAJSBnN0YXR1",
+            "cxJfCgxyZXF1ZXN0ZWRfYnkYDCABKAlCPJK1GDgKDHJlcXVlc3RlZF9ieRIE",
+            "VVVJRBgBSiAKBXVzZXJzEgd1c2VyX2lkGgxhdXRobl9zY2hlbWEgAlILcmVx",
+            "dWVzdGVkQnkSXAoLYXBwcm92ZWRfYnkYDSABKAlCO5K1GDcKC2FwcHJvdmVk",
+            "X2J5EgRVVUlESiIKBXVzZXJzEgd1c2VyX2lkGgxhdXRobl9zY2hlbWEgBCgD",
+            "UgphcHByb3ZlZEJ5EmQKDnBheW1lbnRfbWV0aG9kGA4gASgJQj2StRg5Cg5w",
+            "YXltZW50X21ldGhvZBILVkFSQ0hBUigyMClaGkJBTktfVFJBTlNGRVIsIE1G",
+            "UywgQ0hFUVVFUg1wYXltZW50TWV0aG9kElIKEXBheW1lbnRfcmVmZXJlbmNl",
+            "GA8gASgJQiWStRghChFwYXltZW50X3JlZmVyZW5jZRIMVkFSQ0hBUigxMDAp",
+            "UhBwYXltZW50UmVmZXJlbmNlEswBChFwYXltZW50X3JlZnVuZF9pZBgQIAEo",
+            "CUKfAZK1GJoBChFwYXltZW50X3JlZnVuZF9pZBIEVVVJREouCg9wYXltZW50",
+            "X3JlZnVuZHMSCXJlZnVuZF9pZBoOcGF5bWVudF9zY2hlbWEgBFIhCh1pZHhf",
+            "cmVmdW5kc19wYXltZW50X3JlZnVuZF9pZBACWixMaW5rcyBidXNpbmVzcyBy",
+            "ZWZ1bmQgdG8gcGF5bWVudCB0cmFuc2FjdGlvblIPcGF5bWVudFJlZnVuZElk",
+            "El4KDHByb2Nlc3NlZF9hdBgRIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1l",
+            "c3RhbXBCH5K1GBsKDHByb2Nlc3NlZF9hdBILVElNRVNUQU1QVFpSC3Byb2Nl",
+            "c3NlZEF0EoQBCgphdWRpdF9pbmZvGBIgASgLMh8uaW5zdXJldGVjaC5jb21t",
+            "b24udjEuQXVkaXRJbmZvQkSStRhACgphdWRpdF9pbmZvEgVKU09OQhgBOgsn",
+            "e30nOjpqc29uYloaQXVkaXQgdHJhaWwgc3RvcmVkIGFzIEpTT054AVIJYXVk",
+            "aXRJbmZvEskBCghvcmRlcl9pZBgTIAEoCUKtAZK1GKgBCghvcmRlcl9pZBIE",
+            "VVVJREooCgZvcmRlcnMSCG9yZGVyX2lkGhBpbnN1cmFuY2Vfc2NoZW1hIAQo",
+            "A1IYChRpZHhfcmVmdW5kc19vcmRlcl9pZBACWlJPcmRlciBsaW5rZWQgdG8g",
+            "dGhlIHJlZnVuZCB3aGVuIGEgcGFpZCBwcm9wb3NhbCBpcyByZWplY3RlZCBi",
+            "ZWZvcmUgcG9saWN5IGlzc3VhbmNlUgdvcmRlcklkEr0BCgtwcm9wb3NhbF9p",
+            "ZBgUIAEoCUKbAZK1GJYBCgtwcm9wb3NhbF9pZBIEVVVJREo4ChNpbnN1cmFu",
+            "Y2VfcHJvcG9zYWxzEgtwcm9wb3NhbF9pZBoQaW5zdXJhbmNlX3NjaGVtYSAE",
+            "KANSGwoXaWR4X3JlZnVuZHNfcHJvcG9zYWxfaWQQAloqSW5zdXJlciBwcm9w",
+            "b3NhbCB0aGF0IHRyaWdnZXJlZCB0aGUgcmVmdW5kUgpwcm9wb3NhbElkOk2K",
+            "tRhJCgdyZWZ1bmRzEg5wYXltZW50X3NjaGVtYRgnIAEqKFByZW1pdW0gcmVm",
+            "dW5kcyBmb3IgcG9saWN5IGNhbmNlbGxhdGlvbnM4ASrNAgoMUmVmdW5kUmVh",
+            "c29uEh0KGVJFRlVORF9SRUFTT05fVU5TUEVDSUZJRUQQABIoCiRSRUZVTkRf",
+            "UkVBU09OX0ZSRUVfTE9PS19DQU5DRUxMQVRJT04QARIiCh5SRUZVTkRfUkVB",
+            "U09OX0NVU1RPTUVSX1JFUVVFU1QQAhIoCiRSRUZVTkRfUkVBU09OX1VOREVS",
+            "V1JJVElOR19SRUpFQ1RJT04QAxIiCh5SRUZVTkRfUkVBU09OX0RVUExJQ0FU",
+            "RV9QT0xJQ1kQBBIiCh5SRUZVTkRfUkVBU09OX0RFQVRIX09GX0lOU1VSRUQQ",
+            "BRIfChtSRUZVTkRfUkVBU09OX1BPTElDWV9MQVBTRUQQBhIXChNSRUZVTkRf",
+            "UkVBU09OX0ZSQVVEEAcSJAogUkVGVU5EX1JFQVNPTl9QUk9QT1NBTF9SRUpF",
+            "Q1RJT04QCCr0AQoMUmVmdW5kU3RhdHVzEh0KGVJFRlVORF9TVEFUVVNfVU5T",
+            "UEVDSUZJRUQQABIZChVSRUZVTkRfU1RBVFVTX1BFTkRJTkcQARIdChlSRUZV",
+            "TkRfU1RBVFVTX0NBTENVTEFUSU5HEAISGgoWUkVGVU5EX1NUQVRVU19BUFBS",
+            "T1ZFRBADEhwKGFJFRlVORF9TVEFUVVNfUFJPQ0VTU0lORxAEEhsKF1JFRlVO",
+            "RF9TVEFUVVNfQ09NUExFVEVEEAUSGAoUUkVGVU5EX1NUQVRVU19GQUlMRUQQ",
+            "BhIaChZSRUZVTkRfU1RBVFVTX1JFSkVDVEVEEAdCjQIKH2NvbS5pbnN1cmV0",
+            "ZWNoLnJlZnVuZC5lbnRpdHkudjFCC1JlZnVuZFByb3RvUAFaTmdpdGh1Yi5j",
+            "b20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gvZ2VuL2dvL2luc3VyZXRlY2gv",
+            "cmVmdW5kL2VudGl0eS92MTtlbnRpdHl2MaICA0lSRaoCG0luc3VyZXRlY2gu",
+            "UmVmdW5kLkVudGl0eS5WMcoCG0luc3VyZXRlY2hcUmVmdW5kXEVudGl0eVxW",
+            "MeICJ0luc3VyZXRlY2hcUmVmdW5kXEVudGl0eVxWMVxHUEJNZXRhZGF0YeoC",
+            "Hkluc3VyZXRlY2g6OlJlZnVuZDo6RW50aXR5OjpWMWIGcHJvdG8z"));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, global::Insuretech.Common.V1.TypesReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Refund.Entity.V1.RefundReason), typeof(global::Insuretech.Refund.Entity.V1.RefundStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Refund.Entity.V1.Refund), global::Insuretech.Refund.Entity.V1.Refund.Parser, new[]{ "Id", "RefundNumber", "PolicyId", "Reason", "ReasonDetails", "TotalPremiumPaid", "PremiumUsed", "CancellationCharge", "RefundableAmount", "CalculationDetails", "Status", "RequestedBy", "ApprovedBy", "PaymentMethod", "PaymentReference", "PaymentRefundId", "ProcessedAt", "AuditInfo" }, null, null, null, null)
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Refund.Entity.V1.Refund), global::Insuretech.Refund.Entity.V1.Refund.Parser, new[]{ "Id", "RefundNumber", "PolicyId", "Reason", "ReasonDetails", "TotalPremiumPaid", "PremiumUsed", "CancellationCharge", "RefundableAmount", "CalculationDetails", "Status", "RequestedBy", "ApprovedBy", "PaymentMethod", "PaymentReference", "PaymentRefundId", "ProcessedAt", "AuditInfo", "OrderId", "ProposalId" }, null, null, null, null)
           }));
     }
     #endregion
@@ -111,6 +122,7 @@ namespace Insuretech.Refund.Entity.V1 {
     [pbr::OriginalName("REFUND_REASON_DEATH_OF_INSURED")] DeathOfInsured = 5,
     [pbr::OriginalName("REFUND_REASON_POLICY_LAPSED")] PolicyLapsed = 6,
     [pbr::OriginalName("REFUND_REASON_FRAUD")] Fraud = 7,
+    [pbr::OriginalName("REFUND_REASON_PROPOSAL_REJECTION")] ProposalRejection = 8,
   }
 
   public enum RefundStatus {
@@ -128,7 +140,7 @@ namespace Insuretech.Refund.Entity.V1 {
 
   #region Messages
   /// <summary>
-  /// Refund for policy cancellation (FR-093 to FR-097)
+  /// Refund for policy cancellation or paid-order reversal after insurer/proposal rejection.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
   public sealed partial class Refund : pb::IMessage<Refund>
@@ -183,6 +195,8 @@ namespace Insuretech.Refund.Entity.V1 {
       paymentRefundId_ = other.paymentRefundId_;
       processedAt_ = other.processedAt_ != null ? other.processedAt_.Clone() : null;
       auditInfo_ = other.auditInfo_ != null ? other.auditInfo_.Clone() : null;
+      orderId_ = other.orderId_;
+      proposalId_ = other.proposalId_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -226,7 +240,7 @@ namespace Insuretech.Refund.Entity.V1 {
     public const int PolicyIdFieldNumber = 3;
     private string policyId_ = "";
     /// <summary>
-    /// @inject_tag: gorm:"column:policy_id;not null"
+    /// @inject_tag: gorm:"column:policy_id"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -450,6 +464,36 @@ namespace Insuretech.Refund.Entity.V1 {
       }
     }
 
+    /// <summary>Field number for the "order_id" field.</summary>
+    public const int OrderIdFieldNumber = 19;
+    private string orderId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:order_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string OrderId {
+      get { return orderId_; }
+      set {
+        orderId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "proposal_id" field.</summary>
+    public const int ProposalIdFieldNumber = 20;
+    private string proposalId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProposalId {
+      get { return proposalId_; }
+      set {
+        proposalId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -483,6 +527,8 @@ namespace Insuretech.Refund.Entity.V1 {
       if (PaymentRefundId != other.PaymentRefundId) return false;
       if (!object.Equals(ProcessedAt, other.ProcessedAt)) return false;
       if (!object.Equals(AuditInfo, other.AuditInfo)) return false;
+      if (OrderId != other.OrderId) return false;
+      if (ProposalId != other.ProposalId) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -508,6 +554,8 @@ namespace Insuretech.Refund.Entity.V1 {
       if (PaymentRefundId.Length != 0) hash ^= PaymentRefundId.GetHashCode();
       if (processedAt_ != null) hash ^= ProcessedAt.GetHashCode();
       if (auditInfo_ != null) hash ^= AuditInfo.GetHashCode();
+      if (OrderId.Length != 0) hash ^= OrderId.GetHashCode();
+      if (ProposalId.Length != 0) hash ^= ProposalId.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -598,6 +646,14 @@ namespace Insuretech.Refund.Entity.V1 {
         output.WriteRawTag(146, 1);
         output.WriteMessage(AuditInfo);
       }
+      if (OrderId.Length != 0) {
+        output.WriteRawTag(154, 1);
+        output.WriteString(OrderId);
+      }
+      if (ProposalId.Length != 0) {
+        output.WriteRawTag(162, 1);
+        output.WriteString(ProposalId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -680,6 +736,14 @@ namespace Insuretech.Refund.Entity.V1 {
         output.WriteRawTag(146, 1);
         output.WriteMessage(AuditInfo);
       }
+      if (OrderId.Length != 0) {
+        output.WriteRawTag(154, 1);
+        output.WriteString(OrderId);
+      }
+      if (ProposalId.Length != 0) {
+        output.WriteRawTag(162, 1);
+        output.WriteString(ProposalId);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -743,6 +807,12 @@ namespace Insuretech.Refund.Entity.V1 {
       }
       if (auditInfo_ != null) {
         size += 2 + pb::CodedOutputStream.ComputeMessageSize(AuditInfo);
+      }
+      if (OrderId.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(OrderId);
+      }
+      if (ProposalId.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(ProposalId);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -827,6 +897,12 @@ namespace Insuretech.Refund.Entity.V1 {
           AuditInfo = new global::Insuretech.Common.V1.AuditInfo();
         }
         AuditInfo.MergeFrom(other.AuditInfo);
+      }
+      if (other.OrderId.Length != 0) {
+        OrderId = other.OrderId;
+      }
+      if (other.ProposalId.Length != 0) {
+        ProposalId = other.ProposalId;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -937,6 +1013,14 @@ namespace Insuretech.Refund.Entity.V1 {
             input.ReadMessage(AuditInfo);
             break;
           }
+          case 154: {
+            OrderId = input.ReadString();
+            break;
+          }
+          case 162: {
+            ProposalId = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -1044,6 +1128,14 @@ namespace Insuretech.Refund.Entity.V1 {
               AuditInfo = new global::Insuretech.Common.V1.AuditInfo();
             }
             input.ReadMessage(AuditInfo);
+            break;
+          }
+          case 154: {
+            OrderId = input.ReadString();
+            break;
+          }
+          case 162: {
+            ProposalId = input.ReadString();
             break;
           }
         }

@@ -1,0 +1,13 @@
+SaveReserveCalculationResponse:
+  type: object
+  properties:
+    reserve:
+      $ref: '#/components/schemas/ReserveCalculation'
+    success:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+  description: Response payload for save reserve calculation operation. Returns operation
+    results and status.

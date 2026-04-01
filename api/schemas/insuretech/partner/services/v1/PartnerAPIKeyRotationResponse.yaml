@@ -8,8 +8,5 @@ PartnerAPIKeyRotationResponse:
     expires_at:
       type: string
       format: date-time
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for partner api key rotation operation. Returns operation
     results and status.

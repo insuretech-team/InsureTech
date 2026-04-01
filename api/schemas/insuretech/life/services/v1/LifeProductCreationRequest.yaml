@@ -1,0 +1,49 @@
+LifeProductCreationRequest:
+  type: object
+  properties:
+    product_code:
+      type: string
+    product_name:
+      type: string
+    product_type:
+      $ref: '#/components/schemas/LifeProductType'
+    description:
+      type: string
+    base_rate:
+      type: string
+      format: int64
+    age_addition_config:
+      $ref: '#/components/schemas/AgeAdditionConfig'
+    condition_multipliers:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConditionMultiplier'
+    bonuses:
+      type: array
+      items:
+        $ref: '#/components/schemas/BonusConfig'
+    min_sum_assured:
+      type: string
+      format: int64
+    max_sum_assured:
+      type: string
+      format: int64
+    min_entry_age:
+      type: integer
+      format: int32
+    max_entry_age:
+      type: integer
+      format: int32
+    min_policy_term:
+      type: integer
+      format: int32
+    max_policy_term:
+      type: integer
+      format: int32
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for creating a new life product creation. Contains
+    all required fields and optional parameters for initialization.

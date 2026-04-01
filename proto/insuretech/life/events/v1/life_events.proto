@@ -1,0 +1,87 @@
+syntax = "proto3";
+
+package insuretech.life.events.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/life/events/v1;lifeeventsv1";
+option csharp_namespace = "Insuretech.Life.Events.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/life/entity/v1/life.proto";
+
+// LifeProductCreatedEvent is emitted when a new life product is created
+message LifeProductCreatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  string product_name = 4;
+  entity.v1.LifeProductType product_type = 5;
+  int64 base_rate = 6;
+  google.protobuf.Timestamp created_at = 7;
+}
+
+// LifeProductUpdatedEvent is emitted when a life product is updated
+message LifeProductUpdatedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_name = 3;
+  repeated string changed_fields = 4;
+  google.protobuf.Timestamp updated_at = 5;
+}
+
+// LifeProductDeletedEvent is emitted when a life product is deleted
+message LifeProductDeletedEvent {
+  string event_id = 1;
+  string product_id = 2;
+  string product_code = 3;
+  bool permanent = 4;
+  google.protobuf.Timestamp deleted_at = 5;
+}
+
+// LifeQuoteGeneratedEvent is emitted when a quote is generated
+message LifeQuoteGeneratedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string product_id = 4;
+  string customer_id = 5;
+  string insured_person_name = 6;
+  int32 age_at_entry = 7;
+  int64 sum_assured = 8;
+  int64 total_premium = 9;
+  google.protobuf.Timestamp valid_until = 10;
+  google.protobuf.Timestamp generated_at = 11;
+}
+
+// LifeQuoteConvertedEvent is emitted when a quote is converted to policy
+message LifeQuoteConvertedEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  string policy_id = 4;
+  string customer_id = 5;
+  string product_id = 6;
+  int64 total_premium = 7;
+  google.protobuf.Timestamp converted_at = 8;
+}
+
+// LifeQuoteExpiredEvent is emitted when a quote expires
+message LifeQuoteExpiredEvent {
+  string event_id = 1;
+  string quote_id = 2;
+  string quote_number = 3;
+  google.protobuf.Timestamp expired_at = 4;
+}
+
+// PremiumCalculatedEvent is emitted when premium is calculated
+message PremiumCalculatedEvent {
+  string event_id = 1;
+  string calculation_id = 2;
+  string product_id = 3;
+  int32 age_at_entry = 4;
+  int64 base_premium = 5;
+  int64 age_addition = 6;
+  float condition_multiplier = 7;
+  int64 total_premium = 8;
+  int32 calculation_duration_ms = 9;
+  google.protobuf.Timestamp calculated_at = 10;
+}

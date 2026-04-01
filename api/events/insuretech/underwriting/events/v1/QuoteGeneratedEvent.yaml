@@ -1,4 +1,4 @@
-QuoteGeneratedEvent:
+UnderwritingQuoteGeneratedEvent:
   type: object
   properties:
     event_id:

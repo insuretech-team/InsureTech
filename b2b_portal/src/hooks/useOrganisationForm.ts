@@ -6,7 +6,12 @@
 "use client";
 
 import { useState, useCallback } from "react";
-import { organisationClient, type OrgCreatePayload } from "@lib/sdk/organisation-client";
+import { bffClient, type OrgCreatePayload } from "@lib/sdk/b2b-sdk-client";
+import {
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+} from "@/src/lib/utils/bd-mobile";
+import { getPasswordValidationMessage } from "@/src/lib/utils/password";
 
 export interface OrgFormValues {
   name: string;
@@ -24,6 +29,7 @@ export interface OrgFormValues {
 export interface OrgFormErrors {
   name?: string;
   contactEmail?: string;
+  contactPhone?: string;
   adminEmail?: string;
   adminPassword?: string;
   adminMobileNumber?: string;
@@ -43,31 +49,23 @@ export const EMPTY_ORG_FORM: OrgFormValues = {
   adminMobileNumber: "",
 };
 
-function looksLikeBangladeshMobile(raw: string): boolean {
-  const digits = raw.replace(/\D/g, "");
-  return /^(?:880|0)?1[3-9]\d{8}$/.test(digits) || /^1[3-9]\d{8}$/.test(digits);
-}
-
-function validate(v: OrgFormValues, mode: "create" | "edit"): OrgFormErrors {
+function validateWithOptions(
+  v: OrgFormValues,
+  mode: "create" | "edit",
+  requireDefaultAdmin: boolean,
+): OrgFormErrors {
   const e: OrgFormErrors = {};
   if (!v.name.trim()) e.name = "Organisation name is required";
-  if (mode === "create") {
+  if (v.contactPhone.trim() && !normalizeBangladeshMobile(v.contactPhone.trim())) {
+    e.contactPhone = getBangladeshMobileValidationMessage("Contact phone");
+  }
+  if (mode === "create" && requireDefaultAdmin) {
     if (!v.adminEmail.trim()) e.adminEmail = "Admin email is required";
-    if (!v.adminPassword.trim()) {
-      e.adminPassword = "Admin password is required";
-    } else {
-      const hasUpper = /[A-Z]/.test(v.adminPassword);
-      const hasLower = /[a-z]/.test(v.adminPassword);
-      const hasDigit = /\d/.test(v.adminPassword);
-      const hasSymbol = /[^A-Za-z0-9]/.test(v.adminPassword);
-      if (v.adminPassword.length < 8 || !hasUpper || !hasLower || !hasDigit || !hasSymbol) {
-        e.adminPassword = "Use 8+ chars with upper, lower, number, and symbol";
-      }
-    }
+    e.adminPassword = getPasswordValidationMessage(v.adminPassword, "Admin password") ?? undefined;
     if (!v.adminMobileNumber.trim()) {
       e.adminMobileNumber = "Admin mobile number is required";
-    } else if (!looksLikeBangladeshMobile(v.adminMobileNumber.trim())) {
-      e.adminMobileNumber = "Use a valid BD mobile number";
+    } else if (!normalizeBangladeshMobile(v.adminMobileNumber.trim())) {
+      e.adminMobileNumber = getBangladeshMobileValidationMessage("Admin mobile number");
     }
   }
   return e;
@@ -79,6 +77,11 @@ interface UseOrgFormOptions {
   initialValues?: Partial<OrgFormValues>;
   onSuccess?: (message: string) => void;
   onError?: (message: string) => void;
+}
+
+interface SubmitOverrides {
+  requireDefaultAdmin?: boolean;
+  createPayload?: Partial<OrgCreatePayload>;
 }
 
 export function useOrganisationForm({ mode, orgId, initialValues, onSuccess, onError }: UseOrgFormOptions) {
@@ -96,29 +99,43 @@ export function useOrganisationForm({ mode, orgId, initialValues, onSuccess, onE
     setErrors({});
   }, [initialValues]);
 
-  const submit = useCallback(async (e: React.FormEvent) => {
+  const submit = useCallback(async (e: React.FormEvent, overrides?: SubmitOverrides) => {
     e.preventDefault();
-    const ve = validate(values, mode);
+    const requireDefaultAdmin = overrides?.requireDefaultAdmin ?? (mode === "create");
+    const ve = validateWithOptions(values, mode, requireDefaultAdmin);
     if (Object.keys(ve).length > 0) { setErrors(ve); return; }
     setSubmitting(true);
     try {
-      const payload: OrgCreatePayload = {
+      const normalizedContactPhone = values.contactPhone.trim()
+        ? normalizeBangladeshMobile(values.contactPhone.trim())
+        : null;
+      const basePayload: OrgCreatePayload = {
         name: values.name.trim(),
         code: values.code.trim() || undefined,
         industry: values.industry.trim() || undefined,
         contactEmail: values.contactEmail.trim() || undefined,
-        contactPhone: values.contactPhone.trim() || undefined,
+        contactPhone: normalizedContactPhone ?? undefined,
         address: values.address.trim() || undefined,
-        admin: mode === "create" ? {
+      };
+      const normalizedAdminMobile =
+        mode === "create" && requireDefaultAdmin
+          ? normalizeBangladeshMobile(values.adminMobileNumber.trim())
+          : null;
+      if (mode === "create" && requireDefaultAdmin) {
+        basePayload.admin = {
           fullName: values.adminFullName.trim() || undefined,
           email: values.adminEmail.trim(),
           password: values.adminPassword,
-          mobileNumber: values.adminMobileNumber.trim(),
-        } : undefined,
+          mobileNumber: normalizedAdminMobile ?? values.adminMobileNumber.trim(),
+        };
+      }
+      const payload: OrgCreatePayload = {
+        ...basePayload,
+        ...(overrides?.createPayload ?? {}),
       };
       const result = mode === "edit" && orgId
-        ? await organisationClient.update(orgId, payload)
-        : await organisationClient.create(payload);
+        ? await bffClient.organisations.update(orgId, payload)
+        : await bffClient.organisations.create(payload);
       if (!result.ok) { onError?.(result.message ?? "Operation failed"); return; }
       onSuccess?.(result.message ?? (mode === "create" ? "Organisation created" : "Organisation updated"));
       if (mode === "create") reset();

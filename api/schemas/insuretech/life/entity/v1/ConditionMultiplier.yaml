@@ -1,0 +1,20 @@
+ConditionMultiplier:
+  type: object
+  properties:
+    condition_code:
+      type: string
+      description: e.g., "DIABETES", "HYPERTENSION"
+    condition_name:
+      type: string
+      description: Human readable name
+    multiplier:
+      type: number
+      format: float
+      description: e.g., 0.2 = 20% increase
+    severity:
+      type: string
+      description: LOW, MEDIUM, HIGH
+    description:
+      type: string
+      description: Detailed description
+  description: ConditionMultiplier - Health condition risk multipliers

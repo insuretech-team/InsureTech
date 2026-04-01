@@ -16,6 +16,44 @@ param(
 
 $ErrorActionPreference = "Stop"
 
+function New-TempSqlFile {
+  $tempDir = [System.IO.Path]::GetTempPath()
+  $fileName = "safe_reset_db_{0}.sql" -f [System.IO.Path]::GetRandomFileName()
+  return Join-Path $tempDir $fileName
+}
+
+function Remove-TempFileWithRetry {
+  param(
+    [Parameter(Mandatory=$true)]
+    [string]$Path,
+
+    [int]$MaxAttempts = 5,
+    [int]$DelayMilliseconds = 200
+  )
+
+  for ($attempt = 1; $attempt -le $MaxAttempts; $attempt++) {
+    if (-not (Test-Path -LiteralPath $Path)) {
+      return $true
+    }
+
+    try {
+      [System.IO.File]::SetAttributes($Path, [System.IO.FileAttributes]::Normal)
+      Remove-Item -LiteralPath $Path -Force -ErrorAction Stop
+      return $true
+    }
+    catch {
+      if ($attempt -eq $MaxAttempts) {
+        Write-Warning "Could not delete temporary SQL file '$Path': $($_.Exception.Message)"
+        return $false
+      }
+
+      Start-Sleep -Milliseconds $DelayMilliseconds
+    }
+  }
+
+  return $false
+}
+
 # SQL to drop all tables in public schema, then drop all custom schemas
 $nukeSQL = @"
 DO `$`$
@@ -68,8 +106,8 @@ Set-Location "$root\backend\inscore"
 Write-Host "Resetting $Target..." -ForegroundColor Yellow
 
 # Save SQL to temp file to avoid escaping issues
-$tempSqlFile = [System.IO.Path]::GetTempFileName() + ".sql"
-$nukeSQL | Out-File -FilePath $tempSqlFile -Encoding UTF8 -NoNewline
+$tempSqlFile = New-TempSqlFile
+[System.IO.File]::WriteAllText($tempSqlFile, $nukeSQL, [System.Text.UTF8Encoding]::new($false))
 
 # Keep Go compile memory low on constrained Windows hosts.
 $prevGoFlags = $env:GOFLAGS
@@ -83,7 +121,7 @@ try {
   }
   $env:GOMAXPROCS = "1"
 
-  # Use lightweight SQL runner (avoids heavy dbmanager compile graph).
+  # Use lightweight SQL runner (avoids heavy dbx compile graph).
   go run ./cmd/dbsql --sql-file="$tempSqlFile" --target=$Target
 
   if ($LASTEXITCODE -ne 0) {
@@ -100,7 +138,7 @@ finally {
   if ($null -eq $prevGoMaxProcs) { Remove-Item Env:GOMAXPROCS -ErrorAction SilentlyContinue } else { $env:GOMAXPROCS = $prevGoMaxProcs }
 
   # Clean up temp file
-  if (Test-Path $tempSqlFile) {
-    Remove-Item $tempSqlFile -Force
+  if (Test-Path -LiteralPath $tempSqlFile) {
+    Remove-TempFileWithRetry -Path $tempSqlFile | Out-Null
   }
 }

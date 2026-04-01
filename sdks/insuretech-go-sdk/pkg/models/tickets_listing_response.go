@@ -5,5 +5,4 @@ package models
 type TicketsListingResponse struct {
 	Tickets []*Ticket `json:"tickets,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

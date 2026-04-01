@@ -5,6 +5,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"golang.org/x/time/rate"
 )
 
@@ -75,7 +76,7 @@ func (rl *RateLimiter) Middleware(next http.Handler) http.Handler {
 
 		// Check if request is allowed
 		if !limiter.Allow() {
-			http.Error(w, "Rate limit exceeded. Please try again later.", http.StatusTooManyRequests)
+			respond.Error(w, r, http.StatusTooManyRequests, "RATE_LIMITED", "Rate limit exceeded. Please try again later.")
 			return
 		}
 

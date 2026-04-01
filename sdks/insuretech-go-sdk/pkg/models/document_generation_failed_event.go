@@ -6,9 +6,9 @@ import (
 
 // DocumentGenerationFailedEvent represents a document_generation_failed_event
 type DocumentGenerationFailedEvent struct {
-	EventId string `json:"event_id,omitempty"`
+	CorrelationId string `json:"correlation_id,omitempty"`
 	DocumentGenerationId string `json:"document_generation_id,omitempty"`
 	ErrorMessage string `json:"error_message,omitempty"`
-	CorrelationId string `json:"correlation_id,omitempty"`
+	EventId string `json:"event_id,omitempty"`
 	Timestamp time.Time `json:"timestamp,omitempty"`
 }

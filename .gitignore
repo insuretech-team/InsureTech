@@ -63,10 +63,14 @@
 # **/gen/
 
 # Database
+.venv
 **/*.db
 **/*.sqlite
 **/*.sqlite3
-
+**/.projindex/
+**/.seek/
+**/.kiro/
+/.kiro/
 # Environment variables
 **/.env
 **/.env.*
@@ -77,9 +81,11 @@
 **/*.key
 **/*.crt
 .env.prod
-# Rovodev
+# Local tooling state
 .rovodev/
 .rovodev
+/.opencode/
+/.resources/
 # OpenAPI error logs
 openapi_errors*.txt
 
@@ -87,6 +93,8 @@ openapi_errors*.txt
 NUL
 /backend/insurance_engine/.vs/InsureTechPlatform.slnx/FileContentIndex
 .gocache/
-SSLCommerz-NodeJS/
-/backend/insurance_engine/.vs/InsuranceEngine
-/backend/insurance_engine-old
+SSLCommerz-NodeJS/*
+SSLCommerz-NodeJS
+./backend/inscore/.gotmp/*
+backend/inscore/.gotmp/*
+api/postman/newman_results.json

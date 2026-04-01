@@ -1,74 +1,177 @@
-import { fail, redirect } from '@sveltejs/kit';
+import { fail, isRedirect, redirect } from '@sveltejs/kit';
 import type { Actions, PageServerLoad } from './$types';
-import { getApiClient } from '$lib/server/api';
-import { authServiceLogin } from '@lifeplus/insuretech-sdk';
+import {
+	authServiceEmailLogin,
+	authServiceSendEmailOtp,
+	createInsureTechClient
+} from '@lifeplus/insuretech-sdk';
+import { extractGatewayError } from '$lib/server/api-helpers';
+
+const DEFAULT_TENANT_ID =
+	process.env.DEFAULT_TENANT_ID?.trim() || '00000000-0000-0000-0000-000000000001';
+
+function createAuthClient() {
+	return createInsureTechClient({
+		apiKey: process.env.INSURETECH_API_KEY ?? 'system-portal',
+		baseUrl:
+			process.env.INSURETECH_API_BASE_URL ??
+			process.env.VITE_API_URL ??
+			process.env.PUBLIC_API_URL ??
+			'http://localhost:8080'
+	});
+}
+
+function cookieOptions() {
+	return {
+		path: '/',
+		httpOnly: true,
+		sameSite: 'lax' as const,
+		secure: process.env.NODE_ENV === 'production',
+		maxAge: 60 * 60 * 12
+	};
+}
+
+function metadataCookieOptions() {
+	return {
+		path: '/',
+		httpOnly: false,
+		sameSite: 'lax' as const,
+		secure: process.env.NODE_ENV === 'production',
+		maxAge: 60 * 60 * 12
+	};
+}
+
+function maskEmail(email: string) {
+	const [name, domain] = email.split('@');
+	if (!name || !domain) return email;
+	return `${name.slice(0, 2)}${'*'.repeat(Math.max(1, name.length - 2))}@${domain}`;
+}
 
 export const load: PageServerLoad = async ({ locals }) => {
-    // If already logged in, redirect away from login
-    if (locals.user) {
-        throw redirect(302, '/dashboard');
-    }
-    return {};
+	if (locals.user) {
+		throw redirect(302, '/dashboard');
+	}
+
+	return {};
 };
 
 export const actions: Actions = {
-    default: async ({ request, cookies }) => {
-        const data = await request.formData();
-        const email = data.get('email')?.toString();
-        const password = data.get('password')?.toString();
+	sendOtp: async ({ request }) => {
+		const form = await request.formData();
+		const email = form.get('email')?.toString().trim().toLowerCase() ?? '';
 
-        if (!email || !password) {
-            return fail(400, {
-                error: 'Email and password are required',
-                email
-            });
-        }
+		if (!email) {
+			return fail(400, {
+				step: 'request',
+				email,
+				error: 'Enter the system user email address to continue.'
+			});
+		}
 
-        try {
-            // Get an unauthenticated client instance
-            const client = getApiClient();
+		try {
+			const result = await authServiceSendEmailOtp({
+				client: createAuthClient(),
+				throwOnError: false,
+				body: {
+					email,
+					type: 'email_login'
+				}
+			});
 
-            // Call the SDK login endpoint with device_type: 'WEB' for server-side sessions
-            const res = await authServiceLogin({
-                client,
-                body: {
-                    mobile_number: email, // Assuming email maps to mobile/username field in auth
-                    password,
-                    device_id: 'web-portal',
-                    device_type: 'WEB', // Triggers server-side session instead of JWT
-                    device_name: 'System Portal'
-                }
-            });
+			const otpId = result.data?.otp_id;
+			if (!otpId) {
+				return fail(400, {
+					step: 'request',
+					email,
+					error: extractGatewayError(result)
+				});
+			}
 
-            if (res.data && res.data.session_token) {
-                // Set the secure session cookie
-                cookies.set('session', res.data.session_token, {
-                    path: '/',
-                    httpOnly: true,
-                    sameSite: 'lax',
-                    secure: process.env.NODE_ENV === 'production',
-                    maxAge: 60 * 60 * 24 * 30 // 30 days
-                });
+			return {
+				step: 'verify',
+				email,
+				otpId,
+				expiresIn: result.data?.expires_in_seconds ?? 300,
+				maskedEmail: maskEmail(email),
+				message: 'OTP sent. Check the inbox for the system user account.'
+			};
+		} catch (error) {
+			return fail(400, {
+				step: 'request',
+				email,
+				error: extractGatewayError(error)
+			});
+		}
+	},
 
-                // Successfully authenticated, redirect to the dashboard
-                throw redirect(302, '/dashboard');
-            } else {
-                // Should not happen if authn succeeds, but fallback
-                return fail(401, {
-                    error: 'Invalid response from authentication server',
-                    email
-                });
-            }
+	verifyOtp: async ({ request, cookies }) => {
+		const form = await request.formData();
+		const email = form.get('email')?.toString().trim().toLowerCase() ?? '';
+		const otpId = form.get('otpId')?.toString().trim() ?? '';
+		const code = form.get('code')?.toString().trim() ?? '';
 
-        } catch (err: any) {
-            if (err.status === 302) {
-                throw err; // Re-throw SvelteKit redirects
-            }
-            console.error('Login error:', err);
-            return fail(401, {
-                error: err?.body?.message || 'Invalid credentials or unable to connect to authentication server',
-                email
-            });
-        }
-    }
+		if (!email || !otpId || !code) {
+			return fail(400, {
+				step: 'verify',
+				email,
+				otpId,
+				error: 'Enter the 6-digit OTP to complete sign in.'
+			});
+		}
+
+		try {
+			const result = await authServiceEmailLogin({
+				client: createAuthClient(),
+				throwOnError: false,
+				body: {
+					email,
+					otp_id: otpId,
+					code,
+					device_id: crypto.randomUUID(),
+					device_name: 'System Portal Web'
+				}
+			});
+
+			if (!result.data?.session_token) {
+				return fail(401, {
+					step: 'verify',
+					email,
+					otpId,
+					error: extractGatewayError(result)
+				});
+			}
+
+			cookies.set('session_token', result.data.session_token, cookieOptions());
+
+			if (result.data.csrf_token) {
+				cookies.set('csrf_token', result.data.csrf_token, metadataCookieOptions());
+			}
+
+			cookies.set('portal_role', 'SYSTEM_ADMIN', metadataCookieOptions());
+			cookies.set(
+				'portal_user_id',
+				result.data.user_id ?? result.data.user?.user_id ?? '',
+				metadataCookieOptions()
+			);
+			cookies.set('portal_biz_id', '', metadataCookieOptions());
+			cookies.set('portal_email', result.data.user?.email ?? email, metadataCookieOptions());
+			cookies.set(
+				'portal_mobile',
+				result.data.user?.mobile_number ?? '',
+				metadataCookieOptions()
+			);
+			cookies.set('portal_tenant_id', DEFAULT_TENANT_ID, metadataCookieOptions());
+
+			throw redirect(302, '/dashboard');
+		} catch (error) {
+			if (isRedirect(error)) throw error;
+
+			return fail(401, {
+				step: 'verify',
+				email,
+				otpId,
+				error: extractGatewayError(error)
+			});
+		}
+	}
 };

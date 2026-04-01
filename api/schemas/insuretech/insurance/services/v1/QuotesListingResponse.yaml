@@ -4,7 +4,7 @@ InsuranceQuotesListingResponse:
     quotes:
       type: array
       items:
-        $ref: '#/components/schemas/Quote'
+        $ref: '#/components/schemas/UnderwritingQuote'
     total:
       type: integer
       format: int32

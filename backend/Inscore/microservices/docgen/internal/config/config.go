@@ -23,6 +23,12 @@ const (
 type Config struct {
 	Port                 int
 	GotenbergURL         string
+	// DocRendererURL is the base URL of the Python docrender sidecar service.
+	// The sidecar handles DOCX generation (python-docx) and high-quality PDF
+	// rendering (WeasyPrint). Defaults to http://localhost:8500.
+	DocRendererURL       string
+	// DocRendererTimeout is the HTTP timeout for sidecar calls.
+	DocRendererTimeout   time.Duration
 	StorageServiceAddr   string
 	KafkaBrokers         []string
 	KafkaDocgenTopic     string
@@ -44,6 +50,8 @@ func Load() (*Config, error) {
 	cfg := &Config{
 		Port:                 docgenHTTPPort,
 		GotenbergURL:         getEnv("GOTENBERG_URL", gotenbergURLDefault),
+		DocRendererURL:       getEnv("DOC_RENDERER_URL", "http://localhost:8500"),
+		DocRendererTimeout:   getEnvAsDuration("DOC_RENDERER_TIMEOUT", 60*time.Second),
 		StorageServiceAddr:   getEnv("STORAGE_SERVICE_ADDR", ""),
 		KafkaBrokers:         getEnvAsSlice("KAFKA_BROKERS", []string{"localhost:9092"}),
 		KafkaDocgenTopic:     getEnv("KAFKA_DOCGEN_TOPIC", "docgen-events"),

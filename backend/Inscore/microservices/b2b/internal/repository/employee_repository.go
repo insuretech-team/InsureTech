@@ -150,6 +150,18 @@ func (r *PortalRepository) GetEmployee(ctx context.Context, employeeUUID string)
 	return scanEmployee(row)
 }
 
+func (r *PortalRepository) GetEmployeeByUserID(ctx context.Context, userID string) (*b2bv1.Employee, error) {
+	query := fmt.Sprintf(`SELECT %s FROM b2b_schema.employees WHERE user_id = $1 AND deleted_at IS NULL LIMIT 1`, employeeCols)
+	row := r.db.WithContext(ctx).Raw(query, userID).Row()
+	return scanEmployee(row)
+}
+
+func (r *PortalRepository) GetEmployeeByBusinessEmployeeIDEmail(ctx context.Context, businessID, employeeID, email string) (*b2bv1.Employee, error) {
+	query := fmt.Sprintf(`SELECT %s FROM b2b_schema.employees WHERE business_id = $1 AND employee_id = $2 AND LOWER(email) = LOWER($3) AND deleted_at IS NULL LIMIT 1`, employeeCols)
+	row := r.db.WithContext(ctx).Raw(query, businessID, employeeID, email).Row()
+	return scanEmployee(row)
+}
+
 func (r *PortalRepository) ListEmployees(
 	ctx context.Context,
 	pageSize, offset int,
@@ -323,6 +335,7 @@ func (r *PortalRepository) UpdateEmployee(ctx context.Context, input domain.Empl
 	if input.Status != b2bv1.EmployeeStatus_EMPLOYEE_STATUS_UNSPECIFIED {
 		addStr("status", employeeStatusStr(input.Status))
 	}
+	addStr("user_id", input.UserID)
 
 	if len(setClauses) == 0 {
 		return r.GetEmployee(ctx, input.EmployeeUUID)

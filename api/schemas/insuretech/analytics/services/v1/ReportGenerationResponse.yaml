@@ -8,8 +8,5 @@ ReportGenerationResponse:
     file_size_bytes:
       type: string
       format: int64
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for report generation operation. Returns operation
     results and status.

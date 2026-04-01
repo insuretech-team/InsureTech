@@ -71,66 +71,67 @@ namespace Insuretech.Policy.Services.V1 {
             "c2FnZRgBIAEoCUID4EEDUgdtZXNzYWdlEkUKDXJlZnVuZF9hbW91bnQYAiAB",
             "KAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5Nb25leUID4EEDUgxyZWZ1bmRB",
             "bW91bnQSNgoFZXJyb3IYAyABKAsyGy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5F",
-            "cnJvckID4EEDUgVlcnJvciLVAQoSUmVuZXdQb2xpY3lSZXF1ZXN0EiAKCXBv",
-            "bGljeV9pZBgBIAEoCUID4EECUghwb2xpY3lJZBIoCg10ZW51cmVfbW9udGhz",
-            "GAIgASgFQgPgQQJSDHRlbnVyZU1vbnRocxIsCg91cGRhdGVfbm9taW5lZXMY",
-            "AyABKAhCA+BBAVIOdXBkYXRlTm9taW5lZXMSRQoIbm9taW5lZXMYBCADKAsy",
-            "JC5pbnN1cmV0ZWNoLnBvbGljeS5lbnRpdHkudjEuTm9taW5lZUID4EEBUghu",
-            "b21pbmVlcyKPAgoTUmVuZXdQb2xpY3lSZXNwb25zZRInCg1uZXdfcG9saWN5",
-            "X2lkGAEgASgJQgPgQQNSC25ld1BvbGljeUlkEi8KEW5ld19wb2xpY3lfbnVt",
-            "YmVyGAIgASgJQgPgQQNSD25ld1BvbGljeU51bWJlchJHCg5wcmVtaXVtX2Ft",
-            "b3VudBgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLk1vbmV5QgPgQQNS",
-            "DXByZW1pdW1BbW91bnQSHQoHbWVzc2FnZRgEIAEoCUID4EEDUgdtZXNzYWdl",
-            "EjYKBWVycm9yGAUgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJyb3JC",
-            "A+BBA1IFZXJyb3IiQQodR2VuZXJhdGVQb2xpY3lEb2N1bWVudFJlcXVlc3QS",
-            "IAoJcG9saWN5X2lkGAEgASgJQgPgQQJSCHBvbGljeUlkIp4BCh5HZW5lcmF0",
-            "ZVBvbGljeURvY3VtZW50UmVzcG9uc2USJgoMZG9jdW1lbnRfdXJsGAEgASgJ",
-            "QgPgQQNSC2RvY3VtZW50VXJsEhwKB3FyX2NvZGUYAiABKAlCA+BBA1IGcXJD",
-            "b2RlEjYKBWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5jb21tb24udjEuRXJy",
-            "b3JCA+BBA1IFZXJyb3IiegoSSXNzdWVQb2xpY3lSZXF1ZXN0EiAKCXBvbGlj",
-            "eV9pZBgBIAEoCUID4EECUghwb2xpY3lJZBIeCghxdW90ZV9pZBgCIAEoCUID",
-            "4EECUgdxdW90ZUlkEiIKCnBheW1lbnRfaWQYAyABKAlCA+BBAlIJcGF5bWVu",
-            "dElkIq4BChNJc3N1ZVBvbGljeVJlc3BvbnNlEkAKBnBvbGljeRgBIAEoCzIj",
-            "Lmluc3VyZXRlY2gucG9saWN5LmVudGl0eS52MS5Qb2xpY3lCA+BBA1IGcG9s",
-            "aWN5Eh0KB21lc3NhZ2UYAiABKAlCA+BBA1IHbWVzc2FnZRI2CgVlcnJvchgD",
-            "IAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9yQgPgQQNSBWVycm9y",
-            "MrwKCg1Qb2xpY3lTZXJ2aWNlEpABCgxDcmVhdGVQb2xpY3kSMi5pbnN1cmV0",
-            "ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5DcmVhdGVQb2xpY3lSZXF1ZXN0GjMu",
-            "aW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMudjEuQ3JlYXRlUG9saWN5UmVz",
-            "cG9uc2UiF4LT5JMCESIML3YxL3BvbGljaWVzOgEqEpABCglHZXRQb2xpY3kS",
-            "Ly5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5HZXRQb2xpY3lSZXF1",
-            "ZXN0GjAuaW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMudjEuR2V0UG9saWN5",
-            "UmVzcG9uc2UiIILT5JMCGhIYL3YxL3BvbGljaWVzL3twb2xpY3lfaWR9Eq0B",
-            "ChBMaXN0VXNlclBvbGljaWVzEjYuaW5zdXJldGVjaC5wb2xpY3kuc2Vydmlj",
-            "ZXMudjEuTGlzdFVzZXJQb2xpY2llc1JlcXVlc3QaNy5pbnN1cmV0ZWNoLnBv",
-            "bGljeS5zZXJ2aWNlcy52MS5MaXN0VXNlclBvbGljaWVzUmVzcG9uc2UiKILT",
-            "5JMCIhIgL3YxL3VzZXJzL3tjdXN0b21lcl9pZH0vcG9saWNpZXMSnAEKDFVw",
-            "ZGF0ZVBvbGljeRIyLmluc3VyZXRlY2gucG9saWN5LnNlcnZpY2VzLnYxLlVw",
-            "ZGF0ZVBvbGljeVJlcXVlc3QaMy5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNl",
-            "cy52MS5VcGRhdGVQb2xpY3lSZXNwb25zZSIjgtPkkwIdMhgvdjEvcG9saWNp",
-            "ZXMve3BvbGljeV9pZH06ASoSowEKDENhbmNlbFBvbGljeRIyLmluc3VyZXRl",
-            "Y2gucG9saWN5LnNlcnZpY2VzLnYxLkNhbmNlbFBvbGljeVJlcXVlc3QaMy5p",
-            "bnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5DYW5jZWxQb2xpY3lSZXNw",
-            "b25zZSIqgtPkkwIkIh8vdjEvcG9saWNpZXMve3BvbGljeV9pZH06Y2FuY2Vs",
-            "OgEqEp8BCgtSZW5ld1BvbGljeRIxLmluc3VyZXRlY2gucG9saWN5LnNlcnZp",
-            "Y2VzLnYxLlJlbmV3UG9saWN5UmVxdWVzdBoyLmluc3VyZXRlY2gucG9saWN5",
-            "LnNlcnZpY2VzLnYxLlJlbmV3UG9saWN5UmVzcG9uc2UiKYLT5JMCIyIeL3Yx",
-            "L3BvbGljaWVzL3twb2xpY3lfaWR9OnJlbmV3OgEqEssBChZHZW5lcmF0ZVBv",
-            "bGljeURvY3VtZW50EjwuaW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMudjEu",
-            "R2VuZXJhdGVQb2xpY3lEb2N1bWVudFJlcXVlc3QaPS5pbnN1cmV0ZWNoLnBv",
-            "bGljeS5zZXJ2aWNlcy52MS5HZW5lcmF0ZVBvbGljeURvY3VtZW50UmVzcG9u",
-            "c2UiNILT5JMCLiIpL3YxL3BvbGljaWVzL3twb2xpY3lfaWR9OmdlbmVyYXRl",
-            "RG9jdW1lbnQ6ASoSnwEKC0lzc3VlUG9saWN5EjEuaW5zdXJldGVjaC5wb2xp",
-            "Y3kuc2VydmljZXMudjEuSXNzdWVQb2xpY3lSZXF1ZXN0GjIuaW5zdXJldGVj",
-            "aC5wb2xpY3kuc2VydmljZXMudjEuSXNzdWVQb2xpY3lSZXNwb25zZSIpgtPk",
-            "kwIjIh4vdjEvcG9saWNpZXMve3BvbGljeV9pZH06aXNzdWU6ASpCogIKIWNv",
-            "bS5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MUISUG9saWN5U2Vydmlj",
-            "ZVByb3RvUAFaUmdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gv",
-            "Z2VuL2dvL2luc3VyZXRlY2gvcG9saWN5L3NlcnZpY2VzL3YxO3NlcnZpY2Vz",
-            "djGiAgNJUFOqAh1JbnN1cmV0ZWNoLlBvbGljeS5TZXJ2aWNlcy5WMcoCHUlu",
-            "c3VyZXRlY2hcUG9saWN5XFNlcnZpY2VzXFYx4gIpSW5zdXJldGVjaFxQb2xp",
-            "Y3lcU2VydmljZXNcVjFcR1BCTWV0YWRhdGHqAiBJbnN1cmV0ZWNoOjpQb2xp",
-            "Y3k6OlNlcnZpY2VzOjpWMWIGcHJvdG8z"));
+            "cnJvckID4EEDUgVlcnJvciLbAQoYUmVuZXdQb2xpY3lUZW51cmVSZXF1ZXN0",
+            "EiAKCXBvbGljeV9pZBgBIAEoCUID4EECUghwb2xpY3lJZBIoCg10ZW51cmVf",
+            "bW9udGhzGAIgASgFQgPgQQJSDHRlbnVyZU1vbnRocxIsCg91cGRhdGVfbm9t",
+            "aW5lZXMYAyABKAhCA+BBAVIOdXBkYXRlTm9taW5lZXMSRQoIbm9taW5lZXMY",
+            "BCADKAsyJC5pbnN1cmV0ZWNoLnBvbGljeS5lbnRpdHkudjEuTm9taW5lZUID",
+            "4EEBUghub21pbmVlcyKVAgoZUmVuZXdQb2xpY3lUZW51cmVSZXNwb25zZRIn",
+            "Cg1uZXdfcG9saWN5X2lkGAEgASgJQgPgQQNSC25ld1BvbGljeUlkEi8KEW5l",
+            "d19wb2xpY3lfbnVtYmVyGAIgASgJQgPgQQNSD25ld1BvbGljeU51bWJlchJH",
+            "Cg5wcmVtaXVtX2Ftb3VudBgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYx",
+            "Lk1vbmV5QgPgQQNSDXByZW1pdW1BbW91bnQSHQoHbWVzc2FnZRgEIAEoCUID",
+            "4EEDUgdtZXNzYWdlEjYKBWVycm9yGAUgASgLMhsuaW5zdXJldGVjaC5jb21t",
+            "b24udjEuRXJyb3JCA+BBA1IFZXJyb3IiQQodR2VuZXJhdGVQb2xpY3lEb2N1",
+            "bWVudFJlcXVlc3QSIAoJcG9saWN5X2lkGAEgASgJQgPgQQJSCHBvbGljeUlk",
+            "Ip4BCh5HZW5lcmF0ZVBvbGljeURvY3VtZW50UmVzcG9uc2USJgoMZG9jdW1l",
+            "bnRfdXJsGAEgASgJQgPgQQNSC2RvY3VtZW50VXJsEhwKB3FyX2NvZGUYAiAB",
+            "KAlCA+BBA1IGcXJDb2RlEjYKBWVycm9yGAMgASgLMhsuaW5zdXJldGVjaC5j",
+            "b21tb24udjEuRXJyb3JCA+BBA1IFZXJyb3IiegoSSXNzdWVQb2xpY3lSZXF1",
+            "ZXN0EiAKCXBvbGljeV9pZBgBIAEoCUID4EECUghwb2xpY3lJZBIeCghxdW90",
+            "ZV9pZBgCIAEoCUID4EECUgdxdW90ZUlkEiIKCnBheW1lbnRfaWQYAyABKAlC",
+            "A+BBAlIJcGF5bWVudElkIq4BChNJc3N1ZVBvbGljeVJlc3BvbnNlEkAKBnBv",
+            "bGljeRgBIAEoCzIjLmluc3VyZXRlY2gucG9saWN5LmVudGl0eS52MS5Qb2xp",
+            "Y3lCA+BBA1IGcG9saWN5Eh0KB21lc3NhZ2UYAiABKAlCA+BBA1IHbWVzc2Fn",
+            "ZRI2CgVlcnJvchgDIAEoCzIbLmluc3VyZXRlY2guY29tbW9uLnYxLkVycm9y",
+            "QgPgQQNSBWVycm9yMs8KCg1Qb2xpY3lTZXJ2aWNlEpABCgxDcmVhdGVQb2xp",
+            "Y3kSMi5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5DcmVhdGVQb2xp",
+            "Y3lSZXF1ZXN0GjMuaW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMudjEuQ3Jl",
+            "YXRlUG9saWN5UmVzcG9uc2UiF4LT5JMCESIML3YxL3BvbGljaWVzOgEqEpAB",
+            "CglHZXRQb2xpY3kSLy5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5H",
+            "ZXRQb2xpY3lSZXF1ZXN0GjAuaW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMu",
+            "djEuR2V0UG9saWN5UmVzcG9uc2UiIILT5JMCGhIYL3YxL3BvbGljaWVzL3tw",
+            "b2xpY3lfaWR9Eq0BChBMaXN0VXNlclBvbGljaWVzEjYuaW5zdXJldGVjaC5w",
+            "b2xpY3kuc2VydmljZXMudjEuTGlzdFVzZXJQb2xpY2llc1JlcXVlc3QaNy5p",
+            "bnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5MaXN0VXNlclBvbGljaWVz",
+            "UmVzcG9uc2UiKILT5JMCIhIgL3YxL3VzZXJzL3tjdXN0b21lcl9pZH0vcG9s",
+            "aWNpZXMSnAEKDFVwZGF0ZVBvbGljeRIyLmluc3VyZXRlY2gucG9saWN5LnNl",
+            "cnZpY2VzLnYxLlVwZGF0ZVBvbGljeVJlcXVlc3QaMy5pbnN1cmV0ZWNoLnBv",
+            "bGljeS5zZXJ2aWNlcy52MS5VcGRhdGVQb2xpY3lSZXNwb25zZSIjgtPkkwId",
+            "MhgvdjEvcG9saWNpZXMve3BvbGljeV9pZH06ASoSowEKDENhbmNlbFBvbGlj",
+            "eRIyLmluc3VyZXRlY2gucG9saWN5LnNlcnZpY2VzLnYxLkNhbmNlbFBvbGlj",
+            "eVJlcXVlc3QaMy5pbnN1cmV0ZWNoLnBvbGljeS5zZXJ2aWNlcy52MS5DYW5j",
+            "ZWxQb2xpY3lSZXNwb25zZSIqgtPkkwIkIh8vdjEvcG9saWNpZXMve3BvbGlj",
+            "eV9pZH06Y2FuY2VsOgEqErIBCgtSZW5ld1BvbGljeRI3Lmluc3VyZXRlY2gu",
+            "cG9saWN5LnNlcnZpY2VzLnYxLlJlbmV3UG9saWN5VGVudXJlUmVxdWVzdBo4",
+            "Lmluc3VyZXRlY2gucG9saWN5LnNlcnZpY2VzLnYxLlJlbmV3UG9saWN5VGVu",
+            "dXJlUmVzcG9uc2UiMILT5JMCKiIlL3YxL3BvbGljaWVzL3twb2xpY3lfaWR9",
+            "OnJlbmV3LXRlbnVyZToBKhLLAQoWR2VuZXJhdGVQb2xpY3lEb2N1bWVudBI8",
+            "Lmluc3VyZXRlY2gucG9saWN5LnNlcnZpY2VzLnYxLkdlbmVyYXRlUG9saWN5",
+            "RG9jdW1lbnRSZXF1ZXN0Gj0uaW5zdXJldGVjaC5wb2xpY3kuc2VydmljZXMu",
+            "djEuR2VuZXJhdGVQb2xpY3lEb2N1bWVudFJlc3BvbnNlIjSC0+STAi4iKS92",
+            "MS9wb2xpY2llcy97cG9saWN5X2lkfTpnZW5lcmF0ZURvY3VtZW50OgEqEp8B",
+            "CgtJc3N1ZVBvbGljeRIxLmluc3VyZXRlY2gucG9saWN5LnNlcnZpY2VzLnYx",
+            "Lklzc3VlUG9saWN5UmVxdWVzdBoyLmluc3VyZXRlY2gucG9saWN5LnNlcnZp",
+            "Y2VzLnYxLklzc3VlUG9saWN5UmVzcG9uc2UiKYLT5JMCIyIeL3YxL3BvbGlj",
+            "aWVzL3twb2xpY3lfaWR9Omlzc3VlOgEqQqICCiFjb20uaW5zdXJldGVjaC5w",
+            "b2xpY3kuc2VydmljZXMudjFCElBvbGljeVNlcnZpY2VQcm90b1ABWlJnaXRo",
+            "dWIuY29tL25ld2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0",
+            "ZWNoL3BvbGljeS9zZXJ2aWNlcy92MTtzZXJ2aWNlc3YxogIDSVBTqgIdSW5z",
+            "dXJldGVjaC5Qb2xpY3kuU2VydmljZXMuVjHKAh1JbnN1cmV0ZWNoXFBvbGlj",
+            "eVxTZXJ2aWNlc1xWMeICKUluc3VyZXRlY2hcUG9saWN5XFNlcnZpY2VzXFYx",
+            "XEdQQk1ldGFkYXRh6gIgSW5zdXJldGVjaDo6UG9saWN5OjpTZXJ2aWNlczo6",
+            "VjFiBnByb3RvMw=="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Api.AnnotationsReflection.Descriptor, global::Google.Api.FieldBehaviorReflection.Descriptor, global::Insuretech.Common.V1.ErrorReflection.Descriptor, global::Insuretech.Common.V1.TypesReflection.Descriptor, global::Insuretech.Policy.Entity.V1.PolicyReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -144,8 +145,8 @@ namespace Insuretech.Policy.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.UpdatePolicyResponse), global::Insuretech.Policy.Services.V1.UpdatePolicyResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.CancelPolicyRequest), global::Insuretech.Policy.Services.V1.CancelPolicyRequest.Parser, new[]{ "PolicyId", "Reason" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.CancelPolicyResponse), global::Insuretech.Policy.Services.V1.CancelPolicyResponse.Parser, new[]{ "Message", "RefundAmount", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.RenewPolicyRequest), global::Insuretech.Policy.Services.V1.RenewPolicyRequest.Parser, new[]{ "PolicyId", "TenureMonths", "UpdateNominees", "Nominees" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.RenewPolicyResponse), global::Insuretech.Policy.Services.V1.RenewPolicyResponse.Parser, new[]{ "NewPolicyId", "NewPolicyNumber", "PremiumAmount", "Message", "Error" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest), global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest.Parser, new[]{ "PolicyId", "TenureMonths", "UpdateNominees", "Nominees" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse), global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse.Parser, new[]{ "NewPolicyId", "NewPolicyNumber", "PremiumAmount", "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest), global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest.Parser, new[]{ "PolicyId" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse), global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse.Parser, new[]{ "DocumentUrl", "QrCode", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Policy.Services.V1.IssuePolicyRequest), global::Insuretech.Policy.Services.V1.IssuePolicyRequest.Parser, new[]{ "PolicyId", "QuoteId", "PaymentId" }, null, null, null, null),
@@ -3086,16 +3087,16 @@ namespace Insuretech.Policy.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RenewPolicyRequest : pb::IMessage<RenewPolicyRequest>
+  public sealed partial class RenewPolicyTenureRequest : pb::IMessage<RenewPolicyTenureRequest>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<RenewPolicyRequest> _parser = new pb::MessageParser<RenewPolicyRequest>(() => new RenewPolicyRequest());
+    private static readonly pb::MessageParser<RenewPolicyTenureRequest> _parser = new pb::MessageParser<RenewPolicyTenureRequest>(() => new RenewPolicyTenureRequest());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RenewPolicyRequest> Parser { get { return _parser; } }
+    public static pb::MessageParser<RenewPolicyTenureRequest> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3111,7 +3112,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyRequest() {
+    public RenewPolicyTenureRequest() {
       OnConstruction();
     }
 
@@ -3119,7 +3120,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyRequest(RenewPolicyRequest other) : this() {
+    public RenewPolicyTenureRequest(RenewPolicyTenureRequest other) : this() {
       policyId_ = other.policyId_;
       tenureMonths_ = other.tenureMonths_;
       updateNominees_ = other.updateNominees_;
@@ -3129,8 +3130,8 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyRequest Clone() {
-      return new RenewPolicyRequest(this);
+    public RenewPolicyTenureRequest Clone() {
+      return new RenewPolicyTenureRequest(this);
     }
 
     /// <summary>Field number for the "policy_id" field.</summary>
@@ -3183,12 +3184,12 @@ namespace Insuretech.Policy.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as RenewPolicyRequest);
+      return Equals(other as RenewPolicyTenureRequest);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RenewPolicyRequest other) {
+    public bool Equals(RenewPolicyTenureRequest other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3292,7 +3293,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RenewPolicyRequest other) {
+    public void MergeFrom(RenewPolicyTenureRequest other) {
       if (other == null) {
         return;
       }
@@ -3384,16 +3385,16 @@ namespace Insuretech.Policy.Services.V1 {
   }
 
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
-  public sealed partial class RenewPolicyResponse : pb::IMessage<RenewPolicyResponse>
+  public sealed partial class RenewPolicyTenureResponse : pb::IMessage<RenewPolicyTenureResponse>
   #if !GOOGLE_PROTOBUF_REFSTRUCT_COMPATIBILITY_MODE
       , pb::IBufferMessage
   #endif
   {
-    private static readonly pb::MessageParser<RenewPolicyResponse> _parser = new pb::MessageParser<RenewPolicyResponse>(() => new RenewPolicyResponse());
+    private static readonly pb::MessageParser<RenewPolicyTenureResponse> _parser = new pb::MessageParser<RenewPolicyTenureResponse>(() => new RenewPolicyTenureResponse());
     private pb::UnknownFieldSet _unknownFields;
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public static pb::MessageParser<RenewPolicyResponse> Parser { get { return _parser; } }
+    public static pb::MessageParser<RenewPolicyTenureResponse> Parser { get { return _parser; } }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -3409,7 +3410,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyResponse() {
+    public RenewPolicyTenureResponse() {
       OnConstruction();
     }
 
@@ -3417,7 +3418,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyResponse(RenewPolicyResponse other) : this() {
+    public RenewPolicyTenureResponse(RenewPolicyTenureResponse other) : this() {
       newPolicyId_ = other.newPolicyId_;
       newPolicyNumber_ = other.newPolicyNumber_;
       premiumAmount_ = other.premiumAmount_ != null ? other.premiumAmount_.Clone() : null;
@@ -3428,8 +3429,8 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public RenewPolicyResponse Clone() {
-      return new RenewPolicyResponse(this);
+    public RenewPolicyTenureResponse Clone() {
+      return new RenewPolicyTenureResponse(this);
     }
 
     /// <summary>Field number for the "new_policy_id" field.</summary>
@@ -3498,12 +3499,12 @@ namespace Insuretech.Policy.Services.V1 {
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
-      return Equals(other as RenewPolicyResponse);
+      return Equals(other as RenewPolicyTenureResponse);
     }
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public bool Equals(RenewPolicyResponse other) {
+    public bool Equals(RenewPolicyTenureResponse other) {
       if (ReferenceEquals(other, null)) {
         return false;
       }
@@ -3628,7 +3629,7 @@ namespace Insuretech.Policy.Services.V1 {
 
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
-    public void MergeFrom(RenewPolicyResponse other) {
+    public void MergeFrom(RenewPolicyTenureResponse other) {
       if (other == null) {
         return;
       }

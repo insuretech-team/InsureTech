@@ -20,16 +20,17 @@ const (
 
 // Config holds all configuration for the authn microservice
 type Config struct {
-	Server   ServerConfig
-	Database DatabaseConfig
-	JWT      JWTConfig
-	KYC      KYCConfig
-	SMS      SMSConfig
-	Email    EmailConfig
-	Redis    RedisConfig
-	Kafka    KafkaConfig
-	Security SecurityConfig
-	FLVE     FLVEConfig
+	Server    ServerConfig
+	Database  DatabaseConfig
+	JWT       JWTConfig
+	KYC       KYCConfig
+	SMS       SMSConfig
+	Email     EmailConfig // OTP/verification emails (noreply@)
+	EmailInfo EmailConfig // informational/transactional emails (info@)
+	Redis     RedisConfig
+	Kafka     KafkaConfig
+	Security  SecurityConfig
+	FLVE      FLVEConfig
 }
 
 // FLVEConfig contains Face Liveness & Verification Engine settings
@@ -137,15 +138,19 @@ type KafkaConfig struct {
 
 // SecurityConfig contains security-related settings
 type SecurityConfig struct {
-	ServerSessionDuration time.Duration // Web portal server-side session duration (default 12h)
-	OTPLength             int
-	OTPExpiry             time.Duration
-	OTPMaxAttempts        int
-	OTPCooldown           time.Duration
-	BCryptCost            int
-	RateLimitPerMinute    int
-	RateLimitPerDay       int
-	IdleTimeoutDuration   time.Duration // Idle session timeout (default 0 = disabled)
+	ServerSessionDuration   time.Duration // Web portal server-side session duration (default 12h)
+	OTPLength               int
+	OTPExpiry               time.Duration
+	OTPMaxAttempts          int
+	OTPCooldown             time.Duration
+	BCryptCost              int
+	RateLimitPerMinute      int // General OTP rate limit per minute (OTP_RATE_LIMIT env)
+	RateLimitLoginPerMinute int // Login endpoint rate limit per minute (RATE_LIMIT_LOGIN_PER_MINUTE)
+	RateLimitPerDay         int
+	RateLimitPerHour        int
+	LoginMaxAttempts        int
+	LoginLockoutDuration    time.Duration
+	IdleTimeoutDuration     time.Duration // Idle session timeout (default 0 = disabled)
 }
 
 // Load loads configuration from environment variables
@@ -238,12 +243,20 @@ func Load() (*Config, error) {
 			DLRWebhookURL:     getEnv("SSLWIRELESS_DLR_WEBHOOK_URL", ""),
 		},
 		Email: EmailConfig{
-			SMTPHost: getEnv("EMAIL_SMTP_HOST", "smtp.labaidinsuretech.com"),
+			SMTPHost: getEnv("EMAIL_SMTP_HOST", "smtp.gmail.com"),
 			SMTPPort: getEnvAsInt("EMAIL_SMTP_PORT", 587),
-			From:     getEnv("EMAIL_FROM", "verification@labaidinsuretech.com"),
+			From:     getEnv("EMAIL_FROM", "noreply@labaidinsuretech.com"),
 			Username: getEnv("EMAIL_USERNAME", ""),
 			Password: getEnv("EMAIL_PASSWORD", ""),
-			TLS:      getEnvAsBool("EMAIL_TLS", true),
+			TLS:      getEnvAsBool("EMAIL_TLS", false),
+		},
+		EmailInfo: EmailConfig{
+			SMTPHost: getEnv("EMAIL_INFO_SMTP_HOST", "smtp.gmail.com"),
+			SMTPPort: getEnvAsInt("EMAIL_INFO_SMTP_PORT", 587),
+			From:     getEnv("EMAIL_INFO_FROM", "info@labaidinsuretech.com"),
+			Username: getEnv("EMAIL_INFO_USERNAME", ""),
+			Password: getEnv("EMAIL_INFO_PASSWORD", ""),
+			TLS:      getEnvAsBool("EMAIL_INFO_TLS", false),
 		},
 		Redis: RedisConfig{
 			URL:      getEnv("REDIS_URL", "redis://localhost:6379"),
@@ -255,15 +268,19 @@ func Load() (*Config, error) {
 			Topic:   getEnv("KAFKA_AUTHN_TOPIC", "authn-events"),
 		},
 		Security: SecurityConfig{
-			ServerSessionDuration: getEnvAsDuration("SERVER_SESSION_DURATION", 12*time.Hour),
-			OTPLength:             getEnvAsInt("OTP_LENGTH", 6),
-			OTPExpiry:             getEnvAsDuration("OTP_EXPIRY", 5*time.Minute),
-			OTPMaxAttempts:        getEnvAsInt("OTP_MAX_ATTEMPTS", 3),
-			OTPCooldown:           getEnvAsDuration("OTP_COOLDOWN", 60*time.Second),
-			BCryptCost:            getEnvAsInt("BCRYPT_COST", 10),
-			RateLimitPerMinute:    getEnvAsInt("RATE_LIMIT_PER_MINUTE", 3),
-			RateLimitPerDay:       getEnvAsInt("RATE_LIMIT_PER_DAY", 10),
-			IdleTimeoutDuration:   time.Duration(getEnvAsInt("IDLE_TIMEOUT_SECONDS", 0)) * time.Second,
+			ServerSessionDuration:   getEnvAsDuration("SERVER_SESSION_DURATION", 12*time.Hour),
+			OTPLength:               getEnvAsInt("OTP_LENGTH", 6),
+			OTPExpiry:               getEnvAsDuration("OTP_EXPIRY", 5*time.Minute),
+			OTPMaxAttempts:          getEnvAsInt("OTP_MAX_ATTEMPTS", 3),
+			OTPCooldown:             getEnvAsDuration("OTP_COOLDOWN", 60*time.Second),
+			BCryptCost:              getEnvAsInt("BCRYPT_COST", 10),
+			RateLimitPerMinute:      getEnvAsInt("RATE_LIMIT_PER_MINUTE", 3),
+			RateLimitLoginPerMinute: getEnvAsInt("RATE_LIMIT_LOGIN_PER_MINUTE", 5),
+			RateLimitPerDay:         getEnvAsInt("RATE_LIMIT_PER_DAY", 10),
+			RateLimitPerHour:        getEnvAsInt("OTP_RATE_LIMIT_MAX", 100),
+			LoginMaxAttempts:        getEnvAsInt("LOGIN_MAX_ATTEMPTS", 8),
+			LoginLockoutDuration:    getEnvAsDuration("LOGIN_LOCKOUT_DURATION", 10*time.Minute),
+			IdleTimeoutDuration:     time.Duration(getEnvAsInt("IDLE_TIMEOUT_SECONDS", 0)) * time.Second,
 		},
 		FLVE: FLVEConfig{
 			Port: getEnvAsInt("FLVE_PORT", func() int {

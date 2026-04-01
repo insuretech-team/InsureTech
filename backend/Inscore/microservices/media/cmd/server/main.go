@@ -12,23 +12,16 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/db"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/media"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
-	"github.com/newage-saint/insuretech/ops/config"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	mediaservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/services/v1"
+	"github.com/newage-saint/insuretech/ops/config"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/credentials/insecure"
 	"gopkg.in/yaml.v3"
 )
 
 // ServicesConfig structure matches services.yaml
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// 1. Initialize Logger

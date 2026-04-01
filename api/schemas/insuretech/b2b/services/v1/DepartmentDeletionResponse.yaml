@@ -1,9 +1,5 @@
 DepartmentDeletionResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
+  properties: {}
   description: Response payload for department deletion operation. Returns operation
     results and status.

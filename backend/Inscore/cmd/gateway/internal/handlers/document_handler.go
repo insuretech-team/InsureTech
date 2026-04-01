@@ -1,4 +1,4 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 	storageentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/entity/v1"
 	storageservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/service/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -46,7 +45,7 @@ func NewDocumentHandlerWithClient(client StorageClient) *DocumentHandler {
 func (h *DocumentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.UploadFileRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.TenantId == "" {
@@ -61,7 +60,7 @@ func (h *DocumentHandler) Upload(w http.ResponseWriter, r *http.Request) {
 func (h *DocumentHandler) UploadBatch(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.UploadFilesRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.TenantId == "" {
@@ -76,7 +75,7 @@ func (h *DocumentHandler) UploadBatch(w http.ResponseWriter, r *http.Request) {
 func (h *DocumentHandler) GetUploadURL(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.GetUploadURLRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.TenantId == "" {
@@ -91,7 +90,7 @@ func (h *DocumentHandler) GetUploadURL(w http.ResponseWriter, r *http.Request) {
 func (h *DocumentHandler) FinalizeUpload(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.FinalizeUploadRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.TenantId == "" {
@@ -120,7 +119,7 @@ func (h *DocumentHandler) Update(w http.ResponseWriter, r *http.Request) {
 	id := r.PathValue("id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.UpdateFileRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.FileId == "" {
@@ -140,7 +139,7 @@ func (h *DocumentHandler) GetDownloadURL(w http.ResponseWriter, r *http.Request)
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req storageservicev1.GetDownloadURLRequest
 		if len(body) > 0 {
-			if err := protojson.Unmarshal(body, &req); err != nil {
+			if err := protoUnmarshal(body, &req); err != nil {
 				return nil, err
 			}
 		}

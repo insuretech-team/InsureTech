@@ -1,0 +1,25 @@
+BusinessWorkflowUpdateRequest:
+  type: object
+  properties:
+    business_workflow_id:
+      type: string
+    workflow_name:
+      type: string
+    description:
+      type: string
+    workflow_type:
+      $ref: '#/components/schemas/BusinessWorkflowType'
+    status:
+      $ref: '#/components/schemas/BusinessWorkflowStatus'
+    rules:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessRule'
+    input_schema:
+      type: object
+    output_schema:
+      type: object
+    metadata:
+      type: object
+  description: Request payload for updating an existing business workflow update.
+    Contains fields to be modified.

@@ -1,0 +1,7 @@
+VehicleRegistrationResponse:
+  type: object
+  properties:
+    registration:
+      $ref: '#/components/schemas/VehicleRegistration'
+  description: Response payload for vehicle registration operation. Returns operation
+    results and status.

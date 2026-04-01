@@ -20,8 +20,8 @@ import re
 import json
 from pathlib import Path
 from typing import Dict, List, Any
-from datetime import datetime
 from collections import defaultdict
+from write_guard import write_if_changed, json_dump_if_changed
 
 
 class ValidationIssue:
@@ -323,7 +323,6 @@ class OptimizedValidator:
         
         report = {
             'spec_path': str(self.spec_path),
-            'timestamp': datetime.now().isoformat(),
             'summary': {
                 'errors': len(errors),
                 'warnings': len(warnings),
@@ -379,7 +378,6 @@ class OptimizedValidator:
             '</style></head><body><div class="container">',
             f'<h1>🔍 OpenAPI Validation Report</h1>',
             f'<p><strong>Spec:</strong> {report["spec_path"]}</p>',
-            f'<p><strong>Generated:</strong> {report["timestamp"]}</p>',
             '<h2>📊 Metrics</h2><div class="metrics">'
         ]
         
@@ -413,8 +411,7 @@ class OptimizedValidator:
         
         html_parts.append('</div></body></html>')
         
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(''.join(html_parts))
+        write_if_changed(output_path, ''.join(html_parts))
         
         print("✓ HTML report generated")
 
@@ -433,8 +430,7 @@ def main():
         
         # Save JSON report
         if args.report:
-            with open(args.report, 'w', encoding='utf-8') as f:
-                json.dump(report, f, indent=2)
+            json_dump_if_changed(args.report, report, indent=2)
             print(f"\n✓ JSON report saved: {args.report}")
         
         # Save HTML report

@@ -1,4 +1,4 @@
-PremiumCalculationRequest:
+ProductsPremiumCalculationRequest:
   type: object
   properties:
     product_id:

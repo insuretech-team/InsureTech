@@ -1,0 +1,8 @@
+RuleExpressionType:
+  type: string
+  enum:
+  - RULE_EXPRESSION_TYPE_UNSPECIFIED
+  - RULE_EXPRESSION_TYPE_LAMBDA
+  - RULE_EXPRESSION_TYPE_CUSTOM
+  description: 'Type categorization for rule expression. Options: RULE_EXPRESSION_TYPE_UNSPECIFIED,
+    RULE_EXPRESSION_TYPE_LAMBDA, RULE_EXPRESSION_TYPE_CUSTOM.'

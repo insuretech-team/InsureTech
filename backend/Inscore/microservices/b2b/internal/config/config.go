@@ -13,6 +13,7 @@ type Config struct {
 	DBPassword      string
 	DBName          string
 	KafkaBrokers    []string
+	AuthNServiceURL string
 	AuthZServiceURL string
 }
 
@@ -28,6 +29,7 @@ func Load() (*Config, error) {
 		DBPassword:      getEnv("DB_PASSWORD", "postgres"),
 		DBName:          getEnv("DB_NAME", "insuretech"),
 		KafkaBrokers:    []string{getEnv("KAFKA_BROKERS", "localhost:9092")},
+		AuthNServiceURL: getEnv("AUTHN_GRPC_ADDR", getEnv("AUTHN_SERVICE_URL", "")),
 		AuthZServiceURL: getEnv("AUTHZ_GRPC_ADDR", getEnv("AUTHZ_SERVICE_URL", "")),
 	}, nil
 }

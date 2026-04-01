@@ -1,0 +1,7 @@
+FindPortalUserRequest:
+  type: object
+  properties:
+    identifier:
+      type: string
+  description: Request payload for find portal user operation. Contains parameters
+    required to execute the operation.

@@ -5,5 +5,4 @@ package models
 type TenantsListingResponse struct {
 	Tenants []*Tenant `json:"tenants,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

@@ -16,4 +16,8 @@ UserRegisteredEvent:
       type: string
     device_type:
       type: string
+    portal:
+      type: string
+    tenant_id:
+      type: string
   description: 'Event: User registered'

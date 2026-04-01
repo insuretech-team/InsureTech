@@ -1,0 +1,40 @@
+LeadUpdateRequest:
+  type: object
+  properties:
+    lead_id:
+      type: string
+    title:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    phone_number:
+      type: string
+    email_address:
+      type: string
+    address:
+      type: string
+    lead_status:
+      $ref: '#/components/schemas/LeadStatus'
+    lead_priority:
+      $ref: '#/components/schemas/LeadPriority'
+    lead_score:
+      type: integer
+      format: int32
+    assigned_agent_id:
+      type: string
+    desired_insurance_type:
+      type: string
+    desired_coverage_amount:
+      type: string
+      format: int64
+    qualification_status:
+      $ref: '#/components/schemas/QualificationStatus'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for updating an existing lead update. Contains fields
+    to be modified.

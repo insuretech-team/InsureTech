@@ -137,6 +137,23 @@ service AuthService {
     };
   }
 
+  // Find a portal user by exact email or mobile number.
+  rpc FindPortalUser(FindPortalUserRequest) returns (FindPortalUserResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users:find"
+      body : "*"
+    };
+  }
+
+  // Set a temporary password and require the user to change it on next login.
+  rpc SetTemporaryPassword(SetTemporaryPasswordRequest)
+      returns (SetTemporaryPasswordResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/users/{user_id}/password:temporary"
+      body : "*"
+    };
+  }
+
   // ================================================================
   // EMAIL-BASED AUTH (Business Beneficiary + System Users ONLY)
   // Web portal: server-side session. Restricted by user_type check.
@@ -173,6 +190,15 @@ service AuthService {
   rpc EmailLogin(EmailLoginRequest) returns (EmailLoginResponse) {
     option (google.api.http) = {
       post : "/v1/auth/email/login"
+      body : "*"
+    };
+  }
+
+  // Login via email + password (B2B beneficiary self-service).
+  rpc EmailPasswordLogin(EmailPasswordLoginRequest)
+      returns (EmailPasswordLoginResponse) {
+    option (google.api.http) = {
+      post : "/v1/auth/email-password:login"
       body : "*"
     };
   }
@@ -217,6 +243,10 @@ service AuthService {
   // Update SMS delivery report status (called by DLR webhook handler)
   rpc UpdateDLRStatus(UpdateDLRStatusRequest)
       returns (UpdateDLRStatusResponse) {}
+
+  // Provision or fetch a managed B2B employee portal user.
+  rpc ProvisionEmployeeUser(ProvisionEmployeeUserRequest)
+      returns (ProvisionEmployeeUserResponse) {}
 
   // ================================================================
   // API KEY MANAGEMENT
@@ -356,12 +386,6 @@ service AuthService {
       body : "*"
     };
   }
-  rpc RejectKYC(RejectKYCRequest) returns (RejectKYCResponse) {
-    option (google.api.http) = {
-      post : "/v1/auth/kyc/{kyc_id}:reject"
-      body : "*"
-    };
-  }
 
   // ── Document Verification (Admin) ──
   rpc VerifyDocument(VerifyDocumentRequest) returns (VerifyDocumentResponse) {
@@ -379,19 +403,6 @@ service AuthService {
       body : "*"
     };
   }
-  rpc GetVoiceSession(GetVoiceSessionRequest)
-      returns (GetVoiceSessionResponse) {
-    option (google.api.http) = {
-      get : "/v1/auth/voice-sessions/{voice_session_id}"
-    };
-  }
-  rpc EndVoiceSession(EndVoiceSessionRequest)
-      returns (EndVoiceSessionResponse) {
-    option (google.api.http) = {
-      post : "/v1/auth/voice-sessions/{voice_session_id}:end"
-      body : "*"
-    };
-  }
 
   // ── Profile Photo Upload URL ──
   rpc GetProfilePhotoUploadURL(GetProfilePhotoUploadURLRequest)
@@ -403,6 +414,13 @@ service AuthService {
   }
 
   // ── Notification Preferences ──
+  rpc GetNotificationPreferences(GetNotificationPreferencesRequest)
+      returns (GetNotificationPreferencesResponse) {
+    option (google.api.http) = {
+      get: "/v1/auth/users/{user_id}/notification-preferences"
+    };
+  }
+
   rpc UpdateNotificationPreferences(UpdateNotificationPreferencesRequest)
       returns (UpdateNotificationPreferencesResponse) {
     option (google.api.http) = {
@@ -454,10 +472,4 @@ service AuthService {
     };
   }
 
-  // 🔑 JWKS 🔑
-  rpc GetJWKS(GetJWKSRequest) returns (GetJWKSResponse) {
-    option (google.api.http) = {
-      get : "/v1/auth/.well-known/jwks.json"
-    };
-  }
 }

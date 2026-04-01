@@ -6,10 +6,10 @@
 
 ```powershell
 # Method 1: Direct Go command
-go run ./cmd/dbmanager <command> [flags]
+go run ./cmd/dbx <command> [flags]
 
 # Method 2: Using wrapper script
-./dbmanager.ps1 <command> [flags]
+./dbx.ps1 <command> [flags]
 ```
 
 ## Local Infra For AuthN/AuthZ
@@ -44,17 +44,17 @@ To use FLVE as external KYC provider in AuthN:
 
 ```powershell
 # Run migrations
-go run ./cmd/dbmanager migrate --target=primary
-go run ./cmd/dbmanager migrate --target=backup
+go run ./cmd/dbx migrate --target=primary
+go run ./cmd/dbx migrate --target=backup
 
 # Export CSV
-go run ./cmd/dbmanager csv-backup --table=users --source=primary
+go run ./cmd/dbx csv-backup --table=users --source=primary
 
 # Run SQL query
-go run ./cmd/dbmanager sql --sql="SELECT * FROM users LIMIT 10" --target=primary
+go run ./cmd/dbx sql --sql="SELECT * FROM users LIMIT 10" --target=primary
 
 # Interactive TUI mode
-go run ./cmd/dbmanager
+go run ./cmd/dbx
 ```
 
 ### Examples
@@ -64,23 +64,23 @@ go run ./cmd/dbmanager
 cd E:\Projects\InsureTech\backend\inscore
 
 # Run full migration
-go run ./cmd/dbmanager migrate --target=primary
+go run ./cmd/dbx migrate --target=primary
 
 # Export users table
-go run ./cmd/dbmanager csv-backup --table=users --source=primary
+go run ./cmd/dbx csv-backup --table=users --source=primary
 
 # Check migration status
-go run ./cmd/dbmanager sql --sql="SELECT * FROM schema_migrations ORDER BY applied_at DESC LIMIT 10" --target=primary
+go run ./cmd/dbx sql --sql="SELECT * FROM schema_migrations ORDER BY applied_at DESC LIMIT 10" --target=primary
 ```
 
 ### Building Standalone Binary
 
 ```powershell
-cd cmd/dbmanager
-go build -o dbmanager.exe .
+cd cmd/dbx
+go build -o dbx.exe .
 
 # Then run from anywhere
-./dbmanager.exe migrate --target=primary
+./dbx.exe migrate --target=primary
 ```
 
 ## Directory Structure
@@ -88,7 +88,7 @@ go build -o dbmanager.exe .
 ```
 backend/inscore/
 ├── cmd/
-│   └── dbmanager/          # Database manager CLI
+│   └── dbx/          # Database manager CLI
 │       ├── main.go         # Entry point
 │       └── internal/       # Internal packages
 ├── db/
@@ -97,7 +97,7 @@ backend/inscore/
 │   ├── ops/
 │   │   └── migrate.go      # Unified migration manager
 │   └── config.go           # Database configuration
-└── dbmanager.ps1           # Convenience wrapper
+└── dbx.ps1           # Convenience wrapper
 ```
 
 ## Migration System

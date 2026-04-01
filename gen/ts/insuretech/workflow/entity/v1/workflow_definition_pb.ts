@@ -85,7 +85,7 @@ export type WorkflowDefinition = Message<"insuretech.workflow.entity.v1.Workflow
   status: WorkflowStatus;
 
   /**
-   * @inject_tag: gorm:"column:audit_info;not null"
+   * @inject_tag: gorm:"-"
    *
    * @generated from field: insuretech.common.v1.AuditInfo audit_info = 10;
    */

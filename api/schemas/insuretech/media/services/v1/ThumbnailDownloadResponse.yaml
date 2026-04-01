@@ -6,7 +6,5 @@ ThumbnailDownloadResponse:
     expires_in_seconds:
       type: string
       format: int64
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for thumbnail download operation. Returns operation
     results and status.

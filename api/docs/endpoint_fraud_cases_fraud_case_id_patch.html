@@ -167,6 +167,17 @@
             color: #666;
         }
         
+        .response-example {
+            margin-top: 10px;
+        }
+        
+        .example-label {
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 4px;
+        }
+        
         .response-schema {
             margin-top: 10px;
             color: #666;
@@ -325,7 +336,7 @@
                 
                 <div class="request-body">
                     <div class="content-type-badge">application/json</div>
-                    <div class="schema-ref-name">FraudCaseUpdateRequest</div><div class="schema-properties"><div class="json-block"><pre>{
+                    <div class="schema-ref-name">FraudFraudCaseUpdateRequest</div><div class="schema-properties"><div class="json-block"><pre>{
   "<span class="json-key">fraud_case_id</span>": <span class="json-type">"string"</span>, <span class="json-required">(required)</span>
   "<span class="json-key">status</span>": <span class="json-type">"string"</span>,
   "<span class="json-key">outcome</span>": <span class="json-type">"string"</span>,
@@ -342,145 +353,185 @@
                     <span class="response-code">200</span>
                     <span class="response-desc">Successful response</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">FraudCaseUpdateResponse</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,
-  "<span class="json-key">error</span>": <span class="json-ref">Error</span>,  <span class="json-comment">// Error information if operation failed</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": true,
+  "data": {},
+  "error": null,
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z",
+    "pagination": null
+  }
+}</pre></div>
             </div>
             
             <div class="response response-error">
                 <div class="response-header">
                     <span class="response-code">400</span>
-                    <span class="response-desc">Bad request - Invalid input parameters</span>
+                    <span class="response-desc">Bad request - Malformed request body or invalid parameters</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
- Use UPPER_SNAKE_CASE format</span>
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
- Should be clear and actionable</span>
-  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
- Examples: {"field": "email", "reason": "invalid format"}</span>
-  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
- Used for form validation errors</span>
-  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
- true: Temporary error, client should retry
- false: Permanent error, don't retry</span>
-  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
- Only set if retryable = true</span>
-  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
- 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
-  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
- Can be used to look up error in logs</span>
-  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Bad request - Malformed request body or invalid parameters",
+    "error_id": "err_example",
+    "http_status_code": 400,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
             </div>
             
             <div class="response response-error">
                 <div class="response-header">
                     <span class="response-code">401</span>
-                    <span class="response-desc">Unauthorized - Authentication required</span>
+                    <span class="response-desc">Unauthorized - Valid authentication token required</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
- Use UPPER_SNAKE_CASE format</span>
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
- Should be clear and actionable</span>
-  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
- Examples: {"field": "email", "reason": "invalid format"}</span>
-  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
- Used for form validation errors</span>
-  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
- true: Temporary error, client should retry
- false: Permanent error, don't retry</span>
-  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
- Only set if retryable = true</span>
-  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
- 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
-  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
- Can be used to look up error in logs</span>
-  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Unauthorized - Valid authentication token required",
+    "error_id": "err_example",
+    "http_status_code": 401,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
             </div>
             
             <div class="response response-error">
                 <div class="response-header">
                     <span class="response-code">403</span>
-                    <span class="response-desc">Forbidden - Insufficient permissions</span>
+                    <span class="response-desc">Forbidden - Insufficient permissions for this operation</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
- Use UPPER_SNAKE_CASE format</span>
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
- Should be clear and actionable</span>
-  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
- Examples: {"field": "email", "reason": "invalid format"}</span>
-  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
- Used for form validation errors</span>
-  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
- true: Temporary error, client should retry
- false: Permanent error, don't retry</span>
-  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
- Only set if retryable = true</span>
-  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
- 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
-  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
- Can be used to look up error in logs</span>
-  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Forbidden - Insufficient permissions for this operation",
+    "error_id": "err_example",
+    "http_status_code": 403,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
             </div>
             
             <div class="response response-error">
                 <div class="response-header">
                     <span class="response-code">404</span>
-                    <span class="response-desc">Not found - Resource does not exist</span>
+                    <span class="response-desc">Not found - The requested resource does not exist</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
- Use UPPER_SNAKE_CASE format</span>
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
- Should be clear and actionable</span>
-  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
- Examples: {"field": "email", "reason": "invalid format"}</span>
-  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
- Used for form validation errors</span>
-  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
- true: Temporary error, client should retry
- false: Permanent error, don't retry</span>
-  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
- Only set if retryable = true</span>
-  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
- 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
-  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
- Can be used to look up error in logs</span>
-  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Not found - The requested resource does not exist",
+    "error_id": "err_example",
+    "http_status_code": 404,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">422</span>
+                    <span class="response-desc">Unprocessable Entity - Request is valid but failed business validation. See error.field_violations for field-level details</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Unprocessable Entity - Request is valid but failed business validation. See error.field_violations for field-level details",
+    "error_id": "err_example",
+    "http_status_code": 422,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
+            </div>
+            
+            <div class="response response-error">
+                <div class="response-header">
+                    <span class="response-code">429</span>
+                    <span class="response-desc">Too Many Requests - Rate limit exceeded. Retry after the indicated delay</span>
+                </div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Too Many Requests - Rate limit exceeded. Retry after the indicated delay",
+    "error_id": "err_example",
+    "http_status_code": 429,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
             </div>
             
             <div class="response response-error">
                 <div class="response-header">
                     <span class="response-code">500</span>
-                    <span class="response-desc">Internal server error</span>
+                    <span class="response-desc">Internal server error - Unexpected server-side error</span>
                 </div>
-                <div class="response-body"><div class="schema-ref-name">Error</div><div class="schema-properties"><div class="json-block"><pre>{
-  "<span class="json-key">code</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Machine-readable error code (e.g., "POLICY_NOT_FOUND", "INVALID_PREMIUM_AMOUNT")
- Use UPPER_SNAKE_CASE format</span>
-  "<span class="json-key">message</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Human-readable error message in user's language
- Should be clear and actionable</span>
-  "<span class="json-key">details</span>": <div class="schema-properties"><span class="json-type">object</span></div>,  <span class="json-comment">// Additional error details as key-value pairs
- Examples: {"field": "email", "reason": "invalid format"}</span>
-  "<span class="json-key">field_violations</span>": [<span class="json-ref">FieldViolation</span>],  <span class="json-comment">// List of field-specific validation errors
- Used for form validation errors</span>
-  "<span class="json-key">retryable</span>": <span class="json-type">"boolean"</span>,  <span class="json-comment">// Whether the operation can be retried
- true: Temporary error, client should retry
- false: Permanent error, don't retry</span>
-  "<span class="json-key">retry_after_seconds</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// Suggested delay before retry (in seconds)
- Only set if retryable = true</span>
-  "<span class="json-key">http_status_code</span>": <span class="json-type">"integer"</span>,  <span class="json-comment">// HTTP status code equivalent
- 400 = Bad Request, 404 = Not Found, 500 = Internal Error</span>
-  "<span class="json-key">error_id</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Unique error instance ID for tracking and debugging
- Can be used to look up error in logs</span>
-  "<span class="json-key">documentation_url</span>": <span class="json-type">"string"</span>,  <span class="json-comment">// Link to documentation for this error</span>
-}</pre></div></div></div>
+                <div class="response-body"><div class="schema-properties"><span class="json-type">object</span></div></div>
+                <div class="response-example"><div class="example-label">Example</div><pre class="json-block">{
+  "success": false,
+  "data": null,
+  "error": {
+    "code": "ERROR_CODE",
+    "message": "Internal server error - Unexpected server-side error",
+    "error_id": "err_example",
+    "http_status_code": 500,
+    "retryable": false,
+    "field_violations": []
+  },
+  "meta": {
+    "request_id": "req_example",
+    "timestamp": "2024-01-15T10:30:00Z"
+  }
+}</pre></div>
             </div>
             </div>
         </div>

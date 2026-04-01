@@ -6,12 +6,12 @@ import (
 
 // EndorsementRequestedEvent represents a endorsement_requested_event
 type EndorsementRequestedEvent struct {
-	EndorsementNumber string `json:"endorsement_number,omitempty"`
-	PolicyId string `json:"policy_id,omitempty"`
-	Type string `json:"type,omitempty"`
-	RequestedBy string `json:"requested_by,omitempty"`
 	CorrelationId string `json:"correlation_id,omitempty"`
-	Timestamp time.Time `json:"timestamp,omitempty"`
-	EventId string `json:"event_id,omitempty"`
 	EndorsementId string `json:"endorsement_id,omitempty"`
+	EndorsementNumber string `json:"endorsement_number,omitempty"`
+	EventId string `json:"event_id,omitempty"`
+	PolicyId string `json:"policy_id,omitempty"`
+	RequestedBy string `json:"requested_by,omitempty"`
+	Timestamp time.Time `json:"timestamp,omitempty"`
+	Type string `json:"type,omitempty"`
 }

@@ -28,11 +28,12 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/metadata"
 )
 
 // ResourceExtractorFn extracts the resource path segment from a request.
@@ -56,7 +57,7 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 		logger.Error("AuthZ middleware created without authz connection — all requests will be DENIED")
 		return func(next http.Handler) http.Handler {
 			return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-				http.Error(w, "Authorization service unavailable", http.StatusServiceUnavailable)
+				respond.Error(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "Authorization service unavailable")
 			})
 		}
 	}
@@ -77,7 +78,7 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 
 			if userID == "" {
 				// AuthMiddleware must run first
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 
@@ -94,7 +95,7 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 			action := r.Method
 
 			// ── Call AuthZ.CheckAccess ─────────────────────────────────────────
-			authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+			authzCtx := internalrpc.OutgoingContext(ctx, "gateway")
 			resp, err := client.CheckAccess(authzCtx, &authzservicev1.CheckAccessRequest{
 				UserId: userID,
 				Domain: domain,
@@ -110,27 +111,6 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 			})
 
 			if err != nil {
-				// Check if this is a connectivity error (authz service not running).
-				// In that case, degrade gracefully: log a warning and fall through
-				// to portal-gate enforcement only (user-type check already passed).
-				// Hard 503 is reserved for when authz is reachable but returns an error.
-				errStr := err.Error()
-				isConnErr := strings.Contains(errStr, "connection refused") ||
-					strings.Contains(errStr, "No connection could be made") ||
-					strings.Contains(errStr, "Unavailable") ||
-					strings.Contains(errStr, "transport:")
-				if isConnErr {
-					logger.Warn("AuthZ service unreachable — falling back to portal-gate enforcement only",
-						zap.String("user_id", userID),
-						zap.String("domain", domain),
-						zap.String("object", object),
-						zap.String("action", action),
-						zap.Error(err),
-					)
-					// Allow request through; portal-gate middleware provides baseline enforcement.
-					next.ServeHTTP(w, r.WithContext(ctx))
-					return
-				}
 				logger.Error("AuthZ.CheckAccess RPC failed",
 					zap.Error(err),
 					zap.String("user_id", userID),
@@ -138,7 +118,10 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 					zap.String("object", object),
 					zap.String("action", action),
 				)
-				http.Error(w, "Authorization service error", http.StatusServiceUnavailable)
+				// Deny-by-default: if the authz service is unreachable or returns
+				// an error, reject the request with 503. Never allow requests to
+				// pass through without a positive authorization decision.
+				respond.Error(w, r, http.StatusServiceUnavailable, "SERVICE_UNAVAILABLE", "Authorization service unavailable")
 				return
 			}
 
@@ -154,7 +137,7 @@ func AuthZMiddleware(authzConn *grpc.ClientConn, servicePrefix string, extractRe
 					zap.String("action", action),
 					zap.String("reason", reason),
 				)
-				http.Error(w, "Forbidden: "+reason, http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: "+reason)
 				return
 			}
 
@@ -219,6 +202,8 @@ const (
 	UserTypeAgent               = "USER_TYPE_AGENT"
 	UserTypeRegulator           = "USER_TYPE_REGULATOR"
 	UserTypeB2CCustomer         = "USER_TYPE_B2C_CUSTOMER"
+	UserTypeB2BOrgAdmin         = "USER_TYPE_B2B_ORG_ADMIN"
+	UserTypeBusinessAdmin       = "USER_TYPE_BUSINESS_ADMIN"
 )
 
 // requireUserTypes returns a middleware that allows only the listed user types.
@@ -231,7 +216,7 @@ func requireUserTypes(allowed ...string) func(http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 			ut := r.Header.Get("X-User-Type")
 			if !allowedSet[ut] {
-				http.Error(w, "Forbidden: insufficient portal access", http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: insufficient portal access")
 				return
 			}
 			next.ServeHTTP(w, r)
@@ -273,6 +258,8 @@ func AnyAuthenticatedMiddleware(next http.Handler) http.Handler {
 		UserTypeAgent,
 		UserTypeRegulator,
 		UserTypeB2CCustomer,
+		UserTypeB2BOrgAdmin,
+		UserTypeBusinessAdmin,
 	)(next)
 }
 

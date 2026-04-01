@@ -11,61 +11,43 @@ type KycService struct {
 	Client Client
 }
 
-// ListPendingVerifications List pending KYC verifications (admin review queue)
-func (s *KycService) ListPendingVerifications(ctx context.Context) (*models.PendingVerificationsListingResponse, error) {
-	path := "/v1/kyc-verifications:pending"
-	var result models.PendingVerificationsListingResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
 // StartKYCVerification Start KYC verification
-func (s *KycService) StartKYCVerification(ctx context.Context, req *models.KYCVerificationStartRequest) (*models.KYCVerificationStartResponse, error) {
+func (s *KycService) StartKYCVerification(ctx context.Context, req *models.KYCVerificationStartRequest) error {
 	path := "/v1/kyc-verifications"
-	var result models.KYCVerificationStartResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
-}
-
-// UploadDocument Upload document
-func (s *KycService) UploadDocument(ctx context.Context, kycVerificationId string, req *models.KycDocumentUploadRequest) (*models.KycDocumentUploadResponse, error) {
-	path := "/v1/kyc-verifications/{kyc_verification_id}/documents"
-	path = strings.ReplaceAll(path, "{kyc_verification_id}", kycVerificationId)
-	var result models.KycDocumentUploadResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // GetKYCVerification Get KYC verification
-func (s *KycService) GetKYCVerification(ctx context.Context, kycVerificationId string) (*models.KYCVerificationRetrievalResponse, error) {
+func (s *KycService) GetKYCVerification(ctx context.Context, kycVerificationId string) error {
 	path := "/v1/kyc-verifications/{kyc_verification_id}"
 	path = strings.ReplaceAll(path, "{kyc_verification_id}", kycVerificationId)
-	var result models.KYCVerificationRetrievalResponse
-	err := s.Client.DoRequest(ctx, "GET", path, nil, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
+}
+
+// UploadDocument Upload document
+func (s *KycService) UploadDocument(ctx context.Context, kycVerificationId string, req *models.KycDocumentUploadRequest) error {
+	path := "/v1/kyc-verifications/{kyc_verification_id}/documents"
+	path = strings.ReplaceAll(path, "{kyc_verification_id}", kycVerificationId)
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
+}
+
+// RejectKYC Reject KYC
+func (s *KycService) RejectKYC(ctx context.Context, kycVerificationId string, req *models.KYCRejectionRequest) error {
+	path := "/v1/kyc-verifications/{kyc_verification_id}:reject"
+	path = strings.ReplaceAll(path, "{kyc_verification_id}", kycVerificationId)
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
 }
 
 // VerifyKYC Verify KYC
-func (s *KycService) VerifyKYC(ctx context.Context, kycVerificationId string, req *models.KYCVerificationRequest) (*models.KYCVerificationResponse, error) {
-	path := "/v1/kyc-verifications/{kyc_verification_id}"
+func (s *KycService) VerifyKYC(ctx context.Context, kycVerificationId string, req *models.KYCVerificationRequest) error {
+	path := "/v1/kyc-verifications/{kyc_verification_id}:verify"
 	path = strings.ReplaceAll(path, "{kyc_verification_id}", kycVerificationId)
-	var result models.KYCVerificationResponse
-	err := s.Client.DoRequest(ctx, "POST", path, req, &result)
-	if err != nil {
-		return nil, err
-	}
-	return &result, nil
+	return s.Client.DoRequest(ctx, "POST", path, req, nil)
+}
+
+// ListPendingVerifications List pending KYC verifications (admin review queue)
+func (s *KycService) ListPendingVerifications(ctx context.Context) error {
+	path := "/v1/kyc-verifications:pending"
+	return s.Client.DoRequest(ctx, "GET", path, nil, nil)
 }
 

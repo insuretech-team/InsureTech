@@ -26,6 +26,15 @@ func normalizeMobile(raw string) (string, error) {
 	return "+" + normalized, nil
 }
 
+func allowsOTPOnlyLogin(deviceType string) bool {
+	switch strings.ToUpper(strings.TrimSpace(deviceType)) {
+	case "", "API", "ANDROID", "MOBILE", "MOBILE_ANDROID", "IOS", "MOBILE_IOS", "DESKTOP":
+		return true
+	default:
+		return false
+	}
+}
+
 type AuthServiceHandler struct {
 	authnservicev1.UnimplementedAuthServiceServer
 	authService AuthServiceIface
@@ -45,7 +54,10 @@ func (h *AuthServiceHandler) Login(ctx context.Context, req *authnservicev1.Logi
 		return nil, err
 	}
 	req.MobileNumber = normalized
-	if req.Password == "" {
+	// B2C OTP-only login: password is optional when a recent verified OTP exists.
+	// The auth service will validate the recent verified OTP when password is empty.
+	// Any JWT-style device is allowed here; WEB remains password-required.
+	if req.Password == "" && !allowsOTPOnlyLogin(req.DeviceType) {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 	resp, err := h.authService.Login(ctx, req)
@@ -61,7 +73,8 @@ func (h *AuthServiceHandler) Register(ctx context.Context, req *authnservicev1.R
 		return nil, err
 	}
 	req.MobileNumber = normalized
-	if req.Password == "" {
+	// B2C OTP-only registration: password optional for mobile/android/ios device types.
+	if req.Password == "" && req.DeviceType != "mobile" && req.DeviceType != "ios" && req.DeviceType != "android" {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
 	resp, err := h.authService.Register(ctx, req)
@@ -77,6 +90,20 @@ func (h *AuthServiceHandler) SendOTP(ctx context.Context, req *authnservicev1.Se
 	}
 	if req.Type == "" {
 		return nil, status.Error(codes.InvalidArgument, "type is required")
+	}
+	channel := strings.ToLower(strings.TrimSpace(req.Channel))
+	if channel == "" {
+		channel = "sms"
+	}
+	if channel == "sms" {
+		normalized, err := normalizeMobile(req.Recipient)
+		if err != nil {
+			return nil, status.Errorf(
+				codes.InvalidArgument,
+				"recipient must be a valid Bangladesh mobile number for sms channel (e.g. 01712345678, +8801712345678, 008801712345678)",
+			)
+		}
+		req.Recipient = normalized
 	}
 	resp, err := h.authService.SendOTP(ctx, req)
 	if err != nil {
@@ -199,6 +226,31 @@ func (h *AuthServiceHandler) GetCurrentSession(ctx context.Context, req *authnse
 	return resp, nil
 }
 
+func (h *AuthServiceHandler) FindPortalUser(ctx context.Context, req *authnservicev1.FindPortalUserRequest) (*authnservicev1.FindPortalUserResponse, error) {
+	if strings.TrimSpace(req.GetIdentifier()) == "" {
+		return nil, status.Error(codes.InvalidArgument, "identifier is required")
+	}
+	resp, err := h.authService.FindPortalUser(ctx, req)
+	if err != nil {
+		return nil, toGRPCError(err)
+	}
+	return resp, nil
+}
+
+func (h *AuthServiceHandler) SetTemporaryPassword(ctx context.Context, req *authnservicev1.SetTemporaryPasswordRequest) (*authnservicev1.SetTemporaryPasswordResponse, error) {
+	if strings.TrimSpace(req.GetUserId()) == "" {
+		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+	if strings.TrimSpace(req.GetTemporaryPassword()) == "" {
+		return nil, status.Error(codes.InvalidArgument, "temporary_password is required")
+	}
+	resp, err := h.authService.SetTemporaryPassword(ctx, req)
+	if err != nil {
+		return nil, toGRPCError(err)
+	}
+	return resp, nil
+}
+
 func (h *AuthServiceHandler) ValidateCSRF(ctx context.Context, req *authnservicev1.ValidateCSRFRequest) (*authnservicev1.ValidateCSRFResponse, error) {
 	if req.SessionId == "" {
 		return nil, status.Error(codes.InvalidArgument, "session_id is required")
@@ -260,6 +312,12 @@ func (h *AuthServiceHandler) RegisterEmailUser(ctx context.Context, req *authnse
 	if req.Password == "" {
 		return nil, status.Error(codes.InvalidArgument, "password is required")
 	}
+	if req.UserType == "" {
+		return nil, status.Error(codes.InvalidArgument, "user_type is required")
+	}
+	if req.FullName == "" {
+		return nil, status.Error(codes.InvalidArgument, "full_name is required")
+	}
 	if strings.TrimSpace(req.MobileNumber) != "" {
 		normalized, err := normalizeMobile(req.MobileNumber)
 		if err != nil {
@@ -277,6 +335,9 @@ func (h *AuthServiceHandler) RegisterEmailUser(ctx context.Context, req *authnse
 func (h *AuthServiceHandler) SendEmailOTP(ctx context.Context, req *authnservicev1.SendEmailOTPRequest) (*authnservicev1.SendEmailOTPResponse, error) {
 	if req.Email == "" {
 		return nil, status.Error(codes.InvalidArgument, "email is required")
+	}
+	if req.Type == "" {
+		return nil, status.Error(codes.InvalidArgument, "type is required")
 	}
 	resp, err := h.authService.SendEmailOTP(ctx, req)
 	if err != nil {
@@ -316,6 +377,20 @@ func (h *AuthServiceHandler) EmailLogin(ctx context.Context, req *authnservicev1
 	return resp, nil
 }
 
+func (h *AuthServiceHandler) EmailPasswordLogin(ctx context.Context, req *authnservicev1.EmailPasswordLoginRequest) (*authnservicev1.EmailPasswordLoginResponse, error) {
+	if req.GetEmail() == "" {
+		return nil, status.Error(codes.InvalidArgument, "email is required")
+	}
+	if req.GetPassword() == "" {
+		return nil, status.Error(codes.InvalidArgument, "password is required")
+	}
+	resp, err := h.authService.EmailPasswordLogin(ctx, req)
+	if err != nil {
+		return nil, toGRPCError(err)
+	}
+	return resp, nil
+}
+
 func (h *AuthServiceHandler) RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error) {
 	if req.Email == "" {
 		return nil, status.Error(codes.InvalidArgument, "email is required")
@@ -341,6 +416,26 @@ func (h *AuthServiceHandler) ResetPasswordByEmail(ctx context.Context, req *auth
 		return nil, status.Error(codes.InvalidArgument, "new_password is required")
 	}
 	resp, err := h.authService.ResetPasswordByEmail(ctx, req)
+	if err != nil {
+		return nil, toGRPCError(err)
+	}
+	return resp, nil
+}
+
+func (h *AuthServiceHandler) ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error) {
+	if req.GetEmail() == "" {
+		return nil, status.Error(codes.InvalidArgument, "email is required")
+	}
+	if req.GetFullName() == "" {
+		return nil, status.Error(codes.InvalidArgument, "full_name is required")
+	}
+	if req.GetEmployeeId() == "" {
+		return nil, status.Error(codes.InvalidArgument, "employee_id is required")
+	}
+	if req.GetBusinessId() == "" {
+		return nil, status.Error(codes.InvalidArgument, "business_id is required")
+	}
+	resp, err := h.authService.ProvisionEmployeeUser(ctx, req)
 	if err != nil {
 		return nil, toGRPCError(err)
 	}
@@ -388,6 +483,12 @@ func (h *AuthServiceHandler) CreateAPIKey(ctx context.Context, req *authnservice
 	if req.Name == "" {
 		return nil, status.Error(codes.InvalidArgument, "name is required")
 	}
+	if req.OwnerType == "" {
+		return nil, status.Error(codes.InvalidArgument, "owner_type is required")
+	}
+	if len(req.Scopes) == 0 {
+		return nil, status.Error(codes.InvalidArgument, "scopes is required")
+	}
 	resp, err := h.authService.CreateAPIKey(ctx, req)
 	if err != nil {
 		return nil, toGRPCError(err)
@@ -434,8 +535,16 @@ func (h *AuthServiceHandler) CreateUserProfile(ctx context.Context, req *authnse
 	if req.UserId == "" {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
+	// Attempt to create - if profile already exists the service returns AlreadyExists
+	// which maps to HTTP 409. Validate required fields only for new profile creation.
 	if req.FullName == "" {
 		return nil, status.Error(codes.InvalidArgument, "full_name is required")
+	}
+	if req.DateOfBirth == nil {
+		return nil, status.Error(codes.InvalidArgument, "date_of_birth is required")
+	}
+	if req.Gender == "" {
+		return nil, status.Error(codes.InvalidArgument, "gender is required")
 	}
 	if req.AddressLine1 == "" {
 		return nil, status.Error(codes.InvalidArgument, "address_line1 is required")
@@ -613,6 +722,9 @@ func (h *AuthServiceHandler) ApproveKYC(ctx context.Context, req *authnservicev1
 	if req.KycId == "" {
 		return nil, status.Error(codes.InvalidArgument, "kyc_id is required")
 	}
+	if req.ReviewerId == "" {
+		return nil, status.Error(codes.InvalidArgument, "reviewer_id is required")
+	}
 	resp, err := h.authService.ApproveKYC(ctx, req)
 	if err != nil {
 		return nil, toGRPCError(err)
@@ -620,25 +732,19 @@ func (h *AuthServiceHandler) ApproveKYC(ctx context.Context, req *authnservicev1
 	return resp, nil
 }
 
-func (h *AuthServiceHandler) RejectKYC(ctx context.Context, req *authnservicev1.RejectKYCRequest) (*authnservicev1.RejectKYCResponse, error) {
-	if req.KycId == "" {
-		return nil, status.Error(codes.InvalidArgument, "kyc_id is required")
-	}
-	if req.RejectionReason == "" {
-		return nil, status.Error(codes.InvalidArgument, "rejection_reason is required")
-	}
-	resp, err := h.authService.RejectKYC(ctx, req)
-	if err != nil {
-		return nil, toGRPCError(err)
-	}
-	return resp, nil
-}
+// NOTE: RejectKYC RPC removed from proto (API path conflict). Use internal rejectKYCInternal helper.
 
 // ── Document Verification ────────────────────────────────────────────────────
 
 func (h *AuthServiceHandler) VerifyDocument(ctx context.Context, req *authnservicev1.VerifyDocumentRequest) (*authnservicev1.VerifyDocumentResponse, error) {
 	if req.UserDocumentId == "" {
 		return nil, status.Error(codes.InvalidArgument, "user_document_id is required")
+	}
+	if req.VerificationStatus == "" {
+		return nil, status.Error(codes.InvalidArgument, "verification_status is required")
+	}
+	if req.VerifiedBy == "" {
+		return nil, status.Error(codes.InvalidArgument, "verified_by is required")
 	}
 	resp, err := h.authService.VerifyDocument(ctx, req)
 	if err != nil {
@@ -660,27 +766,8 @@ func (h *AuthServiceHandler) CreateVoiceSession(ctx context.Context, req *authns
 	return resp, nil
 }
 
-func (h *AuthServiceHandler) GetVoiceSession(ctx context.Context, req *authnservicev1.GetVoiceSessionRequest) (*authnservicev1.GetVoiceSessionResponse, error) {
-	if req.VoiceSessionId == "" {
-		return nil, status.Error(codes.InvalidArgument, "voice_session_id is required")
-	}
-	resp, err := h.authService.GetVoiceSession(ctx, req)
-	if err != nil {
-		return nil, toGRPCError(err)
-	}
-	return resp, nil
-}
-
-func (h *AuthServiceHandler) EndVoiceSession(ctx context.Context, req *authnservicev1.EndVoiceSessionRequest) (*authnservicev1.EndVoiceSessionResponse, error) {
-	if req.VoiceSessionId == "" {
-		return nil, status.Error(codes.InvalidArgument, "voice_session_id is required")
-	}
-	resp, err := h.authService.EndVoiceSession(ctx, req)
-	if err != nil {
-		return nil, toGRPCError(err)
-	}
-	return resp, nil
-}
+// NOTE: GetVoiceSession and EndVoiceSession RPCs removed from proto (API path conflict with voice domain).
+// Use internal helpers getVoiceSessionInternal / endVoiceSessionInternal on AuthService.
 
 // ── Voice Biometric Auth (Sprint 1.10) ───────────────────────────────────────
 
@@ -698,6 +785,9 @@ func (h *AuthServiceHandler) InitiateVoiceSession(ctx context.Context, req *auth
 func (h *AuthServiceHandler) SubmitVoiceSample(ctx context.Context, req *authnservicev1.SubmitVoiceSampleRequest) (*authnservicev1.SubmitVoiceSampleResponse, error) {
 	if req.SessionId == "" {
 		return nil, status.Error(codes.InvalidArgument, "session_id is required")
+	}
+	if req.Transcript == "" {
+		return nil, status.Error(codes.InvalidArgument, "transcript is required")
 	}
 	resp, err := h.authService.SubmitVoiceSample(ctx, req)
 	if err != nil {
@@ -731,6 +821,19 @@ func (h *AuthServiceHandler) GetProfilePhotoUploadURL(ctx context.Context, req *
 }
 
 // ── Notification Preferences ──────────────────────────────────────────────────
+
+// GetNotificationPreferences returns current notification preferences for a user.
+// BUG-010 FIX: Added missing GET handler — previously only Update existed.
+func (h *AuthServiceHandler) GetNotificationPreferences(ctx context.Context, req *authnservicev1.GetNotificationPreferencesRequest) (*authnservicev1.GetNotificationPreferencesResponse, error) {
+	if req.GetUserId() == "" {
+		return nil, status.Error(codes.InvalidArgument, "user_id is required")
+	}
+	resp, err := h.authService.GetNotificationPreferences(ctx, req)
+	if err != nil {
+		return nil, status.Errorf(codes.Internal, "get notification preferences: %v", err)
+	}
+	return resp, nil
+}
 
 func (h *AuthServiceHandler) UpdateNotificationPreferences(ctx context.Context, req *authnservicev1.UpdateNotificationPreferencesRequest) (*authnservicev1.UpdateNotificationPreferencesResponse, error) {
 	if req.UserId == "" {
@@ -774,6 +877,9 @@ func (h *AuthServiceHandler) DisableTOTP(ctx context.Context, req *authnservicev
 	if req.UserId == "" {
 		return nil, status.Error(codes.InvalidArgument, "user_id is required")
 	}
+	if req.TotpCode == "" {
+		return nil, status.Error(codes.InvalidArgument, "totp_code is required")
+	}
 	resp, err := h.authService.DisableTOTP(ctx, req)
 	if err != nil {
 		return nil, toGRPCError(err)
@@ -781,12 +887,5 @@ func (h *AuthServiceHandler) DisableTOTP(ctx context.Context, req *authnservicev
 	return resp, nil
 }
 
-// ── JWKS ─────────────────────────────────────────────────────────────────────
-
-func (h *AuthServiceHandler) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error) {
-	resp, err := h.authService.GetJWKS(ctx, req)
-	if err != nil {
-		return nil, toGRPCError(err)
-	}
-	return resp, nil
-}
+// NOTE: GetJWKS RPC removed from proto (API path conflict with well-known domain).
+// JWKS is served directly by the API gateway via TokenService.GetJWKSInternal.

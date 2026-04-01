@@ -1,0 +1,24 @@
+VehicleCreationRequest:
+  type: object
+  properties:
+    model:
+      type: string
+    type:
+      $ref: '#/components/schemas/VehicleType'
+    price:
+      type: string
+      format: int64
+    manufacturer:
+      type: string
+    year:
+      type: integer
+      format: int32
+    image_uri:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for creating a new vehicle creation. Contains all required
+    fields and optional parameters for initialization.

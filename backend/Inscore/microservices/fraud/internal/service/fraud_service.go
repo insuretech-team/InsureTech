@@ -13,10 +13,10 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/events"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/metrics"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/fraud/internal/repository"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	fraudv1 "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/entity/v1"
 	fraudservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/services/v1"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/structpb"
 )
 
@@ -615,20 +615,7 @@ func toFloat(v any) (float64, bool) {
 }
 
 func correlationIDFromContext(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	for _, k := range []string{"x-correlation-id", "x-request-id", "x-trace-id"} {
-		vals := md.Get(k)
-		if len(vals) == 0 {
-			continue
-		}
-		if v := strings.TrimSpace(vals[0]); v != "" {
-			return v
-		}
-	}
-	return ""
+	return grpcmeta.CorrelationID(ctx)
 }
 
 func structToJSON(in *structpb.Struct) string {

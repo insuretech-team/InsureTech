@@ -50,7 +50,7 @@ message IoTDevice {
   ];
   // @inject_tag: gorm:"column:device_serial;not null"
 
-  DeviceType type = 3 [
+  IoTDeviceType type = 3 [
     (insuretech.common.v1.column) = {
       column_name: "type"
       sql_type: "VARCHAR(50)"
@@ -199,7 +199,7 @@ message IoTDevice {
   // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
 }
 
-enum DeviceType {
+enum IoTDeviceType {
   DEVICE_TYPE_UNSPECIFIED = 0;
   DEVICE_TYPE_VEHICLE_TRACKER = 1; // GPS tracker for vehicles
   DEVICE_TYPE_HEALTH_MONITOR = 2; // Wearable health device

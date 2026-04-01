@@ -54,7 +54,7 @@ service UnderwritingService {
   // Approve underwriting (manual)
   rpc ApproveUnderwriting(ApproveUnderwritingRequest) returns (ApproveUnderwritingResponse) {
     option (google.api.http) = {
-      post: "/v1/quotes/{quote_id}?action=approve"
+      post: "/v1/quotes/{quote_id}:approve"
       body: "*"
     };
   }
@@ -62,7 +62,7 @@ service UnderwritingService {
   // Reject underwriting (manual)
   rpc RejectUnderwriting(RejectUnderwritingRequest) returns (RejectUnderwritingResponse) {
     option (google.api.http) = {
-      post: "/v1/quotes/{quote_id}?action=reject"
+      post: "/v1/quotes/{quote_id}:reject"
       body: "*"
     };
   }
@@ -70,7 +70,7 @@ service UnderwritingService {
   // Convert quote to policy
   rpc ConvertQuoteToPolicy(ConvertQuoteToPolicyRequest) returns (ConvertQuoteToPolicyResponse) {
     option (google.api.http) = {
-      post: "/v1/quotes/{quote_id}?action=convert"
+      post: "/v1/quotes/{quote_id}:convert"
       body: "*"
     };
   }

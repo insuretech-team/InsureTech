@@ -4,8 +4,6 @@ ResendOTPResponse:
     otp_id:
       type: string
       description: New OTP ID (replaces the original)
-    message:
-      type: string
     expires_in_seconds:
       type: integer
       format: int32
@@ -24,7 +22,5 @@ ResendOTPResponse:
     sender_id:
       type: string
       description: Sender ID used (for display to user)
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for resend otp operation. Returns operation results
     and status.

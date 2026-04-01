@@ -29,6 +29,7 @@ import "insuretech/beneficiary/entity/v1/individual.proto";
 import "insuretech/beneficiary/entity/v1/business.proto";
 import "insuretech/endorsement/entity/v1/endorsement.proto";
 import "insuretech/policy/entity/v1/quotation.proto";
+import "insuretech/policy/entity/v1/insurance_proposal.proto";
 import "insuretech/policy/entity/v1/policy_service_request.proto";
 import "insuretech/services/entity/v1/service_provider.proto";
 
@@ -54,6 +55,7 @@ service InsuranceService {
   // ========== PRICING CONFIG CRUD ==========
   rpc CreatePricingConfig(CreatePricingConfigRequest) returns (CreatePricingConfigResponse);
   rpc GetPricingConfig(GetPricingConfigRequest) returns (GetPricingConfigResponse);
+  rpc ListPricingConfigs(ListPricingConfigsRequest) returns (ListPricingConfigsResponse);
 
   // ========== POLICY CRUD ==========
   rpc CreatePolicy(CreatePolicyRequest) returns (CreatePolicyResponse);
@@ -66,6 +68,8 @@ service InsuranceService {
   rpc CreateClaim(CreateClaimRequest) returns (CreateClaimResponse);
   rpc GetClaim(GetClaimRequest) returns (GetClaimResponse);
   rpc UpdateClaim(UpdateClaimRequest) returns (UpdateClaimResponse);
+  rpc CreateClaimDocument(CreateClaimDocumentRequest) returns (CreateClaimDocumentResponse);
+  rpc CreateClaimApproval(CreateClaimApprovalRequest) returns (CreateClaimApprovalResponse);
   rpc DeleteClaim(DeleteClaimRequest) returns (google.protobuf.Empty);
   rpc ListClaims(ListClaimsRequest) returns (ListClaimsResponse);
 
@@ -187,6 +191,13 @@ service InsuranceService {
   rpc UpdateQuotation(UpdateQuotationRequest) returns (UpdateQuotationResponse);
   rpc DeleteQuotation(DeleteQuotationRequest) returns (google.protobuf.Empty);
   rpc ListQuotations(ListQuotationsRequest) returns (ListQuotationsResponse);
+
+  // ========== INSURANCE PROPOSAL CRUD ==========
+  rpc CreateInsuranceProposal(CreateInsuranceProposalRequest) returns (CreateInsuranceProposalResponse);
+  rpc GetInsuranceProposal(GetInsuranceProposalRequest) returns (GetInsuranceProposalResponse);
+  rpc UpdateInsuranceProposal(UpdateInsuranceProposalRequest) returns (UpdateInsuranceProposalResponse);
+  rpc DeleteInsuranceProposal(DeleteInsuranceProposalRequest) returns (google.protobuf.Empty);
+  rpc ListInsuranceProposals(ListInsuranceProposalsRequest) returns (ListInsuranceProposalsResponse);
 
   // ========== POLICY SERVICE REQUEST CRUD ==========
   rpc CreatePolicyServiceRequest(CreatePolicyServiceRequestRequest) returns (CreatePolicyServiceRequestResponse);
@@ -310,6 +321,14 @@ message GetPricingConfigResponse {
   insuretech.products.entity.v1.PricingConfig config = 1;
 }
 
+message ListPricingConfigsRequest {
+  string product_id = 1;
+}
+
+message ListPricingConfigsResponse {
+  repeated insuretech.products.entity.v1.PricingConfig configs = 1;
+}
+
 // ========== POLICY MESSAGES ==========
 message CreatePolicyRequest {
   insuretech.policy.entity.v1.Policy policy = 1;
@@ -370,6 +389,22 @@ message UpdateClaimRequest {
 
 message UpdateClaimResponse {
   insuretech.claims.entity.v1.Claim claim = 1;
+}
+
+message CreateClaimDocumentRequest {
+  insuretech.claims.entity.v1.ClaimDocument document = 1;
+}
+
+message CreateClaimDocumentResponse {
+  insuretech.claims.entity.v1.ClaimDocument document = 1;
+}
+
+message CreateClaimApprovalRequest {
+  insuretech.claims.entity.v1.ClaimApproval approval = 1;
+}
+
+message CreateClaimApprovalResponse {
+  insuretech.claims.entity.v1.ClaimApproval approval = 1;
 }
 
 message ListClaimsRequest {
@@ -1028,6 +1063,49 @@ message ListQuotationsRequest {
 
 message ListQuotationsResponse {
   repeated insuretech.policy.entity.v1.Quotation quotations = 1;
+  int32 total = 2;
+}
+
+// ========== INSURANCE PROPOSAL MESSAGES ==========
+message CreateInsuranceProposalRequest {
+  insuretech.policy.entity.v1.InsuranceProposal proposal = 1;
+}
+
+message CreateInsuranceProposalResponse {
+  insuretech.policy.entity.v1.InsuranceProposal proposal = 1;
+}
+
+message GetInsuranceProposalRequest {
+  string proposal_id = 1;
+}
+
+message GetInsuranceProposalResponse {
+  insuretech.policy.entity.v1.InsuranceProposal proposal = 1;
+}
+
+message UpdateInsuranceProposalRequest {
+  insuretech.policy.entity.v1.InsuranceProposal proposal = 1;
+}
+
+message UpdateInsuranceProposalResponse {
+  insuretech.policy.entity.v1.InsuranceProposal proposal = 1;
+}
+
+message DeleteInsuranceProposalRequest {
+  string proposal_id = 1;
+}
+
+message ListInsuranceProposalsRequest {
+  string order_id = 1;
+  string insurer_id = 2;
+  string customer_id = 3;
+  insuretech.policy.entity.v1.ProposalStatus status = 4;
+  int32 page = 5;
+  int32 page_size = 6;
+}
+
+message ListInsuranceProposalsResponse {
+  repeated insuretech.policy.entity.v1.InsuranceProposal proposals = 1;
   int32 total = 2;
 }
 

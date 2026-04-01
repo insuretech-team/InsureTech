@@ -1,0 +1,57 @@
+{
+  "id": "travel_rate_table",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "OVERSEAS MEDICLAIM — PREMIUM RATE SCHEDULE" },
+    { "type": "subtitle", "text": "{{ rate_table_title }}", "bold": true },
+    { "type": "divider" },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Rate Table Type", "value": "{{ rate_table_type }}" },
+        { "number": "", "label": "Effective From", "value": "{{ effective_from }}" },
+        { "number": "", "label": "Currency", "value": "{{ currency }}" }
+      ]
+    },
+    { "type": "heading", "text": "PLAN A — WORLDWIDE EXCLUDING USA & CANADA", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Duration (Days)", "Age: 6 mo–35 yrs", "Age: 36–45 yrs", "Age: 46–55 yrs", "Age: 56–65 yrs", "Age: 66–70 yrs", "Age: 71–75 yrs", "Age: 76–79 yrs"],
+      "rows_key": "plan_a_rates",
+      "columns": ["duration", "age_6m_35", "age_36_45", "age_46_55", "age_56_65", "age_66_70", "age_71_75", "age_76_79"],
+      "col_widths": [0.9, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.76]
+    },
+    { "type": "heading", "text": "PLAN B — WORLDWIDE INCLUDING USA & CANADA", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Duration (Days)", "Age: 6 mo–35 yrs", "Age: 36–45 yrs", "Age: 46–55 yrs", "Age: 56–65 yrs", "Age: 66–70 yrs", "Age: 71–75 yrs", "Age: 76–79 yrs"],
+      "rows_key": "plan_b_rates",
+      "columns": ["duration", "age_6m_35", "age_36_45", "age_46_55", "age_56_65", "age_66_70", "age_71_75", "age_76_79"],
+      "col_widths": [0.9, 0.8, 0.8, 0.8, 0.8, 0.8, 0.8, 0.76]
+    },
+    { "type": "heading", "text": "SPECIAL CATEGORIES & ADDENDA", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Category", "Description", "Rate / Premium"],
+      "rows_key": "special_rates",
+      "columns": ["category", "description", "rate"],
+      "col_widths": [1.5, 3.0, 2.0]
+    },
+    {
+      "type": "notice",
+      "text": "Note: All premiums are in BDT unless otherwise stated. Rates are subject to change without prior notice. Contact your relationship manager for corporate / group discounts. Children under 6 months and persons above 79 years are not eligible."
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Rate Schedule Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

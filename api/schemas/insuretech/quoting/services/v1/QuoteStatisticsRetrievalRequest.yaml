@@ -1,0 +1,17 @@
+QuoteStatisticsRetrievalRequest:
+  type: object
+  properties:
+    customer_id:
+      type: string
+    product_id:
+      type: string
+    agent_id:
+      type: string
+    start_date:
+      type: string
+      format: date-time
+    end_date:
+      type: string
+      format: date-time
+  description: Request payload for retrieving quote statistics retrieval information.
+    May include filters and pagination parameters.

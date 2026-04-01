@@ -1,0 +1,83 @@
+ActuarialCalculation:
+  type: object
+  properties:
+    calculation_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    calculation_reference:
+      type: string
+      x-unique: true
+    calculation_type:
+      $ref: '#/components/schemas/ActuarialCalculationType'
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    parameters_json:
+      type: string
+      description: Input parameters for the calculation
+    results_json:
+      type: string
+      description: Calculation results
+    status:
+      allOf:
+      - $ref: '#/components/schemas/CalculationStatus'
+      x-database-default: PENDING
+    validation_errors:
+      type: string
+    calculated_premium:
+      type: number
+      format: double
+      description: Calculated values (denormalized for querying)
+    loss_ratio:
+      type: number
+      format: double
+    combined_ratio:
+      type: number
+      format: double
+    reserve_amount:
+      type: number
+      format: double
+    calculated_by:
+      type: string
+      description: Metadata
+    calculated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    effective_date:
+      type: string
+      format: date-time
+      description: Effective date for the calculation
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "ActuarialCalculation represents a P&C actuarial calculation result\n\
+    \ Maps to 'actuarial_calculations' table in actuarial_schema"
+  required:
+  - calculation_id
+  - calculation_reference
+  - calculation_type
+  - entity_type
+  - entity_id
+  - parameters_json
+  - results_json
+  - status
+  - calculated_at
+  - effective_date
+  - created_at
+  - updated_at

@@ -1,0 +1,7 @@
+ContactCreationResponse:
+  type: object
+  properties:
+    contact:
+      $ref: '#/components/schemas/Contact'
+  description: Response payload for contact creation operation. Returns operation
+    results and status.

@@ -1,0 +1,38 @@
+ContactCreationRequest:
+  type: object
+  properties:
+    first_name:
+      type: string
+    last_name:
+      type: string
+    date_of_birth:
+      type: string
+      format: date-time
+    gender:
+      type: string
+    phone_number:
+      type: string
+    email_address:
+      type: string
+    address:
+      type: string
+    preferred_contact_method:
+      $ref: '#/components/schemas/PreferredContactMethod'
+    referral_source:
+      type: string
+    preferred_language:
+      type: string
+    marketing_consent:
+      type: boolean
+    assigned_agent_id:
+      type: string
+    contact_type:
+      $ref: '#/components/schemas/ContactType'
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_by:
+      type: string
+  description: Contact requests/responses

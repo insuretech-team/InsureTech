@@ -1,0 +1,7 @@
+BusinessWorkflowDeletionResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for business workflow deletion operation. Returns
+    operation results and status.

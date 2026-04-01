@@ -13,7 +13,7 @@ Task:
       type: string
       description: '@inject_tag: gorm:"column:description"'
     type:
-      $ref: '#/components/schemas/TaskTaskType'
+      $ref: '#/components/schemas/TaskType'
       description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
     priority:
       allOf:
@@ -21,7 +21,7 @@ Task:
       x-database-default: MEDIUM
     status:
       allOf:
-      - $ref: '#/components/schemas/TaskTaskStatus'
+      - $ref: '#/components/schemas/TaskStatus'
       x-database-default: PENDING
     assigned_to:
       type: string

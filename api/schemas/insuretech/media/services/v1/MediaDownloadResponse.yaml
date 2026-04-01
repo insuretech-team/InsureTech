@@ -7,7 +7,5 @@ MediaDownloadResponse:
     expires_in_seconds:
       type: string
       format: int64
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for media download operation. Returns operation results
     and status.

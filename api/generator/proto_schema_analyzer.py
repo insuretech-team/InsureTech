@@ -2,6 +2,7 @@
 Proto Schema Analyzer
 Recursively scans proto files to extract database schema groups, tables, enums, and message types.
 """
+from write_guard import json_dump_if_changed
 
 import os
 import re
@@ -26,7 +27,7 @@ class ProtoSchemaAnalyzer:
         """Recursively scan all proto files and extract schema information"""
         print(f"Scanning proto files in: {self.proto_root}")
         
-        proto_files = list(Path(self.proto_root).rglob("*.proto"))
+        proto_files = sorted(Path(self.proto_root).rglob("*.proto"))
         print(f"Found {len(proto_files)} proto files")
         
         for proto_file in proto_files:
@@ -238,9 +239,7 @@ class ProtoSchemaAnalyzer:
     
     def export_to_json(self, output_file: str, summary: Dict):
         """Export summary to JSON file"""
-        import json
-        with open(output_file, 'w', encoding='utf-8') as f:
-            json.dump(summary, f, indent=2, ensure_ascii=False)
+        json_dump_if_changed(output_file, summary, indent=2, ensure_ascii=False, sort_keys=True)
         print(f"\n✅ Exported to: {output_file}")
 
 

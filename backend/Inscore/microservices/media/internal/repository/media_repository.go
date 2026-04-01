@@ -8,9 +8,7 @@ import (
 	"strings"
 
 	"github.com/jmoiron/sqlx"
-	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	mediav1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/entity/v1"
-	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
 // MediaRepository handles database operations for media files.
@@ -30,19 +28,21 @@ func NewMediaRepository(db *sqlx.DB) *MediaRepository {
 
 // Create stores a new media file record.
 func (r *MediaRepository) Create(ctx context.Context, media *mediav1.MediaFile) (*mediav1.MediaFile, error) {
+	auditInfo, auditInfoJSON, err := prepareAuditInfoForCreate(media.AuditInfo, media.UploadedBy)
+	if err != nil {
+		return nil, err
+	}
+
 	query := `
 		INSERT INTO media_schema.media_files (
 			media_id, file_id, tenant_id, media_type, mime_type, file_size_bytes,
 			width, height, dpi, optimized_file_id, thumbnail_file_id,
 			entity_type, entity_id, ocr_text, validation_status, validation_errors,
-			virus_scan_status, uploaded_by, audit_info, created_at, updated_at
-		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19, NOW(), NOW())
-		RETURNING created_at, updated_at
+			virus_scan_status, uploaded_by, audit_info
+		) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19::jsonb)
 	`
 
-	var createdAt, updatedAt sql.NullTime
-
-	err := r.db.QueryRowContext(ctx, query,
+	_, err = r.db.ExecContext(ctx, query,
 		media.Id,
 		media.FileId,
 		media.TenantId,
@@ -61,22 +61,14 @@ func (r *MediaRepository) Create(ctx context.Context, media *mediav1.MediaFile) 
 		nullString(media.ValidationErrors),
 		media.VirusScanStatus.String(),
 		media.UploadedBy,
-		"{}",
-	).Scan(&createdAt, &updatedAt)
+		auditInfoJSON,
+	)
 
 	if err != nil {
 		return nil, fmt.Errorf("failed to create media file: %w", err)
 	}
 
-	if media.AuditInfo == nil {
-		media.AuditInfo = &commonv1.AuditInfo{}
-	}
-	if createdAt.Valid {
-		media.AuditInfo.CreatedAt = timestamppb.New(createdAt.Time)
-	}
-	if updatedAt.Valid {
-		media.AuditInfo.UpdatedAt = timestamppb.New(updatedAt.Time)
-	}
+	media.AuditInfo = auditInfo
 
 	return media, nil
 }
@@ -88,7 +80,7 @@ func (r *MediaRepository) GetByID(ctx context.Context, tenantID, mediaID string)
 			media_id, file_id, tenant_id, media_type, mime_type, file_size_bytes,
 			width, height, dpi, optimized_file_id, thumbnail_file_id,
 			entity_type, entity_id, ocr_text, validation_status, validation_errors,
-			virus_scan_status, uploaded_by, audit_info, created_at, updated_at
+			virus_scan_status, uploaded_by, ` + auditInfoSelectExpr("") + `
 		FROM media_schema.media_files
 		WHERE media_id = $1`
 	args := []any{mediaID}
@@ -100,8 +92,7 @@ func (r *MediaRepository) GetByID(ctx context.Context, tenantID, mediaID string)
 	var media mediav1.MediaFile
 	var mediaType, validationStatus, virusScanStatus string
 	var width, height, dpi sql.NullInt32
-	var optimizedFileID, thumbnailFileID, entityType, entityID, ocrText, validationErrors sql.NullString
-	var createdAt, updatedAt sql.NullTime
+	var optimizedFileID, thumbnailFileID, entityType, entityID, ocrText, validationErrors, auditInfoJSON sql.NullString
 
 	err := r.db.QueryRowContext(ctx, query, args...).Scan(
 		&media.Id,
@@ -122,9 +113,7 @@ func (r *MediaRepository) GetByID(ctx context.Context, tenantID, mediaID string)
 		&validationErrors,
 		&virusScanStatus,
 		&media.UploadedBy,
-		&media.AuditInfo,
-		&createdAt,
-		&updatedAt,
+		&auditInfoJSON,
 	)
 
 	if err == sql.ErrNoRows {
@@ -166,14 +155,13 @@ func (r *MediaRepository) GetByID(ctx context.Context, tenantID, mediaID string)
 		media.ValidationErrors = validationErrors.String
 	}
 
-	if media.AuditInfo == nil {
-		media.AuditInfo = &commonv1.AuditInfo{}
-	}
-	if createdAt.Valid {
-		media.AuditInfo.CreatedAt = timestamppb.New(createdAt.Time)
-	}
-	if updatedAt.Valid {
-		media.AuditInfo.UpdatedAt = timestamppb.New(updatedAt.Time)
+	if auditInfoJSON.Valid {
+		media.AuditInfo, err = parseAuditInfoJSON(auditInfoJSON.String)
+		if err != nil {
+			return nil, err
+		}
+	} else {
+		media.AuditInfo, _ = parseAuditInfoJSON("{}")
 	}
 
 	return &media, nil
@@ -220,12 +208,12 @@ func (r *MediaRepository) ListByEntity(
 			media_id, file_id, tenant_id, media_type, mime_type, file_size_bytes,
 			width, height, dpi, optimized_file_id, thumbnail_file_id,
 			entity_type, entity_id, ocr_text, validation_status, validation_errors,
-			virus_scan_status, uploaded_by, created_at, updated_at
+			virus_scan_status, uploaded_by, %s
 		FROM media_schema.media_files
 		WHERE %s
-		ORDER BY created_at DESC
+		ORDER BY %s DESC
 		LIMIT $%d OFFSET $%d
-	`, whereClause, len(args)+1, len(args)+2)
+	`, auditInfoSelectExpr(""), whereClause, auditCreatedAtExprMedia(""), len(args)+1, len(args)+2)
 
 	queryArgs := append(append([]any{}, args...), limit, offset)
 	rows, err := r.db.QueryContext(ctx, query, queryArgs...)
@@ -239,8 +227,7 @@ func (r *MediaRepository) ListByEntity(
 		var media mediav1.MediaFile
 		var mediaTypeStr, validationStatusStr, virusScanStatusStr string
 		var width, height, dpi sql.NullInt32
-		var optimizedFileID, thumbnailFileID, entityTypeVal, entityIDVal, ocrText, validationErrors sql.NullString
-		var createdAt, updatedAt sql.NullTime
+		var optimizedFileID, thumbnailFileID, entityTypeVal, entityIDVal, ocrText, validationErrors, auditInfoJSON sql.NullString
 
 		if err := rows.Scan(
 			&media.Id,
@@ -261,8 +248,7 @@ func (r *MediaRepository) ListByEntity(
 			&validationErrors,
 			&virusScanStatusStr,
 			&media.UploadedBy,
-			&createdAt,
-			&updatedAt,
+			&auditInfoJSON,
 		); err != nil {
 			return nil, 0, fmt.Errorf("failed to scan media file: %w", err)
 		}
@@ -299,12 +285,13 @@ func (r *MediaRepository) ListByEntity(
 			media.ValidationErrors = validationErrors.String
 		}
 
-		media.AuditInfo = &commonv1.AuditInfo{}
-		if createdAt.Valid {
-			media.AuditInfo.CreatedAt = timestamppb.New(createdAt.Time)
-		}
-		if updatedAt.Valid {
-			media.AuditInfo.UpdatedAt = timestamppb.New(updatedAt.Time)
+		if auditInfoJSON.Valid {
+			media.AuditInfo, err = parseAuditInfoJSON(auditInfoJSON.String)
+			if err != nil {
+				return nil, 0, err
+			}
+		} else {
+			media.AuditInfo, _ = parseAuditInfoJSON("{}")
 		}
 
 		mediaFiles = append(mediaFiles, &media)
@@ -321,7 +308,7 @@ func (r *MediaRepository) ListByEntity(
 func (r *MediaRepository) UpdateValidationStatus(ctx context.Context, tenantID, mediaID string, status mediav1.ValidationStatus, errors string) error {
 	query := `
 		UPDATE media_schema.media_files
-		SET validation_status = $1, validation_errors = $2, updated_at = NOW()
+		SET validation_status = $1, validation_errors = $2, ` + auditInfoUpdatedExpr("") + `
 		WHERE media_id = $3`
 	args := []any{status.String(), nullString(errors), mediaID}
 	if strings.TrimSpace(tenantID) != "" {
@@ -350,7 +337,7 @@ func (r *MediaRepository) UpdateValidationStatus(ctx context.Context, tenantID, 
 func (r *MediaRepository) UpdateVirusScanStatus(ctx context.Context, tenantID, mediaID string, status mediav1.VirusScanStatus) error {
 	query := `
 		UPDATE media_schema.media_files
-		SET virus_scan_status = $1, updated_at = NOW()
+		SET virus_scan_status = $1, ` + auditInfoUpdatedExpr("") + `
 		WHERE media_id = $2`
 	args := []any{status.String(), mediaID}
 	if strings.TrimSpace(tenantID) != "" {
@@ -379,7 +366,7 @@ func (r *MediaRepository) UpdateVirusScanStatus(ctx context.Context, tenantID, m
 func (r *MediaRepository) UpdateOCRText(ctx context.Context, tenantID, mediaID, ocrText string) error {
 	query := `
 		UPDATE media_schema.media_files
-		SET ocr_text = $1, updated_at = NOW()
+		SET ocr_text = $1, ` + auditInfoUpdatedExpr("") + `
 		WHERE media_id = $2`
 	args := []any{ocrText, mediaID}
 	if strings.TrimSpace(tenantID) != "" {
@@ -408,7 +395,7 @@ func (r *MediaRepository) UpdateOCRText(ctx context.Context, tenantID, mediaID, 
 func (r *MediaRepository) UpdateProcessedFiles(ctx context.Context, tenantID, mediaID, optimizedFileID, thumbnailFileID string) error {
 	query := `
 		UPDATE media_schema.media_files
-		SET optimized_file_id = $1, thumbnail_file_id = $2, updated_at = NOW()
+		SET optimized_file_id = $1, thumbnail_file_id = $2, ` + auditInfoUpdatedExpr("") + `
 		WHERE media_id = $3`
 	args := []any{nullString(optimizedFileID), nullString(thumbnailFileID), mediaID}
 	if strings.TrimSpace(tenantID) != "" {
@@ -495,13 +482,6 @@ func parseVirusScanStatus(s string) mediav1.VirusScanStatus {
 	return mediav1.VirusScanStatus_VIRUS_SCAN_STATUS_UNSPECIFIED
 }
 
-// DownloadFile retrieves the raw file data for a media file (for worker processing)
-// This is a stub implementation that returns error since actual file data is in storage service
-func (r *MediaRepository) DownloadFile(ctx context.Context, mediaID string) ([]byte, string, error) {
-	// TODO: Implement integration with storage service to download actual file data
-	return nil, "", fmt.Errorf("file download not yet implemented - requires storage service integration")
-}
-
 // UpdateProcessingResult updates processing results after a job completes (OCR text and/or dimensions)
 func (r *MediaRepository) UpdateProcessingResult(ctx context.Context, mediaID string, ocrText string, width, height int) error {
 	var updates []string
@@ -524,7 +504,7 @@ func (r *MediaRepository) UpdateProcessingResult(ctx context.Context, mediaID st
 		return nil
 	}
 
-	updates = append(updates, fmt.Sprintf("updated_at = NOW()"))
+	updates = append(updates, auditInfoUpdatedExpr(""))
 
 	query := fmt.Sprintf(`
 		UPDATE media_schema.media_files
@@ -560,7 +540,7 @@ func (r *MediaRepository) UpdateVirusScanResult(ctx context.Context, mediaID str
 
 	query := `
 		UPDATE media_schema.media_files
-		SET virus_scan_status = $1, updated_at = NOW()
+		SET virus_scan_status = $1, ` + auditInfoUpdatedExpr("") + `
 		WHERE media_id = $2
 	`
 

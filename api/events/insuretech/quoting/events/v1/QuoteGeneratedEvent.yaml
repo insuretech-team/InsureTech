@@ -1,0 +1,24 @@
+QuotingQuoteGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    product_id:
+      type: string
+    customer_id:
+      type: string
+    agent_id:
+      type: string
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    valid_until:
+      type: string
+      format: date-time
+    generated_at:
+      type: string
+      format: date-time
+  description: QuoteGeneratedEvent is emitted when a new quote is generated

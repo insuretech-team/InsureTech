@@ -3,8 +3,5 @@ UnderwritingHealthDeclarationRetrievalResponse:
   properties:
     health_declaration:
       $ref: '#/components/schemas/UnderwritingHealthDeclaration'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for health declaration retrieval operation. Returns
     operation results and status.

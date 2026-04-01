@@ -1,0 +1,15 @@
+QuotingQuoteExpiredEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    customer_id:
+      type: string
+    expired_at:
+      type: string
+      format: date-time
+  description: QuoteExpiredEvent is emitted when a quote expires

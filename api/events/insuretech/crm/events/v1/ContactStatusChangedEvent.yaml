@@ -1,0 +1,17 @@
+ContactStatusChangedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    contact_id:
+      type: string
+    old_status:
+      $ref: '#/components/schemas/ContactStatus'
+    new_status:
+      $ref: '#/components/schemas/ContactStatus'
+    reason:
+      type: string
+    changed_at:
+      type: string
+      format: date-time
+  description: ContactStatusChangedEvent is emitted when contact status changes

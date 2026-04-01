@@ -19,6 +19,25 @@ type PartnerRepository struct {
 	encryptionKey string
 }
 
+func nullableOptionalString(value string) any {
+	if strings.TrimSpace(value) == "" {
+		return nil
+	}
+	return value
+}
+
+func partnerTypeToDBValue(v partnerv1.PartnerType) string {
+	return strings.TrimPrefix(v.String(), "PARTNER_TYPE_")
+}
+
+func partnerStatusToDBValue(v partnerv1.PartnerStatus) string {
+	return strings.TrimPrefix(v.String(), "PARTNER_STATUS_")
+}
+
+func agentStatusToDBValue(v partnerv1.InsuranceAgentStatus) string {
+	return strings.TrimPrefix(v.String(), "AGENT_STATUS_")
+}
+
 func NewPartnerRepository(db *gorm.DB, encryptionKey string) *PartnerRepository {
 	return &PartnerRepository{db: db, encryptionKey: encryptionKey}
 }
@@ -35,19 +54,11 @@ func (r *PartnerRepository) decrypt(partner *partnerv1.Partner) {
 			logger.Warnf("failed to decrypt partner bank account: %v", err)
 		}
 	}
-	if partner.ContactPhone != "" {
-		if plain, err := crypto.DecryptPII(partner.ContactPhone, r.encryptionKey); err == nil {
-			partner.ContactPhone = plain
-		} else {
-			logger.Warnf("failed to decrypt partner contact phone: %v", err)
-		}
-	}
 }
 
 // encrypt returns a new PII-encrypted map of fields for saving.
 func (r *PartnerRepository) encrypt(partner *partnerv1.Partner) (map[string]any, error) {
 	encBank := partner.BankAccount
-	encPhone := partner.ContactPhone
 	var err error
 
 	if encBank != "" {
@@ -56,16 +67,11 @@ func (r *PartnerRepository) encrypt(partner *partnerv1.Partner) (map[string]any,
 			return nil, err
 		}
 	}
-	if encPhone != "" {
-		encPhone, err = crypto.EncryptPII(encPhone, r.encryptionKey)
-		if err != nil {
-			return nil, err
-		}
-	}
 
 	return map[string]any{
-		"bank_account":  encBank,
-		"contact_phone": encPhone,
+		"bank_account": encBank,
+		// contact_phone is schema-constrained to short validated values and cannot fit ciphertext.
+		"contact_phone": partner.ContactPhone,
 	}, nil
 }
 
@@ -90,15 +96,15 @@ func (r *PartnerRepository) Create(ctx context.Context, partner *partnerv1.Partn
 	values := map[string]any{
 		"partner_id":                  partner.PartnerId,
 		"organization_name":           partner.OrganizationName,
-		"type":                        partner.Type.String(),
-		"status":                      partner.Status.String(),
+		"type":                        partnerTypeToDBValue(partner.Type),
+		"status":                      partnerStatusToDBValue(partner.Status),
 		"trade_license":               partner.TradeLicense,
 		"tin_number":                  partner.TinNumber,
 		"bank_account":                encFields["bank_account"],
 		"bank_name":                   partner.BankName,
 		"bank_branch":                 partner.BankBranch,
 		"contact_email":               partner.ContactEmail,
-		"contact_phone":               encFields["contact_phone"],
+		"contact_phone":               nullableOptionalString(encFields["contact_phone"].(string)),
 		"acquisition_commission_rate": partner.AcquisitionCommissionRate,
 		"renewal_commission_rate":     partner.RenewalCommissionRate,
 		"claims_assistance_rate":      partner.ClaimsAssistanceRate,
@@ -143,7 +149,7 @@ func (r *PartnerRepository) GetByTradeLicense(ctx context.Context, tradeLicense 
 // UpdateStatus updates the verification and operational status of a partner
 func (r *PartnerRepository) UpdateStatus(ctx context.Context, partnerID string, status partnerv1.PartnerStatus) error {
 	upd := map[string]interface{}{
-		"status":     status.String(),
+		"status":     partnerStatusToDBValue(status),
 		"updated_at": time.Now(),
 	}
 
@@ -245,8 +251,8 @@ func (r *PartnerRepository) Update(ctx context.Context, partnerID string, partne
 	}
 
 	set([]string{"organization_name", "organizationName"}, func() { updates["organization_name"] = partner.OrganizationName })
-	set([]string{"type"}, func() { updates["type"] = partner.Type.String() })
-	set([]string{"status"}, func() { updates["status"] = partner.Status.String() })
+	set([]string{"type"}, func() { updates["type"] = partnerTypeToDBValue(partner.Type) })
+	set([]string{"status"}, func() { updates["status"] = partnerStatusToDBValue(partner.Status) })
 	set([]string{"trade_license", "tradeLicense"}, func() { updates["trade_license"] = partner.TradeLicense })
 	set([]string{"tin_number", "tinNumber"}, func() { updates["tin_number"] = partner.TinNumber })
 	set([]string{"bank_name", "bankName"}, func() { updates["bank_name"] = partner.BankName })
@@ -282,7 +288,7 @@ func (r *PartnerRepository) Update(ctx context.Context, partnerID string, partne
 			updates["bank_account"] = encFields["bank_account"]
 		}
 		if useAll || hasUpdateMaskKey(mask, "contact_phone", "contactPhone") {
-			updates["contact_phone"] = encFields["contact_phone"]
+			updates["contact_phone"] = nullableOptionalString(encFields["contact_phone"].(string))
 		}
 	})
 
@@ -313,7 +319,7 @@ func (r *PartnerRepository) SoftDelete(ctx context.Context, partnerID string) er
 		Updates(map[string]any{
 			"deleted_at": now,
 			"updated_at": now,
-			"status":     partnerv1.PartnerStatus_PARTNER_STATUS_TERMINATED.String(),
+			"status":     partnerStatusToDBValue(partnerv1.PartnerStatus_PARTNER_STATUS_TERMINATED),
 		})
 	if res.Error != nil {
 		return res.Error
@@ -347,15 +353,15 @@ func (r *PartnerRepository) CreateWithAgent(ctx context.Context, partner *partne
 		partnerValues := map[string]any{
 			"partner_id":                  partner.PartnerId,
 			"organization_name":           partner.OrganizationName,
-			"type":                        partner.Type.String(),
-			"status":                      partner.Status.String(),
+			"type":                        partnerTypeToDBValue(partner.Type),
+			"status":                      partnerStatusToDBValue(partner.Status),
 			"trade_license":               partner.TradeLicense,
 			"tin_number":                  partner.TinNumber,
 			"bank_account":                encFields["bank_account"],
 			"bank_name":                   partner.BankName,
 			"bank_branch":                 partner.BankBranch,
 			"contact_email":               partner.ContactEmail,
-			"contact_phone":               encFields["contact_phone"],
+			"contact_phone":               nullableOptionalString(encFields["contact_phone"].(string)),
 			"acquisition_commission_rate": partner.AcquisitionCommissionRate,
 			"renewal_commission_rate":     partner.RenewalCommissionRate,
 			"claims_assistance_rate":      partner.ClaimsAssistanceRate,
@@ -387,8 +393,8 @@ func (r *PartnerRepository) CreateWithAgent(ctx context.Context, partner *partne
 			agent.UpdatedAt = timestamppb.New(now)
 			agent.JoinedAt = timestamppb.New(now)
 
-			if agent.Status == partnerv1.AgentStatus_AGENT_STATUS_UNSPECIFIED {
-				agent.Status = partnerv1.AgentStatus_AGENT_STATUS_ACTIVE
+			if agent.Status == partnerv1.InsuranceAgentStatus_AGENT_STATUS_UNSPECIFIED {
+				agent.Status = partnerv1.InsuranceAgentStatus_AGENT_STATUS_ACTIVE
 			}
 
 			encAgentPhone := agent.PhoneNumber
@@ -415,10 +421,10 @@ func (r *PartnerRepository) CreateWithAgent(ctx context.Context, partner *partne
 				"partner_id":      agent.PartnerId,
 				"user_id":         agent.UserId,
 				"full_name":       agent.FullName,
-				"phone_number":    encAgentPhone,
-				"email":           encAgentEmail,
-				"nid_number":      encAgentNid,
-				"status":          agent.Status.String(),
+				"phone_number":    nullableOptionalString(encAgentPhone),
+				"email":           nullableOptionalString(encAgentEmail),
+				"nid_number":      nullableOptionalString(encAgentNid),
+				"status":          agentStatusToDBValue(agent.Status),
 				"commission_rate": agent.CommissionRate,
 				"joined_at":       now,
 				"created_at":      now,
@@ -521,30 +527,30 @@ func normalizePartnerOrderBy(orderBy string) string {
 
 func normalizePartnerStatusFilter(v string) string {
 	if iv, ok := partnerv1.PartnerStatus_value[v]; ok {
-		return partnerv1.PartnerStatus(iv).String()
+		return partnerStatusToDBValue(partnerv1.PartnerStatus(iv))
 	}
 	if iv, err := strconv.Atoi(v); err == nil {
 		if _, ok := partnerv1.PartnerStatus_name[int32(iv)]; ok {
-			return partnerv1.PartnerStatus(iv).String()
+			return partnerStatusToDBValue(partnerv1.PartnerStatus(iv))
 		}
 	}
 	if _, ok := partnerv1.PartnerStatus_value["PARTNER_STATUS_"+v]; ok {
-		return "PARTNER_STATUS_" + v
+		return normalizePartnerStatusFilter("PARTNER_STATUS_" + v)
 	}
 	return v
 }
 
 func normalizePartnerTypeFilter(v string) string {
 	if iv, ok := partnerv1.PartnerType_value[v]; ok {
-		return partnerv1.PartnerType(iv).String()
+		return partnerTypeToDBValue(partnerv1.PartnerType(iv))
 	}
 	if iv, err := strconv.Atoi(v); err == nil {
 		if _, ok := partnerv1.PartnerType_name[int32(iv)]; ok {
-			return partnerv1.PartnerType(iv).String()
+			return partnerTypeToDBValue(partnerv1.PartnerType(iv))
 		}
 	}
 	if _, ok := partnerv1.PartnerType_value["PARTNER_TYPE_"+v]; ok {
-		return "PARTNER_TYPE_" + v
+		return normalizePartnerTypeFilter("PARTNER_TYPE_" + v)
 	}
 	return v
 }

@@ -3,7 +3,5 @@ UserDocumentRetrievalResponse:
   properties:
     document:
       $ref: '#/components/schemas/UserDocument'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for user document retrieval operation. Returns operation
     results and status.

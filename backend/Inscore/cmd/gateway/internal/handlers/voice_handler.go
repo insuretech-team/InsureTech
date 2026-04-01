@@ -1,11 +1,10 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
 	"net/http"
 
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 
 	roomservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/webrtc/v1/service"
@@ -26,7 +25,7 @@ func NewVoiceHandler(conn *grpc.ClientConn) *VoiceHandler {
 func (h *VoiceHandler) Create(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req roomservicev1.CreateRoomRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateRoom(ctx, &req)

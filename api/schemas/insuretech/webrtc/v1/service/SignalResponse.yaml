@@ -28,8 +28,6 @@ SignalResponse:
       $ref: '#/components/schemas/TrackUnpublishedEvent'
     track_muted:
       $ref: '#/components/schemas/TrackMutedEvent'
-    error:
-      $ref: '#/components/schemas/ErrorResponse'
     pong:
       $ref: '#/components/schemas/PongResponse'
   description: Response payload for signal operation. Returns operation results and

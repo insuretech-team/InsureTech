@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,46 +8,25 @@
     android:orientation="vertical"
     tools:context=".ui.my_info.MyInfoFragment">
 
-    <!-- Fixed Header Section (Not Scrollable) -->
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/my_info_toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_background"
-        android:padding="16dp"
-        android:paddingTop="40dp"
-        android:paddingBottom="24dp">
-
-        <!-- Back Button -->
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:tint="@color/white"
-            android:src="@drawable/back_button" />
-
-        <!-- My Info Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/btnBack"
-            android:text="My Info"
-            android:fontFamily="@font/karla_bold"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Scrollable Content Section -->
     <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:fillViewport="true"
-        android:background="#F4F6F8">
+        app:layout_constraintTop_toBottomOf="@id/my_info_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -92,7 +71,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_person"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvName"
@@ -116,7 +95,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_calendar"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvDOB"
@@ -140,7 +119,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_gender"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvGender"
@@ -164,7 +143,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_occupation"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvOccupation"
@@ -188,7 +167,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_income"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvIncome"
@@ -211,7 +190,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_location"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:id="@+id/tvLocation"
@@ -259,8 +238,8 @@
                         android:textColor="@android:color/white"
                         android:paddingStart="24dp"
                         android:paddingEnd="20dp"
-                        android:backgroundTint="#7B2CBF"
-                        app:cornerRadius="8dp"
+                        android:background="@drawable/button_background"
+                        app:backgroundTint="@null"
                         app:icon="@drawable/ic_arrow_forward"
                         app:iconGravity="textEnd"
                         app:iconPadding="8dp"
@@ -273,4 +252,4 @@
     </ScrollView>
 
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

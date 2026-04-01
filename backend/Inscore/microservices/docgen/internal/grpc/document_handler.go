@@ -3,12 +3,11 @@ package server
 import (
 	"context"
 	"errors"
-	"strings"
 
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/docgen/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
 	documentservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/document/services/v1"
-	"google.golang.org/grpc/metadata"
 )
 
 // DocumentHandler implements the DocumentService gRPC server.
@@ -22,37 +21,11 @@ func NewDocumentHandler(docService *service.DocumentService) *DocumentHandler {
 }
 
 func actorFromContext(ctx context.Context, fallback string) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return fallback
-	}
-	for _, k := range []string{"x-user-id", "x-actor-id", "x-sub", "user-id"} {
-		vals := md.Get(k)
-		if len(vals) > 0 {
-			v := strings.TrimSpace(vals[0])
-			if v != "" {
-				return v
-			}
-		}
-	}
-	return fallback
+	return grpcmeta.ActorID(ctx, fallback)
 }
 
 func tenantFromContext(ctx context.Context) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return ""
-	}
-	for _, k := range []string{"x-tenant-id", "tenant-id", "x-tenant"} {
-		vals := md.Get(k)
-		if len(vals) > 0 {
-			v := strings.TrimSpace(vals[0])
-			if v != "" {
-				return v
-			}
-		}
-	}
-	return ""
+	return grpcmeta.TenantID(ctx, "")
 }
 
 func mapErr(err error, notFoundMessage string) *commonv1.Error {
@@ -71,15 +44,30 @@ func mapErr(err error, notFoundMessage string) *commonv1.Error {
 func (h *DocumentHandler) GenerateDocument(ctx context.Context, req *documentservicev1.GenerateDocumentRequest) (*documentservicev1.GenerateDocumentResponse, error) {
 	tenantID := tenantFromContext(ctx)
 	generatedBy := actorFromContext(ctx, tenantID)
-	doc, err := h.docService.GenerateDocument(ctx, req.TemplateId, req.EntityType, req.EntityId, req.Data, req.IncludeQrCode, tenantID, generatedBy)
+
+	opts := service.GenerateOptions{
+		IncludeQRCode:    req.IncludeQrCode,
+		OutputFormatHint: req.OutputFormat, // per-request format override (e.g. "xlsx", "docx")
+		AltMedia:         req.Alt == "media",
+	}
+
+	result, err := h.docService.GenerateDocumentEx(ctx, req.TemplateId, req.EntityType, req.EntityId, req.Data, tenantID, generatedBy, opts)
 	if err != nil {
 		return &documentservicev1.GenerateDocumentResponse{Error: mapErr(err, "template or document context not found")}, nil
 	}
-	return &documentservicev1.GenerateDocumentResponse{
-		DocumentId: doc.Id,
-		FileUrl:    doc.FileUrl,
+
+	resp := &documentservicev1.GenerateDocumentResponse{
+		DocumentId: result.DocumentID,
+		FileUrl:    result.FileURL,
 		Message:    "Document generated successfully",
-	}, nil
+	}
+	// When alt=media was requested, include raw bytes so the gateway can stream them.
+	if opts.AltMedia && len(result.FileBytes) > 0 {
+		resp.FileBytes   = result.FileBytes
+		resp.ContentType = result.ContentType
+		resp.Filename    = result.Filename
+	}
+	return resp, nil
 }
 
 func (h *DocumentHandler) GetDocument(ctx context.Context, req *documentservicev1.GetDocumentRequest) (*documentservicev1.GetDocumentResponse, error) {

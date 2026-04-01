@@ -2,8 +2,8 @@ package sms
 
 import (
 	"errors"
-	"regexp"
-	"strings"
+
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 )
 
 // Bangladesh mobile number validation
@@ -19,9 +19,6 @@ var (
 
 	// ErrUnsupportedOperator indicates the operator is not supported
 	ErrUnsupportedOperator = errors.New("unsupported mobile operator")
-
-	// validBDPhonePattern matches valid Bangladesh numbers in 880XXXXXXXXXX format
-	validBDPhonePattern = regexp.MustCompile(`^880(13|14|15|16|17|18|19)\d{8}$`)
 )
 
 // Operator represents a Bangladesh mobile operator
@@ -42,47 +39,17 @@ const (
 //   - +8801712345678 → 8801712345678
 //   - 00880171234... → 8801712345678
 func NormalizePhoneNumber(phone string) (string, error) {
-	if phone == "" {
+	normalized, err := mobile.NormalizeBangladeshMobileDigits(phone)
+	if err != nil {
 		return "", ErrInvalidPhoneNumber
 	}
-
-	// Remove all non-numeric characters (spaces, dashes, plus, parentheses)
-	cleaned := regexp.MustCompile(`\D`).ReplaceAllString(phone, "")
-
-	// Handle different input formats
-	switch {
-	case strings.HasPrefix(cleaned, "00880"):
-		// Remove 00 prefix (international dialing)
-		cleaned = cleaned[2:]
-	case strings.HasPrefix(cleaned, "880"):
-		// Already in international format (without +)
-		// No change needed
-	case strings.HasPrefix(cleaned, "0"):
-		// Local format: 01XXXXXXXXX
-		cleaned = "880" + cleaned[1:]
-	case len(cleaned) == 10:
-		// 10 digits without leading 0: 1XXXXXXXXX
-		cleaned = "880" + cleaned
-	default:
-		// Unknown format
-		return "", ErrInvalidPhoneNumber
-	}
-
-	// Validate the normalized number
-	if !validBDPhonePattern.MatchString(cleaned) {
-		return "", ErrInvalidPhoneNumber
-	}
-
-	return cleaned, nil
+	return normalized, nil
 }
 
 // ValidatePhoneNumber checks if a phone number is valid Bangladesh number
 func ValidatePhoneNumber(phone string) bool {
-	normalized, err := NormalizePhoneNumber(phone)
-	if err != nil {
-		return false
-	}
-	return validBDPhonePattern.MatchString(normalized)
+	_, err := NormalizePhoneNumber(phone)
+	return err == nil
 }
 
 // GetOperator returns the mobile operator for a given phone number

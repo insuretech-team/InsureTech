@@ -1,4 +1,5 @@
 using Grpc.Core;
+using Google.Protobuf.WellKnownTypes;
 using Insuretech.Fraud.Services.V1;
 using Microsoft.Extensions.Logging;
 
@@ -27,9 +28,12 @@ public sealed class FraudGrpcClient
         try
         {
             var req = new CheckFraudRequest { EntityType = entityType, EntityId = entityId };
-            req.Metadata.Add(metadata);
+            foreach (var pair in metadata)
+            {
+                req.Data.Fields[pair.Key] = Value.ForString(pair.Value);
+            }
             var resp = await Client.CheckFraudAsync(req, cancellationToken: ct);
-            return new FraudCheckResult(resp.RiskScore, resp.IsFlagged, [.. resp.Flags]);
+            return new FraudCheckResult(resp.FraudScore, resp.IsFraudDetected, [.. resp.TriggeredRules]);
         }
         catch (RpcException ex)
         {

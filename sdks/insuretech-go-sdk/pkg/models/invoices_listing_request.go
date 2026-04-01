@@ -6,13 +6,13 @@ import (
 
 // InvoicesListingRequest represents a invoices_listing_request
 type InvoicesListingRequest struct {
-	PageToken string `json:"page_token,omitempty"`
 	CustomerId string `json:"customer_id"`
 	EndDate time.Time `json:"end_date,omitempty"`
-	PageSize int `json:"page_size,omitempty"`
-	OrganisationId string `json:"organisation_id"`
 	OrderId string `json:"order_id"`
+	OrganisationId string `json:"organisation_id"`
+	PageSize int `json:"page_size,omitempty"`
+	PageToken string `json:"page_token,omitempty"`
 	PurchaseOrderId string `json:"purchase_order_id"`
-	Status *InvoiceStatus `json:"status,omitempty"`
 	StartDate time.Time `json:"start_date,omitempty"`
+	Status *InvoiceStatus `json:"status,omitempty"`
 }

@@ -1,0 +1,15 @@
+RatingFormulaUpdateResponse:
+  type: object
+  properties:
+    formula:
+      $ref: '#/components/schemas/RatingFormula'
+    success:
+      type: boolean
+    new_version_created:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+  description: Response payload for rating formula update operation. Returns operation
+    results and status.

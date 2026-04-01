@@ -1,4 +1,4 @@
-RenewalPolicyRenewalRequest:
+PolicyRenewalRequest:
   type: object
   properties:
     policy_id:

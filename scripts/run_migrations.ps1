@@ -27,13 +27,51 @@ Write-Host "🗄️  InsureTech Database Migration" -ForegroundColor Cyan
 Write-Host "Target: $Target" -ForegroundColor Yellow
 Write-Host ""
 
-# Check for SSH and SCP
+# Bootstrap prerequisites (Go + SSH)
+$bootstrapScript = Join-Path $PSScriptRoot "bootstrap.ps1"
+if (Test-Path $bootstrapScript) {
+    & $bootstrapScript -GoOnly
+    if ($LASTEXITCODE -ne 0) { exit $LASTEXITCODE }
+} else {
+    if (-not (Get-Command "go" -ErrorAction SilentlyContinue)) {
+        Write-Error "'go' not found. Install Go 1.25 from https://go.dev/dl/"
+        exit 1
+    }
+}
+
+# Check for SSH and SCP — auto-install OpenSSH client on Windows if missing
 $sshCmd = Get-Command ssh.exe -ErrorAction SilentlyContinue
 $scpCmd = Get-Command scp.exe -ErrorAction SilentlyContinue
 
 if (-not $sshCmd -or -not $scpCmd) {
-    Write-Error "SSH/SCP not found. Please install OpenSSH Client via Windows Settings or use WSL."
-    exit 1
+    Write-Host "⚠ SSH/SCP not found — attempting to install OpenSSH Client..." -ForegroundColor Yellow
+    if ($IsWindows -or $PSVersionTable.Platform -eq $null) {
+        try {
+            Add-WindowsCapability -Online -Name OpenSSH.Client~~~~0.0.1.0 | Out-Null
+            Write-Host "  ✓ OpenSSH Client installed" -ForegroundColor Green
+            # Refresh PATH
+            $env:PATH = [System.Environment]::GetEnvironmentVariable("PATH","Machine") + ";" + [System.Environment]::GetEnvironmentVariable("PATH","User")
+        } catch {
+            Write-Error "SSH/SCP not found. Enable via: Settings → Apps → Optional features → OpenSSH Client"
+            exit 1
+        }
+    } else {
+        # Linux/macOS
+        if (Get-Command "apt-get" -ErrorAction SilentlyContinue) {
+            sudo apt-get install -y openssh-client
+        } elseif (Get-Command "brew" -ErrorAction SilentlyContinue) {
+            brew install openssh
+        } else {
+            Write-Error "SSH/SCP not found. Please install openssh-client."
+            exit 1
+        }
+    }
+    $sshCmd = Get-Command ssh -ErrorAction SilentlyContinue
+    $scpCmd = Get-Command scp -ErrorAction SilentlyContinue
+    if (-not $sshCmd -or -not $scpCmd) {
+        Write-Error "SSH/SCP still not found after install attempt. Please install OpenSSH manually."
+        exit 1
+    }
 }
 
 # Build dbops tool locally

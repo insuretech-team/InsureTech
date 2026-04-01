@@ -44,10 +44,21 @@ echo "📄 Creating error pages directory..."
 mkdir -p /var/www/html
 cp "$NGINX_DIR"/error-pages/*.html /var/www/html/ 2>/dev/null || true
 
+# Render conf.d templates (substitutes __PLACEHOLDER__ tokens from .env.prod)
+echo "🔧 Rendering nginx conf.d templates from env..."
+bash "$SCRIPT_DIR/render-nginx-conf.sh" --out "$NGINX_DIR/dist/conf.d"
+
 # Copy configuration files
 echo "📝 Copying configuration files..."
 cp "$NGINX_DIR"/nginx.conf "$INSTALL_DIR"/
-cp "$NGINX_DIR"/conf.d/*.conf "$INSTALL_DIR"/conf.d/
+# Use rendered conf.d (env-substituted) if available, else fall back to templates
+if [ -d "$NGINX_DIR/dist/conf.d" ] && ls "$NGINX_DIR/dist/conf.d/"*.conf 1>/dev/null 2>&1; then
+    cp "$NGINX_DIR/dist/conf.d/"*.conf "$INSTALL_DIR/conf.d/"
+    echo "   (used rendered conf.d from dist/)"
+else
+    cp "$NGINX_DIR/conf.d/"*.conf "$INSTALL_DIR/conf.d/"
+    echo "   ⚠  Using raw templates — placeholders may remain unsubstituted"
+fi
 cp "$NGINX_DIR"/snippets/*.conf "$INSTALL_DIR"/snippets/
 cp "$NGINX_DIR"/upstreams/*.conf "$INSTALL_DIR"/upstreams/
 cp "$NGINX_DIR"/cache/*.conf "$INSTALL_DIR"/cache/

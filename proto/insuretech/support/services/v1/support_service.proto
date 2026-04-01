@@ -54,7 +54,7 @@ service SupportService {
   // Assign ticket
   rpc AssignTicket(AssignTicketRequest) returns (AssignTicketResponse) {
     option (google.api.http) = {
-      post: "/v1/tickets/{ticket_id}?action=assign"
+      post: "/v1/tickets/{ticket_id}:assign"
       body: "*"
     };
   }

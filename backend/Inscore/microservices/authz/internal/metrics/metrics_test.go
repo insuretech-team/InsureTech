@@ -25,3 +25,24 @@ func TestExtractPortal(t *testing.T) {
 	require.Equal(t, "unknown", extractPortal("unknown"))
 }
 
+func TestScopeAndPortalMetrics(t *testing.T) {
+	scopeAllowBefore := testutil.ToFloat64(APIScopeValidations.WithLabelValues("system", "allowed"))
+	scopeDenyBefore := testutil.ToFloat64(APIScopeValidations.WithLabelValues("system", "denied"))
+	noScopesBefore := testutil.ToFloat64(APIScopeDenialReasons.WithLabelValues("no_scopes"))
+	mismatchBefore := testutil.ToFloat64(APIScopeDenialReasons.WithLabelValues("scope_mismatch"))
+	portalReqBefore := testutil.ToFloat64(PortalConfigRequests.WithLabelValues("system", "success"))
+
+	RecordAPIScopeValidation("system:root", true, 0.4)
+	RecordAPIScopeValidation("system:root", false, 0.6)
+	RecordAPIScopeDenial("API key has no scopes defined")
+	RecordAPIScopeDenial("scope does not match")
+	RecordPortalConfigRequest("system", "success")
+	RecordCacheHit(true)
+	RecordCacheHit(false)
+
+	require.GreaterOrEqual(t, testutil.ToFloat64(APIScopeValidations.WithLabelValues("system", "allowed")), scopeAllowBefore+1)
+	require.GreaterOrEqual(t, testutil.ToFloat64(APIScopeValidations.WithLabelValues("system", "denied")), scopeDenyBefore+1)
+	require.GreaterOrEqual(t, testutil.ToFloat64(APIScopeDenialReasons.WithLabelValues("no_scopes")), noScopesBefore+1)
+	require.GreaterOrEqual(t, testutil.ToFloat64(APIScopeDenialReasons.WithLabelValues("scope_mismatch")), mismatchBefore+1)
+	require.GreaterOrEqual(t, testutil.ToFloat64(PortalConfigRequests.WithLabelValues("system", "success")), portalReqBefore+1)
+}

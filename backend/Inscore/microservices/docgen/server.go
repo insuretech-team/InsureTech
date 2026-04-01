@@ -69,6 +69,10 @@ func NewDocumentServer(db *sql.DB, storageConn *grpc.ClientConn) (*DocGenServer,
 	docService.SetKafkaPublisher(kafkaPublisher)
 	if cfg != nil {
 		docService.SetPDFRenderer(cfg.GotenbergURL, cfg.MaxGenerationTimeout)
+		if cfg.DocRendererURL != "" {
+			docService.SetDocRenderer(cfg.DocRendererURL, cfg.DocRendererTimeout)
+			logger.Infof("Doc renderer sidecar configured at %s", cfg.DocRendererURL)
+		}
 	}
 
 	// Initialize async generation worker if enabled.
@@ -102,6 +106,7 @@ func NewDocumentServer(db *sql.DB, storageConn *grpc.ClientConn) (*DocGenServer,
 					true,
 					req.TenantID,
 					req.ActorID,
+					req.Format, // per-request output format hint (e.g. "xlsx", "docx")
 				)
 				return genErr
 			},

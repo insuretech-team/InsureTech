@@ -18,9 +18,9 @@ import "insuretech/authn/entity/v1/enums.proto";
 
 // Register Request
 message RegisterRequest {
-  string mobile_number = 1; // Required: +880 1XXX XXXXXX
-  string email = 2;         // Optional
-  string password = 3;      // Min 8 chars, 1 upper, 1 number, 1 special
+  string mobile_number = 1; // Required. Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+  string email = 2; // Optional
+  string password = 3; // Min 8 chars, 1 upper, 1 number, 1 special
   string device_id = 4;
   string device_type = 5;
 }
@@ -42,7 +42,7 @@ message RegisterResponse {
 // Send OTP Request
 message SendOTPRequest {
   string recipient = 1 [ (google.api.field_behavior) =
-                             REQUIRED ]; // Phone: 8801XXXXXXXXX or email
+                             REQUIRED ]; // For sms: accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX. For email: send a valid email address.
   string type = 2 [ (google.api.field_behavior) =
                         REQUIRED ]; // registration, login, reset_password
   string channel = 3
@@ -69,6 +69,10 @@ message SendOTPResponse {
 message VerifyOTPRequest {
   string otp_id = 1 [ (google.api.field_behavior) = REQUIRED ];
   string code = 2 [ (google.api.field_behavior) = REQUIRED ];
+  // Device binding: if provided with ANDROID or IOS device_type, the response
+  // will include a one-time device_credential for WhatsApp-style login.
+  string device_id   = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string device_type = 4 [ (google.api.field_behavior) = OPTIONAL ]; // ANDROID | IOS
 }
 
 message VerifyOTPResponse {
@@ -78,6 +82,11 @@ message VerifyOTPResponse {
   // Error information if operation failed
   insuretech.common.v1.Error error = 4
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  // WhatsApp-style device credential — returned ONCE after successful OTP verify
+  // when device_type is ANDROID or IOS. Store in Android Keystore / iOS Keychain.
+  // Use as `password` field in subsequent Login requests (no OTP needed).
+  // Empty for WEB clients or when device_id is not provided.
+  string device_credential = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
 // Resend OTP Request — invalidates previous OTP and sends a new one
@@ -110,8 +119,10 @@ message ResendOTPResponse {
 
 // Login Request
 message LoginRequest {
-  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ];
-  string password = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ]; // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
+  // Optional for B2C OTP-only login. Leave empty only after VerifyOTP succeeds
+  // and only for JWT-style mobile/API clients. WEB login still requires password.
+  string password = 2 [ (google.api.field_behavior) = OPTIONAL ];
   string device_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
   string device_type = 4
       [ (google.api.field_behavior) =
@@ -149,6 +160,7 @@ message LoginResponse {
   string mfa_method        = 13 [(google.api.field_behavior) = OUTPUT_ONLY]; // "TOTP", "SMS", "EMAIL"
   // mfa_session_token: opaque 5-min token; pass back in VerifyTOTPRequest to get real session tokens.
   string mfa_session_token = 14 [(google.api.field_behavior) = OUTPUT_ONLY];
+  bool password_change_required = 15 [(google.api.field_behavior) = OUTPUT_ONLY];
 
   // Error information if operation failed
   insuretech.common.v1.Error error = 11
@@ -224,7 +236,7 @@ message ChangePasswordResponse {
 
 // Reset Password Request
 message ResetPasswordRequest {
-  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string mobile_number = 1 [ (google.api.field_behavior) = REQUIRED ]; // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
   string otp_code = 2 [ (google.api.field_behavior) = REQUIRED ];
   string new_password = 3 [ (google.api.field_behavior) = REQUIRED ];
 }
@@ -338,6 +350,44 @@ message GetCurrentSessionResponse {
   // user_type lets callers determine the role without an extra user lookup.
   // Same format as ValidateTokenResponse.user_type: e.g. "SYSTEM_USER"
   string user_type = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool password_change_required = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message PortalUserSummary {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string full_name = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string email = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string mobile_number = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string user_type = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool email_verified = 6 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool kyc_verified = 7 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool password_change_required = 8
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message FindPortalUserRequest {
+  string identifier = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message FindPortalUserResponse {
+  PortalUserSummary user = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
+message SetTemporaryPasswordRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string temporary_password = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string assigned_by = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  bool require_password_change = 4
+      [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message SetTemporaryPasswordResponse {
+  string message = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 2
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
 // Revoke All Sessions Request
@@ -360,8 +410,8 @@ message RevokeAllSessionsResponse {
 // ================================================================
 
 // Register Email User Request
-// Only for user_type: BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or
-// B2B_ORG_ADMIN
+// Only for user_type: BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER,
+// AGENT, or B2B_ORG_ADMIN
 // Email is REQUIRED. Triggers an email verification OTP automatically.
 message RegisterEmailUserRequest {
   string email = 1 [ (google.api.field_behavior) =
@@ -370,12 +420,12 @@ message RegisterEmailUserRequest {
       [ (google.api.field_behavior) =
             REQUIRED ]; // Min 8 chars, 1 upper, 1 number, 1 special
   string user_type = 3 [ (google.api.field_behavior) =
-                             REQUIRED ]; // BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
+                             REQUIRED ]; // BUSINESS_BENEFICIARY, B2B_BENEFICIARY, SYSTEM_USER, AGENT, or B2B_ORG_ADMIN
   string full_name = 4
       [ (google.api.field_behavior) = REQUIRED ]; // Full name for account
   string device_id = 5 [ (google.api.field_behavior) = OPTIONAL ];
   string mobile_number = 6
-      [ (google.api.field_behavior) = OPTIONAL ]; // Optional for business users
+      [ (google.api.field_behavior) = OPTIONAL ]; // Optional for business users. Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
 }
 
 message RegisterEmailUserResponse {
@@ -460,9 +510,30 @@ message EmailLoginResponse {
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
+message EmailPasswordLoginRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string password = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string device_id = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string device_name = 4 [ (google.api.field_behavior) = OPTIONAL ];
+}
+
+message EmailPasswordLoginResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_id = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_token = 3 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string csrf_token = 4 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  entity.v1.User user = 5 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  string session_type = 6 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool password_change_required = 7
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 8
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
 // Request Password Reset By Email
 // Sends a password reset OTP to the registered email.
-// Restricted to users with verified email addresses.
+// Restricted to users with email-auth access. B2B beneficiary first-time
+// activation also uses this flow.
 message RequestPasswordResetByEmailRequest {
   string email = 1 [ (google.api.field_behavior) = REQUIRED ];
 }
@@ -632,6 +703,23 @@ message ResetPasswordByEmailResponse {
       [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
+message ProvisionEmployeeUserRequest {
+  string email = 1 [ (google.api.field_behavior) = REQUIRED ];
+  string full_name = 2 [ (google.api.field_behavior) = REQUIRED ];
+  string mobile_number = 3 [ (google.api.field_behavior) = OPTIONAL ];
+  string employee_id = 4 [ (google.api.field_behavior) = REQUIRED ];
+  string business_id = 5 [ (google.api.field_behavior) = REQUIRED ];
+}
+
+message ProvisionEmployeeUserResponse {
+  string user_id = 1 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool created = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  bool password_change_required = 3
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+  insuretech.common.v1.Error error = 4
+      [ (google.api.field_behavior) = OUTPUT_ONLY ];
+}
+
 // ================================================================
 // USER PROFILE MESSAGES
 // ================================================================
@@ -783,6 +871,55 @@ message ListDocumentTypesResponse {
   insuretech.common.v1.Error error = 2 [ (google.api.field_behavior) = OUTPUT_ONLY ];
 }
 
+// ── KYC Supporting Messages ──
+
+message KYCStep {
+  int32 step_number = 1;
+  string challenge_type = 2; // "BLINK", "LOOK_LEFT", "LOOK_RIGHT", "CAPTURE"
+  string state = 3; // "PENDING", "IN_PROGRESS", "COMPLETED", "FAILED"
+  string instruction = 4; // "Please blink your eyes"
+  string instruction_key = 5; // "ekyc.instruction.blink" (i18n)
+  int32 timeout_seconds = 6;
+  double confidence = 7;
+}
+
+message KYCDetection {
+  bool detected = 1;
+  int32 x = 2;
+  int32 y = 3;
+  int32 width = 4;
+  int32 height = 5;
+}
+
+message KYCHeadPose {
+  double yaw = 1;
+  double pitch = 2;
+  double roll = 3;
+}
+
+message KYCEyeState {
+  double left_openness = 1;
+  double right_openness = 2;
+  bool is_blinking = 3;
+}
+
+message KYCSessionSummary {
+  int32 total_steps = 1;
+  int32 completed_steps = 2;
+  int32 failed_steps = 3;
+  int32 total_frames_processed = 4;
+  int32 elapsed_ms = 5;
+  repeated KYCStepResult step_results = 6;
+}
+
+message KYCStepResult {
+  string challenge_type = 1;
+  string state = 2;
+  double confidence = 3;
+  int32 frames_processed = 4;
+  int32 elapsed_ms = 5;
+}
+
 // ── KYC Messages ──
 
 message InitiateKYCRequest {
@@ -793,6 +930,11 @@ message InitiateKYCResponse {
   string status = 2;
   string message = 3;
   insuretech.common.v1.Error error = 4;
+  string provider = 5; // e.g. "FLVE_HF"
+  string provider_reference = 6; // FLVE session_id (internal)
+  string session_state = 7; // "EKYC_SESSION_ACTIVE"
+  repeated KYCStep steps = 8; // challenge steps
+  int32 total_timeout_seconds = 9; // session timeout
 }
 message GetKYCStatusRequest {
   string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
@@ -804,6 +946,14 @@ message GetKYCStatusResponse {
   google.protobuf.Timestamp submitted_at = 4;
   google.protobuf.Timestamp reviewed_at = 5;
   insuretech.common.v1.Error error = 6;
+  string provider = 7; // e.g. "FLVE_HF"
+  string provider_reference = 8; // FLVE session_id
+  string session_state = 9; // current FLVE state
+  KYCStep current_step = 10; // current challenge
+  int32 completed_steps = 11; // steps done
+  int32 total_steps = 12; // total challenges
+  double overall_progress = 13; // 0.0–1.0
+  int32 remaining_seconds = 14; // time left
 }
 message SubmitKYCFrameRequest {
   string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
@@ -820,6 +970,18 @@ message SubmitKYCFrameResponse {
   double liveness_confidence = 6;
   string message = 7;
   insuretech.common.v1.Error error = 8;
+  string session_state = 9; // "EKYC_SESSION_ACTIVE"
+  double step_progress = 10; // 0.0–1.0
+  double overall_progress = 11; // 0.0–1.0
+  repeated string guidance_messages = 12; // all guidance strings
+  KYCDetection detection = 13; // face detection box
+  KYCHeadPose head_pose = 14; // yaw/pitch/roll
+  KYCEyeState eye_state = 15; // blink state
+  KYCStep current_step_detail = 16; // full step info
+  // eye_contours_json: JSON-encoded FLVE eye mesh (left/right edges+points).
+  // Parsed by the frontend for canvas eye contour overlay rendering.
+  string eye_contours_json = 17;
+  bool step_completed = 18;
 }
 message CompleteKYCSessionRequest {
   string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
@@ -833,21 +995,18 @@ message CompleteKYCSessionResponse {
   string profile_image_url = 5;
   string message = 6;
   insuretech.common.v1.Error error = 7;
+  string provider_reference = 8; // FLVE session_id
+  string session_state = 9; // "EKYC_SESSION_COMPLETED"
+  bool identity_match = 10; // face match result
+  double match_score = 11; // cosine similarity
+  KYCSessionSummary summary = 12; // step-by-step results
+  string completed_at = 13; // ISO timestamp
 }
 message ApproveKYCRequest {
   string kyc_id = 1 [ (google.api.field_behavior) = REQUIRED ];
   string reviewer_id = 2 [ (google.api.field_behavior) = REQUIRED ];
 }
 message ApproveKYCResponse {
-  string message = 1;
-  insuretech.common.v1.Error error = 2;
-}
-message RejectKYCRequest {
-  string kyc_id = 1 [ (google.api.field_behavior) = REQUIRED ];
-  string reviewer_id = 2 [ (google.api.field_behavior) = REQUIRED ];
-  string rejection_reason = 3 [ (google.api.field_behavior) = REQUIRED ];
-}
-message RejectKYCResponse {
   string message = 1;
   insuretech.common.v1.Error error = 2;
 }
@@ -880,28 +1039,6 @@ message CreateVoiceSessionResponse {
   string message = 3;
   insuretech.common.v1.Error error = 4;
 }
-message GetVoiceSessionRequest {
-  string voice_session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
-}
-message GetVoiceSessionResponse {
-  string voice_session_id = 1;
-  string user_id = 2;
-  string status = 3;
-  string language = 4;
-  string session_type = 5;
-  google.protobuf.Timestamp started_at = 6;
-  google.protobuf.Timestamp ended_at = 7;
-  insuretech.common.v1.Error error = 8;
-}
-message EndVoiceSessionRequest {
-  string voice_session_id = 1 [ (google.api.field_behavior) = REQUIRED ];
-  string status = 2; // ENDED or FAILED
-  int32 duration_seconds = 3;
-}
-message EndVoiceSessionResponse {
-  string message = 1;
-  insuretech.common.v1.Error error = 2;
-}
 
 // ── RBAC Messages ──
 
@@ -925,11 +1062,22 @@ message GetProfilePhotoUploadURLResponse {
 message UpdateNotificationPreferencesRequest {
   string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
   string notification_preference = 2; // SMS, EMAIL, PUSH, ALL, NONE
-  string preferred_language = 3;       // en or bn
+  string preferred_language = 3; // en or bn
 }
 message UpdateNotificationPreferencesResponse {
   string message = 1;
   insuretech.common.v1.Error error = 2;
+}
+
+// BUG-010 FIX: GetNotificationPreferences — read current preferences for a user.
+message GetNotificationPreferencesRequest {
+  string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
+}
+message GetNotificationPreferencesResponse {
+  string user_id = 1;
+  string notification_preference = 2; // SMS, EMAIL, PUSH, ALL, NONE
+  string preferred_language = 3; // en or bn
+  insuretech.common.v1.Error error = 4;
 }
 
 // ── TOTP / 2FA Messages ──
@@ -938,8 +1086,8 @@ message EnableTOTPRequest {
   string user_id = 1 [ (google.api.field_behavior) = REQUIRED ];
 }
 message EnableTOTPResponse {
-  string totp_secret = 1;        // base32 secret for app setup
-  string provisioning_uri = 2;   // otpauth:// URI for QR code
+  string totp_secret = 1; // base32 secret for app setup
+  string provisioning_uri = 2; // otpauth:// URI for QR code
   insuretech.common.v1.Error error = 3;
 }
 message VerifyTOTPRequest {
@@ -1006,19 +1154,4 @@ message VerifyVoiceSessionResponse {
   string user_id = 2;
   string message = 3;
   insuretech.common.v1.Error error = 4;
-}
-
-// 🔑 JWKS Messages 🔑
-
-message JWK {
-  string kty = 1;
-  string use = 2;
-  string alg = 3;
-  string kid = 4;
-  string n = 5;
-  string e = 6;
-}
-message GetJWKSRequest {}
-message GetJWKSResponse {
-  repeated JWK keys = 1;
 }

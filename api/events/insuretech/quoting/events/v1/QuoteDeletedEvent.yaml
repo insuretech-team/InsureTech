@@ -1,0 +1,17 @@
+QuoteDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    permanent:
+      type: boolean
+    deleted_by:
+      type: string
+    deleted_at:
+      type: string
+      format: date-time
+  description: QuoteDeletedEvent is emitted when a quote is deleted

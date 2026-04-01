@@ -1,0 +1,528 @@
+syntax = "proto3";
+
+package insuretech.quoting.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/quoting/entity/v1;quotingv1";
+option csharp_namespace = "Insuretech.Quoting.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Quote represents a dynamically generated insurance quote
+// Maps to 'quotes' table in quoting_schema
+message Quote {
+  option (insuretech.common.v1.table) = {
+    table_name: "quotes"
+    schema_name: "quoting_schema"
+    migration_order: 220
+    is_table: true
+    comment: "Dynamically generated insurance quotes with premium calculations"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string quote_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "quote_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Quote UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:quote_id;not null"
+
+  string quote_number = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "quote_number"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Human-readable quote number (e.g., QT-2024-000001)"
+      index: {
+        index_name: "idx_quotes_number"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:quote_number;not null"
+
+  string product_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to products"
+      foreign_key: {
+        references_table: "products"
+        references_column: "product_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_quotes_product_id"
+      }
+      index: {
+        index_name: "idx_quotes_product_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string customer_id = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "customer_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to customers"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_quotes_customer_id"
+      }
+      index: {
+        index_name: "idx_quotes_customer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:customer_id;not null"
+
+  string agent_id = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "agent_id"
+      sql_type: "UUID"
+      comment: "Agent who created the quote (null for self-service)"
+      index: {
+        index_name: "idx_quotes_agent_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:agent_id"
+
+  QuoteStatus status = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'DRAFT'"
+      comment: "Quote status"
+      index: {
+        index_name: "idx_quotes_status"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  // Quote parameters/inputs
+  string parameters_json = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "parameters_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Quote input parameters as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:parameters_json;not null"
+
+  // Premium calculation results
+  string premium_calculation_json = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "premium_calculation_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Premium calculation breakdown as JSON"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:premium_calculation_json;not null"
+
+  // Coverages included in the quote
+  string coverages_json = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "coverages_json"
+      sql_type: "JSONB"
+      not_null: true
+      comment: "Coverages as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:coverages_json;not null"
+
+  // Discounts applied
+  string discounts_json = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "discounts_json"
+      sql_type: "JSONB"
+      comment: "Discounts as JSON array"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:discounts_json"
+
+  // Total premium amount
+  insuretech.common.v1.Money total_premium = 11;
+  // @inject_tag: gorm:"column:total_premium;serializer:proto_money"
+
+  // Validity period
+  google.protobuf.Timestamp valid_from = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_from"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+  // @inject_tag: gorm:"column:valid_from;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp valid_until = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_until"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      comment: "Quote expiration date"
+    }
+  ];
+  // @inject_tag: gorm:"column:valid_until;not null;serializer:proto_timestamp"
+
+  // Conversion tracking
+  google.protobuf.Timestamp converted_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "When quote was converted to policy"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_at;serializer:proto_timestamp"
+
+  string converted_policy_id = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "converted_policy_id"
+      sql_type: "UUID"
+      comment: "Policy ID if converted"
+    }
+  ];
+  // @inject_tag: gorm:"column:converted_policy_id"
+
+  // Revision tracking
+  int32 revision_number = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "revision_number"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "1"
+      comment: "Quote revision number"
+    }
+  ];
+  // @inject_tag: gorm:"column:revision_number;not null"
+
+  string parent_quote_id = 17 [
+    (insuretech.common.v1.column) = {
+      column_name: "parent_quote_id"
+      sql_type: "UUID"
+      comment: "Parent quote if this is a revision"
+    }
+  ];
+  // @inject_tag: gorm:"column:parent_quote_id"
+
+  string revision_reason = 18 [
+    (insuretech.common.v1.column) = {
+      column_name: "revision_reason"
+      sql_type: "TEXT"
+      comment: "Reason for revision"
+    }
+  ];
+  // @inject_tag: gorm:"column:revision_reason"
+
+  map<string, string> metadata = 19 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional metadata"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 20 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 21 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 22 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum QuoteStatus {
+  QUOTE_STATUS_UNSPECIFIED = 0;
+  QUOTE_STATUS_DRAFT = 1;
+  QUOTE_STATUS_GENERATED = 2;
+  QUOTE_STATUS_SENT = 3;
+  QUOTE_STATUS_VIEWED = 4;
+  QUOTE_STATUS_ACCEPTED = 5;
+  QUOTE_STATUS_DECLINED = 6;
+  QUOTE_STATUS_EXPIRED = 7;
+  QUOTE_STATUS_CONVERTED = 8;
+}
+
+// QuoteParameters represents the input parameters for quote generation
+message QuoteParameters {
+  string coverage_type = 1;
+  string coverage_plan = 2;
+  double asset_value = 3;
+  int32 coverage_duration_months = 4;
+  repeated OptionalCoverage optional_coverages = 5;
+  map<string, string> additional_data = 6;
+}
+
+message OptionalCoverage {
+  string coverage_id = 1;
+  string name = 2;
+  double selected_limit = 3;
+  double selected_deductible = 4;
+}
+
+// PremiumCalculation represents the calculated premium breakdown
+message PremiumCalculation {
+  insuretech.common.v1.Money base_premium = 1;
+  insuretech.common.v1.Money risk_adjustment = 2;
+  insuretech.common.v1.Money optional_coverages_total = 3;
+  insuretech.common.v1.Money discounts_total = 4;
+  insuretech.common.v1.Money taxes = 5;
+  insuretech.common.v1.Money fees = 6;
+  insuretech.common.v1.Money total_premium = 7;
+  string currency = 8;
+  repeated PremiumBreakdown breakdown = 9;
+}
+
+message PremiumBreakdown {
+  string category = 1;
+  string description = 2;
+  insuretech.common.v1.Money amount = 3;
+  bool is_discount = 4;
+}
+
+// Coverage represents a coverage item in the quote
+message Coverage {
+  string coverage_id = 1;
+  string name = 2;
+  string description = 3;
+  insuretech.common.v1.Money limit = 4;
+  insuretech.common.v1.Money deductible = 5;
+  insuretech.common.v1.Money premium = 6;
+  bool is_included = 7;
+  bool is_optional = 8;
+}
+
+// Discount represents an applied discount
+message Discount {
+  string discount_id = 1;
+  string name = 2;
+  string description = 3;
+  insuretech.common.v1.Money amount = 4;
+  double percentage = 5;
+  string discount_type = 6;
+}
+
+// PricingRule represents a pricing calculation rule
+// Maps to 'pricing_rules' table in quoting_schema
+message PricingRule {
+  option (insuretech.common.v1.table) = {
+    table_name: "pricing_rules"
+    schema_name: "quoting_schema"
+    migration_order: 221
+    is_table: true
+    comment: "Pricing calculation rules for dynamic premium calculation"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string pricing_rule_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "pricing_rule_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:pricing_rule_id;not null"
+
+  string product_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "product_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Product this rule applies to"
+      index: {
+        index_name: "idx_pricing_rules_product_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:product_id;not null"
+
+  string rule_name = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "rule_name"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Rule name"
+    }
+  ];
+  // @inject_tag: gorm:"column:rule_name;not null"
+
+  PricingRuleType rule_type = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "rule_type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Type of pricing rule"
+    }
+  ];
+  // @inject_tag: gorm:"column:rule_type;not null;serializer:proto_enum"
+
+  string condition_expression = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "condition_expression"
+      sql_type: "TEXT"
+      comment: "Condition for rule to apply (e.g., age > 25)"
+    }
+  ];
+  // @inject_tag: gorm:"column:condition_expression"
+
+  string calculation_expression = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_expression"
+      sql_type: "TEXT"
+      not_null: true
+      comment: "Calculation formula (e.g., base_rate * 0.95)"
+    }
+  ];
+  // @inject_tag: gorm:"column:calculation_expression;not null"
+
+  int32 priority = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "priority"
+      sql_type: "INTEGER"
+      not_null: true
+      default_value: "100"
+      comment: "Rule priority (lower = first)"
+    }
+  ];
+  // @inject_tag: gorm:"column:priority;not null"
+
+  bool is_active = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  google.protobuf.Timestamp valid_from = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_from"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+  // @inject_tag: gorm:"column:valid_from;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp valid_until = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "valid_until"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Rule expiration (null = no expiration)"
+    }
+  ];
+  // @inject_tag: gorm:"column:valid_until;serializer:proto_timestamp"
+
+  map<string, string> metadata = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      is_json: true
+    }
+  ];
+
+  google.protobuf.Timestamp created_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 13 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum PricingRuleType {
+  PRICING_RULE_TYPE_UNSPECIFIED = 0;
+  PRICING_RULE_TYPE_BASE_RATE = 1;
+  PRICING_RULE_TYPE_RISK_ADJUSTMENT = 2;
+  PRICING_RULE_TYPE_DISCOUNT = 3;
+  PRICING_RULE_TYPE_LOADING = 4;
+  PRICING_RULE_TYPE_TAX = 5;
+  PRICING_RULE_TYPE_FEE = 6;
+}

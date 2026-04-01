@@ -1,4 +1,4 @@
-AuthzJWKSRetrievalRequest:
+JWKSRetrievalRequest:
   type: object
   properties: {}
   description: Request payload for retrieving jwks retrieval information. May include

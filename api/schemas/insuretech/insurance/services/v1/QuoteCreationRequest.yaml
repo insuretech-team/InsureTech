@@ -2,5 +2,5 @@ QuoteCreationRequest:
   type: object
   properties:
     quote:
-      $ref: '#/components/schemas/Quote'
+      $ref: '#/components/schemas/UnderwritingQuote'
   description: ========== QUOTE MESSAGES ==========

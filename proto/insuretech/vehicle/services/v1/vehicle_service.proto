@@ -1,0 +1,199 @@
+syntax = "proto3";
+
+package insuretech.vehicle.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/vehicle/services/v1;vehicleservicev1";
+option csharp_namespace = "Insuretech.Vehicle.Services.V1";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/vehicle/entity/v1/vehicle.proto";
+
+// VehicleService provides vehicle data management and premium calculations
+service VehicleService {
+  // Get vehicle by ID
+  rpc GetVehicle(GetVehicleRequest) returns (GetVehicleResponse);
+
+  // Get vehicle by model name
+  rpc GetVehicleByModel(GetVehicleByModelRequest) returns (GetVehicleResponse);
+
+  // List vehicles with filters
+  rpc ListVehicles(ListVehiclesRequest) returns (ListVehiclesResponse);
+
+  // Create a new vehicle model
+  rpc CreateVehicle(CreateVehicleRequest) returns (CreateVehicleResponse);
+
+  // Update a vehicle
+  rpc UpdateVehicle(UpdateVehicleRequest) returns (UpdateVehicleResponse);
+
+  // Delete a vehicle
+  rpc DeleteVehicle(DeleteVehicleRequest) returns (DeleteVehicleResponse);
+
+  // Get vehicle models by type
+  rpc GetVehicleModels(GetVehicleModelsRequest) returns (GetVehicleModelsResponse);
+
+  // Register a vehicle for insurance
+  rpc RegisterVehicle(RegisterVehicleRequest) returns (RegisterVehicleResponse);
+
+  // Get vehicle registration
+  rpc GetVehicleRegistration(GetVehicleRegistrationRequest) returns (GetVehicleRegistrationResponse);
+
+  // Calculate premium for a vehicle
+  rpc CalculatePremium(CalculatePremiumRequest) returns (CalculatePremiumResponse);
+
+  // Get premium calculation history
+  rpc GetPremiumCalculations(GetPremiumCalculationsRequest) returns (GetPremiumCalculationsResponse);
+
+  // Get vehicle images
+  rpc GetVehicleImages(GetVehicleImagesRequest) returns (GetVehicleImagesResponse);
+}
+
+message GetVehicleRequest {
+  string vehicle_id = 1;
+}
+
+message GetVehicleByModelRequest {
+  string model = 1;
+}
+
+message GetVehicleResponse {
+  entity.v1.Vehicle vehicle = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListVehiclesRequest {
+  entity.v1.VehicleType vehicle_type = 1;
+  string manufacturer = 2;
+  int32 year = 3;
+  bool only_active = 4;
+  string filter = 5;
+  int32 page_size = 6;
+  string page_token = 7;
+}
+
+message ListVehiclesResponse {
+  repeated entity.v1.Vehicle vehicles = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message CreateVehicleRequest {
+  string model = 1;
+  entity.v1.VehicleType type = 2;
+  int64 price = 3;
+  string manufacturer = 4;
+  int32 year = 5;
+  string image_uri = 6;
+  map<string, string> metadata = 7;
+}
+
+message CreateVehicleResponse {
+  entity.v1.Vehicle vehicle = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message UpdateVehicleRequest {
+  string vehicle_id = 1;
+  string model = 2;
+  entity.v1.VehicleType type = 3;
+  int64 price = 4;
+  string manufacturer = 5;
+  int32 year = 6;
+  string image_uri = 7;
+  bool is_active = 8;
+  map<string, string> metadata = 9;
+}
+
+message UpdateVehicleResponse {
+  entity.v1.Vehicle vehicle = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteVehicleRequest {
+  string vehicle_id = 1;
+  bool permanent = 2;
+}
+
+message DeleteVehicleResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetVehicleModelsRequest {
+  entity.v1.VehicleType vehicle_type = 1;
+}
+
+message GetVehicleModelsResponse {
+  repeated string models = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message RegisterVehicleRequest {
+  string vehicle_id = 1;
+  string owner_id = 2;
+  string registration_number = 3;
+  int32 registration_year = 4;
+  map<string, string> additional_info = 5;
+}
+
+message RegisterVehicleResponse {
+  entity.v1.VehicleRegistration registration = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetVehicleRegistrationRequest {
+  string registration_id = 1;
+}
+
+message GetVehicleRegistrationResponse {
+  entity.v1.VehicleRegistration registration = 1;
+  entity.v1.Vehicle vehicle = 2;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 3;
+}
+
+message CalculatePremiumRequest {
+  string registration_id = 1;
+  string registration_number = 2; // Alternative to registration_id
+  bool accidental_cover = 3;
+}
+
+message CalculatePremiumResponse {
+  entity.v1.VehiclePremiumCalculation calculation = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetPremiumCalculationsRequest {
+  string registration_id = 1;
+  int32 page_size = 2;
+  string page_token = 3;
+}
+
+message GetPremiumCalculationsResponse {
+  repeated entity.v1.VehiclePremiumCalculation calculations = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetVehicleImagesRequest {
+  // Empty - returns all vehicle images
+}
+
+message GetVehicleImagesResponse {
+  map<string, string> images = 1; // key: vehicle_type or model, value: image_uri
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}

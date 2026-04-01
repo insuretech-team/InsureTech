@@ -1,0 +1,99 @@
+{
+  "id": "commercial_vehicle_proposal",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "COMMERCIAL VEHICLE INSURANCE PROPOSAL FORM" },
+    { "type": "subtitle", "text": "(To be submitted in duplicate)", "italic": true, "size": 9 },
+    { "type": "divider" },
+    { "type": "notice", "text": "Acceptance of this proposal is subject to the rules & regulations of the Company. Please give a definite answer to each question. Ticks and dashes are not accepted as answers." },
+    { "type": "heading", "text": "I.  PROPOSER / INSURED DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "1.", "label": "Full Name / Company Name (in block letters)", "value": "{{ proposer_name }}" },
+        { "number": "2.", "label": "Address (in block letters)", "value": "{{ proposer_address }}" },
+        { "number": "3.", "label": "Phone / Mobile Number", "value": "{{ phone_number }}" },
+        { "number": "4.", "label": "Email Address", "value": "{{ email_address }}" },
+        { "number": "5.", "label": "Nature of Business", "value": "{{ occupation }}" },
+        { "number": "6.", "label": "TIN / Trade Licence No.", "value": "{{ tin_number }}" }
+      ]
+    },
+    { "type": "heading", "text": "II.  VEHICLE PARTICULARS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["Registration No.*", "Make / Model*", "Engine & Chassis No.*", "Body Type*", "Cubic Capacity*", "Year of Mfg.*", "Seating Capacity*", "Carrying Capacity (Tons)"],
+      "rows_key": "vehicle_details",
+      "columns": ["registration", "make_model", "engine_chassis", "body_type", "cubic_capacity", "year_of_manufacture", "seating_capacity", "carrying_capacity"]
+    },
+    { "type": "heading", "text": "III.  USE & PERMIT DETAILS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "1.", "label": "Route Permit No.", "value": "{{ route_permit_number }}" },
+        { "number": "2.", "label": "Route / Area of Operation", "value": "{{ route_area }}" },
+        { "number": "3.", "label": "Type of Goods / Passengers Carried", "value": "{{ goods_type }}" },
+        { "number": "4.", "label": "Is vehicle used for hire & reward?", "value": "{{ is_hire_reward }}" }
+      ]
+    },
+    { "type": "heading", "text": "IV.  SUM INSURED BREAKDOWN", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "", "label": "Vehicle Value (Tk.)", "value": "{{ vehicle_value }}" },
+        { "number": "", "label": "Accessories (Tk.)", "value": "{{ accessories_value }}" },
+        { "number": "", "label": "TOTAL SUM INSURED (Tk.)", "value": "{{ total_sum_insured }}" }
+      ]
+    },
+    { "type": "heading", "text": "V.  DECLARATIONS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 4.0,
+      "rows": [
+        { "number": "1.", "label": "Do you require (a) Comprehensive Policy (b) Act only Policy?", "value": "{{ policy_type }}" },
+        { "number": "2.", "label": "Any accidents / losses in past 3 years? Provide details.", "value": "{{ accident_history }}" },
+        { "number": "3.", "label": "Previous insurer (if any) and policy expiry date:", "value": "{{ previous_insurer }}" },
+        { "number": "4.", "label": "No Claim Bonus entitlement from previous insurer:", "value": "{{ ncb_entitlement }}" },
+        { "number": "5.", "label": "Has any insurer ever declined or cancelled your motor policy?", "value": "{{ policy_declined }}" }
+      ]
+    },
+    { "type": "heading", "text": "VI.  PREMIUM SUMMARY", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Coverage Period From", "value": "{{ coverage_start_date }}" },
+        { "number": "", "label": "Coverage Period To", "value": "{{ coverage_end_date }}" },
+        { "number": "", "label": "Basic Premium (Tk.)", "value": "{{ basic_premium }}" },
+        { "number": "", "label": "Stamp Duty (Tk.)", "value": "{{ stamp_duty }}" },
+        { "number": "", "label": "VAT (7%) (Tk.)", "value": "{{ vat_amount }}" },
+        { "number": "", "label": "TOTAL PREMIUM (Tk.)", "value": "{{ total_premium }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/We warrant that the above statements and particulars are true and complete. I/We agree that this proposal shall form the basis of the contract between me/us and Pragati Insurance Limited. I/We consent to data collection and use for insurance underwriting and administration purposes."
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer's Signature & Date", "name": "{{ proposer_name }}" },
+        { "label": "Agent / Broker", "name": "{{ agent_name }}" },
+        { "label": "For & On Behalf of Insurer", "name": "" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Proposal Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

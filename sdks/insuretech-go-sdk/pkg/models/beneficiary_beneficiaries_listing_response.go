@@ -5,5 +5,4 @@ package models
 type BeneficiaryBeneficiariesListingResponse struct {
 	Beneficiaries []*Beneficiary `json:"beneficiaries,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

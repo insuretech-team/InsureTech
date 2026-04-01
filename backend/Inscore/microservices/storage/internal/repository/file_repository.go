@@ -37,6 +37,13 @@ type FileMetadataPatch struct {
 	UploadedBy    *string
 }
 
+func nullableStringValue(value string) any {
+	if strings.TrimSpace(value) == "" {
+		return nil
+	}
+	return value
+}
+
 func enumToDBValue(fileType storageentityv1.FileType) string {
 	return fileType.String()
 }
@@ -91,11 +98,11 @@ func (r *FileRepository) Create(ctx context.Context, tenantID string, file *stor
 		file.Url,
 		file.CdnUrl,
 		enumToDBValue(file.FileType),
-		file.ReferenceId,
+		nullableStringValue(file.ReferenceId),
 		file.ReferenceType,
 		file.IsPublic,
 		expiresAt,
-		file.UploadedBy,
+		nullableStringValue(file.UploadedBy),
 	).Scan(&createdAt, &updatedAt)
 
 	if err != nil {
@@ -123,7 +130,8 @@ func (r *FileRepository) GetByID(ctx context.Context, tenantID string, fileID st
 	`
 
 	var file storageentityv1.StoredFile
-	var fileID_, tenantID_, uploadedBy_ string
+	var fileID_, tenantID_ string
+	var referenceID_, referenceType_, uploadedBy_ sql.NullString
 	var fileType_ string
 	var createdAt, updatedAt, expiresAt sql.NullTime
 
@@ -138,8 +146,8 @@ func (r *FileRepository) GetByID(ctx context.Context, tenantID string, fileID st
 		&file.Url,
 		&file.CdnUrl,
 		&fileType_,
-		&file.ReferenceId,
-		&file.ReferenceType,
+		&referenceID_,
+		&referenceType_,
 		&file.IsPublic,
 		&expiresAt,
 		&uploadedBy_,
@@ -157,7 +165,9 @@ func (r *FileRepository) GetByID(ctx context.Context, tenantID string, fileID st
 	file.FileId = fileID_
 	file.TenantId = tenantID_
 	file.FileType = dbValueToEnum(fileType_)
-	file.UploadedBy = uploadedBy_
+	file.ReferenceId = referenceID_.String
+	file.ReferenceType = referenceType_.String
+	file.UploadedBy = uploadedBy_.String
 
 	if createdAt.Valid {
 		file.CreatedAt = timestamppb.New(createdAt.Time)
@@ -174,18 +184,27 @@ func (r *FileRepository) GetByID(ctx context.Context, tenantID string, fileID st
 
 // List retrieves files with filters
 func (r *FileRepository) List(ctx context.Context, tenantID string, fileType storageentityv1.FileType, referenceID string, referenceType string, limit, offset int32) ([]*storageentityv1.StoredFile, int, error) {
+	// BUG FIX: B2C users use tenantID="" (root tenant is not a UUID).
+	// When tenantID is empty, skip the tenant_id filter entirely.
 	// Build query with filters
 	baseQuery := `
 		SELECT file_id, tenant_id, filename, content_type, size_bytes, storage_key, bucket,
 			   url, cdn_url, file_type, reference_id, reference_type, is_public,
 			   expires_at, uploaded_by, created_at, updated_at
 		FROM storage_schema.files
-		WHERE tenant_id = $1
+		WHERE 1=1
 	`
-	countQuery := `SELECT COUNT(*) FROM storage_schema.files WHERE tenant_id = $1`
+	countQuery := `SELECT COUNT(*) FROM storage_schema.files WHERE 1=1`
 
-	args := []interface{}{tenantID}
-	argCount := 2
+	args := []interface{}{}
+	argCount := 1
+
+	if tenantID != "" {
+		baseQuery += fmt.Sprintf(" AND tenant_id = $%d", argCount)
+		countQuery += fmt.Sprintf(" AND tenant_id = $%d", argCount)
+		args = append(args, tenantID)
+		argCount++
+	}
 
 	// Add filters
 	if fileType != storageentityv1.FileType_FILE_TYPE_UNSPECIFIED {
@@ -230,7 +249,8 @@ func (r *FileRepository) List(ctx context.Context, tenantID string, fileType sto
 	var files []*storageentityv1.StoredFile
 	for rows.Next() {
 		var file storageentityv1.StoredFile
-		var fileID_, tenantID_, uploadedBy_ string
+		var fileID_, tenantID_ string
+		var referenceID_, referenceType_, uploadedBy_ sql.NullString
 		var fileType_ string
 		var createdAt, updatedAt, expiresAt sql.NullTime
 
@@ -245,8 +265,8 @@ func (r *FileRepository) List(ctx context.Context, tenantID string, fileType sto
 			&file.Url,
 			&file.CdnUrl,
 			&fileType_,
-			&file.ReferenceId,
-			&file.ReferenceType,
+			&referenceID_,
+			&referenceType_,
 			&file.IsPublic,
 			&expiresAt,
 			&uploadedBy_,
@@ -260,7 +280,9 @@ func (r *FileRepository) List(ctx context.Context, tenantID string, fileType sto
 		file.FileId = fileID_
 		file.TenantId = tenantID_
 		file.FileType = dbValueToEnum(fileType_)
-		file.UploadedBy = uploadedBy_
+		file.ReferenceId = referenceID_.String
+		file.ReferenceType = referenceType_.String
+		file.UploadedBy = uploadedBy_.String
 
 		if createdAt.Valid {
 			file.CreatedAt = timestamppb.New(createdAt.Time)
@@ -278,18 +300,34 @@ func (r *FileRepository) List(ctx context.Context, tenantID string, fileType sto
 	return files, total, nil
 }
 
-// ListAllByUploadedBy retrieves all files for a tenant and uploader, ordered by newest first.
+// ListAllByUploadedBy retrieves all files for an uploader, optionally filtered by tenantID.
+// BUG FIX: When tenantID is empty (B2C root tenant), skip tenant_id filter.
 func (r *FileRepository) ListAllByUploadedBy(ctx context.Context, tenantID string, uploadedBy string) ([]*storageentityv1.StoredFile, error) {
-	query := `
-		SELECT file_id, tenant_id, filename, content_type, size_bytes, storage_key, bucket,
-			   url, cdn_url, file_type, reference_id, reference_type, is_public,
-			   expires_at, uploaded_by, created_at, updated_at
-		FROM storage_schema.files
-		WHERE tenant_id = $1 AND uploaded_by = $2
-		ORDER BY created_at DESC
-	`
+	var query string
+	var args []interface{}
+	if tenantID != "" {
+		query = `
+			SELECT file_id, tenant_id, filename, content_type, size_bytes, storage_key, bucket,
+				   url, cdn_url, file_type, reference_id, reference_type, is_public,
+				   expires_at, uploaded_by, created_at, updated_at
+			FROM storage_schema.files
+			WHERE tenant_id = $1 AND uploaded_by = $2
+			ORDER BY created_at DESC
+		`
+		args = []interface{}{tenantID, uploadedBy}
+	} else {
+		query = `
+			SELECT file_id, tenant_id, filename, content_type, size_bytes, storage_key, bucket,
+				   url, cdn_url, file_type, reference_id, reference_type, is_public,
+				   expires_at, uploaded_by, created_at, updated_at
+			FROM storage_schema.files
+			WHERE uploaded_by = $1
+			ORDER BY created_at DESC
+		`
+		args = []interface{}{uploadedBy}
+	}
 
-	rows, err := r.db.QueryContext(ctx, query, tenantID, uploadedBy)
+	rows, err := r.db.QueryContext(ctx, query, args...)
 	if err != nil {
 		return nil, fmt.Errorf("failed to list files by uploader: %w", err)
 	}
@@ -298,7 +336,8 @@ func (r *FileRepository) ListAllByUploadedBy(ctx context.Context, tenantID strin
 	files := make([]*storageentityv1.StoredFile, 0, 64)
 	for rows.Next() {
 		var file storageentityv1.StoredFile
-		var fileID_, tenantID_, uploadedBy_ string
+		var fileID_, tenantID_ string
+		var referenceID_, referenceType_, uploadedBy_ sql.NullString
 		var fileType_ string
 		var createdAt, updatedAt, expiresAt sql.NullTime
 
@@ -313,8 +352,8 @@ func (r *FileRepository) ListAllByUploadedBy(ctx context.Context, tenantID strin
 			&file.Url,
 			&file.CdnUrl,
 			&fileType_,
-			&file.ReferenceId,
-			&file.ReferenceType,
+			&referenceID_,
+			&referenceType_,
 			&file.IsPublic,
 			&expiresAt,
 			&uploadedBy_,
@@ -328,7 +367,9 @@ func (r *FileRepository) ListAllByUploadedBy(ctx context.Context, tenantID strin
 		file.FileId = fileID_
 		file.TenantId = tenantID_
 		file.FileType = dbValueToEnum(fileType_)
-		file.UploadedBy = uploadedBy_
+		file.ReferenceId = referenceID_.String
+		file.ReferenceType = referenceType_.String
+		file.UploadedBy = uploadedBy_.String
 
 		if createdAt.Valid {
 			file.CreatedAt = timestamppb.New(createdAt.Time)
@@ -399,11 +440,11 @@ func (r *FileRepository) UpdateAfterDirectUpload(ctx context.Context, tenantID s
 		file.ContentType,
 		file.SizeBytes,
 		enumToDBValue(file.FileType),
-		file.ReferenceId,
+		nullableStringValue(file.ReferenceId),
 		file.ReferenceType,
 		file.IsPublic,
 		expiresAt,
-		file.UploadedBy,
+		nullableStringValue(file.UploadedBy),
 	).Scan(&createdAt, &updatedAt)
 	if err != nil {
 		if err == sql.ErrNoRows {
@@ -449,7 +490,7 @@ func (r *FileRepository) UpdateMetadata(ctx context.Context, tenantID, fileID st
 	}
 	if patch.ReferenceID != nil {
 		setClauses = append(setClauses, fmt.Sprintf("reference_id = $%d", argPos))
-		args = append(args, *patch.ReferenceID)
+		args = append(args, nullableStringValue(*patch.ReferenceID))
 		argPos++
 	}
 	if patch.ReferenceType != nil {
@@ -471,7 +512,7 @@ func (r *FileRepository) UpdateMetadata(ctx context.Context, tenantID, fileID st
 	}
 	if patch.UploadedBy != nil {
 		setClauses = append(setClauses, fmt.Sprintf("uploaded_by = $%d", argPos))
-		args = append(args, *patch.UploadedBy)
+		args = append(args, nullableStringValue(*patch.UploadedBy))
 		argPos++
 	}
 

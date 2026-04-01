@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useState } from "react";
 import { LuTrash2, LuLoader, LuUserPlus, LuShield, LuCopy, LuCheck } from "react-icons/lu";
-import { organisationClient } from "@lib/sdk/organisation-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import type { OrgMember } from "@lifeplus/insuretech-sdk";
 
 interface OrgMemberPanelProps {
@@ -143,7 +143,7 @@ export function OrgMemberPanel({ orgId, currentUserRole }: OrgMemberPanelProps) 
     setLoading(true);
     setError("");
     try {
-      const result = await organisationClient.listMembers(orgId);
+      const result = await bffClient.organisations.listMembers(orgId);
       setMembers(result.ok ? (result.members ?? []) : []);
       if (!result.ok) setError(result.message ?? "Failed to load members");
     } finally {
@@ -154,14 +154,14 @@ export function OrgMemberPanel({ orgId, currentUserRole }: OrgMemberPanelProps) 
   useEffect(() => { loadMembers(); }, [loadMembers]);
 
   async function handleRemove(memberId: string) {
-    const result = await organisationClient.removeMember(orgId, memberId);
+    const result = await bffClient.organisations.removeMember(orgId, memberId);
     if (!result.ok) { setError(result.message ?? "Remove failed"); return; }
     await loadMembers();
   }
 
   async function handlePromote(memberId: string) {
     // Promote existing member to admin using member_id (not user_id)
-    const result = await organisationClient.assignAdmin(orgId, memberId);
+    const result = await bffClient.organisations.assignAdmin(orgId, memberId);
     if (!result.ok) { setError(result.message ?? "Failed to promote member"); return; }
     await loadMembers();
   }
@@ -171,7 +171,7 @@ export function OrgMemberPanel({ orgId, currentUserRole }: OrgMemberPanelProps) 
     setAdding(true);
     setError("");
     try {
-      const result = await organisationClient.addMember(orgId, addUserId.trim(), addRole);
+      const result = await bffClient.organisations.addMember(orgId, addUserId.trim(), addRole);
       if (!result.ok) { setError(result.message ?? "Failed to add member"); return; }
       setAddUserId("");
       await loadMembers();

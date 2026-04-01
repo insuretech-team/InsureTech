@@ -97,6 +97,7 @@ type EmployeeUpdateInput struct {
 	CoverageAmount    *commonv1.Money
 	NumberOfDependent int32
 	Status            b2bv1.EmployeeStatus
+	UserID            string
 }
 
 type PurchaseOrderCreateInput struct {
@@ -122,6 +123,8 @@ type B2BRepository interface {
 	// Organisation
 	CreateOrganisation(ctx context.Context, input OrganisationCreateInput) (*b2bv1.Organisation, error)
 	GetOrganisation(ctx context.Context, organisationID string) (*b2bv1.Organisation, error)
+	GetOrganisationByCode(ctx context.Context, code string) (*b2bv1.Organisation, error)
+	SearchOrganisationsForEmployeeActivation(ctx context.Context, query string, limit int) ([]*b2bv1.Organisation, error)
 	ListOrganisations(ctx context.Context, pageSize, offset int, tenantID string, status b2bv1.OrganisationStatus) ([]*b2bv1.Organisation, int64, error)
 	UpdateOrganisation(ctx context.Context, input OrganisationUpdateInput) (*b2bv1.Organisation, error)
 	DeleteOrganisation(ctx context.Context, organisationID string) error
@@ -146,6 +149,8 @@ type B2BRepository interface {
 	// Employee
 	ListEmployees(ctx context.Context, pageSize, offset int, departmentID, businessID string, status b2bv1.EmployeeStatus) ([]*b2bv1.Employee, int64, error)
 	GetEmployee(ctx context.Context, employeeUUID string) (*b2bv1.Employee, error)
+	GetEmployeeByUserID(ctx context.Context, userID string) (*b2bv1.Employee, error)
+	GetEmployeeByBusinessEmployeeIDEmail(ctx context.Context, businessID, employeeID, email string) (*b2bv1.Employee, error)
 	CreateEmployee(ctx context.Context, input EmployeeCreateInput) (*b2bv1.Employee, error)
 	UpdateEmployee(ctx context.Context, input EmployeeUpdateInput) (*b2bv1.Employee, error)
 	DeleteEmployee(ctx context.Context, employeeUUID string) error
@@ -188,9 +193,13 @@ type B2BService interface {
 	// Employee
 	ListEmployees(ctx context.Context, req *b2bservicev1.ListEmployeesRequest) (*b2bservicev1.ListEmployeesResponse, error)
 	GetEmployee(ctx context.Context, req *b2bservicev1.GetEmployeeRequest) (*b2bservicev1.GetEmployeeResponse, error)
+	ListEmployeeLoginOrganisations(ctx context.Context, req *b2bservicev1.ListEmployeeLoginOrganisationsRequest) (*b2bservicev1.ListEmployeeLoginOrganisationsResponse, error)
 	CreateEmployee(ctx context.Context, req *b2bservicev1.CreateEmployeeRequest) (*b2bservicev1.CreateEmployeeResponse, error)
 	UpdateEmployee(ctx context.Context, req *b2bservicev1.UpdateEmployeeRequest) (*b2bservicev1.UpdateEmployeeResponse, error)
 	DeleteEmployee(ctx context.Context, req *b2bservicev1.DeleteEmployeeRequest) (*b2bservicev1.DeleteEmployeeResponse, error)
+	ActivateEmployee(ctx context.Context, req *b2bservicev1.ActivateEmployeeRequest) (*b2bservicev1.ActivateEmployeeResponse, error)
+	GetMyEmployeeProfile(ctx context.Context, req *b2bservicev1.GetMyEmployeeProfileRequest) (*b2bservicev1.GetMyEmployeeProfileResponse, error)
+	GetMyEmployeeCoverage(ctx context.Context, req *b2bservicev1.GetMyEmployeeCoverageRequest) (*b2bservicev1.GetMyEmployeeCoverageResponse, error)
 
 	// Purchase Orders
 	ListPurchaseOrderCatalog(ctx context.Context, req *b2bservicev1.ListPurchaseOrderCatalogRequest) (*b2bservicev1.ListPurchaseOrderCatalogResponse, error)

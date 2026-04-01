@@ -3,42 +3,222 @@
     summary: Request refund
     operationId: RefundService_RequestRefund
     responses:
-      '200':
-        description: Successful response
+      '201':
+        description: Resource created successfully
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RequestRefundResponse'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id001
+                    $ref: '#/components/schemas/RequestRefundResponse'
+            example:
+              success: true
+              data:
+                refund_id: 01HGW2EXAMPLE0000000000001
+                refund_number: example_value
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
+        headers:
+          Location:
+            description: URL of the newly created resource (e.g. /v1/policies/{policy_id}/refund/{refund_id})
+            schema:
+              type: string
       '400':
-        description: Bad request - Invalid input parameters
+        description: Bad request - Malformed request body or invalid parameters
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '401':
-        description: Unauthorized - Authentication required
+        description: Unauthorized - Valid authentication token required
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '403':
-        description: Forbidden - Insufficient permissions
+        description: Forbidden - Insufficient permissions for this operation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '404':
-        description: Not found - Resource does not exist
+        description: Not found - The requested resource does not exist
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Not found - The requested resource does not exist
+                error_id: err_example
+                http_status_code: 404
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '409':
+        description: Conflict - Resource already exists or state conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Conflict - Resource already exists or state conflict
+                error_id: err_example
+                http_status_code: 409
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '422':
+        description: Unprocessable Entity - Request is valid but failed business validation.
+          See error.field_violations for field-level details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unprocessable Entity - Request is valid but failed business
+                  validation. See error.field_violations for field-level details
+                error_id: err_example
+                http_status_code: 422
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '500':
-        description: Internal server error
+        description: Internal server error - Unexpected server-side error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id001
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
     description: Request refund
     parameters:
     - name: policy_id
@@ -52,7 +232,7 @@
           schema:
             $ref: '#/components/schemas/RequestRefundRequest'
       required: true
-/v1/policies/{policy_id}/refunds:
+/v1/policies/{policy_id}/refunds:calculate:
   post:
     summary: Calculate refund amount
     operationId: RefundService_CalculateRefund
@@ -62,37 +242,215 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundCalculationResponse'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id002
+                    $ref: '#/components/schemas/RefundCalculationResponse'
+            example:
+              success: true
+              data:
+                total_premium_paid: example_value
+                premium_used: example_value
+                cancellation_charge: example_value
+                refundable_amount: '1000.00'
+                calculation_details: example_value
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
       '400':
-        description: Bad request - Invalid input parameters
+        description: Bad request - Malformed request body or invalid parameters
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '401':
-        description: Unauthorized - Authentication required
+        description: Unauthorized - Valid authentication token required
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '403':
-        description: Forbidden - Insufficient permissions
+        description: Forbidden - Insufficient permissions for this operation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '404':
-        description: Not found - Resource does not exist
+        description: Not found - The requested resource does not exist
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Not found - The requested resource does not exist
+                error_id: err_example
+                http_status_code: 404
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '409':
+        description: Conflict - Resource already exists or state conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Conflict - Resource already exists or state conflict
+                error_id: err_example
+                http_status_code: 409
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '422':
+        description: Unprocessable Entity - Request is valid but failed business validation.
+          See error.field_violations for field-level details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unprocessable Entity - Request is valid but failed business
+                  validation. See error.field_violations for field-level details
+                error_id: err_example
+                http_status_code: 422
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '500':
-        description: Internal server error
+        description: Internal server error - Unexpected server-side error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id002
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
     description: Calculate refund amount
     parameters:
     - name: policy_id
@@ -100,13 +458,6 @@
       required: true
       schema:
         type: string
-    - name: action
-      in: query
-      required: true
-      schema:
-        type: string
-        enum:
-        - calculate
     requestBody:
       content:
         application/json:
@@ -123,37 +474,163 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundRetrievalResponse'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id003
+                    $ref: '#/components/schemas/RefundRetrievalResponse'
+            example:
+              success: true
+              data:
+                refund: {}
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
       '400':
-        description: Bad request - Invalid input parameters
+        description: Bad request - Malformed request body or invalid parameters
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '401':
-        description: Unauthorized - Authentication required
+        description: Unauthorized - Valid authentication token required
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '403':
-        description: Forbidden - Insufficient permissions
+        description: Forbidden - Insufficient permissions for this operation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '404':
-        description: Not found - Resource does not exist
+        description: Not found - The requested resource does not exist
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Not found - The requested resource does not exist
+                error_id: err_example
+                http_status_code: 404
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '500':
-        description: Internal server error
+        description: Internal server error - Unexpected server-side error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id003
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
     description: Get refund
     parameters:
     - name: refund_id
@@ -161,6 +638,7 @@
       required: true
       schema:
         type: string
+/v1/refunds/{refund_id}:approve:
   post:
     summary: Approve refund
     operationId: RefundService_ApproveRefund
@@ -170,37 +648,210 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundApprovalResponse'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id004
+                    $ref: '#/components/schemas/RefundApprovalResponse'
+            example:
+              success: true
+              data: {}
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
       '400':
-        description: Bad request - Invalid input parameters
+        description: Bad request - Malformed request body or invalid parameters
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '401':
-        description: Unauthorized - Authentication required
+        description: Unauthorized - Valid authentication token required
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '403':
-        description: Forbidden - Insufficient permissions
+        description: Forbidden - Insufficient permissions for this operation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '404':
-        description: Not found - Resource does not exist
+        description: Not found - The requested resource does not exist
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Not found - The requested resource does not exist
+                error_id: err_example
+                http_status_code: 404
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '409':
+        description: Conflict - Resource already exists or state conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Conflict - Resource already exists or state conflict
+                error_id: err_example
+                http_status_code: 409
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '422':
+        description: Unprocessable Entity - Request is valid but failed business validation.
+          See error.field_violations for field-level details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unprocessable Entity - Request is valid but failed business
+                  validation. See error.field_violations for field-level details
+                error_id: err_example
+                http_status_code: 422
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '500':
-        description: Internal server error
+        description: Internal server error - Unexpected server-side error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id004
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
     description: Approve refund
     parameters:
     - name: refund_id
@@ -208,18 +859,239 @@
       required: true
       schema:
         type: string
-    - name: action
-      in: query
-      required: true
-      schema:
-        type: string
-        enum:
-        - approve
     requestBody:
       content:
         application/json:
           schema:
             $ref: '#/components/schemas/RefundApprovalRequest'
+      required: true
+/v1/refunds/{refund_id}:process:
+  post:
+    summary: Process refund payment
+    operationId: RefundService_ProcessRefund
+    responses:
+      '200':
+        description: Successful response
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id005
+                    $ref: '#/components/schemas/RefundProcessingResponse'
+            example:
+              success: true
+              data:
+                processed_at: '2024-01-15T10:30:00Z'
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
+      '400':
+        description: Bad request - Malformed request body or invalid parameters
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '401':
+        description: Unauthorized - Valid authentication token required
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '403':
+        description: Forbidden - Insufficient permissions for this operation
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '404':
+        description: Not found - The requested resource does not exist
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Not found - The requested resource does not exist
+                error_id: err_example
+                http_status_code: 404
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '409':
+        description: Conflict - Resource already exists or state conflict
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Conflict - Resource already exists or state conflict
+                error_id: err_example
+                http_status_code: 409
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '422':
+        description: Unprocessable Entity - Request is valid but failed business validation.
+          See error.field_violations for field-level details
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unprocessable Entity - Request is valid but failed business
+                  validation. See error.field_violations for field-level details
+                error_id: err_example
+                http_status_code: 422
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '500':
+        description: Internal server error - Unexpected server-side error
+        content:
+          application/json:
+            schema:
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id005
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
+    description: Process refund payment
+    parameters:
+    - name: refund_id
+      in: path
+      required: true
+      schema:
+        type: string
+    requestBody:
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/RefundProcessingRequest'
       required: true
 /v1/refunds:
   get:
@@ -231,35 +1103,194 @@
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RefundsListingResponse'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: &id006
+                    $ref: '#/components/schemas/RefundsListingResponse'
+            example:
+              success: true
+              data:
+                refunds:
+                - {}
+                total_count: 42
+              error: null
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+                pagination: null
       '400':
-        description: Bad request - Invalid input parameters
+        description: Bad request - Malformed request body or invalid parameters
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id006
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Bad request - Malformed request body or invalid parameters
+                error_id: err_example
+                http_status_code: 400
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '401':
-        description: Unauthorized - Authentication required
+        description: Unauthorized - Valid authentication token required
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id006
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Unauthorized - Valid authentication token required
+                error_id: err_example
+                http_status_code: 401
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '403':
-        description: Forbidden - Insufficient permissions
+        description: Forbidden - Insufficient permissions for this operation
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
-      '404':
-        description: Not found - Resource does not exist
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id006
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Forbidden - Insufficient permissions for this operation
+                error_id: err_example
+                http_status_code: 403
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+      '429':
+        description: Too Many Requests - Rate limit exceeded. Retry after the indicated
+          delay
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id006
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Too Many Requests - Rate limit exceeded. Retry after the
+                  indicated delay
+                error_id: err_example
+                http_status_code: 429
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
       '500':
-        description: Internal server error
+        description: Internal server error - Unexpected server-side error
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/Error'
+              allOf:
+              - $ref: '#/components/schemas/ApiResponse'
+              - type: object
+                properties:
+                  data: *id006
+            example:
+              success: false
+              data: null
+              error:
+                code: ERROR_CODE
+                message: Internal server error - Unexpected server-side error
+                error_id: err_example
+                http_status_code: 500
+                retryable: false
+                field_violations: []
+              meta:
+                request_id: req_example
+                timestamp: '2024-01-15T10:30:00Z'
+    security:
+    - BearerAuth: []
     description: List refunds
+    parameters:
+    - name: page
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        default: 1
+      description: 'Page number (1-based). Default: 1'
+    - name: page_size
+      in: query
+      required: false
+      schema:
+        type: integer
+        minimum: 1
+        maximum: 100
+        default: 20
+      description: 'Number of items per page (1-100). Default: 20'
+    - name: sort_by
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Field name to sort by (e.g. 'created_at', 'name')
+    - name: sort_order
+      in: query
+      required: false
+      schema:
+        type: string
+        enum:
+        - asc
+        - desc
+        default: desc
+      description: 'Sort direction: ''asc'' or ''desc''. Default: desc'
+    - name: search
+      in: query
+      required: false
+      schema:
+        type: string
+      description: Full-text search query
+    - name: from_date
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+      description: Filter records from this date (inclusive), format YYYY-MM-DD
+    - name: to_date
+      in: query
+      required: false
+      schema:
+        type: string
+        format: date
+      description: Filter records to this date (inclusive), format YYYY-MM-DD

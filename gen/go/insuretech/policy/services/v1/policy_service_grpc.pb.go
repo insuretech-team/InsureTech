@@ -46,7 +46,7 @@ type PolicyServiceClient interface {
 	// Cancel policy
 	CancelPolicy(ctx context.Context, in *CancelPolicyRequest, opts ...grpc.CallOption) (*CancelPolicyResponse, error)
 	// Renew policy
-	RenewPolicy(ctx context.Context, in *RenewPolicyRequest, opts ...grpc.CallOption) (*RenewPolicyResponse, error)
+	RenewPolicy(ctx context.Context, in *RenewPolicyTenureRequest, opts ...grpc.CallOption) (*RenewPolicyTenureResponse, error)
 	// Generate policy document
 	GeneratePolicyDocument(ctx context.Context, in *GeneratePolicyDocumentRequest, opts ...grpc.CallOption) (*GeneratePolicyDocumentResponse, error)
 	// Issue policy (explicit transition from pending to active after payment)
@@ -111,9 +111,9 @@ func (c *policyServiceClient) CancelPolicy(ctx context.Context, in *CancelPolicy
 	return out, nil
 }
 
-func (c *policyServiceClient) RenewPolicy(ctx context.Context, in *RenewPolicyRequest, opts ...grpc.CallOption) (*RenewPolicyResponse, error) {
+func (c *policyServiceClient) RenewPolicy(ctx context.Context, in *RenewPolicyTenureRequest, opts ...grpc.CallOption) (*RenewPolicyTenureResponse, error) {
 	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
-	out := new(RenewPolicyResponse)
+	out := new(RenewPolicyTenureResponse)
 	err := c.cc.Invoke(ctx, PolicyService_RenewPolicy_FullMethodName, in, out, cOpts...)
 	if err != nil {
 		return nil, err
@@ -158,7 +158,7 @@ type PolicyServiceServer interface {
 	// Cancel policy
 	CancelPolicy(context.Context, *CancelPolicyRequest) (*CancelPolicyResponse, error)
 	// Renew policy
-	RenewPolicy(context.Context, *RenewPolicyRequest) (*RenewPolicyResponse, error)
+	RenewPolicy(context.Context, *RenewPolicyTenureRequest) (*RenewPolicyTenureResponse, error)
 	// Generate policy document
 	GeneratePolicyDocument(context.Context, *GeneratePolicyDocumentRequest) (*GeneratePolicyDocumentResponse, error)
 	// Issue policy (explicit transition from pending to active after payment)
@@ -187,7 +187,7 @@ func (UnimplementedPolicyServiceServer) UpdatePolicy(context.Context, *UpdatePol
 func (UnimplementedPolicyServiceServer) CancelPolicy(context.Context, *CancelPolicyRequest) (*CancelPolicyResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method CancelPolicy not implemented")
 }
-func (UnimplementedPolicyServiceServer) RenewPolicy(context.Context, *RenewPolicyRequest) (*RenewPolicyResponse, error) {
+func (UnimplementedPolicyServiceServer) RenewPolicy(context.Context, *RenewPolicyTenureRequest) (*RenewPolicyTenureResponse, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method RenewPolicy not implemented")
 }
 func (UnimplementedPolicyServiceServer) GeneratePolicyDocument(context.Context, *GeneratePolicyDocumentRequest) (*GeneratePolicyDocumentResponse, error) {
@@ -307,7 +307,7 @@ func _PolicyService_CancelPolicy_Handler(srv interface{}, ctx context.Context, d
 }
 
 func _PolicyService_RenewPolicy_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
-	in := new(RenewPolicyRequest)
+	in := new(RenewPolicyTenureRequest)
 	if err := dec(in); err != nil {
 		return nil, err
 	}
@@ -319,7 +319,7 @@ func _PolicyService_RenewPolicy_Handler(srv interface{}, ctx context.Context, de
 		FullMethod: PolicyService_RenewPolicy_FullMethodName,
 	}
 	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
-		return srv.(PolicyServiceServer).RenewPolicy(ctx, req.(*RenewPolicyRequest))
+		return srv.(PolicyServiceServer).RenewPolicy(ctx, req.(*RenewPolicyTenureRequest))
 	}
 	return interceptor(ctx, in, info, handler)
 }

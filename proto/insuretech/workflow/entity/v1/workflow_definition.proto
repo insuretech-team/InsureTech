@@ -109,7 +109,7 @@ message WorkflowDefinition {
       comment: "Audit trail stored as JSON"
     }
   ];
-  // @inject_tag: gorm:"column:audit_info;not null"
+  // @inject_tag: gorm:"-"
 }
 
 enum WorkflowType {

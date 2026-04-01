@@ -1,0 +1,12 @@
+QuotingConvertQuoteToPolicyResponse:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    policy_id:
+      type: string
+    converted_at:
+      type: string
+      format: date-time
+  description: Response payload for convert quote to policy operation. Returns operation
+    results and status.

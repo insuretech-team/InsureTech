@@ -1,0 +1,7 @@
+BusinessWorkflowByNameRetrievalRequest:
+  type: object
+  properties:
+    workflow_name:
+      type: string
+  description: Request payload for retrieving business workflow by name retrieval
+    information. May include filters and pagination parameters.

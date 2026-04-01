@@ -106,13 +106,32 @@ func TestUnaryServerInterceptor_MissingUserID_Unauthenticated(t *testing.T) {
 
 // ResolveMyOrganisation always passes through — no org needed, no Casbin check.
 func TestUnaryServerInterceptor_ResolveMyOrganisation_AlwaysPasses(t *testing.T) {
-	client := newCapture(false) // Casbin would deny — but should never be called.
+	client := newCapture(false)           // Casbin would deny — but should never be called.
 	ctx := makeCtx("x-user-id", "user-1") // no portal, no org
 	resp, err := runInterceptor(t, client,
 		"/insuretech.b2b.services.v1.B2BService/ResolveMyOrganisation", ctx)
 	require.NoError(t, err)
 	require.Equal(t, "ok", resp)
 	require.Nil(t, client.last, "Casbin should NOT be called for ResolveMyOrganisation")
+}
+
+func TestUnaryServerInterceptor_PreOrgEmployeeMethods_AlwaysPass(t *testing.T) {
+	methods := []string{
+		"/insuretech.b2b.services.v1.B2BService/ListEmployeeLoginOrganisations",
+		"/insuretech.b2b.services.v1.B2BService/ActivateEmployee",
+	}
+
+	for _, method := range methods {
+		method := method
+		t.Run(method, func(t *testing.T) {
+			client := newCapture(false) // would deny if called
+			ctx := makeCtx("x-user-id", "user-1")
+			resp, err := runInterceptor(t, client, method, ctx)
+			require.NoError(t, err)
+			require.Equal(t, "ok", resp)
+			require.Nil(t, client.last, "Casbin should NOT be called for pre-org employee bootstrap methods")
+		})
+	}
 }
 
 // Super admin (PORTAL_SYSTEM, no org) calling org management → system:root, allowed.

@@ -1,0 +1,12 @@
+package models
+
+// BusinessWorkflowStatus represents a business_workflow_status
+type BusinessWorkflowStatus string
+
+// BusinessWorkflowStatus values
+const (
+	BusinessWorkflowStatusBUSINESSWORKFLOWSTATUSUNSPECIFIED BusinessWorkflowStatus = "BUSINESS_WORKFLOW_STATUS_UNSPECIFIED"
+	BusinessWorkflowStatusBUSINESSWORKFLOWSTATUSACTIVE  = "BUSINESS_WORKFLOW_STATUS_ACTIVE"
+	BusinessWorkflowStatusBUSINESSWORKFLOWSTATUSINACTIVE  = "BUSINESS_WORKFLOW_STATUS_INACTIVE"
+	BusinessWorkflowStatusBUSINESSWORKFLOWSTATUSDEPRECATED  = "BUSINESS_WORKFLOW_STATUS_DEPRECATED"
+)

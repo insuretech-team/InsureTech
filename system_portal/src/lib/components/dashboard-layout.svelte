@@ -1,283 +1,209 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { goto } from '$app/navigation';
+	import { page } from '$app/state';
 	import {
-		Home,
-		Users,
-		Building2,
-		Package,
-		Settings,
-		FileText,
-		CreditCard,
 		AlertCircle,
 		BarChart3,
-		Menu,
+		Building2,
+		FileSearch,
+		FileText,
+		LayoutDashboard,
 		LogOut,
-		User,
-		Bell,
+		Menu,
+		Package,
 		Search,
-		ChevronDown
+		Shield,
+		Users
 	} from 'lucide-svelte';
-	import { Button } from '$lib/components/ui/button';
-	import { Badge } from '$lib/components/ui/badge';
+	import type { Snippet } from 'svelte';
 	import * as Avatar from '$lib/components/ui/avatar';
-	import * as DropdownMenu from '$lib/components/ui/dropdown-menu';
-	import * as Sheet from '$lib/components/ui/sheet';
-	import { Separator } from '$lib/components/ui/separator';
+	import { Badge } from '$lib/components/ui/badge';
+	import { Button } from '$lib/components/ui/button';
 	import { Input } from '$lib/components/ui/input';
+	import { Separator } from '$lib/components/ui/separator';
+	import * as Sheet from '$lib/components/ui/sheet';
+	import BrandLogo from '$lib/components/system/brand-logo.svelte';
 
-	let { children } = $props();
+	type NavigationItem = {
+		label: string;
+		href: string;
+		icon: typeof LayoutDashboard;
+	};
 
-	let sidebarOpen = $state(false);
+	type NavigationGroup = {
+		title: string;
+		items: NavigationItem[];
+	};
 
-	function handleLogout() {
-		// Clear any stored session data
-		localStorage.removeItem('user');
-		sessionStorage.clear();
-		
-		// Redirect to login
-		goto('/login');
-	}
-
-	const navigation = [
+	const navigation: NavigationGroup[] = [
 		{
 			title: 'Overview',
 			items: [
-				{ name: 'Dashboard', href: '/dashboard', icon: Home },
-				{ name: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 }
+				{ label: 'Dashboard', href: '/dashboard', icon: LayoutDashboard },
+				{ label: 'Analytics', href: '/dashboard/analytics', icon: BarChart3 }
 			]
 		},
 		{
-			title: 'Insurance',
+			title: 'Operations',
 			items: [
-				{ name: 'Products', href: '/dashboard/products', icon: Package },
-				{ name: 'Policies', href: '/dashboard/policies', icon: FileText },
-				{ name: 'Claims', href: '/dashboard/claims', icon: AlertCircle }
+				{ label: 'Products', href: '/dashboard/products', icon: Package },
+				{ label: 'Policies', href: '/dashboard/policies', icon: FileText },
+				{ label: 'Claims', href: '/dashboard/claims', icon: AlertCircle }
 			]
 		},
 		{
-			title: 'Partners',
+			title: 'Network',
 			items: [
-				{ name: 'Life Partners', href: '/dashboard/partners/life', icon: Building2 },
-				{ name: 'Non-Life Partners', href: '/dashboard/partners/non-life', icon: Building2 },
-				{ name: 'Agents', href: '/dashboard/agents', icon: Users }
+				{ label: 'Life Partners', href: '/dashboard/partners/life', icon: Users },
+				{ label: 'Non-Life Partners', href: '/dashboard/partners/non-life', icon: Building2 },
+				{ label: 'Tenants', href: '/dashboard/tenants', icon: Shield }
 			]
 		},
 		{
-			title: 'Finance',
+			title: 'Governance',
 			items: [
-				{ name: 'Payments', href: '/dashboard/payments', icon: CreditCard },
-				{ name: 'Commissions', href: '/dashboard/commissions', icon: CreditCard }
-			]
-		},
-		{
-			title: 'System',
-			items: [
-				{ name: 'Users', href: '/dashboard/users', icon: Users },
-				{ name: 'Settings', href: '/dashboard/settings', icon: Settings }
+				{ label: 'Reports', href: '/dashboard/reports', icon: BarChart3 },
+				{ label: 'Audit Trail', href: '/dashboard/audit', icon: FileSearch }
 			]
 		}
 	];
 
-	const lifePartnerTypes = [
-		{ label: 'Hospitals', count: 24, variant: 'success' },
-		{ label: 'Pharmacies', count: 156, variant: 'info' },
-		{ label: 'Doctors', count: 89, variant: 'warning' },
-		{ label: 'Ambulances', count: 12, variant: 'destructive' }
-	];
+	let {
+		user,
+		children
+	}: {
+		user: NonNullable<App.Locals['user']>;
+		children: Snippet;
+	} = $props();
 
-	const nonLifePartnerTypes = [
-		{ label: 'Auto Repair', count: 45, variant: 'success' },
-		{ label: 'Laptop Repair', count: 32, variant: 'info' },
-		{ label: 'Mobile Repair', count: 78, variant: 'warning' }
-	];
+	let mobileOpen = $state(false);
+
+	function isActive(href: string) {
+		return href === '/dashboard'
+			? page.url.pathname === href
+			: page.url.pathname.startsWith(href);
+	}
+
+	const displayName = $derived(user.email || 'System operator');
 </script>
 
-<!-- Mobile sidebar -->
-<Sheet.Root bind:open={sidebarOpen}>
-	<Sheet.Content side="left" class="w-80 p-0">
-		<div class="flex h-full flex-col">
-			<!-- Logo -->
-			<div class="flex h-16 items-center border-b border-white/10 px-6 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent">
-				<img src="/logo.svg" alt="LabAid InsureTech" class="h-8" />
-			</div>
+{#snippet Navigation()}
+	<nav class="space-y-6">
+		{#each navigation as group}
+			<div class="space-y-2">
+				<p class="px-3 text-[11px] font-semibold uppercase tracking-[0.24em] text-slate-500">
+					{group.title}
+				</p>
 
-			<!-- Navigation -->
-			<nav class="flex-1 space-y-2 overflow-y-auto p-4">
-				{#each navigation as section}
-					<div class="space-y-1">
-						<h3 class="mb-2 px-3 text-xs font-semibold uppercase text-muted-foreground">
-							{section.title}
-						</h3>
-						{#each section.items as item}
-							{@const isActive = $page.url.pathname === item.href}
-							<a
-								href={item.href}
-								class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-white/10 {isActive
-									? 'bg-primary text-primary-foreground shadow-md border-l-2 border-l-accent'
-									: 'text-white/70 hover:text-white hover:translate-x-0.5'}"
-								onclick={() => (sidebarOpen = false)}
-							>
-								{@const Icon = item.icon}
-								<Icon class="h-4 w-4" />
-								{item.name}
-							</a>
-						{/each}
-					</div>
-					<Separator class="my-2" />
-				{/each}
-			</nav>
+				<div class="space-y-1">
+					{#each group.items as item}
+						{@const Icon = item.icon}
+						<a
+							href={item.href}
+							class={`flex items-center gap-3 rounded-2xl px-3 py-2.5 text-sm font-medium transition ${
+								isActive(item.href)
+									? 'bg-primary text-white shadow-[0_18px_35px_-22px_rgba(18,63,80,0.8)]'
+									: 'text-slate-600 hover:bg-slate-100 hover:text-slate-950'
+							}`}
+							onclick={() => (mobileOpen = false)}
+						>
+							<Icon class="h-4 w-4" />
+							<span>{item.label}</span>
+						</a>
+					{/each}
+				</div>
+			</div>
+		{/each}
+	</nav>
+{/snippet}
+
+<Sheet.Root bind:open={mobileOpen}>
+	<Sheet.Content side="left" class="w-[20rem] border-none bg-white p-0">
+		<div class="flex h-full flex-col">
+			<div class="border-b border-slate-200 px-5 py-5">
+				<BrandLogo class="h-9" />
+				<p class="mt-3 text-sm text-slate-500">System administration and operational control.</p>
+			</div>
+			<div class="flex-1 overflow-y-auto px-4 py-5">
+				{@render Navigation()}
+			</div>
 		</div>
 	</Sheet.Content>
 </Sheet.Root>
 
-<div class="flex h-screen overflow-hidden bg-background">
-	<!-- Desktop Sidebar -->
-	<aside class="hidden w-64 flex-col border-r bg-card lg:flex">
-		<!-- Logo -->
-		<div class="flex h-16 items-center border-b border-white/10 px-6 bg-gradient-to-r from-primary/20 via-primary/10 to-transparent">
-			<img src="/logo.svg" alt="LabAid InsureTech" class="h-8" />
-		</div>
-
-		<!-- Navigation -->
-		<nav class="flex-1 space-y-2 overflow-y-auto p-4">
-			{#each navigation as section}
-				<div class="space-y-1">
-					<h3 class="mb-2 px-3 text-xs font-semibold uppercase text-muted-foreground">
-						{section.title}
-					</h3>
-					{#each section.items as item}
-						{@const isActive = $page.url.pathname === item.href}
-						<a
-							href={item.href}
-							class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm transition-all hover:bg-white/10 {isActive
-								? 'bg-primary text-primary-foreground shadow-md border-l-2 border-l-accent'
-								: 'text-white/70 hover:text-white hover:translate-x-0.5'}"
-						>
-							{@const Icon = item.icon}
-							<Icon class="h-4 w-4" />
-							{item.name}
-						</a>
-					{/each}
+<div class="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(3,167,101,0.14),_transparent_26%),linear-gradient(180deg,_#f8fcfb_0%,_#eef5f6_100%)]">
+	<div class="mx-auto flex min-h-screen max-w-[1600px]">
+		<aside class="hidden w-[288px] shrink-0 border-r border-white/70 bg-white/70 px-5 py-6 backdrop-blur xl:flex xl:flex-col">
+			<div class="space-y-5">
+				<div class="rounded-[28px] border border-primary/10 bg-gradient-to-br from-primary to-[#1f5d72] p-5 text-white shadow-[0_30px_60px_-38px_rgba(18,63,80,0.75)]">
+					<BrandLogo class="h-10 brightness-[1.8] saturate-0" />
+					<p class="mt-4 text-sm leading-6 text-white/78">
+						Single place for tenants, products, claims, policy visibility, and governance signals.
+					</p>
+					<div class="mt-4 flex items-center gap-2">
+						<Badge variant="secondary" class="bg-white/14 text-white">System console</Badge>
+						<Badge variant="outline" class="border-white/20 text-white">OTP secured</Badge>
+					</div>
 				</div>
-				<Separator class="my-2" />
-			{/each}
-		</nav>
 
-		<!-- User section -->
-		<div class="border-t p-4">
-			<DropdownMenu.Root>
-				<DropdownMenu.Trigger asChild>
-					{#snippet child({ props })}
-						<Button
-							{...props}
-							variant="ghost"
-							class="w-full justify-start gap-3 px-3"
-						>
-						<Avatar.Root class="h-8 w-8">
-							<Avatar.Fallback class="bg-primary text-primary-foreground">AD</Avatar.Fallback>
-						</Avatar.Root>
-						<div class="flex-1 text-left">
-							<p class="text-sm font-medium">Admin User</p>
-							<p class="text-xs text-muted-foreground">admin@labaid.com</p>
-						</div>
-						<ChevronDown class="h-4 w-4 text-muted-foreground" />
-						</Button>
-					{/snippet}
-				</DropdownMenu.Trigger>
-				<DropdownMenu.Content align="end" class="w-56">
-					<DropdownMenu.Item>
-						<User class="mr-2 h-4 w-4" />
-						Profile
-					</DropdownMenu.Item>
-					<DropdownMenu.Item>
-						<Settings class="mr-2 h-4 w-4" />
-						Settings
-					</DropdownMenu.Item>
-					<DropdownMenu.Separator />
-					<DropdownMenu.Item class="text-destructive" onclick={() => handleLogout()}>
-						<LogOut class="mr-2 h-4 w-4" />
-						Logout
-					</DropdownMenu.Item>
-				</DropdownMenu.Content>
-			</DropdownMenu.Root>
-		</div>
-	</aside>
-
-	<!-- Main Content -->
-	<div class="flex flex-1 flex-col overflow-hidden">
-		<!-- Header -->
-		<header class="flex h-16 items-center gap-4 border-b border-white/10 bg-card/80 backdrop-blur-md px-6 shadow-lg">
-			<!-- Mobile menu button -->
-			<Button
-				variant="ghost"
-				size="icon"
-				class="lg:hidden"
-				onclick={() => (sidebarOpen = true)}
-			>
-				<Menu class="h-5 w-5" />
-			</Button>
-
-			<!-- Search -->
-			<div class="flex-1 lg:max-w-md">
-				<div class="relative">
-					<Search class="absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-muted-foreground" />
-					<Input type="search" placeholder="Search..." class="pl-10" />
+				<div class="rounded-[28px] border border-white/60 bg-white/85 p-4 shadow-[0_24px_60px_-40px_rgba(18,63,80,0.45)] backdrop-blur">
+					{@render Navigation()}
 				</div>
 			</div>
 
-			<!-- Right section -->
-			<div class="flex items-center gap-2">
-				<!-- Notifications -->
-				<Button variant="ghost" size="icon" class="relative">
-					<Bell class="h-5 w-5" />
-					<span
-						class="absolute right-1.5 top-1.5 h-2 w-2 rounded-full bg-destructive ring-2 ring-card"
-					></span>
-				</Button>
-
-				<!-- User menu (mobile) -->
-				<div class="lg:hidden">
-					<DropdownMenu.Root>
-						<DropdownMenu.Trigger asChild>
-							{#snippet child({ props })}
-								<Button {...props} variant="ghost" size="icon">
-								<Avatar.Root class="h-8 w-8">
-									<Avatar.Fallback class="bg-primary text-primary-foreground">AD</Avatar.Fallback>
-								</Avatar.Root>
-								</Button>
-							{/snippet}
-						</DropdownMenu.Trigger>
-						<DropdownMenu.Content align="end" class="w-56">
-							<DropdownMenu.Label>
-								<div class="flex flex-col space-y-1">
-									<p class="text-sm font-medium">Admin User</p>
-									<p class="text-xs text-muted-foreground">admin@labaid.com</p>
-								</div>
-							</DropdownMenu.Label>
-							<DropdownMenu.Separator />
-							<DropdownMenu.Item>
-								<User class="mr-2 h-4 w-4" />
-								Profile
-							</DropdownMenu.Item>
-							<DropdownMenu.Item>
-								<Settings class="mr-2 h-4 w-4" />
-								Settings
-							</DropdownMenu.Item>
-							<DropdownMenu.Separator />
-							<DropdownMenu.Item class="text-destructive" onclick={() => handleLogout()}>
-								<LogOut class="mr-2 h-4 w-4" />
-								Logout
-							</DropdownMenu.Item>
-						</DropdownMenu.Content>
-					</DropdownMenu.Root>
+			<div class="mt-auto rounded-[28px] border border-white/60 bg-white/85 p-4 shadow-[0_24px_60px_-40px_rgba(18,63,80,0.35)] backdrop-blur">
+				<div class="flex items-center gap-3">
+					<Avatar.Root class="h-11 w-11 ring-2 ring-primary/10">
+						<Avatar.Fallback class="bg-primary text-white">
+							{displayName.slice(0, 1).toUpperCase()}
+						</Avatar.Fallback>
+					</Avatar.Root>
+					<div class="min-w-0">
+						<p class="truncate text-sm font-semibold text-slate-900">{displayName}</p>
+						<p class="truncate text-xs text-slate-500">{user.role}</p>
+					</div>
 				</div>
-			</div>
-		</header>
 
-		<!-- Page Content -->
-		<main class="flex-1 overflow-y-auto p-6">
-			{@render children()}
-		</main>
+				<Separator class="my-4" />
+
+				<form method="POST" action="/logout">
+					<Button type="submit" variant="outline" class="w-full justify-start gap-2 rounded-2xl">
+						<LogOut class="h-4 w-4" />
+						Sign out
+					</Button>
+				</form>
+			</div>
+		</aside>
+
+		<div class="flex min-w-0 flex-1 flex-col">
+			<header class="sticky top-0 z-20 border-b border-white/60 bg-white/70 px-4 py-4 backdrop-blur lg:px-8">
+				<div class="flex items-center gap-3">
+					<Button
+						type="button"
+						variant="outline"
+						size="icon"
+						class="rounded-2xl xl:hidden"
+						onclick={() => (mobileOpen = true)}
+					>
+						<Menu class="h-4 w-4" />
+					</Button>
+
+					<div class="relative flex-1">
+						<Search class="pointer-events-none absolute left-3 top-1/2 h-4 w-4 -translate-y-1/2 text-slate-400" />
+						<Input
+							placeholder="Search products, policies, claims, or partner IDs"
+							class="h-11 rounded-2xl border-white/70 bg-white/90 pl-10 shadow-none"
+						/>
+					</div>
+
+					<Badge variant="outline" class="hidden rounded-full border-primary/20 bg-primary/5 px-3 py-1 text-primary sm:inline-flex">
+						{user.role}
+					</Badge>
+				</div>
+			</header>
+
+			<main class="min-w-0 flex-1 px-4 py-6 lg:px-8 lg:py-8">
+				{@render children()}
+			</main>
+		</div>
 	</div>
 </div>

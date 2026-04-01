@@ -1,0 +1,16 @@
+BusinessWorkflowEvaluationRequest:
+  type: object
+  properties:
+    workflow_name:
+      type: string
+    inputs:
+      type: object
+    entity_type:
+      type: string
+      description: POLICY, CLAIM, QUOTE, CUSTOMER, etc.
+    entity_id:
+      type: string
+    executed_by:
+      type: string
+  description: Request payload for business workflow evaluation operation. Contains
+    parameters required to execute the operation.

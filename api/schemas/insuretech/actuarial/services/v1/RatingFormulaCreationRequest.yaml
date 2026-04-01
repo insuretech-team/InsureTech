@@ -1,0 +1,36 @@
+RatingFormulaCreationRequest:
+  type: object
+  properties:
+    formula_code:
+      type: string
+    formula_name:
+      type: string
+    description:
+      type: string
+    category:
+      $ref: '#/components/schemas/FormulaCategory'
+    insurance_type:
+      type: string
+    formula_expression:
+      type: string
+    variables:
+      type: array
+      items:
+        $ref: '#/components/schemas/ActuarialVariable'
+    sort_order:
+      type: integer
+      format: int32
+    valid_from:
+      type: string
+      format: date-time
+    valid_until:
+      type: string
+      format: date-time
+    created_by:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Rating formula CRUD

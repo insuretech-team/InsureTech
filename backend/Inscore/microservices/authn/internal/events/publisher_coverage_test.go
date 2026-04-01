@@ -26,7 +26,7 @@ func TestPublisherCoversAllEventTypes(t *testing.T) {
 		method string
 		args   []any
 	}{
-		{"PublishUserRegistered", []any{ctx, "u", "+8801", "a@b.com", "1.1.1.1", "WEB"}},
+		{"PublishUserRegistered", []any{ctx, "u", "+8801", "a@b.com", "1.1.1.1", "WEB", "b2c", "root"}},
 		{"PublishUserLoggedIn", []any{ctx, "u", "s", "JWT", "1.1.1.1", "MOBILE", "ua"}},
 		{"PublishUserLoggedOut", []any{ctx, "u", "s", "JWT", "user_initiated", "1.1.1.1", "MOBILE"}},
 		{"PublishTokenRefreshed", []any{ctx, "u", "s", "old", "new", "newr", "1.1.1.1", "MOBILE", "ua"}},

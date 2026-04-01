@@ -1,0 +1,15 @@
+LifeProductDeletedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    product_id:
+      type: string
+    product_code:
+      type: string
+    permanent:
+      type: boolean
+    deleted_at:
+      type: string
+      format: date-time
+  description: LifeProductDeletedEvent is emitted when a life product is deleted

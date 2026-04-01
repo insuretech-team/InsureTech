@@ -12,6 +12,8 @@ import (
 
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/metrics"
 	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/middleware"
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
@@ -199,7 +201,7 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 			if err != nil {
 				logger.Error("Combined auth validation failed", zap.Error(err))
 				metrics.RecordCombinedAuthRequest("unknown", "error", validationDuration, false)
-				http.Error(w, "Authentication/Authorization failed", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Authentication/Authorization failed")
 				return
 			}
 
@@ -208,7 +210,7 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 
 			if !result.Valid {
 				metrics.RecordCombinedAuthRequest(result.Portal, "authn_failed", validationDuration, false)
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 
@@ -224,7 +226,7 @@ func (m *CombinedAuthMiddleware) Middleware() func(http.Handler) http.Handler {
 					zap.String("reason", reason),
 				)
 				metrics.RecordCombinedAuthRequest(result.Portal, "authz_failed", validationDuration, false)
-				http.Error(w, "Forbidden: "+reason, http.StatusForbidden)
+				respond.Error(w, r, http.StatusForbidden, "PERMISSION_DENIED", "Forbidden: "+reason)
 				return
 			}
 
@@ -337,7 +339,7 @@ func (m *CombinedAuthMiddleware) validateAuth(
 
 	var authzResp *authzservicev1.CheckAccessResponse
 	err = m.authzCircuit.Execute(func() error {
-		authzCtx := metadata.AppendToOutgoingContext(ctx, "x-internal-service", "gateway")
+		authzCtx := internalrpc.OutgoingContext(ctx, "gateway")
 		resp, err := m.authzClient.CheckAccess(authzCtx, &authzservicev1.CheckAccessRequest{
 			UserId:  result.UserID,
 			Domain:  domain,

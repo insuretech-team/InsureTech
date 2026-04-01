@@ -31,6 +31,7 @@ import (
 	"runtime"
 	"sort"
 	"strings"
+	"time"
 )
 
 func main() {
@@ -79,6 +80,7 @@ func main() {
 
 	var totalFiles, modifiedFiles, skippedFiles int
 	var totalInjected int
+	var failedFiles []string
 
 	for _, dir := range entityDirs {
 		files, err := filepath.Glob(filepath.Join(dir, "*.pb.go"))
@@ -92,6 +94,7 @@ func main() {
 			changed, injected, err := injectFile(file, *dryRun)
 			if err != nil {
 				fmt.Printf("  ERROR: %s - %v\n", filepath.Base(file), err)
+				failedFiles = append(failedFiles, file)
 				continue
 			}
 
@@ -120,7 +123,17 @@ func main() {
 	if *dryRun {
 		fmt.Println("  [DRY RUN - no files modified]")
 	}
-	fmt.Println("  OK: GORM tags injected")
+	if len(failedFiles) > 0 {
+		fmt.Printf("  WARN: %d file(s) could not be updated\n", len(failedFiles))
+		for _, file := range failedFiles {
+			fmt.Printf("    - %s\n", filepath.Base(file))
+		}
+		if runtime.GOOS == "windows" {
+			fmt.Println("  Hint: close VS Code/gopls/go processes holding generated files open, then rerun generation.")
+		}
+	} else {
+		fmt.Println("  OK: GORM tags injected")
+	}
 
 	// Step 3 (optional): proto registry
 	if *registry {
@@ -211,7 +224,40 @@ func injectFile(path string, dryRun bool) (changed bool, injected int, err error
 	}
 
 	newContent := strings.Join(outLines, "\n") + "\n"
-	return true, injected, os.WriteFile(path, []byte(newContent), 0o644)
+	return true, injected, writeFileWithRetry(path, []byte(newContent), 0o644)
+}
+
+func writeFileWithRetry(path string, data []byte, perm os.FileMode) error {
+	const maxAttempts = 8
+	delay := 150 * time.Millisecond
+
+	var lastErr error
+	for attempt := 1; attempt <= maxAttempts; attempt++ {
+		if err := os.WriteFile(path, data, perm); err != nil {
+			lastErr = err
+			if runtime.GOOS == "windows" && isRetryableMappedFileError(err) && attempt < maxAttempts {
+				time.Sleep(delay)
+				if delay < time.Second {
+					delay *= 2
+				}
+				continue
+			}
+			return err
+		}
+		return nil
+	}
+
+	return fmt.Errorf("write failed after %d attempts: %w", maxAttempts, lastErr)
+}
+
+func isRetryableMappedFileError(err error) bool {
+	if err == nil {
+		return false
+	}
+	lower := strings.ToLower(err.Error())
+	return strings.Contains(lower, "user-mapped section open") ||
+		strings.Contains(lower, "used by another process") ||
+		strings.Contains(lower, "being used by another process")
 }
 
 // injectGormOnLine injects a gorm struct tag from a trailing or preceding @inject_tag comment.

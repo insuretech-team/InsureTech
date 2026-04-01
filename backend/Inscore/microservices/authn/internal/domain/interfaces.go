@@ -21,14 +21,18 @@ type AuthService interface {
 	ResetPassword(ctx context.Context, req *authnservicev1.ResetPasswordRequest) (*authnservicev1.ResetPasswordResponse, error)
 	ValidateToken(ctx context.Context, req *authnservicev1.ValidateTokenRequest) (*authnservicev1.ValidateTokenResponse, error)
 	RevokeAllSessions(ctx context.Context, req *authnservicev1.RevokeAllSessionsRequest) (*authnservicev1.RevokeAllSessionsResponse, error)
+	FindPortalUser(ctx context.Context, req *authnservicev1.FindPortalUserRequest) (*authnservicev1.FindPortalUserResponse, error)
+	SetTemporaryPassword(ctx context.Context, req *authnservicev1.SetTemporaryPasswordRequest) (*authnservicev1.SetTemporaryPasswordResponse, error)
 
 	// Email OTP auth (Business Beneficiary + System User — web portal only)
 	RegisterEmailUser(ctx context.Context, req *authnservicev1.RegisterEmailUserRequest) (*authnservicev1.RegisterEmailUserResponse, error)
 	SendEmailOTP(ctx context.Context, req *authnservicev1.SendEmailOTPRequest) (*authnservicev1.SendEmailOTPResponse, error)
 	VerifyEmail(ctx context.Context, req *authnservicev1.VerifyEmailRequest) (*authnservicev1.VerifyEmailResponse, error)
 	EmailLogin(ctx context.Context, req *authnservicev1.EmailLoginRequest) (*authnservicev1.EmailLoginResponse, error)
+	EmailPasswordLogin(ctx context.Context, req *authnservicev1.EmailPasswordLoginRequest) (*authnservicev1.EmailPasswordLoginResponse, error)
 	RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error)
 	ResetPasswordByEmail(ctx context.Context, req *authnservicev1.ResetPasswordByEmailRequest) (*authnservicev1.ResetPasswordByEmailResponse, error)
+	ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error)
 }
 
 // Secondary Port (Outbound - DB) - Session storage
@@ -68,7 +72,7 @@ type UserRepository interface {
 
 // Secondary Port (Outbound - Messaging) - Event publishing
 type EventPublisher interface {
-	PublishUserRegistered(ctx context.Context, userID, mobile, email, ip, deviceType string) error
+	PublishUserRegistered(ctx context.Context, userID, mobile, email, ip, deviceType, portal, tenantID string) error
 	PublishUserLoggedIn(ctx context.Context, userID, sessionID, sessionType, ip, deviceType, userAgent string) error
 	PublishUserLoggedOut(ctx context.Context, userID, sessionID, sessionType, reason, ip, deviceType string) error
 	PublishLoginFailed(ctx context.Context, userID, mobile, reason, ip, deviceType, userAgent string, failedAttempts int32) error
@@ -82,6 +86,7 @@ type EventPublisher interface {
 	PublishSMSDeliveryReport(ctx context.Context, otpID, providerMsgID, msisdnMasked, status, errorCode, carrier string, deliveredAt time.Time) error
 	PublishEmailVerificationSent(ctx context.Context, userID, email, otpID, otpType, ipAddress string) error
 	PublishEmailVerified(ctx context.Context, userID, email string) error
+	PublishKYCVerified(ctx context.Context, entityID, kycID, reviewerID string, verifiedAt time.Time) error
 	PublishEmailLoginSucceeded(ctx context.Context, userID, sessionID, email, userType, ipAddress, userAgent, deviceName string) error
 	PublishEmailLoginFailed(ctx context.Context, email, reason string, attempts int32, ipAddress, userAgent string) error
 	PublishPasswordResetByEmailRequested(ctx context.Context, userID, email, otpID, ipAddress string) error

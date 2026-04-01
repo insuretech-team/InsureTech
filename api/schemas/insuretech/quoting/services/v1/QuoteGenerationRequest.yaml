@@ -1,0 +1,23 @@
+QuotingQuoteGenerationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    customer_id:
+      type: string
+    agent_id:
+      type: string
+      description: Optional
+    parameters:
+      $ref: '#/components/schemas/QuoteParameters'
+    validity_days:
+      type: integer
+      format: int32
+      description: Default 30 days
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+  description: Request payload for quote generation operation. Contains parameters
+    required to execute the operation.

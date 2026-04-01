@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"fmt"
+	"strings"
 	"testing"
 	"time"
 
@@ -183,6 +184,52 @@ func TestAuthService_LiveDB_LoginServerSide(t *testing.T) {
 	})
 	require.NoError(t, err)
 	require.True(t, csrfResp.Valid)
+}
+
+func TestAuthService_LiveDB_OTPVerifiedLoginWithoutPassword(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping live DB test")
+	}
+	ctx := metadata.NewIncomingContext(context.Background(), metadata.Pairs(
+		"x-forwarded-for", "127.0.0.1",
+		"user-agent", "auth-service-live-test",
+	))
+	dbConn := testServiceLiveDB(t)
+	svc := buildLiveAuthService(t, dbConn)
+
+	mobile := fmt.Sprintf("+8801%09d", time.Now().UnixNano()%1_000_000_000)
+	userID := createLiveAuthnUser(t, svc, ctx, mobile, "live_otp_"+uuid.NewString()[:8]+"@example.com", "Str0ng!OTP1")
+	t.Cleanup(func() { cleanupLiveAuthnUser(t, dbConn, userID) })
+
+	otpHash, err := bcrypt.GenerateFromPassword([]byte("123456"), bcrypt.DefaultCost)
+	require.NoError(t, err)
+	require.NoError(t, svc.otpRepo.Create(ctx, &authnentityv1.OTP{
+		OtpId:      uuid.NewString(),
+		UserId:     userID,
+		OtpHash:    string(otpHash),
+		Purpose:    "login",
+		Recipient:  strings.TrimPrefix(mobile, "+"),
+		Channel:    "sms",
+		ExpiresAt:  timestamppb.New(time.Now().Add(5 * time.Minute)),
+		Verified:   true,
+		VerifiedAt: timestamppb.Now(),
+		Attempts:   1,
+		DeviceType: "API",
+		IpAddress:  "127.0.0.1",
+		DlrStatus:  "DELIVERED",
+	}))
+
+	resp, err := svc.Login(ctx, &authnservicev1.LoginRequest{
+		MobileNumber: mobile,
+		Password:     "",
+		DeviceType:   "API",
+		DeviceId:     "dev-otp-1",
+	})
+	require.NoError(t, err)
+	require.Equal(t, "JWT", resp.SessionType)
+	require.NotEmpty(t, resp.AccessToken)
+	require.NotEmpty(t, resp.RefreshToken)
+	require.NotEmpty(t, resp.SessionId)
 }
 
 func TestAuthService_WrapperEdgeCases(t *testing.T) {
@@ -453,8 +500,8 @@ func TestAuthService_LiveDB_ServiceWrappersCoverage(t *testing.T) {
 	require.NoError(t, err)
 	require.False(t, verifyResp.Verified)
 
-	// JWKS wrapper
-	jwksResp, err := svc.GetJWKS(ctx, &authnservicev1.GetJWKSRequest{})
+	// JWKS internal helper (GetJWKS RPC removed from proto — API path conflict)
+	jwksResp, err := svc.getJWKSInternal(ctx)
 	require.NoError(t, err)
 	require.NotEmpty(t, jwksResp.Keys)
 
@@ -714,11 +761,8 @@ func TestAuthService_LiveDB_KYCVoiceAndVerifyDocument(t *testing.T) {
 	require.NoError(t, err)
 	require.True(t, profileAfterComplete.Profile.KycVerified)
 
-	_, err = svc.RejectKYC(ctx, &authnservicev1.RejectKYCRequest{
-		KycId:           initKYC.KycId,
-		ReviewerId:      userID,
-		RejectionReason: "missing field",
-	})
+	// RejectKYC RPC removed from proto (API path conflict) — use internal helper
+	err = svc.rejectKYCInternal(ctx, initKYC.KycId, "missing field")
 	require.NoError(t, err)
 
 	_, err = svc.ApproveKYC(ctx, &authnservicev1.ApproveKYCRequest{
@@ -771,17 +815,12 @@ func TestAuthService_LiveDB_KYCVoiceAndVerifyDocument(t *testing.T) {
 	require.NoError(t, err)
 	require.NotEmpty(t, createVoiceResp.VoiceSessionId)
 
-	getVoiceResp, err := svc.GetVoiceSession(ctx, &authnservicev1.GetVoiceSessionRequest{
-		VoiceSessionId: createVoiceResp.VoiceSessionId,
-	})
+	// GetVoiceSession / EndVoiceSession RPCs removed from proto (API path conflict) — use internal helpers
+	getVoiceResp, err := svc.getVoiceSessionInternal(ctx, createVoiceResp.VoiceSessionId)
 	require.NoError(t, err)
 	require.Equal(t, userID, getVoiceResp.UserId)
 
-	_, err = svc.EndVoiceSession(ctx, &authnservicev1.EndVoiceSessionRequest{
-		VoiceSessionId:  createVoiceResp.VoiceSessionId,
-		Status:          "FAILED",
-		DurationSeconds: 19,
-	})
+	err = svc.endVoiceSessionInternal(ctx, createVoiceResp.VoiceSessionId, "FAILED", 19)
 	require.NoError(t, err)
 }
 

@@ -10,6 +10,8 @@ import (
 	"strings"
 
 	"github.com/golang-jwt/jwt/v5"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/internalrpc"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -45,7 +47,6 @@ var trustedInternalServices = map[string]struct{}{
 }
 
 // NewJWTInterceptor constructs a JWTInterceptor.
-// publicKey may be nil — in that case every request is passed through (no-op mode).
 // skipMethods is a list of full gRPC method paths that bypass auth (e.g. health check).
 func NewJWTInterceptor(publicKey *rsa.PublicKey, skipMethods []string) *JWTInterceptor {
 	skips := make(map[string]bool, len(skipMethods))
@@ -74,8 +75,14 @@ func (i *JWTInterceptor) unaryIntercept(
 	info *grpc.UnaryServerInfo,
 	handler grpc.UnaryHandler,
 ) (interface{}, error) {
-	if i.publicKey == nil || i.skipMethods[info.FullMethod] || isTrustedInternalCall(ctx) {
+	if i.skipMethods[info.FullMethod] {
 		return handler(ctx, req)
+	}
+	if isTrustedInternalCall(ctx) {
+		return handler(ctx, req)
+	}
+	if i.publicKey == nil {
+		return nil, status.Error(codes.Unauthenticated, "jwt validation is not configured")
 	}
 	claims, err := i.extractClaims(ctx)
 	if err != nil {
@@ -91,8 +98,14 @@ func (i *JWTInterceptor) streamIntercept(
 	info *grpc.StreamServerInfo,
 	handler grpc.StreamHandler,
 ) error {
-	if i.publicKey == nil || i.skipMethods[info.FullMethod] || isTrustedInternalCall(ss.Context()) {
+	if i.skipMethods[info.FullMethod] {
 		return handler(srv, ss)
+	}
+	if isTrustedInternalCall(ss.Context()) {
+		return handler(srv, ss)
+	}
+	if i.publicKey == nil {
+		return status.Error(codes.Unauthenticated, "jwt validation is not configured")
 	}
 	claims, err := i.extractClaims(ss.Context())
 	if err != nil {
@@ -104,10 +117,23 @@ func (i *JWTInterceptor) streamIntercept(
 }
 
 // extractClaims parses and validates the Bearer JWT from gRPC metadata.
+// If x-user-id is present (pre-validated by gateway), bypass JWT validation.
 func (i *JWTInterceptor) extractClaims(ctx context.Context) (*AuthClaims, error) {
 	md, ok := metadata.FromIncomingContext(ctx)
 	if !ok {
 		return nil, errors.New("missing metadata")
+	}
+
+	// Gateway pre-validation bypass: if x-user-id is set, the gateway already
+	// validated the session via authn. Trust the forwarded identity.
+	if userID := grpcmeta.First(md, "x-user-id"); userID != "" {
+		// Construct minimal claims from pre-validated gateway headers
+		return &AuthClaims{
+			UserID:   userID,
+			PortalID: grpcmeta.First(md, "x-portal"),
+			Email:    grpcmeta.First(md, "x-email"),
+			Roles:    parseRoles(md.Get("x-roles")),
+		}, nil
 	}
 
 	vals := md.Get("authorization")
@@ -143,7 +169,9 @@ func (i *JWTInterceptor) extractClaims(ctx context.Context) (*AuthClaims, error)
 	}
 
 	// portal → PortalID
-	if portal, ok := mapClaims["portal"]; ok {
+	if portal, ok := mapClaims["ins_portal"]; ok {
+		claims.PortalID, _ = portal.(string)
+	} else if portal, ok := mapClaims["portal"]; ok {
 		claims.PortalID, _ = portal.(string)
 	}
 
@@ -184,22 +212,8 @@ func GetClaims(ctx context.Context) *AuthClaims {
 }
 
 func isTrustedInternalCall(ctx context.Context) bool {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return false
-	}
-
-	for _, value := range md.Get("x-internal-service") {
-		value = strings.ToLower(strings.TrimSpace(value))
-		if value == "" {
-			continue
-		}
-		if _, ok := trustedInternalServices[value]; ok {
-			return true
-		}
-	}
-
-	return false
+	_, err := internalrpc.ValidateIncoming(ctx, trustedInternalServices)
+	return err == nil
 }
 
 // ParseRSAPublicKeyFromPEM parses an RSA public key from a PEM-encoded string.
@@ -260,3 +274,27 @@ type wrappedStream struct {
 }
 
 func (w *wrappedStream) Context() context.Context { return w.ctx }
+
+// firstOrEmpty returns the first element of a slice or empty string.
+func firstOrEmpty(vals []string) string {
+	if len(vals) > 0 {
+		return vals[0]
+	}
+	return ""
+}
+
+// parseRoles converts x-roles metadata into a slice of strings.
+func parseRoles(vals []string) []string {
+	if len(vals) == 0 {
+		return nil
+	}
+	// If roles came as a single comma-separated string, split them
+	if len(vals) == 1 && strings.Contains(vals[0], ",") {
+		parts := strings.Split(vals[0], ",")
+		for i := range parts {
+			parts[i] = strings.TrimSpace(parts[i])
+		}
+		return parts
+	}
+	return vals
+}

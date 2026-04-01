@@ -15,7 +15,7 @@ import type { Message } from "@bufbuild/protobuf";
  * Describes the file insuretech/workflow/entity/v1/workflow_task.proto.
  */
 export const file_insuretech_workflow_entity_v1_workflow_task: GenFile = /*@__PURE__*/
-  fileDesc("CjFpbnN1cmV0ZWNoL3dvcmtmbG93L2VudGl0eS92MS93b3JrZmxvd190YXNrLnByb3RvEh1pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0eS52MSK7CAoMV29ya2Zsb3dUYXNrEjYKAmlkGAEgASgJQiqStRgmCgd0YXNrX2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKCkSmgEKFHdvcmtmbG93X2luc3RhbmNlX2lkGAIgASgJQnyStRh4ChR3b3JrZmxvd19pbnN0YW5jZV9pZBIEVVVJRBgBSjQKEndvcmtmbG93X2luc3RhbmNlcxILaW5zdGFuY2VfaWQaD3dvcmtmbG93X3NjaGVtYSADUiIKHmlkeF93b3JrZmxvd190YXNrc19pbnN0YW5jZV9pZBACEjIKCXN0ZXBfbmFtZRgDIAEoCUIfkrUYGwoJc3RlcF9uYW1lEgxWQVJDSEFSKDEwMCkYARJQCgR0eXBlGAQgASgOMicuaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjEuVGFza1R5cGVCGZK1GBUKBHR5cGUSC1ZBUkNIQVIoMjApGAEScgoLYXNzaWduZWRfdG8YBSABKAlCXZK1GFkKC2Fzc2lnbmVkX3RvEgRVVUlESiAKBXVzZXJzEgd1c2VyX2lkGgxhdXRobl9zY2hlbWEgBFIiCh5pZHhfd29ya2Zsb3dfdGFza3NfYXNzaWduZWRfdG8QAhKAAQoGc3RhdHVzGAYgASgOMikuaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjEuVGFza1N0YXR1c0JFkrUYQQoGc3RhdHVzEgtWQVJDSEFSKDIwKRgBOgknUEVORElORydSHQoZaWR4X3dvcmtmbG93X3Rhc2tzX3N0YXR1cxACEksKCGRlY2lzaW9uGAcgASgJQjmStRg1CghkZWNpc2lvbhILVkFSQ0hBUigyMClaHEFQUFJPVkVELCBSRUpFQ1RFRCwgUkVUVVJORUQSJgoIY29tbWVudHMYCCABKAlCFJK1GBAKCGNvbW1lbnRzEgRURVhUEkkKCGR1ZV9kYXRlGAkgASgLMhouZ29vZ2xlLnByb3RvYnVmLlRpbWVzdGFtcEIbkrUYFwoIZHVlX2RhdGUSC1RJTUVTVEFNUFRaElEKDGNvbXBsZXRlZF9hdBgKIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCH5K1GBsKDGNvbXBsZXRlZF9hdBILVElNRVNUQU1QVFoSeQoKYXVkaXRfaW5mbxgLIAEoCzIfLmluc3VyZXRlY2guY29tbW9uLnYxLkF1ZGl0SW5mb0JEkrUYQAoKYXVkaXRfaW5mbxIFSlNPTkIYAToLJ3t9Jzo6anNvbmJaGkF1ZGl0IHRyYWlsIHN0b3JlZCBhcyBKU09OeAE6S4q1GEcKDndvcmtmbG93X3Rhc2tzEg93b3JrZmxvd19zY2hlbWEYPSABKh5JbmRpdmlkdWFsIHdvcmtmbG93IHN0ZXAgdGFza3M4ASqFAQoIVGFza1R5cGUSGQoVVEFTS19UWVBFX1VOU1BFQ0lGSUVEEAASFgoSVEFTS19UWVBFX0FQUFJPVkFMEAESFAoQVEFTS19UWVBFX1JFVklFVxACEhoKFlRBU0tfVFlQRV9OT1RJRklDQVRJT04QAxIUChBUQVNLX1RZUEVfQUNUSU9OEAQqkwEKClRhc2tTdGF0dXMSGwoXVEFTS19TVEFUVVNfVU5TUEVDSUZJRUQQABIXChNUQVNLX1NUQVRVU19QRU5ESU5HEAESGwoXVEFTS19TVEFUVVNfSU5fUFJPR1JFU1MQAhIZChVUQVNLX1NUQVRVU19DT01QTEVURUQQAxIXChNUQVNLX1NUQVRVU19TS0lQUEVEEARCnwIKIWNvbS5pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0eS52MUIRV29ya2Zsb3dUYXNrUHJvdG9QAVpQZ2l0aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJldGVjaC93b3JrZmxvdy9lbnRpdHkvdjE7ZW50aXR5djGiAgNJV0WqAh1JbnN1cmV0ZWNoLldvcmtmbG93LkVudGl0eS5WMcoCHUluc3VyZXRlY2hcV29ya2Zsb3dcRW50aXR5XFYx4gIpSW5zdXJldGVjaFxXb3JrZmxvd1xFbnRpdHlcVjFcR1BCTWV0YWRhdGHqAiBJbnN1cmV0ZWNoOjpXb3JrZmxvdzo6RW50aXR5OjpWMWIGcHJvdG8z", [file_insuretech_common_v1_types, file_google_protobuf_timestamp, file_insuretech_common_v1_db]);
+  fileDesc("CjFpbnN1cmV0ZWNoL3dvcmtmbG93L2VudGl0eS92MS93b3JrZmxvd190YXNrLnByb3RvEh1pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0eS52MSLLCAoMV29ya2Zsb3dUYXNrEjYKAmlkGAEgASgJQiqStRgmCgd0YXNrX2lkEgRVVUlEGAEoAToRZ2VuX3JhbmRvbV91dWlkKCkSmgEKFHdvcmtmbG93X2luc3RhbmNlX2lkGAIgASgJQnyStRh4ChR3b3JrZmxvd19pbnN0YW5jZV9pZBIEVVVJRBgBSjQKEndvcmtmbG93X2luc3RhbmNlcxILaW5zdGFuY2VfaWQaD3dvcmtmbG93X3NjaGVtYSADUiIKHmlkeF93b3JrZmxvd190YXNrc19pbnN0YW5jZV9pZBACEjIKCXN0ZXBfbmFtZRgDIAEoCUIfkrUYGwoJc3RlcF9uYW1lEgxWQVJDSEFSKDEwMCkYARJYCgR0eXBlGAQgASgOMi8uaW5zdXJldGVjaC53b3JrZmxvdy5lbnRpdHkudjEuV29ya2Zsb3dUYXNrVHlwZUIZkrUYFQoEdHlwZRILVkFSQ0hBUigyMCkYARJyCgthc3NpZ25lZF90bxgFIAEoCUJdkrUYWQoLYXNzaWduZWRfdG8SBFVVSURKIAoFdXNlcnMSB3VzZXJfaWQaDGF1dGhuX3NjaGVtYSAEUiIKHmlkeF93b3JrZmxvd190YXNrc19hc3NpZ25lZF90bxACEogBCgZzdGF0dXMYBiABKA4yMS5pbnN1cmV0ZWNoLndvcmtmbG93LmVudGl0eS52MS5Xb3JrZmxvd1Rhc2tTdGF0dXNCRZK1GEEKBnN0YXR1cxILVkFSQ0hBUigyMCkYAToJJ1BFTkRJTkcnUh0KGWlkeF93b3JrZmxvd190YXNrc19zdGF0dXMQAhJLCghkZWNpc2lvbhgHIAEoCUI5krUYNQoIZGVjaXNpb24SC1ZBUkNIQVIoMjApWhxBUFBST1ZFRCwgUkVKRUNURUQsIFJFVFVSTkVEEiYKCGNvbW1lbnRzGAggASgJQhSStRgQCghjb21tZW50cxIEVEVYVBJJCghkdWVfZGF0ZRgJIAEoCzIaLmdvb2dsZS5wcm90b2J1Zi5UaW1lc3RhbXBCG5K1GBcKCGR1ZV9kYXRlEgtUSU1FU1RBTVBUWhJRCgxjb21wbGV0ZWRfYXQYCiABKAsyGi5nb29nbGUucHJvdG9idWYuVGltZXN0YW1wQh+StRgbCgxjb21wbGV0ZWRfYXQSC1RJTUVTVEFNUFRaEnkKCmF1ZGl0X2luZm8YCyABKAsyHy5pbnN1cmV0ZWNoLmNvbW1vbi52MS5BdWRpdEluZm9CRJK1GEAKCmF1ZGl0X2luZm8SBUpTT05CGAE6Cyd7fSc6Ompzb25iWhpBdWRpdCB0cmFpbCBzdG9yZWQgYXMgSlNPTngBOkuKtRhHCg53b3JrZmxvd190YXNrcxIPd29ya2Zsb3dfc2NoZW1hGD0gASoeSW5kaXZpZHVhbCB3b3JrZmxvdyBzdGVwIHRhc2tzOAEqugEKEFdvcmtmbG93VGFza1R5cGUSIgoeV09SS0ZMT1dfVEFTS19UWVBFX1VOU1BFQ0lGSUVEEAASHwobV09SS0ZMT1dfVEFTS19UWVBFX0FQUFJPVkFMEAESHQoZV09SS0ZMT1dfVEFTS19UWVBFX1JFVklFVxACEiMKH1dPUktGTE9XX1RBU0tfVFlQRV9OT1RJRklDQVRJT04QAxIdChlXT1JLRkxPV19UQVNLX1RZUEVfQUNUSU9OEAQqyAEKEldvcmtmbG93VGFza1N0YXR1cxIkCiBXT1JLRkxPV19UQVNLX1NUQVRVU19VTlNQRUNJRklFRBAAEiAKHFdPUktGTE9XX1RBU0tfU1RBVFVTX1BFTkRJTkcQARIkCiBXT1JLRkxPV19UQVNLX1NUQVRVU19JTl9QUk9HUkVTUxACEiIKHldPUktGTE9XX1RBU0tfU1RBVFVTX0NPTVBMRVRFRBADEiAKHFdPUktGTE9XX1RBU0tfU1RBVFVTX1NLSVBQRUQQBEKfAgohY29tLmluc3VyZXRlY2gud29ya2Zsb3cuZW50aXR5LnYxQhFXb3JrZmxvd1Rhc2tQcm90b1ABWlBnaXRodWIuY29tL25ld2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL3dvcmtmbG93L2VudGl0eS92MTtlbnRpdHl2MaICA0lXRaoCHUluc3VyZXRlY2guV29ya2Zsb3cuRW50aXR5LlYxygIdSW5zdXJldGVjaFxXb3JrZmxvd1xFbnRpdHlcVjHiAilJbnN1cmV0ZWNoXFdvcmtmbG93XEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCIEluc3VyZXRlY2g6OldvcmtmbG93OjpFbnRpdHk6OlYxYgZwcm90bzM", [file_insuretech_common_v1_types, file_google_protobuf_timestamp, file_insuretech_common_v1_db]);
 
 /**
  * Workflow task (step execution)
@@ -47,9 +47,9 @@ export type WorkflowTask = Message<"insuretech.workflow.entity.v1.WorkflowTask">
   /**
    * @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
    *
-   * @generated from field: insuretech.workflow.entity.v1.TaskType type = 4;
+   * @generated from field: insuretech.workflow.entity.v1.WorkflowTaskType type = 4;
    */
-  type: TaskType;
+  type: WorkflowTaskType;
 
   /**
    * @inject_tag: gorm:"column:assigned_to"
@@ -61,9 +61,9 @@ export type WorkflowTask = Message<"insuretech.workflow.entity.v1.WorkflowTask">
   /**
    * @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
    *
-   * @generated from field: insuretech.workflow.entity.v1.TaskStatus status = 6;
+   * @generated from field: insuretech.workflow.entity.v1.WorkflowTaskStatus status = 6;
    */
-  status: TaskStatus;
+  status: WorkflowTaskStatus;
 
   /**
    * @inject_tag: gorm:"column:decision"
@@ -94,7 +94,7 @@ export type WorkflowTask = Message<"insuretech.workflow.entity.v1.WorkflowTask">
   completedAt?: Timestamp;
 
   /**
-   * @inject_tag: gorm:"column:audit_info;not null"
+   * @inject_tag: gorm:"-"
    *
    * @generated from field: insuretech.common.v1.AuditInfo audit_info = 11;
    */
@@ -109,74 +109,74 @@ export const WorkflowTaskSchema: GenMessage<WorkflowTask> = /*@__PURE__*/
   messageDesc(file_insuretech_workflow_entity_v1_workflow_task, 0);
 
 /**
- * @generated from enum insuretech.workflow.entity.v1.TaskType
+ * @generated from enum insuretech.workflow.entity.v1.WorkflowTaskType
  */
-export enum TaskType {
+export enum WorkflowTaskType {
   /**
-   * @generated from enum value: TASK_TYPE_UNSPECIFIED = 0;
+   * @generated from enum value: WORKFLOW_TASK_TYPE_UNSPECIFIED = 0;
    */
   UNSPECIFIED = 0,
 
   /**
-   * @generated from enum value: TASK_TYPE_APPROVAL = 1;
+   * @generated from enum value: WORKFLOW_TASK_TYPE_APPROVAL = 1;
    */
   APPROVAL = 1,
 
   /**
-   * @generated from enum value: TASK_TYPE_REVIEW = 2;
+   * @generated from enum value: WORKFLOW_TASK_TYPE_REVIEW = 2;
    */
   REVIEW = 2,
 
   /**
-   * @generated from enum value: TASK_TYPE_NOTIFICATION = 3;
+   * @generated from enum value: WORKFLOW_TASK_TYPE_NOTIFICATION = 3;
    */
   NOTIFICATION = 3,
 
   /**
-   * @generated from enum value: TASK_TYPE_ACTION = 4;
+   * @generated from enum value: WORKFLOW_TASK_TYPE_ACTION = 4;
    */
   ACTION = 4,
 }
 
 /**
- * Describes the enum insuretech.workflow.entity.v1.TaskType.
+ * Describes the enum insuretech.workflow.entity.v1.WorkflowTaskType.
  */
-export const TaskTypeSchema: GenEnum<TaskType> = /*@__PURE__*/
+export const WorkflowTaskTypeSchema: GenEnum<WorkflowTaskType> = /*@__PURE__*/
   enumDesc(file_insuretech_workflow_entity_v1_workflow_task, 0);
 
 /**
- * @generated from enum insuretech.workflow.entity.v1.TaskStatus
+ * @generated from enum insuretech.workflow.entity.v1.WorkflowTaskStatus
  */
-export enum TaskStatus {
+export enum WorkflowTaskStatus {
   /**
-   * @generated from enum value: TASK_STATUS_UNSPECIFIED = 0;
+   * @generated from enum value: WORKFLOW_TASK_STATUS_UNSPECIFIED = 0;
    */
   UNSPECIFIED = 0,
 
   /**
-   * @generated from enum value: TASK_STATUS_PENDING = 1;
+   * @generated from enum value: WORKFLOW_TASK_STATUS_PENDING = 1;
    */
   PENDING = 1,
 
   /**
-   * @generated from enum value: TASK_STATUS_IN_PROGRESS = 2;
+   * @generated from enum value: WORKFLOW_TASK_STATUS_IN_PROGRESS = 2;
    */
   IN_PROGRESS = 2,
 
   /**
-   * @generated from enum value: TASK_STATUS_COMPLETED = 3;
+   * @generated from enum value: WORKFLOW_TASK_STATUS_COMPLETED = 3;
    */
   COMPLETED = 3,
 
   /**
-   * @generated from enum value: TASK_STATUS_SKIPPED = 4;
+   * @generated from enum value: WORKFLOW_TASK_STATUS_SKIPPED = 4;
    */
   SKIPPED = 4,
 }
 
 /**
- * Describes the enum insuretech.workflow.entity.v1.TaskStatus.
+ * Describes the enum insuretech.workflow.entity.v1.WorkflowTaskStatus.
  */
-export const TaskStatusSchema: GenEnum<TaskStatus> = /*@__PURE__*/
+export const WorkflowTaskStatusSchema: GenEnum<WorkflowTaskStatus> = /*@__PURE__*/
   enumDesc(file_insuretech_workflow_entity_v1_workflow_task, 1);
 

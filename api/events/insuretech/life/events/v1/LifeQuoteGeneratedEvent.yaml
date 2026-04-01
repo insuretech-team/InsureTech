@@ -1,0 +1,31 @@
+LifeQuoteGeneratedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    product_id:
+      type: string
+    customer_id:
+      type: string
+    insured_person_name:
+      type: string
+    age_at_entry:
+      type: integer
+      format: int32
+    sum_assured:
+      type: string
+      format: int64
+    total_premium:
+      type: string
+      format: int64
+    valid_until:
+      type: string
+      format: date-time
+    generated_at:
+      type: string
+      format: date-time
+  description: LifeQuoteGeneratedEvent is emitted when a quote is generated

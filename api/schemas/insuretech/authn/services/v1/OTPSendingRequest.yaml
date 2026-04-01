@@ -3,7 +3,8 @@ OTPSendingRequest:
   properties:
     recipient:
       type: string
-      description: 'Phone: 8801XXXXXXXXX or email'
+      description: 'For sms: accepts 017..., +880..., or 00880... and is normalized
+        to +8801XXXXXXXXX. For email: send a valid email address.'
     type:
       type: string
       description: registration, login, reset_password

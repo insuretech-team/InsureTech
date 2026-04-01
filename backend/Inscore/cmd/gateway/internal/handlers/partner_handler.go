@@ -1,4 +1,4 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
@@ -7,7 +7,6 @@ import (
 
 	partnerservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/partner/services/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -38,7 +37,7 @@ func NewPartnerHandler(conn *grpc.ClientConn) *PartnerHandler {
 func (h *PartnerHandler) Create(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.CreatePartnerRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreatePartner(ctx, &req)
@@ -56,7 +55,7 @@ func (h *PartnerHandler) Update(w http.ResponseWriter, r *http.Request) {
 	partnerID := r.PathValue("partner_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.UpdatePartnerRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.PartnerId = partnerID
@@ -91,7 +90,7 @@ func (h *PartnerHandler) Verify(w http.ResponseWriter, r *http.Request) {
 	partnerID := r.PathValue("partner_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.VerifyPartnerRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.PartnerId = partnerID
@@ -103,7 +102,7 @@ func (h *PartnerHandler) UpdateStatus(w http.ResponseWriter, r *http.Request) {
 	partnerID := r.PathValue("partner_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.UpdatePartnerStatusRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.PartnerId = partnerID
@@ -133,7 +132,7 @@ func (h *PartnerHandler) UpdateCommission(w http.ResponseWriter, r *http.Request
 	partnerID := r.PathValue("partner_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.UpdateCommissionStructureRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.PartnerId = partnerID
@@ -153,7 +152,7 @@ func (h *PartnerHandler) RotateAPIKey(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req partnerservicev1.RotatePartnerAPIKeyRequest
 		if len(body) > 0 {
-			if err := protojson.Unmarshal(body, &req); err != nil {
+			if err := protoUnmarshal(body, &req); err != nil {
 				return nil, err
 			}
 		}

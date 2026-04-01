@@ -5,12 +5,13 @@ import (
 	"errors"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"google.golang.org/grpc/codes"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/grpc/status"
 
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/storage/internal/service"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
+	storageentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/entity/v1"
 	storageservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/storage/service/v1"
 )
 
@@ -28,22 +29,7 @@ func NewStorageHandler(storageService storageServiceIface) *StorageHandler {
 }
 
 func actorFromContext(ctx context.Context, fallback string) string {
-	md, ok := metadata.FromIncomingContext(ctx)
-	if !ok {
-		return fallback
-	}
-	keys := []string{"x-user-id", "x-actor-id", "x-sub", "user-id"}
-	for _, k := range keys {
-		vals := md.Get(k)
-		if len(vals) == 0 {
-			continue
-		}
-		v := strings.TrimSpace(vals[0])
-		if v != "" {
-			return v
-		}
-	}
-	return fallback
+	return grpcmeta.ActorID(ctx, fallback)
 }
 
 // UploadFile uploads a file to storage
@@ -358,6 +344,51 @@ func (h *StorageHandler) DeleteFile(ctx context.Context, req *storageservicev1.D
 func (h *StorageHandler) ListFiles(ctx context.Context, req *storageservicev1.ListFilesRequest) (*storageservicev1.ListFilesResponse, error) {
 	if req.TenantId == "" {
 		return nil, status.Error(codes.InvalidArgument, "tenant_id is required")
+	}
+	// BUG FIX: B2C users have ins_tenant="root" in their JWT (not a UUID).
+	// "root" is a special marker for the global B2C namespace — not a UUID tenant.
+	// When tenant is "root", skip tenant_id filter and use uploaded_by instead.
+	if req.TenantId == "root" {
+		if req.UploadedBy == "" && req.ReferenceId == "" {
+			// No specific filter: return empty to avoid full-table dump
+			return &storageservicev1.ListFilesResponse{
+				Files: []*storageentityv1.StoredFile{},
+				Page: &commonv1.PaginationResponse{
+					TotalItems:  0,
+					TotalPages:  0,
+					CurrentPage: 1,
+					PageSize:    50,
+				},
+			}, nil
+		}
+		// Use ListFiles with empty tenantID (storage service omits tenant_id filter when empty)
+		limit := int32(50)
+		offset := int32(0)
+		if req.Page != nil {
+			if req.Page.PageSize > 0 {
+				limit = req.Page.PageSize
+			}
+			if req.Page.Page > 1 {
+				offset = (req.Page.Page - 1) * limit
+			}
+		}
+		files, total, err := h.storageService.ListFiles(ctx, "", req.FileType, req.ReferenceId, req.ReferenceType, req.UploadedBy, limit, offset)
+		if err != nil {
+			return nil, status.Errorf(codes.Internal, "failed to list files: %v", err)
+		}
+		totalPages := int32(0)
+		if total > 0 && limit > 0 {
+			totalPages = int32((total + int(limit) - 1) / int(limit))
+		}
+		return &storageservicev1.ListFilesResponse{
+			Files: files,
+			Page: &commonv1.PaginationResponse{
+				TotalItems:  int32(total),
+				TotalPages:  totalPages,
+				CurrentPage: 1,
+				PageSize:    limit,
+			},
+		}, nil
 	}
 	tenantID := req.TenantId
 

@@ -1,0 +1,474 @@
+syntax = "proto3";
+
+package insuretech.vehicle.entity.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/vehicle/entity/v1;vehiclev1";
+option csharp_namespace = "Insuretech.Vehicle.Entity.V1";
+
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/db.proto";
+import "insuretech/common/v1/types.proto";
+
+// Vehicle represents a vehicle model/type in the database
+// Maps to 'vehicles' table in vehicle_schema
+message Vehicle {
+  option (insuretech.common.v1.table) = {
+    table_name: "vehicles"
+    schema_name: "vehicle_schema"
+    migration_order: 230
+    is_table: true
+    comment: "Vehicle master data (models, types, base prices)"
+    soft_delete: true
+    audit_fields: true
+    enable_rls: false
+  };
+
+  string vehicle_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "vehicle_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Vehicle UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:vehicle_id;not null"
+
+  string model = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "model"
+      sql_type: "VARCHAR(100)"
+      not_null: true
+      comment: "Vehicle model name"
+      index: {
+        index_name: "idx_vehicles_model"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:model;not null"
+
+  VehicleType type = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "type"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      comment: "Vehicle type (Bike, Car, etc.)"
+      index: {
+        index_name: "idx_vehicles_type"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:type;not null;serializer:proto_enum"
+
+  int64 price = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "price"
+      sql_type: "BIGINT"
+      not_null: true
+      comment: "Base price in smallest currency unit"
+    }
+  ];
+  // @inject_tag: gorm:"column:price;not null"
+
+  string manufacturer = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "manufacturer"
+      sql_type: "VARCHAR(100)"
+      comment: "Vehicle manufacturer"
+    }
+  ];
+  // @inject_tag: gorm:"column:manufacturer"
+
+  int32 year = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "year"
+      sql_type: "INTEGER"
+      comment: "Model year"
+    }
+  ];
+  // @inject_tag: gorm:"column:year"
+
+  string image_uri = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "image_uri"
+      sql_type: "VARCHAR(500)"
+      comment: "Vehicle image URL"
+    }
+  ];
+  // @inject_tag: gorm:"column:image_uri"
+
+  bool is_active = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "is_active"
+      sql_type: "BOOLEAN"
+      not_null: true
+      default_value: "true"
+    }
+  ];
+  // @inject_tag: gorm:"column:is_active;not null"
+
+  map<string, string> metadata = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "metadata"
+      sql_type: "JSONB"
+      comment: "Additional vehicle data"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:metadata;serializer:json"
+
+  google.protobuf.Timestamp created_at = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp deleted_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "deleted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "Soft delete timestamp"
+    }
+  ];
+  // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
+}
+
+enum VehicleType {
+  VEHICLE_TYPE_UNSPECIFIED = 0;
+  VEHICLE_TYPE_BIKE = 1;        // Two wheeler
+  VEHICLE_TYPE_CAR = 2;         // Four wheeler
+  VEHICLE_TYPE_COMMERCIAL = 3;  // Commercial vehicle
+  VEHICLE_TYPE_TRUCK = 4;       // Heavy vehicle
+  VEHICLE_TYPE_BUS = 5;         // Bus
+}
+
+// VehicleRegistration represents a specific registered vehicle instance
+// Maps to 'vehicle_registrations' table in vehicle_schema
+message VehicleRegistration {
+  option (insuretech.common.v1.table) = {
+    table_name: "vehicle_registrations"
+    schema_name: "vehicle_schema"
+    migration_order: 231
+    is_table: true
+    comment: "Registered vehicle instances for insurance"
+    soft_delete: false
+    audit_fields: true
+    enable_rls: true
+  };
+
+  string registration_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "registration_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+      comment: "Primary key - Registration UUID"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:registration_id;not null"
+
+  string vehicle_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "vehicle_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to vehicles"
+      foreign_key: {
+        references_table: "vehicles"
+        references_column: "vehicle_id"
+        references_schema: "vehicle_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_reg_vehicle_id"
+      }
+      index: {
+        index_name: "idx_reg_vehicle_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:vehicle_id;not null"
+
+  string owner_id = 3 [
+    (insuretech.common.v1.column) = {
+      column_name: "owner_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to users (vehicle owner)"
+      foreign_key: {
+        references_table: "users"
+        references_column: "user_id"
+        references_schema: "authn_schema"
+        on_delete: REFERENTIAL_ACTION_RESTRICT
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_reg_owner_id"
+      }
+      index: {
+        index_name: "idx_reg_owner_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:owner_id;not null"
+
+  string registration_number = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "registration_number"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      unique: true
+      comment: "Vehicle registration number (e.g., TN-01-AB-1234)"
+      index: {
+        index_name: "idx_reg_number"
+        index_type: INDEX_TYPE_BTREE
+        unique: true
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:registration_number;not null"
+
+  int32 registration_year = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "registration_year"
+      sql_type: "INTEGER"
+      not_null: true
+      comment: "Year of registration"
+    }
+  ];
+  // @inject_tag: gorm:"column:registration_year;not null"
+
+  string registration_state = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "registration_state"
+      sql_type: "VARCHAR(10)"
+      not_null: true
+      comment: "State code from registration number (e.g., TN, AP, KL)"
+      index: {
+        index_name: "idx_reg_state"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:registration_state;not null"
+
+  RegistrationStatus status = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ACTIVE'"
+      comment: "Registration status"
+    }
+  ];
+  // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
+
+  int32 vehicle_age = 8 [
+    (insuretech.common.v1.column) = {
+      column_name: "vehicle_age"
+      sql_type: "INTEGER"
+      comment: "Calculated age in years"
+    }
+  ];
+  // @inject_tag: gorm:"column:vehicle_age"
+
+  int64 current_value = 9 [
+    (insuretech.common.v1.column) = {
+      column_name: "current_value"
+      sql_type: "BIGINT"
+      comment: "Depreciated current value"
+    }
+  ];
+  // @inject_tag: gorm:"column:current_value"
+
+  map<string, string> additional_info = 10 [
+    (insuretech.common.v1.column) = {
+      column_name: "additional_info"
+      sql_type: "JSONB"
+      comment: "Additional registration data"
+      is_json: true
+    }
+  ];
+  // @inject_tag: gorm:"column:additional_info;serializer:json"
+
+  google.protobuf.Timestamp created_at = 11 [
+    (insuretech.common.v1.column) = {
+      column_name: "created_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+      exclude_from_update: true
+    }
+  ];
+  // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp updated_at = 12 [
+    (insuretech.common.v1.column) = {
+      column_name: "updated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+      exclude_from_insert: true
+    }
+  ];
+  // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
+}
+
+enum RegistrationStatus {
+  REGISTRATION_STATUS_UNSPECIFIED = 0;
+  REGISTRATION_STATUS_ACTIVE = 1;
+  REGISTRATION_STATUS_SUSPENDED = 2;
+  REGISTRATION_STATUS_EXPIRED = 3;
+}
+
+// VehiclePremiumCalculation stores calculated premiums
+// Maps to 'vehicle_premium_calculations' table in vehicle_schema
+message VehiclePremiumCalculation {
+  option (insuretech.common.v1.table) = {
+    table_name: "vehicle_premium_calculations"
+    schema_name: "vehicle_schema"
+    migration_order: 232
+    is_table: true
+    comment: "Vehicle insurance premium calculations"
+    soft_delete: false
+    audit_fields: false
+    enable_rls: false
+  };
+
+  string calculation_id = 1 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_id"
+      sql_type: "UUID"
+      primary_key: true
+      not_null: true
+      default_value: "gen_random_uuid()"
+    }
+  ];
+  // @inject_tag: gorm:"primaryKey;column:calculation_id;not null"
+
+  string registration_id = 2 [
+    (insuretech.common.v1.column) = {
+      column_name: "registration_id"
+      sql_type: "UUID"
+      not_null: true
+      comment: "Foreign key to vehicle_registrations"
+      foreign_key: {
+        references_table: "vehicle_registrations"
+        references_column: "registration_id"
+        references_schema: "vehicle_schema"
+        on_delete: REFERENTIAL_ACTION_CASCADE
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_calc_reg_id"
+      }
+      index: {
+        index_name: "idx_calc_reg_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:registration_id;not null"
+
+  insuretech.common.v1.Money base_premium = 3;
+  // @inject_tag: gorm:"column:base_premium;serializer:proto_money"
+  
+  float type_multiplier = 4 [
+    (insuretech.common.v1.column) = {
+      column_name: "type_multiplier"
+      sql_type: "DECIMAL(3,2)"
+      comment: "Vehicle type multiplier"
+    }
+  ];
+  // @inject_tag: gorm:"column:type_multiplier"
+
+  float age_multiplier = 5 [
+    (insuretech.common.v1.column) = {
+      column_name: "age_multiplier"
+      sql_type: "DECIMAL(3,2)"
+      comment: "Vehicle age multiplier"
+    }
+  ];
+  // @inject_tag: gorm:"column:age_multiplier"
+
+  float value_multiplier = 6 [
+    (insuretech.common.v1.column) = {
+      column_name: "value_multiplier"
+      sql_type: "DECIMAL(3,2)"
+      comment: "Depreciated value multiplier"
+    }
+  ];
+  // @inject_tag: gorm:"column:value_multiplier"
+
+  float location_multiplier = 7 [
+    (insuretech.common.v1.column) = {
+      column_name: "location_multiplier"
+      sql_type: "DECIMAL(3,2)"
+      comment: "Location/state multiplier"
+    }
+  ];
+  // @inject_tag: gorm:"column:location_multiplier"
+
+  // Third Party premiums
+  insuretech.common.v1.Money tp_premium_1_year = 8;
+  // @inject_tag: gorm:"column:tp_premium_1_year;serializer:proto_money"
+  insuretech.common.v1.Money tp_premium_2_year = 9;
+  // @inject_tag: gorm:"column:tp_premium_2_year;serializer:proto_money"
+  insuretech.common.v1.Money tp_premium_3_year = 10;
+  // @inject_tag: gorm:"column:tp_premium_3_year;serializer:proto_money"
+
+  // Comprehensive premiums
+  insuretech.common.v1.Money comp_premium_1_year = 11;
+  // @inject_tag: gorm:"column:comp_premium_1_year;serializer:proto_money"
+  insuretech.common.v1.Money comp_premium_2_year = 12;
+  // @inject_tag: gorm:"column:comp_premium_2_year;serializer:proto_money"
+  insuretech.common.v1.Money comp_premium_3_year = 13;
+  // @inject_tag: gorm:"column:comp_premium_3_year;serializer:proto_money"
+
+  bool accidental_cover = 14 [
+    (insuretech.common.v1.column) = {
+      column_name: "accidental_cover"
+      sql_type: "BOOLEAN"
+      default_value: "false"
+    }
+  ];
+  // @inject_tag: gorm:"column:accidental_cover"
+
+  google.protobuf.Timestamp calculated_at = 15 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculated_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      not_null: true
+      default_value: "CURRENT_TIMESTAMP"
+    }
+  ];
+  // @inject_tag: gorm:"column:calculated_at;not null;serializer:proto_timestamp"
+
+  int32 calculation_duration_ms = 16 [
+    (insuretech.common.v1.column) = {
+      column_name: "calculation_duration_ms"
+      sql_type: "INTEGER"
+      comment: "Calculation time in milliseconds"
+    }
+  ];
+  // @inject_tag: gorm:"column:calculation_duration_ms"
+}

@@ -1,6 +1,7 @@
 using Grpc.Net.Client;
 using Insuretech.Payment.Services.V1;
 using Microsoft.Extensions.Configuration;
+using PaymentService = Insuretech.Payment.Services.V1.PaymentService;
 
 namespace PoliSync.Infrastructure.Clients;
 

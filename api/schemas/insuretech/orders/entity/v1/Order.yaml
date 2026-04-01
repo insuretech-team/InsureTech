@@ -38,15 +38,15 @@ Order:
       default: BDT
     payment_id:
       type: string
-      description: "Payment fields \u2014 populated after InitiatePayment\r\n @inject_tag:\
+      description: "Payment fields \u2014 populated after InitiatePayment\n @inject_tag:\
         \ gorm:\"column:payment_id\""
     payment_gateway_ref:
       type: string
       description: '@inject_tag: gorm:"column:payment_gateway_ref"'
     policy_id:
       type: string
-      description: "Policy fields \u2014 populated after PolicyIssued\r\n @inject_tag:\
-        \ gorm:\"column:policy_id\""
+      description: "Policy fields \u2014 populated after insurer approval and PolicyIssued\n\
+        \ @inject_tag: gorm:\"column:policy_id\""
     cancellation_reason:
       type: string
       description: '@inject_tag: gorm:"column:cancellation_reason"'
@@ -117,9 +117,33 @@ Order:
     purchase_order_id:
       type: string
       description: '@inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"'
-  description: "Order represents a purchase order for an insurance policy.\r\n Created\
-    \ from an approved quotation \u2192 payment \u2192 policy issuance flow.\r\n Maps\
-    \ to 'orders' table in insurance_schema."
+    proposal_id:
+      type: string
+      description: '@inject_tag: gorm:"column:proposal_id"'
+    refund_id:
+      type: string
+      description: '@inject_tag: gorm:"column:refund_id"'
+    insurer_id:
+      type: string
+      description: '@inject_tag: gorm:"column:insurer_id"'
+    proposal_status:
+      allOf:
+      - $ref: '#/components/schemas/OrderProposalStatus'
+      x-database-default: ORDER_PROPOSAL_STATUS_NOT_SUBMITTED
+    proposal_submitted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:proposal_submitted_at;serializer:proto_timestamp"'
+    proposal_decided_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:proposal_decided_at;serializer:proto_timestamp"'
+    proposal_decision_reason:
+      type: string
+      description: '@inject_tag: gorm:"column:proposal_decision_reason"'
+  description: "Order represents a purchase order for an insurance policy.\n Created\
+    \ from an approved quotation \u2192 payment \u2192 insurer proposal \u2192 policy\
+    \ issuance/refund flow.\n Maps to 'orders' table in insurance_schema."
   required:
   - order_id
   - order_number
@@ -137,3 +161,4 @@ Order:
   - billing_status
   - fulfillment_status
   - manual_review_required
+  - proposal_status

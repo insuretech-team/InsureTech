@@ -1,0 +1,12 @@
+ActuarialPremiumCalculationRequest:
+  type: object
+  properties:
+    input:
+      $ref: '#/components/schemas/PremiumCalculationInput'
+    calculation_reference:
+      type: string
+    calculated_by:
+      type: string
+    save_calculation:
+      type: boolean
+  description: Premium calculation requests/responses

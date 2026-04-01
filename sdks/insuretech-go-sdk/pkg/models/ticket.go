@@ -6,19 +6,19 @@ import (
 
 // Ticket represents a ticket
 type Ticket struct {
+	AssignedTo string `json:"assigned_to,omitempty"`
+	AuditInfo interface{} `json:"audit_info"`
+	BeneficiaryId string `json:"beneficiary_id"`
+	Category *TicketCategory `json:"category"`
 	ClosedAt time.Time `json:"closed_at,omitempty"`
-	TicketNumber string `json:"ticket_number"`
-	Type *TicketType `json:"type"`
+	Description string `json:"description"`
+	Id string `json:"id"`
+	Priority interface{} `json:"priority"`
+	RelatedEntityId string `json:"related_entity_id,omitempty"`
 	RelatedEntityType string `json:"related_entity_type,omitempty"`
 	ResolvedAt time.Time `json:"resolved_at,omitempty"`
-	Category *TicketCategory `json:"category"`
-	Priority interface{} `json:"priority"`
-	Description string `json:"description"`
-	RelatedEntityId string `json:"related_entity_id,omitempty"`
-	AssignedTo string `json:"assigned_to,omitempty"`
-	Id string `json:"id"`
-	BeneficiaryId string `json:"beneficiary_id"`
-	Subject string `json:"subject"`
 	Status interface{} `json:"status"`
-	AuditInfo interface{} `json:"audit_info"`
+	Subject string `json:"subject"`
+	TicketNumber string `json:"ticket_number"`
+	Type *TicketType `json:"type"`
 }

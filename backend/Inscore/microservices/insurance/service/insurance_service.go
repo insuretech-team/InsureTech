@@ -5,73 +5,80 @@ import (
 	"fmt"
 	"strings"
 
+	"go.uber.org/zap"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/emptypb"
 	"gorm.io/gorm"
-	"go.uber.org/zap"
 
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/insurance/internal/repository"
-	insurancev1 "github.com/newage-saint/insuretech/gen/go/insuretech/insurance/services/v1"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	claimsv1 "github.com/newage-saint/insuretech/gen/go/insuretech/claims/entity/v1"
+	insurancev1 "github.com/newage-saint/insuretech/gen/go/insuretech/insurance/services/v1"
 )
 
 type InsuranceService struct {
 	insurancev1.UnimplementedInsuranceServiceServer
-	productRepo                  *repository.ProductRepository
-	productPlanRepo              *repository.ProductPlanRepository
-	riderRepo                    *repository.RiderRepository
-	pricingRepo                  *repository.PricingConfigRepository
-	policyRepo                   *repository.PolicyRepository
-	claimRepo                    *repository.ClaimRepository
-	quoteRepo                    *repository.QuoteRepository
-	underwritingDecisionRepo     *repository.UnderwritingDecisionRepository
-	healthDeclarationRepo        *repository.HealthDeclarationRepository
-	renewalScheduleRepo          *repository.RenewalScheduleRepository
-	renewalReminderRepo          *repository.RenewalReminderRepository
-	gracePeriodRepo              *repository.GracePeriodRepository
-	insurerRepo                  *repository.InsurerRepository
-	insurerConfigRepo            *repository.InsurerConfigRepository
-	insurerProductRepo           *repository.InsurerProductRepository
-	fraudRuleRepo                *repository.FraudRuleRepository
-	fraudCaseRepo                *repository.FraudCaseRepository
-	fraudAlertRepo               *repository.FraudAlertRepository
-	beneficiaryRepo              *repository.BeneficiaryRepository
-	individualBeneficiaryRepo    *repository.IndividualBeneficiaryRepository
-	businessBeneficiaryRepo      *repository.BusinessBeneficiaryRepository
-	endorsementRepo              *repository.EndorsementRepository
-	quotationRepo                *repository.QuotationRepository
-	policyServiceRequestRepo     *repository.PolicyServiceRequestRepository
-	serviceProviderRepo          *repository.ServiceProviderRepository
+	productRepo               *repository.ProductRepository
+	productPlanRepo           *repository.ProductPlanRepository
+	riderRepo                 *repository.RiderRepository
+	pricingRepo               *repository.PricingConfigRepository
+	policyRepo                *repository.PolicyRepository
+	claimRepo                 *repository.ClaimRepository
+	claimDocumentRepo         *repository.ClaimDocumentRepository
+	claimApprovalRepo         *repository.ClaimApprovalRepository
+	quoteRepo                 *repository.QuoteRepository
+	underwritingDecisionRepo  *repository.UnderwritingDecisionRepository
+	healthDeclarationRepo     *repository.HealthDeclarationRepository
+	renewalScheduleRepo       *repository.RenewalScheduleRepository
+	renewalReminderRepo       *repository.RenewalReminderRepository
+	gracePeriodRepo           *repository.GracePeriodRepository
+	insurerRepo               *repository.InsurerRepository
+	insurerConfigRepo         *repository.InsurerConfigRepository
+	insurerProductRepo        *repository.InsurerProductRepository
+	fraudRuleRepo             *repository.FraudRuleRepository
+	fraudCaseRepo             *repository.FraudCaseRepository
+	fraudAlertRepo            *repository.FraudAlertRepository
+	beneficiaryRepo           *repository.BeneficiaryRepository
+	individualBeneficiaryRepo *repository.IndividualBeneficiaryRepository
+	businessBeneficiaryRepo   *repository.BusinessBeneficiaryRepository
+	endorsementRepo           *repository.EndorsementRepository
+	quotationRepo             *repository.QuotationRepository
+	insuranceProposalRepo     *repository.InsuranceProposalRepository
+	policyServiceRequestRepo  *repository.PolicyServiceRequestRepository
+	serviceProviderRepo       *repository.ServiceProviderRepository
 }
 
 func NewInsuranceService(db *gorm.DB) *InsuranceService {
 	return &InsuranceService{
-		productRepo:              repository.NewProductRepository(db),
-		productPlanRepo:          repository.NewProductPlanRepository(db),
-		riderRepo:                repository.NewRiderRepository(db),
-		pricingRepo:              repository.NewPricingConfigRepository(db),
-		policyRepo:               repository.NewPolicyRepository(db),
-		claimRepo:                repository.NewClaimRepository(db),
-		quoteRepo:                repository.NewQuoteRepository(db),
-		underwritingDecisionRepo: repository.NewUnderwritingDecisionRepository(db),
-		healthDeclarationRepo:    repository.NewHealthDeclarationRepository(db),
-		renewalScheduleRepo:      repository.NewRenewalScheduleRepository(db),
-		renewalReminderRepo:      repository.NewRenewalReminderRepository(db),
-		gracePeriodRepo:          repository.NewGracePeriodRepository(db),
-		insurerRepo:              repository.NewInsurerRepository(db),
-		insurerConfigRepo:        repository.NewInsurerConfigRepository(db),
-		insurerProductRepo:       repository.NewInsurerProductRepository(db),
-		fraudRuleRepo:            repository.NewFraudRuleRepository(db),
-		fraudCaseRepo:            repository.NewFraudCaseRepository(db),
-		fraudAlertRepo:           repository.NewFraudAlertRepository(db),
-		beneficiaryRepo:          repository.NewBeneficiaryRepository(db),
+		productRepo:               repository.NewProductRepository(db),
+		productPlanRepo:           repository.NewProductPlanRepository(db),
+		riderRepo:                 repository.NewRiderRepository(db),
+		pricingRepo:               repository.NewPricingConfigRepository(db),
+		policyRepo:                repository.NewPolicyRepository(db),
+		claimRepo:                 repository.NewClaimRepository(db),
+		claimDocumentRepo:         repository.NewClaimDocumentRepository(db),
+		claimApprovalRepo:         repository.NewClaimApprovalRepository(db),
+		quoteRepo:                 repository.NewQuoteRepository(db),
+		underwritingDecisionRepo:  repository.NewUnderwritingDecisionRepository(db),
+		healthDeclarationRepo:     repository.NewHealthDeclarationRepository(db),
+		renewalScheduleRepo:       repository.NewRenewalScheduleRepository(db),
+		renewalReminderRepo:       repository.NewRenewalReminderRepository(db),
+		gracePeriodRepo:           repository.NewGracePeriodRepository(db),
+		insurerRepo:               repository.NewInsurerRepository(db),
+		insurerConfigRepo:         repository.NewInsurerConfigRepository(db),
+		insurerProductRepo:        repository.NewInsurerProductRepository(db),
+		fraudRuleRepo:             repository.NewFraudRuleRepository(db),
+		fraudCaseRepo:             repository.NewFraudCaseRepository(db),
+		fraudAlertRepo:            repository.NewFraudAlertRepository(db),
+		beneficiaryRepo:           repository.NewBeneficiaryRepository(db),
 		individualBeneficiaryRepo: repository.NewIndividualBeneficiaryRepository(db),
-		businessBeneficiaryRepo:  repository.NewBusinessBeneficiaryRepository(db),
-		endorsementRepo:          repository.NewEndorsementRepository(db),
-		quotationRepo:            repository.NewQuotationRepository(db),
-		policyServiceRequestRepo: repository.NewPolicyServiceRequestRepository(db),
-		serviceProviderRepo:      repository.NewServiceProviderRepository(db),
+		businessBeneficiaryRepo:   repository.NewBusinessBeneficiaryRepository(db),
+		endorsementRepo:           repository.NewEndorsementRepository(db),
+		quotationRepo:             repository.NewQuotationRepository(db),
+		insuranceProposalRepo:     repository.NewInsuranceProposalRepository(db),
+		policyServiceRequestRepo:  repository.NewPolicyServiceRequestRepository(db),
+		serviceProviderRepo:       repository.NewServiceProviderRepository(db),
 	}
 }
 
@@ -285,6 +292,20 @@ func (s *InsuranceService) GetPricingConfig(ctx context.Context, req *insurancev
 	return &insurancev1.GetPricingConfigResponse{Config: config}, nil
 }
 
+func (s *InsuranceService) ListPricingConfigs(ctx context.Context, req *insurancev1.ListPricingConfigsRequest) (*insurancev1.ListPricingConfigsResponse, error) {
+	if req.ProductId == "" {
+		return nil, status.Error(codes.InvalidArgument, "product_id is required")
+	}
+
+	configs, err := s.pricingRepo.ListByProductID(ctx, req.ProductId)
+	if err != nil {
+		logger.Error("Failed to list pricing configs", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to list pricing configs")
+	}
+
+	return &insurancev1.ListPricingConfigsResponse{Configs: configs}, nil
+}
+
 // ========== POLICY CRUD ==========
 
 func (s *InsuranceService) CreatePolicy(ctx context.Context, req *insurancev1.CreatePolicyRequest) (*insurancev1.CreatePolicyResponse, error) {
@@ -384,6 +405,11 @@ func (s *InsuranceService) GetClaim(ctx context.Context, req *insurancev1.GetCla
 		return nil, status.Error(codes.Internal, "failed to get claim")
 	}
 
+	if err := s.enrichClaim(ctx, claim); err != nil {
+		logger.Error("Failed to enrich claim", zap.Error(err), zap.String("claim_id", req.ClaimId))
+		return nil, status.Error(codes.Internal, "failed to load claim details")
+	}
+
 	return &insurancev1.GetClaimResponse{Claim: claim}, nil
 }
 
@@ -399,6 +425,34 @@ func (s *InsuranceService) UpdateClaim(ctx context.Context, req *insurancev1.Upd
 	}
 
 	return &insurancev1.UpdateClaimResponse{Claim: claim}, nil
+}
+
+func (s *InsuranceService) CreateClaimDocument(ctx context.Context, req *insurancev1.CreateClaimDocumentRequest) (*insurancev1.CreateClaimDocumentResponse, error) {
+	if req.Document == nil {
+		return nil, status.Error(codes.InvalidArgument, "document is required")
+	}
+
+	document, err := s.claimDocumentRepo.Create(ctx, req.Document)
+	if err != nil {
+		logger.Error("Failed to create claim document", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to create claim document")
+	}
+
+	return &insurancev1.CreateClaimDocumentResponse{Document: document}, nil
+}
+
+func (s *InsuranceService) CreateClaimApproval(ctx context.Context, req *insurancev1.CreateClaimApprovalRequest) (*insurancev1.CreateClaimApprovalResponse, error) {
+	if req.Approval == nil {
+		return nil, status.Error(codes.InvalidArgument, "approval is required")
+	}
+
+	approval, err := s.claimApprovalRepo.Create(ctx, req.Approval)
+	if err != nil {
+		logger.Error("Failed to create claim approval", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to create claim approval")
+	}
+
+	return &insurancev1.CreateClaimApprovalResponse{Approval: approval}, nil
 }
 
 func (s *InsuranceService) ListClaims(ctx context.Context, req *insurancev1.ListClaimsRequest) (*insurancev1.ListClaimsResponse, error) {
@@ -417,10 +471,40 @@ func (s *InsuranceService) ListClaims(ctx context.Context, req *insurancev1.List
 		return nil, status.Error(codes.Internal, "failed to list claims")
 	}
 
+	for _, claim := range claims {
+		if err := s.enrichClaim(ctx, claim); err != nil {
+			logger.Error("Failed to enrich claim in list", zap.Error(err), zap.String("claim_id", claim.GetClaimId()))
+			return nil, status.Error(codes.Internal, "failed to load claim details")
+		}
+	}
+
 	return &insurancev1.ListClaimsResponse{
 		Claims: claims,
 		Total:  int32(total),
 	}, nil
+}
+
+func (s *InsuranceService) enrichClaim(ctx context.Context, claim *claimsv1.Claim) error {
+	if claim == nil || claim.ClaimId == "" {
+		return nil
+	}
+
+	documents, err := s.claimDocumentRepo.ListByClaimID(ctx, claim.ClaimId)
+	if err != nil {
+		return fmt.Errorf("list claim documents: %w", err)
+	}
+
+	approvals, err := s.claimApprovalRepo.ListByClaimID(ctx, claim.ClaimId)
+	if err != nil {
+		return fmt.Errorf("list claim approvals: %w", err)
+	}
+
+	claim.Documents = claim.Documents[:0]
+	claim.Documents = append(claim.Documents, documents...)
+	claim.Approvals = claim.Approvals[:0]
+	claim.Approvals = append(claim.Approvals, approvals...)
+
+	return nil
 }
 
 func (s *InsuranceService) DeletePolicy(ctx context.Context, req *insurancev1.DeletePolicyRequest) (*emptypb.Empty, error) {
@@ -1764,6 +1848,96 @@ func (s *InsuranceService) ListQuotations(ctx context.Context, req *insurancev1.
 	return &insurancev1.ListQuotationsResponse{
 		Quotations: quotations,
 		Total:      int32(total),
+	}, nil
+}
+
+// ========== INSURANCE PROPOSAL CRUD ==========
+
+func (s *InsuranceService) CreateInsuranceProposal(ctx context.Context, req *insurancev1.CreateInsuranceProposalRequest) (*insurancev1.CreateInsuranceProposalResponse, error) {
+	if req.Proposal == nil {
+		return nil, status.Error(codes.InvalidArgument, "proposal is required")
+	}
+
+	proposal, err := s.insuranceProposalRepo.Create(ctx, req.Proposal)
+	if err != nil {
+		logger.Error("Failed to create insurance proposal", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to create insurance proposal")
+	}
+
+	return &insurancev1.CreateInsuranceProposalResponse{Proposal: proposal}, nil
+}
+
+func (s *InsuranceService) GetInsuranceProposal(ctx context.Context, req *insurancev1.GetInsuranceProposalRequest) (*insurancev1.GetInsuranceProposalResponse, error) {
+	if req.ProposalId == "" {
+		return nil, status.Error(codes.InvalidArgument, "proposal_id is required")
+	}
+
+	proposal, err := s.insuranceProposalRepo.GetByID(ctx, req.ProposalId)
+	if err != nil {
+		if err == gorm.ErrRecordNotFound {
+			return nil, status.Error(codes.NotFound, "insurance proposal not found")
+		}
+		logger.Error("Failed to get insurance proposal", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to get insurance proposal")
+	}
+
+	return &insurancev1.GetInsuranceProposalResponse{Proposal: proposal}, nil
+}
+
+func (s *InsuranceService) UpdateInsuranceProposal(ctx context.Context, req *insurancev1.UpdateInsuranceProposalRequest) (*insurancev1.UpdateInsuranceProposalResponse, error) {
+	if req.Proposal == nil {
+		return nil, status.Error(codes.InvalidArgument, "proposal is required")
+	}
+
+	proposal, err := s.insuranceProposalRepo.Update(ctx, req.Proposal)
+	if err != nil {
+		logger.Error("Failed to update insurance proposal", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to update insurance proposal")
+	}
+
+	return &insurancev1.UpdateInsuranceProposalResponse{Proposal: proposal}, nil
+}
+
+func (s *InsuranceService) DeleteInsuranceProposal(ctx context.Context, req *insurancev1.DeleteInsuranceProposalRequest) (*emptypb.Empty, error) {
+	if req.ProposalId == "" {
+		return nil, status.Error(codes.InvalidArgument, "proposal_id is required")
+	}
+
+	if err := s.insuranceProposalRepo.Delete(ctx, req.ProposalId); err != nil {
+		logger.Error("Failed to delete insurance proposal", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to delete insurance proposal")
+	}
+
+	return &emptypb.Empty{}, nil
+}
+
+func (s *InsuranceService) ListInsuranceProposals(ctx context.Context, req *insurancev1.ListInsuranceProposalsRequest) (*insurancev1.ListInsuranceProposalsResponse, error) {
+	page := req.Page
+	if page < 1 {
+		page = 1
+	}
+	pageSize := req.PageSize
+	if pageSize < 1 {
+		pageSize = 50
+	}
+
+	proposals, total, err := s.insuranceProposalRepo.List(
+		ctx,
+		req.OrderId,
+		req.InsurerId,
+		req.CustomerId,
+		req.Status,
+		int(page),
+		int(pageSize),
+	)
+	if err != nil {
+		logger.Error("Failed to list insurance proposals", zap.Error(err))
+		return nil, status.Error(codes.Internal, "failed to list insurance proposals")
+	}
+
+	return &insurancev1.ListInsuranceProposalsResponse{
+		Proposals: proposals,
+		Total:     int32(total),
 	}, nil
 }
 

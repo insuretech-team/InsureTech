@@ -11,7 +11,6 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/config"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/repository"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
-	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"github.com/stretchr/testify/require"
 )
 
@@ -111,7 +110,7 @@ func TestTokenService_LiveDB_RefreshAndRevoke(t *testing.T) {
 
 func TestTokenService_JWKSAndRandom(t *testing.T) {
 	svc, _, _ := newLiveTokenService(t)
-	resp, err := svc.GetJWKS(context.Background(), &authnservicev1.GetJWKSRequest{})
+	resp, err := svc.GetJWKSInternal(context.Background())
 	require.NoError(t, err)
 	require.Len(t, resp.Keys, 1)
 	require.Equal(t, "RSA", resp.Keys[0].Kty)

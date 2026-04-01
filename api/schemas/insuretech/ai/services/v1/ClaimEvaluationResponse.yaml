@@ -21,8 +21,5 @@ ClaimEvaluationResponse:
         type: string
         description: Missing documents
       description: Missing documents
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for claim evaluation operation. Returns operation
     results and status.

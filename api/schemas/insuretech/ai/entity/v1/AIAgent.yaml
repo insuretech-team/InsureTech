@@ -18,7 +18,7 @@ AIAgent:
       description: '@inject_tag: gorm:"column:model_name;not null"'
     status:
       allOf:
-      - $ref: '#/components/schemas/AiAgentStatus'
+      - $ref: '#/components/schemas/AIAgentStatus'
       x-database-default: IDLE
     capabilities:
       type: object

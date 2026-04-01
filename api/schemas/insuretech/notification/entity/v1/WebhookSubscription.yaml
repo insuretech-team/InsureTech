@@ -1,0 +1,77 @@
+WebhookSubscription:
+  type: object
+  properties:
+    subscription_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:subscription_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    subscriber_name:
+      type: string
+      description: '@inject_tag: gorm:"column:subscriber_name;not null"'
+    target_url:
+      type: string
+      description: '@inject_tag: gorm:"column:target_url;not null"'
+    secret:
+      type: string
+      description: '@inject_tag: gorm:"column:secret;not null"'
+    event_types:
+      type: array
+      items:
+        type: string
+        description: '@inject_tag: gorm:"column:event_types;serializer:json"'
+      description: '@inject_tag: gorm:"column:event_types;serializer:json"'
+    topic_groups:
+      type: array
+      items:
+        type: string
+        description: '@inject_tag: gorm:"column:topic_groups;serializer:json"'
+      description: '@inject_tag: gorm:"column:topic_groups;serializer:json"'
+    topics:
+      type: array
+      items:
+        type: string
+        description: '@inject_tag: gorm:"column:topics;serializer:json"'
+      description: '@inject_tag: gorm:"column:topics;serializer:json"'
+    channels:
+      type: array
+      items:
+        type: string
+        description: '@inject_tag: gorm:"column:channels;serializer:json"'
+      description: '@inject_tag: gorm:"column:channels;serializer:json"'
+    timeout_seconds:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:timeout_seconds;not null"'
+      default: 10
+    max_attempts:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:max_attempts;not null"'
+      default: 5
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: WebhookSubscription stores downstream subscribers for signed lifecycle
+    fanout.
+  required:
+  - subscription_id
+  - subscriber_name
+  - target_url
+  - secret
+  - timeout_seconds
+  - max_attempts
+  - is_active
+  - created_at
+  - updated_at

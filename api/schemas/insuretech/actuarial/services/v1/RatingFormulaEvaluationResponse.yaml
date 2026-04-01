@@ -1,0 +1,24 @@
+RatingFormulaEvaluationResponse:
+  type: object
+  properties:
+    calculation_id:
+      type: string
+    success:
+      type: boolean
+    result:
+      type: number
+      format: double
+    output_variables:
+      type: object
+    errors:
+      type: array
+      items:
+        type: string
+    execution_time_ms:
+      type: string
+      format: int64
+    calculated_at:
+      type: string
+      format: date-time
+  description: Response payload for rating formula evaluation operation. Returns operation
+    results and status.

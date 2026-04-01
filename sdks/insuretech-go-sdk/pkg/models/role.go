@@ -6,14 +6,14 @@ import (
 
 // Role represents a role
 type Role struct {
-	Name string `json:"name"`
-	IsSystem bool `json:"is_system"`
-	IsActive bool `json:"is_active"`
-	CreatedBy string `json:"created_by,omitempty"`
-	UpdatedAt time.Time `json:"updated_at"`
-	DeletedAt time.Time `json:"deleted_at,omitempty"`
-	Portal *Portal `json:"portal"`
-	Description string `json:"description,omitempty"`
 	CreatedAt time.Time `json:"created_at"`
+	CreatedBy string `json:"created_by,omitempty"`
+	DeletedAt time.Time `json:"deleted_at,omitempty"`
+	Description string `json:"description,omitempty"`
+	IsActive bool `json:"is_active"`
+	IsSystem bool `json:"is_system"`
+	Name string `json:"name"`
+	Portal *Portal `json:"portal"`
 	RoleId string `json:"role_id"`
+	UpdatedAt time.Time `json:"updated_at"`
 }

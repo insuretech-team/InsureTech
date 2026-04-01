@@ -70,7 +70,7 @@ message AccessContext {
   string ip_address  = 1;
   string user_agent  = 2;
   string device_id   = 3;
-  string token_id    = 4;  // jti — for revocation check
+  string token_id    = 4; // jti — for revocation check
   string session_id  = 5;
   bool   kyc_verified = 6;
   // Arbitrary key-value attributes for custom ABAC matchers
@@ -242,6 +242,12 @@ message ListPolicyRulesResponse {
 }
 
 // ── Portal Config ─────────────────────────────────────────────────────────────
+
+message ListPortalConfigsRequest {}
+message ListPortalConfigsResponse {
+  repeated insuretech.authz.entity.v1.PortalConfig configs = 1;
+  insuretech.common.v1.Error error                         = 2;
+}
 
 message GetPortalConfigRequest {
   insuretech.authz.entity.v1.Portal portal = 1 [(google.api.field_behavior) = REQUIRED];

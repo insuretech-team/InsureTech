@@ -1,0 +1,10 @@
+BusinessWorkflowDeletionRequest:
+  type: object
+  properties:
+    business_workflow_id:
+      type: string
+    permanent:
+      type: boolean
+      description: If true, hard delete instead of soft delete
+  description: Request payload for business workflow deletion operation. Contains
+    parameters required to execute the operation.

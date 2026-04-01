@@ -1,4 +1,4 @@
-FROM golang:1.25-alpine AS builder
+FROM golang:1.26-alpine AS builder
 
 WORKDIR /workspace
 
@@ -32,6 +32,7 @@ COPY go.mod ./
 # Runtime data directories (paths resolved relative to projectRoot = /app)
 COPY backend/inscore/db/migrations ./backend/inscore/db/migrations
 COPY backend/inscore/db/seeds      ./backend/inscore/db/seeds
+COPY ops ./ops
 COPY backend/inscore/configs       ./backend/inscore/configs
 COPY backend/inscore/secrets       ./backend/inscore/secrets
 

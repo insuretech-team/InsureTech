@@ -1,0 +1,25 @@
+PremiumCalculationResult:
+  type: object
+  properties:
+    base_premium:
+      type: number
+      format: double
+    net_premium:
+      type: number
+      format: double
+    gross_premium:
+      type: number
+      format: double
+    total_loadings:
+      type: number
+      format: double
+    total_discounts:
+      type: number
+      format: double
+    factor_breakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/FactorBreakdown'
+    currency:
+      type: string
+  description: PremiumCalculationResult represents the result of premium calculations

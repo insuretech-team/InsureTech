@@ -91,6 +91,16 @@ class SchemaGenerator:
 
         for field in fields:
             prop_name = field['name']
+
+            # Rule 01 + 03: Strip 'error' and bare 'message' from all *Response schemas.
+            # Errors are communicated via HTTP 4xx/5xx + Error envelope, never inside
+            # a success response body. 'message' strings are not useful for programmatic clients.
+            if original_name.endswith('Response'):
+                if prop_name == 'error':
+                    continue
+                if prop_name == 'message':
+                    continue
+
             prop_schema = self._map_type(field)
             has_ref = '$ref' in prop_schema
             default_value_to_add = None
@@ -415,8 +425,6 @@ class SchemaGenerator:
             if ref:
                 return {"$ref": ref}
             else:
-                # Debug: why did lookup fail?
-                print(f"    WARNING: No ref found for {full_name}")
                 # Fallback if not found (e.g. map entry or external like google.protobuf.Struct)
                 if full_name == "google.protobuf.Struct":
                      return {"type": "object"}
@@ -427,17 +435,14 @@ class SchemaGenerator:
                 # Map entries have names like "SomeMessage.SomeFieldEntry"
                 # These should be converted to proper OpenAPI objects with additionalProperties
                 if full_name.endswith('Entry') and '.' in full_name:
-                    # This is a protobuf map entry - convert to object with additionalProperties
-                    # Map<string, string> becomes: type: object, additionalProperties: {type: string}
-                    # For now, we'll use a generic object with string values
-                    # In the future, we could parse the actual key/value types
                     return {
                         "type": "object",
                         "additionalProperties": {"type": "string"},
                         "description": f"Map field (key-value pairs)"
                     }
                 
-                # Unknown type - return generic object
+                # Only warn for genuinely unknown types
+                print(f"    WARNING: No ref found for {full_name}")
                 return {"type": "object", "description": f"Unknown type: {full_name}"}
 
         return {"type": "string"} # Default fallback (e.g. unknown)

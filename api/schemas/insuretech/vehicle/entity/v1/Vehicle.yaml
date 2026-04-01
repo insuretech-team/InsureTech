@@ -1,0 +1,61 @@
+Vehicle:
+  type: object
+  properties:
+    vehicle_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:vehicle_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    model:
+      type: string
+      description: '@inject_tag: gorm:"column:model;not null"'
+    type:
+      $ref: '#/components/schemas/VehicleType'
+      description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
+    price:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:price;not null"'
+    manufacturer:
+      type: string
+      description: '@inject_tag: gorm:"column:manufacturer"'
+    year:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:year"'
+    image_uri:
+      type: string
+      description: '@inject_tag: gorm:"column:image_uri"'
+    is_active:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_active;not null"'
+      default: true
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"'
+  description: "Vehicle represents a vehicle model/type in the database\n Maps to\
+    \ 'vehicles' table in vehicle_schema"
+  required:
+  - vehicle_id
+  - model
+  - type
+  - price
+  - is_active
+  - created_at
+  - updated_at

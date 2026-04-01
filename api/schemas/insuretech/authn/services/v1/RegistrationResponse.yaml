@@ -3,8 +3,6 @@ RegistrationResponse:
   properties:
     user_id:
       type: string
-    message:
-      type: string
     otp_sent:
       type: boolean
     otp_id:
@@ -14,8 +12,5 @@ RegistrationResponse:
       type: integer
       format: int32
       description: Time until OTP expires (300 seconds = 5 min)
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for registration operation. Returns operation results
     and status.

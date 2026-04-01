@@ -27,7 +27,7 @@ func (r *FraudCaseRepository) Create(ctx context.Context, fraudCase *fraudv1.Fra
 		fraudCase.Id = uuid.NewString()
 	}
 	if fraudCase.CaseNumber == "" {
-		fraudCase.CaseNumber = "FRC-" + time.Now().UTC().Format("20060102-150405")
+		fraudCase.CaseNumber = newSequenceNumber("FRC", time.Now().UTC())
 	}
 	if fraudCase.Priority == fraudv1.CasePriority_CASE_PRIORITY_UNSPECIFIED {
 		fraudCase.Priority = fraudv1.CasePriority_CASE_PRIORITY_MEDIUM

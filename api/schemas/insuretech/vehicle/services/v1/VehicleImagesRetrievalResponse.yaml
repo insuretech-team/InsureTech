@@ -1,0 +1,10 @@
+VehicleImagesRetrievalResponse:
+  type: object
+  properties:
+    images:
+      type: object
+      additionalProperties:
+        type: string
+      description: 'key: vehicle_type or model, value: image_uri'
+  description: Response payload for vehicle images retrieval operation. Returns operation
+    results and status.

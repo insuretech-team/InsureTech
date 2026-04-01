@@ -66,9 +66,9 @@ namespace Insuretech.Workflow.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.GetMyTasksResponse> __Marshaller_insuretech_workflow_services_v1_GetMyTasksResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.GetMyTasksResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.CompleteTaskRequest> __Marshaller_insuretech_workflow_services_v1_CompleteTaskRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.CompleteTaskRequest.Parser));
+    static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest> __Marshaller_insuretech_workflow_services_v1_CompleteWorkflowTaskRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.CompleteTaskResponse> __Marshaller_insuretech_workflow_services_v1_CompleteTaskResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.CompleteTaskResponse.Parser));
+    static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse> __Marshaller_insuretech_workflow_services_v1_CompleteWorkflowTaskResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest> __Marshaller_insuretech_workflow_services_v1_GetWorkflowHistoryRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -115,12 +115,12 @@ namespace Insuretech.Workflow.Services.V1 {
         __Marshaller_insuretech_workflow_services_v1_GetMyTasksResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Workflow.Services.V1.CompleteTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteTaskResponse> __Method_CompleteTask = new grpc::Method<global::Insuretech.Workflow.Services.V1.CompleteTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteTaskResponse>(
+    static readonly grpc::Method<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse> __Method_CompleteTask = new grpc::Method<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "CompleteTask",
-        __Marshaller_insuretech_workflow_services_v1_CompleteTaskRequest,
-        __Marshaller_insuretech_workflow_services_v1_CompleteTaskResponse);
+        __Marshaller_insuretech_workflow_services_v1_CompleteWorkflowTaskRequest,
+        __Marshaller_insuretech_workflow_services_v1_CompleteWorkflowTaskResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest, global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryResponse> __Method_GetWorkflowHistory = new grpc::Method<global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest, global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryResponse>(
@@ -207,7 +207,7 @@ namespace Insuretech.Workflow.Services.V1 {
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Workflow.Services.V1.CompleteTaskResponse> CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest request, grpc::ServerCallContext context)
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse> CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -502,7 +502,7 @@ namespace Insuretech.Workflow.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Workflow.Services.V1.CompleteTaskResponse CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return CompleteTask(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -513,7 +513,7 @@ namespace Insuretech.Workflow.Services.V1 {
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Workflow.Services.V1.CompleteTaskResponse CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest request, grpc::CallOptions options)
+      public virtual global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse CompleteTask(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest request, grpc::CallOptions options)
       {
         return CallInvoker.BlockingUnaryCall(__Method_CompleteTask, null, options, request);
       }
@@ -526,7 +526,7 @@ namespace Insuretech.Workflow.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Workflow.Services.V1.CompleteTaskResponse> CompleteTaskAsync(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse> CompleteTaskAsync(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
         return CompleteTaskAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
@@ -537,7 +537,7 @@ namespace Insuretech.Workflow.Services.V1 {
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Workflow.Services.V1.CompleteTaskResponse> CompleteTaskAsync(global::Insuretech.Workflow.Services.V1.CompleteTaskRequest request, grpc::CallOptions options)
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse> CompleteTaskAsync(global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_CompleteTask, null, options, request);
       }
@@ -624,7 +624,7 @@ namespace Insuretech.Workflow.Services.V1 {
       serviceBinder.AddMethod(__Method_StartWorkflow, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.StartWorkflowRequest, global::Insuretech.Workflow.Services.V1.StartWorkflowResponse>(serviceImpl.StartWorkflow));
       serviceBinder.AddMethod(__Method_GetWorkflowInstance, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.GetWorkflowInstanceRequest, global::Insuretech.Workflow.Services.V1.GetWorkflowInstanceResponse>(serviceImpl.GetWorkflowInstance));
       serviceBinder.AddMethod(__Method_GetMyTasks, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.GetMyTasksRequest, global::Insuretech.Workflow.Services.V1.GetMyTasksResponse>(serviceImpl.GetMyTasks));
-      serviceBinder.AddMethod(__Method_CompleteTask, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.CompleteTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteTaskResponse>(serviceImpl.CompleteTask));
+      serviceBinder.AddMethod(__Method_CompleteTask, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskRequest, global::Insuretech.Workflow.Services.V1.CompleteWorkflowTaskResponse>(serviceImpl.CompleteTask));
       serviceBinder.AddMethod(__Method_GetWorkflowHistory, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryRequest, global::Insuretech.Workflow.Services.V1.GetWorkflowHistoryResponse>(serviceImpl.GetWorkflowHistory));
     }
 

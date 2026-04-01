@@ -1,0 +1,13 @@
+KYCEyeState:
+  type: object
+  properties:
+    left_openness:
+      type: number
+      format: double
+    right_openness:
+      type: number
+      format: double
+    is_blinking:
+      type: boolean
+  description: Domain entity representing kyc eye state. Core business object in the
+    system.

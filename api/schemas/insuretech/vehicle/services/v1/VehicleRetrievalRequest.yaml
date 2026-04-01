@@ -1,0 +1,7 @@
+VehicleRetrievalRequest:
+  type: object
+  properties:
+    vehicle_id:
+      type: string
+  description: Request payload for retrieving vehicle retrieval information. May include
+    filters and pagination parameters.

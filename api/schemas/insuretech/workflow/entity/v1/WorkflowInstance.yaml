@@ -41,6 +41,9 @@ WorkflowInstance:
       allOf:
       - $ref: '#/components/schemas/AuditInfo'
       x-database-default: '{}''::jsonb'
+    correlation_id:
+      type: string
+      description: '@inject_tag: gorm:"column:correlation_id"'
   description: Workflow instance (execution)
   required:
   - id

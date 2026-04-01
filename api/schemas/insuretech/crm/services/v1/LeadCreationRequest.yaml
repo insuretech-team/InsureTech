@@ -1,0 +1,41 @@
+LeadCreationRequest:
+  type: object
+  properties:
+    title:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    date_of_birth:
+      type: string
+      format: date-time
+    gender:
+      type: string
+    phone_number:
+      type: string
+    email_address:
+      type: string
+    address:
+      type: string
+    lead_source:
+      $ref: '#/components/schemas/LeadSource'
+    lead_priority:
+      $ref: '#/components/schemas/LeadPriority'
+    assigned_agent_id:
+      type: string
+    desired_insurance_type:
+      type: string
+    desired_coverage_amount:
+      type: string
+      format: int64
+    specific_requirements:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map field (key-value pairs)
+    created_by:
+      type: string
+  description: Lead requests/responses

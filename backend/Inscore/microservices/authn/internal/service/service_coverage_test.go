@@ -75,6 +75,13 @@ func TestHelpers_ParseAndMapping(t *testing.T) {
 	require.Equal(t, authnentityv1.UserType_USER_TYPE_SYSTEM_USER, parseUserType("SYSTEM_USER"))
 }
 
+func TestPortalMappings_B2BAdminUserTypes(t *testing.T) {
+	require.Equal(t, "PORTAL_B2B", portalConfigKeyForUserType("USER_TYPE_BUSINESS_ADMIN"))
+	require.Equal(t, "PORTAL_B2B", portalConfigKeyForUserType("USER_TYPE_B2B_ORG_ADMIN"))
+	require.Equal(t, "b2b", portalForUserType("USER_TYPE_BUSINESS_ADMIN"))
+	require.Equal(t, "b2b", portalForUserType("USER_TYPE_B2B_ORG_ADMIN"))
+}
+
 func TestSessionTokenLookup_Deterministic(t *testing.T) {
 	a := sessionTokenLookup("token-1")
 	b := sessionTokenLookup("token-1")
@@ -132,15 +139,16 @@ func TestSessionLimiter_NoRedis(t *testing.T) {
 }
 
 func TestJWKSService_GetJWKS(t *testing.T) {
+	// GetJWKS RPC removed from proto (API path conflict) — now uses GetJWKSInternal
 	nilSvc := NewJWKSService(nil, "kid")
-	resp, err := nilSvc.GetJWKS(context.Background(), &authnservicev1.GetJWKSRequest{})
+	resp, err := nilSvc.GetJWKSInternal(context.Background())
 	require.NoError(t, err)
 	require.Empty(t, resp.Keys)
 
 	priv, err := rsa.GenerateKey(rand.Reader, 2048)
 	require.NoError(t, err)
 	svc := NewJWKSService(&priv.PublicKey, "kid-1")
-	resp, err = svc.GetJWKS(context.Background(), &authnservicev1.GetJWKSRequest{})
+	resp, err = svc.GetJWKSInternal(context.Background())
 	require.NoError(t, err)
 	require.Len(t, resp.Keys, 1)
 	require.Equal(t, "kid-1", resp.Keys[0].Kid)
@@ -187,16 +195,16 @@ func TestServiceMethods_NilRepoErrors(t *testing.T) {
 	require.Error(t, err)
 	_, err = svc.ApproveKYC(ctx, &authnservicev1.ApproveKYCRequest{KycId: "k1"})
 	require.Error(t, err)
-	_, err = svc.RejectKYC(ctx, &authnservicev1.RejectKYCRequest{KycId: "k1"})
+	err = svc.rejectKYCInternal(ctx, "k1", "bad")
 	require.Error(t, err)
 	_, err = svc.VerifyDocument(ctx, &authnservicev1.VerifyDocumentRequest{UserDocumentId: "d1"})
 	require.Error(t, err)
 
 	_, err = svc.CreateVoiceSession(ctx, &authnservicev1.CreateVoiceSessionRequest{UserId: "u1"})
 	require.Error(t, err)
-	_, err = svc.GetVoiceSession(ctx, &authnservicev1.GetVoiceSessionRequest{VoiceSessionId: "v1"})
+	_, err = svc.getVoiceSessionInternal(ctx, "v1")
 	require.Error(t, err)
-	_, err = svc.EndVoiceSession(ctx, &authnservicev1.EndVoiceSessionRequest{VoiceSessionId: "v1"})
+	err = svc.endVoiceSessionInternal(ctx, "v1", "FAILED", 1)
 	require.Error(t, err)
 
 	_, err = svc.UploadUserDocument(ctx, &authnservicev1.UploadUserDocumentRequest{})

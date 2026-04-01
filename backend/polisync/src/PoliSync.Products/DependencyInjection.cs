@@ -12,7 +12,8 @@ public static class DependencyInjection
 {
     public static IServiceCollection AddProductsModule(this IServiceCollection services)
     {
-        services.AddScoped<IProductRepository, ProductRepository>();
+        services.AddScoped<IProductRepository, GoProductDataGateway>();
         return services;
     }
 }
+

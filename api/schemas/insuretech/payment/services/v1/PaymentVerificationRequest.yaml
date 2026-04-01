@@ -15,7 +15,7 @@ PaymentVerificationRequest:
       description: "\u2500\u2500 Provider-specific verification fields \u2500\u2500\
         \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
         \u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\u2500\
-        \u2500\u2500\u2500\u2500\u2500\r\n sslcommerz, bkash, etc."
+        \u2500\u2500\u2500\u2500\u2500\n sslcommerz, bkash, etc."
     val_id:
       type: string
       description: SSLCommerz val_id for server-side validate

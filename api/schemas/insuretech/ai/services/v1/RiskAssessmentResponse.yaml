@@ -16,8 +16,5 @@ RiskAssessmentResponse:
         type: string
     recommended_premium:
       $ref: '#/components/schemas/Money'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for risk assessment operation. Returns operation results
     and status.

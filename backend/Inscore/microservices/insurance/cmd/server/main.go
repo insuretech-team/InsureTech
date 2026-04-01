@@ -10,22 +10,20 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/db"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/insurance/service"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
-	"github.com/newage-saint/insuretech/ops/config"
-	"gopkg.in/yaml.v3"
-	"google.golang.org/grpc"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
+	actuarialv1 "github.com/newage-saint/insuretech/gen/go/insuretech/actuarial/services/v1"
+	crmservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/crm/services/v1"
 	insurancev1 "github.com/newage-saint/insuretech/gen/go/insuretech/insurance/services/v1"
+	lifeservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/life/services/v1"
+	quotingservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/quoting/services/v1"
+	vehicleservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/vehicle/services/v1"
+	"github.com/newage-saint/insuretech/ops/config"
+	"google.golang.org/grpc"
+	"gopkg.in/yaml.v3"
 )
 
 // ServicesConfig structure matches services.yaml
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// 1. Initialize Logger
@@ -65,7 +63,7 @@ func main() {
 		appLogger.Fatalf("Failed to resolve database config path: %v", err)
 	}
 	appLogger.Infof("Using database config: %s", dbConfigPath)
-	
+
 	if err := db.InitializeManagerForService(dbConfigPath); err != nil {
 		appLogger.Errorf("Failed to initialize database: %v", err)
 		appLogger.Fatal("Database initialization failed")
@@ -76,10 +74,20 @@ func main() {
 
 	// 4. Initialize Service (repositories are created internally)
 	insuranceService := service.NewInsuranceService(database)
+	quotingService := service.NewQuotingService(database)
+	lifeService := service.NewLifeInsuranceService(database)
+	vehicleService := service.NewVehicleService(database)
+	crmService := service.NewCrmService(database)
+	actuarialService := service.NewActuarialService(database)
 
 	// 5. Initialize gRPC Server
 	grpcServer := grpc.NewServer()
 	insurancev1.RegisterInsuranceServiceServer(grpcServer, insuranceService)
+	quotingservicev1.RegisterQuotingServiceServer(grpcServer, quotingService)
+	lifeservicev1.RegisterLifeInsuranceServiceServer(grpcServer, lifeService)
+	vehicleservicev1.RegisterVehicleServiceServer(grpcServer, vehicleService)
+	crmservicev1.RegisterCrmServiceServer(grpcServer, crmService)
+	actuarialv1.RegisterActuarialServiceServer(grpcServer, actuarialService)
 
 	// 6. Start Server
 	listener, err := net.Listen("tcp", ":"+port)

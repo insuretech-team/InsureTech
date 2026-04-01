@@ -6,9 +6,9 @@ import (
 
 // RefundCalculatedEvent represents a refund_calculated_event
 type RefundCalculatedEvent struct {
+	CorrelationId string `json:"correlation_id,omitempty"`
 	EventId string `json:"event_id,omitempty"`
 	RefundId string `json:"refund_id,omitempty"`
 	RefundableAmount *Money `json:"refundable_amount,omitempty"`
-	CorrelationId string `json:"correlation_id,omitempty"`
 	Timestamp time.Time `json:"timestamp,omitempty"`
 }

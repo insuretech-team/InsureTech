@@ -3,7 +3,7 @@
  */
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { parseMoneyDecimal, sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { parseMoneyDecimal, sdkErrorMessage, unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { PurchaseOrder, Money } from "@lifeplus/insuretech-sdk";
 import type { PurchaseOrder as UiPO } from "@lib/types/b2b";
@@ -41,8 +41,9 @@ export async function GET(request: Request) {
     const sdk = makeSdkClient(request, hdrs ?? undefined);
     const url = new URL(request.url);
     const result = await sdk.listPurchaseOrders({ query: { page_size: Number(url.searchParams.get("page_size") ?? 50) } });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result), purchaseOrders: [] }, { status: result.response.status });
-    const pos = (result.data?.purchase_orders ?? []) as POWithMeta[];
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message, purchaseOrders: [] }, { status: unwrapped.status });
+    const pos = ((unwrapped.data as Record<string, unknown>)?.purchase_orders ?? []) as POWithMeta[];
     return NextResponse.json({ ok: true, purchaseOrders: pos.map(mapPO) });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error", purchaseOrders: [] }, { status: 502 });
@@ -69,9 +70,11 @@ export async function POST(request: Request) {
         notes: body.notes ? String(body.notes) : undefined,
       },
     });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    const poRaw = result.data?.purchase_order as POWithMeta | undefined;
-    return NextResponse.json({ ok: true, message: result.data?.message ?? "Purchase order created", purchaseOrder: poRaw ? mapPO(poRaw) : null }, { status: 201 });
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message }, { status: unwrapped.status });
+    const d = unwrapped.data as Record<string, unknown>;
+    const poRaw = d?.purchase_order as POWithMeta | undefined;
+    return NextResponse.json({ ok: true, message: (d?.message as string) ?? "Purchase order created", purchaseOrder: poRaw ? mapPO(poRaw) : null }, { status: 201 });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error" }, { status: 502 });
   }

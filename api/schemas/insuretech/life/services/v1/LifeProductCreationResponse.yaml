@@ -1,0 +1,7 @@
+LifeProductCreationResponse:
+  type: object
+  properties:
+    product:
+      $ref: '#/components/schemas/LifeProduct'
+  description: Response payload for life product creation operation. Returns operation
+    results and status.

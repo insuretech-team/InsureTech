@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>APIKeysListingResponse Schema - InsureTech API</title>
+    <title>ApiKeysListingResponse Schema - InsureTech API</title>
     <style>
         * { margin: 0; padding: 0; box-sizing: border-box; }
         
@@ -243,7 +243,7 @@
             </div>
             <div class="schema-title">
                 <span class="type-badge">object</span>
-                <span class="schema-name">APIKeysListingResponse</span>
+                <span class="schema-name">ApiKeysListingResponse</span>
             </div>
         </div>
     </div>
@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">3</div>
+                    <div class="stat-value">2</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">3</div>
+                    <div class="stat-value">2</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -288,12 +288,12 @@
                     
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>keys</strong>
+                    ⚪ <strong>api_keys</strong>
                 </td>
                 <td class="field-type">
                     <code>array</code>
-                    <br><small>array of APIKeySummary</small>
-                    <a href="schema_apikeysummary.html" class="ref-link">→ APIKeySummary[]</a>
+                    <br><small>array of ApiKey</small>
+                    <a href="schema_apikey.html" class="ref-link">→ ApiKey[]</a>
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
@@ -302,26 +302,12 @@
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>next_page_token</strong>
+                    ⚪ <strong>total_count</strong>
                 </td>
                 <td class="field-type">
-                    <code>string</code>
+                    <code>integer</code>
+                    <br><small>int32</small>
                     
-                    
-                </td>
-                <td class="field-nullable">YES</td>
-                <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
-            </tr>
-            
-            <tr>
-                <td class="field-name">
-                    ⚪ <strong>error</strong>
-                </td>
-                <td class="field-type">
-                    <code>reference</code>
-                    <br><small>Error</small>
-                    <a href="schema_error.html" class="ref-link">→ Error</a>
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>

@@ -1,4 +1,5 @@
 using Insuretech.Document.Services.V1;
+using Google.Protobuf.WellKnownTypes;
 
 namespace PoliSync.Infrastructure.GrpcClients;
 
@@ -21,11 +22,27 @@ public sealed class DocgenGrpcClient
     {
         var req = new GenerateDocumentRequest
         {
-            EntityId   = entityId,
+            EntityId = entityId,
+            EntityType = "generic",
             TemplateId = templateId,
         };
-        req.Data.Add(data);
+        foreach (var pair in data)
+        {
+            req.Data.Fields[pair.Key] = Value.ForString(pair.Value);
+        }
         var resp = await Client.GenerateDocumentAsync(req, cancellationToken: ct);
-        return resp.DocumentUrl;
+        return string.IsNullOrWhiteSpace(resp.FileUrl) ? resp.DocumentId : resp.FileUrl;
+    }
+
+    public async Task<Insuretech.Document.Entity.V1.DocumentGeneration?> GetDocumentAsync(
+        string documentId,
+        CancellationToken ct = default)
+    {
+        var resp = await Client.GetDocumentAsync(new GetDocumentRequest
+        {
+            DocumentId = documentId
+        }, cancellationToken: ct);
+
+        return resp.Document;
     }
 }

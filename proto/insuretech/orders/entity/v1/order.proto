@@ -10,7 +10,7 @@ import "insuretech/common/v1/db.proto";
 import "insuretech/common/v1/types.proto";
 
 // Order represents a purchase order for an insurance policy.
-// Created from an approved quotation → payment → policy issuance flow.
+// Created from an approved quotation → payment → insurer proposal → policy issuance/refund flow.
 // Maps to 'orders' table in insurance_schema.
 message Order {
   option (insuretech.common.v1.table) = {
@@ -223,7 +223,7 @@ message Order {
   ];
   // @inject_tag: gorm:"column:payment_gateway_ref"
 
-  // Policy fields — populated after PolicyIssued
+  // Policy fields — populated after insurer approval and PolicyIssued
   string policy_id = 13 [
     (insuretech.common.v1.column) = {
       column_name: "policy_id"
@@ -435,6 +435,107 @@ message Order {
     }
   ];
   // @inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"
+
+  string proposal_id = 33 [
+    (insuretech.common.v1.column) = {
+      column_name: "proposal_id"
+      sql_type: "UUID"
+      comment: "FK to insurance_proposals table — insurer review record created after payment"
+      foreign_key: {
+        references_table: "insurance_proposals"
+        references_column: "proposal_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_proposal_id"
+      }
+      index: {
+        index_name: "idx_orders_proposal_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:proposal_id"
+
+  string refund_id = 34 [
+    (insuretech.common.v1.column) = {
+      column_name: "refund_id"
+      sql_type: "UUID"
+      comment: "FK to payment_schema.refunds — refund created when insurer rejects a paid proposal"
+      foreign_key: {
+        references_table: "refunds"
+        references_column: "refund_id"
+        references_schema: "payment_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_refund_id"
+      }
+      index: {
+        index_name: "idx_orders_refund_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:refund_id"
+
+  string insurer_id = 35 [
+    (insuretech.common.v1.column) = {
+      column_name: "insurer_id"
+      sql_type: "UUID"
+      comment: "Target insurer for proposal submission and decisioning"
+      foreign_key: {
+        references_table: "insurers"
+        references_column: "insurer_id"
+        references_schema: "insurance_schema"
+        on_delete: REFERENTIAL_ACTION_SET_NULL
+        on_update: REFERENTIAL_ACTION_CASCADE
+        constraint_name: "fk_orders_insurer_id"
+      }
+      index: {
+        index_name: "idx_orders_insurer_id"
+        index_type: INDEX_TYPE_BTREE
+      }
+    }
+  ];
+  // @inject_tag: gorm:"column:insurer_id"
+
+  OrderProposalStatus proposal_status = 36 [
+    (insuretech.common.v1.column) = {
+      column_name: "proposal_status"
+      sql_type: "VARCHAR(50)"
+      not_null: true
+      default_value: "'ORDER_PROPOSAL_STATUS_NOT_SUBMITTED'"
+      comment: "Insurer proposal dimension of the order lifecycle"
+    }
+  ];
+  // @inject_tag: gorm:"column:proposal_status;not null"
+
+  google.protobuf.Timestamp proposal_submitted_at = 37 [
+    (insuretech.common.v1.column) = {
+      column_name: "proposal_submitted_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "When the paid order was submitted to the insurer"
+    }
+  ];
+  // @inject_tag: gorm:"column:proposal_submitted_at;serializer:proto_timestamp"
+
+  google.protobuf.Timestamp proposal_decided_at = 38 [
+    (insuretech.common.v1.column) = {
+      column_name: "proposal_decided_at"
+      sql_type: "TIMESTAMP WITH TIME ZONE"
+      comment: "When the insurer approved or rejected the proposal"
+    }
+  ];
+  // @inject_tag: gorm:"column:proposal_decided_at;serializer:proto_timestamp"
+
+  string proposal_decision_reason = 39 [
+    (insuretech.common.v1.column) = {
+      column_name: "proposal_decision_reason"
+      sql_type: "TEXT"
+      comment: "Insurer decision reason or decline explanation"
+    }
+  ];
+  // @inject_tag: gorm:"column:proposal_decision_reason"
 }
 
 // OrderStatus represents the primary lifecycle state of an insurance purchase order.
@@ -442,10 +543,15 @@ enum OrderStatus {
   ORDER_STATUS_UNSPECIFIED = 0;
   ORDER_STATUS_PENDING = 1;           // Order created, awaiting payment
   ORDER_STATUS_PAYMENT_INITIATED = 2; // Payment flow started via gateway
-  ORDER_STATUS_PAID = 3;              // Payment confirmed — triggers policy issuance
-  ORDER_STATUS_POLICY_ISSUED = 4;     // Policy successfully issued (terminal success)
+  ORDER_STATUS_PAID = 3;              // Payment confirmed — waiting for insurer proposal submission/decision
+  ORDER_STATUS_POLICY_ISSUED = 4;     // Policy successfully issued after insurer approval (terminal success)
   ORDER_STATUS_CANCELLED = 5;         // Cancelled by user or system
   ORDER_STATUS_FAILED = 6;            // Payment failed or timed out
+  ORDER_STATUS_PROPOSAL_SUBMITTED = 7; // Paid order submitted to insurer for acceptance
+  ORDER_STATUS_PROPOSAL_APPROVED = 8;  // Insurer approved; policy issuance can proceed
+  ORDER_STATUS_PROPOSAL_REJECTED = 9;  // Insurer rejected; refund must be initiated
+  ORDER_STATUS_REFUND_PENDING = 10;    // Refund saga started after insurer rejection
+  ORDER_STATUS_REFUNDED = 11;          // Payment successfully refunded after rejection
 }
 
 // OrderPaymentStatus is the payment dimension of the order lifecycle (separate from primary status).
@@ -470,7 +576,20 @@ enum OrderBillingStatus {
 enum OrderFulfillmentStatus {
   ORDER_FULFILLMENT_STATUS_UNSPECIFIED = 0;
   ORDER_FULFILLMENT_STATUS_NOT_STARTED = 1;        // Policy not yet issued
-  ORDER_FULFILLMENT_STATUS_FULFILLMENT_IN_PROGRESS = 2; // Insurance-service processing
+  ORDER_FULFILLMENT_STATUS_FULFILLMENT_IN_PROGRESS = 2; // Proposal approved; insurance-service issuing policy
   ORDER_FULFILLMENT_STATUS_FULFILLED = 3;          // Policy successfully issued
   ORDER_FULFILLMENT_STATUS_FULFILLMENT_FAILED = 4; // Policy issuance failed
+}
+
+// OrderProposalStatus captures the insurer decision leg between payment confirmation
+// and policy issuance/refund.
+enum OrderProposalStatus {
+  ORDER_PROPOSAL_STATUS_UNSPECIFIED = 0;
+  ORDER_PROPOSAL_STATUS_NOT_SUBMITTED = 1;
+  ORDER_PROPOSAL_STATUS_SUBMITTED = 2;
+  ORDER_PROPOSAL_STATUS_IN_REVIEW = 3;
+  ORDER_PROPOSAL_STATUS_APPROVED = 4;
+  ORDER_PROPOSAL_STATUS_REJECTED = 5;
+  ORDER_PROPOSAL_STATUS_REFUND_INITIATED = 6;
+  ORDER_PROPOSAL_STATUS_REFUNDED = 7;
 }

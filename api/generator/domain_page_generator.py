@@ -3,6 +3,7 @@
 Domain Page Generator
 Generates individual static HTML pages for each domain with Swagger UI embedded
 """
+from write_guard import write_if_changed
 
 import yaml
 import json
@@ -289,8 +290,7 @@ class DomainPageGenerator:
         
         # Write to file
         output_path = os.path.join(output_dir, f'domain_{domain}.html')
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         return output_path
     

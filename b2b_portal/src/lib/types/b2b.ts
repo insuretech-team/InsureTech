@@ -31,7 +31,7 @@ export interface SessionUser {
   organisationName: string;
   name: string;
   email: string;
-  role: "BUSINESS_ADMIN" | "FINANCE_MANAGER" | "HR_MANAGER" | "SYSTEM_ADMIN" | "B2B_ORG_ADMIN";
+  role: "BUSINESS_ADMIN" | "FINANCE_MANAGER" | "HR_MANAGER" | "SYSTEM_ADMIN" | "B2B_ORG_ADMIN" | "B2B_BENEFICIARY";
 }
 
 // ─── Navigation ───────────────────────────────────────────────────────────────

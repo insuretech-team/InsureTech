@@ -248,8 +248,13 @@ func (r *ClaimRepository) GetByID(ctx context.Context, claimID string) (*claimsv
 
 	// Parse enums
 	if statusStr.Valid {
+		// BUG FIX: DB stores "SUBMITTED", "APPROVED" etc. but proto enum keys are
+		// "CLAIM_STATUS_SUBMITTED", "CLAIM_STATUS_APPROVED" etc.
+		// Try both formats: raw string and with prefix.
 		k := strings.ToUpper(statusStr.String)
 		if v, ok := claimsv1.ClaimStatus_value[k]; ok {
+			c.Status = claimsv1.ClaimStatus(v)
+		} else if v, ok := claimsv1.ClaimStatus_value["CLAIM_STATUS_"+k]; ok {
 			c.Status = claimsv1.ClaimStatus(v)
 		}
 	}
@@ -257,11 +262,15 @@ func (r *ClaimRepository) GetByID(ctx context.Context, claimID string) (*claimsv
 		k := strings.ToUpper(typeStr.String)
 		if v, ok := claimsv1.ClaimType_value[k]; ok {
 			c.Type = claimsv1.ClaimType(v)
+		} else if v, ok := claimsv1.ClaimType_value["CLAIM_TYPE_"+k]; ok {
+			c.Type = claimsv1.ClaimType(v)
 		}
 	}
 	if processingTypeStr.Valid {
 		k := strings.ToUpper(processingTypeStr.String)
 		if v, ok := claimsv1.ClaimProcessingType_value[k]; ok {
+			c.ProcessingType = claimsv1.ClaimProcessingType(v)
+		} else if v, ok := claimsv1.ClaimProcessingType_value["CLAIM_PROCESSING_TYPE_"+k]; ok {
 			c.ProcessingType = claimsv1.ClaimProcessingType(v)
 		}
 	}
@@ -584,9 +593,14 @@ func (r *ClaimRepository) List(ctx context.Context, policyID, customerID string,
 		}
 
 		// Parse enums
+		// BUG FIX: DB stores "SUBMITTED", "APPROVED" etc. but proto enum keys are
+		// "CLAIM_STATUS_SUBMITTED", "CLAIM_STATUS_APPROVED" etc.
+		// Try both formats: raw string and with prefix (same logic as GetByID).
 		if statusStr.Valid {
 			k := strings.ToUpper(statusStr.String)
 			if v, ok := claimsv1.ClaimStatus_value[k]; ok {
+				c.Status = claimsv1.ClaimStatus(v)
+			} else if v, ok := claimsv1.ClaimStatus_value["CLAIM_STATUS_"+k]; ok {
 				c.Status = claimsv1.ClaimStatus(v)
 			}
 		}
@@ -594,11 +608,15 @@ func (r *ClaimRepository) List(ctx context.Context, policyID, customerID string,
 			k := strings.ToUpper(typeStr.String)
 			if v, ok := claimsv1.ClaimType_value[k]; ok {
 				c.Type = claimsv1.ClaimType(v)
+			} else if v, ok := claimsv1.ClaimType_value["CLAIM_TYPE_"+k]; ok {
+				c.Type = claimsv1.ClaimType(v)
 			}
 		}
 		if processingTypeStr.Valid {
 			k := strings.ToUpper(processingTypeStr.String)
 			if v, ok := claimsv1.ClaimProcessingType_value[k]; ok {
+				c.ProcessingType = claimsv1.ClaimProcessingType(v)
+			} else if v, ok := claimsv1.ClaimProcessingType_value["CLAIM_PROCESSING_TYPE_"+k]; ok {
 				c.ProcessingType = claimsv1.ClaimProcessingType(v)
 			}
 		}

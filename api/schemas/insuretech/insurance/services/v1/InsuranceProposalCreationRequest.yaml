@@ -1,0 +1,6 @@
+InsuranceProposalCreationRequest:
+  type: object
+  properties:
+    proposal:
+      $ref: '#/components/schemas/InsuranceProposal'
+  description: ========== INSURANCE PROPOSAL MESSAGES ==========

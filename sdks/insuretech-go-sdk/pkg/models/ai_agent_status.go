@@ -1,12 +1,12 @@
 package models
 
-// AiAgentStatus represents a ai_agent_status
-type AiAgentStatus string
+// AIAgentStatus represents a ai_agent_status
+type AIAgentStatus string
 
-// AiAgentStatus values
+// AIAgentStatus values
 const (
-	AiAgentStatusAGENTSTATUSUNSPECIFIED AiAgentStatus = "AGENT_STATUS_UNSPECIFIED"
-	AiAgentStatusAGENTSTATUSIDLE  = "AGENT_STATUS_IDLE"
-	AiAgentStatusAGENTSTATUSPROCESSING  = "AGENT_STATUS_PROCESSING"
-	AiAgentStatusAGENTSTATUSOFFLINE  = "AGENT_STATUS_OFFLINE"
+	AIAgentStatusAGENTSTATUSUNSPECIFIED AIAgentStatus = "AGENT_STATUS_UNSPECIFIED"
+	AIAgentStatusAGENTSTATUSIDLE  = "AGENT_STATUS_IDLE"
+	AIAgentStatusAGENTSTATUSPROCESSING  = "AGENT_STATUS_PROCESSING"
+	AIAgentStatusAGENTSTATUSOFFLINE  = "AGENT_STATUS_OFFLINE"
 )

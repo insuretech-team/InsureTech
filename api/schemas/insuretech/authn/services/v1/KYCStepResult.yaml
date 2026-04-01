@@ -1,0 +1,18 @@
+KYCStepResult:
+  type: object
+  properties:
+    challenge_type:
+      type: string
+    state:
+      type: string
+    confidence:
+      type: number
+      format: double
+    frames_processed:
+      type: integer
+      format: int32
+    elapsed_ms:
+      type: integer
+      format: int32
+  description: Domain entity representing kyc step result. Core business object in
+    the system.

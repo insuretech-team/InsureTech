@@ -11,7 +11,6 @@
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
-import { sdkErrorMessage } from "@lib/sdk/api-helpers";
 
 export type DashboardStats = {
   // Super Admin cards
@@ -23,6 +22,14 @@ export type DashboardStats = {
   activePurchaseOrders: number;
   // B2B Admin cards
   totalMembers?:     number;
+};
+
+export type DashboardStatsResponse = {
+  ok: boolean;
+  stats?: DashboardStats;
+  role?: string;
+  message?: string;
+  needsOrganisation?: boolean;
 };
 
 function settled<T>(result: PromiseSettledResult<T>, fallback: T): T {
@@ -52,19 +59,31 @@ export async function GET(request: Request) {
     const pos       = settled(posRes, null);
     const depts     = settled(deptsRes, null);
 
-    const orgList   = orgs?.data?.organisations ?? [];
+    // SDK interceptor unwraps the envelope, result.data is the inner payload directly.
+    function unwrap(r: typeof orgs): Record<string, unknown> {
+      if (!r?.data) return {};
+      return r.data as Record<string, unknown>;
+    }
+
+    const orgsData  = unwrap(orgs);
+    const empsData  = unwrap(emps);
+    const posData   = unwrap(pos);
+    const deptsData = unwrap(depts);
+
+    const orgList   = (orgsData?.organisations ?? []) as Record<string, unknown>[];
     const pendingOrgs = orgList.filter(
-      (o) => (o.status ?? "").includes("PENDING")
+      (o) => ((o.status as string) ?? "").includes("PENDING")
     ).length;
 
     const stats: DashboardStats = {
       totalOrganisations:   orgList.length,
       pendingOrganisations: pendingOrgs,
-      totalEmployees:       emps?.data?.total_count ?? 0,
-      totalDepartments:     depts?.data?.total_count ?? 0,
-      activePurchaseOrders: (pos?.data?.purchase_orders ?? []).filter(
+      totalEmployees:       (empsData?.total_count as number) ?? 0,
+      totalDepartments:     (deptsData?.total_count as number) ?? 0,
+      activePurchaseOrders: ((posData?.purchase_orders ?? []) as Record<string, unknown>[]).filter(
         (p) => {
-          const s = p.purchase_order?.status ?? "";
+          const po = p.purchase_order as Record<string, unknown> | undefined;
+          const s = (po?.status as string) ?? "";
           return s.includes("ACTIVE") || !s.includes("CANCELLED");
         }
       ).length,
@@ -73,10 +92,32 @@ export async function GET(request: Request) {
     return NextResponse.json({ ok: true, stats, role: "SYSTEM_ADMIN" });
 
   } else {
-    // B2B Admin / HR Manager — scoped to their org via x-business-id header
-    const orgId = hdrs.businessId;
+    // B2B Admin / HR Manager — scoped to their org via x-business-id header.
+    // If portal_biz_id cookie is missing (race on first load after login),
+    // fall back to resolving the org from the session via /organisations/me.
+    let orgId = hdrs.businessId;
     if (!orgId) {
-      return NextResponse.json({ ok: false, message: "No organisation context" }, { status: 400 });
+      try {
+        const meResult = await makeSdkClient(request, hdrs).getMyOrganisation();
+        if (meResult.ok && typeof meResult.data.organisation_id === "string") {
+          orgId = meResult.data.organisation_id;
+        }
+      } catch { /* ignore — will 400 below */ }
+    }
+    if (!orgId) {
+      const emptyStats: DashboardStats = {
+        totalEmployees: 0,
+        totalDepartments: 0,
+        activePurchaseOrders: 0,
+        totalMembers: 0,
+      };
+      return NextResponse.json({
+        ok: true,
+        stats: emptyStats,
+        role: "B2B_ORG_ADMIN",
+        needsOrganisation: true,
+        message: "Your account is active, but no organisation is linked yet.",
+      } satisfies DashboardStatsResponse);
     }
 
     const [empsRes, deptsRes, posRes, membersRes] = await Promise.allSettled([
@@ -91,18 +132,29 @@ export async function GET(request: Request) {
     const pos     = settled(posRes, null);
     const members = settled(membersRes, null);
 
+    // Unwrap ApiResponse<T> envelope
+    function unwrapB2B(r: { data?: unknown } | null): Record<string, unknown> {
+      if (!r?.data) return {};
+      return r.data as Record<string, unknown>;
+    }
+    const empsData    = unwrapB2B(emps);
+    const deptsData   = unwrapB2B(depts);
+    const posData     = unwrapB2B(pos);
+    const membersData = unwrapB2B(members);
+
     const stats: DashboardStats = {
-      totalEmployees:       emps?.data?.total_count ?? 0,
-      totalDepartments:     depts?.data?.total_count ?? 0,
-      activePurchaseOrders: (pos?.data?.purchase_orders ?? []).filter(
+      totalEmployees:       (empsData?.total_count as number) ?? 0,
+      totalDepartments:     (deptsData?.total_count as number) ?? 0,
+      activePurchaseOrders: ((posData?.purchase_orders ?? []) as Record<string, unknown>[]).filter(
         (p) => {
-          const s = p.purchase_order?.status ?? "";
+          const po = p.purchase_order as Record<string, unknown> | undefined;
+          const s = (po?.status as string) ?? "";
           return s.includes("ACTIVE") || !s.includes("CANCELLED");
         }
       ).length,
-      totalMembers:         (members?.data?.members ?? []).length,
+      totalMembers:         ((membersData?.members ?? []) as unknown[]).length,
     };
 
-    return NextResponse.json({ ok: true, stats, role: "B2B_ORG_ADMIN" });
+    return NextResponse.json({ ok: true, stats, role: "B2B_ORG_ADMIN" } satisfies DashboardStatsResponse);
   }
 }

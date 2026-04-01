@@ -2,8 +2,11 @@ package repository
 
 import (
 	"context"
+	"fmt"
 	"testing"
+	"time"
 
+	"github.com/google/uuid"
 	partnerv1 "github.com/newage-saint/insuretech/gen/go/insuretech/partner/entity/v1"
 	"github.com/stretchr/testify/require"
 )
@@ -20,16 +23,18 @@ func TestPartnerRepository_LiveDB_CreateGetUpdateList(t *testing.T) {
 	repo := NewPartnerRepository(dbConn, encKey)
 
 	partnerID := newPartnerLiveID("partner")
+	shortID := partnerID[:8]
+	tinNumber := fmt.Sprintf("%012d", time.Now().UnixNano()%1_000_000_000_000)
 	partner := &partnerv1.Partner{
 		PartnerId:                 partnerID,
-		OrganizationName:          "Live Test Org " + partnerID,
+		OrganizationName:          "LiveOrg-" + shortID,
 		Type:                      partnerv1.PartnerType_PARTNER_TYPE_CORPORATE,
-		TradeLicense:              "TL-" + partnerID,
-		TinNumber:                 "TIN-" + partnerID,
+		TradeLicense:              "TL" + shortID,
+		TinNumber:                 tinNumber,
 		BankAccount:               "1234567890",
 		BankName:                  "Test Bank",
 		BankBranch:                "Main Branch",
-		ContactEmail:              partnerID + "@test.com",
+		ContactEmail:              shortID + "@t.co",
 		ContactPhone:              "+8801700000001",
 		AcquisitionCommissionRate: 5.0,
 		RenewalCommissionRate:     3.0,
@@ -46,7 +51,7 @@ func TestPartnerRepository_LiveDB_CreateGetUpdateList(t *testing.T) {
 	fetched, err := repo.GetByID(ctx, partnerID)
 	require.NoError(t, err)
 	require.Equal(t, partnerID, fetched.PartnerId)
-	require.Equal(t, "Live Test Org "+partnerID, fetched.OrganizationName)
+	require.Equal(t, "LiveOrg-"+shortID, fetched.OrganizationName)
 	require.Equal(t, "1234567890", fetched.BankAccount)      // decrypted
 	require.Equal(t, "+8801700000001", fetched.ContactPhone) // decrypted
 
@@ -92,6 +97,6 @@ func TestPartnerRepository_LiveDB_GetByID_NotFound(t *testing.T) {
 	dbConn := testPartnerDB(t)
 	repo := NewPartnerRepository(dbConn, "0123456789abcdef0123456789abcdef")
 
-	_, err := repo.GetByID(ctx, "nonexistent-partner")
+	_, err := repo.GetByID(ctx, uuid.New().String())
 	require.Error(t, err)
 }

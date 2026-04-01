@@ -232,7 +232,7 @@
             </div>
             <div class="stats">
                 <div class="stat">
-                    <div class="stat-value">13</div>
+                    <div class="stat-value">20</div>
                     <div class="stat-label">Schemas</div>
                 </div>
             </div>
@@ -283,6 +283,43 @@
                 </td>
                 <td class="desc-cell">Kafka event: Insurer product status changed</td>
                 <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifeproduct.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeProduct</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeProduct represents a life insurance product
+ Maps to 'life_products' table in life_schema</td>
+                <td class="props-cell">20 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifeproductcreatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeProductCreatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeProductCreatedEvent is emitted when a new life product is created</td>
+                <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifeproductdeletedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeProductDeletedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeProductDeletedEvent is emitted when a life product is deleted</td>
+                <td class="props-cell">5 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_lifeproductupdatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">LifeProductUpdatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">LifeProductUpdatedEvent is emitted when a life product is updated</td>
+                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_product.html'" style="cursor: pointer;">
@@ -365,6 +402,33 @@
                 </td>
                 <td class="desc-cell">Event: Product updated</td>
                 <td class="props-cell">7 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_productspremiumbreakdown.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ProductsPremiumBreakdown</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing premium breakdown. Core business object in the system.</td>
+                <td class="props-cell">3 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_productspremiumcalculatedevent.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ProductsPremiumCalculatedEvent</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Event: Premium calculated (for analytics)</td>
+                <td class="props-cell">8 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_productspricingrule.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">ProductsPricingRule</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Pricing rule (stored as JSONB in pricing_configs table)</td>
+                <td class="props-cell">5 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_productsrider.html'" style="cursor: pointer;">

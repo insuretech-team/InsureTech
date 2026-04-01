@@ -99,7 +99,7 @@ func (dm *DatabaseManager) Initialize() error {
 	}
 
 	// Run migrations only on current database (avoid double execution)
-	// Migrations are now handled by the ops package and dbmanager tool
+	// Migrations are now handled by the ops package and dbx tool
 	// if err := dm.runMigrations(); err != nil {
 	// 	return fmt.Errorf("failed to run migrations: %v", err)
 	// }
@@ -545,7 +545,7 @@ func (dm *DatabaseManager) dropAllTablesInBackup() error {
 // runMigrationsOnBackup runs migrations on backup database
 func (dm *DatabaseManager) runMigrationsOnBackup() error {
 	// Migration functions moved to ops package
-	// These are now called via dbmanager CLI
+	// These are now called via dbx CLI
 	// // Enable uuid-ossp extension
 	// if err := enableUUIDOSSP(sqlDB); err != nil {
 	// 	appLogger.Warnf("Failed to enable uuid-ossp extension: %v", err)
@@ -571,7 +571,7 @@ func (dm *DatabaseManager) runMigrationsOnBackup() error {
 	// 	return fmt.Errorf("failed to get SQL connection: %v", err)
 	// }
 
-	appLogger.Info("Backup database schema rebuild completed (run migrations via dbmanager CLI)")
+	appLogger.Info("Backup database schema rebuild completed (run migrations via dbx CLI)")
 	return nil
 }
 
@@ -585,12 +585,12 @@ func (dm *DatabaseManager) runSeedersOnBackup() error {
 	// }
 
 	// Run seeders using ops package (moved from db package)
-	// Seeder functions are now in inscore/db/ops and called via dbmanager CLI
+	// Seeder functions are now in inscore/db/ops and called via dbx CLI
 	// if err := runSQLSeedersFromRoots(sqlDB, "inscore/db/seeders", "gen/go/lifepluscore/seeders"); err != nil {
 	// 	return fmt.Errorf("failed to run seeders on backup: %v", err)
 	// }
 
-	appLogger.Info("Seeders completed on backup database (use dbmanager CLI)")
+	appLogger.Info("Seeders completed on backup database (use dbx CLI)")
 	return nil
 }
 
@@ -866,6 +866,6 @@ func runMigrationsAndSeeders(db *gorm.DB) error {
 	// }
 
 	_ = sqlDB // Suppress unused variable warning
-	appLogger.GetLogger().Info("Database migrations and seeders completed (run via dbmanager CLI)")
+	appLogger.GetLogger().Info("Database migrations and seeders completed (run via dbx CLI)")
 	return nil
 }

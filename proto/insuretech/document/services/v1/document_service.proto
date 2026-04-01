@@ -15,7 +15,7 @@ service DocumentService {
   // Generate document
   rpc GenerateDocument(GenerateDocumentRequest) returns (GenerateDocumentResponse) {
     option (google.api.http) = {
-      post: "/v1/documents?action=generate"
+      post: "/v1/documents:generate"
       body: "*"
     };
   }
@@ -100,6 +100,14 @@ message GenerateDocumentRequest {
   string entity_id = 3;
   google.protobuf.Struct data = 4; // CG-7: Typed document data for template merge
   bool include_qr_code = 5;
+  // output_format overrides the template's default format for this request.
+  // Accepts: "pdf", "html", "docx", "xlsx" (case-insensitive).
+  // If empty, the template's configured output_format is used.
+  string output_format = 6;
+  // alt controls the response format (Google API style).
+  // Use alt="media" to receive raw file bytes instead of JSON metadata.
+  // Equivalent to passing $alt=media as a query parameter.
+  string alt = 7;
 }
 
 message GenerateDocumentResponse {
@@ -108,6 +116,13 @@ message GenerateDocumentResponse {
   string message = 3;
   // Error information if operation failed
   insuretech.common.v1.Error error = 4;
+  // file_bytes is populated when alt="media" is set in the request.
+  // Contains raw document bytes (PDF, DOCX, XLSX, or HTML).
+  bytes file_bytes = 5;
+  // content_type is the MIME type of file_bytes (e.g. "application/pdf").
+  string content_type = 6;
+  // filename is the suggested download filename (e.g. "policy-123.xlsx").
+  string filename = 7;
 }
 
 message GetDocumentRequest {

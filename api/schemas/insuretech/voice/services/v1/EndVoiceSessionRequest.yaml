@@ -1,4 +1,4 @@
-VoiceEndVoiceSessionRequest:
+EndVoiceSessionRequest:
   type: object
   properties:
     voice_session_id:

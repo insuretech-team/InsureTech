@@ -1,126 +1,129 @@
 package logger
 
 import (
-    "fmt"
-    "sync"
-    "strings"
-    "time"
-    "go.uber.org/zap"
-    "go.uber.org/zap/zapcore"
+	"fmt"
+	"strings"
+	"sync"
+	"time"
+
+	"go.uber.org/zap"
+	"go.uber.org/zap/zapcore"
 )
 
 var (
-    initOnce     sync.Once
-    base         *zap.Logger
-    initialized  bool
-    mu           sync.RWMutex
+	initOnce    sync.Once
+	base        *zap.Logger
+	initialized bool
+	mu          sync.RWMutex
 )
 
 // Config is a minimal logger configuration for CLI tools
 type Config struct {
-    Level   string // debug|info|warn|error
-    Format  string // json|text
-    Output  string // console (only for now)
-    Verbose bool
+	Level   string // debug|info|warn|error
+	Format  string // json|text
+	Output  string // console (only for now)
+	Verbose bool
 }
 
-// NoFileConfig returns a default console-oriented config used by dbmanager
+// NoFileConfig returns a default console-oriented config used by dbx
 func NoFileConfig() Config {
-    return Config{Level: "info", Format: "text", Output: "console", Verbose: false}
+	return Config{Level: "info", Format: "text", Output: "console", Verbose: false}
 }
 
 // ANSI color codes
 const (
-    colorReset  = "\033[0m"
-    colorCyan   = "\033[36m"
-    colorGreen  = "\033[32m"
-    colorYellow = "\033[33m"
-    colorRed    = "\033[31m"
-    colorPurple = "\033[35m"
-    colorGray   = "\033[90m"
+	colorReset  = "\033[0m"
+	colorCyan   = "\033[36m"
+	colorGreen  = "\033[32m"
+	colorYellow = "\033[33m"
+	colorRed    = "\033[31m"
+	colorPurple = "\033[35m"
+	colorGray   = "\033[90m"
 )
 
 // Custom encoders for beautiful console output with colors
 func customTimeEncoder(t time.Time, enc zapcore.PrimitiveArrayEncoder) {
-    enc.AppendString(fmt.Sprintf("%s[%s]%s", colorGray, t.Format("15:04"), colorReset))
+	enc.AppendString(fmt.Sprintf("%s[%s]%s", colorGray, t.Format("15:04"), colorReset))
 }
 
 func customLevelEncoder(level zapcore.Level, enc zapcore.PrimitiveArrayEncoder) {
-    var color string
-    switch level {
-    case zapcore.DebugLevel:
-        color = colorPurple
-    case zapcore.InfoLevel:
-        color = colorGreen
-    case zapcore.WarnLevel:
-        color = colorYellow
-    case zapcore.ErrorLevel, zapcore.DPanicLevel, zapcore.PanicLevel, zapcore.FatalLevel:
-        color = colorRed
-    default:
-        color = colorReset
-    }
-    enc.AppendString(fmt.Sprintf("%s[%s]%s", color, level.CapitalString(), colorReset))
+	var color string
+	switch level {
+	case zapcore.DebugLevel:
+		color = colorPurple
+	case zapcore.InfoLevel:
+		color = colorGreen
+	case zapcore.WarnLevel:
+		color = colorYellow
+	case zapcore.ErrorLevel, zapcore.DPanicLevel, zapcore.PanicLevel, zapcore.FatalLevel:
+		color = colorRed
+	default:
+		color = colorReset
+	}
+	enc.AppendString(fmt.Sprintf("%s[%s]%s", color, level.CapitalString(), colorReset))
 }
 
 func customCallerEncoder(caller zapcore.EntryCaller, enc zapcore.PrimitiveArrayEncoder) {
-    enc.AppendString(fmt.Sprintf("%s[%s]%s\n  ", colorCyan, caller.TrimmedPath(), colorReset))
+	enc.AppendString(fmt.Sprintf("%s[%s]%s\n  ", colorCyan, caller.TrimmedPath(), colorReset))
 }
 
 // Initialize configures the global logger according to the provided Config
 // This will override any previous initialization
 func Initialize(cfg Config) error {
-    mu.Lock()
-    defer mu.Unlock()
-    
-    var zcfg zap.Config
-    if cfg.Format == "json" {
-        zcfg = zap.NewProductionConfig()
-    } else {
-        zcfg = zap.NewDevelopmentConfig()
-        zcfg.Encoding = "console"
-        
-        // Custom encoder config for beautiful console output with brackets
-        zcfg.EncoderConfig.TimeKey = "T"
-        zcfg.EncoderConfig.LevelKey = "L"
-        zcfg.EncoderConfig.NameKey = "N"
-        zcfg.EncoderConfig.CallerKey = "C"
-        zcfg.EncoderConfig.MessageKey = "M"
-        zcfg.EncoderConfig.StacktraceKey = "S"
-        
-        zcfg.EncoderConfig.EncodeLevel = customLevelEncoder
-        zcfg.EncoderConfig.EncodeTime = customTimeEncoder
-        zcfg.EncoderConfig.EncodeCaller = customCallerEncoder
-        zcfg.EncoderConfig.EncodeName = zapcore.FullNameEncoder
-        zcfg.EncoderConfig.LineEnding = zapcore.DefaultLineEnding
-        zcfg.EncoderConfig.ConsoleSeparator = " "
-        
-        zcfg.DisableStacktrace = true
-        zcfg.DisableCaller = false
-    }
-    // Level
-    switch strings.ToLower(cfg.Level) {
-    case "debug":
-        zcfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
-    case "warn":
-        zcfg.Level = zap.NewAtomicLevelAt(zapcore.WarnLevel)
-    case "error":
-        zcfg.Level = zap.NewAtomicLevelAt(zapcore.ErrorLevel)
-    default:
-        zcfg.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
-    }
-    l, err := zcfg.Build(zap.AddCallerSkip(1))
-    if err != nil { return err }
-    base = l
-    initialized = true
-    return nil
+	mu.Lock()
+	defer mu.Unlock()
+
+	var zcfg zap.Config
+	if cfg.Format == "json" {
+		zcfg = zap.NewProductionConfig()
+	} else {
+		zcfg = zap.NewDevelopmentConfig()
+		zcfg.Encoding = "console"
+
+		// Custom encoder config for beautiful console output with brackets
+		zcfg.EncoderConfig.TimeKey = "T"
+		zcfg.EncoderConfig.LevelKey = "L"
+		zcfg.EncoderConfig.NameKey = "N"
+		zcfg.EncoderConfig.CallerKey = "C"
+		zcfg.EncoderConfig.MessageKey = "M"
+		zcfg.EncoderConfig.StacktraceKey = "S"
+
+		zcfg.EncoderConfig.EncodeLevel = customLevelEncoder
+		zcfg.EncoderConfig.EncodeTime = customTimeEncoder
+		zcfg.EncoderConfig.EncodeCaller = customCallerEncoder
+		zcfg.EncoderConfig.EncodeName = zapcore.FullNameEncoder
+		zcfg.EncoderConfig.LineEnding = zapcore.DefaultLineEnding
+		zcfg.EncoderConfig.ConsoleSeparator = " "
+
+		zcfg.DisableStacktrace = true
+		zcfg.DisableCaller = false
+	}
+	// Level
+	switch strings.ToLower(cfg.Level) {
+	case "debug":
+		zcfg.Level = zap.NewAtomicLevelAt(zapcore.DebugLevel)
+	case "warn":
+		zcfg.Level = zap.NewAtomicLevelAt(zapcore.WarnLevel)
+	case "error":
+		zcfg.Level = zap.NewAtomicLevelAt(zapcore.ErrorLevel)
+	default:
+		zcfg.Level = zap.NewAtomicLevelAt(zapcore.InfoLevel)
+	}
+	l, err := zcfg.Build(zap.AddCallerSkip(1))
+	if err != nil {
+		return err
+	}
+	base = l
+	initialized = true
+	return nil
 }
 
 func initLogger() {
-    cfg := zap.NewProductionConfig()
-    cfg.EncoderConfig.TimeKey = "ts"
-    cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
-    l, _ := cfg.Build()
-    base = l
+	cfg := zap.NewProductionConfig()
+	cfg.EncoderConfig.TimeKey = "ts"
+	cfg.EncoderConfig.EncodeTime = zapcore.ISO8601TimeEncoder
+	l, _ := cfg.Build()
+	base = l
 }
 
 func GetLogger() *zap.Logger {
@@ -130,7 +133,7 @@ func GetLogger() *zap.Logger {
 		return base
 	}
 	mu.RUnlock()
-	
+
 	initOnce.Do(initLogger)
 	return base
 }
@@ -141,7 +144,7 @@ func Warn(msg string, fields ...zap.Field)  { GetLogger().Warn(msg, fields...) }
 func Error(msg string, fields ...zap.Field) { GetLogger().Error(msg, fields...) }
 func Debug(msg string, fields ...zap.Field) { GetLogger().Debug(msg, fields...) }
 
-// Formatted helpers used by dbmanager
+// Formatted helpers used by dbx
 func Infof(format string, args ...interface{})  { GetLogger().Sugar().Infof(format, args...) }
 func Warnf(format string, args ...interface{})  { GetLogger().Sugar().Warnf(format, args...) }
 func Errorf(format string, args ...interface{}) { GetLogger().Sugar().Errorf(format, args...) }

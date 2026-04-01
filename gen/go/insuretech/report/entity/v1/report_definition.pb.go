@@ -88,15 +88,15 @@ type ReportDefinition struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id           string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                              // @inject_tag: gorm:"primaryKey;column:report_id;not null"
-	Name         string         `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`                                                          // @inject_tag: gorm:"column:name;not null"
-	Category     ReportCategory `protobuf:"varint,3,opt,name=category,proto3,enum=insuretech.report.entity.v1.ReportCategory" json:"category,omitempty"` // @inject_tag: gorm:"column:category;not null;serializer:proto_enum"
-	Description  string         `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty"`                                            // @inject_tag: gorm:"column:description"
-	Query        string         `protobuf:"bytes,5,opt,name=query,proto3" json:"query,omitempty"`                                                        // @inject_tag: gorm:"column:query;not null"
-	Parameters   string         `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty"`                                              // @inject_tag: gorm:"column:parameters"
-	FormatConfig string         `protobuf:"bytes,7,opt,name=format_config,json=formatConfig,proto3" json:"format_config,omitempty"`                      // @inject_tag: gorm:"column:format_config"
-	IsActive     bool           `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty"`                                 // @inject_tag: gorm:"column:is_active"
-	AuditInfo    *v1.AuditInfo  `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                               // @inject_tag: gorm:"column:audit_info;not null"
+	Id           string         `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:report_id;not null"`
+	Name         string         `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	Category     ReportCategory `protobuf:"varint,3,opt,name=category,proto3,enum=insuretech.report.entity.v1.ReportCategory" json:"category,omitempty" gorm:"column:category;not null;serializer:proto_enum"`
+	Description  string         `protobuf:"bytes,4,opt,name=description,proto3" json:"description,omitempty" gorm:"column:description"`
+	Query        string         `protobuf:"bytes,5,opt,name=query,proto3" json:"query,omitempty" gorm:"column:query;not null"`
+	Parameters   string         `protobuf:"bytes,6,opt,name=parameters,proto3" json:"parameters,omitempty" gorm:"column:parameters"`
+	FormatConfig string         `protobuf:"bytes,7,opt,name=format_config,json=formatConfig,proto3" json:"format_config,omitempty" gorm:"column:format_config"`
+	IsActive     bool           `protobuf:"varint,8,opt,name=is_active,json=isActive,proto3" json:"is_active,omitempty" gorm:"column:is_active"`
+	AuditInfo    *v1.AuditInfo  `protobuf:"bytes,9,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *ReportDefinition) Reset() {

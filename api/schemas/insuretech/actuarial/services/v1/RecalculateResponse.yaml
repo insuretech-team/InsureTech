@@ -1,0 +1,15 @@
+RecalculateResponse:
+  type: object
+  properties:
+    new_calculation_id:
+      type: string
+    success:
+      type: boolean
+    calculation:
+      $ref: '#/components/schemas/ActuarialCalculation'
+    errors:
+      type: array
+      items:
+        type: string
+  description: Response payload for recalculate operation. Returns operation results
+    and status.

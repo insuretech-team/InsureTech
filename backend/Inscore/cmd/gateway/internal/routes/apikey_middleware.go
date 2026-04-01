@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"go.uber.org/zap"
@@ -48,7 +49,7 @@ func ApiKeyScopeMiddleware(authnConn *grpc.ClientConn, requiredScope string) fun
 					zap.Error(err),
 					zap.String("path", r.URL.Path),
 				)
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 
@@ -56,7 +57,7 @@ func ApiKeyScopeMiddleware(authnConn *grpc.ClientConn, requiredScope string) fun
 				logger.Warn("ApiKeyScopeMiddleware: invalid API key",
 					zap.String("path", r.URL.Path),
 				)
-				http.Error(w, "Unauthorized", http.StatusUnauthorized)
+				respond.Error(w, r, http.StatusUnauthorized, "UNAUTHENTICATED", "Unauthorized")
 				return
 			}
 

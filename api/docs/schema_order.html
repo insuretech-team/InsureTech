@@ -250,23 +250,23 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">Order represents a purchase order for an insurance policy.
- Created from an approved quotation → payment → policy issuance flow.
+            <div class="description">Order represents a purchase order for an insurance policy.
+ Created from an approved quotation → payment → insurer proposal → policy issuance/refund flow.
  Maps to 'orders' table in insurance_schema.</div>
         </div>
         
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">32</div>
+                    <div class="stat-value">39</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">16</div>
+                    <div class="stat-value">17</div>
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">16</div>
+                    <div class="stat-value">22</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -439,7 +439,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Payment fields — populated after InitiatePayment
+                <td class="field-description">Payment fields — populated after InitiatePayment
  @inject_tag: gorm:"column:payment_id"</td>
             </tr>
             
@@ -468,7 +468,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">Policy fields — populated after PolicyIssued
+                <td class="field-description">Policy fields — populated after insurer approval and PolicyIssued
  @inject_tag: gorm:"column:policy_id"</td>
             </tr>
             
@@ -736,6 +736,104 @@
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
                 <td class="field-description">@inject_tag: gorm:"column:purchase_order_id;index:idx_orders_purchase_order_id"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>proposal_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:proposal_id"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>refund_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:refund_id"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>insurer_id</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:insurer_id"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    🔴 <strong>proposal_status</strong>
+                </td>
+                <td class="field-type">
+                    <code>unknown</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">NO</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>proposal_submitted_at</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    <br><small>date-time</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:proposal_submitted_at;serializer:proto_timestamp"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>proposal_decided_at</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    <br><small>date-time</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:proposal_decided_at;serializer:proto_timestamp"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>proposal_decision_reason</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">@inject_tag: gorm:"column:proposal_decision_reason"</td>
             </tr>
             
                 </tbody>

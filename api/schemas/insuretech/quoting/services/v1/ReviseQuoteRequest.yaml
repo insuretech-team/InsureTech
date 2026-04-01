@@ -1,0 +1,14 @@
+ReviseQuoteRequest:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    new_parameters:
+      $ref: '#/components/schemas/QuoteParameters'
+    revision_reason:
+      type: string
+    validity_days:
+      type: integer
+      format: int32
+  description: Request payload for revise quote operation. Contains parameters required
+    to execute the operation.

@@ -1,0 +1,9 @@
+EmployeeLoginOrganisationsListingResponse:
+  type: object
+  properties:
+    organisations:
+      type: array
+      items:
+        $ref: '#/components/schemas/EmployeeLoginOrganisation'
+  description: Response payload for employee login organisations listing operation.
+    Returns operation results and status.

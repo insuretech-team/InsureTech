@@ -146,9 +146,9 @@ message Partner {
       column_name : "contact_phone"
       sql_type : "VARCHAR(20)"
       not_null : true
-      check_constraint : "contact_phone ~ '^\\+880[1][0-9]{9}$'"
+      check_constraint : "contact_phone ~ '^\\+880(13|14|15|16|17|18|19)[0-9]{8}$'"
       // @inject_tag: gorm:"column:contact_phone;not null"
-      comment : "Primary contact phone (Bangladesh format)"
+      comment : "Primary contact mobile stored as canonical +8801XXXXXXXXX"
     },
     (insuretech.common.v1.pii) = true,
     (insuretech.common.v1.encrypted_security) = true,
@@ -395,9 +395,9 @@ message Agent {
       sql_type : "VARCHAR(20)"
       not_null : true
       unique : true
-      check_constraint : "phone_number ~ '^\\+880[1][0-9]{9}$'"
+      check_constraint : "phone_number ~ '^\\+880(13|14|15|16|17|18|19)[0-9]{8}$'"
       // @inject_tag: gorm:"column:phone_number;not null"
-      comment : "Agent phone number (Bangladesh format)"
+      comment : "Agent mobile number stored as canonical +8801XXXXXXXXX"
       index : {
         index_name : "idx_agents_phone_number"
         index_type : INDEX_TYPE_BTREE
@@ -434,7 +434,7 @@ message Agent {
     (insuretech.common.v1.data_purpose) = "Agent contact information"
   ];
 
-  AgentStatus status = 7 [ (insuretech.common.v1.column) = {
+  InsuranceAgentStatus status = 7 [ (insuretech.common.v1.column) = {
     column_name : "status"
     sql_type : "VARCHAR(50)"
     not_null : true
@@ -512,7 +512,7 @@ message Agent {
   // @inject_tag: gorm:"column:deleted_at;serializer:proto_timestamp"
 }
 
-enum AgentStatus {
+enum InsuranceAgentStatus {
   AGENT_STATUS_UNSPECIFIED = 0;
   AGENT_STATUS_ACTIVE = 1;    // Active agent
   AGENT_STATUS_INACTIVE = 2;  // Inactive (voluntary)

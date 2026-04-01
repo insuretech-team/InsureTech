@@ -1,0 +1,21 @@
+BusinessRuleFailedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    execution_id:
+      type: string
+    business_workflow_id:
+      type: string
+    rule_name:
+      type: string
+    error_message:
+      type: string
+    entity_type:
+      type: string
+    entity_id:
+      type: string
+    failed_at:
+      type: string
+      format: date-time
+  description: BusinessRuleFailedEvent is emitted when a specific business rule fails

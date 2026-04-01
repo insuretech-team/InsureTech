@@ -1,0 +1,24 @@
+InsuredPerson:
+  type: object
+  properties:
+    first_name:
+      type: string
+    last_name:
+      type: string
+    age:
+      type: integer
+      format: int32
+    gender:
+      type: string
+      description: MALE, FEMALE, OTHER
+    occupation:
+      type: string
+    email:
+      type: string
+    phone:
+      type: string
+    health_conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/HealthCondition'
+  description: InsuredPerson - Details of the person being insured

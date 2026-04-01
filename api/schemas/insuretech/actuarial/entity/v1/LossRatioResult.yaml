@@ -1,0 +1,19 @@
+LossRatioResult:
+  type: object
+  properties:
+    loss_ratio:
+      type: number
+      format: double
+    expense_ratio:
+      type: number
+      format: double
+    combined_ratio:
+      type: number
+      format: double
+    underwriting_profit_margin:
+      type: number
+      format: double
+    interpretation:
+      type: string
+      description: PROFITABLE, BREAK_EVEN, LOSS_MAKING
+  description: LossRatioResult represents the result of loss ratio calculations

@@ -4,7 +4,7 @@
  */
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { parseMoneyDecimal, sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { parseMoneyDecimal, sdkErrorMessage, unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { PurchaseOrder } from "@lifeplus/insuretech-sdk";
 import type { PurchaseOrder as UiPO } from "@lib/types/b2b";
@@ -38,8 +38,9 @@ export async function GET(request: Request, { params }: RouteContext) {
   try {
     const hdrs = await resolvePortalHeaders(request);
     const result = await makeSdkClient(request, hdrs ?? undefined).getPurchaseOrder({ path: { purchase_order_id: id } });
-    if (!result.response.ok) return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    const po = result.data?.purchase_order as POWithMeta | undefined;
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message }, { status: unwrapped.status });
+    const po = (unwrapped.data as Record<string, unknown>)?.purchase_order as POWithMeta | undefined;
     return NextResponse.json({ ok: true, purchaseOrder: po ? mapPO(po) : null });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error" }, { status: 502 });

@@ -26,7 +26,7 @@ func TestAuthZService_Live_CheckAccessErrorAndBatchErrorReason(t *testing.T) {
 		cleanupAuthnUserForService(t, dbConn, userID)
 	})
 
-	// Invalid regex in action pattern -> enforce error path.
+	// Invalid regex in action pattern should fail closed without bubbling an error.
 	_, err := svc.CreatePolicyRule(ctx, &authzservicev1.CreatePolicyRuleRequest{
 		Subject:   "user:" + userID,
 		Domain:    domain,
@@ -37,10 +37,12 @@ func TestAuthZService_Live_CheckAccessErrorAndBatchErrorReason(t *testing.T) {
 	})
 	require.NoError(t, err)
 
-	_, err = svc.CheckAccess(ctx, &authzservicev1.CheckAccessRequest{
+	checkResp, err := svc.CheckAccess(ctx, &authzservicev1.CheckAccessRequest{
 		UserId: userID, Domain: domain, Object: "svc:err/regex", Action: "GET",
 	})
-	require.Error(t, err)
+	require.NoError(t, err)
+	require.False(t, checkResp.Allowed)
+	require.NotEmpty(t, checkResp.Reason)
 
 	batchResp, err := svc.BatchCheckAccess(ctx, &authzservicev1.BatchCheckAccessRequest{
 		UserId: userID,

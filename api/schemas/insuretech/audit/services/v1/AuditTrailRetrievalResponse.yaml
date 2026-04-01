@@ -5,8 +5,5 @@ AuditTrailRetrievalResponse:
       type: array
       items:
         $ref: '#/components/schemas/AuditLog'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for audit trail retrieval operation. Returns operation
     results and status.

@@ -1,4 +1,4 @@
-AuthzJWK:
+JWK:
   type: object
   properties:
     kty:

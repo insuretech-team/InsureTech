@@ -47,7 +47,8 @@ func testPartnerDB(t *testing.T) *gorm.DB {
 }
 
 func newPartnerLiveID(prefix string) string {
-	return prefix + "_" + uuid.New().String()[:8]
+	_ = prefix
+	return uuid.New().String()
 }
 
 func cleanupPartner(t *testing.T, db *gorm.DB, partnerID string) {

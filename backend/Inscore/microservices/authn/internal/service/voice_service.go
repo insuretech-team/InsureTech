@@ -2,9 +2,11 @@ package service
 
 // voice_service.go — Voice Biometric Session (Sprint 1.10)
 // Implements a challenge-response voice authentication flow:
-//   1. InitiateVoiceSession  — generates a random challenge phrase, creates a PENDING session
-//   2. SubmitVoiceSample     — validates transcript + confidence score, marks COMPLETED or FAILED
-//   3. VerifyVoiceSession    — confirms the session is COMPLETED and returns the user ID
+//   1. InitiateVoiceSession   — generates a random challenge phrase, creates a PENDING session
+//   2. SubmitVoiceSample      — validates transcript + confidence score, marks COMPLETED or FAILED
+//   3. VerifyVoiceSession     — confirms the session is COMPLETED and returns the user ID
+//   4. CreateVoiceSession     — legacy RPC kept for proto compatibility; delegates to InitiateVoiceSession
+//   5. getVoiceSessionInternal / endVoiceSessionInternal — internal helpers
 
 import (
 	"context"
@@ -219,4 +221,53 @@ func (s *AuthService) VerifyVoiceSession(ctx context.Context, req *authnservicev
 		UserId:        vs.UserId,
 		Message:       "Voice authentication successful",
 	}, nil
+}
+
+// ── CreateVoiceSession (legacy RPC — proto compatibility) ────────────────────
+
+// CreateVoiceSession is the legacy voice session RPC kept for proto compatibility.
+// It delegates to InitiateVoiceSession and maps the response to the legacy shape.
+func (s *AuthService) CreateVoiceSession(ctx context.Context, req *authnservicev1.CreateVoiceSessionRequest) (*authnservicev1.CreateVoiceSessionResponse, error) {
+	initResp, err := s.InitiateVoiceSession(ctx, &authnservicev1.InitiateVoiceSessionRequest{
+		UserId: req.UserId,
+	})
+	if err != nil {
+		return nil, err
+	}
+	return &authnservicev1.CreateVoiceSessionResponse{
+		VoiceSessionId: initResp.SessionId,
+		Status:         "PENDING",
+		Message:        initResp.Challenge,
+	}, nil
+}
+
+// ── Internal helpers ──────────────────────────────────────────────────────────
+
+// getVoiceSessionInternal retrieves a voice session by ID for internal use.
+func (s *AuthService) getVoiceSessionInternal(ctx context.Context, voiceSessionID string) (*voicev1.VoiceSession, error) {
+	if s.voiceRepo == nil {
+		return nil, errors.New("voice repository not configured")
+	}
+	vs, err := s.voiceRepo.GetByID(ctx, voiceSessionID)
+	if err != nil {
+		return nil, err
+	}
+	return vs, nil
+}
+
+// endVoiceSessionInternal marks a voice session as ended with the given status and duration.
+func (s *AuthService) endVoiceSessionInternal(ctx context.Context, voiceSessionID string, status string, durationSeconds int32) error {
+	if s.voiceRepo == nil {
+		return errors.New("voice repository not configured")
+	}
+	var newStatus voicev1.SessionStatus
+	switch status {
+	case "COMPLETED":
+		newStatus = voicev1.SessionStatus_SESSION_STATUS_COMPLETED
+	case "FAILED":
+		newStatus = voicev1.SessionStatus_SESSION_STATUS_FAILED
+	default:
+		newStatus = voicev1.SessionStatus_SESSION_STATUS_TIMEOUT
+	}
+	return s.voiceRepo.Complete(ctx, voiceSessionID, newStatus, time.Now(), &durationSeconds)
 }

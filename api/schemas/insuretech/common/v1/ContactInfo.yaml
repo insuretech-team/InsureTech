@@ -3,7 +3,7 @@ ContactInfo:
   properties:
     mobile_number:
       type: string
-      description: +880 1XXX XXXXXX
+      description: 'Canonical format: +8801XXXXXXXXX'
       x-pii: true
       x-encrypted: true
       x-log-masked: true

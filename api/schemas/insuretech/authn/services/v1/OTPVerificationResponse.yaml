@@ -5,10 +5,11 @@ OTPVerificationResponse:
       type: boolean
     user_id:
       type: string
-    message:
+    device_credential:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+      description: "WhatsApp-style device credential \u2014 returned ONCE after successful\
+        \ OTP verify\r\n when device_type is ANDROID or IOS. Store in Android Keystore\
+        \ / iOS Keychain.\r\n Use as `password` field in subsequent Login requests\
+        \ (no OTP needed).\r\n Empty for WEB clients or when device_id is not provided."
   description: Response payload for otp verification operation. Returns operation
     results and status.

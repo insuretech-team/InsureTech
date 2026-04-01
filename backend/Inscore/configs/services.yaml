@@ -90,10 +90,10 @@ services:
     ports:
       grpc: 50140
       http: 50141
-  orders:
-    name: orders-service
+  sync_order:
+    name: sync-order-service
     backend: inscore
-    description: "Order Lifecycle (Go data layer for PoliSync orders)"
+    description: "Order Lifecycle (Go sync layer - data persistence for PoliSync order engine)"
     ports:
       grpc: 50142
       http: 50143

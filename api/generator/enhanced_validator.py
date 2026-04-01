@@ -19,7 +19,7 @@ import re
 import json
 from pathlib import Path
 from typing import Dict, List, Tuple, Any
-from datetime import datetime
+from write_guard import write_if_changed, json_dump_if_changed
 
 
 class ValidationIssue:
@@ -370,7 +370,6 @@ class EnhancedValidator:
         
         return {
             'spec_path': self.spec_path,
-            'timestamp': datetime.now().isoformat(),
             'summary': {
                 'total_issues': len(self.issues),
                 'errors': len(errors),
@@ -393,7 +392,6 @@ class EnhancedValidator:
         print("=" * 80)
         print()
         print(f"Spec: {report['spec_path']}")
-        print(f"Timestamp: {report['timestamp']}")
         print()
         print(f"📊 Metrics:")
         print(f"  - Total Schemas: {report['metrics']['total_schemas']}")
@@ -426,8 +424,7 @@ def main():
     validator.print_summary(report)
     
     # Save JSON report
-    with open(args.report, 'w', encoding='utf-8') as f:
-        json.dump(report, f, indent=2)
+    json_dump_if_changed(args.report, report, indent=2)
     print(f"✅ JSON report saved: {args.report}")
     
     # Generate HTML report if requested
@@ -477,7 +474,6 @@ def generate_html_report(report: Dict[str, Any], output_path: str):
     <div class="container">
         <h1>🔍 OpenAPI Validation Report</h1>
         <p><strong>Spec:</strong> {report['spec_path']}</p>
-        <p><strong>Generated:</strong> {report['timestamp']}</p>
         
         <h2>📊 Metrics</h2>
         <div class="metrics">
@@ -532,8 +528,7 @@ def generate_html_report(report: Dict[str, Any], output_path: str):
 </body>
 </html>"""
     
-    with open(output_path, 'w', encoding='utf-8') as f:
-        f.write(html)
+    write_if_changed(output_path, html)
 
 
 if __name__ == '__main__':

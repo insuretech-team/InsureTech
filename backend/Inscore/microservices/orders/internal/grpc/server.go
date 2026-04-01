@@ -60,8 +60,8 @@ func (s *Server) Start() error {
 		return fmt.Errorf("failed to listen on port %s: %w", s.config.Port, err)
 	}
 
-	appLogger.Infof("orders gRPC server listening on port %s", s.config.Port)
-	s.health.SetServingStatus("", grpc_health_v1.HealthCheckResponse_SERVING)
+	appLogger.Infof("sync-order gRPC server listening on port %s", s.config.Port)
+	s.health.SetServingStatus("sync_order", grpc_health_v1.HealthCheckResponse_SERVING)
 	s.health.SetServingStatus("insuretech.orders.services.v1.OrderService", grpc_health_v1.HealthCheckResponse_SERVING)
 
 	if err := s.server.Serve(lis); err != nil {

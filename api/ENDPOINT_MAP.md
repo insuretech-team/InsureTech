@@ -26,6 +26,8 @@ Auto-generated endpoint documentation
 - [Compliance-Logs](#compliance-logs)
 - [Compliance-Reports](#compliance-reports)
 - [Config](#config)
+- [Configs](#configs)
+- [Coverage](#coverage)
 - [Credentials](#credentials)
 - [Csrf](#csrf)
 - [Current](#current)
@@ -38,6 +40,7 @@ Auto-generated endpoint documentation
 - [Documents](#documents)
 - [Download](#download)
 - [Email](#email)
+- [Email-Password](#email-password)
 - [Employees](#employees)
 - [Endorsements](#endorsements)
 - [Faqs](#faqs)
@@ -116,6 +119,7 @@ Auto-generated endpoint documentation
 - [Unknown](#unknown)
 - [Upcoming](#upcoming)
 - [Usage](#usage)
+- [Users](#users)
 - [Webhook](#webhook)
 - [Webhooks](#webhooks)
 - [Workflow-Definitions](#workflow-definitions)
@@ -127,14 +131,16 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/b2b/organisations/{organisation_id}/admins` | Resource | `POST` | POST: Assign a platform user as an OrgAdmin |
+| `/v1/b2b/organisations/{organisation_id}/admins:assign` | Custom Action: `assign` | `POST` | POST: Assign a platform user as an OrgAdmin |
 
 ## Api-Keys
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/api-keys` | Collection | `GET`, `POST` | GET: List API keys for owner<br>POST: Validate API key and check scopes |
-| `/v1/api-keys/{api_key_id}` | Resource | `DELETE`, `GET`, `POST` | DELETE: Revoke API key<br>GET: Get API key details<br>POST: Rotate API key |
+| `/v1/api-keys` | Collection | `GET`, `POST` | GET: List API keys for owner<br>POST: Generate new API key for insurer/partner |
+| `/v1/api-keys/{api_key_id}` | Resource | `DELETE`, `GET` | DELETE: Revoke API key<br>GET: Get API key details |
+| `/v1/api-keys/{api_key_id}:rotate` | Custom Action: `rotate` | `POST` | POST: Rotate API key |
+| `/v1/api-keys:validate` | Custom Action: `validate` | `POST` | POST: Validate API key and check scopes |
 | `/v1/auth/api-keys` | Collection | `GET`, `POST` | GET: List API keys for an owner<br>POST: Create a new API key for a user or service |
 | `/v1/auth/api-keys/{key_id}:revoke` | Custom Action: `revoke` | `POST` | POST: Revoke an API key |
 | `/v1/auth/api-keys/{key_id}:rotate` | Custom Action: `rotate` | `POST` | POST: Rotate an API key (generates new key, marks old one for graceful expiry) |
@@ -171,8 +177,6 @@ Auto-generated endpoint documentation
 | `/v1/auth/voice-biometric:submit` | Custom Action: `submit` | `POST` | POST: Submit voice sample |
 | `/v1/auth/voice-biometric:verify` | Custom Action: `verify` | `POST` | POST: Verify voice session |
 | `/v1/auth/voice-sessions` | Collection | `POST` | POST: ── Voice Sessions ── |
-| `/v1/auth/voice-sessions/{voice_session_id}` | Resource | `GET` | GET: Get voice session |
-| `/v1/auth/voice-sessions/{voice_session_id}:end` | Custom Action: `end` | `POST` | POST: End voice session |
 
 ## Beneficiaries
 
@@ -243,7 +247,7 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/commission-payouts` | Collection | `POST` | POST: Create payout batch |
-| `/v1/commission-payouts/{payout_id}` | Resource | `POST` | POST: Process payout |
+| `/v1/commission-payouts/{payout_id}:process` | Custom Action: `process` | `POST` | POST: Process payout |
 
 ## Commission-Statement
 
@@ -255,8 +259,9 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/commissions` | Collection | `GET`, `POST` | GET: List commissions for recipient<br>POST: Calculate and record commission for policy |
+| `/v1/commissions` | Collection | `GET` | GET: List commissions for recipient |
 | `/v1/commissions/{commission_id}` | Resource | `GET` | GET: Get commission details |
+| `/v1/commissions:calculate` | Custom Action: `calculate` | `POST` | POST: Calculate and record commission for policy |
 
 ## Compliance-Logs
 
@@ -268,7 +273,7 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/compliance-reports` | Collection | `POST` | POST: Generate compliance report |
+| `/v1/compliance-reports:generate` | Custom Action: `generate` | `POST` | POST: Generate compliance report |
 
 ## Config
 
@@ -278,12 +283,24 @@ Auto-generated endpoint documentation
 | `/v1/insurers/{insurer_id}/config` | Resource | `PUT` | PUT: Update insurer config |
 | `/v1/tenants/{tenant_id}/config` | Resource | `GET`, `PUT` | GET: Get tenant config<br>PUT: Update tenant config |
 
+## Configs
+
+| Path | Type | Methods | Operations |
+|------|------|---------|------------|
+| `/v1/authz/portals/configs` | Collection | `GET` | GET: List portal configs |
+
+## Coverage
+
+| Path | Type | Methods | Operations |
+|------|------|---------|------------|
+| `/v1/b2b-self/coverage` | Collection | `GET` | GET: Resolve the authenticated employee's assigned plan and coverage |
+
 ## Credentials
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/partners/{partner_id}/credentials` | Resource | `GET` | GET: Partner Integration |
-| `/v1/partners/{partner_id}/credentials:rotate` | Custom Action: `rotate` | `POST` | POST: Rotate partner a p i key |
+| `/v1/partners/{partner_id}/credentials:rotate` | Custom Action: `rotate` | `POST` | POST: Rotate partner API key |
 
 ## Csrf
 
@@ -348,8 +365,8 @@ Auto-generated endpoint documentation
 | `/v1/auth/documents/{user_document_id}:verify` | Custom Action: `verify` | `POST` | POST: ── Document Verification (Admin) ── |
 | `/v1/auth/users/{user_id}/documents` | Resource | `GET`, `POST` | GET: List user documents<br>POST: Upload user document |
 | `/v1/claims/{claim_id}/documents` | Resource | `POST` | POST: Upload claim document |
-| `/v1/documents` | Collection | `POST` | POST: Generate document |
 | `/v1/documents/{document_id}` | Resource | `DELETE`, `GET` | DELETE: Delete document<br>GET: Get document |
+| `/v1/documents:generate` | Custom Action: `generate` | `POST` | POST: Generate document |
 | `/v1/entities/{entity_type}/{entity_id}/documents` | Resource | `GET` | GET: List documents for entity |
 | `/v1/kyc-verifications/{kyc_verification_id}/documents` | Resource | `POST` | POST: Upload document |
 
@@ -367,18 +384,27 @@ Auto-generated endpoint documentation
 |------|------|---------|------------|
 | `/v1/auth/email/verify` | Collection | `POST` | POST: Verify email address using OTP (must call before email login is allowed) |
 
+## Email-Password
+
+| Path | Type | Methods | Operations |
+|------|------|---------|------------|
+| `/v1/auth/email-password:login` | Custom Action: `login` | `POST` | POST: Login via email + password (B2B beneficiary self-service) |
+
 ## Employees
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/b2b/employees` | Collection | `GET`, `POST` | GET: List employees for the authenticated organisation<br>POST: Create a new employee |
 | `/v1/b2b/employees/{employee_uuid}` | Resource | `DELETE`, `GET`, `PATCH` | DELETE: Soft-delete an employee record<br>GET: Get a single employee by employee_uuid<br>PATCH: Update an existing employee's details |
+| `/v1/b2b/employees:activate` | Custom Action: `activate` | `POST` | POST: Start employee self-service activation using organisation code + |
 
 ## Endorsements
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/endorsements/{endorsement_id}` | Resource | `GET`, `POST` | GET: Get endorsement<br>POST: Reject endorsement |
+| `/v1/endorsements/{endorsement_id}` | Resource | `GET` | GET: Get endorsement |
+| `/v1/endorsements/{endorsement_id}:approve` | Custom Action: `approve` | `POST` | POST: Approve endorsement |
+| `/v1/endorsements/{endorsement_id}:reject` | Custom Action: `reject` | `POST` | POST: Reject endorsement |
 | `/v1/policies/{policy_id}/endorsements` | Resource | `GET`, `POST` | GET: List endorsements for policy<br>POST: Request endorsement |
 
 ## Faqs
@@ -476,7 +502,6 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/.well-known/jwks.json` | Collection | `GET` | GET: GetJWKS — serves the RS256 public key set for JWT verification |
-| `/v1/auth/.well-known/jwks.json` | Collection | `GET` | GET: 🔑 JWKS 🔑 |
 
 ## Knowledge-Base
 
@@ -490,11 +515,10 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/auth/kyc/{kyc_id}:approve` | Custom Action: `approve` | `POST` | POST: Approve k y c |
-| `/v1/auth/kyc/{kyc_id}:reject` | Custom Action: `reject` | `POST` | POST: Reject k y c |
-| `/v1/auth/users/{user_id}/kyc` | Resource | `GET`, `POST` | GET: Get k y c status<br>POST: ── KYC Verification ── |
-| `/v1/auth/users/{user_id}/kyc:complete` | Custom Action: `complete` | `POST` | POST: Complete k y c session |
-| `/v1/auth/users/{user_id}/kyc:submit-frame` | Custom Action: `submit-frame` | `POST` | POST: Submit k y c frame |
+| `/v1/auth/kyc/{kyc_id}:approve` | Custom Action: `approve` | `POST` | POST: Approve KYC |
+| `/v1/auth/users/{user_id}/kyc` | Resource | `GET`, `POST` | GET: Get KYC status<br>POST: ── KYC Verification ── |
+| `/v1/auth/users/{user_id}/kyc:complete` | Custom Action: `complete` | `POST` | POST: Complete KYC session |
+| `/v1/auth/users/{user_id}/kyc:submit-frame` | Custom Action: `submit-frame` | `POST` | POST: Submit KYC frame |
 | `/v1/beneficiaries/{beneficiary_id}/kyc` | Resource | `POST` | POST: Complete KYC |
 
 ## Kyc-Verifications
@@ -502,7 +526,9 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/kyc-verifications` | Collection | `POST` | POST: Start KYC verification |
-| `/v1/kyc-verifications/{kyc_verification_id}` | Resource | `GET`, `POST` | GET: Get KYC verification<br>POST: Reject KYC |
+| `/v1/kyc-verifications/{kyc_verification_id}` | Resource | `GET` | GET: Get KYC verification |
+| `/v1/kyc-verifications/{kyc_verification_id}:reject` | Custom Action: `reject` | `POST` | POST: Reject KYC |
+| `/v1/kyc-verifications/{kyc_verification_id}:verify` | Custom Action: `verify` | `POST` | POST: Verify KYC |
 | `/v1/kyc-verifications:pending` | Custom Action: `pending` | `GET` | GET: List pending KYC verifications (admin review queue) |
 
 ## Login
@@ -557,7 +583,7 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/auth/users/{user_id}/notification-preferences` | Resource | `PATCH` | PATCH: ── Notification Preferences ── |
+| `/v1/auth/users/{user_id}/notification-preferences` | Resource | `GET`, `PATCH` | GET: ── Notification Preferences ──<br>PATCH: Update notification preferences |
 | `/v1/users/{user_id}/notification-preferences` | Resource | `PUT` | PUT: Update notification preferences |
 
 ## Notification-Templates
@@ -600,6 +626,7 @@ Auto-generated endpoint documentation
 |------|------|---------|------------|
 | `/v1/b2b/organisations` | Collection | `GET`, `POST` | GET: List all organisations (SuperAdmin: all; BizAdmin: own only)<br>POST: Create a new organisation (SuperAdmin only) |
 | `/v1/b2b/organisations/{organisation_id}` | Resource | `DELETE`, `GET`, `PATCH` | DELETE: Soft-delete an organisation and revoke its memberships<br>GET: Get a single organisation by ID<br>PATCH: Update an organisation's profile |
+| `/v1/b2b/organisations:employee-login` | Custom Action: `employee-login` | `GET` | GET: List organisations matching a partial name/code for employee activation |
 
 ## Otp
 
@@ -627,6 +654,7 @@ Auto-generated endpoint documentation
 | `/v1/auth/email/password:reset-request` | Custom Action: `reset-request` | `POST` | POST: Request password reset via email OTP |
 | `/v1/auth/password:change` | Custom Action: `change` | `POST` | POST: Change password |
 | `/v1/auth/password:reset` | Custom Action: `reset` | `POST` | POST: Reset password |
+| `/v1/auth/users/{user_id}/password:temporary` | Custom Action: `temporary` | `POST` | POST: Set a temporary password and require the user to change it on next login |
 
 ## Payment-Methods
 
@@ -672,11 +700,13 @@ Auto-generated endpoint documentation
 | `/v1/authz/policies` | Collection | `GET`, `POST` | GET: List policy rules<br>POST: Create policy rule |
 | `/v1/authz/policies/{policy_id}` | Resource | `DELETE`, `PATCH` | DELETE: Delete policy rule<br>PATCH: Update policy rule |
 | `/v1/policies` | Collection | `POST` | POST: Create policy |
-| `/v1/policies/{policy_id}` | Resource | `GET`, `PATCH`, `POST` | GET: Get policy details<br>PATCH: Update policy<br>POST: Revive lapsed policy |
+| `/v1/policies/{policy_id}` | Resource | `GET`, `PATCH` | GET: Get policy details<br>PATCH: Update policy |
 | `/v1/policies/{policy_id}:cancel` | Custom Action: `cancel` | `POST` | POST: Cancel policy |
 | `/v1/policies/{policy_id}:generate-document` | Custom Action: `generate-document` | `POST` | POST: Generate policy document |
 | `/v1/policies/{policy_id}:issue` | Custom Action: `issue` | `POST` | POST: Issue policy (explicit transition from pending to active after payment) |
-| `/v1/policies/{policy_id}:renew` | Custom Action: `renew` | `POST` | POST: Renew policy |
+| `/v1/policies/{policy_id}:renew` | Custom Action: `renew` | `POST` | POST: Renew policy manually |
+| `/v1/policies/{policy_id}:renew-tenure` | Custom Action: `renew-tenure` | `POST` | POST: Renew policy |
+| `/v1/policies/{policy_id}:revive` | Custom Action: `revive` | `POST` | POST: Revive lapsed policy |
 | `/v1/users/{customer_id}/policies` | Resource | `GET` | GET: List user policies |
 
 ## Process
@@ -710,6 +740,7 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/auth/users/{user_id}/profile` | Resource | `GET`, `PATCH`, `POST` | GET: Get user profile<br>PATCH: Update user profile<br>POST: Create user profile |
+| `/v1/b2b-self/profile` | Collection | `GET` | GET: Resolve the authenticated employee's own profile |
 
 ## Purchase-Orders
 
@@ -730,7 +761,10 @@ Auto-generated endpoint documentation
 |------|------|---------|------------|
 | `/v1/beneficiaries/{beneficiary_id}/quotes` | Resource | `GET` | GET: List quotes for beneficiary |
 | `/v1/quotes` | Collection | `POST` | POST: Request premium quote |
-| `/v1/quotes/{quote_id}` | Resource | `GET`, `POST` | GET: Get quote details<br>POST: Convert quote to policy |
+| `/v1/quotes/{quote_id}` | Resource | `GET` | GET: Get quote details |
+| `/v1/quotes/{quote_id}:approve` | Custom Action: `approve` | `POST` | POST: Approve underwriting (manual) |
+| `/v1/quotes/{quote_id}:convert` | Custom Action: `convert` | `POST` | POST: Convert quote to policy |
+| `/v1/quotes/{quote_id}:reject` | Custom Action: `reject` | `POST` | POST: Reject underwriting (manual) |
 
 ## Receipt
 
@@ -756,9 +790,11 @@ Auto-generated endpoint documentation
 |------|------|---------|------------|
 | `/v1/mfs/refunds` | Collection | `POST` | POST: Execute refund |
 | `/v1/payments/{payment_id}/refunds` | Resource | `POST` | POST: Refund Management |
-| `/v1/policies/{policy_id}/refunds` | Resource | `POST` | POST: Calculate refund amount |
+| `/v1/policies/{policy_id}/refunds:calculate` | Custom Action: `calculate` | `POST` | POST: Calculate refund amount |
 | `/v1/refunds` | Collection | `GET` | GET: List refunds |
-| `/v1/refunds/{refund_id}` | Resource | `GET`, `POST` | GET: Get refund<br>POST: Process refund payment |
+| `/v1/refunds/{refund_id}` | Resource | `GET` | GET: Get refund |
+| `/v1/refunds/{refund_id}:approve` | Custom Action: `approve` | `POST` | POST: Approve refund |
+| `/v1/refunds/{refund_id}:process` | Custom Action: `process` | `POST` | POST: Process refund payment |
 
 ## Register
 
@@ -804,7 +840,7 @@ Auto-generated endpoint documentation
 |------|------|---------|------------|
 | `/v1/analytics/reports/{report_id}:generate` | Custom Action: `generate` | `POST` | POST: Generate report |
 | `/v1/analytics/reports:schedule` | Custom Action: `schedule` | `POST` | POST: Schedule report |
-| `/v1/reports/{report_definition_id}` | Resource | `POST` | POST: Execute report |
+| `/v1/reports/{report_definition_id}:execute` | Custom Action: `execute` | `POST` | POST: Execute report |
 
 ## Revenue-Share
 
@@ -853,6 +889,7 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/orders/{order_id}/status` | Resource | `GET` | GET: Get lightweight order status |
+| `/v1/refunds/{refund_id}/status` | Resource | `GET` | GET: Get refund status |
 | `/v1/tickets/{ticket_id}/status` | Resource | `PATCH` | PATCH: Update ticket status |
 
 ## Tasks
@@ -860,7 +897,9 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/tasks` | Collection | `POST` | POST: Create task |
-| `/v1/tasks/{task_id}` | Resource | `GET`, `PATCH`, `POST` | GET: Get task<br>PATCH: Update task<br>POST: Complete task |
+| `/v1/tasks/{task_id}` | Resource | `GET`, `PATCH` | GET: Get task<br>PATCH: Update task |
+| `/v1/tasks/{task_id}:assign` | Custom Action: `assign` | `POST` | POST: Assign task |
+| `/v1/tasks/{task_id}:complete` | Custom Action: `complete` | `POST` | POST: Complete task |
 
 ## Telemetry
 
@@ -886,7 +925,8 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/tickets` | Collection | `GET`, `POST` | GET: List tickets<br>POST: Create ticket |
-| `/v1/tickets/{ticket_id}` | Resource | `GET`, `POST` | GET: Get ticket<br>POST: Assign ticket |
+| `/v1/tickets/{ticket_id}` | Resource | `GET` | GET: Get ticket |
+| `/v1/tickets/{ticket_id}:assign` | Custom Action: `assign` | `POST` | POST: Assign ticket |
 
 ## Token
 
@@ -899,9 +939,9 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/auth/users/{user_id}/totp:disable` | Custom Action: `disable` | `POST` | POST: Disable t o t p |
+| `/v1/auth/users/{user_id}/totp:disable` | Custom Action: `disable` | `POST` | POST: Disable TOTP |
 | `/v1/auth/users/{user_id}/totp:enable` | Custom Action: `enable` | `POST` | POST: 🔐 TOTP / 2FA 🔐 |
-| `/v1/auth/users/{user_id}/totp:verify` | Custom Action: `verify` | `POST` | POST: Verify t o t p |
+| `/v1/auth/users/{user_id}/totp:verify` | Custom Action: `verify` | `POST` | POST: Verify TOTP |
 
 ## Transactions
 
@@ -921,7 +961,8 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/voice-sessions` | Collection | `POST` | POST: Start voice session |
-| `/v1/voice-sessions/{voice_session_id}` | Resource | `GET`, `POST` | GET: Get voice session<br>POST: End voice session |
+| `/v1/voice-sessions/{voice_session_id}` | Resource | `GET` | GET: Get voice session |
+| `/v1/voice-sessions/{voice_session_id}:end` | Custom Action: `end` | `POST` | POST: End voice session |
 
 ## Upcoming
 
@@ -934,6 +975,12 @@ Auto-generated endpoint documentation
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
 | `/v1/api-keys/{api_key_id}/usage` | Resource | `GET` | GET: Get usage statistics |
+
+## Users
+
+| Path | Type | Methods | Operations |
+|------|------|---------|------------|
+| `/v1/auth/users:find` | Custom Action: `find` | `POST` | POST: Find a portal user by exact email or mobile number |
 
 ## Webhook
 
@@ -971,12 +1018,12 @@ Auto-generated endpoint documentation
 
 | Path | Type | Methods | Operations |
 |------|------|---------|------------|
-| `/v1/workflow-tasks/{task_id}` | Resource | `POST` | POST: Complete task |
+| `/v1/workflow-tasks/{task_id}:complete` | Custom Action: `complete` | `POST` | POST: Complete task |
 
 ## Statistics
 
-- **Total Endpoints:** 260
-- **Total Operations:** 335
+- **Total Endpoints:** 283
+- **Total Operations:** 349
 - **Collections:** 75
-- **Resources:** 111
-- **Custom Actions:** 74
+- **Resources:** 106
+- **Custom Actions:** 102

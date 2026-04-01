@@ -27,7 +27,7 @@ namespace Insuretech.Orders.Entity.V1 {
             "CidpbnN1cmV0ZWNoL29yZGVycy9lbnRpdHkvdjEvb3JkZXIucHJvdG8SG2lu",
             "c3VyZXRlY2gub3JkZXJzLmVudGl0eS52MRofZ29vZ2xlL3Byb3RvYnVmL3Rp",
             "bWVzdGFtcC5wcm90bxodaW5zdXJldGVjaC9jb21tb24vdjEvZGIucHJvdG8a",
-            "IGluc3VyZXRlY2gvY29tbW9uL3YxL3R5cGVzLnByb3RvIu0nCgVPcmRlchJi",
+            "IGluc3VyZXRlY2gvY29tbW9uL3YxL3R5cGVzLnByb3RvIvwyCgVPcmRlchJi",
             "CghvcmRlcl9pZBgBIAEoCUJHkrUYQwoIb3JkZXJfaWQSBFVVSUQYASgBOhFn",
             "ZW5fcmFuZG9tX3V1aWQoKVoaUHJpbWFyeSBrZXkg4oCUIE9yZGVyIFVVSURS",
             "B29yZGVySWQSmAEKDG9yZGVyX251bWJlchgCIAEoCUJ1krUYcQoMb3JkZXJf",
@@ -138,40 +138,82 @@ namespace Insuretech.Orders.Entity.V1 {
             "IGIyYywgYjJiLCBhZ2VudCwgc3lzdGVtUgZwb3J0YWwSiQEKEXB1cmNoYXNl",
             "X29yZGVyX2lkGCAgASgJQl2StRhZChFwdXJjaGFzZV9vcmRlcl9pZBIEVVVJ",
             "RFo+QjJCIHB1cmNoYXNlIG9yZGVyIHJlZmVyZW5jZSAoZnJvbSBiMmJfc2No",
-            "ZW1hLnB1cmNoYXNlX29yZGVycylSD3B1cmNoYXNlT3JkZXJJZDpnirUYYwoG",
-            "b3JkZXJzEhBpbnN1cmFuY2Vfc2NoZW1hGC0gASo/SW5zdXJhbmNlIHB1cmNo",
-            "YXNlIG9yZGVycyDigJQgcXVvdGF0aW9uLXRvLXBvbGljeSBjaGVja291dCBm",
-            "bG93OAFAASrVAQoLT3JkZXJTdGF0dXMSHAoYT1JERVJfU1RBVFVTX1VOU1BF",
-            "Q0lGSUVEEAASGAoUT1JERVJfU1RBVFVTX1BFTkRJTkcQARIiCh5PUkRFUl9T",
-            "VEFUVVNfUEFZTUVOVF9JTklUSUFURUQQAhIVChFPUkRFUl9TVEFUVVNfUEFJ",
-            "RBADEh4KGk9SREVSX1NUQVRVU19QT0xJQ1lfSVNTVUVEEAQSGgoWT1JERVJf",
-            "U1RBVFVTX0NBTkNFTExFRBAFEhcKE09SREVSX1NUQVRVU19GQUlMRUQQBir0",
-            "AQoST3JkZXJQYXltZW50U3RhdHVzEiQKIE9SREVSX1BBWU1FTlRfU1RBVFVT",
-            "X1VOU1BFQ0lGSUVEEAASHwobT1JERVJfUEFZTUVOVF9TVEFUVVNfVU5QQUlE",
-            "EAESLAooT1JERVJfUEFZTUVOVF9TVEFUVVNfUEFZTUVOVF9JTl9QUk9HUkVT",
-            "UxACEh0KGU9SREVSX1BBWU1FTlRfU1RBVFVTX1BBSUQQAxInCiNPUkRFUl9Q",
-            "QVlNRU5UX1NUQVRVU19QQVlNRU5UX0ZBSUxFRBAEEiEKHU9SREVSX1BBWU1F",
-            "TlRfU1RBVFVTX1JFRlVOREVEEAUqsAEKEk9yZGVyQmlsbGluZ1N0YXR1cxIk",
-            "CiBPUkRFUl9CSUxMSU5HX1NUQVRVU19VTlNQRUNJRklFRBAAEiUKIU9SREVS",
-            "X0JJTExJTkdfU1RBVFVTX05PVF9JTlZPSUNFRBABEiEKHU9SREVSX0JJTExJ",
-            "TkdfU1RBVFVTX0lOVk9JQ0VEEAISKgomT1JERVJfQklMTElOR19TVEFUVVNf",
-            "SU5WT0lDRV9DQU5DRUxMRUQQAyr7AQoWT3JkZXJGdWxmaWxsbWVudFN0YXR1",
-            "cxIoCiRPUkRFUl9GVUxGSUxMTUVOVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIo",
-            "CiRPUkRFUl9GVUxGSUxMTUVOVF9TVEFUVVNfTk9UX1NUQVJURUQQARI0CjBP",
-            "UkRFUl9GVUxGSUxMTUVOVF9TVEFUVVNfRlVMRklMTE1FTlRfSU5fUFJPR1JF",
-            "U1MQAhImCiJPUkRFUl9GVUxGSUxMTUVOVF9TVEFUVVNfRlVMRklMTEVEEAMS",
-            "LworT1JERVJfRlVMRklMTE1FTlRfU1RBVFVTX0ZVTEZJTExNRU5UX0ZBSUxF",
-            "RBAEQowCCh9jb20uaW5zdXJldGVjaC5vcmRlcnMuZW50aXR5LnYxQgpPcmRl",
-            "clByb3RvUAFaTmdpdGh1Yi5jb20vbmV3YWdlLXNhaW50L2luc3VyZXRlY2gv",
-            "Z2VuL2dvL2luc3VyZXRlY2gvb3JkZXJzL2VudGl0eS92MTtlbnRpdHl2MaIC",
-            "A0lPRaoCG0luc3VyZXRlY2guT3JkZXJzLkVudGl0eS5WMcoCG0luc3VyZXRl",
-            "Y2hcT3JkZXJzXEVudGl0eVxWMeICJ0luc3VyZXRlY2hcT3JkZXJzXEVudGl0",
-            "eVxWMVxHUEJNZXRhZGF0YeoCHkluc3VyZXRlY2g6Ok9yZGVyczo6RW50aXR5",
-            "OjpWMWIGcHJvdG8z"));
+            "ZW1hLnB1cmNoYXNlX29yZGVycylSD3B1cmNoYXNlT3JkZXJJZBL4AQoLcHJv",
+            "cG9zYWxfaWQYISABKAlC1gGStRjRAQoLcHJvcG9zYWxfaWQSBFVVSURKTwoT",
+            "aW5zdXJhbmNlX3Byb3Bvc2FscxILcHJvcG9zYWxfaWQaEGluc3VyYW5jZV9z",
+            "Y2hlbWEgBCgDMhVma19vcmRlcnNfcHJvcG9zYWxfaWRSGgoWaWR4X29yZGVy",
+            "c19wcm9wb3NhbF9pZBACWk9GSyB0byBpbnN1cmFuY2VfcHJvcG9zYWxzIHRh",
+            "YmxlIOKAlCBpbnN1cmVyIHJldmlldyByZWNvcmQgY3JlYXRlZCBhZnRlciBw",
+            "YXltZW50Ugpwcm9wb3NhbElkEuMBCglyZWZ1bmRfaWQYIiABKAlCxQGStRjA",
+            "AQoJcmVmdW5kX2lkEgRVVUlESj0KB3JlZnVuZHMSCXJlZnVuZF9pZBoOcGF5",
+            "bWVudF9zY2hlbWEgBCgDMhNma19vcmRlcnNfcmVmdW5kX2lkUhgKFGlkeF9v",
+            "cmRlcnNfcmVmdW5kX2lkEAJaVEZLIHRvIHBheW1lbnRfc2NoZW1hLnJlZnVu",
+            "ZHMg4oCUIHJlZnVuZCBjcmVhdGVkIHdoZW4gaW5zdXJlciByZWplY3RzIGEg",
+            "cGFpZCBwcm9wb3NhbFIIcmVmdW5kSWQSzgEKCmluc3VyZXJfaWQYIyABKAlC",
+            "rgGStRipAQoKaW5zdXJlcl9pZBIEVVVJREpCCghpbnN1cmVycxIKaW5zdXJl",
+            "cl9pZBoQaW5zdXJhbmNlX3NjaGVtYSAEKAMyFGZrX29yZGVyc19pbnN1cmVy",
+            "X2lkUhkKFWlkeF9vcmRlcnNfaW5zdXJlcl9pZBACWjZUYXJnZXQgaW5zdXJl",
+            "ciBmb3IgcHJvcG9zYWwgc3VibWlzc2lvbiBhbmQgZGVjaXNpb25pbmdSCWlu",
+            "c3VyZXJJZBLZAQoPcHJvcG9zYWxfc3RhdHVzGCQgASgOMjAuaW5zdXJldGVj",
+            "aC5vcmRlcnMuZW50aXR5LnYxLk9yZGVyUHJvcG9zYWxTdGF0dXNCfpK1GHoK",
+            "D3Byb3Bvc2FsX3N0YXR1cxILVkFSQ0hBUig1MCkYATolJ09SREVSX1BST1BP",
+            "U0FMX1NUQVRVU19OT1RfU1VCTUlUVEVEJ1oxSW5zdXJlciBwcm9wb3NhbCBk",
+            "aW1lbnNpb24gb2YgdGhlIG9yZGVyIGxpZmVjeWNsZVIOcHJvcG9zYWxTdGF0",
+            "dXMStwEKFXByb3Bvc2FsX3N1Ym1pdHRlZF9hdBglIAEoCzIaLmdvb2dsZS5w",
+            "cm90b2J1Zi5UaW1lc3RhbXBCZ5K1GGMKFXByb3Bvc2FsX3N1Ym1pdHRlZF9h",
+            "dBIYVElNRVNUQU1QIFdJVEggVElNRSBaT05FWjBXaGVuIHRoZSBwYWlkIG9y",
+            "ZGVyIHdhcyBzdWJtaXR0ZWQgdG8gdGhlIGluc3VyZXJSE3Byb3Bvc2FsU3Vi",
+            "bWl0dGVkQXQSswEKE3Byb3Bvc2FsX2RlY2lkZWRfYXQYJiABKAsyGi5nb29n",
+            "bGUucHJvdG9idWYuVGltZXN0YW1wQmeStRhjChNwcm9wb3NhbF9kZWNpZGVk",
+            "X2F0EhhUSU1FU1RBTVAgV0lUSCBUSU1FIFpPTkVaMldoZW4gdGhlIGluc3Vy",
+            "ZXIgYXBwcm92ZWQgb3IgcmVqZWN0ZWQgdGhlIHByb3Bvc2FsUhFwcm9wb3Nh",
+            "bERlY2lkZWRBdBKOAQoYcHJvcG9zYWxfZGVjaXNpb25fcmVhc29uGCcgASgJ",
+            "QlSStRhQChhwcm9wb3NhbF9kZWNpc2lvbl9yZWFzb24SBFRFWFRaLkluc3Vy",
+            "ZXIgZGVjaXNpb24gcmVhc29uIG9yIGRlY2xpbmUgZXhwbGFuYXRpb25SFnBy",
+            "b3Bvc2FsRGVjaXNpb25SZWFzb246Z4q1GGMKBm9yZGVycxIQaW5zdXJhbmNl",
+            "X3NjaGVtYRgtIAEqP0luc3VyYW5jZSBwdXJjaGFzZSBvcmRlcnMg4oCUIHF1",
+            "b3RhdGlvbi10by1wb2xpY3kgY2hlY2tvdXQgZmxvdzgBQAEq/gIKC09yZGVy",
+            "U3RhdHVzEhwKGE9SREVSX1NUQVRVU19VTlNQRUNJRklFRBAAEhgKFE9SREVS",
+            "X1NUQVRVU19QRU5ESU5HEAESIgoeT1JERVJfU1RBVFVTX1BBWU1FTlRfSU5J",
+            "VElBVEVEEAISFQoRT1JERVJfU1RBVFVTX1BBSUQQAxIeChpPUkRFUl9TVEFU",
+            "VVNfUE9MSUNZX0lTU1VFRBAEEhoKFk9SREVSX1NUQVRVU19DQU5DRUxMRUQQ",
+            "BRIXChNPUkRFUl9TVEFUVVNfRkFJTEVEEAYSIwofT1JERVJfU1RBVFVTX1BS",
+            "T1BPU0FMX1NVQk1JVFRFRBAHEiIKHk9SREVSX1NUQVRVU19QUk9QT1NBTF9B",
+            "UFBST1ZFRBAIEiIKHk9SREVSX1NUQVRVU19QUk9QT1NBTF9SRUpFQ1RFRBAJ",
+            "Eh8KG09SREVSX1NUQVRVU19SRUZVTkRfUEVORElORxAKEhkKFU9SREVSX1NU",
+            "QVRVU19SRUZVTkRFRBALKvQBChJPcmRlclBheW1lbnRTdGF0dXMSJAogT1JE",
+            "RVJfUEFZTUVOVF9TVEFUVVNfVU5TUEVDSUZJRUQQABIfChtPUkRFUl9QQVlN",
+            "RU5UX1NUQVRVU19VTlBBSUQQARIsCihPUkRFUl9QQVlNRU5UX1NUQVRVU19Q",
+            "QVlNRU5UX0lOX1BST0dSRVNTEAISHQoZT1JERVJfUEFZTUVOVF9TVEFUVVNf",
+            "UEFJRBADEicKI09SREVSX1BBWU1FTlRfU1RBVFVTX1BBWU1FTlRfRkFJTEVE",
+            "EAQSIQodT1JERVJfUEFZTUVOVF9TVEFUVVNfUkVGVU5ERUQQBSqwAQoST3Jk",
+            "ZXJCaWxsaW5nU3RhdHVzEiQKIE9SREVSX0JJTExJTkdfU1RBVFVTX1VOU1BF",
+            "Q0lGSUVEEAASJQohT1JERVJfQklMTElOR19TVEFUVVNfTk9UX0lOVk9JQ0VE",
+            "EAESIQodT1JERVJfQklMTElOR19TVEFUVVNfSU5WT0lDRUQQAhIqCiZPUkRF",
+            "Ul9CSUxMSU5HX1NUQVRVU19JTlZPSUNFX0NBTkNFTExFRBADKvsBChZPcmRl",
+            "ckZ1bGZpbGxtZW50U3RhdHVzEigKJE9SREVSX0ZVTEZJTExNRU5UX1NUQVRV",
+            "U19VTlNQRUNJRklFRBAAEigKJE9SREVSX0ZVTEZJTExNRU5UX1NUQVRVU19O",
+            "T1RfU1RBUlRFRBABEjQKME9SREVSX0ZVTEZJTExNRU5UX1NUQVRVU19GVUxG",
+            "SUxMTUVOVF9JTl9QUk9HUkVTUxACEiYKIk9SREVSX0ZVTEZJTExNRU5UX1NU",
+            "QVRVU19GVUxGSUxMRUQQAxIvCitPUkRFUl9GVUxGSUxMTUVOVF9TVEFUVVNf",
+            "RlVMRklMTE1FTlRfRkFJTEVEEAQqxwIKE09yZGVyUHJvcG9zYWxTdGF0dXMS",
+            "JQohT1JERVJfUFJPUE9TQUxfU1RBVFVTX1VOU1BFQ0lGSUVEEAASJwojT1JE",
+            "RVJfUFJPUE9TQUxfU1RBVFVTX05PVF9TVUJNSVRURUQQARIjCh9PUkRFUl9Q",
+            "Uk9QT1NBTF9TVEFUVVNfU1VCTUlUVEVEEAISIwofT1JERVJfUFJPUE9TQUxf",
+            "U1RBVFVTX0lOX1JFVklFVxADEiIKHk9SREVSX1BST1BPU0FMX1NUQVRVU19B",
+            "UFBST1ZFRBAEEiIKHk9SREVSX1BST1BPU0FMX1NUQVRVU19SRUpFQ1RFRBAF",
+            "EioKJk9SREVSX1BST1BPU0FMX1NUQVRVU19SRUZVTkRfSU5JVElBVEVEEAYS",
+            "IgoeT1JERVJfUFJPUE9TQUxfU1RBVFVTX1JFRlVOREVEEAdCjAIKH2NvbS5p",
+            "bnN1cmV0ZWNoLm9yZGVycy5lbnRpdHkudjFCCk9yZGVyUHJvdG9QAVpOZ2l0",
+            "aHViLmNvbS9uZXdhZ2Utc2FpbnQvaW5zdXJldGVjaC9nZW4vZ28vaW5zdXJl",
+            "dGVjaC9vcmRlcnMvZW50aXR5L3YxO2VudGl0eXYxogIDSU9FqgIbSW5zdXJl",
+            "dGVjaC5PcmRlcnMuRW50aXR5LlYxygIbSW5zdXJldGVjaFxPcmRlcnNcRW50",
+            "aXR5XFYx4gInSW5zdXJldGVjaFxPcmRlcnNcRW50aXR5XFYxXEdQQk1ldGFk",
+            "YXRh6gIeSW5zdXJldGVjaDo6T3JkZXJzOjpFbnRpdHk6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, global::Insuretech.Common.V1.TypesReflection.Descriptor, },
-          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Orders.Entity.V1.OrderStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderPaymentStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderBillingStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderFulfillmentStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Orders.Entity.V1.Order), global::Insuretech.Orders.Entity.V1.Order.Parser, new[]{ "OrderId", "OrderNumber", "TenantId", "QuotationId", "CustomerId", "ProductId", "PlanId", "Status", "TotalPayable", "Currency", "PaymentId", "PaymentGatewayRef", "PolicyId", "CancellationReason", "FailureReason", "CreatedAt", "UpdatedAt", "PaidAt", "InvoiceId", "OrganisationId", "IdempotencyKey", "CorrelationId", "PaymentStatus", "BillingStatus", "FulfillmentStatus", "ManualReviewRequired", "PaymentDueAt", "CoverageStartAt", "CoverageEndAt", "ActorUserId", "Portal", "PurchaseOrderId" }, null, null, null, null)
+          new pbr::GeneratedClrTypeInfo(new[] {typeof(global::Insuretech.Orders.Entity.V1.OrderStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderPaymentStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderBillingStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderFulfillmentStatus), typeof(global::Insuretech.Orders.Entity.V1.OrderProposalStatus), }, null, new pbr::GeneratedClrTypeInfo[] {
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Orders.Entity.V1.Order), global::Insuretech.Orders.Entity.V1.Order.Parser, new[]{ "OrderId", "OrderNumber", "TenantId", "QuotationId", "CustomerId", "ProductId", "PlanId", "Status", "TotalPayable", "Currency", "PaymentId", "PaymentGatewayRef", "PolicyId", "CancellationReason", "FailureReason", "CreatedAt", "UpdatedAt", "PaidAt", "InvoiceId", "OrganisationId", "IdempotencyKey", "CorrelationId", "PaymentStatus", "BillingStatus", "FulfillmentStatus", "ManualReviewRequired", "PaymentDueAt", "CoverageStartAt", "CoverageEndAt", "ActorUserId", "Portal", "PurchaseOrderId", "ProposalId", "RefundId", "InsurerId", "ProposalStatus", "ProposalSubmittedAt", "ProposalDecidedAt", "ProposalDecisionReason" }, null, null, null, null)
           }));
     }
     #endregion
@@ -192,11 +234,11 @@ namespace Insuretech.Orders.Entity.V1 {
     /// </summary>
     [pbr::OriginalName("ORDER_STATUS_PAYMENT_INITIATED")] PaymentInitiated = 2,
     /// <summary>
-    /// Payment confirmed — triggers policy issuance
+    /// Payment confirmed — waiting for insurer proposal submission/decision
     /// </summary>
     [pbr::OriginalName("ORDER_STATUS_PAID")] Paid = 3,
     /// <summary>
-    /// Policy successfully issued (terminal success)
+    /// Policy successfully issued after insurer approval (terminal success)
     /// </summary>
     [pbr::OriginalName("ORDER_STATUS_POLICY_ISSUED")] PolicyIssued = 4,
     /// <summary>
@@ -207,6 +249,26 @@ namespace Insuretech.Orders.Entity.V1 {
     /// Payment failed or timed out
     /// </summary>
     [pbr::OriginalName("ORDER_STATUS_FAILED")] Failed = 6,
+    /// <summary>
+    /// Paid order submitted to insurer for acceptance
+    /// </summary>
+    [pbr::OriginalName("ORDER_STATUS_PROPOSAL_SUBMITTED")] ProposalSubmitted = 7,
+    /// <summary>
+    /// Insurer approved; policy issuance can proceed
+    /// </summary>
+    [pbr::OriginalName("ORDER_STATUS_PROPOSAL_APPROVED")] ProposalApproved = 8,
+    /// <summary>
+    /// Insurer rejected; refund must be initiated
+    /// </summary>
+    [pbr::OriginalName("ORDER_STATUS_PROPOSAL_REJECTED")] ProposalRejected = 9,
+    /// <summary>
+    /// Refund saga started after insurer rejection
+    /// </summary>
+    [pbr::OriginalName("ORDER_STATUS_REFUND_PENDING")] RefundPending = 10,
+    /// <summary>
+    /// Payment successfully refunded after rejection
+    /// </summary>
+    [pbr::OriginalName("ORDER_STATUS_REFUNDED")] Refunded = 11,
   }
 
   /// <summary>
@@ -265,7 +327,7 @@ namespace Insuretech.Orders.Entity.V1 {
     /// </summary>
     [pbr::OriginalName("ORDER_FULFILLMENT_STATUS_NOT_STARTED")] NotStarted = 1,
     /// <summary>
-    /// Insurance-service processing
+    /// Proposal approved; insurance-service issuing policy
     /// </summary>
     [pbr::OriginalName("ORDER_FULFILLMENT_STATUS_FULFILLMENT_IN_PROGRESS")] FulfillmentInProgress = 2,
     /// <summary>
@@ -278,12 +340,27 @@ namespace Insuretech.Orders.Entity.V1 {
     [pbr::OriginalName("ORDER_FULFILLMENT_STATUS_FULFILLMENT_FAILED")] FulfillmentFailed = 4,
   }
 
+  /// <summary>
+  /// OrderProposalStatus captures the insurer decision leg between payment confirmation
+  /// and policy issuance/refund.
+  /// </summary>
+  public enum OrderProposalStatus {
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_UNSPECIFIED")] Unspecified = 0,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_NOT_SUBMITTED")] NotSubmitted = 1,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_SUBMITTED")] Submitted = 2,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_IN_REVIEW")] InReview = 3,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_APPROVED")] Approved = 4,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_REJECTED")] Rejected = 5,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_REFUND_INITIATED")] RefundInitiated = 6,
+    [pbr::OriginalName("ORDER_PROPOSAL_STATUS_REFUNDED")] Refunded = 7,
+  }
+
   #endregion
 
   #region Messages
   /// <summary>
   /// Order represents a purchase order for an insurance policy.
-  /// Created from an approved quotation → payment → policy issuance flow.
+  /// Created from an approved quotation → payment → insurer proposal → policy issuance/refund flow.
   /// Maps to 'orders' table in insurance_schema.
   /// </summary>
   [global::System.Diagnostics.DebuggerDisplayAttribute("{ToString(),nq}")]
@@ -353,6 +430,13 @@ namespace Insuretech.Orders.Entity.V1 {
       actorUserId_ = other.actorUserId_;
       portal_ = other.portal_;
       purchaseOrderId_ = other.purchaseOrderId_;
+      proposalId_ = other.proposalId_;
+      refundId_ = other.refundId_;
+      insurerId_ = other.insurerId_;
+      proposalStatus_ = other.proposalStatus_;
+      proposalSubmittedAt_ = other.proposalSubmittedAt_ != null ? other.proposalSubmittedAt_.Clone() : null;
+      proposalDecidedAt_ = other.proposalDecidedAt_ != null ? other.proposalDecidedAt_.Clone() : null;
+      proposalDecisionReason_ = other.proposalDecisionReason_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -546,7 +630,7 @@ namespace Insuretech.Orders.Entity.V1 {
     public const int PolicyIdFieldNumber = 13;
     private string policyId_ = "";
     /// <summary>
-    /// Policy fields — populated after PolicyIssued
+    /// Policy fields — populated after insurer approval and PolicyIssued
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
@@ -842,6 +926,111 @@ namespace Insuretech.Orders.Entity.V1 {
       }
     }
 
+    /// <summary>Field number for the "proposal_id" field.</summary>
+    public const int ProposalIdFieldNumber = 33;
+    private string proposalId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProposalId {
+      get { return proposalId_; }
+      set {
+        proposalId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "refund_id" field.</summary>
+    public const int RefundIdFieldNumber = 34;
+    private string refundId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:refund_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string RefundId {
+      get { return refundId_; }
+      set {
+        refundId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "insurer_id" field.</summary>
+    public const int InsurerIdFieldNumber = 35;
+    private string insurerId_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:insurer_id"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string InsurerId {
+      get { return insurerId_; }
+      set {
+        insurerId_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
+    /// <summary>Field number for the "proposal_status" field.</summary>
+    public const int ProposalStatusFieldNumber = 36;
+    private global::Insuretech.Orders.Entity.V1.OrderProposalStatus proposalStatus_ = global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified;
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_status;not null"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Insuretech.Orders.Entity.V1.OrderProposalStatus ProposalStatus {
+      get { return proposalStatus_; }
+      set {
+        proposalStatus_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "proposal_submitted_at" field.</summary>
+    public const int ProposalSubmittedAtFieldNumber = 37;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp proposalSubmittedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_submitted_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp ProposalSubmittedAt {
+      get { return proposalSubmittedAt_; }
+      set {
+        proposalSubmittedAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "proposal_decided_at" field.</summary>
+    public const int ProposalDecidedAtFieldNumber = 38;
+    private global::Google.Protobuf.WellKnownTypes.Timestamp proposalDecidedAt_;
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_decided_at;serializer:proto_timestamp"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public global::Google.Protobuf.WellKnownTypes.Timestamp ProposalDecidedAt {
+      get { return proposalDecidedAt_; }
+      set {
+        proposalDecidedAt_ = value;
+      }
+    }
+
+    /// <summary>Field number for the "proposal_decision_reason" field.</summary>
+    public const int ProposalDecisionReasonFieldNumber = 39;
+    private string proposalDecisionReason_ = "";
+    /// <summary>
+    /// @inject_tag: gorm:"column:proposal_decision_reason"
+    /// </summary>
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string ProposalDecisionReason {
+      get { return proposalDecisionReason_; }
+      set {
+        proposalDecisionReason_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -889,6 +1078,13 @@ namespace Insuretech.Orders.Entity.V1 {
       if (ActorUserId != other.ActorUserId) return false;
       if (Portal != other.Portal) return false;
       if (PurchaseOrderId != other.PurchaseOrderId) return false;
+      if (ProposalId != other.ProposalId) return false;
+      if (RefundId != other.RefundId) return false;
+      if (InsurerId != other.InsurerId) return false;
+      if (ProposalStatus != other.ProposalStatus) return false;
+      if (!object.Equals(ProposalSubmittedAt, other.ProposalSubmittedAt)) return false;
+      if (!object.Equals(ProposalDecidedAt, other.ProposalDecidedAt)) return false;
+      if (ProposalDecisionReason != other.ProposalDecisionReason) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -928,6 +1124,13 @@ namespace Insuretech.Orders.Entity.V1 {
       if (ActorUserId.Length != 0) hash ^= ActorUserId.GetHashCode();
       if (Portal.Length != 0) hash ^= Portal.GetHashCode();
       if (PurchaseOrderId.Length != 0) hash ^= PurchaseOrderId.GetHashCode();
+      if (ProposalId.Length != 0) hash ^= ProposalId.GetHashCode();
+      if (RefundId.Length != 0) hash ^= RefundId.GetHashCode();
+      if (InsurerId.Length != 0) hash ^= InsurerId.GetHashCode();
+      if (ProposalStatus != global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified) hash ^= ProposalStatus.GetHashCode();
+      if (proposalSubmittedAt_ != null) hash ^= ProposalSubmittedAt.GetHashCode();
+      if (proposalDecidedAt_ != null) hash ^= ProposalDecidedAt.GetHashCode();
+      if (ProposalDecisionReason.Length != 0) hash ^= ProposalDecisionReason.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }
@@ -1074,6 +1277,34 @@ namespace Insuretech.Orders.Entity.V1 {
         output.WriteRawTag(130, 2);
         output.WriteString(PurchaseOrderId);
       }
+      if (ProposalId.Length != 0) {
+        output.WriteRawTag(138, 2);
+        output.WriteString(ProposalId);
+      }
+      if (RefundId.Length != 0) {
+        output.WriteRawTag(146, 2);
+        output.WriteString(RefundId);
+      }
+      if (InsurerId.Length != 0) {
+        output.WriteRawTag(154, 2);
+        output.WriteString(InsurerId);
+      }
+      if (ProposalStatus != global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified) {
+        output.WriteRawTag(160, 2);
+        output.WriteEnum((int) ProposalStatus);
+      }
+      if (proposalSubmittedAt_ != null) {
+        output.WriteRawTag(170, 2);
+        output.WriteMessage(ProposalSubmittedAt);
+      }
+      if (proposalDecidedAt_ != null) {
+        output.WriteRawTag(178, 2);
+        output.WriteMessage(ProposalDecidedAt);
+      }
+      if (ProposalDecisionReason.Length != 0) {
+        output.WriteRawTag(186, 2);
+        output.WriteString(ProposalDecisionReason);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(output);
       }
@@ -1212,6 +1443,34 @@ namespace Insuretech.Orders.Entity.V1 {
         output.WriteRawTag(130, 2);
         output.WriteString(PurchaseOrderId);
       }
+      if (ProposalId.Length != 0) {
+        output.WriteRawTag(138, 2);
+        output.WriteString(ProposalId);
+      }
+      if (RefundId.Length != 0) {
+        output.WriteRawTag(146, 2);
+        output.WriteString(RefundId);
+      }
+      if (InsurerId.Length != 0) {
+        output.WriteRawTag(154, 2);
+        output.WriteString(InsurerId);
+      }
+      if (ProposalStatus != global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified) {
+        output.WriteRawTag(160, 2);
+        output.WriteEnum((int) ProposalStatus);
+      }
+      if (proposalSubmittedAt_ != null) {
+        output.WriteRawTag(170, 2);
+        output.WriteMessage(ProposalSubmittedAt);
+      }
+      if (proposalDecidedAt_ != null) {
+        output.WriteRawTag(178, 2);
+        output.WriteMessage(ProposalDecidedAt);
+      }
+      if (ProposalDecisionReason.Length != 0) {
+        output.WriteRawTag(186, 2);
+        output.WriteString(ProposalDecisionReason);
+      }
       if (_unknownFields != null) {
         _unknownFields.WriteTo(ref output);
       }
@@ -1317,6 +1576,27 @@ namespace Insuretech.Orders.Entity.V1 {
       }
       if (PurchaseOrderId.Length != 0) {
         size += 2 + pb::CodedOutputStream.ComputeStringSize(PurchaseOrderId);
+      }
+      if (ProposalId.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(ProposalId);
+      }
+      if (RefundId.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(RefundId);
+      }
+      if (InsurerId.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(InsurerId);
+      }
+      if (ProposalStatus != global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified) {
+        size += 2 + pb::CodedOutputStream.ComputeEnumSize((int) ProposalStatus);
+      }
+      if (proposalSubmittedAt_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ProposalSubmittedAt);
+      }
+      if (proposalDecidedAt_ != null) {
+        size += 2 + pb::CodedOutputStream.ComputeMessageSize(ProposalDecidedAt);
+      }
+      if (ProposalDecisionReason.Length != 0) {
+        size += 2 + pb::CodedOutputStream.ComputeStringSize(ProposalDecisionReason);
       }
       if (_unknownFields != null) {
         size += _unknownFields.CalculateSize();
@@ -1446,6 +1726,33 @@ namespace Insuretech.Orders.Entity.V1 {
       }
       if (other.PurchaseOrderId.Length != 0) {
         PurchaseOrderId = other.PurchaseOrderId;
+      }
+      if (other.ProposalId.Length != 0) {
+        ProposalId = other.ProposalId;
+      }
+      if (other.RefundId.Length != 0) {
+        RefundId = other.RefundId;
+      }
+      if (other.InsurerId.Length != 0) {
+        InsurerId = other.InsurerId;
+      }
+      if (other.ProposalStatus != global::Insuretech.Orders.Entity.V1.OrderProposalStatus.Unspecified) {
+        ProposalStatus = other.ProposalStatus;
+      }
+      if (other.proposalSubmittedAt_ != null) {
+        if (proposalSubmittedAt_ == null) {
+          ProposalSubmittedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        ProposalSubmittedAt.MergeFrom(other.ProposalSubmittedAt);
+      }
+      if (other.proposalDecidedAt_ != null) {
+        if (proposalDecidedAt_ == null) {
+          ProposalDecidedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+        }
+        ProposalDecidedAt.MergeFrom(other.ProposalDecidedAt);
+      }
+      if (other.ProposalDecisionReason.Length != 0) {
+        ProposalDecisionReason = other.ProposalDecisionReason;
       }
       _unknownFields = pb::UnknownFieldSet.MergeFrom(_unknownFields, other._unknownFields);
     }
@@ -1615,6 +1922,40 @@ namespace Insuretech.Orders.Entity.V1 {
             PurchaseOrderId = input.ReadString();
             break;
           }
+          case 266: {
+            ProposalId = input.ReadString();
+            break;
+          }
+          case 274: {
+            RefundId = input.ReadString();
+            break;
+          }
+          case 282: {
+            InsurerId = input.ReadString();
+            break;
+          }
+          case 288: {
+            ProposalStatus = (global::Insuretech.Orders.Entity.V1.OrderProposalStatus) input.ReadEnum();
+            break;
+          }
+          case 298: {
+            if (proposalSubmittedAt_ == null) {
+              ProposalSubmittedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ProposalSubmittedAt);
+            break;
+          }
+          case 306: {
+            if (proposalDecidedAt_ == null) {
+              ProposalDecidedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ProposalDecidedAt);
+            break;
+          }
+          case 314: {
+            ProposalDecisionReason = input.ReadString();
+            break;
+          }
         }
       }
     #endif
@@ -1781,6 +2122,40 @@ namespace Insuretech.Orders.Entity.V1 {
           }
           case 258: {
             PurchaseOrderId = input.ReadString();
+            break;
+          }
+          case 266: {
+            ProposalId = input.ReadString();
+            break;
+          }
+          case 274: {
+            RefundId = input.ReadString();
+            break;
+          }
+          case 282: {
+            InsurerId = input.ReadString();
+            break;
+          }
+          case 288: {
+            ProposalStatus = (global::Insuretech.Orders.Entity.V1.OrderProposalStatus) input.ReadEnum();
+            break;
+          }
+          case 298: {
+            if (proposalSubmittedAt_ == null) {
+              ProposalSubmittedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ProposalSubmittedAt);
+            break;
+          }
+          case 306: {
+            if (proposalDecidedAt_ == null) {
+              ProposalDecidedAt = new global::Google.Protobuf.WellKnownTypes.Timestamp();
+            }
+            input.ReadMessage(ProposalDecidedAt);
+            break;
+          }
+          case 314: {
+            ProposalDecisionReason = input.ReadString();
             break;
           }
         }

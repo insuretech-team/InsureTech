@@ -1,0 +1,25 @@
+ActuarialVariable:
+  type: object
+  properties:
+    variable_name:
+      type: string
+    variable_type:
+      type: string
+      description: STRING, DOUBLE, BOOLEAN, DATE
+    description:
+      type: string
+    is_required:
+      type: boolean
+    default_value:
+      type: string
+    min_value:
+      type: number
+      format: double
+    max_value:
+      type: number
+      format: double
+    allowed_values:
+      type: array
+      items:
+        type: string
+  description: ActuarialVariable represents a variable definition for rating formulas

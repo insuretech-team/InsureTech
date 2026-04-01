@@ -1,0 +1,5966 @@
+[
+  {
+    "id": "workbook-enrollment-format-alpha-force",
+    "fileName": "Enrollment Format  Alpha Force.xlsx",
+    "displayName": "Enrollment Format  Alpha Force",
+    "sheets": []
+  },
+  {
+    "id": "workbook-enrollment-format-prime-shine",
+    "fileName": "Enrollment format Prime Shine.xlsx",
+    "displayName": "Enrollment format Prime Shine",
+    "sheets": []
+  },
+  {
+    "id": "workbook-insurance-coverage-income",
+    "fileName": "Insurance Coverage & Income.xlsx",
+    "displayName": "Insurance Coverage & Income",
+    "sheets": []
+  },
+  {
+    "id": "workbook-pragati",
+    "fileName": "pragati.xlsx",
+    "displayName": "pragati",
+    "sheets": [
+      {
+        "id": "sheet-pragati-sheet1",
+        "sheetName": "Sheet1",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance Limited",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Head Office",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "Pragati Insurance Bhaban, 20-21 Kawran Bazar, Dhaka-1215",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "PADE E-mail: info@pragatiinsurance.com, Web www.pragatiinsurance.com",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "PROPOSAL FORM FOR OVERSEAS MEDICLAIM POLICY (BUSINESS AND HOLIDAYS)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "(To be submitted in original with two coples)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "(Available to persons in the age group 6 months to 79 years)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "THE OVERSEAS MEDICLAIM POLICY PROVIDES INDEMNITY FOR EXPENSES INCURRED FOR MEDICAL\nTREATMENT TO THE INSURED PERSON WHO TRAVELS ABROAD AS CORPORATE CLIENT, FOR ILLNESS, DISEASES\nCONTRACTED OR INJURY SUSTAINED DURING OVERSEAS TRAVEL AND WHICH IS PRIMARILY IN THE NATURE OF \nAN EMERGENCY AND WHICH IS NECESSARY TO BE UNDERTAKEN IMMEDIATELY, WITHOUT WHICH THE\nPROPOSER IS NOT ABLE TO LEAVE THE OVERSEAS COUNTRY UNDER MEDICAL ADVICE. THE ATTENTION OF THE\nPROPOSER IS DRAWN TO ITEM II (MEDICAL HISTORY) OF THE PROPOSAL FORM, ESPECIALLY IN RELATION TO\nPREVIOUS TREATMENT OF ILLNESS BY THE PROPOSER",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "THE PROPOSAL FORM SHOULD BE COMPLETED TO THE BEST OF YOUR KNOWLEDGE AND BELIEF AND ALL MATTERIAL FACTS\nSHOULD BE DISCLOSED, FAILURE TO DO SO MAY NULLIFY COVER UNDER ANY POLICY ISSUED.\nA material fact is one that is likely to influence the Insurer's acceptance or assessment of the proposal. You\nshould consult Corporation/ Company if you are in any doubt as to what constitutes a material fact.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "1. Name and state of the propeser ( in block",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "State whether Mr./ Mrs./ Miss/Master",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "letters) as stated in the passport :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "2. Residence address :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "3. Residence Telephone No & Mobile No :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "4. Proposer's Actual Occupation (specify) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "5. Office Name and Address, if any :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "6. Office Telephone No. :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "7. Age (in completed years) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "8. Passport Number (copy attached) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "9. Plan Type :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "Schengen countries",
+              "",
+              "",
+              "",
+              "",
+              "Non-Schengen countries",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "Worldwide (excluding USA & Canada)",
+              "",
+              "",
+              "",
+              "",
+              "Worldwide (excluding USA & Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "Plan A",
+              "",
+              "",
+              "",
+              "",
+              "Plan A",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "Worldwide (including USA & Canada)",
+              "",
+              "",
+              "",
+              "",
+              "Worldwide (including USA & Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "Plan B",
+              "",
+              "",
+              "",
+              "",
+              "Plan B",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "10. Purpose of Trip (State official/holiday travel in conducted tour/holiday travel individual) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "11. Purposed date of departure from the People's Republic of Bangladesh (kindly note that no extension can be granteu) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 34,
+            "cells": [
+              "12. Number of days stay outside the People's Republic of Bangladesh (kindly note that no extension can be granted) :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 36,
+            "cells": [
+              "13. Itinerary (State countries and places to ha scholted and animate m of days at each place :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet2",
+        "sheetName": "Sheet2",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "14",
+              "14. Name and Address of the usual physician and Registration No. :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "",
+              "Telephone No. Consulting Room/Office/ :",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "",
+              "Residance",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "II..",
+              "MEDICAL HISTORY",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "",
+              "TO BE COMPLETED BY THE PROPOSER/SPOUSE",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "",
+              "PLEASE ANSWER THE FOLLOWING QUESTIONS IN YES OR NO (A DASH IS NOT SUFFICIENT\nAND GIVE FULL DETAILS.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "1",
+              "Are you in good health and free\nfrom physical and mental disease or infirmity?:",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "2",
+              "Have you ever suffered from",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "",
+              "(a) Any nervous, mental or psychiatric\ndisease slinned disc or other sninal\ndisorder, fainting episode, blackout,\nfit or paralysis of any kind?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "",
+              "(b) High blood pressure, heart diseases\nincluding ischemic heart disease,\npiles, varicose veins, other circulatory\ndicordare or chaumatin fav",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "",
+              "(c) Hernia, any rheumatic or joint disease\nUrinary disease or diabetes?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "",
+              "(d) Any respiratory or allergic disease, or\nany disorder of the stomach, bowel or",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "",
+              "(e) Any other complaint requiring\nspecialist's consultation or surgical or\nhospital treatment or investigations?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "",
+              "(f) Any complaint or tendency that may\nnecessitate such consultation or\ntreatment in the future?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "3",
+              "Are there any additional facts affecting the\nproposed insurance which should be\ndisclosed to Insurers?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "4",
+              "Have you any intention of engaging in\nwinter sports or pastimes rendering you\nliable to personal injury?",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "5",
+              "Give particulars of any other illness or\ndisease or accident sustained by you during\nthe 12 months preceding the first day of\nInsurance in the table below.",
+              "",
+              "",
+              "",
+              "",
+              ":____________________________________",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "",
+              "Nature of illness/disease\nInjury and treatment received",
+              "",
+              "",
+              "Date First Treated",
+              "",
+              "",
+              "Name of attending medical practitioner/surgeon with his",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet3",
+        "sheetName": "Sheet3",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "1",
+              "Please give details of any knowledge of any positive existence or presence of any ailment, sickness or\ninjury which may require medical attention whilst on tour abroad.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "",
+              "1",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "",
+              "2",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "",
+              "3",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "",
+              "4",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "1 HEREBY DECLARE THAT",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "1",
+              "I will not be travelling against the advice of a physician.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "2",
+              "I am not on waiting list for any medical treatment.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "3",
+              "I will not be travelling for the purpose of obtaining medical treatment.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "4",
+              "I have not received a terminal prognosis for a medical condition before this day.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "I further declare and warrant that the above statements are true and complete. I consent to the insurers seeking medical information from any doctor who has at any time attended concerning anything which affects my physical or mental health, and I authorise the giving of such information as Van Ameyde UK Ltd. / Specialty Assist Ltd. and/or their Program Medical Advisor may require. I agree that this proposal shall form the basis of the contract should the insurance be effected.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "I am willing to accept the Policy, subject to the terms, exceptions and conditions prescribed by Corporation/\nComnany therein",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "Signature ________________________________Date:_______________/____________/_____________",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "DD",
+              "",
+              "MM",
+              "YY",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "Place___________________________________________________",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "List of Schengen Countries",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "Austria. Belgium. Denmark. Finland. France, Germany, Iceland Italy Greece Invemhourg\nNetherlands, Norway, Portugal, Spain, Sweden, Estonia, Latvia, Lithuania, Poland, Czech\nRepublic, Slovakia, Hungary, Slovenia, Malta, Cyprus, Switzerland and Liechtenstein",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "OVERSEAS MEDICLAIM POLICY\n(TRAVEL INSURANCE)\nPRODUCT BENEFITS & LIMITATIONS",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "01. medical expenses & Hospitalization abroaа",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "USS 50,000 Excess USD 100 (Worldwide excluding USA/CANADA",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "02. Medical Expenses & Hospitalization abroad",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "US$ 100,000 Excess USD 100 (Worldwide including USA/Canada",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "03. Medical Expenses & Hospitalization abroad for Schengen Countries",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Euro 30,000 with Nil deductible",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "04. Transport or Repatriation in case of illness of Accident",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Actual Expenses",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "05. Emergency Dental Care",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "ISS 500 Fyrese 118 50",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "06. Repatriation of Family Medical Travelling with the insured",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Actual Expenses",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "07. Repatriation of mortal remains",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Actual Expenses",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "08. Travel of one immediate family member",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "US$ 100 per day, Maximum US$ 1,000",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "09. Emergency return home following death of a close family member",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Actual Expenses",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 33,
+            "cells": [
+              "NOTE, TEEL CORE PAINT WILL NOT BE LIABILE TO PROVIDE ANT ASSISTANCE WHICH ARISES DIRECTLY OR INDIRECTLY\nFROM ANY PRE-EXISTING MEDICAL CONDITION, SUICIDE OR ATTEMTED SUICIDE, MENTAL ILLNESS, PREGNANCY OR\nCHILDBIRTH",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet4",
+        "sheetName": "Sheet4",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "OVERSEAS MEDICL AIM SCHEME PREMIUM RATING STRUCTURE (BANGLADESH)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "NON SCHENGEN COUNTRIES",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "BUSINESS and HOLIDAY (B & H): For Periods up to 180 days.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "PLAN -A\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "Age Band",
+              "0.5 40\nYears",
+              "41-50\nYears",
+              "51-55\nYears",
+              "56-59\nyears",
+              "60-65\nYears",
+              "66-70\nYears",
+              "71-76\nYears",
+              "76-79\nYears",
+              "80-85\nYears",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "Period Days",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "14-1",
+              "1239",
+              "1860",
+              "2499",
+              "2499",
+              "2499",
+              "8131",
+              "14230",
+              "28460",
+              "40657",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "15-21",
+              "1291",
+              "1983",
+              "2664",
+              "2664",
+              "2664",
+              "8668",
+              "15169",
+              "30338",
+              "43339",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "22-28",
+              "1640",
+              "2210",
+              "2076",
+              "2970",
+              "2976",
+              "9678",
+              "16937",
+              "33873",
+              "48390",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "29-35",
+              "1783",
+              "2673",
+              "3592",
+              "3592",
+              "3592",
+              "11692",
+              "20462",
+              "40924",
+              "56455",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "36-47",
+              "2042",
+              "3063",
+              "4119",
+              "4119",
+              "4119",
+              "13402",
+              "23454",
+              "46908",
+              "67011",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "48-60",
+              "2402",
+              "3629",
+              "4879",
+              "4879",
+              "4879",
+              "15873",
+              "27779",
+              "55558",
+              "79368",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "61-75",
+              "2970",
+              "4480",
+              "6022",
+              "6022",
+              "6022",
+              "19598",
+              "34297",
+              "68592",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "76-90",
+              "3550",
+              "5311",
+              "7140",
+              "7140",
+              "7140",
+              "23232",
+              "40657",
+              "81312",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "91-120",
+              "6003",
+              "9063",
+              "12184",
+              "12184",
+              "12184",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "121-147",
+              "7230",
+              "10869",
+              "14613",
+              "14613",
+              "14613",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "148-180",
+              "10046",
+              "14992",
+              "20326",
+              "20326",
+              "20326",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "PLAN -B\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "Age Band",
+              "0.5 40\nYears",
+              "41-50\nYears",
+              "51-55\nYears",
+              "56-59\nyears",
+              "60-65\nYears",
+              "66-70\nYears",
+              "71-76\nYears",
+              "76-79\nYears",
+              "80-85\nYears",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "Period Days",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "14-1",
+              "2269",
+              "4200",
+              "5331",
+              "5331",
+              "5331",
+              "17349",
+              "30360",
+              "60720",
+              "86742",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "15-21",
+              "2411",
+              "4499",
+              "5712",
+              "5712",
+              "5712",
+              "18587",
+              "32526",
+              "65052",
+              "92931",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "22-28",
+              "2724",
+              "5212",
+              "6618",
+              "6618",
+              "6618",
+              "21531",
+              "37679",
+              "75358",
+              "107653",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "29-35",
+              "3271",
+              "6149",
+              "7808",
+              "7808",
+              "7808",
+              "25402",
+              "44454",
+              "88910",
+              "127013",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "36-47",
+              "3901",
+              "7497",
+              "9520",
+              "9520",
+              "9520",
+              "30977",
+              "54210",
+              "108420",
+              "154886",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "48-60",
+              "6284",
+              "12182",
+              "15470",
+              "15470",
+              "15470",
+              "50339",
+              "88093",
+              "176187",
+              "251694",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "61-75",
+              "9037",
+              "17910",
+              "22372",
+              "22372",
+              "22372",
+              "72700",
+              "127302",
+              "254784",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "76-90",
+              "10874",
+              "21178",
+              "26894",
+              "26894",
+              "26894",
+              "87511",
+              "153146",
+              "306291",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "91-120",
+              "15320",
+              "29988",
+              "38080",
+              "38080",
+              "38080",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "121-147",
+              "20341",
+              "39921",
+              "50694",
+              "50694",
+              "50694",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 33,
+            "cells": [
+              "148-180",
+              "26939",
+              "53006",
+              "67308",
+              "67308",
+              "67308",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet5",
+        "sheetName": "Sheet5",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "APPLICABLE IN RESPECT OF CHILDREN AGED 5 AND UNDER: -",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "This policy excludes cover or Mumns Chicken Pox, Measles, German Measles, Spina Bifida,\nWhooping Cough, Diphtheria, Poliomyelitis, Meningitis and Scarlet Fever\" and for consequal thants\naccerlerated thereby or arising therefrom.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "2) CORPORATE FREQUENT TRAVELS (C.F.T): Annual Cover (Business Only)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "Maximum Period Any One Trip 30 Days",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "Age Bands (Yrs)",
+              "",
+              "",
+              "",
+              "",
+              "Premium (ODT)",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "18-40",
+              "",
+              "",
+              "",
+              "",
+              "11704",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "41-59",
+              "",
+              "",
+              "",
+              "",
+              "27511",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "EMPLOYMENT and STUDIES (E&S): For periods exceeding 180 days, but not exceeding 12 months, the\nPremium Rates are quoted on \"Per Month basis. Shorter periods to be based oh pro rata rales. 3)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "a) Employment:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "Premium to be collected in Foreign Currency (USD/Sterling out of the foreign exchange eamings un",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "espiyonla",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "Client)).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "",
+              "",
+              "",
+              "PLAN 'C'\n(Worldwide Excluding USA and (Canada)",
+              "",
+              "",
+              "",
+              "PLAN 'D'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "Age Groups (years)",
+              "",
+              "",
+              "18-40",
+              "",
+              "18-40",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "1) Premium per person\nper month or part thereof for participant\nAccompanying spouse",
+              "",
+              "",
+              "USD 64.56",
+              "",
+              "USD 103.13",
+              "",
+              "USD 111.88",
+              "",
+              "USD 214.20",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "2) Premium per ? per month\nor pert thereof Child\n(under 18 yrs)",
+              "",
+              "",
+              "USD 22.63",
+              "",
+              "",
+              "",
+              "USD 01.67",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "b) Studies:Premium to be collected in BDT:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "",
+              "",
+              "",
+              "PLAN 'C'\n(Worldwide Excluding USA and (Canada)",
+              "",
+              "",
+              "",
+              "PLAN 'D'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "Age Groups (years)",
+              "",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "1) Premium per person\nper month or part thereof for participant\nAccompanying spouse",
+              "",
+              "",
+              "BDT 1861.11",
+              "",
+              "BDT 2810.00",
+              "",
+              "BDT 2995.56",
+              "",
+              "BDT 5666.67",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "Deductibles",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "For Non-Schengen Countries:",
+              "",
+              "",
+              "USD 100",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "Emergency Detail Care:",
+              "",
+              "",
+              "USD 50",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet6",
+        "sheetName": "Sheet6",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "OVERSEAS MEDICLAIM SCHEME PREMIUM RATING STRUCTURE (BANGLADESH) SCHENGEN COUNTRIES ONLY\n1) BUSINESS and HOLIDAY (B & N) ?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "PLAN 'A'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "",
+              "0.5-40\nYears",
+              "41-50\nYears",
+              "51-55\nYears",
+              "56-69\nYears",
+              "60-65\nYears",
+              "68-70\nYears",
+              "71-75\nYears",
+              "76-79\nYears",
+              "80-85\nYears",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "14-1",
+              "1549",
+              "2324",
+              "3124",
+              "3124",
+              "3124",
+              "10164",
+              "17788",
+              "35574",
+              "50820",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "15-21",
+              "1614",
+              "2479",
+              "3330",
+              "3330",
+              "3330",
+              "10636",
+              "18962",
+              "37924",
+              "54178",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "22-28",
+              "1808",
+              "2767",
+              "3719",
+              "3719",
+              "3719",
+              "12098",
+              "21170",
+              "42340",
+              "60486",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "29-35",
+              "2229",
+              "3341",
+              "4491",
+              "4491",
+              "4491",
+              "14617",
+              "25578",
+              "51157",
+              "73080",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "36-47",
+              "2553",
+              "3830",
+              "5148",
+              "5146",
+              "5146",
+              "16753",
+              "29318",
+              "58636",
+              "83764",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "48-60",
+              "3002",
+              "4537",
+              "6099",
+              "9900",
+              "9900",
+              "19847",
+              "34724",
+              "69448",
+              "99211",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "61-75",
+              "3712",
+              "5600",
+              "7528",
+              "7528",
+              "7528",
+              "24498",
+              "42871",
+              "85743",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "76-90",
+              "4438",
+              "6639",
+              "8926",
+              "8926",
+              "8926",
+              "29040",
+              "50820",
+              "101640",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "91-120",
+              "7503",
+              "11330",
+              "15230",
+              "15230",
+              "15230",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "121-147",
+              "9038",
+              "13588",
+              "18267",
+              "18267",
+              "18267",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "148-180",
+              "12557",
+              "18741",
+              "25407",
+              "25407",
+              "25407",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "PLAN 'B'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "",
+              "0.5-40\nYears",
+              "41-50\nYears",
+              "51-55\nYears",
+              "56-69\nYears",
+              "60-65\nYears",
+              "68-70\nYears",
+              "71-75\nYears",
+              "76-79\nYears",
+              "80-85\nYears",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "14-1",
+              "2837",
+              "5250",
+              "6664",
+              "8664",
+              "8664",
+              "21686",
+              "37950",
+              "75899",
+              "108427",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "15-21",
+              "3013",
+              "5623",
+              "7140",
+              "7140",
+              "7140",
+              "23233",
+              "40659",
+              "81318",
+              "116168",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "22-28",
+              "3406",
+              "8516",
+              "8272",
+              "8272",
+              "8272",
+              "26914",
+              "47100",
+              "94200",
+              "134571",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "29-35",
+              "4090",
+              "7687",
+              "9760",
+              "9760",
+              "9760",
+              "31754",
+              "55570",
+              "111139",
+              "158769",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "36-47",
+              "4877",
+              "9372",
+              "11900",
+              "11900",
+              "11900",
+              "38722",
+              "67763",
+              "135528",
+              "193611",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "48-60",
+              "7856",
+              "15228",
+              "19338",
+              "19338",
+              "19338",
+              "62923",
+              "116117",
+              "200233",
+              "814619",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "61-75",
+              "11296",
+              "22022",
+              "27966",
+              "27966",
+              "27968",
+              "90994",
+              "159240",
+              "318480",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "76-90",
+              "43593",
+              "26473",
+              "33618",
+              "33618",
+              "33618",
+              "109390",
+              "191431",
+              "382863",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "91-120",
+              "19150",
+              "37486",
+              "47600",
+              "47600",
+              "47600",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "121-147",
+              "25426",
+              "54623",
+              "63368",
+              "83368",
+              "63368",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "148-180",
+              "33674",
+              "66257",
+              "84134",
+              "84134",
+              "84134",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              "No Cover",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet7",
+        "sheetName": "Sheet7",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "APPLICABLE IN RESPECT OF CHILDREN AGED 5 AND LINDER:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "This policy excludes cover for treatment relaling to 'Mumps, Chicken Pox, Measies, German, ? Soina Bifida, Whooping Cough\nDiphtheria, Poliomyelities, Meningilis and Scarlet Fever\" and for consequences atributable theretc, accerlerated thereby or arising thereform.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "2) CORPORATE FREQUENT TRAVELS (C.F.T): Annuel Cover (Business Only)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "Maximum Period Any One Trip 30 Days",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "Age Bands (Yrs)",
+              "",
+              "",
+              "",
+              "",
+              "Premium (BDT)",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "18-40",
+              "",
+              "",
+              "",
+              "",
+              "14630",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "41-59",
+              "",
+              "",
+              "",
+              "",
+              "34390",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "3) EMPLOYMENT and STUDIES (E &S):",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "For periods exceeding 180 days, but not exceeding 12 monthe, the Premium Rates are qunted on\n'Per Month' basis. Shorter perfods to",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "a) Einployment:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "Premium to be collected in Foreign Currency (USD/Sterling out of the foreign eamings of the employers (Corpurai",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "",
+              "",
+              "PLAN 'C'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "PLAN 'D'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "Age Groups (years)",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "2) Premium per perosn permonth or part\nthere of for participant/accompanying spouse",
+              "",
+              "UDS 80.69",
+              "",
+              "USD 128.92",
+              "",
+              "USD 139.86",
+              "",
+              "USD 267.76",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "2) Premium per child\nmonth or part there of Child (under 18 yrs)",
+              "",
+              "USD 28.29",
+              "",
+              "",
+              "",
+              "USD 118.34",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "b) Studies: Premium to be ?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "",
+              "",
+              "PLAN 'C'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              "PLAN 'D'\n(Worldwide Excluding USA and Canada)",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "Age Groups (years)",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              "",
+              "18-40",
+              "",
+              "41-59",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "2) Premium per perosn permonth or part\nthere of for participant/accompanying spouse",
+              "",
+              "BDT 2325.70",
+              "",
+              "BDT ?",
+              "",
+              "BDT 3.744.72",
+              "",
+              "BDT 7083.33",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "Derluctibles-No deductibies for policies issued for travel to Schengen countris",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet8",
+        "sheetName": "Sheet8",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance Limited",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Head Office, Pragati Insurance Bhaban,",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "20-21 Kawran Bazar, Dhaka-1215",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "Tel: PABX: 9133680-2, Fax :880-2-55013694",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "SYMBOL OF SECURITY E-mail:bancassurance@pragatiinsurance.com, ,Web:www.pragatiinsurance.com",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "PRIVATE VEHICLE INSURANCE",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "PROPOSAL FORM",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "Please fill up the star mark and highlighted part only",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "Certificate No. .........................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Address of Issuing Office",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "Policy No. ................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "..............................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "Acceptance of this proposal is subject to the rules & regulations of the Company",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "..............................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "Full Name of Md. Zubayed Ur Rahman, H/P Mioland Bank Plc",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "Address (in block letters) N.B Tower Level-5, 40/7 North Avenue, Gulshan-2, Dhaka-1212",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "Proposer Mobile/Phone Number 01985700011 & 01982777444",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "Proposer e-mail address: Zubayer@ymail.com",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "Business or Profession: Service, Medland Bank Plc",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "(Note: Please give a definite answer to each question, Ticks and dashes are not accepted as answer)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "Registration Mark & No.",
+              "Marks",
+              "Enginee & Chassis",
+              "",
+              "Type of Body",
+              "",
+              "Capacity or H.P",
+              "Year of Manufacture",
+              "Carrying capacity",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "Dhaka Metro GA-18-6525",
+              "",
+              "Eng No.\nINZ-R 77380\nChass:\nNKE165-7216292",
+              "",
+              "380\n7216292",
+              "",
+              "1496 CC",
+              "2019",
+              "Seating capacity\nINcluding Driver 5",
+              "Goods",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "Segregation of\nthe Estimated Value",
+              "Glass item excluding glass item",
+              "Glass Item",
+              "",
+              "",
+              "Electrical Appliances\nIncluding TV. Radio Air Condition",
+              "",
+              "",
+              "Accessories",
+              "Full insure Value",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "",
+              "Tk.",
+              "Tk.",
+              "",
+              "",
+              "Tk.",
+              "",
+              "",
+              "Tk.",
+              "19.50 lac",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "1. (a) Will the Car be used Solely for social domestic and pleasure purposes?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(a)..........................................",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "(b)if not, state other uses",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(b)..........................................",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "2. Are you the owner of the car and is it registered in your name? it not, state the\nname and address of owner and of the person in whose name the Car is registered",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "3. (a) Date of purchase of Car by you",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(a)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "(b) Whither new",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(b)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "(c) Price paid",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(c)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 33,
+            "cells": [
+              "(4) Present alimiate market valut",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(d)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 34,
+            "cells": [
+              "4 Do you or does any other person who to your knowledge will drive,\nsuffer from defective vision or hearing or from any physical infirmity?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 35,
+            "cells": [
+              "5. Have you, or has any other person who to your knowledge will drive been\nconvicted during the past five years or any offence in connection with any\nmotor vehicle or is any prosecution pending?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 36,
+            "cells": [
+              "6. How long have you been drive motor Vehicle continuously",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet9",
+        "sheetName": "Sheet9",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "7. Are your now or have your been insured in respect of any motor Vehicle? If so, please state name of Underwriter",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "8. Are your entitled to No. Claim Bonus from your previous insurer in respect of\nany of the Car described in this proposal? If so, please attach renewal notice",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "9. Has any underwriter ever:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "(a) declined your proposal or cancelled or refused to renew your Policy",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(a)........................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "(b) required your to bear the first of the cost of any accident ar loss",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(b)........................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "(c) Imposed special conditions to insure you or required an increased premium?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(c)........................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "10. Give particulars of accidents and losses which have occurred during the past\nthree years in connection with this or any motor Vehicle owned or driven by γου.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(a)........................................\n(b)........................................\n(c).........................................",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "11. Do your require (a) Comprehensive Policy:(b) Act only Policy or (c) Policy\nlimited to the cover required by the Motor Vehicles Act 1939 and as amended as\nper Govt. Notice\n1991....................................................................................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "12. If you wish to bear first part of the cost of each accident or loss, please state\namount Tk",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "13.Do yours wish to insure Rugs. Coats and luggage on the Car (limited Tk.1500/-\neach occurrence)?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "14. (a) Do you wish to insure any other henefits?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "TOTAL TK",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "I we warrant that the above statement and particulars are true and I/we hereby agree that this declaration shall be held to be promissory and shall from the basis of the contract between me/us and Pragati Insurance limited and I/we undertake that the Car or Cars to be insured shall not be driven by any who to my/our knowledge has been refused any motor Vehicle insurance or continuance thereof, and I/we hereby apply for and agree to accept a Policy as designate above subject to the terms. Exceptions and conditions prescribed by the scheme therein.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "Dated this 11th Day of NOV 2025",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "POLICY TO COMMENCE FROM......................................................Proposer's Signature........................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "Bank Use Only",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "Branch Name",
+              "",
+              "Gulshan Branch",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "Account Number",
+              "",
+              "Cell-1010000970",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "Account Name",
+              "",
+              "Md. Zubayed Ur Rahman",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "Bank Officer's Code",
+              "",
+              "1448",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet10",
+        "sheetName": "Sheet10",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "cÖMwZ BÝy¨‡iÝ wjwg‡UW\nPragati Insurance Limited",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "HEAD OFFICE PRAGATI INSURANCE BHABAN 20-21,\nKAWRAN BAZAR (14TH 18THE 16TH FLR\nDHAKA-1215 PHONE: PABX: 0133680-2, 8118268\n(DIR) FAX: 680-2-8122090 E-ma)\npibima@pol-online.com, TELEX: 571158PGIBJ",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "PROPOSAL FOR FIRE INSURANCE",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "Full name, address, trade or\nprofession of the proposer",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "Term of insurance: From",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "to:",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "AMOUNT TO BE INSURED (Taka Figure)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "No of diagram of Cack",
+              "",
+              "On Building",
+              "",
+              "On Machinery",
+              "",
+              "On Furniture and affects",
+              "",
+              "On Marchandise\nor stock-in trade",
+              "",
+              "Total:"
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "No. 1",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "No. 2",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "No. 3",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "Total",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "Note: All buildings standing apart or not not commnicating intemally must be separatelyupon the conents of\neach. insured. Separale sums must also be declared upon the",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "LOCATION",
+              "",
+              "",
+              "",
+              "",
+              "CONSTRUCTION",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "Name of Building",
+              "",
+              "",
+              "",
+              "",
+              "Number of storeys",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "Owner of Buiding",
+              "",
+              "",
+              "",
+              "",
+              "CONSTRUCTION OF:",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "Plot Number",
+              "",
+              "",
+              "",
+              "",
+              "Walls/Boundary",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "Holding Number",
+              "",
+              "",
+              "",
+              "",
+              "Roof",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "Name of Street",
+              "",
+              "",
+              "",
+              "",
+              "Floors in each storey",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "Town",
+              "",
+              "",
+              "",
+              "",
+              "Adjoining Building",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "Director",
+              "",
+              "",
+              "",
+              "",
+              "Building within 50 feet",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "OCCUPATION",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "Name of Banker",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "Occucation of the Ground Floor",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "Croption of the First Floor",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "Occupation of the Upper Floor",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "Occupation of Acording Floors",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "The Building is used for",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "LIGHTING, HEATING AND POWER",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "How is the building lighted?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "hHow is the building heated?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "Full paticulars of power used",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "Oh you use any naked light",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 33,
+            "cells": [
+              "OTHER INFORMATION (Please tok)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "equipemnt installed at your premises",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 34,
+            "cells": [
+              "is the building detached?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 35,
+            "cells": [
+              "Are hazardous goods stored it the building?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 36,
+            "cells": [
+              "Are the stock books kept in a fire proof safe?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 37,
+            "cells": [
+              "Do you keep a duplicate set in other premises?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 38,
+            "cells": [
+              "Do you have adequate fire fighting equipments?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 39,
+            "cells": [
+              "Have you ever had a lose by fire?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 40,
+            "cells": [
+              "Does your banker have any interest in insurance?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 41,
+            "cells": [
+              "Are you presently insured?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 42,
+            "cells": [
+              "Were you ever declined cancelled or refused to\nrenew any policy?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 43,
+            "cells": [
+              "If your building adjoins another, is the\ndivision wall about 15 feet high and openings\nnot more thant square feet in area?",
+              "",
+              "",
+              "",
+              "",
+              "Yes",
+              "No",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 44,
+            "cells": [
+              "Ary other pertinent information:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 45,
+            "cells": [
+              "I/We hereby declare that the above information is correct and I'We agree that this proposal shall be the basis\nof contract between malus and PRAGATI INSURANCE LIMITED.\n\n\n\n\nDATE:___________________________________________                                                 (Signature of the Proposer)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 46,
+            "cells": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Please turn overleaf for List of Hazardous Goods.",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet11",
+        "sheetName": "Sheet11",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance PLC",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Head Office: Pragati Insurance Bhaban,",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "20-21 Kawran Bazar, Dhaka-1215,",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "Tel PABX: 9133680-2, Fax:880-2-55013694",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "SYMBOL OF SECURITY       E-mail:info@pragatiinsurance.com, Web:www.pragatiinsurance.com",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "PROPOSAL FORM",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "FOR COMMERCIAL VEHICLE INSURANC",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "(Please fill up the star mark & highlighted part only)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "Certificate No .....................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Address of issuing office",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "Policy No............................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ".....................................................",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "Acceptance of this proposai is subject to the rules & regulations of the Company",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "Full Name of Proposer (in block letters)...............................................................................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "Address (in block letters).....................................................................................................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "Business or Profession.........................................................................................................................................",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "(Note: Please give a definito answer to each question Ticks and dashes are not accented as answer)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "PARTICULARS OF COMMERCIAL VEHICLE TO BE INSURED (only highlighted)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "Registration Marks &\nNo. or\n(Engine & Chassis No.)",
+              "",
+              "Make of Vehicle",
+              "Horse Power",
+              "Year of Manufacture",
+              "Type of Body",
+              "LIcensed Carrying Capacity",
+              "",
+              "",
+              "Insured's estimate of value of vehicle including accessories thereon for insurance purpose",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Goods Vehicles (in tons)",
+              "Passenger Vehicle of Passengers (exdriver & Cleaner)",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 20,
+            "cells": [
+              "Segregation of the Estimated Value",
+              "Vehicle (Excluding Glass item)",
+              "",
+              "Glass Item",
+              "",
+              "Trailer",
+              "Other attachment",
+              "Electrical accessories",
+              "",
+              "Non electrical accessories",
+              "Full Insured value"
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "",
+              "Tk.",
+              "",
+              "Tk.",
+              "",
+              "Tk.",
+              "Tk.",
+              "Tk.",
+              "",
+              "Tk.",
+              "Tk."
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "Date of Purchase by proposer",
+              "",
+              "Whether New of Secondhand when bought",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "(a) Price paid by proposer\n(b) Present market value",
+              "",
+              "(a) Tk.\n(b) Tk."
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "1. Is the vehicle fitted with dual rear wheels and double springs?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "2. Describe the Permit granted by Motor Vehicle Department;",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "3. Whether Private Carrier's Public Carrior's stage carriage or Cantart Carriage Permit.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "Will the vehicle be only used in Dhaka, if not State where?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "4. Where will the vehicle be usually garaged?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "5. Is vehicle in perfect condition?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "6. What accidents (if any) have occurred to any vehicle owned by proposer?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "7. What claims (if any) by third partied have been made upon Proposer?",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "8. Has proposer previously held motor vehicle Insurance? If so, state name of the corporation.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet12",
+        "sheetName": "Sheet12",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance PLC",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Cattle/Livestock Insurance Proposal Form",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "1) Name of Insured:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "2) Address:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "3) Occupation:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "4) Farm Location:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "5) Period of Insurance:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "6) Despcription of animal:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "Sl#",
+              "Ear Tag/Identification",
+              "",
+              "",
+              "Date of Birth/Purchase",
+              "Gender",
+              "Color",
+              "Weight (kg)",
+              "Value/Sum Insured (BDT)/",
+              "Species",
+              "Remarks"
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet13",
+        "sheetName": "Sheet13",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance PLC",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Cattle/Livestock Insurance Proposal Form",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 4,
+            "cells": [
+              "Period: 1 (one) year from the date of payment.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "Sl#",
+              "Ear Tag/Identification",
+              "",
+              "",
+              "Designation/Relation",
+              "Gender",
+              "Date of Birth",
+              "Age",
+              "Date of Birth",
+              "Age",
+              "Sum Insured (Per Member, In BDT,",
+              "Yearly Premium In BDT"
+            ]
+          },
+          {
+            "row": 8,
+            "cells": [
+              "1",
+              "Employee's Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "",
+              "Spouse Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "",
+              "Child-1 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "",
+              "Child-2 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "2",
+              "Employee's Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "",
+              "Spouse Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "",
+              "Child-1 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "",
+              "Child-2 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "3",
+              "Employee's Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "",
+              "Spouse Name",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "",
+              "Child-1 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "",
+              "Child-2 Information",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      },
+      {
+        "id": "sheet-pragati-sheet14",
+        "sheetName": "Sheet14",
+        "rows": [
+          {
+            "row": 1,
+            "cells": [
+              "Pragati Insurance PLC",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 2,
+            "cells": [
+              "Head Office: Pragati Insurance Bhaban, 20-21 Kawran Bazar, Dhaka-1215.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 3,
+            "cells": [
+              "PABX: 9133680-2, Fax: 880-2-8189606, E-mail: health @pragatiinsurance.com",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 5,
+            "cells": [
+              "SYMBOL OF SECURITY",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 6,
+            "cells": [
+              "(HEALTH INSURANCE CLAIM FORM)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 7,
+            "cells": [
+              "N.B: Please note that reimbursement of claim can only be made when all original documents and bills are\nsubmitted together with this form as mentioned below. ALL CLAIMS SHOULD BE SUBMITTED THROUGH THIS FORM",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 9,
+            "cells": [
+              "1. Name of Organization",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "10. Breakup of Hospitalization Treatment Expenses:",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 10,
+            "cells": [
+              "2. Name of Employee:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Cost, Charges and Fees in respect of",
+              "",
+              "",
+              "Amount (Taka",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 11,
+            "cells": [
+              "3. Name of Patient",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Hospital Accommodation",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 12,
+            "cells": [
+              "4. Relationship with Emplovce (if the patient is spouse/dependent\n                   Husband                Wife                Son                 Daughter                    Self",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Consultant's Fee",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 13,
+            "cells": [
+              "5. Date of Prior Intimation",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Routine Investigations",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 14,
+            "cells": [
+              "6. Membership No",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Medicines/Drugs",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 15,
+            "cells": [
+              "7. Name and Address",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Surgical Charges",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 16,
+            "cells": [
+              "of Hospital/Clinic",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Ancillary Services",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 17,
+            "cells": [
+              "18. Date of Admission:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Others",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 18,
+            "cells": [
+              "9. Date of Discharge",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "Total",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 19,
+            "cells": [
+              "11. Signature of the Employee & Date",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 21,
+            "cells": [
+              "(to be filled in by the Plan Coordinator of the Organization)",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 22,
+            "cells": [
+              "Documents required during submission of claim for reimbursement:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 23,
+            "cells": [
+              "Please tick the appropriate boxes for the submitted documents",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 24,
+            "cells": [
+              "1",
+              "",
+              "Copy of Prior Claim Intimation Record. OR date of telephonic intimation--/--/---",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 25,
+            "cells": [
+              "2",
+              "",
+              "Doctor's prescription(s) mentioning-duration of presenting complaints, diagnosis and\nhospitalization advice in original. In Maternity cases, the doctor's prescription must mention\nthe LMP, EDD and the Gravida.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 26,
+            "cells": [
+              "3",
+              "",
+              "Discharge Certificate stating brief history of illness, diagnosis & treatment/operation note\nand also mentioning time & date of admission and discharge. 4.☐ Certificate from\nEmployer/Educational institution in regard to absence during illness. 5. Photocopy of\npatient's Treatment Records while confined in hospital/clinic 6 Hospital Bill! should be supported by originai Money Receipt issued by the hospital. 7. All copies of diagnostic reports pertaining to the hospitalization along with the receipts in original supported by Doctor's advice",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 27,
+            "cells": [
+              "6",
+              "",
+              "Hospital Bill! should be supported by originai Money Receipt issued by the hospital. 7. All copies of diagnostic reports pertaining to the hospitalization along with the receipts in original supported by Doctor's advice",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 28,
+            "cells": [
+              "8",
+              "",
+              "Original Bills specifying:",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 29,
+            "cells": [
+              "",
+              "a)",
+              "",
+              "Accommodation Charges (mentioning daily charge with number of days in hospital).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 30,
+            "cells": [
+              "",
+              "b)",
+              "",
+              "Consultant's Fee (Doctor's bill & receipts with date).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 31,
+            "cells": [
+              "",
+              "c)",
+              "",
+              "Medicines/Drugs (Bill stating name of medicine, quantity & price supported by Doctor's prescription).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 32,
+            "cells": [
+              "",
+              "d)",
+              "",
+              "Surgical Charges (A break-up of professional fees for Surgeon, O.T., Anesthetist, Assistants etc.).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 33,
+            "cells": [
+              "",
+              "e)",
+              "",
+              "Charges for Ancillary Services (Labor Room Service, Post-Operative Care facilities, Oxygen\ntherapy, Intensive Care facility, Blood transfusions, Equipment charges, dressing, tests other\nthan routine investigations, Ambulance services etc.).",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 34,
+            "cells": [
+              "",
+              "f)",
+              "",
+              "Service charge, telephone, food & heverare charges",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 35,
+            "cells": [
+              "",
+              "g)",
+              "",
+              "VAT/other Government charges.",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 36,
+            "cells": [
+              "Forwarded the above mentioned information to Pragati\nInsurance with the necessary supporting documents\nfor processing of the claim as per Contract",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          },
+          {
+            "row": 38,
+            "cells": [
+              "Ref No.______________________________ Date:________________________Signature of Plan Coordinator with Seal",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              "",
+              ""
+            ]
+          }
+        ]
+      }
+    ]
+  }
+]

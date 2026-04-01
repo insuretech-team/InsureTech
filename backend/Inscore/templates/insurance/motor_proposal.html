@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Motor Insurance Proposal Form</title>
+  <style>
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: "Segoe UI", Arial, sans-serif; font-size: 12px; color: #0f172a; background: #fff; padding: 28px; }
+    .page { max-width: 820px; margin: 0 auto; }
+
+    /* Header */
+    .header { display: flex; justify-content: space-between; align-items: flex-start; border-bottom: 3px solid #0f172a; padding-bottom: 14px; margin-bottom: 18px; }
+    .header-brand h1 { font-size: 20px; font-weight: 700; letter-spacing: .04em; }
+    .header-brand p { font-size: 11px; color: #475569; margin-top: 3px; }
+    .header-meta { text-align: right; font-size: 11px; color: #475569; }
+    .header-meta strong { display: block; font-size: 14px; color: #0f172a; margin-bottom: 4px; }
+
+    /* Section */
+    .section { margin-bottom: 18px; }
+    .section-title { background: #0f172a; color: #fff; font-size: 11px; font-weight: 700; text-transform: uppercase; letter-spacing: .1em; padding: 6px 10px; border-radius: 4px 4px 0 0; }
+    .section-body { border: 1px solid #cbd5e1; border-top: none; border-radius: 0 0 4px 4px; padding: 12px; }
+
+    /* Grid */
+    .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+    .grid-4 { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 10px; }
+
+    /* Field */
+    .field { display: flex; flex-direction: column; gap: 3px; }
+    .field label { font-size: 10px; font-weight: 600; text-transform: uppercase; color: #64748b; letter-spacing: .06em; }
+    .field .val { border-bottom: 1px solid #94a3b8; min-height: 20px; padding: 2px 4px; font-size: 12px; color: #0f172a; }
+    .field .val-box { border: 1px solid #94a3b8; min-height: 44px; padding: 4px 6px; border-radius: 3px; font-size: 12px; }
+
+    /* Table */
+    table { width: 100%; border-collapse: collapse; margin-top: 8px; font-size: 11px; }
+    th { background: #f1f5f9; color: #475569; font-size: 10px; text-transform: uppercase; letter-spacing: .06em; padding: 6px 8px; border: 1px solid #cbd5e1; text-align: left; }
+    td { padding: 6px 8px; border: 1px solid #e2e8f0; vertical-align: top; }
+    tr:nth-child(even) td { background: #f8fafc; }
+
+    /* Declaration */
+    .declaration { background: #f8fafc; border: 1px solid #cbd5e1; border-radius: 4px; padding: 12px; font-size: 11px; line-height: 1.7; color: #334155; }
+
+    /* Signatures */
+    .sig-row { display: flex; justify-content: space-between; gap: 24px; margin-top: 28px; }
+    .sig-box { flex: 1; }
+    .sig-box .sig-line { border-top: 1px solid #0f172a; margin-top: 40px; padding-top: 4px; font-size: 10px; color: #475569; }
+
+    /* Ref / stamp */
+    .ref-row { display: flex; justify-content: space-between; align-items: center; margin-top: 14px; padding-top: 10px; border-top: 1px dashed #cbd5e1; font-size: 10px; color: #64748b; }
+
+    /* QR */
+    .qr-block { text-align: right; margin-top: 14px; }
+    .qr-block img { width: 80px; height: 80px; }
+    .qr-block p { font-size: 9px; color: #94a3b8; margin-top: 3px; }
+
+    /* Pill */
+    .pill { display: inline-block; padding: 2px 10px; border-radius: 99px; font-size: 10px; font-weight: 700; text-transform: uppercase; }
+    .pill-new { background: #dbeafe; color: #1e40af; }
+    .pill-renew { background: #dcfce7; color: #166534; }
+
+    @media print { body { padding: 0; } .page { max-width: 100%; } }
+  </style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ── Header ── -->
+  <div class="header">
+    <div class="header-brand">
+      <h1>Motor Insurance Proposal Form</h1>
+      <p>{{.company_name}} &nbsp;·&nbsp; Proposal No: <strong style="color:#0f172a">{{.proposal_number}}</strong></p>
+    </div>
+    <div class="header-meta">
+      <strong>{{.proposal_date}}</strong>
+      <div>Branch: {{.branch_name}}</div>
+      <div>Agent / Broker: {{.agent_name}}</div>
+      <div>
+        {{if .is_renewal}}
+          <span class="pill pill-renew">Renewal</span>
+        {{else}}
+          <span class="pill pill-new">New Business</span>
+        {{end}}
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 1. Proposer / Insured Details ── -->
+  <div class="section">
+    <div class="section-title">1. Proposer / Insured Details</div>
+    <div class="section-body">
+      <div class="grid-2" style="gap:14px">
+        <div class="field"><label>Full Name (Thai)</label><div class="val">{{.proposer_name_th}}</div></div>
+        <div class="field"><label>Full Name (English)</label><div class="val">{{.proposer_name_en}}</div></div>
+        <div class="field"><label>ID Card / Passport No.</label><div class="val">{{.id_card_number}}</div></div>
+        <div class="field"><label>Date of Birth</label><div class="val">{{.date_of_birth}}</div></div>
+        <div class="field"><label>Nationality</label><div class="val">{{.nationality}}</div></div>
+        <div class="field"><label>Occupation</label><div class="val">{{.occupation}}</div></div>
+        <div class="field"><label>Phone Number</label><div class="val">{{.phone_number}}</div></div>
+        <div class="field"><label>Email Address</label><div class="val">{{.email_address}}</div></div>
+      </div>
+      <div class="field" style="margin-top:10px"><label>Address (as per ID)</label><div class="val-box">{{.address}}</div></div>
+    </div>
+  </div>
+
+  <!-- ── 2. Vehicle Details ── -->
+  <div class="section">
+    <div class="section-title">2. Vehicle Details</div>
+    <div class="section-body">
+      <div class="grid-3" style="gap:14px">
+        <div class="field"><label>Registration No.</label><div class="val">{{.vehicle_registration}}</div></div>
+        <div class="field"><label>Province (Registration)</label><div class="val">{{.registration_province}}</div></div>
+        <div class="field"><label>Chassis / VIN No.</label><div class="val">{{.chassis_number}}</div></div>
+        <div class="field"><label>Engine No.</label><div class="val">{{.engine_number}}</div></div>
+        <div class="field"><label>Make / Brand</label><div class="val">{{.vehicle_make}}</div></div>
+        <div class="field"><label>Model</label><div class="val">{{.vehicle_model}}</div></div>
+        <div class="field"><label>Year of Manufacture</label><div class="val">{{.vehicle_year}}</div></div>
+        <div class="field"><label>Body Type</label><div class="val">{{.body_type}}</div></div>
+        <div class="field"><label>Engine Capacity (cc)</label><div class="val">{{.engine_cc}}</div></div>
+        <div class="field"><label>No. of Seats</label><div class="val">{{.seat_count}}</div></div>
+        <div class="field"><label>Weight (kg)</label><div class="val">{{.vehicle_weight}}</div></div>
+        <div class="field"><label>Vehicle Use</label><div class="val">{{.vehicle_use}}</div></div>
+      </div>
+      <div class="grid-2" style="gap:14px; margin-top:10px">
+        <div class="field"><label>Colour</label><div class="val">{{.vehicle_colour}}</div></div>
+        <div class="field"><label>Fuel Type</label><div class="val">{{.fuel_type}}</div></div>
+        <div class="field"><label>Sum Insured (Vehicle Value) (THB)</label><div class="val">{{.vehicle_sum_insured}}</div></div>
+        <div class="field"><label>Accessories Sum Insured (THB)</label><div class="val">{{.accessories_sum_insured}}</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 3. Coverage & Plan ── -->
+  <div class="section">
+    <div class="section-title">3. Coverage & Plan</div>
+    <div class="section-body">
+      <div class="grid-2" style="gap:14px">
+        <div class="field"><label>Policy Type</label><div class="val">{{.policy_type}}</div></div>
+        <div class="field"><label>Coverage Class</label><div class="val">{{.coverage_class}}</div></div>
+        <div class="field"><label>Coverage Period From</label><div class="val">{{.coverage_start_date}}</div></div>
+        <div class="field"><label>Coverage Period To</label><div class="val">{{.coverage_end_date}}</div></div>
+        <div class="field"><label>Deductible (THB)</label><div class="val">{{.deductible_amount}}</div></div>
+        <div class="field"><label>Garage Type</label><div class="val">{{.garage_type}}</div></div>
+      </div>
+      <table style="margin-top:14px">
+        <thead>
+          <tr>
+            <th>Coverage Section</th>
+            <th>Sum Insured (THB)</th>
+            <th>Included</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Own Damage (OD)</td><td>{{.od_sum_insured}}</td><td>{{.od_included}}</td></tr>
+          <tr><td>Fire & Theft</td><td>{{.fire_theft_sum_insured}}</td><td>{{.fire_theft_included}}</td></tr>
+          <tr><td>Third Party Liability – Body Injury</td><td>{{.tpl_bi_sum_insured}}</td><td>{{.tpl_bi_included}}</td></tr>
+          <tr><td>Third Party Liability – Property Damage</td><td>{{.tpl_pd_sum_insured}}</td><td>{{.tpl_pd_included}}</td></tr>
+          <tr><td>Personal Accident (Driver)</td><td>{{.pa_driver_sum_insured}}</td><td>{{.pa_driver_included}}</td></tr>
+          <tr><td>Personal Accident (Passenger)</td><td>{{.pa_passenger_sum_insured}}</td><td>{{.pa_passenger_included}}</td></tr>
+          <tr><td>Medical Expenses</td><td>{{.medical_sum_insured}}</td><td>{{.medical_included}}</td></tr>
+          <tr><td>Bail Bond</td><td>{{.bail_bond_amount}}</td><td>{{.bail_bond_included}}</td></tr>
+          {{range .additional_coverages}}
+          <tr><td>{{.name}}</td><td>{{.sum_insured}}</td><td>{{.included}}</td></tr>
+          {{end}}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 4. Previous Insurance ── -->
+  <div class="section">
+    <div class="section-title">4. Previous Insurance History</div>
+    <div class="section-body">
+      <div class="grid-3" style="gap:14px">
+        <div class="field"><label>Previous Insurer</label><div class="val">{{.previous_insurer}}</div></div>
+        <div class="field"><label>Previous Policy No.</label><div class="val">{{.previous_policy_number}}</div></div>
+        <div class="field"><label>Expiry Date</label><div class="val">{{.previous_expiry_date}}</div></div>
+        <div class="field"><label>No-Claim Discount (%)</label><div class="val">{{.no_claim_discount}}</div></div>
+        <div class="field"><label>Claims in Last 3 Years</label><div class="val">{{.claims_last_3_years}}</div></div>
+        <div class="field"><label>Total Claim Amount (THB)</label><div class="val">{{.total_claim_amount}}</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ── 5. Premium Summary ── -->
+  <div class="section">
+    <div class="section-title">5. Premium Summary</div>
+    <div class="section-body">
+      <table>
+        <thead>
+          <tr><th>Item</th><th style="text-align:right">Amount (THB)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>Basic Premium</td><td style="text-align:right">{{.basic_premium}}</td></tr>
+          <tr><td>Stamp Duty</td><td style="text-align:right">{{.stamp_duty}}</td></tr>
+          <tr><td>VAT (7%)</td><td style="text-align:right">{{.vat_amount}}</td></tr>
+          {{range .additional_premiums}}
+          <tr><td>{{.label}}</td><td style="text-align:right">{{.amount}}</td></tr>
+          {{end}}
+        </tbody>
+        <tfoot>
+          <tr style="font-weight:700; background:#f1f5f9">
+            <td>Total Premium</td>
+            <td style="text-align:right">{{.total_premium}}</td>
+          </tr>
+        </tfoot>
+      </table>
+    </div>
+  </div>
+
+  <!-- ── 6. Declaration ── -->
+  <div class="section">
+    <div class="section-title">6. Declaration &amp; Consent</div>
+    <div class="section-body">
+      <div class="declaration">
+        I/We hereby declare that the statements made in this proposal are true, complete and accurate to the best of my/our knowledge
+        and belief and that I/We have not withheld any material information. I/We agree that this proposal shall form the basis of
+        the contract of insurance. I/We also consent to the collection, use, and disclosure of my/our personal data for the purpose
+        of processing this insurance proposal in accordance with applicable laws.
+      </div>
+    </div>
+  </div>
+
+  <!-- ── Signatures ── -->
+  <div class="sig-row">
+    <div class="sig-box">
+      <div class="sig-line">Proposer / Insured Signature &amp; Date</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-line">Agent / Broker Signature &amp; Date</div>
+    </div>
+    <div class="sig-box">
+      <div class="sig-line">For &amp; On Behalf of Insurer</div>
+    </div>
+  </div>
+
+  <!-- ── QR / Ref ── -->
+  <div class="ref-row">
+    <div>
+      Proposal ID: {{.proposal_id}} &nbsp;·&nbsp;
+      Generated: {{.generated_at}} &nbsp;·&nbsp;
+      This document is system-generated and subject to underwriting acceptance.
+    </div>
+    {{if .qr_code_data_uri}}
+    <div class="qr-block">
+      <img src="{{.qr_code_data_uri}}" alt="QR" />
+      <p>Scan to verify</p>
+    </div>
+    {{end}}
+  </div>
+
+</div>
+</body>
+</html>

@@ -1,0 +1,68 @@
+{
+  "id": "claims_required_docs",
+  "font": "Times New Roman",
+  "nav_color": "7F1D1D",
+  "nav_light_color": "FEF2F2",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "DOCUMENTS REQUIRED FOR INSURANCE CLAIMS" },
+    { "type": "subtitle", "text": "Claim Submission Checklist & Process Note", "italic": true },
+    { "type": "divider" },
+    { "type": "notice", "text": "Please ensure all required documents are submitted with the claim form. Incomplete submissions will delay processing. Original documents must be produced for verification — certified copies may be accepted at the discretion of the claims officer." },
+    { "type": "heading", "text": "I.  HEALTH / MEDICLAIM CLAIMS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Document Required", "Original / Copy", "Mandatory"],
+      "rows_key": "health_claim_docs",
+      "columns": ["number", "document", "original_copy", "mandatory"],
+      "col_widths": [0.35, 3.5, 1.3, 1.31]
+    },
+    { "type": "heading", "text": "II.  MOTOR / VEHICLE CLAIMS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Document Required", "Original / Copy", "Mandatory"],
+      "rows_key": "motor_claim_docs",
+      "columns": ["number", "document", "original_copy", "mandatory"],
+      "col_widths": [0.35, 3.5, 1.3, 1.31]
+    },
+    { "type": "heading", "text": "III.  FIRE / PROPERTY CLAIMS", "level": 1 },
+    {
+      "type": "table",
+      "headers": ["#", "Document Required", "Original / Copy", "Mandatory"],
+      "rows_key": "fire_claim_docs",
+      "columns": ["number", "document", "original_copy", "mandatory"],
+      "col_widths": [0.35, 3.5, 1.3, 1.31]
+    },
+    { "type": "heading", "text": "IV.  CLAIM SUBMISSION PROCESS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "Step 1.", "label": "Notify the insurer / TPA within", "value": "{{ notification_period }}" },
+        { "number": "Step 2.", "label": "Complete and submit claim form with all documents to", "value": "{{ claims_submission_address }}" },
+        { "number": "Step 3.", "label": "Claim assessment / surveyor appointment within", "value": "{{ assessment_period }}" },
+        { "number": "Step 4.", "label": "Settlement / rejection notification within", "value": "{{ settlement_period }}" },
+        { "number": "Step 5.", "label": "Payment via", "value": "{{ payment_method }}" }
+      ]
+    },
+    { "type": "heading", "text": "V.  CONTACT FOR CLAIMS", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "", "label": "Claims Hotline", "value": "{{ claims_hotline }}" },
+        { "number": "", "label": "Claims Email", "value": "{{ claims_email }}" },
+        { "number": "", "label": "TPA / Portal", "value": "{{ tpa_portal }}" },
+        { "number": "", "label": "Office Hours", "value": "{{ office_hours }}" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Document Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

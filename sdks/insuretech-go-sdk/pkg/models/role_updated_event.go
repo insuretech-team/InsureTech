@@ -6,9 +6,9 @@ import (
 
 // RoleUpdatedEvent represents a role_updated_event
 type RoleUpdatedEvent struct {
+	ChangedFields map[string]interface{} `json:"changed_fields,omitempty"`
+	EventId string `json:"event_id,omitempty"`
+	OccurredAt time.Time `json:"occurred_at,omitempty"`
 	RoleId string `json:"role_id,omitempty"`
 	UpdatedBy string `json:"updated_by,omitempty"`
-	ChangedFields map[string]interface{} `json:"changed_fields,omitempty"`
-	OccurredAt time.Time `json:"occurred_at,omitempty"`
-	EventId string `json:"event_id,omitempty"`
 }

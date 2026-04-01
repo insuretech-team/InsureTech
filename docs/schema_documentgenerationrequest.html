@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">5</div>
+                    <div class="stat-value">7</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">2</div>
+                    <div class="stat-value">4</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -354,6 +354,38 @@
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
                 <td class="field-description">No description</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>output_format</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">output_format overrides the template's default format for this request.
+ Accepts: "pdf", "html", "docx", "xlsx" (case-insensitive).
+ If empty, the template's configured output_format is used.</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>alt</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">alt controls the response format (Google API style).
+ Use alt="media" to receive raw file bytes instead of JSON metadata.
+ Equivalent to passing $alt=media as a query parameter.</td>
             </tr>
             
                 </tbody>

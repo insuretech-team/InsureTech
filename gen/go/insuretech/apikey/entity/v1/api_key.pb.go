@@ -138,18 +138,18 @@ type ApiKey struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                                                  // @inject_tag: gorm:"primaryKey;column:api_key_id;not null"
-	KeyHash            string                 `protobuf:"bytes,2,opt,name=key_hash,json=keyHash,proto3" json:"key_hash,omitempty"`                                                         // @inject_tag: gorm:"column:key_hash;not null"
-	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty"`                                                                              // @inject_tag: gorm:"column:name;not null"
-	OwnerType          ApiKeyOwnerType        `protobuf:"varint,4,opt,name=owner_type,json=ownerType,proto3,enum=insuretech.apikey.entity.v1.ApiKeyOwnerType" json:"owner_type,omitempty"` // @inject_tag: gorm:"column:owner_type;not null;serializer:proto_enum"
-	OwnerId            string                 `protobuf:"bytes,5,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty"`                                                         // @inject_tag: gorm:"column:owner_id;not null"
-	Scopes             []string               `protobuf:"bytes,6,rep,name=scopes,proto3" json:"scopes,omitempty"`
-	Status             ApiKeyStatus           `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.apikey.entity.v1.ApiKeyStatus" json:"status,omitempty"`         // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	RateLimitPerMinute int32                  `protobuf:"varint,8,opt,name=rate_limit_per_minute,json=rateLimitPerMinute,proto3" json:"rate_limit_per_minute,omitempty"` // @inject_tag: gorm:"column:rate_limit_per_minute;not null"
-	ExpiresAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty"`                                 // @inject_tag: gorm:"column:expires_at;serializer:proto_timestamp"
-	LastUsedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_used_at,json=lastUsedAt,proto3" json:"last_used_at,omitempty"`                           // @inject_tag: gorm:"column:last_used_at;serializer:proto_timestamp"
-	IpWhitelist        []string               `protobuf:"bytes,11,rep,name=ip_whitelist,json=ipWhitelist,proto3" json:"ip_whitelist,omitempty"`
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"` // @inject_tag: gorm:"column:audit_info;not null"
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:api_key_id;not null"`
+	KeyHash            string                 `protobuf:"bytes,2,opt,name=key_hash,json=keyHash,proto3" json:"key_hash,omitempty" gorm:"column:key_hash;not null"`
+	Name               string                 `protobuf:"bytes,3,opt,name=name,proto3" json:"name,omitempty" gorm:"column:name;not null"`
+	OwnerType          ApiKeyOwnerType        `protobuf:"varint,4,opt,name=owner_type,json=ownerType,proto3,enum=insuretech.apikey.entity.v1.ApiKeyOwnerType" json:"owner_type,omitempty" gorm:"column:owner_type;not null;serializer:proto_enum"`
+	OwnerId            string                 `protobuf:"bytes,5,opt,name=owner_id,json=ownerId,proto3" json:"owner_id,omitempty" gorm:"column:owner_id;not null"`
+	Scopes             []string               `protobuf:"bytes,6,rep,name=scopes,proto3" json:"scopes,omitempty" gorm:"column:scopes"`
+	Status             ApiKeyStatus           `protobuf:"varint,7,opt,name=status,proto3,enum=insuretech.apikey.entity.v1.ApiKeyStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	RateLimitPerMinute int32                  `protobuf:"varint,8,opt,name=rate_limit_per_minute,json=rateLimitPerMinute,proto3" json:"rate_limit_per_minute,omitempty" gorm:"column:rate_limit_per_minute;not null"`
+	ExpiresAt          *timestamppb.Timestamp `protobuf:"bytes,9,opt,name=expires_at,json=expiresAt,proto3" json:"expires_at,omitempty" gorm:"column:expires_at;serializer:proto_timestamp"`
+	LastUsedAt         *timestamppb.Timestamp `protobuf:"bytes,10,opt,name=last_used_at,json=lastUsedAt,proto3" json:"last_used_at,omitempty" gorm:"column:last_used_at;serializer:proto_timestamp"`
+	IpWhitelist        []string               `protobuf:"bytes,11,rep,name=ip_whitelist,json=ipWhitelist,proto3" json:"ip_whitelist,omitempty" gorm:"column:ip_whitelist"`
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,12,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *ApiKey) Reset() {

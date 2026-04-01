@@ -24,7 +24,7 @@ Payment:
       $ref: '#/components/schemas/PaymentType'
       description: '@inject_tag: gorm:"column:type;not null;serializer:proto_enum"'
     method:
-      $ref: '#/components/schemas/PaymentPaymentMethod'
+      $ref: '#/components/schemas/PaymentMethod'
       description: '@inject_tag: gorm:"column:method;not null;serializer:proto_enum"'
     status:
       allOf:

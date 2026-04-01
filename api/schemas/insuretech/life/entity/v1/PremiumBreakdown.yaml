@@ -1,0 +1,13 @@
+LifePremiumBreakdown:
+  type: object
+  properties:
+    component:
+      type: string
+    amount:
+      type: string
+      format: int64
+    description:
+      type: string
+    is_discount:
+      type: boolean
+  description: PremiumBreakdown - Detailed premium calculation

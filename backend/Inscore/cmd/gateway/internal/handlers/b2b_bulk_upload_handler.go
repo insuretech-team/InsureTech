@@ -38,10 +38,12 @@ import (
 	"strings"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 	b2bentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/entity/v1"
 	b2bservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/b2b/services/v1"
 	commonv1 "github.com/newage-saint/insuretech/gen/go/insuretech/common/v1"
-	"google.golang.org/grpc/metadata"
 )
 
 // ─── Bulk Upload Result ───────────────────────────────────────────────────────
@@ -65,7 +67,7 @@ type bulkUploadError struct {
 func (h *B2BServiceHandler) BulkUploadEmployees(w http.ResponseWriter, r *http.Request) {
 	// 32 MB max upload
 	if err := r.ParseMultipartForm(32 << 20); err != nil {
-		writeJSONError(w, http.StatusBadRequest, "could not parse multipart form: "+err.Error())
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "could not parse multipart form: "+err.Error())
 		return
 	}
 
@@ -75,20 +77,20 @@ func (h *B2BServiceHandler) BulkUploadEmployees(w http.ResponseWriter, r *http.R
 		businessID = strings.TrimSpace(r.Header.Get("X-Business-ID"))
 	}
 	if businessID == "" {
-		writeJSONError(w, http.StatusBadRequest, "business_id is required")
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "business_id is required")
 		return
 	}
 
 	file, header, err := r.FormFile("file")
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, "file field is required")
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "file field is required")
 		return
 	}
 	defer file.Close()
 
 	fileBytes, err := io.ReadAll(file)
 	if err != nil {
-		writeJSONError(w, http.StatusInternalServerError, "could not read uploaded file")
+		respond.Error(w, r, http.StatusInternalServerError, "INTERNAL_ERROR", "could not read uploaded file")
 		return
 	}
 
@@ -108,12 +110,12 @@ func (h *B2BServiceHandler) BulkUploadEmployees(w http.ResponseWriter, r *http.R
 		}
 	}
 	if err != nil {
-		writeJSONError(w, http.StatusBadRequest, "could not parse file: "+err.Error())
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "could not parse file: "+err.Error())
 		return
 	}
 
 	if len(rows) < 2 {
-		writeJSONError(w, http.StatusBadRequest, "file must have a header row and at least one data row")
+		respond.Error(w, r, http.StatusBadRequest, "BAD_REQUEST", "file must have a header row and at least one data row")
 		return
 	}
 
@@ -365,13 +367,22 @@ func rowToCreateEmployeeRequest(row []string, colMap map[string]int, businessID 
 		doj = time.Now().UTC().Format("2006-01-02")
 	}
 
+	mobileNumber := getCol(row, colMap, "mobile_number")
+	if strings.TrimSpace(mobileNumber) != "" {
+		normalizedMobileNumber, err := mobile.NormalizeBangladeshMobileE164(mobileNumber)
+		if err != nil {
+			return nil, fmt.Errorf("mobile_number must be a valid Bangladesh number: use 01712345678, +8801712345678, or 008801712345678")
+		}
+		mobileNumber = normalizedMobileNumber
+	}
+
 	req := &b2bservicev1.CreateEmployeeRequest{
 		BusinessId:        businessID,
 		Name:              getCol(row, colMap, "name"),
 		EmployeeId:        getCol(row, colMap, "employee_id"),
 		DepartmentId:      getCol(row, colMap, "department_id"),
 		Email:             getCol(row, colMap, "email"),
-		MobileNumber:      getCol(row, colMap, "mobile_number"),
+		MobileNumber:      mobileNumber,
 		DateOfBirth:       normalizeDate(getCol(row, colMap, "date_of_birth")),
 		DateOfJoining:     doj,
 		Gender:            parseGender(getCol(row, colMap, "gender")),
@@ -525,14 +536,7 @@ func withBulkMD(ctx context.Context, businessID, userID, portal, tenantID string
 	if tenantID != "" {
 		pairs = append(pairs, "x-tenant-id", tenantID)
 	}
-	if md, ok := metadata.FromOutgoingContext(ctx); ok {
-		md2 := md.Copy()
-		for i := 0; i+1 < len(pairs); i += 2 {
-			md2.Set(pairs[i], pairs[i+1])
-		}
-		return metadata.NewOutgoingContext(ctx, md2)
-	}
-	return metadata.NewOutgoingContext(ctx, metadata.Pairs(pairs...))
+	return grpcmeta.WithOutgoingMetadata(ctx, pairs...)
 }
 
 // ─── CSV Parser ───────────────────────────────────────────────────────────────

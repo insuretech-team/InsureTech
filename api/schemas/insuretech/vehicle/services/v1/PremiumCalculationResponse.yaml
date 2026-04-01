@@ -1,0 +1,7 @@
+VehiclePremiumCalculationResponse:
+  type: object
+  properties:
+    calculation:
+      $ref: '#/components/schemas/VehiclePremiumCalculation'
+  description: Response payload for premium calculation operation. Returns operation
+    results and status.

@@ -28,7 +28,7 @@ func NewUserRepository(db *gorm.DB) *UserRepository {
 func (r *UserRepository) getOne(ctx context.Context, where string, args ...any) (*authnentityv1.User, error) {
 	query := `SELECT user_id, mobile_number, email, password_hash, status, user_type, created_at, updated_at, wallet_balance,
 	                 email_verified, email_verified_at, email_login_attempts, login_attempts, last_login_at, last_login_session_type,
-	                 totp_enabled, totp_secret_enc, locked_until, email_locked_until, notification_preference,
+	                 totp_enabled, totp_secret_enc, password_change_required, locked_until, email_locked_until, notification_preference,
 	                 preferred_language, biometric_token_enc
 	            FROM authn_schema.users
 	           WHERE ` + where + ` LIMIT 1`
@@ -52,6 +52,7 @@ func (r *UserRepository) getOne(ctx context.Context, where string, args ...any) 
 		lastLoginSessionType   sql.NullString
 		totpEnabled            sql.NullBool
 		totpSecretEnc          sql.NullString
+		passwordChangeRequired sql.NullBool
 		lockedUntil            sql.NullTime
 		emailLockedUntil       sql.NullTime
 		notificationPreference sql.NullString
@@ -76,6 +77,7 @@ func (r *UserRepository) getOne(ctx context.Context, where string, args ...any) 
 		&lastLoginSessionType,
 		&totpEnabled,
 		&totpSecretEnc,
+		&passwordChangeRequired,
 		&lockedUntil,
 		&emailLockedUntil,
 		&notificationPreference,
@@ -136,6 +138,7 @@ func (r *UserRepository) getOne(ctx context.Context, where string, args ...any) 
 	if totpSecretEnc.Valid {
 		u.TotpSecretEnc = totpSecretEnc.String
 	}
+	u.PasswordChangeRequired = passwordChangeRequired.Valid && passwordChangeRequired.Bool
 	if lockedUntil.Valid {
 		u.LockedUntil = timestamppb.New(lockedUntil.Time)
 	}
@@ -164,19 +167,25 @@ func (r *UserRepository) Create(ctx context.Context, mobile, passwordHash, email
 	}
 
 	// Use map insert (not struct insert) to avoid GORM reflection on proto-only fields like WalletBalance.
+	// email must be nil (not "") when not provided — PostgreSQL chk_users_email rejects empty string.
+	var emailVal any
+	if email != "" {
+		emailVal = email
+	}
 	values := map[string]any{
-		"user_id":               userID,
-		"mobile_number":         mobile,
-		"password_hash":         passwordHash,
-		"email":                 email,
-		"status":                status.String(),
-		"user_type":             authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER.String(),
-		"wallet_balance":        int64(0), // paisa
-		"active_policies_count": 0,
-		"pending_claims_count":  0,
-		"biometric_token_enc":   "",
-		"created_at":            now,
-		"updated_at":            now,
+		"user_id":                  userID,
+		"mobile_number":            mobile,
+		"password_hash":            passwordHash,
+		"email":                    emailVal,
+		"status":                   status.String(),
+		"user_type":                authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER.String(),
+		"wallet_balance":           int64(0), // paisa
+		"active_policies_count":    0,
+		"pending_claims_count":     0,
+		"biometric_token_enc":      "",
+		"password_change_required": false,
+		"created_at":               now,
+		"updated_at":               now,
 	}
 	if err := r.db.WithContext(ctx).Table("authn_schema.users").Create(values).Error; err != nil {
 		return nil, err
@@ -194,9 +203,10 @@ func (r *UserRepository) Create(ctx context.Context, mobile, passwordHash, email
 			Amount:   0,
 			Currency: "BDT",
 		},
-		ActivePoliciesCount: 0,
-		PendingClaimsCount:  0,
-		BiometricTokenEnc:   "",
+		ActivePoliciesCount:    0,
+		PendingClaimsCount:     0,
+		BiometricTokenEnc:      "",
+		PasswordChangeRequired: false,
 	}, nil
 }
 
@@ -218,24 +228,34 @@ func (r *UserRepository) CreateFull(ctx context.Context, user *authnentityv1.Use
 		user.UserType = authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER
 	}
 
+	var mobileVal any
+	if strings.TrimSpace(user.MobileNumber) != "" {
+		mobileVal = user.MobileNumber
+	}
+	var emailVal any
+	if strings.TrimSpace(user.Email) != "" {
+		emailVal = user.Email
+	}
+
 	values := map[string]any{
-		"user_id":                 user.UserId,
-		"mobile_number":           user.MobileNumber,
-		"email":                   user.Email,
-		"password_hash":           user.PasswordHash,
-		"status":                  user.Status.String(),
-		"user_type":               user.UserType.String(),
-		"wallet_balance":          user.WalletBalance.Amount,
-		"active_policies_count":   user.ActivePoliciesCount,
-		"pending_claims_count":    user.PendingClaimsCount,
-		"biometric_token_enc":     user.BiometricTokenEnc,
-		"email_verified":          user.EmailVerified,
-		"email_login_attempts":    user.EmailLoginAttempts,
-		"login_attempts":          user.LoginAttempts,
-		"notification_preference": user.NotificationPreference,
-		"preferred_language":      user.PreferredLanguage,
-		"created_at":              now,
-		"updated_at":              now,
+		"user_id":                  user.UserId,
+		"mobile_number":            mobileVal,
+		"email":                    emailVal,
+		"password_hash":            user.PasswordHash,
+		"status":                   user.Status.String(),
+		"user_type":                user.UserType.String(),
+		"wallet_balance":           user.WalletBalance.Amount,
+		"active_policies_count":    user.ActivePoliciesCount,
+		"pending_claims_count":     user.PendingClaimsCount,
+		"biometric_token_enc":      user.BiometricTokenEnc,
+		"email_verified":           user.EmailVerified,
+		"email_login_attempts":     user.EmailLoginAttempts,
+		"login_attempts":           user.LoginAttempts,
+		"notification_preference":  user.NotificationPreference,
+		"preferred_language":       user.PreferredLanguage,
+		"password_change_required": user.PasswordChangeRequired,
+		"created_at":               now,
+		"updated_at":               now,
 	}
 	return r.db.WithContext(ctx).Table("authn_schema.users").Create(values).Error
 }
@@ -278,7 +298,7 @@ func (r *UserRepository) GetByID(ctx context.Context, id string) (*authnentityv1
 
 // GetByEmail retrieves a user by email address
 func (r *UserRepository) GetByEmail(ctx context.Context, email string) (*authnentityv1.User, error) {
-	return r.getOne(ctx, "email = ? AND deleted_at IS NULL", email)
+	return r.getOne(ctx, "LOWER(email) = LOWER(?) AND deleted_at IS NULL", email)
 }
 
 // UpdatePassword updates user's password hash
@@ -291,6 +311,16 @@ func (r *UserRepository) UpdatePassword(ctx context.Context, userID, passwordHas
 			"updated_at":    time.Now(),
 		})
 	return result.Error
+}
+
+func (r *UserRepository) SetPasswordChangeRequired(ctx context.Context, userID string, required bool) error {
+	return r.db.WithContext(ctx).
+		Table("authn_schema.users").
+		Where("user_id = ?", userID).
+		Updates(map[string]any{
+			"password_change_required": required,
+			"updated_at":               time.Now(),
+		}).Error
 }
 
 // UpdateEmailVerified marks the user's email as verified

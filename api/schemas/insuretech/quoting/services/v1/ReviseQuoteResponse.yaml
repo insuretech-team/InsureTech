@@ -1,0 +1,11 @@
+ReviseQuoteResponse:
+  type: object
+  properties:
+    quote:
+      $ref: '#/components/schemas/QuotingQuote'
+      description: New revised quote
+    parent_quote:
+      $ref: '#/components/schemas/QuotingQuote'
+      description: Original quote
+  description: Response payload for revise quote operation. Returns operation results
+    and status.

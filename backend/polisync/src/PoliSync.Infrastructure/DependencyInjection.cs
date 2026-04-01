@@ -3,12 +3,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using PoliSync.Infrastructure.Auth;
 using PoliSync.Infrastructure.Cache;
+using PoliSync.Infrastructure.Clients;
 using PoliSync.Infrastructure.GrpcClients;
 using PoliSync.Infrastructure.Messaging;
 using PoliSync.Infrastructure.Persistence;
 using PoliSync.Infrastructure.Pii;
 using PoliSync.SharedKernel.Auth;
 using PoliSync.SharedKernel.Messaging;
+using PoliSync.SharedKernel.Pii;
 using PoliSync.SharedKernel.Persistence;
 
 namespace PoliSync.Infrastructure;
@@ -26,7 +28,7 @@ public static class DependencyInjection
                 config.GetConnectionString("InsuranceDb"),
                 npgsql => npgsql
                     .CommandTimeout(30)
-            ).UseSnakeCaseNamingConvention()
+            )
         );
 
         // ── EF Core: commission_schema ─────────────────────────────────────
@@ -35,7 +37,7 @@ public static class DependencyInjection
                 config.GetConnectionString("CommissionDb"),
                 npgsql => npgsql
                     .CommandTimeout(30)
-            ).UseSnakeCaseNamingConvention()
+            )
         );
 
         // ── Redis cache ────────────────────────────────────────────────────
@@ -86,6 +88,12 @@ public static class DependencyInjection
         services.AddSingleton<StorageGrpcClient>();
         services.AddSingleton<DocgenGrpcClient>();
         services.AddSingleton<WorkflowGrpcClient>();
+        services.AddSingleton<CommissionServiceGrpcClient>();
+
+        // ── Typed clients for PoliSync-specific Go services ──────────────────
+        services.AddSingleton<OrderServiceGrpcClient>();
+        services.AddSingleton<PaymentServiceGrpcClient>();
+        services.AddSingleton<InsuranceServiceClient>();
 
         return services;
     }

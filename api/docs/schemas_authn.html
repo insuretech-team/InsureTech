@@ -267,21 +267,12 @@
                 <td class="props-cell">7 properties</td>
             </tr>
             
-            <tr onclick="window.location.href='schema_authnjwk.html'" style="cursor: pointer;">
+            <tr onclick="window.location.href='schema_kycsessionsummary.html'" style="cursor: pointer;">
                 <td class="name-cell">
-                    <span class="schema-name">AuthnJWK</span>
+                    <span class="schema-name">KYCSessionSummary</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Domain entity representing jwk. Core business object in the system.</td>
-                <td class="props-cell">6 properties</td>
-            </tr>
-            
-            <tr onclick="window.location.href='schema_authzjwk.html'" style="cursor: pointer;">
-                <td class="name-cell">
-                    <span class="schema-name">AuthzJWK</span>
-                    <span class="badge badge-type">object</span>
-                </td>
-                <td class="desc-cell">Domain entity representing jwk. Core business object in the system.</td>
+                <td class="desc-cell">Domain entity representing kyc session summary. Core business object in the system.</td>
                 <td class="props-cell">6 properties</td>
             </tr>
             
@@ -292,6 +283,15 @@
                 </td>
                 <td class="desc-cell">Peer participation in a session</td>
                 <td class="props-cell">6 properties</td>
+            </tr>
+            
+            <tr onclick="window.location.href='schema_portalusersummary.html'" style="cursor: pointer;">
+                <td class="name-cell">
+                    <span class="schema-name">PortalUserSummary</span>
+                    <span class="badge badge-type">object</span>
+                </td>
+                <td class="desc-cell">Domain entity representing portal user summary. Core business object in the system.</td>
+                <td class="props-cell">8 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_roomsession.html'" style="cursor: pointer;">
@@ -308,7 +308,7 @@
                     <span class="schema-name">Session</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">Session represents user authentication session (HYBRID: Server-side + JWT)
+                <td class="desc-cell">Session represents user authentication session (HYBRID: Server-side + JWT)
  Maps to 'sessions' table in authn_schema</td>
                 <td class="props-cell">19 properties</td>
             </tr>
@@ -336,9 +336,9 @@
                     <span class="schema-name">User</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">User represents a registered user in the system
+                <td class="desc-cell">User represents a registered user in the system
  Maps to 'users' table in public schema</td>
-                <td class="props-cell">33 properties</td>
+                <td class="props-cell">34 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_userdocument.html'" style="cursor: pointer;">
@@ -347,7 +347,7 @@
                     <span class="badge badge-type">object</span>
                 </td>
                 <td class="desc-cell">UserDocument represents documents uploaded by a user for KYC or Policies</td>
-                <td class="props-cell">10 properties</td>
+                <td class="props-cell">11 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_userloggedinevent.html'" style="cursor: pointer;">
@@ -373,7 +373,7 @@
                     <span class="schema-name">UserProfile</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">UserProfile stores additional user information
+                <td class="desc-cell">UserProfile stores additional user information
  Maps to 'user_profiles' table in public schema</td>
                 <td class="props-cell">29 properties</td>
             </tr>
@@ -384,7 +384,7 @@
                     <span class="badge badge-type">object</span>
                 </td>
                 <td class="desc-cell">Event: User registered</td>
-                <td class="props-cell">7 properties</td>
+                <td class="props-cell">9 properties</td>
             </tr>
             
             <tr onclick="window.location.href='schema_userrole.html'" style="cursor: pointer;">
@@ -392,8 +392,8 @@
                     <span class="schema-name">UserRole</span>
                     <span class="badge badge-type">object</span>
                 </td>
-                <td class="desc-cell">---------------------------------------------------------------------------
- 3. UserRole — assignment of a role to a user within a domain (portal:tenant)
+                <td class="desc-cell">---------------------------------------------------------------------------
+ 3. UserRole — assignment of a role to a user within a domain (portal:tenant)
  ---------------------------------------------------------------------------</td>
                 <td class="props-cell">7 properties</td>
             </tr>

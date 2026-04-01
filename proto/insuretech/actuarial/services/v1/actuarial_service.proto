@@ -1,0 +1,382 @@
+syntax = "proto3";
+
+package insuretech.actuarial.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/actuarial/services/v1;actuarialv1";
+option csharp_namespace = "Insuretech.Actuarial.Services.V1";
+
+import "google/protobuf/timestamp.proto";
+import "google/protobuf/struct.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/actuarial/entity/v1/actuarial.proto";
+
+// ActuarialService provides P&C actuarial calculations
+service ActuarialService {
+  // Premium calculations
+  rpc CalculatePremium(CalculatePremiumRequest) returns (CalculatePremiumResponse);
+  rpc CalculatePurePremium(CalculatePurePremiumRequest) returns (CalculatePremiumResponse);
+  
+  // Rating formula evaluation
+  rpc EvaluateRatingFormula(EvaluateRatingFormulaRequest) returns (EvaluateRatingFormulaResponse);
+  rpc ValidateFormulaExpression(ValidateFormulaExpressionRequest) returns (ValidateFormulaExpressionResponse);
+  
+  // Reserve calculations
+  rpc CalculateReserves(CalculateReservesRequest) returns (CalculateReservesResponse);
+  rpc GetReserveCalculation(GetReserveCalculationRequest) returns (GetReserveCalculationResponse);
+  rpc SaveReserveCalculation(SaveReserveCalculationRequest) returns (SaveReserveCalculationResponse);
+  
+  // Loss ratio analysis
+  rpc CalculateLossRatio(CalculateLossRatioRequest) returns (CalculateLossRatioResponse);
+  rpc GetLossRatioCalculation(GetLossRatioCalculationRequest) returns (GetLossRatioCalculationResponse);
+  rpc ListLossRatioCalculations(ListLossRatioCalculationsRequest) returns (ListLossRatioCalculationsResponse);
+  rpc SaveLossRatioCalculation(SaveLossRatioCalculationRequest) returns (SaveLossRatioCalculationResponse);
+  rpc AnalyzeLossTrends(AnalyzeLossTrendsRequest) returns (AnalyzeLossTrendsResponse);
+  
+  // Rating formula management
+  rpc CreateRatingFormula(CreateRatingFormulaRequest) returns (CreateRatingFormulaResponse);
+  rpc GetRatingFormula(GetRatingFormulaRequest) returns (GetRatingFormulaResponse);
+  rpc UpdateRatingFormula(UpdateRatingFormulaRequest) returns (UpdateRatingFormulaResponse);
+  rpc DeleteRatingFormula(DeleteRatingFormulaRequest) returns (DeleteRatingFormulaResponse);
+  rpc ListRatingFormulas(ListRatingFormulasRequest) returns (ListRatingFormulasResponse);
+  rpc ActivateRatingFormula(ActivateRatingFormulaRequest) returns (ActivateRatingFormulaResponse);
+  
+  // Calculation history
+  rpc GetCalculation(GetCalculationRequest) returns (GetCalculationResponse);
+  rpc ListCalculations(ListCalculationsRequest) returns (ListCalculationsResponse);
+  rpc Recalculate(RecalculateRequest) returns (RecalculateResponse);
+  
+  // Actuarial reporting
+  rpc GenerateActuarialReport(GenerateActuarialReportRequest) returns (GenerateActuarialReportResponse);
+}
+
+// Premium calculation requests/responses
+message CalculatePremiumRequest {
+  insuretech.actuarial.entity.v1.PremiumCalculationInput input = 1;
+  string calculation_reference = 2;
+  string calculated_by = 3;
+  bool save_calculation = 4;
+}
+
+message CalculatePremiumResponse {
+  string calculation_id = 1;
+  string calculation_reference = 2;
+  insuretech.actuarial.entity.v1.PremiumCalculationResult result = 3;
+  bool success = 4;
+  repeated string errors = 5;
+  google.protobuf.Timestamp calculated_at = 6;
+}
+
+message CalculatePurePremiumRequest {
+  string product_id = 1;
+  double expected_claims = 2;
+  double claim_severity = 3;
+  double exposure_units = 4;
+  double risk_adjustment_factor = 5;
+  string calculation_reference = 6;
+  string calculated_by = 7;
+}
+
+// Rating formula evaluation
+message EvaluateRatingFormulaRequest {
+  string formula_id = 1;
+  string formula_code = 2;
+  google.protobuf.Struct variables = 3;
+  string calculation_reference = 4;
+  string calculated_by = 5;
+  bool save_calculation = 6;
+}
+
+message EvaluateRatingFormulaResponse {
+  string calculation_id = 1;
+  bool success = 2;
+  double result = 3;
+  google.protobuf.Struct output_variables = 4;
+  repeated string errors = 5;
+  int64 execution_time_ms = 6;
+  google.protobuf.Timestamp calculated_at = 7;
+}
+
+message ValidateFormulaExpressionRequest {
+  string formula_expression = 1;
+  repeated insuretech.actuarial.entity.v1.ActuarialVariable variables = 2;
+}
+
+message ValidateFormulaExpressionResponse {
+  bool is_valid = 1;
+  repeated string errors = 2;
+  repeated string warnings = 3;
+  repeated string parsed_variables = 4;
+}
+
+// Reserve calculation
+message CalculateReservesRequest {
+  string claim_id = 1;
+  insuretech.actuarial.entity.v1.ReserveInput input = 2;
+  string calculation_reference = 3;
+  string calculated_by = 4;
+}
+
+message CalculateReservesResponse {
+  string reserve_id = 1;
+  string calculation_reference = 2;
+  insuretech.actuarial.entity.v1.ReserveResult result = 3;
+  bool success = 4;
+  repeated string errors = 5;
+  google.protobuf.Timestamp calculated_at = 6;
+}
+
+message GetReserveCalculationRequest {
+  string reserve_id = 1;
+  string claim_id = 2;
+}
+
+message GetReserveCalculationResponse {
+  insuretech.actuarial.entity.v1.ReserveCalculation reserve = 1;
+  bool found = 2;
+}
+
+message SaveReserveCalculationRequest {
+  insuretech.actuarial.entity.v1.ReserveCalculation reserve = 1;
+}
+
+message SaveReserveCalculationResponse {
+  insuretech.actuarial.entity.v1.ReserveCalculation reserve = 1;
+  bool success = 2;
+  repeated string errors = 3;
+}
+
+// Loss ratio calculation
+message CalculateLossRatioRequest {
+  string product_id = 1;
+  string line_of_business = 2;
+  google.protobuf.Timestamp period_start = 3;
+  google.protobuf.Timestamp period_end = 4;
+  insuretech.actuarial.entity.v1.LossRatioInput input = 5;
+  string calculation_reference = 6;
+  string calculated_by = 7;
+  bool save_calculation = 8;
+}
+
+message CalculateLossRatioResponse {
+  string loss_ratio_id = 1;
+  string calculation_reference = 2;
+  insuretech.actuarial.entity.v1.LossRatioResult result = 3;
+  bool success = 4;
+  repeated string errors = 5;
+  google.protobuf.Timestamp calculated_at = 6;
+}
+
+message GetLossRatioCalculationRequest {
+  string loss_ratio_id = 1;
+}
+
+message GetLossRatioCalculationResponse {
+  insuretech.actuarial.entity.v1.LossRatioCalculation loss_ratio = 1;
+  bool found = 2;
+}
+
+message ListLossRatioCalculationsRequest {
+  string product_id = 1;
+  string line_of_business = 2;
+  google.protobuf.Timestamp period_start = 3;
+  google.protobuf.Timestamp period_end = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListLossRatioCalculationsResponse {
+  repeated insuretech.actuarial.entity.v1.LossRatioCalculation loss_ratios = 1;
+  int32 total_count = 2;
+  string next_page_token = 3;
+}
+
+message SaveLossRatioCalculationRequest {
+  insuretech.actuarial.entity.v1.LossRatioCalculation loss_ratio = 1;
+}
+
+message SaveLossRatioCalculationResponse {
+  insuretech.actuarial.entity.v1.LossRatioCalculation loss_ratio = 1;
+  bool success = 2;
+  repeated string errors = 3;
+}
+
+message AnalyzeLossTrendsRequest {
+  string product_id = 1;
+  string line_of_business = 2;
+  google.protobuf.Timestamp analysis_start = 3;
+  google.protobuf.Timestamp analysis_end = 4;
+  int32 comparison_periods = 5;
+  repeated string segmentation_fields = 6;
+}
+
+message LossTrendSegment {
+  string segment_key = 1;
+  string segment_value = 2;
+  double current_loss_ratio = 3;
+  double previous_loss_ratio = 4;
+  double change_percentage = 5;
+  string trend_direction = 6; // IMPROVING, STABLE, WORSENING
+  google.protobuf.Struct details = 7;
+}
+
+message AnalyzeLossTrendsResponse {
+  bool success = 1;
+  repeated LossTrendSegment segments = 2;
+  google.protobuf.Struct overall_trend = 3;
+  repeated string warnings = 4;
+  google.protobuf.Timestamp analysis_date = 5;
+}
+
+// Rating formula CRUD
+message CreateRatingFormulaRequest {
+  string formula_code = 1;
+  string formula_name = 2;
+  string description = 3;
+  insuretech.actuarial.entity.v1.FormulaCategory category = 4;
+  string insurance_type = 5;
+  string formula_expression = 6;
+  repeated insuretech.actuarial.entity.v1.ActuarialVariable variables = 7;
+  int32 sort_order = 8;
+  google.protobuf.Timestamp valid_from = 9;
+  google.protobuf.Timestamp valid_until = 10;
+  string created_by = 11;
+  map<string, string> metadata = 12;
+}
+
+message CreateRatingFormulaResponse {
+  string formula_id = 1;
+  bool success = 2;
+  insuretech.actuarial.entity.v1.RatingFormula formula = 3;
+  repeated string errors = 4;
+}
+
+message GetRatingFormulaRequest {
+  string formula_id = 1;
+  string formula_code = 2;
+}
+
+message GetRatingFormulaResponse {
+  insuretech.actuarial.entity.v1.RatingFormula formula = 1;
+  bool found = 2;
+}
+
+message UpdateRatingFormulaRequest {
+  string formula_id = 1;
+  string formula_name = 2;
+  string description = 3;
+  insuretech.actuarial.entity.v1.FormulaCategory category = 4;
+  string formula_expression = 5;
+  repeated insuretech.actuarial.entity.v1.ActuarialVariable variables = 6;
+  int32 sort_order = 7;
+  google.protobuf.Timestamp valid_until = 8;
+  bool create_new_version = 9;
+  string updated_by = 10;
+  map<string, string> metadata = 11;
+}
+
+message UpdateRatingFormulaResponse {
+  insuretech.actuarial.entity.v1.RatingFormula formula = 1;
+  bool success = 2;
+  bool new_version_created = 3;
+  repeated string errors = 4;
+}
+
+message DeleteRatingFormulaRequest {
+  string formula_id = 1;
+  bool permanent = 2;
+  string deleted_by = 3;
+}
+
+message DeleteRatingFormulaResponse {
+  bool success = 1;
+  bool deleted = 2;
+}
+
+message ListRatingFormulasRequest {
+  string insurance_type = 1;
+  insuretech.actuarial.entity.v1.FormulaCategory category = 2;
+  insuretech.actuarial.entity.v1.FormulaStatus status = 3;
+  string search_query = 4;
+  int32 page_size = 5;
+  string page_token = 6;
+}
+
+message ListRatingFormulasResponse {
+  repeated insuretech.actuarial.entity.v1.RatingFormula formulas = 1;
+  int32 total_count = 2;
+  string next_page_token = 3;
+}
+
+message ActivateRatingFormulaRequest {
+  string formula_id = 1;
+  string activated_by = 2;
+  google.protobuf.Timestamp effective_date = 3;
+}
+
+message ActivateRatingFormulaResponse {
+  bool success = 1;
+  insuretech.actuarial.entity.v1.RatingFormula formula = 2;
+}
+
+// Calculation history
+message GetCalculationRequest {
+  string calculation_id = 1;
+  string calculation_reference = 2;
+}
+
+message GetCalculationResponse {
+  insuretech.actuarial.entity.v1.ActuarialCalculation calculation = 1;
+  bool found = 2;
+}
+
+message ListCalculationsRequest {
+  insuretech.actuarial.entity.v1.ActuarialCalculationType calculation_type = 1;
+  string entity_type = 2;
+  string entity_id = 3;
+  google.protobuf.Timestamp date_from = 4;
+  google.protobuf.Timestamp date_to = 5;
+  string calculated_by = 6;
+  int32 page_size = 7;
+  string page_token = 8;
+}
+
+message ListCalculationsResponse {
+  repeated insuretech.actuarial.entity.v1.ActuarialCalculation calculations = 1;
+  int32 total_count = 2;
+  string next_page_token = 3;
+}
+
+message RecalculateRequest {
+  string calculation_id = 1;
+  google.protobuf.Struct updated_parameters = 2;
+  string recalculated_by = 3;
+  string reason = 4;
+}
+
+message RecalculateResponse {
+  string new_calculation_id = 1;
+  bool success = 2;
+  insuretech.actuarial.entity.v1.ActuarialCalculation calculation = 3;
+  repeated string errors = 4;
+}
+
+// Actuarial reporting
+message GenerateActuarialReportRequest {
+  string report_type = 1; // LOSS_RATIO, RESERVE_ANALYSIS, PREMIUM_TREND, COMBINED_RATIO
+  string product_id = 2;
+  string line_of_business = 3;
+  google.protobuf.Timestamp period_start = 4;
+  google.protobuf.Timestamp period_end = 5;
+  repeated string segmentation_fields = 6;
+  string format = 7; // PDF, EXCEL, JSON
+  string generated_by = 8;
+}
+
+message GenerateActuarialReportResponse {
+  string report_id = 1;
+  string report_url = 2;
+  bool success = 3;
+  google.protobuf.Struct summary = 4;
+  repeated string warnings = 5;
+  google.protobuf.Timestamp generated_at = 6;
+}

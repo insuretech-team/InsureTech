@@ -33,4 +33,13 @@
         <item name="android:textColor">@android:color/white</item>
         <item name="cornerRadius">8dp</item>
     </style>
+
+    <style name="BottomRoundedToolbar" parent="">
+        <!-- Top corners FLAT -->
+        <item name="cornerSizeTopLeft">0dp</item>
+        <item name="cornerSizeTopRight">0dp</item>
+        <!-- Bottom corners ROUNDED -->
+        <item name="cornerSizeBottomLeft">20dp</item>
+        <item name="cornerSizeBottomRight">20dp</item>
+    </style>
 </resources>

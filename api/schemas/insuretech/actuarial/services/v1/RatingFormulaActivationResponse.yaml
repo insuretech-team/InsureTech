@@ -1,0 +1,9 @@
+RatingFormulaActivationResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+    formula:
+      $ref: '#/components/schemas/RatingFormula'
+  description: Response payload for rating formula activation operation. Returns operation
+    results and status.

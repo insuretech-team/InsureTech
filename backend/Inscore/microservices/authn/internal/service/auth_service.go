@@ -17,11 +17,15 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/middleware"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/pii"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/repository"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 	apikeyv1 "github.com/newage-saint/insuretech/gen/go/insuretech/apikey/entity/v1"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -38,6 +42,7 @@ type AuthService struct {
 	documentTypeRepo *repository.DocumentTypeRepository
 	kycRepo          *repository.KYCVerificationRepository
 	externalKYC      ExternalKYCClient
+	flveAdapter      FLVEAdapter
 	voiceRepo        *repository.VoiceSessionRepository
 	eventPublisher   *events.Publisher
 	config           *config.Config
@@ -102,6 +107,19 @@ func NewAuthServiceWithAPIKey(
 func (s *AuthService) Login(ctx context.Context, req *authnservicev1.LoginRequest) (*authnservicev1.LoginResponse, error) {
 	// Extract metadata from context
 	reqMeta := s.metadata.ExtractAll(ctx)
+
+	// Login-specific rate limit (RATE_LIMIT_LOGIN_PER_MINUTE env, default 5).
+	// Checked before any DB lookup to protect against credential stuffing.
+	// This is separate from the OTP rate limit (RATE_LIMIT_PER_MINUTE).
+	if limit := s.config.Security.RateLimitLoginPerMinute; limit > 0 {
+		recentLogins, countErr := s.sessionRepo.CountRecentLoginAttempts(ctx, req.MobileNumber, 1*time.Minute)
+		if countErr == nil && recentLogins >= int64(limit) {
+			appLogger.Warnf("Login rate limited: %s made %d attempts in last minute from IP %s",
+				req.MobileNumber, recentLogins, reqMeta.IPAddress)
+			return nil, status.Errorf(codes.ResourceExhausted,
+				"too many login attempts — please wait before trying again")
+		}
+	}
 	deviceID := strings.TrimSpace(req.DeviceId)
 	if deviceID == "" {
 		// Stable fallback fingerprint when client does not send a device id.
@@ -110,14 +128,65 @@ func (s *AuthService) Login(ctx context.Context, req *authnservicev1.LoginReques
 	}
 
 	// 1. Verify Credentials
-	// Normalize mobile: DB stores E.164 with '+' prefix (e.g. +8801347210751).
-	// Frontend may send with or without '+'. Normalize to match DB format.
-	mobileToLookup := req.MobileNumber
-	if !strings.HasPrefix(mobileToLookup, "+") {
-		mobileToLookup = "+" + mobileToLookup
+	mobileToLookup, err := normalizeMobileForLookup(req.MobileNumber)
+	if err != nil {
+		return nil, errors.New("invalid credentials")
 	}
 	user, err := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
-	if err != nil {
+
+	// B2C OTP-only login: if Password is empty and user does NOT exist yet,
+	// check for a recently verified OTP for this mobile number first, then
+	// auto-create the user as B2C_CUSTOMER (passwordless registration on first login).
+	// This is the mobile-first B2C pattern: OTP verify → auto-register → JWT.
+	otpLoginVerified := false
+	if err != nil && req.Password == "" {
+		// User not found — check for a verified OTP before deciding to create
+		recentOTP, otpErr := s.otpRepo.GetRecentlyVerifiedForMobile(ctx, mobileToLookup, 5*time.Minute)
+		if otpErr != nil || recentOTP == nil {
+			appLogger.Warnf("B2C login: user not found and no verified OTP for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+			_ = s.eventPublisher.PublishLoginFailed(ctx, "", req.MobileNumber, "otp_required", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, 0)
+			return nil, errors.New("invalid credentials: please verify OTP before login")
+		}
+		// Verified OTP found — auto-create B2C user (passwordless first-time login)
+		appLogger.Infof("B2C auto-registration: creating new B2C_CUSTOMER for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+		newUser, createErr := s.userRepo.Create(ctx, mobileToLookup, "", "", authnentityv1.UserStatus_USER_STATUS_ACTIVE)
+		if createErr != nil {
+			appLogger.Errorf("B2C auto-registration failed for mobile %s: %v", req.MobileNumber, createErr)
+			return nil, errors.New("failed to create user account")
+		}
+		// Set user_type to B2C_CUSTOMER explicitly
+		newUser.UserType = authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER
+		user = newUser
+		otpLoginVerified = true
+		_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, mobileToLookup, "", reqMeta.IPAddress, "b2c_otp_auto_register", "b2c", "root")
+		appLogger.Infof("B2C auto-registration success: user_id=%s mobile=%s otp_id=%s from IP %s", user.UserId, req.MobileNumber, recentOTP.OtpId, reqMeta.IPAddress)
+	} else if err != nil && req.Password != "" && req.DeviceId != "" && isMobileDeviceType(req.DeviceType) {
+		// User not found but a device credential was provided — check if credential matches
+		// (try both with and without '+' prefix since OTP recipient may store without '+')
+		mobileNoPlus := strings.TrimPrefix(mobileToLookup, "+")
+		credMatchPlus := deviceCredentialMatches(mobileToLookup, req.DeviceId, req.Password)
+		credMatchRaw := deviceCredentialMatches(mobileNoPlus, req.DeviceId, req.Password)
+		if credMatchPlus || credMatchRaw {
+			// Valid device credential but no user yet — auto-create B2C user
+			appLogger.Infof("B2C device-credential auto-registration: creating new B2C_CUSTOMER for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+			newUser, createErr := s.userRepo.Create(ctx, mobileToLookup, "", "", authnentityv1.UserStatus_USER_STATUS_ACTIVE)
+			if createErr != nil {
+				appLogger.Errorf("B2C device-credential auto-registration failed for mobile %s: %v", req.MobileNumber, createErr)
+				return nil, errors.New("failed to create user account")
+			}
+			newUser.UserType = authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER
+			user = newUser
+			otpLoginVerified = true
+			s.markTrustedDevice(ctx, user.UserId, req.DeviceId)
+			_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, mobileToLookup, "", reqMeta.IPAddress, "b2c_device_credential_auto_register", "b2c", "root")
+			appLogger.Infof("B2C device-credential auto-registration success: user_id=%s mobile=%s from IP %s", user.UserId, req.MobileNumber, reqMeta.IPAddress)
+		} else {
+			appLogger.Warnf("Login failed: user not found and device credential mismatch for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+			_ = s.eventPublisher.PublishLoginFailed(ctx, "", req.MobileNumber, "user_not_found", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, 0)
+			return nil, errors.New("invalid credentials")
+		}
+	} else if err != nil {
+		// User not found and no device credential — standard error
 		appLogger.Warnf("Login failed: user not found for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
 		_ = s.eventPublisher.PublishLoginFailed(ctx, "", req.MobileNumber, "user_not_found", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, 0)
 		return nil, errors.New("invalid credentials")
@@ -131,23 +200,66 @@ func (s *AuthService) Login(ctx context.Context, req *authnservicev1.LoginReques
 		return nil, fmt.Errorf("account is locked. Try again in %s", remaining)
 	}
 
-	valid, needsRehash, verifyErr := verifyPassword(req.Password, user.PasswordHash)
-	if verifyErr != nil || !valid {
-		appLogger.Warnf("Login failed: invalid password for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
-		// Sprint 5: Increment failed attempts and lock if threshold exceeded
-		const maxLoginAttempts = 5
-		const lockoutDuration = 30 * time.Minute
-		attempts, _ := s.userRepo.IncrementLoginAttempts(ctx, user.UserId)
-		if attempts >= maxLoginAttempts {
-			_ = s.userRepo.LockAccount(ctx, user.UserId, lockoutDuration)
-			appLogger.Warnf("Account locked for user %s after %d failed attempts from IP %s", user.UserId, attempts, reqMeta.IPAddress)
+	// WhatsApp-style device credential check: if mobile device type and non-empty password,
+	// try to match it as a device credential (HMAC of mobile+device_id) BEFORE
+	// falling through to bcrypt password check. This enables seamless re-login
+	// on the same device without OTP.
+	if req.Password != "" && req.DeviceId != "" && isMobileDeviceType(req.DeviceType) {
+		mobileNoPlus := strings.TrimPrefix(mobileToLookup, "+")
+		if deviceCredentialMatches(mobileToLookup, req.DeviceId, req.Password) ||
+			deviceCredentialMatches(mobileNoPlus, req.DeviceId, req.Password) {
+			otpLoginVerified = true
+			// Refresh trusted device TTL in Redis
+			s.markTrustedDevice(ctx, user.UserId, req.DeviceId)
+			appLogger.Infof("Device credential login: user=%s mobile=%s device_id=%s device_type=%s from IP %s",
+				user.UserId, req.MobileNumber, req.DeviceId, req.DeviceType, reqMeta.IPAddress)
 		}
-		_ = s.eventPublisher.PublishLoginFailed(ctx, user.UserId, req.MobileNumber, "invalid_password", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, attempts)
-		return nil, errors.New("invalid credentials")
 	}
-	if needsRehash {
-		if newHash, err := hashPassword(req.Password); err == nil {
-			_ = s.userRepo.UpdatePassword(ctx, user.UserId, newHash)
+
+	// B2C OTP-only login: if Password is empty and user already exists,
+	// check for a recently verified OTP for this mobile number.
+	if req.Password == "" && !otpLoginVerified {
+		recentOTP, otpErr := s.otpRepo.GetRecentlyVerifiedForMobile(ctx, user.MobileNumber, 5*time.Minute)
+		if otpErr == nil && recentOTP != nil {
+			otpLoginVerified = true
+			// Consume the OTP immediately so it cannot be reused by a subsequent
+			// login attempt (prevents replay/session-hijack via OTP reuse).
+			if expErr := s.otpRepo.ExpireOTP(ctx, recentOTP.OtpId); expErr != nil {
+				appLogger.Warnf("B2C OTP login: failed to expire OTP %s after use: %v", recentOTP.OtpId, expErr)
+			}
+			appLogger.Infof("B2C OTP login: verified OTP %s consumed for existing user %s mobile %s from IP %s", recentOTP.OtpId, user.UserId, req.MobileNumber, reqMeta.IPAddress)
+		} else {
+			appLogger.Warnf("Login failed: no password and no verified OTP for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+			_ = s.eventPublisher.PublishLoginFailed(ctx, user.UserId, req.MobileNumber, "otp_required", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, 0)
+			return nil, errors.New("invalid credentials: password or verified OTP required")
+		}
+	}
+
+	if !otpLoginVerified {
+		valid, needsRehash, verifyErr := verifyPassword(req.Password, user.PasswordHash)
+		if verifyErr != nil || !valid {
+			appLogger.Warnf("Login failed: invalid password for mobile %s from IP %s", req.MobileNumber, reqMeta.IPAddress)
+			// Sprint 5: Increment failed attempts and lock if threshold exceeded
+			maxLoginAttempts := s.config.Security.LoginMaxAttempts
+			if maxLoginAttempts <= 0 {
+				maxLoginAttempts = 8
+			}
+			lockoutDuration := s.config.Security.LoginLockoutDuration
+			if lockoutDuration <= 0 {
+				lockoutDuration = 10 * time.Minute
+			}
+			attempts, _ := s.userRepo.IncrementLoginAttempts(ctx, user.UserId)
+			if int(attempts) >= maxLoginAttempts {
+				_ = s.userRepo.LockAccount(ctx, user.UserId, lockoutDuration)
+				appLogger.Warnf("Account locked for user %s after %d failed attempts from IP %s", user.UserId, attempts, reqMeta.IPAddress)
+			}
+			_ = s.eventPublisher.PublishLoginFailed(ctx, user.UserId, req.MobileNumber, "invalid_password", reqMeta.IPAddress, req.DeviceType, reqMeta.UserAgent, attempts)
+			return nil, errors.New("invalid credentials")
+		}
+		if needsRehash {
+			if newHash, err := hashPassword(req.Password); err == nil {
+				_ = s.userRepo.UpdatePassword(ctx, user.UserId, newHash)
+			}
 		}
 	}
 	// Sprint 5: Reset failed login attempts on successful credential verification
@@ -186,14 +298,54 @@ func (s *AuthService) Login(ctx context.Context, req *authnservicev1.LoginReques
 	}
 
 issueTokens:
-	// 2. Parse device type
+	// 2. Parse and validate device type
 	deviceType := parseDeviceType(req.DeviceType)
+
+	// Reject unknown/unspecified device_type — clients must send an explicit valid value.
+	// This prevents garbage values like the Postman placeholder "string" from silently
+	// falling through to JWT. Valid values: WEB, ANDROID, IOS, API, DESKTOP.
+	if deviceType == authnentityv1.DeviceType_DEVICE_TYPE_UNSPECIFIED {
+		appLogger.Warnf("Login rejected: unknown device_type %q for mobile %s from IP %s",
+			req.DeviceType, req.MobileNumber, reqMeta.IPAddress)
+		return nil, status.Errorf(codes.InvalidArgument,
+			"invalid device_type %q: must be one of WEB, ANDROID, IOS, API, DESKTOP", req.DeviceType)
+	}
+
+	// Web-portal-only user types must always use device_type=WEB → SERVER_SIDE session.
+	// Issuing JWT to these user types would be a security misconfiguration.
+	//
+	// JWT-eligible (mobile/app users):  B2C_CUSTOMER, AGENT
+	// SERVER_SIDE only (web portal):    SYSTEM_USER, BUSINESS_BENEFICIARY, PARTNER,
+	//                                   REGULATOR, BUSINESS_ADMIN, B2B_ORG_ADMIN
+	isWebOnlyUserType := func(ut authnentityv1.UserType) bool {
+		switch ut {
+		case authnentityv1.UserType_USER_TYPE_SYSTEM_USER,
+			authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY,
+			authnentityv1.UserType_USER_TYPE_PARTNER,
+			authnentityv1.UserType_USER_TYPE_REGULATOR,
+			authnentityv1.UserType_USER_TYPE_BUSINESS_ADMIN,
+			authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN,
+			authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY:
+			return true
+		default:
+			return false
+		}
+	}
+	if isWebOnlyUserType(user.UserType) && deviceType != authnentityv1.DeviceType_DEVICE_TYPE_WEB {
+		appLogger.Warnf("Login rejected: web-portal user %s (type=%s) attempted non-WEB login with device_type=%s from IP %s",
+			user.UserId, user.UserType, req.DeviceType, reqMeta.IPAddress)
+		return nil, status.Errorf(codes.InvalidArgument,
+			"user type %s must use device_type=WEB for login (web portal users cannot use JWT)",
+			user.UserType.String())
+	}
+
 	sessionType := mapDeviceTypeToSessionType(deviceType)
 
 	// 3. Generate session/tokens based on device type
 	resp := &authnservicev1.LoginResponse{
-		UserId: user.UserId,
-		User:   user,
+		UserId:                 user.UserId,
+		User:                   user,
+		PasswordChangeRequired: user.PasswordChangeRequired,
 	}
 
 	var sessionID string
@@ -225,11 +377,19 @@ issueTokens:
 
 	} else {
 		// JWT for mobile/API
+		// B2C customers always use the shared 'b2c:root' domain.
+		// tenantID must be non-empty so the JWT ins_tenant claim resolves to
+		// "b2c:root" (not "b2c:") in CheckAccess domain format "portal:tenant".
+		b2cTenantID := "root"
+		if user.UserType != authnentityv1.UserType_USER_TYPE_B2C_CUSTOMER &&
+			user.UserType != authnentityv1.UserType_USER_TYPE_AGENT {
+			b2cTenantID = "" // non-B2C portals resolve tenant from their org
+		}
 		tokens, err := s.tokenService.GenerateJWT(
 			ctx,
 			user.UserId,
 			user.UserType.String(),
-			"", // tenantID: populated by authz service after role assignment
+			b2cTenantID,
 			deviceID,
 			deviceType,
 			reqMeta.IPAddress,
@@ -262,10 +422,10 @@ issueTokens:
 func (s *AuthService) Register(ctx context.Context, req *authnservicev1.RegisterRequest) (*authnservicev1.RegisterResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
 
-	// Check if user exists — normalize mobile to E.164 with '+' prefix
-	mobileToLookup := req.MobileNumber
-	if !strings.HasPrefix(mobileToLookup, "+") {
-		mobileToLookup = "+" + mobileToLookup
+	// Check if user exists using the canonical +8801XXXXXXXXX form.
+	mobileToLookup, err := normalizeMobileForLookup(req.MobileNumber)
+	if err != nil {
+		return nil, errors.New("invalid mobile number")
 	}
 	existing, _ := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
 	if existing != nil {
@@ -288,7 +448,7 @@ func (s *AuthService) Register(ctx context.Context, req *authnservicev1.Register
 	}
 
 	// Create user with proper signature
-	user, err := s.userRepo.Create(ctx, req.MobileNumber, hashedPassword, req.Email, authnentityv1.UserStatus_USER_STATUS_ACTIVE)
+	user, err := s.userRepo.Create(ctx, mobileToLookup, hashedPassword, req.Email, authnentityv1.UserStatus_USER_STATUS_ACTIVE)
 	if err != nil {
 		appLogger.Errorf("Failed to create user: %v", err)
 		logger.Errorf("failed to create user: %v", err)
@@ -296,7 +456,7 @@ func (s *AuthService) Register(ctx context.Context, req *authnservicev1.Register
 	}
 
 	// Publish event
-	_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, req.MobileNumber, req.Email, reqMeta.IPAddress, "")
+	_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, mobileToLookup, req.Email, reqMeta.IPAddress, "", "b2c", "root")
 
 	appLogger.Infof("User registered successfully: %s from IP %s", user.UserId, reqMeta.IPAddress)
 
@@ -455,10 +615,27 @@ func (s *AuthService) VerifyOTP(ctx context.Context, req *authnservicev1.VerifyO
 		appLogger.Infof("OTP %s verified successfully from IP %s", req.OtpId, reqMeta.IPAddress)
 		// Fetch OTP to capture attempts count for event.
 		attempts := int32(0)
+		var otpMobile string
 		if otp, err := s.otpRepo.GetByID(ctx, req.OtpId); err == nil && otp != nil {
 			attempts = otp.Attempts
+			otpMobile = otp.Recipient // phone number stored as recipient on OTP record
 		}
 		_ = s.eventPublisher.PublishOTPVerified(ctx, req.OtpId, resp.UserId, attempts)
+
+		// WhatsApp-style device binding: if mobile device provided device_id,
+		// derive and return a one-time device credential. The app stores this
+		// in Android Keystore / iOS Keychain and uses it as `password` on
+		// subsequent logins — no OTP required on same device.
+		if req.DeviceId != "" && isMobileDeviceType(req.DeviceType) && otpMobile != "" {
+			cred := deriveDeviceCredential(otpMobile, req.DeviceId)
+			resp.DeviceCredential = cred
+			// Mark this device as trusted in Redis (30-day TTL)
+			if resp.UserId != "" {
+				s.markTrustedDevice(ctx, resp.UserId, req.DeviceId)
+			}
+			appLogger.Infof("Device credential issued for mobile=%s device_id=%s device_type=%s otp_id=%s",
+				otpMobile, req.DeviceId, req.DeviceType, req.OtpId)
+		}
 	} else {
 		appLogger.Warnf("OTP %s verification failed from IP %s: %s", req.OtpId, reqMeta.IPAddress, resp.Message)
 	}
@@ -502,6 +679,10 @@ func (s *AuthService) ChangePassword(ctx context.Context, req *authnservicev1.Ch
 		logger.Errorf("failed to update password: %v", err)
 		return nil, errors.New("failed to update password")
 	}
+	if err := s.userRepo.SetPasswordChangeRequired(ctx, req.UserId, false); err != nil {
+		logger.Errorf("failed to clear password_change_required: %v", err)
+		return nil, errors.New("failed to update password")
+	}
 
 	// Revoke all sessions (force re-login)
 	_ = s.sessionRepo.RevokeAllByUserID(ctx, req.UserId, "")
@@ -518,10 +699,10 @@ func (s *AuthService) ChangePassword(ctx context.Context, req *authnservicev1.Ch
 func (s *AuthService) ResetPassword(ctx context.Context, req *authnservicev1.ResetPasswordRequest) (*authnservicev1.ResetPasswordResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
 
-	// Get user by mobile number first — normalize to E.164 with '+' prefix
-	mobileToLookup := req.MobileNumber
-	if !strings.HasPrefix(mobileToLookup, "+") {
-		mobileToLookup = "+" + mobileToLookup
+	// Get user by mobile number first using the canonical +8801XXXXXXXXX form.
+	mobileToLookup, err := normalizeMobileForLookup(req.MobileNumber)
+	if err != nil {
+		return nil, errors.New("invalid credentials")
 	}
 	user, err := s.userRepo.GetByMobileNumber(ctx, mobileToLookup)
 	if err != nil {
@@ -562,6 +743,10 @@ func (s *AuthService) ResetPassword(ctx context.Context, req *authnservicev1.Res
 	// Update password
 	if err := s.userRepo.UpdatePassword(ctx, user.UserId, hashedPassword); err != nil {
 		logger.Errorf("failed to update password: %v", err)
+		return nil, errors.New("failed to update password")
+	}
+	if err := s.userRepo.SetPasswordChangeRequired(ctx, user.UserId, false); err != nil {
+		logger.Errorf("failed to clear password_change_required: %v", err)
 		return nil, errors.New("failed to update password")
 	}
 
@@ -628,41 +813,139 @@ func (s *AuthService) ValidateCSRF(ctx context.Context, req *authnservicev1.Vali
 func (s *AuthService) GetCurrentSession(ctx context.Context, req *authnservicev1.GetCurrentSessionRequest) (*authnservicev1.GetCurrentSessionResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
 
-	// Try JWT first
-	if reqMeta.Authorization != "" {
-		token := reqMeta.Authorization
-		if len(token) > 7 && token[:7] == "Bearer " {
-			token = token[7:]
-		}
-		resp, err := s.tokenService.ValidateJWT(ctx, token)
+	// Try JWT first — only if authorization looks like a real Bearer token (starts with eyJ).
+	// An empty "authorization" metadata value must be skipped to avoid a failed JWT parse.
+	if strings.HasPrefix(reqMeta.Authorization, "eyJ") {
+		resp, err := s.tokenService.ValidateJWT(ctx, reqMeta.Authorization)
 		if err == nil && resp.Valid {
 			session, err := s.sessionRepo.GetByID(ctx, resp.SessionId)
 			if err == nil {
 				userType := ""
+				passwordChangeRequired := false
 				if u, uerr := s.userRepo.GetByID(ctx, session.UserId); uerr == nil && u != nil {
 					userType = u.UserType.String()
+					passwordChangeRequired = u.GetPasswordChangeRequired()
 				}
-				return &authnservicev1.GetCurrentSessionResponse{Session: session, UserType: userType}, nil
+				return &authnservicev1.GetCurrentSessionResponse{
+					Session:                session,
+					UserType:               userType,
+					PasswordChangeRequired: passwordChangeRequired,
+				}, nil
 			}
 		}
 	}
 
-	// Try server-side session cookie
+	// Try server-side session cookie (session_token=<value> in cookie metadata).
 	if reqMeta.SessionToken != "" {
 		resp, err := s.tokenService.ValidateServerSideSession(ctx, reqMeta.SessionToken)
 		if err == nil && resp.Valid {
 			session, err := s.sessionRepo.GetByID(ctx, resp.SessionId)
 			if err == nil {
 				userType := ""
+				passwordChangeRequired := false
 				if u, uerr := s.userRepo.GetByID(ctx, session.UserId); uerr == nil && u != nil {
 					userType = u.UserType.String()
+					passwordChangeRequired = u.GetPasswordChangeRequired()
 				}
-				return &authnservicev1.GetCurrentSessionResponse{Session: session, UserType: userType}, nil
+				return &authnservicev1.GetCurrentSessionResponse{
+					Session:                session,
+					UserType:               userType,
+					PasswordChangeRequired: passwordChangeRequired,
+				}, nil
 			}
 		}
 	}
 
-	return nil, errors.New("no active session found")
+	appLogger.Warnf("GetCurrentSession: no valid session found — sessionToken=%q auth=%q",
+		reqMeta.SessionToken != "", reqMeta.Authorization != "")
+	return nil, status.Error(codes.NotFound, "no active session found")
+}
+
+func (s *AuthService) FindPortalUser(ctx context.Context, req *authnservicev1.FindPortalUserRequest) (*authnservicev1.FindPortalUserResponse, error) {
+	identifier := strings.TrimSpace(req.GetIdentifier())
+	if identifier == "" {
+		return nil, errors.New("identifier is required")
+	}
+
+	var (
+		user *authnentityv1.User
+		err  error
+	)
+
+	if strings.Contains(identifier, "@") {
+		user, err = s.userRepo.GetByEmail(ctx, strings.ToLower(identifier))
+	} else {
+		normalized, normalizeErr := normalizeMobileForLookup(identifier)
+		if normalizeErr != nil {
+			return nil, errors.New("identifier must be a valid email or Bangladesh mobile number")
+		}
+		user, err = s.userRepo.GetByMobileNumber(ctx, normalized)
+	}
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	summary := &authnservicev1.PortalUserSummary{
+		UserId:                 user.GetUserId(),
+		Email:                  user.GetEmail(),
+		MobileNumber:           user.GetMobileNumber(),
+		UserType:               user.GetUserType().String(),
+		EmailVerified:          user.GetEmailVerified(),
+		PasswordChangeRequired: user.GetPasswordChangeRequired(),
+	}
+
+	if s.userProfileRepo != nil {
+		if profile, profileErr := s.userProfileRepo.GetByUserID(ctx, user.GetUserId()); profileErr == nil && profile != nil {
+			summary.FullName = profile.GetFullName()
+			summary.KycVerified = profile.GetKycVerified()
+		}
+	}
+
+	return &authnservicev1.FindPortalUserResponse{User: summary}, nil
+}
+
+func (s *AuthService) SetTemporaryPassword(ctx context.Context, req *authnservicev1.SetTemporaryPasswordRequest) (*authnservicev1.SetTemporaryPasswordResponse, error) {
+	if strings.TrimSpace(req.GetUserId()) == "" {
+		return nil, errors.New("user_id is required")
+	}
+	if err := validatePasswordStrength(req.GetTemporaryPassword()); err != nil {
+		logger.Errorf("weak temporary password: %v", err)
+		return nil, errors.New("weak password")
+	}
+
+	user, err := s.userRepo.GetByID(ctx, req.GetUserId())
+	if err != nil {
+		return nil, errors.New("user not found")
+	}
+
+	hashedPassword, err := hashPassword(req.GetTemporaryPassword())
+	if err != nil {
+		logger.Errorf("failed to hash temporary password: %v", err)
+		return nil, errors.New("failed to hash password")
+	}
+
+	if err := s.userRepo.UpdatePassword(ctx, user.GetUserId(), hashedPassword); err != nil {
+		logger.Errorf("failed to update temporary password: %v", err)
+		return nil, errors.New("failed to update password")
+	}
+
+	if err := s.userRepo.SetPasswordChangeRequired(ctx, user.GetUserId(), true); err != nil {
+		logger.Errorf("failed to mark password_change_required: %v", err)
+		return nil, errors.New("failed to update password")
+	}
+
+	_ = s.sessionRepo.RevokeAllByUserID(ctx, user.GetUserId(), "")
+
+	reqMeta := s.metadata.ExtractAll(ctx)
+	changedBy := strings.TrimSpace(req.GetAssignedBy())
+	if changedBy == "" {
+		changedBy = grpcmeta.ActorID(ctx, "")
+	}
+	_ = s.eventPublisher.PublishPasswordChanged(ctx, user.GetUserId(), reqMeta.IPAddress, changedBy)
+
+	return &authnservicev1.SetTemporaryPasswordResponse{
+		Message: "Temporary password set successfully",
+	}, nil
 }
 
 // RevokeAllSessions revokes all sessions for a user (logout from all devices)
@@ -709,7 +992,8 @@ func (s *AuthService) RevokeAllSessions(ctx context.Context, req *authnservicev1
 // Helper functions
 
 func parseDeviceType(deviceTypeStr string) authnentityv1.DeviceType {
-	switch deviceTypeStr {
+	// Case-insensitive matching — clients may send "web", "WEB", "Web" etc.
+	switch strings.ToUpper(deviceTypeStr) {
 	case "WEB":
 		return authnentityv1.DeviceType_DEVICE_TYPE_WEB
 	case "MOBILE_ANDROID", "ANDROID":
@@ -721,7 +1005,9 @@ func parseDeviceType(deviceTypeStr string) authnentityv1.DeviceType {
 	case "DESKTOP":
 		return authnentityv1.DeviceType_DEVICE_TYPE_DESKTOP
 	default:
-		return authnentityv1.DeviceType_DEVICE_TYPE_API
+		// Unknown/garbage device_type (e.g. Postman placeholder "string") must NOT
+		// silently fall through to JWT. Return UNSPECIFIED so callers can reject it.
+		return authnentityv1.DeviceType_DEVICE_TYPE_UNSPECIFIED
 	}
 }
 
@@ -732,6 +1018,10 @@ func mapDeviceTypeToSessionType(deviceType authnentityv1.DeviceType) authnentity
 	default:
 		return authnentityv1.SessionType_SESSION_TYPE_JWT
 	}
+}
+
+func normalizeMobileForLookup(raw string) (string, error) {
+	return mobile.NormalizeBangladeshMobileE164(strings.TrimSpace(raw))
 }
 
 // portalConfigKeyForUserType maps UserType to the portal config cache key.
@@ -747,6 +1037,12 @@ func portalConfigKeyForUserType(userType string) string {
 	case authnentityv1.UserType_USER_TYPE_SYSTEM_USER.String(), "SYSTEM_USER", "USER_TYPE_SYSTEM_USER":
 		return "PORTAL_SYSTEM"
 	case authnentityv1.UserType_USER_TYPE_PARTNER.String(), "PARTNER", "USER_TYPE_PARTNER":
+		return "PORTAL_B2B"
+	case authnentityv1.UserType_USER_TYPE_BUSINESS_ADMIN.String(), "BUSINESS_ADMIN", "USER_TYPE_BUSINESS_ADMIN":
+		return "PORTAL_B2B"
+	case authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN.String(), "B2B_ORG_ADMIN", "USER_TYPE_B2B_ORG_ADMIN":
+		return "PORTAL_B2B"
+	case authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY.String(), "B2B_BENEFICIARY", "USER_TYPE_B2B_BENEFICIARY":
 		return "PORTAL_B2B"
 	case authnentityv1.UserType_USER_TYPE_REGULATOR.String(), "REGULATOR", "USER_TYPE_REGULATOR":
 		return "PORTAL_REGULATOR"
@@ -840,8 +1136,10 @@ func (s *AuthService) BiometricAuthenticate(ctx context.Context, req *authnservi
 // ================================================================
 
 // GetJWKS returns the JWKS (JSON Web Key Set) for the authn service's RSA public key.
-func (s *AuthService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error) {
-	return s.tokenService.GetJWKS(ctx, req)
+// NOTE: GetJWKS RPC was removed from auth_service.proto (API path conflict with well-known domain).
+// Kept as internal helper; exposed via HTTP directly by the gateway.
+func (s *AuthService) getJWKSInternal(ctx context.Context) (*JWKSResult, error) {
+	return s.tokenService.GetJWKSInternal(ctx)
 }
 
 // UpdateDLRStatus updates the delivery status of an OTP SMS message.

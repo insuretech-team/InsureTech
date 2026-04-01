@@ -1,0 +1,21 @@
+PortalUserSummary:
+  type: object
+  properties:
+    user_id:
+      type: string
+    full_name:
+      type: string
+    email:
+      type: string
+    mobile_number:
+      type: string
+    user_type:
+      type: string
+    email_verified:
+      type: boolean
+    kyc_verified:
+      type: boolean
+    password_change_required:
+      type: boolean
+  description: Domain entity representing portal user summary. Core business object
+    in the system.

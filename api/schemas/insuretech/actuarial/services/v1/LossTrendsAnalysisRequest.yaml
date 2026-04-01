@@ -1,0 +1,22 @@
+LossTrendsAnalysisRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    line_of_business:
+      type: string
+    analysis_start:
+      type: string
+      format: date-time
+    analysis_end:
+      type: string
+      format: date-time
+    comparison_periods:
+      type: integer
+      format: int32
+    segmentation_fields:
+      type: array
+      items:
+        type: string
+  description: Request payload for loss trends analysis operation. Contains parameters
+    required to execute the operation.

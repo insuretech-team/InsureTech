@@ -1,0 +1,1023 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Proposals - Labaid InsureTech</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+    
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+      background-color: #f8fafc;
+    }
+
+    .sidebar {
+      width: 200px;
+      background: white;
+      border-right: 1px solid #e5e7eb;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .logo {
+      padding: 16px;
+      border-bottom: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      background: linear-gradient(135deg, #10b981, #059669);
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: bold;
+      font-size: 12px;
+    }
+
+    .logo-text {
+      font-size: 14px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .logo-text span {
+      color: #10b981;
+    }
+
+    .nav-menu {
+      padding: 8px;
+      flex: 1;
+    }
+
+    .nav-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 10px 12px;
+      border-radius: 8px;
+      color: #6b7280;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+      font-size: 14px;
+      margin-bottom: 2px;
+    }
+
+    .nav-item:hover {
+      background: #f3f4f6;
+    }
+
+    .nav-item.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .nav-item svg {
+      width: 20px;
+      height: 20px;
+    }
+
+    .main-content {
+      margin-left: 200px;
+      min-height: 100vh;
+    }
+
+    .header {
+      background: white;
+      border-bottom: 1px solid #e5e7eb;
+      padding: 12px 24px;
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 16px;
+    }
+
+    .header-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .header-icon:hover {
+      background: #f3f4f6;
+    }
+
+    .avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #10b981, #059669);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+    }
+
+    .content-area {
+      padding: 24px;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 4px;
+      width: fit-content;
+    }
+
+    .tab {
+      padding: 8px 20px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+    }
+
+    .tab.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .tab:hover:not(.active) {
+      color: #111827;
+    }
+
+    .table-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 16px;
+    }
+
+    .table-title {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .export-btn {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      cursor: pointer;
+      font-size: 14px;
+      color: #374151;
+      transition: all 0.2s;
+    }
+
+    .export-btn:hover {
+      background: #f9fafb;
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 16px;
+      flex-wrap: wrap;
+    }
+
+    .filter-group {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .filter-label {
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .filter-select {
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      font-size: 14px;
+      color: #374151;
+      background: white;
+      cursor: pointer;
+      min-width: 140px;
+    }
+
+    .filter-select:focus {
+      outline: none;
+      border-color: #10b981;
+    }
+
+    .search-box {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 12px;
+      border: 1px solid #e5e7eb;
+      border-radius: 8px;
+      background: white;
+      margin-left: auto;
+      min-width: 250px;
+    }
+
+    .search-box input {
+      border: none;
+      outline: none;
+      font-size: 14px;
+      width: 100%;
+      color: #374151;
+    }
+
+    .search-box input::placeholder {
+      color: #9ca3af;
+    }
+
+    .table-container {
+      background: white;
+      border-radius: 12px;
+      border: 1px solid #e5e7eb;
+      overflow: hidden;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+
+    th {
+      background: #f9fafb;
+      padding: 12px 16px;
+      text-align: left;
+      font-size: 13px;
+      font-weight: 600;
+      color: #374151;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    th .sort-icons {
+      display: inline-flex;
+      flex-direction: column;
+      margin-left: 4px;
+      vertical-align: middle;
+    }
+
+    th .sort-icons svg {
+      width: 10px;
+      height: 10px;
+      color: #9ca3af;
+    }
+
+    td {
+      padding: 14px 16px;
+      font-size: 14px;
+      color: #374151;
+      border-bottom: 1px solid #f3f4f6;
+    }
+
+    tr {
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    tr:hover {
+      background: #f9fafb;
+    }
+
+    .pagination {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 8px;
+      padding: 16px;
+      background: white;
+      border-top: 1px solid #e5e7eb;
+    }
+
+    .pagination-btn {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 12px;
+      border: none;
+      background: transparent;
+      cursor: pointer;
+      font-size: 14px;
+      color: #6b7280;
+      transition: color 0.2s;
+    }
+
+    .pagination-btn:hover {
+      color: #111827;
+    }
+
+    .pagination-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .page-number {
+      width: 32px;
+      height: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 8px;
+      font-size: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      color: #6b7280;
+    }
+
+    .page-number.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .page-number:hover:not(.active) {
+      background: #f3f4f6;
+    }
+
+    /* Sheet/Modal Styles */
+    .sheet-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.5);
+      opacity: 0;
+      visibility: hidden;
+      transition: all 0.3s;
+      z-index: 100;
+    }
+
+    .sheet-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .sheet {
+      position: fixed;
+      top: 0;
+      right: 0;
+      width: 500px;
+      max-width: 90vw;
+      height: 100vh;
+      background: white;
+      transform: translateX(100%);
+      transition: transform 0.3s ease;
+      z-index: 101;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .sheet.open {
+      transform: translateX(0);
+    }
+
+    .sheet-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 20px 24px;
+      border-bottom: 1px solid #e5e7eb;
+    }
+
+    .sheet-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #111827;
+    }
+
+    .sheet-close {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      border: 1px solid #e5e7eb;
+      background: white;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s;
+    }
+
+    .sheet-close:hover {
+      background: #f3f4f6;
+    }
+
+    .sheet-content {
+      flex: 1;
+      overflow-y: auto;
+      padding: 24px;
+    }
+
+    .sheet-tabs {
+      display: flex;
+      gap: 0;
+      margin-bottom: 24px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      padding: 4px;
+    }
+
+    .sheet-tab {
+      flex: 1;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-size: 14px;
+      font-weight: 500;
+      color: #6b7280;
+      transition: all 0.2s;
+      border: none;
+      background: transparent;
+      text-align: center;
+    }
+
+    .sheet-tab.active {
+      background: #10b981;
+      color: white;
+    }
+
+    .info-card {
+      background: #f9fafb;
+      border-radius: 12px;
+      padding: 20px;
+      margin-bottom: 20px;
+    }
+
+    .info-card-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 16px;
+    }
+
+    .info-item {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .info-label {
+      font-size: 12px;
+      font-weight: 500;
+      color: #6b7280;
+    }
+
+    .info-value {
+      font-size: 14px;
+      color: #111827;
+    }
+
+    .document-item {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px;
+      background: white;
+      border-radius: 8px;
+      border: 1px solid #e5e7eb;
+    }
+
+    .document-icon {
+      width: 40px;
+      height: 40px;
+      background: #f3f4f6;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .document-name {
+      flex: 1;
+      font-size: 14px;
+      font-weight: 500;
+      color: #111827;
+    }
+
+    .view-file-btn {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 6px 12px;
+      border: 1px solid #10b981;
+      border-radius: 6px;
+      background: transparent;
+      color: #10b981;
+      font-size: 13px;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .view-file-btn:hover {
+      background: #10b981;
+      color: white;
+    }
+
+    .plan-image {
+      width: 100%;
+      height: 180px;
+      background: linear-gradient(135deg, #d1fae5, #a7f3d0);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+    }
+
+    .plan-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    .plan-name {
+      font-size: 20px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 16px;
+    }
+
+    .plan-stats {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 24px;
+    }
+
+    .plan-stat {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+    }
+
+    .plan-stat-label {
+      font-size: 12px;
+      color: #6b7280;
+    }
+
+    .plan-stat-value {
+      font-size: 16px;
+      font-weight: 600;
+      color: #10b981;
+    }
+
+    .coverage-section {
+      margin-bottom: 24px;
+    }
+
+    .coverage-title {
+      font-size: 15px;
+      font-weight: 600;
+      color: #111827;
+      margin-bottom: 12px;
+    }
+
+    .coverage-items {
+      display: flex;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+
+    .coverage-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 10px 14px;
+      background: #f0fdf4;
+      border: 1px solid #bbf7d0;
+      border-radius: 8px;
+      font-size: 13px;
+      color: #166534;
+    }
+
+    .excluded-items {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .excluded-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #6b7280;
+    }
+
+    .excluded-item svg {
+      color: #ef4444;
+      width: 18px;
+      height: 18px;
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+  </style>
+</head>
+<body>
+  <!-- Sidebar -->
+  <aside class="sidebar">
+    <div class="logo">
+      <div class="logo-icon">L</div>
+      <div class="logo-text">LABAID <span>INSURETECH</span></div>
+    </div>
+    <nav class="nav-menu">
+      <a href="/dashboard.html" class="nav-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2V6zM14 6a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2V6zM4 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2H6a2 2 0 01-2-2v-2zM14 16a2 2 0 012-2h2a2 2 0 012 2v2a2 2 0 01-2 2h-2a2 2 0 01-2-2v-2z"/></svg>
+        Dashboard
+      </a>
+      <a href="/plan-template.html" class="nav-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+        Plan Template
+        <svg style="margin-left:auto;width:16px;height:16px" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+      </a>
+      <a href="/policy-categories.html" class="nav-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 10h16M4 14h16M4 18h16"/></svg>
+        Policy Categories
+      </a>
+      <a href="/proposals.html" class="nav-item active">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
+        Proposals
+      </a>
+      <a href="/claim-settlement.html" class="nav-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+        Claim Settlement
+      </a>
+      <a href="#" class="nav-item">
+        <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"/><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/></svg>
+        Settings
+      </a>
+    </nav>
+  </aside>
+
+  <!-- Main Content -->
+  <main class="main-content">
+    <!-- Header -->
+    <header class="header">
+      <div class="header-icon">
+        <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
+      </div>
+      <div class="avatar">A</div>
+    </header>
+
+    <!-- Content Area -->
+    <div class="content-area">
+      <!-- Tabs -->
+      <div class="tabs">
+        <button class="tab active" onclick="switchTab(this, 'individual')">Individual Claims</button>
+        <button class="tab" onclick="switchTab(this, 'corporate')">Corporate Claims</button>
+      </div>
+
+      <!-- Table Header -->
+      <div class="table-header">
+        <h1 class="table-title">Proposals Table</h1>
+        <button class="export-btn">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+          Export (Excel, Pdf, CSV)
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg>
+        </button>
+      </div>
+
+      <!-- Filters -->
+      <div class="filters">
+        <div class="filter-group">
+          <span class="filter-label">Show List:</span>
+          <select class="filter-select">
+            <option>12</option>
+            <option>24</option>
+            <option>48</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Select Category:</span>
+          <select class="filter-select">
+            <option>Travel Insurance</option>
+            <option>Health Insurance</option>
+            <option>Life Insurance</option>
+          </select>
+        </div>
+        <div class="filter-group">
+          <span class="filter-label">Select Plan:</span>
+          <select class="filter-select">
+            <option>Vromon</option>
+            <option>Basic</option>
+            <option>Premium</option>
+          </select>
+        </div>
+        <div class="search-box">
+          <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
+          <input type="text" placeholder="Search employee by name or ID...">
+        </div>
+      </div>
+
+      <!-- Table -->
+      <div class="table-container">
+        <table>
+          <thead>
+            <tr>
+              <th>Sr. No.</th>
+              <th>Name <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Proposal ID <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Insurance Category <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Plan <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Coverage <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Premium <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+              <th>Mobile No. <span class="sort-icons"><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7"/></svg><svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"/></svg></span></th>
+            </tr>
+          </thead>
+          <tbody id="proposalsTableBody">
+            <!-- Table rows will be generated by JavaScript -->
+          </tbody>
+        </table>
+        <div class="pagination">
+          <button class="pagination-btn" disabled>
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 19l-7-7 7-7"/></svg>
+            Previous
+          </button>
+          <button class="page-number active">1</button>
+          <button class="page-number">2</button>
+          <button class="page-number">3</button>
+          <button class="pagination-btn">
+            Next
+            <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5l7 7-7 7"/></svg>
+          </button>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Sheet Overlay -->
+  <div class="sheet-overlay" id="sheetOverlay" onclick="closeSheet()"></div>
+
+  <!-- Sheet Modal -->
+  <div class="sheet" id="sheet">
+    <div class="sheet-header">
+      <h2 class="sheet-title">Proposal Details</h2>
+      <button class="sheet-close" onclick="closeSheet()">
+        <svg width="16" height="16" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+      </button>
+    </div>
+    <div class="sheet-content">
+      <div class="sheet-tabs">
+        <button class="sheet-tab active" onclick="switchSheetTab(this, 'userInfo')">User Info.</button>
+        <button class="sheet-tab" onclick="switchSheetTab(this, 'insuranceInfo')">Insurance Info.</button>
+      </div>
+
+      <!-- User Info Tab -->
+      <div class="tab-content active" id="userInfoTab">
+        <div class="info-card">
+          <h3 class="info-card-title">User Info. & Informations</h3>
+          <div class="info-grid">
+            <div class="info-item">
+              <span class="info-label">Name</span>
+              <span class="info-value" id="detailName">Akbar Ali</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Occupation</span>
+              <span class="info-value">Job Holder</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Passport No.</span>
+              <span class="info-value">AA12*****</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Insurance taken for</span>
+              <span class="info-value">Self</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Income range</span>
+              <span class="info-value">50,000 - 100,000</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date of Departure</span>
+              <span class="info-value">17-11-2025</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Date of birth</span>
+              <span class="info-value">17-11-1982</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Mobile no.</span>
+              <span class="info-value" id="detailMobile">+88 017 1000 0000</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">No. of days stay outside</span>
+              <span class="info-value">12</span>
+            </div>
+            <div class="info-item" style="grid-column: span 1;">
+              <span class="info-label">State countries and places to be visited and approximate number of days at each place</span>
+              <span class="info-value">Penang 5 days, Bahru 4 days, Kualalumpur 3 days</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Digital Signature</span>
+              <span class="info-value">Anisul Islam</span>
+            </div>
+            <div class="info-item">
+              <span class="info-label">Request submission date</span>
+              <span class="info-value">18-11-2026</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="info-card">
+          <h3 class="info-card-title">Documents</h3>
+          <div class="document-item">
+            <div class="document-icon">
+              <svg width="20" height="20" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg>
+            </div>
+            <span class="document-name">Passport.pdf</span>
+            <button class="view-file-btn">
+              <svg width="14" height="14" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              View File
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Insurance Info Tab -->
+      <div class="tab-content" id="insuranceInfoTab">
+        <div class="plan-image">
+          <img src="https://hebbkx1anhila5yf.public.blob.vercel-storage.com/claim_details1%20%281%29-ueUQ1xuJbsKA7sj8Pj3EGYyBjHicWP.png" alt="Vromon Travel Insurance" style="object-fit: contain; padding: 20px;">
+        </div>
+
+        <h2 class="plan-name">Vromon</h2>
+
+        <div class="plan-stats">
+          <div class="plan-stat">
+            <span class="plan-stat-label">Coverage up to</span>
+            <span class="plan-stat-value">৳ 65,000</span>
+          </div>
+          <div class="plan-stat">
+            <span class="plan-stat-label">Premium price:</span>
+            <span class="plan-stat-value">৳ 1,200</span>
+          </div>
+          <div class="plan-stat">
+            <span class="plan-stat-label">Policy duration:</span>
+            <span class="plan-stat-value">1 year</span>
+          </div>
+        </div>
+
+        <div class="coverage-section">
+          <h3 class="coverage-title">Hospitalization Coverages</h3>
+          <div class="coverage-items">
+            <div class="coverage-item">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Medical expenses & hospitalization abroad
+            </div>
+            <div class="coverage-item">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Transport or repatriation in case of illness of accident
+            </div>
+            <div class="coverage-item">
+              <svg width="18" height="18" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Emergency dental care
+            </div>
+          </div>
+        </div>
+
+        <div class="coverage-section">
+          <h3 class="coverage-title">Excluded Coverages</h3>
+          <div class="excluded-items">
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Cosmetic / aesthetic treatment
+            </div>
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Dental & vision (unless due to accident)
+            </div>
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Infertility treatments
+            </div>
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Self-inflicted injuries
+            </div>
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Non-prescribed medicines
+            </div>
+            <div class="excluded-item">
+              <svg fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 14l2-2m0 0l2-2m-2 2l-2-2m2 2l2 2m7-2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
+              Treatment outside network hospitals (unless emergency)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Sample data
+    const proposals = [
+      { id: 1, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 2, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 3, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 4, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 5, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 6, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 7, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 8, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 9, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 10, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 11, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+      { id: 12, name: "Md Anisul Islam", proposalId: "PID-016-2026", category: "Travel", plan: "Vromon", coverage: "৳ 65,000", premium: "৳ 1,200", mobile: "017 1000 0000" },
+    ];
+
+    // Render table
+    function renderTable() {
+      const tbody = document.getElementById('proposalsTableBody');
+      tbody.innerHTML = proposals.map((p, index) => `
+        <tr onclick="openSheet(${index})">
+          <td>${String(p.id).padStart(2, '0')}</td>
+          <td>${p.name}</td>
+          <td>${p.proposalId}</td>
+          <td>${p.category}</td>
+          <td>${p.plan}</td>
+          <td>${p.coverage}</td>
+          <td>${p.premium}</td>
+          <td>${p.mobile}</td>
+        </tr>
+      `).join('');
+    }
+
+    // Tab switching for main tabs
+    function switchTab(element, tabName) {
+      document.querySelectorAll('.tabs .tab').forEach(tab => tab.classList.remove('active'));
+      element.classList.add('active');
+    }
+
+    // Tab switching for sheet tabs
+    function switchSheetTab(element, tabName) {
+      document.querySelectorAll('.sheet-tab').forEach(tab => tab.classList.remove('active'));
+      element.classList.add('active');
+      
+      document.querySelectorAll('.tab-content').forEach(content => content.classList.remove('active'));
+      document.getElementById(tabName + 'Tab').classList.add('active');
+    }
+
+    // Open sheet
+    function openSheet(index) {
+      const proposal = proposals[index];
+      document.getElementById('detailName').textContent = proposal.name;
+      document.getElementById('detailMobile').textContent = '+88 ' + proposal.mobile;
+      
+      document.getElementById('sheetOverlay').classList.add('open');
+      document.getElementById('sheet').classList.add('open');
+    }
+
+    // Close sheet
+    function closeSheet() {
+      document.getElementById('sheetOverlay').classList.remove('open');
+      document.getElementById('sheet').classList.remove('open');
+    }
+
+    // Initialize
+    renderTable();
+  </script>
+</body>
+</html>

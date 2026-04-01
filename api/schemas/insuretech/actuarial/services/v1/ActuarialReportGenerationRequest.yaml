@@ -1,0 +1,26 @@
+ActuarialReportGenerationRequest:
+  type: object
+  properties:
+    report_type:
+      type: string
+      description: LOSS_RATIO, RESERVE_ANALYSIS, PREMIUM_TREND, COMBINED_RATIO
+    product_id:
+      type: string
+    line_of_business:
+      type: string
+    period_start:
+      type: string
+      format: date-time
+    period_end:
+      type: string
+      format: date-time
+    segmentation_fields:
+      type: array
+      items:
+        type: string
+    format:
+      type: string
+      description: PDF, EXCEL, JSON
+    generated_by:
+      type: string
+  description: Actuarial reporting

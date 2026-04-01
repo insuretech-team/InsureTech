@@ -5,5 +5,4 @@ package models
 type InsurerInsurersListingResponse struct {
 	Insurers []*Insurer `json:"insurers,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

@@ -1,0 +1,4 @@
+VehicleImagesRetrievalRequest:
+  type: object
+  properties: {}
+  description: Empty - returns all vehicle images

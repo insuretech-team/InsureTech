@@ -1,0 +1,31 @@
+LifePremiumCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    calculation_id:
+      type: string
+    product_id:
+      type: string
+    age_at_entry:
+      type: integer
+      format: int32
+    base_premium:
+      type: string
+      format: int64
+    age_addition:
+      type: string
+      format: int64
+    condition_multiplier:
+      type: number
+      format: float
+    total_premium:
+      type: string
+      format: int64
+    calculation_duration_ms:
+      type: integer
+      format: int32
+    calculated_at:
+      type: string
+      format: date-time
+  description: PremiumCalculatedEvent is emitted when premium is calculated

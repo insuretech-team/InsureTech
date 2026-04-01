@@ -1,0 +1,12 @@
+InsuranceProposalsListingResponse:
+  type: object
+  properties:
+    proposals:
+      type: array
+      items:
+        $ref: '#/components/schemas/InsuranceProposal'
+    total:
+      type: integer
+      format: int32
+  description: Response payload for insurance proposals listing operation. Returns
+    operation results and status.

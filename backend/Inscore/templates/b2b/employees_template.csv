@@ -1,0 +1,5 @@
+﻿"name","employee_id","department_name","email","mobile_number","date_of_birth","date_of_joining","gender","insurance_category","assigned_plan_name","coverage_amount","number_of_dependent","assigned_plan_name (reference)","premium_amount_BDT (reference)"
+"মোহাম্মদ রহিম উদ্দিন","EMP001","Engineering","rahim@company.com","+8801712345678","15/06/1990","01/01/2023","MALE","HEALTH","Surokkha","500000","2","Surokkha","430"
+"ফাতেমা বেগম","EMP002","Human Resources","fatema@company.com","+8801812345678","22/03/1988","15/03/2022","FEMALE","LIFE","Verosa","300000","1","Verosa","850"
+"করিম হোসেন","EMP003","Engineering","karim@company.com","+8801912345678","10/11/1992","01/06/2021","MALE","HEALTH","Seba","400000","3","Seba","500"
+"সালমা আক্তার","EMP004","Finance","salma@company.com","+8801612345678","05/08/1995","01/09/2023","FEMALE","LIFE","Surokkha","250000","0","",""

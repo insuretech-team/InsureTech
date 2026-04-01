@@ -11,7 +11,7 @@ import (
 
 // MediaDownloader provides media file download functionality.
 type MediaDownloader interface {
-	DownloadFile(ctx context.Context, mediaID string) ([]byte, string, error)
+	DownloadFile(ctx context.Context, tenantID, mediaID string) ([]byte, string, error)
 }
 
 // MediaUpdater provides media file update functionality.
@@ -241,7 +241,7 @@ func (w *ProcessingWorker) processJob(ctx context.Context, job *ProcessingJobRec
 func (w *ProcessingWorker) processThumbnail(ctx context.Context, job *ProcessingJobRecord, workerID int) error {
 	logger.Infof("[media-worker-%d] generating thumbnail for media=%s", workerID, job.MediaID)
 
-	data, mimeType, err := w.downloader.DownloadFile(ctx, job.MediaID)
+	data, mimeType, err := w.downloader.DownloadFile(ctx, job.TenantID, job.MediaID)
 	if err != nil {
 		return fmt.Errorf("failed to download file: %w", err)
 	}
@@ -273,7 +273,7 @@ func (w *ProcessingWorker) processThumbnail(ctx context.Context, job *Processing
 func (w *ProcessingWorker) processOptimization(ctx context.Context, job *ProcessingJobRecord, workerID int) error {
 	logger.Infof("[media-worker-%d] optimizing image for media=%s", workerID, job.MediaID)
 
-	data, mimeType, err := w.downloader.DownloadFile(ctx, job.MediaID)
+	data, mimeType, err := w.downloader.DownloadFile(ctx, job.TenantID, job.MediaID)
 	if err != nil {
 		return fmt.Errorf("failed to download file: %w", err)
 	}
@@ -287,9 +287,17 @@ func (w *ProcessingWorker) processOptimization(ctx context.Context, job *Process
 		return fmt.Errorf("failed to compress image: %w", err)
 	}
 
+	width, height, err := w.imageProc.GetImageDimensions(compressedData)
+	if err != nil {
+		return fmt.Errorf("failed to inspect optimized image: %w", err)
+	}
+
+	if err := w.mediaUpdater.UpdateProcessingResult(ctx, job.MediaID, "", width, height); err != nil {
+		return fmt.Errorf("failed to persist optimization result: %w", err)
+	}
+
 	logger.Infof("[media-worker-%d] image optimized media=%s original=%d compressed=%d bytes",
 		workerID, job.MediaID, len(data), len(compressedData))
-	// TODO: Upload compressed image to storage
 	return nil
 }
 
@@ -302,7 +310,7 @@ func (w *ProcessingWorker) processOCR(ctx context.Context, job *ProcessingJobRec
 
 	logger.Infof("[media-worker-%d] extracting text via OCR for media=%s", workerID, job.MediaID)
 
-	data, mimeType, err := w.downloader.DownloadFile(ctx, job.MediaID)
+	data, mimeType, err := w.downloader.DownloadFile(ctx, job.TenantID, job.MediaID)
 	if err != nil {
 		return fmt.Errorf("failed to download file: %w", err)
 	}
@@ -329,7 +337,7 @@ func (w *ProcessingWorker) processVirusScan(ctx context.Context, job *Processing
 
 	logger.Infof("[media-worker-%d] scanning file for viruses media=%s", workerID, job.MediaID)
 
-	data, mimeType, err := w.downloader.DownloadFile(ctx, job.MediaID)
+	data, mimeType, err := w.downloader.DownloadFile(ctx, job.TenantID, job.MediaID)
 	if err != nil {
 		return fmt.Errorf("failed to download file: %w", err)
 	}

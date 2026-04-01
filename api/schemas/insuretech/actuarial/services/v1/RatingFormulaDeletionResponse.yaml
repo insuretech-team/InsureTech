@@ -1,0 +1,9 @@
+RatingFormulaDeletionResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+    deleted:
+      type: boolean
+  description: Response payload for rating formula deletion operation. Returns operation
+    results and status.

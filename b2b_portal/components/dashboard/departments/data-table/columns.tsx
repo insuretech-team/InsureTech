@@ -6,7 +6,7 @@ import { useState } from "react";
 import type { Department } from "@lib/types/b2b";
 import AddDepartmentModal from "@/components/modals/add-department-modal";
 import { SortHeader } from "@/components/ui/sort-header";
-import { departmentClient } from "@lib/sdk/department-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 
 export type { Department };
 
@@ -32,7 +32,7 @@ function DepartmentActionsCell({
 
     setDeleting(true);
     try {
-      const result = await departmentClient.delete(dept.id);
+      const result = await bffClient.departments.delete(dept.id);
       if (!result.ok) { alert(result.message ?? "Failed to delete department"); return; }
       onRefresh?.();
     } catch {

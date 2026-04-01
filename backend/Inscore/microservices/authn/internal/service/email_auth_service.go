@@ -14,6 +14,7 @@ import (
 	"context"
 	"errors"
 	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -23,18 +24,18 @@ import (
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 )
 
-const (
-	emailLockDuration     = 30 * time.Minute
-	maxEmailLoginAttempts = 5
-)
-
 // isEmailAuthUser returns true if the user_type is allowed to use email auth.
 // BUSINESS_BENEFICIARY, SYSTEM_USER, AGENT, and B2B_ORG_ADMIN are permitted.
 func isEmailAuthUser(userType authnentityv1.UserType) bool {
 	return userType == authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY ||
+		userType == authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY ||
 		userType == authnentityv1.UserType_USER_TYPE_SYSTEM_USER ||
 		userType == authnentityv1.UserType_USER_TYPE_AGENT ||
 		userType == authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN
+}
+
+func managedEmployeeActivationAllowed(user *authnentityv1.User) bool {
+	return user != nil && user.UserType == authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY
 }
 
 // maskEmail returns a masked email for safe logging: user@domain.com → u***@domain.com
@@ -135,7 +136,7 @@ func (s *AuthService) RegisterEmailUser(ctx context.Context, req *authnservicev1
 	}
 
 	// Publish event
-	_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, mobile, req.Email, reqMeta.IPAddress, "WEB")
+	_ = s.eventPublisher.PublishUserRegistered(ctx, user.UserId, mobile, req.Email, reqMeta.IPAddress, "WEB", portalForUserType(userType.String()), "root")
 
 	appLogger.Infof("RegisterEmailUser: user %s (%s) registered, verification email sent from IP %s", user.UserId, maskEmail(req.Email), reqMeta.IPAddress)
 
@@ -259,6 +260,14 @@ func (s *AuthService) VerifyEmail(ctx context.Context, req *authnservicev1.Verif
 // Flow: SendEmailOTP(type=email_login) → EmailLogin
 func (s *AuthService) EmailLogin(ctx context.Context, req *authnservicev1.EmailLoginRequest) (*authnservicev1.EmailLoginResponse, error) {
 	reqMeta := s.metadata.ExtractAll(ctx)
+	maxEmailLoginAttempts := s.config.Security.LoginMaxAttempts
+	if maxEmailLoginAttempts <= 0 {
+		maxEmailLoginAttempts = 8
+	}
+	emailLockDuration := s.config.Security.LoginLockoutDuration
+	if emailLockDuration <= 0 {
+		emailLockDuration = 10 * time.Minute
+	}
 
 	// 1. Find user by email
 	user, err := s.userRepo.GetByEmail(ctx, req.Email)
@@ -309,7 +318,7 @@ func (s *AuthService) EmailLogin(ctx context.Context, req *authnservicev1.EmailL
 		newAttempts, _ := s.userRepo.IncrementEmailLoginAttempts(ctx, user.UserId)
 		appLogger.Warnf("EmailLogin: invalid OTP for %s, attempts=%d from IP %s", maskEmail(req.Email), newAttempts, reqMeta.IPAddress)
 
-		if newAttempts >= maxEmailLoginAttempts {
+		if int(newAttempts) >= maxEmailLoginAttempts {
 			_ = s.userRepo.LockEmailAuth(ctx, user.UserId, emailLockDuration)
 			appLogger.Warnf("EmailLogin: account locked for %s after %d failed attempts from IP %s", maskEmail(req.Email), newAttempts, reqMeta.IPAddress)
 			return nil, fmt.Errorf("too many failed attempts. Account locked for %s", emailLockDuration)
@@ -355,6 +364,91 @@ func (s *AuthService) EmailLogin(ctx context.Context, req *authnservicev1.EmailL
 	}, nil
 }
 
+// EmailPasswordLogin authenticates an email-based user with email + password.
+// Used by B2B beneficiary self-service after OTP-based first-time activation.
+func (s *AuthService) EmailPasswordLogin(ctx context.Context, req *authnservicev1.EmailPasswordLoginRequest) (*authnservicev1.EmailPasswordLoginResponse, error) {
+	reqMeta := s.metadata.ExtractAll(ctx)
+	maxLoginAttempts := s.config.Security.LoginMaxAttempts
+	if maxLoginAttempts <= 0 {
+		maxLoginAttempts = 8
+	}
+	lockDuration := s.config.Security.LoginLockoutDuration
+	if lockDuration <= 0 {
+		lockDuration = 10 * time.Minute
+	}
+
+	email := strings.TrimSpace(strings.ToLower(req.GetEmail()))
+	if email == "" {
+		return nil, errors.New("email is required")
+	}
+
+	user, err := s.userRepo.GetByEmail(ctx, email)
+	if err != nil {
+		appLogger.Warnf("EmailPasswordLogin: email not found %s from IP %s", maskEmail(email), reqMeta.IPAddress)
+		return nil, errors.New("invalid credentials")
+	}
+	if !isEmailAuthUser(user.UserType) {
+		return nil, errors.New("email login is not available for this account type")
+	}
+	if user.Status == authnentityv1.UserStatus_USER_STATUS_SUSPENDED {
+		return nil, errors.New("account is suspended")
+	}
+	if user.Status == authnentityv1.UserStatus_USER_STATUS_DELETED {
+		return nil, errors.New("invalid credentials")
+	}
+	if user.Status == authnentityv1.UserStatus_USER_STATUS_PENDING_VERIFICATION && !managedEmployeeActivationAllowed(user) {
+		return nil, errors.New("email not verified. Please verify your email first.")
+	}
+	if user.LockedUntil != nil && time.Now().Before(user.LockedUntil.AsTime()) {
+		remaining := time.Until(user.LockedUntil.AsTime()).Round(time.Second)
+		return nil, fmt.Errorf("account is locked. Try again in %s", remaining)
+	}
+	if !user.EmailVerified {
+		return nil, errors.New("account activation is required before email login")
+	}
+
+	valid, needsRehash, verifyErr := verifyPassword(req.GetPassword(), user.GetPasswordHash())
+	if verifyErr != nil || !valid {
+		attempts, _ := s.userRepo.IncrementLoginAttempts(ctx, user.GetUserId())
+		if int(attempts) >= maxLoginAttempts {
+			_ = s.userRepo.LockAccount(ctx, user.GetUserId(), lockDuration)
+			return nil, fmt.Errorf("account is locked. Try again in %s", lockDuration)
+		}
+		remaining := maxLoginAttempts - int(attempts)
+		return nil, fmt.Errorf("invalid credentials. %d attempts remaining", remaining)
+	}
+	if needsRehash {
+		if newHash, err := hashPassword(req.GetPassword()); err == nil {
+			_ = s.userRepo.UpdatePassword(ctx, user.GetUserId(), newHash)
+		}
+	}
+	_ = s.userRepo.ResetLoginAttempts(ctx, user.GetUserId())
+
+	serverSession, err := s.tokenService.GenerateServerSideSession(
+		ctx,
+		user.GetUserId(),
+		req.GetDeviceId(),
+		authnentityv1.DeviceType_DEVICE_TYPE_WEB,
+		reqMeta.IPAddress,
+		reqMeta.UserAgent,
+	)
+	if err != nil {
+		return nil, errors.New("failed to create session")
+	}
+	_ = s.userRepo.UpdateLastLogin(ctx, user.GetUserId(), "SERVER_SIDE")
+	_ = s.eventPublisher.PublishUserLoggedIn(ctx, user.GetUserId(), serverSession.SessionID, "SERVER_SIDE", reqMeta.IPAddress, "WEB", reqMeta.UserAgent)
+
+	return &authnservicev1.EmailPasswordLoginResponse{
+		UserId:                 user.GetUserId(),
+		SessionId:              serverSession.SessionID,
+		SessionToken:           serverSession.SessionToken,
+		CsrfToken:              serverSession.CSRFToken,
+		User:                   user,
+		SessionType:            "SERVER_SIDE",
+		PasswordChangeRequired: user.GetPasswordChangeRequired(),
+	}, nil
+}
+
 // RequestPasswordResetByEmail sends a password reset OTP to the user's email.
 // Requires: user exists, email is verified, user_type allows email auth.
 func (s *AuthService) RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error) {
@@ -376,7 +470,7 @@ func (s *AuthService) RequestPasswordResetByEmail(ctx context.Context, req *auth
 		return genericResp, nil
 	}
 
-	if !user.EmailVerified {
+	if !user.EmailVerified && !managedEmployeeActivationAllowed(user) {
 		appLogger.Warnf("RequestPasswordResetByEmail: email not verified for %s from IP %s", maskEmail(req.Email), reqMeta.IPAddress)
 		return genericResp, nil
 	}
@@ -441,6 +535,22 @@ func (s *AuthService) ResetPasswordByEmail(ctx context.Context, req *authnservic
 		logger.Errorf("failed to update password: %v", err)
 		return nil, errors.New("failed to update password")
 	}
+	if !user.GetEmailVerified() {
+		if err := s.userRepo.UpdateEmailVerified(ctx, user.GetUserId()); err != nil {
+			logger.Errorf("failed to mark email as verified after password reset: %v", err)
+			return nil, errors.New("failed to update password")
+		}
+	}
+	if user.GetStatus() == authnentityv1.UserStatus_USER_STATUS_PENDING_VERIFICATION {
+		if err := s.userRepo.UpdateStatus(ctx, user.GetUserId(), authnentityv1.UserStatus_USER_STATUS_ACTIVE); err != nil {
+			logger.Errorf("failed to activate user after password reset: %v", err)
+			return nil, errors.New("failed to update password")
+		}
+	}
+	if err := s.userRepo.SetPasswordChangeRequired(ctx, user.UserId, false); err != nil {
+		logger.Errorf("failed to clear password_change_required: %v", err)
+		return nil, errors.New("failed to update password")
+	}
 
 	// Revoke all sessions (force re-login)
 	_ = s.sessionRepo.RevokeAllByUserID(ctx, user.UserId, "")
@@ -449,6 +559,60 @@ func (s *AuthService) ResetPasswordByEmail(ctx context.Context, req *authnservic
 
 	return &authnservicev1.ResetPasswordByEmailResponse{
 		Message: "Password reset successfully. Please log in with your new password.",
+	}, nil
+}
+
+// ProvisionEmployeeUser provisions a managed B2B beneficiary user for employee self-service.
+// The account is created once, starts in PENDING_VERIFICATION, and is activated later
+// through RequestPasswordResetByEmail + ResetPasswordByEmail.
+func (s *AuthService) ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error) {
+	email := strings.TrimSpace(strings.ToLower(req.GetEmail()))
+	fullName := strings.TrimSpace(req.GetFullName())
+	if email == "" {
+		return nil, errors.New("email is required")
+	}
+	if fullName == "" {
+		return nil, errors.New("full_name is required")
+	}
+
+	if existing, err := s.userRepo.GetByEmail(ctx, email); err == nil && existing != nil {
+		if existing.GetUserType() != authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY {
+			return nil, errors.New("email is already used by another account type")
+		}
+		return &authnservicev1.ProvisionEmployeeUserResponse{
+			UserId:                 existing.GetUserId(),
+			Created:                false,
+			PasswordChangeRequired: existing.GetPasswordChangeRequired(),
+		}, nil
+	}
+
+	randomSeed := uuid.NewString() + "Aa1!"
+	hashedPassword, err := hashPassword(randomSeed)
+	if err != nil {
+		return nil, errors.New("failed to create employee account")
+	}
+
+	user := &authnentityv1.User{
+		UserId:                 uuid.NewString(),
+		Email:                  email,
+		MobileNumber:           strings.TrimSpace(req.GetMobileNumber()),
+		PasswordHash:           hashedPassword,
+		Status:                 authnentityv1.UserStatus_USER_STATUS_PENDING_VERIFICATION,
+		UserType:               authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY,
+		EmailVerified:          false,
+		PasswordChangeRequired: true,
+	}
+	if err := s.userRepo.CreateFull(ctx, user); err != nil {
+		return nil, errors.New("failed to create employee account")
+	}
+
+	reqMeta := s.metadata.ExtractAll(ctx)
+	_ = s.eventPublisher.PublishUserRegistered(ctx, user.GetUserId(), user.GetMobileNumber(), user.GetEmail(), reqMeta.IPAddress, "WEB", portalForUserType(user.GetUserType().String()), "root")
+
+	return &authnservicev1.ProvisionEmployeeUserResponse{
+		UserId:                 user.GetUserId(),
+		Created:                true,
+		PasswordChangeRequired: true,
 	}, nil
 }
 
@@ -463,6 +627,8 @@ func parseUserType(userTypeStr string) authnentityv1.UserType {
 		return authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY
 	case "SYSTEM_USER":
 		return authnentityv1.UserType_USER_TYPE_SYSTEM_USER
+	case "B2B_BENEFICIARY":
+		return authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY
 	case "B2B_ORG_ADMIN":
 		return authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN
 	default:

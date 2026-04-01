@@ -1,0 +1,23 @@
+BusinessRuleResult:
+  type: object
+  properties:
+    rule_name:
+      type: string
+    is_success:
+      type: boolean
+    success_event:
+      type: string
+      description: Value from success_event if passed
+    error_message:
+      type: string
+      description: Error message if failed
+    child_results:
+      type: array
+      items:
+        type: string
+        description: Names of child rule results
+      description: Names of child rule results
+    execution_time_ms:
+      type: integer
+      format: int32
+  description: Result of a single rule evaluation

@@ -3,9 +3,5 @@ FraudFraudRuleCreationResponse:
   properties:
     rule_id:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for fraud rule creation operation. Returns operation
     results and status.

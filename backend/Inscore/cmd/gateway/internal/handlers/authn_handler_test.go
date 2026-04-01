@@ -17,13 +17,17 @@ type mockAuthServiceClient struct {
 	// embed to satisfy forward-compat on server side (not required for client interface)
 	authnservicev1.UnimplementedAuthServiceServer
 
-	loginFn         func(ctx context.Context, in *authnservicev1.LoginRequest, opts ...grpc.CallOption) (*authnservicev1.LoginResponse, error)
-	getSessionFn    func(ctx context.Context, in *authnservicev1.GetSessionRequest, opts ...grpc.CallOption) (*authnservicev1.GetSessionResponse, error)
-	listSessionsFn  func(ctx context.Context, in *authnservicev1.ListSessionsRequest, opts ...grpc.CallOption) (*authnservicev1.ListSessionsResponse, error)
-	revokeSessionFn func(ctx context.Context, in *authnservicev1.RevokeSessionRequest, opts ...grpc.CallOption) (*authnservicev1.RevokeSessionResponse, error)
-	resendOTPFn     func(ctx context.Context, in *authnservicev1.ResendOTPRequest, opts ...grpc.CallOption) (*authnservicev1.ResendOTPResponse, error)
-	verifyOTPFn     func(ctx context.Context, in *authnservicev1.VerifyOTPRequest, opts ...grpc.CallOption) (*authnservicev1.VerifyOTPResponse, error)
-	emailLoginFn    func(ctx context.Context, in *authnservicev1.EmailLoginRequest, opts ...grpc.CallOption) (*authnservicev1.EmailLoginResponse, error)
+	loginFn                func(ctx context.Context, in *authnservicev1.LoginRequest, opts ...grpc.CallOption) (*authnservicev1.LoginResponse, error)
+	getSessionFn           func(ctx context.Context, in *authnservicev1.GetSessionRequest, opts ...grpc.CallOption) (*authnservicev1.GetSessionResponse, error)
+	listSessionsFn         func(ctx context.Context, in *authnservicev1.ListSessionsRequest, opts ...grpc.CallOption) (*authnservicev1.ListSessionsResponse, error)
+	revokeSessionFn        func(ctx context.Context, in *authnservicev1.RevokeSessionRequest, opts ...grpc.CallOption) (*authnservicev1.RevokeSessionResponse, error)
+	resendOTPFn            func(ctx context.Context, in *authnservicev1.ResendOTPRequest, opts ...grpc.CallOption) (*authnservicev1.ResendOTPResponse, error)
+	verifyOTPFn            func(ctx context.Context, in *authnservicev1.VerifyOTPRequest, opts ...grpc.CallOption) (*authnservicev1.VerifyOTPResponse, error)
+	emailLoginFn           func(ctx context.Context, in *authnservicev1.EmailLoginRequest, opts ...grpc.CallOption) (*authnservicev1.EmailLoginResponse, error)
+	emailPasswordLoginFn   func(ctx context.Context, in *authnservicev1.EmailPasswordLoginRequest, opts ...grpc.CallOption) (*authnservicev1.EmailPasswordLoginResponse, error)
+	findPortalUserFn       func(ctx context.Context, in *authnservicev1.FindPortalUserRequest, opts ...grpc.CallOption) (*authnservicev1.FindPortalUserResponse, error)
+	setTemporaryPasswordFn func(ctx context.Context, in *authnservicev1.SetTemporaryPasswordRequest, opts ...grpc.CallOption) (*authnservicev1.SetTemporaryPasswordResponse, error)
+	provisionEmployeeUserFn func(ctx context.Context, in *authnservicev1.ProvisionEmployeeUserRequest, opts ...grpc.CallOption) (*authnservicev1.ProvisionEmployeeUserResponse, error)
 }
 
 // Ensure we implement the generated gRPC client interface.
@@ -92,6 +96,18 @@ func (m *mockAuthServiceClient) ValidateCSRF(ctx context.Context, in *authnservi
 func (m *mockAuthServiceClient) GetCurrentSession(ctx context.Context, in *authnservicev1.GetCurrentSessionRequest, opts ...grpc.CallOption) (*authnservicev1.GetCurrentSessionResponse, error) {
 	return &authnservicev1.GetCurrentSessionResponse{}, nil
 }
+func (m *mockAuthServiceClient) FindPortalUser(ctx context.Context, in *authnservicev1.FindPortalUserRequest, opts ...grpc.CallOption) (*authnservicev1.FindPortalUserResponse, error) {
+	if m.findPortalUserFn != nil {
+		return m.findPortalUserFn(ctx, in, opts...)
+	}
+	return &authnservicev1.FindPortalUserResponse{}, nil
+}
+func (m *mockAuthServiceClient) SetTemporaryPassword(ctx context.Context, in *authnservicev1.SetTemporaryPasswordRequest, opts ...grpc.CallOption) (*authnservicev1.SetTemporaryPasswordResponse, error) {
+	if m.setTemporaryPasswordFn != nil {
+		return m.setTemporaryPasswordFn(ctx, in, opts...)
+	}
+	return &authnservicev1.SetTemporaryPasswordResponse{}, nil
+}
 func (m *mockAuthServiceClient) RevokeAllSessions(ctx context.Context, in *authnservicev1.RevokeAllSessionsRequest, opts ...grpc.CallOption) (*authnservicev1.RevokeAllSessionsResponse, error) {
 	return &authnservicev1.RevokeAllSessionsResponse{}, nil
 }
@@ -110,6 +126,12 @@ func (m *mockAuthServiceClient) EmailLogin(ctx context.Context, in *authnservice
 	}
 	return &authnservicev1.EmailLoginResponse{}, nil
 }
+func (m *mockAuthServiceClient) EmailPasswordLogin(ctx context.Context, in *authnservicev1.EmailPasswordLoginRequest, opts ...grpc.CallOption) (*authnservicev1.EmailPasswordLoginResponse, error) {
+	if m.emailPasswordLoginFn != nil {
+		return m.emailPasswordLoginFn(ctx, in, opts...)
+	}
+	return &authnservicev1.EmailPasswordLoginResponse{}, nil
+}
 func (m *mockAuthServiceClient) RequestPasswordResetByEmail(ctx context.Context, in *authnservicev1.RequestPasswordResetByEmailRequest, opts ...grpc.CallOption) (*authnservicev1.RequestPasswordResetByEmailResponse, error) {
 	return &authnservicev1.RequestPasswordResetByEmailResponse{}, nil
 }
@@ -121,6 +143,12 @@ func (m *mockAuthServiceClient) BiometricAuthenticate(ctx context.Context, in *a
 }
 func (m *mockAuthServiceClient) UpdateDLRStatus(ctx context.Context, in *authnservicev1.UpdateDLRStatusRequest, opts ...grpc.CallOption) (*authnservicev1.UpdateDLRStatusResponse, error) {
 	return &authnservicev1.UpdateDLRStatusResponse{}, nil
+}
+func (m *mockAuthServiceClient) ProvisionEmployeeUser(ctx context.Context, in *authnservicev1.ProvisionEmployeeUserRequest, opts ...grpc.CallOption) (*authnservicev1.ProvisionEmployeeUserResponse, error) {
+	if m.provisionEmployeeUserFn != nil {
+		return m.provisionEmployeeUserFn(ctx, in, opts...)
+	}
+	return &authnservicev1.ProvisionEmployeeUserResponse{}, nil
 }
 func (m *mockAuthServiceClient) CreateAPIKey(ctx context.Context, in *authnservicev1.CreateAPIKeyRequest, opts ...grpc.CallOption) (*authnservicev1.CreateAPIKeyResponse, error) {
 	return &authnservicev1.CreateAPIKeyResponse{}, nil
@@ -175,9 +203,8 @@ func (m *mockAuthServiceClient) SubmitKYCFrame(ctx context.Context, in *authnser
 func (m *mockAuthServiceClient) ApproveKYC(ctx context.Context, in *authnservicev1.ApproveKYCRequest, opts ...grpc.CallOption) (*authnservicev1.ApproveKYCResponse, error) {
 	return &authnservicev1.ApproveKYCResponse{}, nil
 }
-func (m *mockAuthServiceClient) RejectKYC(ctx context.Context, in *authnservicev1.RejectKYCRequest, opts ...grpc.CallOption) (*authnservicev1.RejectKYCResponse, error) {
-	return &authnservicev1.RejectKYCResponse{}, nil
-}
+
+// RejectKYC removed from proto (API path conflict) — no longer in AuthServiceClient interface.
 func (m *mockAuthServiceClient) CompleteKYCSession(ctx context.Context, in *authnservicev1.CompleteKYCSessionRequest, opts ...grpc.CallOption) (*authnservicev1.CompleteKYCSessionResponse, error) {
 	return &authnservicev1.CompleteKYCSessionResponse{}, nil
 }
@@ -187,12 +214,8 @@ func (m *mockAuthServiceClient) VerifyDocument(ctx context.Context, in *authnser
 func (m *mockAuthServiceClient) CreateVoiceSession(ctx context.Context, in *authnservicev1.CreateVoiceSessionRequest, opts ...grpc.CallOption) (*authnservicev1.CreateVoiceSessionResponse, error) {
 	return &authnservicev1.CreateVoiceSessionResponse{}, nil
 }
-func (m *mockAuthServiceClient) GetVoiceSession(ctx context.Context, in *authnservicev1.GetVoiceSessionRequest, opts ...grpc.CallOption) (*authnservicev1.GetVoiceSessionResponse, error) {
-	return &authnservicev1.GetVoiceSessionResponse{}, nil
-}
-func (m *mockAuthServiceClient) EndVoiceSession(ctx context.Context, in *authnservicev1.EndVoiceSessionRequest, opts ...grpc.CallOption) (*authnservicev1.EndVoiceSessionResponse, error) {
-	return &authnservicev1.EndVoiceSessionResponse{}, nil
-}
+
+// GetVoiceSession / EndVoiceSession removed from proto (API path conflict) — no longer in AuthServiceClient interface.
 func (m *mockAuthServiceClient) GetProfilePhotoUploadURL(ctx context.Context, in *authnservicev1.GetProfilePhotoUploadURLRequest, opts ...grpc.CallOption) (*authnservicev1.GetProfilePhotoUploadURLResponse, error) {
 	return &authnservicev1.GetProfilePhotoUploadURLResponse{}, nil
 }
@@ -208,9 +231,8 @@ func (m *mockAuthServiceClient) VerifyTOTP(ctx context.Context, in *authnservice
 func (m *mockAuthServiceClient) DisableTOTP(ctx context.Context, in *authnservicev1.DisableTOTPRequest, opts ...grpc.CallOption) (*authnservicev1.DisableTOTPResponse, error) {
 	return &authnservicev1.DisableTOTPResponse{}, nil
 }
-func (m *mockAuthServiceClient) GetJWKS(ctx context.Context, in *authnservicev1.GetJWKSRequest, opts ...grpc.CallOption) (*authnservicev1.GetJWKSResponse, error) {
-	return &authnservicev1.GetJWKSResponse{}, nil
-}
+
+// GetJWKS removed from proto (API path conflict) — no longer in AuthServiceClient interface.
 func (m *mockAuthServiceClient) InitiateVoiceSession(ctx context.Context, in *authnservicev1.InitiateVoiceSessionRequest, opts ...grpc.CallOption) (*authnservicev1.InitiateVoiceSessionResponse, error) {
 	return &authnservicev1.InitiateVoiceSessionResponse{}, nil
 }

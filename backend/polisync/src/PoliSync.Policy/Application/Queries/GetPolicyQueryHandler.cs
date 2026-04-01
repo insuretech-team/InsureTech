@@ -34,7 +34,7 @@ public sealed class GetPolicyQueryHandler : IRequestHandler<GetPolicyQuery, Resu
                     tenure_months, start_date, end_date, issued_at, policy_document_url,
                     created_at, updated_at, deleted_at
                 FROM insurance_schema.policies
-                WHERE policy_id = {0} AND deleted_at IS NULL";
+                WHERE policy_id = {0}::uuid AND deleted_at IS NULL";
             
             var result = await _dbContext.Database
                 .SqlQueryRaw<PolicyDto>(sql, request.PolicyId)

@@ -12,9 +12,5 @@ APIKeyRotationResponse:
       type: string
       format: date-time
       description: When old key will be revoked
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for api key rotation operation. Returns operation
     results and status.

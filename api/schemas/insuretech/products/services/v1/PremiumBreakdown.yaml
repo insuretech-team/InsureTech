@@ -1,4 +1,4 @@
-PremiumBreakdown:
+ProductsPremiumBreakdown:
   type: object
   properties:
     item:

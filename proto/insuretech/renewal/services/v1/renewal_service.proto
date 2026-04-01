@@ -30,7 +30,7 @@ service RenewalService {
   // Renew policy manually
   rpc RenewPolicy(RenewPolicyRequest) returns (RenewPolicyResponse) {
     option (google.api.http) = {
-      post: "/v1/policies/{policy_id}?action=renew"
+      post: "/v1/policies/{policy_id}:renew"
       body: "*"
     };
   }
@@ -53,7 +53,7 @@ service RenewalService {
   // Revive lapsed policy
   rpc RevivePolicy(RevivePolicyRequest) returns (RevivePolicyResponse) {
     option (google.api.http) = {
-      post: "/v1/policies/{policy_id}?action=revive"
+      post: "/v1/policies/{policy_id}:revive"
       body: "*"
     };
   }

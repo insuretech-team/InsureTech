@@ -3,9 +3,9 @@
 import { useCallback, useEffect, useState } from "react";
 import { LuUserPlus, LuTrash2, LuLoader, LuUsers } from "react-icons/lu";
 import DashboardLayout from "@/components/dashboard/dashboard-layout";
-import { organisationClient } from "@lib/sdk/organisation-client";
-import { authClient } from "@lib/sdk/auth-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import type { OrgMember } from "@lifeplus/insuretech-sdk";
+import { usePortalPrincipal } from "@lib/auth/portal-session-context";
 
 function roleLabel(role: string | undefined): string {
   if (!role) return "Member";
@@ -16,6 +16,7 @@ function roleLabel(role: string | undefined): string {
 }
 
 export default function TeamManagementPage() {
+  const principal = usePortalPrincipal();
   const [orgId, setOrgId] = useState("");
   const [members, setMembers] = useState<OrgMember[]>([]);
   const [loading, setLoading] = useState(true);
@@ -24,20 +25,17 @@ export default function TeamManagementPage() {
   const [adding, setAdding] = useState(false);
   const [error, setError] = useState("");
 
-  // Resolve org_id from session
+  // Resolve org_id from the server-hydrated portal session
   useEffect(() => {
-    authClient.getSession().then((res) => {
-      const bizId = res.session?.principal.businessId ?? "";
-      setOrgId(bizId);
-    }).catch(() => setOrgId(""));
-  }, []);
+    setOrgId(principal?.businessId ?? "");
+  }, [principal?.businessId]);
 
   const loadMembers = useCallback(async () => {
     if (!orgId) return;
     setLoading(true);
     setError("");
     try {
-      const result = await organisationClient.listMembers(orgId);
+      const result = await bffClient.organisations.listMembers(orgId);
       // Show only non-admin members (HR_MANAGER, VIEWER) on the team page
       const nonAdmins = (result.members ?? []).filter(
         (m) => !m.role?.includes("BUSINESS_ADMIN")
@@ -57,7 +55,7 @@ export default function TeamManagementPage() {
     setAdding(true);
     setError("");
     try {
-      const result = await organisationClient.addMember(orgId, addUserId.trim(), addRole);
+      const result = await bffClient.organisations.addMember(orgId, addUserId.trim(), addRole);
       if (!result.ok) { setError(result.message ?? "Failed to add member"); return; }
       setAddUserId("");
       await loadMembers();
@@ -69,7 +67,7 @@ export default function TeamManagementPage() {
   async function handleRemove(memberId: string) {
     if (!orgId) return;
     if (!confirm("Remove this team member?")) return;
-    const result = await organisationClient.removeMember(orgId, memberId);
+    const result = await bffClient.organisations.removeMember(orgId, memberId);
     if (!result.ok) { alert(result.message ?? "Remove failed"); return; }
     await loadMembers();
   }

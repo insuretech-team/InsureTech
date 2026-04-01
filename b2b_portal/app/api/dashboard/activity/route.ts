@@ -17,6 +17,13 @@ type ActivityItem = {
   createdAt: string;
 };
 
+type ActivityResponse = {
+  ok: boolean;
+  activities?: ActivityItem[];
+  message?: string;
+  needsOrganisation?: boolean;
+};
+
 function settled<T>(r: PromiseSettledResult<T>, fallback: T): T {
   return r.status === "fulfilled" ? r.value : fallback;
 }
@@ -39,90 +46,128 @@ export async function GET(request: Request) {
       sdk.listPurchaseOrders({ query: { page_size: 5 } }),
     ]);
 
-    for (const org of settled(orgsRes, null)?.data?.organisations ?? []) {
+    function unwrapAct(r: Awaited<ReturnType<typeof sdk.listOrganisations>> | null): Record<string, unknown> {
+      if (!r?.data) return {};
+      const d = r.data as Record<string, unknown>;
+      return (d.data && typeof d.data === "object" ? d.data : d) as Record<string, unknown>;
+    }
+    const orgsData  = unwrapAct(settled(orgsRes, null));
+    const empsData  = unwrapAct(settled(empsRes, null) as Awaited<ReturnType<typeof sdk.listOrganisations>> | null);
+    const deptsData = unwrapAct(settled(deptsRes, null) as Awaited<ReturnType<typeof sdk.listOrganisations>> | null);
+    const posData   = unwrapAct(settled(posRes, null) as Awaited<ReturnType<typeof sdk.listOrganisations>> | null);
+
+    for (const org of (orgsData?.organisations ?? []) as Record<string, unknown>[]) {
       activities.push({
-        id:        `org-${org.organisation_id}`,
+        id:        `org-${org.organisation_id as string}`,
         type:      "org",
-        title:     `Organisation registered: ${org.name ?? "Unknown"}`,
-        subtitle:  `Code: ${org.code ?? "—"} · Status: ${(org.status ?? "").replace("ORGANISATION_STATUS_", "")}`,
-        createdAt: org.created_at ?? "",
+        title:     `Organisation registered: ${(org.name as string) ?? "Unknown"}`,
+        subtitle:  `Code: ${(org.code as string) ?? "—"} · Status: ${((org.status as string) ?? "").replace("ORGANISATION_STATUS_", "")}`,
+        createdAt: (org.created_at as string) ?? "",
       });
     }
-    for (const emp of settled(empsRes, null)?.data?.employees ?? []) {
-      const e = emp.employee;
+    for (const emp of (empsData?.employees ?? []) as Record<string, unknown>[]) {
+      const e = emp.employee as Record<string, unknown> | undefined;
       activities.push({
         id:        `emp-${e?.employee_uuid}`,
         type:      "employee",
-        title:     `Employee added: ${e?.name ?? "Unknown"}`,
-        subtitle:  `ID: ${e?.employee_id ?? "—"}`,
-        createdAt: e?.created_at ?? "",
+        title:     `Employee added: ${(e?.name as string) ?? "Unknown"}`,
+        subtitle:  `ID: ${(e?.employee_id as string) ?? "—"}`,
+        createdAt: (e?.created_at as string) ?? "",
       });
     }
-    for (const dept of settled(deptsRes, null)?.data?.departments ?? []) {
+    for (const dept of (deptsData?.departments ?? []) as Record<string, unknown>[]) {
       activities.push({
         id:        `dept-${dept.department_id}`,
         type:      "department",
-        title:     `Department created: ${dept.name ?? "Unknown"}`,
-        subtitle:  `Employees: ${dept.employee_no ?? 0}`,
-        createdAt: dept.created_at ?? "",
+        title:     `Department created: ${(dept.name as string) ?? "Unknown"}`,
+        subtitle:  `Employees: ${(dept.employee_no as number) ?? 0}`,
+        createdAt: (dept.created_at as string) ?? "",
       });
     }
-    for (const poView of settled(posRes, null)?.data?.purchase_orders ?? []) {
-      const po = poView.purchase_order;
+    for (const poView of (posData?.purchase_orders ?? []) as Record<string, unknown>[]) {
+      const po = poView.purchase_order as Record<string, unknown> | undefined;
       activities.push({
         id:        `po-${po?.purchase_order_id ?? Math.random()}`,
         type:      "po",
-        title:     `Purchase order: ${po?.purchase_order_number ?? "—"}`,
-        subtitle:  `Plan: ${poView.plan_name ?? po?.plan_id ?? "—"} · Status: ${(po?.status ?? "").replace("PURCHASE_ORDER_STATUS_", "")}`,
-        createdAt: po?.created_at ?? "",
+        title:     `Purchase order: ${(po?.purchase_order_number as string) ?? "—"}`,
+        subtitle:  `Plan: ${(poView.plan_name as string) ?? (po?.plan_id as string) ?? "—"} · Status: ${((po?.status as string) ?? "").replace("PURCHASE_ORDER_STATUS_", "")}`,
+        createdAt: (po?.created_at as string) ?? "",
       });
     }
   } else {
-    if (!orgId) return NextResponse.json({ ok: false, message: "No organisation context" }, { status: 400 });
+    // Fall back to resolving org from session if portal_biz_id cookie is missing
+    // (race condition on first dashboard load after login).
+    let resolvedOrgId = orgId;
+    if (!resolvedOrgId) {
+      try {
+        const meResult = await sdk.getMyOrganisation();
+        if (meResult.ok && typeof meResult.data.organisation_id === "string") {
+          resolvedOrgId = meResult.data.organisation_id;
+        }
+      } catch { /* ignore */ }
+    }
+    if (!resolvedOrgId) {
+      return NextResponse.json({
+        ok: true,
+        activities: [],
+        needsOrganisation: true,
+        message: "Your account is active, but no organisation activity is available yet.",
+      } satisfies ActivityResponse);
+    }
 
     const [empsRes, deptsRes, posRes, membersRes] = await Promise.allSettled([
-      sdk.listEmployees({ query: { page_size: 5, business_id: orgId } }),
-      sdk.listDepartments({ query: { page_size: 5, business_id: orgId } }),
-      sdk.listPurchaseOrders({ query: { page_size: 5, business_id: orgId } }),
-      sdk.listOrgMembers({ path: { organisation_id: orgId } }),
+      sdk.listEmployees({ query: { page_size: 5, business_id: resolvedOrgId } }),
+      sdk.listDepartments({ query: { page_size: 5, business_id: resolvedOrgId } }),
+      sdk.listPurchaseOrders({ query: { page_size: 5, business_id: resolvedOrgId } }),
+      sdk.listOrgMembers({ path: { organisation_id: resolvedOrgId } }),
     ]);
 
-    for (const emp of settled(empsRes, null)?.data?.employees ?? []) {
-      const e = emp.employee;
+    function unwrapActB2B(r: Awaited<ReturnType<typeof sdk.listEmployees>> | null): Record<string, unknown> {
+      if (!r?.data) return {};
+      const d = r.data as Record<string, unknown>;
+      return (d.data && typeof d.data === "object" ? d.data : d) as Record<string, unknown>;
+    }
+    const b2bEmps    = unwrapActB2B(settled(empsRes, null));
+    const b2bDepts   = unwrapActB2B(settled(deptsRes, null) as Awaited<ReturnType<typeof sdk.listEmployees>> | null);
+    const b2bPos     = unwrapActB2B(settled(posRes, null) as Awaited<ReturnType<typeof sdk.listEmployees>> | null);
+    const b2bMembers = unwrapActB2B(settled(membersRes, null) as Awaited<ReturnType<typeof sdk.listEmployees>> | null);
+
+    for (const emp of (b2bEmps?.employees ?? []) as Record<string, unknown>[]) {
+      const e = emp.employee as Record<string, unknown> | undefined;
       activities.push({
         id:        `emp-${e?.employee_uuid}`,
         type:      "employee",
-        title:     `Employee added: ${e?.name ?? "Unknown"}`,
-        subtitle:  `ID: ${e?.employee_id ?? "—"}`,
-        createdAt: e?.created_at ?? "",
+        title:     `Employee added: ${(e?.name as string) ?? "Unknown"}`,
+        subtitle:  `ID: ${(e?.employee_id as string) ?? "—"}`,
+        createdAt: (e?.created_at as string) ?? "",
       });
     }
-    for (const dept of settled(deptsRes, null)?.data?.departments ?? []) {
+    for (const dept of (b2bDepts?.departments ?? []) as Record<string, unknown>[]) {
       activities.push({
         id:        `dept-${dept.department_id}`,
         type:      "department",
-        title:     `Department created: ${dept.name ?? "Unknown"}`,
-        subtitle:  `Employees: ${dept.employee_no ?? 0}`,
-        createdAt: dept.created_at ?? "",
+        title:     `Department created: ${(dept.name as string) ?? "Unknown"}`,
+        subtitle:  `Employees: ${(dept.employee_no as number) ?? 0}`,
+        createdAt: (dept.created_at as string) ?? "",
       });
     }
-    for (const poView of settled(posRes, null)?.data?.purchase_orders ?? []) {
-      const po = poView.purchase_order;
+    for (const poView of (b2bPos?.purchase_orders ?? []) as Record<string, unknown>[]) {
+      const po = poView.purchase_order as Record<string, unknown> | undefined;
       activities.push({
         id:        `po-${po?.purchase_order_id ?? Math.random()}`,
         type:      "po",
-        title:     `Purchase order: ${po?.purchase_order_number ?? "—"}`,
-        subtitle:  `Plan: ${poView.plan_name ?? po?.plan_id ?? "—"} · Status: ${(po?.status ?? "").replace("PURCHASE_ORDER_STATUS_", "")}`,
-        createdAt: po?.created_at ?? "",
+        title:     `Purchase order: ${(po?.purchase_order_number as string) ?? "—"}`,
+        subtitle:  `Plan: ${(poView.plan_name as string) ?? (po?.plan_id as string) ?? "—"} · Status: ${((po?.status as string) ?? "").replace("PURCHASE_ORDER_STATUS_", "")}`,
+        createdAt: (po?.created_at as string) ?? "",
       });
     }
-    for (const m of settled(membersRes, null)?.data?.members ?? []) {
+    for (const m of (b2bMembers?.members ?? []) as Record<string, unknown>[]) {
       activities.push({
-        id:        `member-${m.member_id}`,
+        id:        `member-${m.member_id as string}`,
         type:      "member",
         title:     `Member joined organisation`,
-        subtitle:  `Role: ${(m.role ?? "").replace("ORG_MEMBER_ROLE_", "")}`,
-        createdAt: m.joined_at ?? "",
+        subtitle:  `Role: ${((m.role as string) ?? "").replace("ORG_MEMBER_ROLE_", "")}`,
+        createdAt: (m.joined_at as string) ?? "",
       });
     }
   }
@@ -133,5 +178,5 @@ export async function GET(request: Request) {
     .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
     .slice(0, 10);
 
-  return NextResponse.json({ ok: true, activities: sorted });
+  return NextResponse.json({ ok: true, activities: sorted } satisfies ActivityResponse);
 }

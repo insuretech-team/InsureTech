@@ -1,0 +1,16 @@
+**/*.dockerfile
+**/*.dockerignore
+bin/
+obj/
+out/
+.git/
+.vs/
+.vscode/
+**/appsettings.Development.json
+**/appsettings.Local.json
+*.db
+*.db-journal
+*.db-shm
+*.db-wal
+logs/
+publish/

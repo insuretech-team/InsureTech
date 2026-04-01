@@ -13,7 +13,7 @@ service CommissionService {
   // Calculate and record commission for policy
   rpc CalculateCommission(CalculateCommissionRequest) returns (CalculateCommissionResponse) {
     option (google.api.http) = {
-      post: "/v1/commissions?action=calculate"
+      post: "/v1/commissions:calculate"
       body: "*"
     };
   }
@@ -43,7 +43,7 @@ service CommissionService {
   // Process payout
   rpc ProcessPayout(ProcessPayoutRequest) returns (ProcessPayoutResponse) {
     option (google.api.http) = {
-      post: "/v1/commission-payouts/{payout_id}?action=process"
+      post: "/v1/commission-payouts/{payout_id}:process"
       body: "*"
     };
   }

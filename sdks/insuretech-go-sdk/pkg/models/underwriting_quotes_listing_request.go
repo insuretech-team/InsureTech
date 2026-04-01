@@ -3,8 +3,8 @@ package models
 
 // UnderwritingQuotesListingRequest represents a underwriting_quotes_listing_request
 type UnderwritingQuotesListingRequest struct {
-	Status string `json:"status,omitempty"`
+	BeneficiaryId string `json:"beneficiary_id"`
 	Page int `json:"page,omitempty"`
 	PageSize int `json:"page_size,omitempty"`
-	BeneficiaryId string `json:"beneficiary_id"`
+	Status string `json:"status,omitempty"`
 }

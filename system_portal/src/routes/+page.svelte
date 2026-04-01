@@ -1,12 +1,3 @@
-<script lang="ts">
-	import { onMount } from 'svelte';
-	import { goto } from '$app/navigation';
-
-	onMount(() => {
-		goto('/login');
-	});
-</script>
-
-<div class="flex h-screen items-center justify-center">
-	<p class="text-muted-foreground">Redirecting to login...</p>
+<div class="flex min-h-screen items-center justify-center text-sm text-slate-500">
+	Redirecting...
 </div>

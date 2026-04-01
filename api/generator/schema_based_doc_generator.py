@@ -2,6 +2,7 @@
 Schema-Based Documentation Generator
 Generates index.html with cards organized by database schema groups (not domains)
 """
+from write_guard import write_if_changed
 
 import json
 import os
@@ -159,8 +160,7 @@ def main():
     
     # Export schema detail data
     detail_data = generator.generate_schema_detail_data()
-    with open(args.output, 'w', encoding='utf-8') as f:
-        f.write(detail_data)
+    write_if_changed(args.output, detail_data)
     
     print(f"\nSchema detail data exported to: {args.output}")
     

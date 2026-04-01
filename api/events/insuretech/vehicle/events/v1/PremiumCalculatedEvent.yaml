@@ -1,0 +1,24 @@
+VehiclePremiumCalculatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    calculation_id:
+      type: string
+    registration_id:
+      type: string
+    registration_number:
+      type: string
+    base_premium_amount:
+      type: string
+      format: int64
+    tp_premium_1_year_amount:
+      type: string
+      format: int64
+    comp_premium_1_year_amount:
+      type: string
+      format: int64
+    calculated_at:
+      type: string
+      format: date-time
+  description: PremiumCalculatedEvent is emitted when premium is calculated

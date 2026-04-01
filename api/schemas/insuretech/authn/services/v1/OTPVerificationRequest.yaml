@@ -5,4 +5,12 @@ OTPVerificationRequest:
       type: string
     code:
       type: string
+    device_id:
+      type: string
+      description: "Device binding: if provided with ANDROID or IOS device_type, the\
+        \ response\r\n will include a one-time device_credential for WhatsApp-style\
+        \ login."
+    device_type:
+      type: string
+      description: ANDROID | IOS
   description: Verify OTP Request

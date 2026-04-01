@@ -1,0 +1,71 @@
+WebhookDeliveryAttempt:
+  type: object
+  properties:
+    attempt_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:attempt_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    subscription_id:
+      type: string
+      description: '@inject_tag: gorm:"column:subscription_id;not null"'
+    notification_id:
+      type: string
+      description: '@inject_tag: gorm:"column:notification_id"'
+    lifecycle_event:
+      type: string
+      description: '@inject_tag: gorm:"column:lifecycle_event;not null"'
+    source_topic:
+      type: string
+      description: '@inject_tag: gorm:"column:source_topic"'
+    payload:
+      type: string
+      description: '@inject_tag: gorm:"column:payload;not null"'
+      x-database-default: '{}''::jsonb'
+    status:
+      type: string
+      description: '@inject_tag: gorm:"column:status;not null"'
+      default: QUEUED
+    response_status:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:response_status"'
+    response_body:
+      type: string
+      description: '@inject_tag: gorm:"column:response_body"'
+    retry_count:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:retry_count;not null"'
+      default: 0
+    error_message:
+      type: string
+      description: '@inject_tag: gorm:"column:error_message"'
+    scheduled_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:scheduled_at;serializer:proto_timestamp"'
+    last_attempted_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:last_attempted_at;serializer:proto_timestamp"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: WebhookDeliveryAttempt stores retryable outbound webhook deliveries.
+  required:
+  - attempt_id
+  - subscription_id
+  - lifecycle_event
+  - payload
+  - status
+  - retry_count
+  - created_at
+  - updated_at

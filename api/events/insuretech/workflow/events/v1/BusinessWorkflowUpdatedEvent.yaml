@@ -1,0 +1,23 @@
+BusinessWorkflowUpdatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    business_workflow_id:
+      type: string
+    workflow_name:
+      type: string
+    version:
+      type: integer
+      format: int32
+    updated_by:
+      type: string
+    updated_at:
+      type: string
+      format: date-time
+    changed_fields:
+      type: array
+      items:
+        type: string
+  description: BusinessWorkflowUpdatedEvent is emitted when a business workflow is
+    updated

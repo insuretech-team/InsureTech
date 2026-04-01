@@ -10,8 +10,5 @@ CommissionCalculationResponse:
     calculation_breakdown:
       type: string
       description: JSON
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for commission calculation operation. Returns operation
     results and status.

@@ -7,7 +7,7 @@ import { getServerSession } from "@lib/auth/session";
 export default async function LoginPage() {
   const session = await getServerSession();
   if (session) {
-    redirect("/");
+    redirect(session.principal.role === "B2B_BENEFICIARY" ? "/employee" : "/");
   }
 
   return (
@@ -32,7 +32,7 @@ export default async function LoginPage() {
               <p className="text-xs font-semibold uppercase tracking-[0.2em] text-[rgb(var(--brand-cold-rgb))]">InsureTech B2B</p>
               <h1 className="text-2xl font-semibold tracking-tight text-foreground sm:text-3xl">Business Portal Login</h1>
               <p className="max-w-md text-sm text-muted-foreground">
-                Sign in with your admin mobile number and password to manage employees, policies, billing, and claims.
+                Admins sign in with mobile and password. Employees can activate access with organisation, employee ID, and email, then use email and password.
               </p>
             </div>
 

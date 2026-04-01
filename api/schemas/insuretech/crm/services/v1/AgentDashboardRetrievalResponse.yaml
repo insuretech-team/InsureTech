@@ -1,0 +1,25 @@
+AgentDashboardRetrievalResponse:
+  type: object
+  properties:
+    my_leads_count:
+      type: integer
+      format: int32
+    my_contacts_count:
+      type: integer
+      format: int32
+    new_leads_today:
+      type: integer
+      format: int32
+    leads_converted_this_month:
+      type: integer
+      format: int32
+    recent_leads:
+      type: array
+      items:
+        $ref: '#/components/schemas/Lead'
+    recent_contacts:
+      type: array
+      items:
+        $ref: '#/components/schemas/Contact'
+  description: Response payload for agent dashboard retrieval operation. Returns operation
+    results and status.

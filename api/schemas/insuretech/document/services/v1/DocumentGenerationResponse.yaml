@@ -5,10 +5,16 @@ DocumentGenerationResponse:
       type: string
     file_url:
       type: string
-    message:
+    file_bytes:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+      format: byte
+      description: "file_bytes is populated when alt=\"media\" is set in the request.\r\
+        \n Contains raw document bytes (PDF, DOCX, XLSX, or HTML)."
+    content_type:
+      type: string
+      description: content_type is the MIME type of file_bytes (e.g. "application/pdf").
+    filename:
+      type: string
+      description: filename is the suggested download filename (e.g. "policy-123.xlsx").
   description: Response payload for document generation operation. Returns operation
     results and status.

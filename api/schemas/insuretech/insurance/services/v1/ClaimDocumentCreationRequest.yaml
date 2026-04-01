@@ -1,0 +1,7 @@
+ClaimDocumentCreationRequest:
+  type: object
+  properties:
+    document:
+      $ref: '#/components/schemas/ClaimDocument'
+  description: Request payload for creating a new claim document creation. Contains
+    all required fields and optional parameters for initialization.

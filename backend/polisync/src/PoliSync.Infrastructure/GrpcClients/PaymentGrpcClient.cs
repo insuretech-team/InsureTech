@@ -1,4 +1,6 @@
 using Insuretech.Payment.Services.V1;
+using PaymentService = Insuretech.Payment.Services.V1.PaymentService;
+using Money = Insuretech.Common.V1.Money;
 
 namespace PoliSync.Infrastructure.GrpcClients;
 
@@ -21,11 +23,18 @@ public sealed class PaymentGrpcClient
     {
         return await Client.InitiatePaymentAsync(new InitiatePaymentRequest
         {
-            OrderId    = orderId,
-            Amount     = amountPaisa,
-            Currency   = currency,
+            UserId = customerId,
             CustomerId = customerId,
-            Method     = method,
+            OrderId = orderId,
+            Amount = new Money
+            {
+                Amount = amountPaisa,
+                Currency = currency,
+                DecimalAmount = amountPaisa / 100d
+            },
+            Currency = currency,
+            PaymentMethod = method,
+            IdempotencyKey = $"polisync:{orderId}:{method}",
         }, cancellationToken: ct);
     }
 

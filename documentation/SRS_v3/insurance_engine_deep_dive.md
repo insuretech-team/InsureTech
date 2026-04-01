@@ -1797,10 +1797,8 @@ service InsuranceEngineService {
   rpc ConfirmPayment(ConfirmPaymentRequest) returns (ConfirmPaymentResponse);
   rpc InitiateRefund(InitiateRefundRequest) returns (InitiateRefundResponse);
 
-  // Reporting
-  rpc GetPolicyReport(GetPolicyReportRequest) returns (GetPolicyReportResponse);
-  rpc GetClaimsReport(GetClaimsReportRequest) returns (GetClaimsReportResponse);
-  rpc GetIDRAReport(GetIDRAReportRequest) returns (GetIDRAReportResponse);
+  // NOTE: Reporting (FG-017, FG-018) belongs to Analytics & Reporting Service (Port 5003)
+  // Insurance Engine publishes domain events to Kafka → Port 5003 consumes and generates reports
 }
 ```
 
@@ -1904,8 +1902,8 @@ Insurance Engine Owns These Tables:
 ├── claim_status_history
 ├── payments
 ├── payment_idempotency_keys
-├── audit_logs                  (TimescaleDB hypertable)
-└── idra_reports
+└── audit_logs                  (TimescaleDB hypertable)
+-- NOTE: idra_reports table belongs to Analytics & Reporting Service (Port 5003)
 ```
 
 ### 15.2 Foreign Key Relationships
@@ -2244,9 +2242,9 @@ Board (15 days): if not decided in 10 days → alert Compliance Team
 | Financial records | 7 years minimum (BFIU) |
 | Policy document | 20 years in S3/Glacier |
 | Idempotency enforcement | All payment + policy issuance APIs |
-| IDRA monthly report | Form IC-1 (Premium) by 10th each month |
-| IDRA monthly report | Form IC-2 (Claims) by 10th each month |
-| Fraud reporting | Significant fraud >BDT 1L → IDRA within 48hr |
+| IDRA monthly data feed | Insurance Engine publishes events → Port 5003 generates Form IC-1 (Premium) |
+| IDRA monthly data feed | Insurance Engine publishes events → Port 5003 generates Form IC-2 (Claims) |
+| Fraud event reporting | FraudFlagged event published to Kafka → Port 5003 files IDRA report within 48hr |
 
 ### 20.4 Data Retention Tiers
 
@@ -2626,4 +2624,5 @@ AUDIT CATEGORY 9: Architecture & Pattern
 
 *Document generated from SRS v3.11 (FINAL_DRAFT, Feb 2026)*
 *Target: AI Tool feed for Insurance Engine audit verification*
-*Coverage: All 12 modules, ~120 FRs, complete proto/DB/Kafka/state machine specs*
+*Coverage: 11 domain modules + 1 notification module (total 12), ~120 FRs, complete proto/DB/Kafka/state machine specs*
+*Note: Reporting (FG-017, FG-018, FR-189–205) belongs to Analytics & Reporting Service (Port 5003) — NOT Insurance Engine*

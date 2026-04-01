@@ -1,0 +1,64 @@
+VehicleRegistration:
+  type: object
+  properties:
+    registration_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:registration_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    vehicle_id:
+      type: string
+      description: '@inject_tag: gorm:"column:vehicle_id;not null"'
+    owner_id:
+      type: string
+      description: '@inject_tag: gorm:"column:owner_id;not null"'
+    registration_number:
+      type: string
+      description: '@inject_tag: gorm:"column:registration_number;not null"'
+      x-unique: true
+    registration_year:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:registration_year;not null"'
+    registration_state:
+      type: string
+      description: '@inject_tag: gorm:"column:registration_state;not null"'
+    status:
+      allOf:
+      - $ref: '#/components/schemas/RegistrationStatus'
+      x-database-default: ACTIVE
+    vehicle_age:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:vehicle_age"'
+    current_value:
+      type: string
+      format: int64
+      description: '@inject_tag: gorm:"column:current_value"'
+    additional_info:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:additional_info;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+  description: "VehicleRegistration represents a specific registered vehicle instance\n\
+    \ Maps to 'vehicle_registrations' table in vehicle_schema"
+  required:
+  - registration_id
+  - vehicle_id
+  - owner_id
+  - registration_number
+  - registration_year
+  - registration_state
+  - status
+  - created_at
+  - updated_at

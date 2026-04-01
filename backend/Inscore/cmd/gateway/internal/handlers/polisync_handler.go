@@ -1,15 +1,15 @@
 package handlers
 
 import (
-	"encoding/json"
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"os"
+	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
-	"google.golang.org/grpc/status"
 )
 
 // PoliSyncHandler is a generic HTTP reverse-proxy for all PoliSync C# services.
@@ -64,14 +64,14 @@ func (h *PoliSyncHandler) Proxy() http.Handler {
 			target = poliSyncServiceURL(h.serviceName)
 		}
 		if target == "" {
-			h.writeJSONError(w, http.StatusBadGateway, "UNAVAILABLE",
+			respond.Error(w, r, http.StatusBadGateway, "UNAVAILABLE",
 				"PoliSync service address not configured: "+h.serviceName)
 			return
 		}
 
 		targetURL, err := url.Parse(target)
 		if err != nil {
-			h.writeJSONError(w, http.StatusInternalServerError, "INTERNAL", "invalid upstream URL")
+			respond.Error(w, r, http.StatusInternalServerError, "INTERNAL", "invalid upstream URL")
 			return
 		}
 
@@ -85,7 +85,7 @@ func (h *PoliSyncHandler) Proxy() http.Handler {
 				req.Header.Del("Trailers")
 			},
 			ErrorHandler: func(w http.ResponseWriter, req *http.Request, err error) {
-				h.writeJSONError(w, http.StatusBadGateway, "UNAVAILABLE",
+				respond.Error(w, req, http.StatusBadGateway, "UNAVAILABLE",
 					"PoliSync "+h.serviceName+" unreachable: "+err.Error())
 			},
 		}
@@ -93,50 +93,15 @@ func (h *PoliSyncHandler) Proxy() http.Handler {
 	})
 }
 
-// writeJSONError writes a JSON error response.
-func (h *PoliSyncHandler) writeJSONError(w http.ResponseWriter, httpCode int, code, message string) {
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(httpCode)
-	_ = json.NewEncoder(w).Encode(map[string]any{
-		"code":    code,
-		"message": message,
-		"service": h.serviceName,
-	})
-}
+// writeJSONError was replaced by the unified respond package.
+// See: github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond
 
-// grpcStatusToHTTP maps gRPC status codes to HTTP status codes.
-// Used when PoliSync returns gRPC errors (future direct gRPC call support).
-func grpcStatusToHTTP(code codes.Code) int {
-	switch code {
-	case codes.OK:
-		return http.StatusOK
-	case codes.InvalidArgument:
-		return http.StatusBadRequest
-	case codes.NotFound:
-		return http.StatusNotFound
-	case codes.AlreadyExists:
-		return http.StatusConflict
-	case codes.PermissionDenied:
-		return http.StatusForbidden
-	case codes.Unauthenticated:
-		return http.StatusUnauthorized
-	case codes.ResourceExhausted:
-		return http.StatusTooManyRequests
-	case codes.Unimplemented:
-		return http.StatusNotImplemented
-	case codes.Unavailable:
-		return http.StatusServiceUnavailable
-	case codes.DeadlineExceeded:
-		return http.StatusGatewayTimeout
-	default:
-		return http.StatusInternalServerError
-	}
-}
+// grpcStatusToHTTP was replaced by respond.GRPCCodeToHTTP from the unified respond package.
+// See: github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond
 
 // writeGRPCError writes a JSON error from a gRPC error.
-func (h *PoliSyncHandler) writeGRPCError(w http.ResponseWriter, err error) {
-	st, _ := status.FromError(err)
-	h.writeJSONError(w, grpcStatusToHTTP(st.Code()), st.Code().String(), st.Message())
+func (h *PoliSyncHandler) writeGRPCError(w http.ResponseWriter, r *http.Request, err error) {
+	respond.GRPCError(w, r, err)
 }
 
 // buildOutgoingMD extracts X-* identity headers as gRPC metadata.
@@ -164,19 +129,90 @@ func buildOutgoingMD(r *http.Request) metadata.MD {
 }
 
 // poliSyncServiceURL maps service names to their HTTP companion port base URLs.
-// In production, Docker DNS resolves the service names.
-// In dev, override with PRODUCT_HTTP_ADDR etc. env vars or update appsettings.Development.json.
+//
+// Two categories of services use this handler:
+//
+//  1. PoliSync C# services — all run inside the single "polisync" Docker container,
+//     each exposing a Kestrel HTTP/1.1 companion port alongside their gRPC port.
+//     Host defaults to POLISYNC_HOST env var (falls back to "polisync").
+//
+//  2. InScore Go services — each runs in its own container with a dedicated HTTP
+//     companion port. Host is read from {SERVICE}_HOST env var (e.g. PAYMENT_HOST).
+//
+// Port layout (must match services.yaml and appsettings.json Kestrel config):
+//
+//	PoliSync C# (host: "polisync"):
+//	  insurance-service    → :50116
+//	  product-service      → :50121
+//	  quote-service        → :50131
+//	  order-service        → :50141   (NOTE: not sync_order Go service at :50142)
+//	  commission-service   → :50151
+//	  policy-service       → :50161
+//	  underwriting-service → :50171
+//	  claim-service        → :50211
+//
+//	InScore Go (host from {SVC}_HOST env, e.g. PAYMENT_HOST=payment):
+//	  payment-service      → :50191
+//	  notification-service → :50231
+//	  kyc-service          → :50091
+//	  beneficiary-service  → :50111
+//	  tenant-service       → :50051
+//	  audit-service        → :50081
+//	  billing-service      → :50196
+//	  b2b-service          → :50113
+//	  media-service        → :50261
+//	  storage-service      → :50291
+//	  fraud-service        → :50221
+//	  partner-service      → :50101
 func poliSyncServiceURL(serviceName string) string {
-	m := map[string]string{
-		"product-service":      "http://product-service:50121",
-		"quote-service":        "http://quote-service:50131",
-		"order-service":        "http://order-service:50141",
-		"commission-service":   "http://commission-service:50151",
-		"policy-service":       "http://policy-service:50161",
-		"underwriting-service": "http://underwriting-service:50171",
-		"claim-service":        "http://claim-service:50211",
+	// Allow full URL override per service: {SERVICE}_HTTP_ADDR takes highest priority.
+	// e.g. PAYMENT_HTTP_ADDR=http://payment:50191
+	envKey := strings.ToUpper(strings.ReplaceAll(strings.TrimSuffix(serviceName, "-service"), "-", "_")) + "_HTTP_ADDR"
+	if override := os.Getenv(envKey); override != "" {
+		return override
 	}
-	return m[serviceName]
+
+	type serviceConfig struct {
+		defaultHost string // Docker DNS name (overridable via {SVC}_HOST env)
+		hostEnvKey  string // env var for host override
+		port        string
+	}
+
+	configs := map[string]serviceConfig{
+		// PoliSync C# — single container "polisync"
+		"insurance-service":    {"polisync", "POLISYNC_HOST", "50116"},
+		"product-service":      {"polisync", "POLISYNC_HOST", "50121"},
+		"quote-service":        {"polisync", "POLISYNC_HOST", "50131"},
+		"order-service":        {"polisync", "POLISYNC_HOST", "50141"},
+		"commission-service":   {"polisync", "POLISYNC_HOST", "50151"},
+		"policy-service":       {"polisync", "POLISYNC_HOST", "50161"},
+		"underwriting-service": {"polisync", "POLISYNC_HOST", "50171"},
+		"claim-service":        {"polisync", "POLISYNC_HOST", "50211"},
+		// InScore Go — separate containers
+		"payment-service":      {"payment", "PAYMENT_HOST", "50191"},
+		"notification-service": {"notification", "NOTIFICATION_HOST", "50231"},
+		"kyc-service":          {"kyc", "KYC_HOST", "50091"},
+		"beneficiary-service":  {"beneficiary", "BENEFICIARY_HOST", "50111"},
+		"tenant-service":       {"tenant", "TENANT_HOST", "50051"},
+		"audit-service":        {"audit", "AUDIT_HOST", "50081"},
+		"billing-service":      {"billing", "BILLING_HOST", "50196"},
+		"b2b-service":          {"b2b", "B2B_HOST", "50113"},
+		"media-service":        {"media", "MEDIA_HOST", "50261"},
+		"storage-service":      {"storage", "STORAGE_HOST", "50291"},
+		"fraud-service":        {"fraud", "FRAUD_HOST", "50221"},
+		"partner-service":      {"partner", "PARTNER_HOST", "50101"},
+	}
+
+	cfg, ok := configs[serviceName]
+	if !ok {
+		return ""
+	}
+
+	host := os.Getenv(cfg.hostEnvKey)
+	if host == "" {
+		host = cfg.defaultHost
+	}
+	return "http://" + host + ":" + cfg.port
 }
 
 // Ensure exported methods satisfy interfaces (compile-time checks).

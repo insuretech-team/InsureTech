@@ -125,7 +125,7 @@ class HomeFragment : Fragment() {
             setPageSize(bannerImages.size)
             setSliderColor(
                 ContextCompat.getColor(requireActivity(), R.color.slider_unselected_color),
-                ContextCompat.getColor(requireActivity(), R.color.band_color)
+                ContextCompat.getColor(requireActivity(), R.color.slider_selected_color)
             )
             setSliderWidth(30f)
             setSlideMode(IndicatorSlideMode.WORM)
@@ -175,7 +175,7 @@ class HomeFragment : Fragment() {
             setPageSize(policies.size)
             setSliderColor(
                 ContextCompat.getColor(requireActivity(), R.color.slider_unselected_color),
-                ContextCompat.getColor(requireActivity(), R.color.band_color)
+                ContextCompat.getColor(requireActivity(), R.color.slider_selected_color)
             )
             setSliderWidth(30f)
             setSlideMode(IndicatorSlideMode.WORM)
@@ -217,7 +217,7 @@ class HomeFragment : Fragment() {
             setPageSize(updates.size)
             setSliderColor(
                 ContextCompat.getColor(requireActivity(), R.color.slider_unselected_color),
-                ContextCompat.getColor(requireActivity(), R.color.band_color)
+                ContextCompat.getColor(requireActivity(), R.color.slider_selected_color)
             )
             setSliderWidth(30f)
             setSlideMode(IndicatorSlideMode.WORM)

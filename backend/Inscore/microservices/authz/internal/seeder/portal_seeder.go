@@ -10,7 +10,7 @@ package seeder
 //  PORTAL_B2B:       partner_admin | partner_user | api_client
 //  PORTAL_AGENT:     senior_agent | agent | agent_trainee
 //  PORTAL_REGULATOR: regulator_admin | inspector | auditor
-//  PORTAL_CUSTOMER:  customer
+//  PORTAL_B2C:       customer
 //
 // Domain key format: "PORTAL_SYSTEM:global"
 // Subject format:    "user:<uuid>"  →  inherits  "role:super_admin" in domain
@@ -56,9 +56,9 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 	// ── PORTAL_SYSTEM ─────────────────────────────────────────────────────────
 	authzentityv1.Portal_PORTAL_SYSTEM: {
 		{Name: "super_admin", DisplayName: "Super Administrator", IsSystem: true, Policies: []seedPolicy{
-			// Wildcard for all services (keyMatch2: svc:* matches svc:foo/bar via regex fallback)
+			// Wildcard for all services (objMatch: svc:* matches any svc:... object)
 			{Object: "svc:*", Action: "*", Effect: "allow"},
-			// Explicit b2b policies — keyMatch2 does NOT glob-expand "svc:*" to "svc:b2b/*"
+			// Explicit b2b policies — explicit rules for b2b to guarantee coverage
 			// so we seed explicit rules to guarantee coverage for every HTTP verb.
 			{Object: "svc:b2b/*", Action: "*", Effect: "allow"},
 			{Object: "svc:b2b/*", Action: "GET", Effect: "allow"},
@@ -167,6 +167,9 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 			{Object: "svc:employee/*", Action: "*", Effect: "allow"},
 			{Object: "svc:enrollment/*", Action: "*", Effect: "allow"},
 		}},
+		{Name: "b2b_beneficiary", DisplayName: "B2B Beneficiary", IsSystem: false, Policies: []seedPolicy{
+			{Object: "svc:b2b-self/*", Action: "GET", Effect: "allow"},
+		}},
 		{Name: "api_client", DisplayName: "API Client (Machine)", IsSystem: false, Policies: []seedPolicy{
 			{Object: "svc:policy/quote", Action: "POST", Effect: "allow"},
 			{Object: "svc:policy/bind", Action: "POST", Effect: "allow"},
@@ -224,14 +227,61 @@ var portalSeedMap = map[authzentityv1.Portal][]portalRole{
 		}},
 	},
 
-	// ── PORTAL_CUSTOMER ───────────────────────────────────────────────────────
+	// ── PORTAL_B2C ────────────────────────────────────────────────────────────
 	authzentityv1.Portal_PORTAL_B2C: {
-		{Name: "customer", DisplayName: "Customer", IsSystem: false, Policies: []seedPolicy{
-			{Object: "svc:policy/my/*", Action: "GET", Effect: "allow"},
-			{Object: "svc:claim/my/*", Action: "*", Effect: "allow"},
-			{Object: "svc:profile/*", Action: "*", Effect: "allow"},
-			{Object: "svc:document/my/*", Action: "*", Effect: "allow"},
-			{Object: "svc:document/*", Action: "*", Effect: "allow"},
+		{Name: "customer", DisplayName: "Customer", IsSystem: true, Policies: []seedPolicy{
+			// ── AuthZ self-access (gateway uses PathSegmentExtractor("/v1/authz/")) ──
+			{Object: "svc:authz/check", Action: "POST", Effect: "allow"},
+			// NOTE: svc:authz/roles GET intentionally NOT granted — listing all roles is admin-only.
+			// NOTE: svc:authz/portals/* narrowed to own portal only — listing all configs is admin-only.
+			{Object: "svc:authz/portals/b2c/config", Action: "GET", Effect: "allow"},
+			// ── Auth service endpoints ────────────────────────────────────────
+			{Object: "svc:authn/auth/otp", Action: "*", Effect: "allow"},
+			{Object: "svc:authn/auth/login", Action: "POST", Effect: "allow"},
+			{Object: "svc:authn/auth/logout", Action: "POST", Effect: "allow"},
+			{Object: "svc:authn/auth/session", Action: "*", Effect: "allow"},
+			{Object: "svc:authn/auth/token", Action: "POST", Effect: "allow"},
+			{Object: "svc:authn/auth/password", Action: "*", Effect: "allow"},
+			{Object: "svc:gateway/me", Action: "GET", Effect: "allow"},
+			// ── Insurance policy ─────────────────────────────────────────────
+			// Gateway sends: svc:policy/* (PathSegmentExtractor("/v1/") on /v1/policies/*)
+			{Object: "svc:policy/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:policy/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:policy/*", Action: "PATCH", Effect: "allow"},
+			// ── Claim ────────────────────────────────────────────────────────
+			// Gateway sends: svc:claim/*
+			{Object: "svc:claim/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:claim/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:claim/*", Action: "PATCH", Effect: "allow"},
+			// ── Payment ──────────────────────────────────────────────────────
+			// Gateway sends: svc:payment/*
+			{Object: "svc:payment/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:payment/*", Action: "POST", Effect: "allow"},
+			// ── Profile / User ────────────────────────────────────────────────
+			// Gateway sends: svc:document/* for /v1/auth/users/{id}/profile
+			{Object: "svc:document/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:document/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:document/*", Action: "PATCH", Effect: "allow"},
+			{Object: "svc:document/*", Action: "DELETE", Effect: "allow"},
+			// ── Product / Insurer (browse only) ──────────────────────────────
+			// Gateway sends: svc:product/*
+			{Object: "svc:product/*", Action: "GET", Effect: "allow"},
+			// ── Quote / Order ─────────────────────────────────────────────────
+			{Object: "svc:quote/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:quote/*", Action: "POST", Effect: "allow"},
+			{Object: "svc:order/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:order/*", Action: "POST", Effect: "allow"},
+			// ── Notification ─────────────────────────────────────────────────
+			{Object: "svc:notification/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:notification/*", Action: "DELETE", Effect: "allow"},
+			// ── Beneficiary ──────────────────────────────────────────────────
+			{Object: "svc:beneficiary/*", Action: "*", Effect: "allow"},
+			// ── KYC ──────────────────────────────────────────────────────────
+			{Object: "svc:kyc/*", Action: "*", Effect: "allow"},
+			// ── Support ticket ────────────────────────────────────────────────
+			{Object: "svc:support/*", Action: "GET", Effect: "allow"},
+			{Object: "svc:support/*", Action: "POST", Effect: "allow"},
+			// ── Storage ──────────────────────────────────────────────────────
 			{Object: "svc:storage/upload", Action: "POST", Effect: "allow"},
 			{Object: "svc:storage/upload-batch", Action: "POST", Effect: "allow"},
 			{Object: "svc:storage/upload-url", Action: "POST", Effect: "allow"},

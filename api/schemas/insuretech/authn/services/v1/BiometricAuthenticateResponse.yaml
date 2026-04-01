@@ -20,7 +20,5 @@ BiometricAuthenticateResponse:
       description: Always JWT for biometric
     user:
       $ref: '#/components/schemas/User'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for biometric authenticate operation. Returns operation
     results and status.

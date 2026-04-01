@@ -9,6 +9,8 @@ import (
 	"io"
 )
 
+const compactGCMNonceSize = 8
+
 // EncryptPII encrypts a plaintext string using AES-GCM and returns a base64 encoded string.
 // If the plaintext is empty, it returns the empty string.
 func EncryptPII(plaintext string, key string) (string, error) {
@@ -26,7 +28,9 @@ func EncryptPII(plaintext string, key string) (string, error) {
 		return "", err
 	}
 
-	aesgcm, err := cipher.NewGCM(block)
+	// Partner PII is stored in legacy varchar-limited columns, so use a compact nonce size
+	// for new writes while keeping decryption backward-compatible with older 12-byte nonce data.
+	aesgcm, err := cipher.NewGCMWithNonceSize(block, compactGCMNonceSize)
 	if err != nil {
 		return "", err
 	}
@@ -62,21 +66,21 @@ func DecryptPII(ciphertext string, key string) (string, error) {
 		return "", err
 	}
 
-	aesgcm, err := cipher.NewGCM(block)
-	if err != nil {
-		return "", err
+	nonceSizes := []int{12, compactGCMNonceSize}
+	for _, nonceSize := range nonceSizes {
+		aesgcm, err := cipher.NewGCMWithNonceSize(block, nonceSize)
+		if err != nil {
+			return "", err
+		}
+		if len(data) < nonceSize {
+			continue
+		}
+		nonce, ciphertextBytes := data[:nonceSize], data[nonceSize:]
+		plaintext, err := aesgcm.Open(nil, nonce, ciphertextBytes, nil)
+		if err == nil {
+			return string(plaintext), nil
+		}
 	}
 
-	nonceSize := aesgcm.NonceSize()
-	if len(data) < nonceSize {
-		return "", errors.New("ciphertext too short")
-	}
-
-	nonce, ciphertextBytes := data[:nonceSize], data[nonceSize:]
-	plaintext, err := aesgcm.Open(nil, nonce, ciphertextBytes, nil)
-	if err != nil {
-		return "", err
-	}
-
-	return string(plaintext), nil
+	return "", errors.New("failed to decrypt ciphertext")
 }

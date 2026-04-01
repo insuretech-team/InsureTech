@@ -1,0 +1,55 @@
+BusinessWorkflowExecution:
+  type: object
+  properties:
+    execution_id:
+      type: string
+      description: '@inject_tag: gorm:"primaryKey;column:execution_id;not null"'
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    business_workflow_id:
+      type: string
+      description: '@inject_tag: gorm:"column:business_workflow_id;not null"'
+    entity_type:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_type;not null"'
+    entity_id:
+      type: string
+      description: '@inject_tag: gorm:"column:entity_id;not null"'
+    is_success:
+      type: boolean
+      description: '@inject_tag: gorm:"column:is_success;not null"'
+    results:
+      type: array
+      items:
+        $ref: '#/components/schemas/BusinessRuleResult'
+        description: "Individual rule results\n @inject_tag: gorm:\"column:results;not\
+          \ null;serializer:proto_json\""
+      description: "Individual rule results\n @inject_tag: gorm:\"column:results;not\
+        \ null;serializer:proto_json\""
+    inputs_json:
+      type: string
+      description: Input data used for evaluation
+    outputs_json:
+      type: string
+      description: Output data from evaluation
+    executed_by:
+      type: string
+      description: '@inject_tag: gorm:"column:executed_by"'
+    executed_at:
+      type: string
+      format: date-time
+      description: '@inject_tag: gorm:"column:executed_at;not null;serializer:proto_timestamp"'
+      x-database-default: CURRENT_TIMESTAMP
+    execution_time_ms:
+      type: integer
+      format: int32
+      description: '@inject_tag: gorm:"column:execution_time_ms"'
+  description: "BusinessWorkflowExecution tracks rule evaluations\n Maps to 'business_workflow_executions'\
+    \ table in workflow_schema"
+  required:
+  - execution_id
+  - business_workflow_id
+  - entity_type
+  - entity_id
+  - is_success
+  - executed_at

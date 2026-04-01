@@ -5,9 +5,24 @@ InitiateKYCResponse:
       type: string
     status:
       type: string
-    message:
+    provider:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
+      description: e.g. "FLVE_HF"
+    provider_reference:
+      type: string
+      description: FLVE session_id (internal)
+    session_state:
+      type: string
+      description: '"EKYC_SESSION_ACTIVE"'
+    steps:
+      type: array
+      items:
+        $ref: '#/components/schemas/KYCStep'
+        description: challenge steps
+      description: challenge steps
+    total_timeout_seconds:
+      type: integer
+      format: int32
+      description: session timeout
   description: Response payload for initiate kyc operation. Returns operation results
     and status.

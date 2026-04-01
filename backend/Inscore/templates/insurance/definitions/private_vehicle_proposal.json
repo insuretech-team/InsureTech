@@ -1,0 +1,145 @@
+{
+  "id": "private_vehicle_proposal",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "PRIVATE VEHICLE INSURANCE PROPOSAL FORM" },
+    { "type": "subtitle", "text": "Please fill up the star marked and highlighted parts only", "italic": true, "size": 9 },
+    { "type": "divider" },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "", "label": "Certificate No.", "value": "{{ certificate_number }}" },
+        { "number": "", "label": "Policy No.", "value": "{{ policy_number }}" },
+        { "number": "", "label": "Address of Issuing Office", "value": "{{ issuing_office_address }}" }
+      ]
+    },
+    { "type": "notice", "text": "Acceptance of this proposal is subject to the rules & regulations of the Company." },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "*", "label": "Full name of proposer (in block letters)", "value": "{{ proposer_name }}" },
+        { "number": "*", "label": "Address (in block letters)", "value": "{{ proposer_address }}" },
+        { "number": "*", "label": "Proposer Mobile / Phone Number", "value": "{{ phone_number }}" },
+        { "number": "", "label": "Proposer E-mail Address", "value": "{{ email_address }}" },
+        { "number": "*", "label": "Business or Profession", "value": "{{ occupation }}" }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "VEHICLE PARTICULARS",
+      "level": 1
+    },
+    {
+      "type": "table",
+      "headers": ["Registration Mark & No.*", "Make*", "Engine & Chassis No.*", "Type of Body*", "Cubic Capacity / H.P.*", "Year of Manufacture*", "Seating Capacity incl. Driver*", "Carrying Capacity"],
+      "rows_key": "vehicle_details",
+      "columns": ["registration", "make", "engine_chassis", "body_type", "cubic_capacity", "year_of_manufacture", "seating_capacity", "carrying_capacity"]
+    },
+    {
+      "type": "heading",
+      "text": "SEGREGATION OF ESTIMATED VALUE",
+      "level": 2
+    },
+    {
+      "type": "table",
+      "headers": ["Glass Item Excl.", "Glass Item", "Electrical Appliances incl. TV, Radio, Air Condition", "Accessories", "Full Insured Value*"],
+      "rows_key": "vehicle_value_breakdown",
+      "columns": ["glass_excl", "glass_item", "electrical_appliances", "accessories", "full_insured_value"],
+      "col_widths": [1.1, 1.1, 1.8, 1.2, 1.26]
+    },
+    {
+      "type": "heading",
+      "text": "DECLARATIONS",
+      "level": 1
+    },
+    {
+      "type": "key_value",
+      "label_width": 4.5,
+      "rows": [
+        { "number": "1(a).", "label": "Will the car be used solely for social, domestic and pleasure purposes?", "value": "{{ q1a_pleasure_use }}" },
+        { "number": "1(b).", "label": "If not, state other uses:", "value": "{{ q1b_other_uses }}" },
+        { "number": "2.", "label": "Are you the owner of the car and is it registered in your name? If not, state name and address of owner.", "value": "{{ q2_owner }}" },
+        { "number": "3(a).", "label": "Date of purchase of car by you:", "value": "{{ q3a_purchase_date }}" },
+        { "number": "3(b).", "label": "Whether new:", "value": "{{ q3b_is_new }}" },
+        { "number": "3(c).", "label": "Price paid:", "value": "{{ q3c_price_paid }}" },
+        { "number": "3(d).", "label": "Present estimated market value:", "value": "{{ q3d_market_value }}" },
+        { "number": "4.", "label": "Do you or does any person who will drive suffer from defective vision, hearing or physical infirmity?", "value": "{{ q4_infirmity }}" },
+        { "number": "5.", "label": "Have you or any person who will drive been convicted in the past five years of any motor vehicle offence?", "value": "{{ q5_conviction }}" },
+        { "number": "6.", "label": "How long have you been driving motor vehicles continuously?", "value": "{{ q6_driving_years }}" },
+        { "number": "7.", "label": "Are you now or have you been insured in respect of any motor vehicle? If so, state name of underwriter:", "value": "{{ q7_previous_insurer }}" },
+        { "number": "8.", "label": "Are you entitled to No Claim Bonus from previous insurer? If so, attach renewal notice.", "value": "{{ q8_ncb }}" },
+        { "number": "9(a).", "label": "Has any underwriter declined your proposal or cancelled / refused to renew your policy?", "value": "{{ q9a_declined }}" },
+        { "number": "9(b).", "label": "Required you to bear the first part of cost of any accident or loss?", "value": "{{ q9b_excess }}" },
+        { "number": "9(c).", "label": "Imposed special conditions or required increased premium?", "value": "{{ q9c_special_conditions }}" },
+        { "number": "10.", "label": "Particulars of accidents and losses during the past three years:", "value": "{{ q10_accident_history }}" },
+        { "number": "11.", "label": "Do you require (a) Comprehensive Policy (b) Act only Policy (c) Limited cover policy?", "value": "{{ q11_policy_type }}" },
+        { "number": "12.", "label": "First part of cost of each accident or loss you wish to bear (Tk.):", "value": "{{ q12_excess_amount }}" },
+        { "number": "13.", "label": "Do you wish to insure Rugs, Coats and Luggage on the car (limited Tk.1500/- each occurrence)?", "value": "{{ q13_luggage_cover }}" },
+        { "number": "14.", "label": "Do you wish to insure any other benefits?", "value": "{{ q14_other_benefits }}" }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "PREMIUM",
+      "level": 2
+    },
+    {
+      "type": "key_value",
+      "label_width": 3.5,
+      "rows": [
+        { "number": "", "label": "Basic Premium (Tk.)", "value": "{{ basic_premium }}" },
+        { "number": "", "label": "Stamp Duty (Tk.)", "value": "{{ stamp_duty }}" },
+        { "number": "", "label": "VAT (Tk.)", "value": "{{ vat_amount }}" },
+        { "number": "", "label": "TOTAL PREMIUM (Tk.)", "value": "{{ total_premium }}" }
+      ]
+    },
+    {
+      "type": "notice",
+      "text": "I/we warrant that the above statements and particulars are true and I/we hereby agree that this declaration shall be held to be promissory and shall form the basis of the contract between me/us and Pragati Insurance Limited and I/we undertake that the car(s) to be insured shall not be driven by any who to my/our knowledge has been refused any motor vehicle insurance or continuance thereof."
+    },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "", "label": "Policy to Commence From", "value": "{{ policy_start_date }}" },
+        { "number": "", "label": "Dated This", "value": "{{ proposal_date }}" }
+      ]
+    },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer's Signature", "name": "{{ proposer_name }}" },
+        { "label": "Agent / Broker", "name": "{{ agent_name }}" },
+        { "label": "For & On Behalf of Insurer", "name": "" }
+      ]
+    },
+    {
+      "type": "heading",
+      "text": "BANK USE ONLY",
+      "level": 2
+    },
+    {
+      "type": "key_value",
+      "label_width": 2.5,
+      "rows": [
+        { "number": "", "label": "Branch Name", "value": "{{ bank_branch_name }}" },
+        { "number": "", "label": "Account Number", "value": "{{ bank_account_number }}" },
+        { "number": "", "label": "Account Name", "value": "{{ bank_account_name }}" },
+        { "number": "", "label": "Bank Officer's Code", "value": "{{ bank_officer_code }}" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Proposal Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

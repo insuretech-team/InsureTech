@@ -3,8 +3,6 @@ Response:
   properties:
     success:
       type: boolean
-    message:
-      type: string
     error_code:
       type: string
     metadata:

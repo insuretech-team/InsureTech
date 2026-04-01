@@ -101,6 +101,10 @@ namespace Insuretech.Insurance.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.GetPricingConfigResponse> __Marshaller_insuretech_insurance_services_v1_GetPricingConfigResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.GetPricingConfigResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest> __Marshaller_insuretech_insurance_services_v1_ListPricingConfigsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse> __Marshaller_insuretech_insurance_services_v1_ListPricingConfigsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreatePolicyRequest> __Marshaller_insuretech_insurance_services_v1_CreatePolicyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreatePolicyRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreatePolicyResponse> __Marshaller_insuretech_insurance_services_v1_CreatePolicyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreatePolicyResponse.Parser));
@@ -130,6 +134,14 @@ namespace Insuretech.Insurance.Services.V1 {
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.UpdateClaimRequest> __Marshaller_insuretech_insurance_services_v1_UpdateClaimRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.UpdateClaimRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.UpdateClaimResponse> __Marshaller_insuretech_insurance_services_v1_UpdateClaimResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.UpdateClaimResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest> __Marshaller_insuretech_insurance_services_v1_CreateClaimDocumentRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse> __Marshaller_insuretech_insurance_services_v1_CreateClaimDocumentResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest> __Marshaller_insuretech_insurance_services_v1_CreateClaimApprovalRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse> __Marshaller_insuretech_insurance_services_v1_CreateClaimApprovalResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.DeleteClaimRequest> __Marshaller_insuretech_insurance_services_v1_DeleteClaimRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.DeleteClaimRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -443,6 +455,24 @@ namespace Insuretech.Insurance.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.ListQuotationsResponse> __Marshaller_insuretech_insurance_services_v1_ListQuotationsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.ListQuotationsResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest> __Marshaller_insuretech_insurance_services_v1_CreateInsuranceProposalRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse> __Marshaller_insuretech_insurance_services_v1_CreateInsuranceProposalResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest> __Marshaller_insuretech_insurance_services_v1_GetInsuranceProposalRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse> __Marshaller_insuretech_insurance_services_v1_GetInsuranceProposalResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest> __Marshaller_insuretech_insurance_services_v1_UpdateInsuranceProposalRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse> __Marshaller_insuretech_insurance_services_v1_UpdateInsuranceProposalResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest> __Marshaller_insuretech_insurance_services_v1_DeleteInsuranceProposalRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest> __Marshaller_insuretech_insurance_services_v1_ListInsuranceProposalsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse> __Marshaller_insuretech_insurance_services_v1_ListInsuranceProposalsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestRequest> __Marshaller_insuretech_insurance_services_v1_CreatePolicyServiceRequestRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestResponse> __Marshaller_insuretech_insurance_services_v1_CreatePolicyServiceRequestResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestResponse.Parser));
@@ -584,6 +614,14 @@ namespace Insuretech.Insurance.Services.V1 {
         __Marshaller_insuretech_insurance_services_v1_GetPricingConfigResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest, global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse> __Method_ListPricingConfigs = new grpc::Method<global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest, global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ListPricingConfigs",
+        __Marshaller_insuretech_insurance_services_v1_ListPricingConfigsRequest,
+        __Marshaller_insuretech_insurance_services_v1_ListPricingConfigsResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.CreatePolicyRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyResponse> __Method_CreatePolicy = new grpc::Method<global::Insuretech.Insurance.Services.V1.CreatePolicyRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -646,6 +684,22 @@ namespace Insuretech.Insurance.Services.V1 {
         "UpdateClaim",
         __Marshaller_insuretech_insurance_services_v1_UpdateClaimRequest,
         __Marshaller_insuretech_insurance_services_v1_UpdateClaimResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest, global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse> __Method_CreateClaimDocument = new grpc::Method<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest, global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "CreateClaimDocument",
+        __Marshaller_insuretech_insurance_services_v1_CreateClaimDocumentRequest,
+        __Marshaller_insuretech_insurance_services_v1_CreateClaimDocumentResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest, global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse> __Method_CreateClaimApproval = new grpc::Method<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest, global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "CreateClaimApproval",
+        __Marshaller_insuretech_insurance_services_v1_CreateClaimApprovalRequest,
+        __Marshaller_insuretech_insurance_services_v1_CreateClaimApprovalResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.DeleteClaimRequest, global::Google.Protobuf.WellKnownTypes.Empty> __Method_DeleteClaim = new grpc::Method<global::Insuretech.Insurance.Services.V1.DeleteClaimRequest, global::Google.Protobuf.WellKnownTypes.Empty>(
@@ -1344,6 +1398,46 @@ namespace Insuretech.Insurance.Services.V1 {
         __Marshaller_insuretech_insurance_services_v1_ListQuotationsResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse> __Method_CreateInsuranceProposal = new grpc::Method<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "CreateInsuranceProposal",
+        __Marshaller_insuretech_insurance_services_v1_CreateInsuranceProposalRequest,
+        __Marshaller_insuretech_insurance_services_v1_CreateInsuranceProposalResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse> __Method_GetInsuranceProposal = new grpc::Method<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetInsuranceProposal",
+        __Marshaller_insuretech_insurance_services_v1_GetInsuranceProposalRequest,
+        __Marshaller_insuretech_insurance_services_v1_GetInsuranceProposalResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse> __Method_UpdateInsuranceProposal = new grpc::Method<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "UpdateInsuranceProposal",
+        __Marshaller_insuretech_insurance_services_v1_UpdateInsuranceProposalRequest,
+        __Marshaller_insuretech_insurance_services_v1_UpdateInsuranceProposalResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest, global::Google.Protobuf.WellKnownTypes.Empty> __Method_DeleteInsuranceProposal = new grpc::Method<global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest, global::Google.Protobuf.WellKnownTypes.Empty>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "DeleteInsuranceProposal",
+        __Marshaller_insuretech_insurance_services_v1_DeleteInsuranceProposalRequest,
+        __Marshaller_google_protobuf_Empty);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest, global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse> __Method_ListInsuranceProposals = new grpc::Method<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest, global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ListInsuranceProposals",
+        __Marshaller_insuretech_insurance_services_v1_ListInsuranceProposalsRequest,
+        __Marshaller_insuretech_insurance_services_v1_ListInsuranceProposalsResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestResponse> __Method_CreatePolicyServiceRequest = new grpc::Method<global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -1535,6 +1629,12 @@ namespace Insuretech.Insurance.Services.V1 {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse> ListPricingConfigs(global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
       /// <summary>
       /// ========== POLICY CRUD ==========
       /// </summary>
@@ -1591,6 +1691,18 @@ namespace Insuretech.Insurance.Services.V1 {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.UpdateClaimResponse> UpdateClaim(global::Insuretech.Insurance.Services.V1.UpdateClaimRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse> CreateClaimDocument(global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse> CreateClaimApproval(global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -2220,6 +2332,42 @@ namespace Insuretech.Insurance.Services.V1 {
       }
 
       /// <summary>
+      /// ========== INSURANCE PROPOSAL CRUD ==========
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse> CreateInsuranceProposal(global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse> GetInsuranceProposal(global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse> UpdateInsuranceProposal(global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Google.Protobuf.WellKnownTypes.Empty> DeleteInsuranceProposal(global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse> ListInsuranceProposals(global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
       /// ========== POLICY SERVICE REQUEST CRUD ==========
       /// </summary>
       /// <param name="request">The request received from the client.</param>
@@ -2692,6 +2840,26 @@ namespace Insuretech.Insurance.Services.V1 {
       {
         return CallInvoker.AsyncUnaryCall(__Method_GetPricingConfig, null, options, request);
       }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse ListPricingConfigs(global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListPricingConfigs(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse ListPricingConfigs(global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ListPricingConfigs, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse> ListPricingConfigsAsync(global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListPricingConfigsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse> ListPricingConfigsAsync(global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ListPricingConfigs, null, options, request);
+      }
       /// <summary>
       /// ========== POLICY CRUD ==========
       /// </summary>
@@ -2907,6 +3075,46 @@ namespace Insuretech.Insurance.Services.V1 {
       public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.UpdateClaimResponse> UpdateClaimAsync(global::Insuretech.Insurance.Services.V1.UpdateClaimRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_UpdateClaim, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse CreateClaimDocument(global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateClaimDocument(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse CreateClaimDocument(global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_CreateClaimDocument, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse> CreateClaimDocumentAsync(global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateClaimDocumentAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse> CreateClaimDocumentAsync(global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_CreateClaimDocument, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse CreateClaimApproval(global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateClaimApproval(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse CreateClaimApproval(global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_CreateClaimApproval, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse> CreateClaimApprovalAsync(global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateClaimApprovalAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse> CreateClaimApprovalAsync(global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_CreateClaimApproval, null, options, request);
       }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::Google.Protobuf.WellKnownTypes.Empty DeleteClaim(global::Insuretech.Insurance.Services.V1.DeleteClaimRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
@@ -5125,6 +5333,134 @@ namespace Insuretech.Insurance.Services.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_ListQuotations, null, options, request);
       }
       /// <summary>
+      /// ========== INSURANCE PROPOSAL CRUD ==========
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse CreateInsuranceProposal(global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateInsuranceProposal(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// ========== INSURANCE PROPOSAL CRUD ==========
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse CreateInsuranceProposal(global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_CreateInsuranceProposal, null, options, request);
+      }
+      /// <summary>
+      /// ========== INSURANCE PROPOSAL CRUD ==========
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse> CreateInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return CreateInsuranceProposalAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// ========== INSURANCE PROPOSAL CRUD ==========
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse> CreateInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_CreateInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse GetInsuranceProposal(global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetInsuranceProposal(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse GetInsuranceProposal(global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse> GetInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetInsuranceProposalAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse> GetInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse UpdateInsuranceProposal(global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateInsuranceProposal(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse UpdateInsuranceProposal(global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_UpdateInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse> UpdateInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateInsuranceProposalAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse> UpdateInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_UpdateInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Google.Protobuf.WellKnownTypes.Empty DeleteInsuranceProposal(global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DeleteInsuranceProposal(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Google.Protobuf.WellKnownTypes.Empty DeleteInsuranceProposal(global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_DeleteInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DeleteInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return DeleteInsuranceProposalAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Google.Protobuf.WellKnownTypes.Empty> DeleteInsuranceProposalAsync(global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_DeleteInsuranceProposal, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse ListInsuranceProposals(global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListInsuranceProposals(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse ListInsuranceProposals(global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ListInsuranceProposals, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse> ListInsuranceProposalsAsync(global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListInsuranceProposalsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse> ListInsuranceProposalsAsync(global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ListInsuranceProposals, null, options, request);
+      }
+      /// <summary>
       /// ========== POLICY SERVICE REQUEST CRUD ==========
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -5407,6 +5743,7 @@ namespace Insuretech.Insurance.Services.V1 {
           .AddMethod(__Method_ListRiders, serviceImpl.ListRiders)
           .AddMethod(__Method_CreatePricingConfig, serviceImpl.CreatePricingConfig)
           .AddMethod(__Method_GetPricingConfig, serviceImpl.GetPricingConfig)
+          .AddMethod(__Method_ListPricingConfigs, serviceImpl.ListPricingConfigs)
           .AddMethod(__Method_CreatePolicy, serviceImpl.CreatePolicy)
           .AddMethod(__Method_GetPolicy, serviceImpl.GetPolicy)
           .AddMethod(__Method_UpdatePolicy, serviceImpl.UpdatePolicy)
@@ -5415,6 +5752,8 @@ namespace Insuretech.Insurance.Services.V1 {
           .AddMethod(__Method_CreateClaim, serviceImpl.CreateClaim)
           .AddMethod(__Method_GetClaim, serviceImpl.GetClaim)
           .AddMethod(__Method_UpdateClaim, serviceImpl.UpdateClaim)
+          .AddMethod(__Method_CreateClaimDocument, serviceImpl.CreateClaimDocument)
+          .AddMethod(__Method_CreateClaimApproval, serviceImpl.CreateClaimApproval)
           .AddMethod(__Method_DeleteClaim, serviceImpl.DeleteClaim)
           .AddMethod(__Method_ListClaims, serviceImpl.ListClaims)
           .AddMethod(__Method_CreateQuote, serviceImpl.CreateQuote)
@@ -5502,6 +5841,11 @@ namespace Insuretech.Insurance.Services.V1 {
           .AddMethod(__Method_UpdateQuotation, serviceImpl.UpdateQuotation)
           .AddMethod(__Method_DeleteQuotation, serviceImpl.DeleteQuotation)
           .AddMethod(__Method_ListQuotations, serviceImpl.ListQuotations)
+          .AddMethod(__Method_CreateInsuranceProposal, serviceImpl.CreateInsuranceProposal)
+          .AddMethod(__Method_GetInsuranceProposal, serviceImpl.GetInsuranceProposal)
+          .AddMethod(__Method_UpdateInsuranceProposal, serviceImpl.UpdateInsuranceProposal)
+          .AddMethod(__Method_DeleteInsuranceProposal, serviceImpl.DeleteInsuranceProposal)
+          .AddMethod(__Method_ListInsuranceProposals, serviceImpl.ListInsuranceProposals)
           .AddMethod(__Method_CreatePolicyServiceRequest, serviceImpl.CreatePolicyServiceRequest)
           .AddMethod(__Method_GetPolicyServiceRequest, serviceImpl.GetPolicyServiceRequest)
           .AddMethod(__Method_UpdatePolicyServiceRequest, serviceImpl.UpdatePolicyServiceRequest)
@@ -5534,6 +5878,7 @@ namespace Insuretech.Insurance.Services.V1 {
       serviceBinder.AddMethod(__Method_ListRiders, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.ListRidersRequest, global::Insuretech.Insurance.Services.V1.ListRidersResponse>(serviceImpl.ListRiders));
       serviceBinder.AddMethod(__Method_CreatePricingConfig, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreatePricingConfigRequest, global::Insuretech.Insurance.Services.V1.CreatePricingConfigResponse>(serviceImpl.CreatePricingConfig));
       serviceBinder.AddMethod(__Method_GetPricingConfig, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.GetPricingConfigRequest, global::Insuretech.Insurance.Services.V1.GetPricingConfigResponse>(serviceImpl.GetPricingConfig));
+      serviceBinder.AddMethod(__Method_ListPricingConfigs, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.ListPricingConfigsRequest, global::Insuretech.Insurance.Services.V1.ListPricingConfigsResponse>(serviceImpl.ListPricingConfigs));
       serviceBinder.AddMethod(__Method_CreatePolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreatePolicyRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyResponse>(serviceImpl.CreatePolicy));
       serviceBinder.AddMethod(__Method_GetPolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.GetPolicyRequest, global::Insuretech.Insurance.Services.V1.GetPolicyResponse>(serviceImpl.GetPolicy));
       serviceBinder.AddMethod(__Method_UpdatePolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.UpdatePolicyRequest, global::Insuretech.Insurance.Services.V1.UpdatePolicyResponse>(serviceImpl.UpdatePolicy));
@@ -5542,6 +5887,8 @@ namespace Insuretech.Insurance.Services.V1 {
       serviceBinder.AddMethod(__Method_CreateClaim, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreateClaimRequest, global::Insuretech.Insurance.Services.V1.CreateClaimResponse>(serviceImpl.CreateClaim));
       serviceBinder.AddMethod(__Method_GetClaim, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.GetClaimRequest, global::Insuretech.Insurance.Services.V1.GetClaimResponse>(serviceImpl.GetClaim));
       serviceBinder.AddMethod(__Method_UpdateClaim, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.UpdateClaimRequest, global::Insuretech.Insurance.Services.V1.UpdateClaimResponse>(serviceImpl.UpdateClaim));
+      serviceBinder.AddMethod(__Method_CreateClaimDocument, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreateClaimDocumentRequest, global::Insuretech.Insurance.Services.V1.CreateClaimDocumentResponse>(serviceImpl.CreateClaimDocument));
+      serviceBinder.AddMethod(__Method_CreateClaimApproval, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreateClaimApprovalRequest, global::Insuretech.Insurance.Services.V1.CreateClaimApprovalResponse>(serviceImpl.CreateClaimApproval));
       serviceBinder.AddMethod(__Method_DeleteClaim, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.DeleteClaimRequest, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.DeleteClaim));
       serviceBinder.AddMethod(__Method_ListClaims, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.ListClaimsRequest, global::Insuretech.Insurance.Services.V1.ListClaimsResponse>(serviceImpl.ListClaims));
       serviceBinder.AddMethod(__Method_CreateQuote, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreateQuoteRequest, global::Insuretech.Insurance.Services.V1.CreateQuoteResponse>(serviceImpl.CreateQuote));
@@ -5629,6 +5976,11 @@ namespace Insuretech.Insurance.Services.V1 {
       serviceBinder.AddMethod(__Method_UpdateQuotation, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.UpdateQuotationRequest, global::Insuretech.Insurance.Services.V1.UpdateQuotationResponse>(serviceImpl.UpdateQuotation));
       serviceBinder.AddMethod(__Method_DeleteQuotation, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.DeleteQuotationRequest, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.DeleteQuotation));
       serviceBinder.AddMethod(__Method_ListQuotations, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.ListQuotationsRequest, global::Insuretech.Insurance.Services.V1.ListQuotationsResponse>(serviceImpl.ListQuotations));
+      serviceBinder.AddMethod(__Method_CreateInsuranceProposal, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.CreateInsuranceProposalResponse>(serviceImpl.CreateInsuranceProposal));
+      serviceBinder.AddMethod(__Method_GetInsuranceProposal, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.GetInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.GetInsuranceProposalResponse>(serviceImpl.GetInsuranceProposal));
+      serviceBinder.AddMethod(__Method_UpdateInsuranceProposal, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalRequest, global::Insuretech.Insurance.Services.V1.UpdateInsuranceProposalResponse>(serviceImpl.UpdateInsuranceProposal));
+      serviceBinder.AddMethod(__Method_DeleteInsuranceProposal, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.DeleteInsuranceProposalRequest, global::Google.Protobuf.WellKnownTypes.Empty>(serviceImpl.DeleteInsuranceProposal));
+      serviceBinder.AddMethod(__Method_ListInsuranceProposals, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsRequest, global::Insuretech.Insurance.Services.V1.ListInsuranceProposalsResponse>(serviceImpl.ListInsuranceProposals));
       serviceBinder.AddMethod(__Method_CreatePolicyServiceRequest, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestRequest, global::Insuretech.Insurance.Services.V1.CreatePolicyServiceRequestResponse>(serviceImpl.CreatePolicyServiceRequest));
       serviceBinder.AddMethod(__Method_GetPolicyServiceRequest, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.GetPolicyServiceRequestRequest, global::Insuretech.Insurance.Services.V1.GetPolicyServiceRequestResponse>(serviceImpl.GetPolicyServiceRequest));
       serviceBinder.AddMethod(__Method_UpdatePolicyServiceRequest, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Insurance.Services.V1.UpdatePolicyServiceRequestRequest, global::Insuretech.Insurance.Services.V1.UpdatePolicyServiceRequestResponse>(serviceImpl.UpdatePolicyServiceRequest));

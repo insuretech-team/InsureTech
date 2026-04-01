@@ -1,0 +1,34 @@
+QuoteStatisticsRetrievalResponse:
+  type: object
+  properties:
+    total_quotes:
+      type: integer
+      format: int32
+    draft_quotes:
+      type: integer
+      format: int32
+    sent_quotes:
+      type: integer
+      format: int32
+    accepted_quotes:
+      type: integer
+      format: int32
+    declined_quotes:
+      type: integer
+      format: int32
+    expired_quotes:
+      type: integer
+      format: int32
+    converted_quotes:
+      type: integer
+      format: int32
+    conversion_rate:
+      type: number
+      format: double
+      description: Percentage
+    total_premium_value:
+      $ref: '#/components/schemas/Money'
+    average_premium:
+      $ref: '#/components/schemas/Money'
+  description: Response payload for quote statistics retrieval operation. Returns
+    operation results and status.

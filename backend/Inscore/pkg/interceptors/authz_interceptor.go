@@ -14,6 +14,7 @@ import (
 	"context"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	"google.golang.org/grpc"
 	"google.golang.org/grpc/codes"
 	"google.golang.org/grpc/metadata"
@@ -25,8 +26,8 @@ import (
 // DefaultSkipMethods is the set of fully-qualified gRPC method names that bypass AuthZ.
 // Add health checks, JWKS, and internal-only methods here.
 var DefaultSkipMethods = map[string]bool{
-	"/grpc.health.v1.Health/Check":       true,
-	"/grpc.health.v1.Health/Watch":       true,
+	"/grpc.health.v1.Health/Check":                      true,
+	"/grpc.health.v1.Health/Watch":                      true,
 	"/insuretech.authn.services.v1.AuthService/GetJWKS": true,
 }
 
@@ -60,12 +61,12 @@ func (i *AuthZInterceptor) Intercept(ctx context.Context, req interface{}, info 
 		return nil, status.Error(codes.Unauthenticated, "missing metadata")
 	}
 
-	userID := firstMD(md, "x-user-id")
-	portal := firstMD(md, "x-portal")
-	tenantID := firstMD(md, "x-tenant-id")
-	sessionID := firstMD(md, "x-session-id")
-	ipAddr := firstMD(md, "x-forwarded-for")
-	userAgent := firstMD(md, "x-user-agent")
+	userID := grpcmeta.First(md, "x-user-id")
+	portal := grpcmeta.First(md, "x-portal")
+	tenantID := grpcmeta.First(md, "x-tenant-id")
+	sessionID := grpcmeta.First(md, "x-session-id")
+	ipAddr := grpcmeta.First(md, "x-forwarded-for")
+	userAgent := grpcmeta.First(md, "x-user-agent")
 
 	if userID == "" {
 		return nil, status.Error(codes.Unauthenticated, "x-user-id header required")
@@ -147,13 +148,4 @@ func rpcToResourceAction(rpcLower string) (resource, action string) {
 	default:
 		return rpcLower, "*"
 	}
-}
-
-// firstMD returns the first value for a metadata key, or empty string.
-func firstMD(md metadata.MD, key string) string {
-	vals := md.Get(key)
-	if len(vals) == 0 {
-		return ""
-	}
-	return vals[0]
 }

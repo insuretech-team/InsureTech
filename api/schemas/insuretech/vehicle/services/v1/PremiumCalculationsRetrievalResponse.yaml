@@ -1,0 +1,14 @@
+PremiumCalculationsRetrievalResponse:
+  type: object
+  properties:
+    calculations:
+      type: array
+      items:
+        $ref: '#/components/schemas/VehiclePremiumCalculation'
+    next_page_token:
+      type: string
+    total_count:
+      type: integer
+      format: int32
+  description: Response payload for premium calculations retrieval operation. Returns
+    operation results and status.

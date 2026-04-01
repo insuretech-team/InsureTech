@@ -1,14 +1,20 @@
 "use client";
+
 import {
-  LuMenu,
   LuBell,
-  LuUser,
+  LuLogOut,
+  LuMenu,
   LuSettings,
   LuShieldCheck,
-  LuLogOut,
+  LuUser,
 } from "react-icons/lu";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
+
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
+import { usePortalSession } from "@lib/auth/portal-session-context";
+import type { SessionUser } from "@lib/types/b2b";
+import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { Button } from "../ui/button";
 import {
   DropdownMenu,
@@ -17,15 +23,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "../ui/dropdown-menu";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
-import { authClient } from "@lib/sdk";
-import type { SessionUser } from "@lib/types/b2b";
 
 interface DashboardHeaderProps {
   onMenuClick: () => void;
 }
 
-// Derive 1-2 letter initials from a display name or email.
 function getInitials(name?: string, email?: string): string {
   if (name && name.trim()) {
     const parts = name.trim().split(/\s+/);
@@ -36,59 +38,57 @@ function getInitials(name?: string, email?: string): string {
   return "??";
 }
 
+function toSessionUser(session: ReturnType<typeof usePortalSession>["session"]): SessionUser | null {
+  if (!session) {
+    return null;
+  }
+  return {
+    userId: session.principal.user.userId,
+    businessId: session.principal.businessId,
+    organisationName: session.principal.organisationName ?? "",
+    name: session.principal.displayName,
+    email: session.principal.user.email,
+    role: session.principal.role,
+  };
+}
+
 const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
   const router = useRouter();
-  const [user, setUser] = useState<SessionUser | null>(null);
-  const [profilePhotoUrl, setProfilePhotoUrl] = useState<string>("");
-  const [fullName, setFullName] = useState<string>("");
+  const { session } = usePortalSession();
+  const user = useMemo(() => toSessionUser(session), [session]);
+  const [profilePhotoUrl, setProfilePhotoUrl] = useState("");
+  const [fullName, setFullName] = useState("");
+  const isBeneficiary = user?.role === "B2B_BENEFICIARY";
 
   const fetchProfile = () => {
-    authClient.getProfile().then((profileRes) => {
+    bffClient.auth.getProfile().then((profileRes) => {
       if (profileRes.ok && profileRes.profile) {
         const p = profileRes.profile as Record<string, unknown>;
         if (typeof p.full_name === "string" && p.full_name) setFullName(p.full_name);
-        if (typeof p.profile_photo_url === "string" && p.profile_photo_url)
+        if (typeof p.profile_photo_url === "string" && p.profile_photo_url) {
           setProfilePhotoUrl(p.profile_photo_url);
+        }
       }
-    }).catch(() => { });
+    }).catch(() => {});
   };
 
   useEffect(() => {
-    // Fetch session and profile in parallel for fastest render.
-    Promise.all([
-      authClient.getSession(),
-      authClient.getProfile(),
-    ]).then(([sessionRes, profileRes]) => {
-      const session = sessionRes.session;
-      if (!session) { setUser(null); return; }
-      setUser({
-        userId: session.principal.user.userId,
-        businessId: session.principal.businessId,
-        organisationName: session.principal.organisationName ?? "",
-        name: session.principal.displayName,
-        email: session.principal.user.email,
-        role: session.principal.role,
-      });
-      // Enrich avatar from the profile record.
-      if (profileRes.ok && profileRes.profile) {
-        const p = profileRes.profile as Record<string, unknown>;
-        if (typeof p.full_name === "string" && p.full_name) setFullName(p.full_name);
-        if (typeof p.profile_photo_url === "string" && p.profile_photo_url)
-          setProfilePhotoUrl(p.profile_photo_url);
-      }
-    }).catch(() => setUser(null));
+    setFullName(session?.principal.displayName ?? "");
+    setProfilePhotoUrl("");
+    if (!session) {
+      return;
+    }
 
-    // Listen for profile saves from the Settings → My Profile tab and
-    // re-fetch the profile so the avatar / display name updates instantly.
+    fetchProfile();
     window.addEventListener("profile:updated", fetchProfile);
     return () => window.removeEventListener("profile:updated", fetchProfile);
-  }, []);
+  }, [session]);
 
   async function handleLogout() {
     try {
-      await authClient.logout();
-    } catch (e) {
-      console.warn("Logout request failed:", e);
+      await bffClient.auth.logout();
+    } catch (error) {
+      console.warn("Logout request failed:", error);
     } finally {
       router.replace("/login");
       router.refresh();
@@ -106,14 +106,13 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
         <LuMenu className="size-5" />
       </Button>
 
-      {/* Org name badge — visible for B2B admin users only */}
-      {user?.organisationName && (
-        <div className="hidden md:flex items-center gap-2 ml-4">
-          <span className="rounded-md border border-border bg-muted/40 px-3 py-1 text-xs font-semibold text-foreground tracking-wide">
+      {user?.organisationName ? (
+        <div className="ml-4 hidden items-center gap-2 md:flex">
+          <span className="rounded-md border border-border bg-muted/40 px-3 py-1 text-xs font-semibold tracking-wide text-foreground">
             {user.organisationName}
           </span>
         </div>
-      )}
+      ) : null}
 
       <div className="ml-auto flex items-center gap-2">
         <DropdownMenu>
@@ -134,9 +133,7 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
             <DropdownMenuSeparator />
             <DropdownMenuItem className="cursor-pointer p-4 hover:bg-secondary">
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium text-gray-800">
-                  Payment Due Soon
-                </p>
+                <p className="text-sm font-medium text-gray-800">Payment Due Soon</p>
                 <p className="text-xs text-muted-foreground">
                   Your Health Insurance payment is due on 22-12-2025
                 </p>
@@ -145,9 +142,7 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer p-4 hover:bg-secondary">
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium text-gray-800">
-                  Claim Status Updated
-                </p>
+                <p className="text-sm font-medium text-gray-800">Claim Status Updated</p>
                 <p className="text-xs text-muted-foreground">
                   Your claim #173782011025648 is now under review
                 </p>
@@ -156,9 +151,7 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
             </DropdownMenuItem>
             <DropdownMenuItem className="cursor-pointer p-4 hover:bg-secondary">
               <div className="flex flex-col gap-1">
-                <p className="text-sm font-medium text-gray-800">
-                  New Policy Document
-                </p>
+                <p className="text-sm font-medium text-gray-800">New Policy Document</p>
                 <p className="text-xs text-muted-foreground">
                   Your auto insurance policy document is ready
                 </p>
@@ -174,32 +167,30 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
 
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
-            <Button
-              variant="link"
-              size="icon"
-              className="size-9 rounded-full p-0"
-            >
+            <Button variant="link" size="icon" className="size-9 rounded-full p-0">
               <Avatar className="size-9 cursor-pointer border-2 border-border">
-                {profilePhotoUrl && <AvatarImage src={profilePhotoUrl} alt={fullName || user?.name || "User"} />}
-                <AvatarFallback className="bg-muted-foreground text-primary-foreground text-xs font-semibold">
+                {profilePhotoUrl ? (
+                  <AvatarImage src={profilePhotoUrl} alt={fullName || user?.name || "User"} />
+                ) : null}
+                <AvatarFallback className="bg-muted-foreground text-xs font-semibold text-primary-foreground">
                   {getInitials(fullName || user?.name, user?.email)}
                 </AvatarFallback>
               </Avatar>
             </Button>
           </DropdownMenuTrigger>
           <DropdownMenuContent align="end" className="w-56">
-            <div className="flex items-center gap-2 px-2 py-3">
+            <div className="flex min-w-0 items-center gap-2 px-2 py-3">
               <Avatar className="size-10">
-                {profilePhotoUrl && <AvatarImage src={profilePhotoUrl} alt={fullName || user?.name || "User"} />}
-                <AvatarFallback className="bg-secondary text-primary-foreground text-xs font-semibold">
+                {profilePhotoUrl ? (
+                  <AvatarImage src={profilePhotoUrl} alt={fullName || user?.name || "User"} />
+                ) : null}
+                <AvatarFallback className="bg-secondary text-xs font-semibold text-primary-foreground">
                   {getInitials(fullName || user?.name, user?.email)}
                 </AvatarFallback>
               </Avatar>
-              <div className="flex flex-col min-w-0">
-                <p className="text-sm font-medium truncate">
-                  {fullName || user?.name || "Business User"}
-                </p>
-                <p className="text-xs text-muted-foreground truncate">
+              <div className="flex min-w-0 flex-col">
+                <p className="truncate text-sm font-medium">{fullName || user?.name || "Business User"}</p>
+                <p className="truncate text-xs text-muted-foreground">
                   {user?.email ?? "user@insuretech.local"}
                 </p>
               </div>
@@ -219,13 +210,15 @@ const DashboardHeader = ({ onMenuClick }: DashboardHeaderProps) => {
               <LuShieldCheck className="mr-2 size-4" />
               <span className="text-foreground">Security</span>
             </DropdownMenuItem>
-            <DropdownMenuItem
-              className="cursor-pointer hover:bg-secondary"
-              onClick={() => router.push("/settings")}
-            >
-              <LuSettings className="mr-2 size-4" />
-              <span className="text-foreground">Organisation Settings</span>
-            </DropdownMenuItem>
+            {!isBeneficiary ? (
+              <DropdownMenuItem
+                className="cursor-pointer hover:bg-secondary"
+                onClick={() => router.push("/settings")}
+              >
+                <LuSettings className="mr-2 size-4" />
+                <span className="text-foreground">Organisation Settings</span>
+              </DropdownMenuItem>
+            ) : null}
             <DropdownMenuSeparator />
             <DropdownMenuItem
               className="cursor-pointer text-destructive hover:bg-secondary"

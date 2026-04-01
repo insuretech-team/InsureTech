@@ -256,7 +256,7 @@
         <div class="card">
             <div class="stats-grid">
                 <div class="stat-box">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value">7</div>
                     <div class="stat-label">Total Fields</div>
                 </div>
                 <div class="stat-box">
@@ -264,7 +264,7 @@
                     <div class="stat-label">Required</div>
                 </div>
                 <div class="stat-box">
-                    <div class="stat-value">4</div>
+                    <div class="stat-value">7</div>
                     <div class="stat-label">Optional</div>
                 </div>
             </div>
@@ -316,7 +316,7 @@
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>message</strong>
+                    ⚪ <strong>provider</strong>
                 </td>
                 <td class="field-type">
                     <code>string</code>
@@ -325,21 +325,63 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">e.g. "FLVE_HF"</td>
             </tr>
             
             <tr>
                 <td class="field-name">
-                    ⚪ <strong>error</strong>
+                    ⚪ <strong>provider_reference</strong>
                 </td>
                 <td class="field-type">
-                    <code>reference</code>
-                    <br><small>Error</small>
-                    <a href="schema_error.html" class="ref-link">→ Error</a>
+                    <code>string</code>
+                    
+                    
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">No description</td>
+                <td class="field-description">FLVE session_id (internal)</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>session_state</strong>
+                </td>
+                <td class="field-type">
+                    <code>string</code>
+                    
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">"EKYC_SESSION_ACTIVE"</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>steps</strong>
+                </td>
+                <td class="field-type">
+                    <code>array</code>
+                    <br><small>array of KYCStep</small>
+                    <a href="schema_kycstep.html" class="ref-link">→ KYCStep[]</a>
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">challenge steps</td>
+            </tr>
+            
+            <tr>
+                <td class="field-name">
+                    ⚪ <strong>total_timeout_seconds</strong>
+                </td>
+                <td class="field-type">
+                    <code>integer</code>
+                    <br><small>int32</small>
+                    
+                </td>
+                <td class="field-nullable">YES</td>
+                <td class="field-constraints"><small>—</small></td>
+                <td class="field-description">session timeout</td>
             </tr>
             
                 </tbody>

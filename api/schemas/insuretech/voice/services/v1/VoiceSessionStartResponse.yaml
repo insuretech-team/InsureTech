@@ -5,10 +5,5 @@ VoiceSessionStartResponse:
       type: string
     session_id:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for voice session start operation. Returns operation
     results and status.

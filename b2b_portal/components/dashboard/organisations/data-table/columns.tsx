@@ -9,7 +9,7 @@ import { useState } from "react";
 import { SortHeader } from "@/components/ui/sort-header";
 import { StatusBadge } from "@/components/ui/status-badge";
 import AddOrganisationModal from "@/components/modals/add-organisation-modal";
-import { organisationClient } from "@lib/sdk/organisation-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import type { Organisation } from "@lib/types/b2b";
 
 export type { Organisation };
@@ -35,7 +35,7 @@ function OrgActionsCell({
     if (!confirm(`Delete organisation "${org.name}"?\nThis cannot be undone.`)) return;
     setDeleting(true);
     try {
-      const result = await organisationClient.delete(org.id);
+      const result = await bffClient.organisations.delete(org.id);
       if (!result.ok) { alert(result.message ?? "Delete failed"); return; }
       onRefresh?.();
     } finally {
@@ -47,7 +47,7 @@ function OrgActionsCell({
     if (!confirm(`Approve "${org.name}"?\nThis will activate their account and notify the admin.`)) return;
     setApproving(true);
     try {
-      const result = await organisationClient.approve(org.id);
+      const result = await bffClient.organisations.approve(org.id);
       if (!result.ok) { alert(result.message ?? "Approve failed"); return; }
       onApprove?.(org);
       onRefresh?.();

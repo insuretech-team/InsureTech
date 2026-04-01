@@ -1,0 +1,7 @@
+InsuranceProposalUpdateResponse:
+  type: object
+  properties:
+    proposal:
+      $ref: '#/components/schemas/InsuranceProposal'
+  description: Response payload for insurance proposal update operation. Returns operation
+    results and status.

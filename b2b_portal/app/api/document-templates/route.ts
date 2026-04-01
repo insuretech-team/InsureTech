@@ -12,7 +12,7 @@ import type { CreateDocumentTemplatePayload } from "@lib/sdk/docgen-sdk-client";
 export async function GET(request: Request) {
   try {
     const hdrs = await resolvePortalHeaders(request);
-    const docgen = makeDocgenClient(request, hdrs ?? undefined);
+    const docgen = makeDocgenClient(request, hdrs as unknown as Record<string, string> ?? undefined);
     const url = new URL(request.url);
     const result = await docgen.listTemplates({
       type: url.searchParams.get("type") ?? undefined,
@@ -32,7 +32,7 @@ export async function GET(request: Request) {
 export async function POST(request: Request) {
   try {
     const hdrs = await resolvePortalHeaders(request);
-    const docgen = makeDocgenClient(request, hdrs ?? undefined);
+    const docgen = makeDocgenClient(request, hdrs as unknown as Record<string, string> ?? undefined);
     const body = (await request.json()) as CreateDocumentTemplatePayload;
     const result = await docgen.createTemplate(body);
     return NextResponse.json(result.data, { status: result.status });

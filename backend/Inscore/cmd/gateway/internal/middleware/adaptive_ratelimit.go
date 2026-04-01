@@ -7,6 +7,7 @@ import (
 	"sync/atomic"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	"go.uber.org/zap"
 	"golang.org/x/time/rate"
@@ -108,7 +109,7 @@ func (rl *AdaptiveRateLimiter) Middleware(next http.Handler) http.Handler {
 			w.Header().Set("X-RateLimit-Remaining", "0")
 			w.Header().Set("Retry-After", "1")
 
-			http.Error(w, "Rate limit exceeded", http.StatusTooManyRequests)
+			respond.Error(w, r, http.StatusTooManyRequests, "RATE_LIMITED", "Rate limit exceeded")
 			return
 		}
 

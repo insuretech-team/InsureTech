@@ -51,9 +51,9 @@ service WorkflowService {
   }
   
   // Complete task
-  rpc CompleteTask(CompleteTaskRequest) returns (CompleteTaskResponse) {
+  rpc CompleteTask(CompleteWorkflowTaskRequest) returns (CompleteWorkflowTaskResponse) {
     option (google.api.http) = {
-      post: "/v1/workflow-tasks/{task_id}?action=complete"
+      post: "/v1/workflow-tasks/{task_id}:complete"
       body: "*"
     };
   }
@@ -129,13 +129,13 @@ message GetMyTasksResponse {
   insuretech.common.v1.Error error = 3;
 }
 
-message CompleteTaskRequest {
+message CompleteWorkflowTaskRequest {
   string task_id = 1;
   string decision = 2; // APPROVED, REJECTED, RETURNED
   string comments = 3;
 }
 
-message CompleteTaskResponse {
+message CompleteWorkflowTaskResponse {
   string message = 1;
   // Error information if operation failed
   insuretech.common.v1.Error error = 2;

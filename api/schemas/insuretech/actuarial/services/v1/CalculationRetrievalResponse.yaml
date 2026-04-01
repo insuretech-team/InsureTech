@@ -1,0 +1,9 @@
+CalculationRetrievalResponse:
+  type: object
+  properties:
+    calculation:
+      $ref: '#/components/schemas/ActuarialCalculation'
+    found:
+      type: boolean
+  description: Response payload for calculation retrieval operation. Returns operation
+    results and status.

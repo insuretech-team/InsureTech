@@ -1,0 +1,32 @@
+QuoteComparison:
+  type: object
+  properties:
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    product_name:
+      type: string
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    coverage_count:
+      type: integer
+      format: int32
+    discount_count:
+      type: integer
+      format: int32
+    valid_until:
+      type: string
+      format: date-time
+    status:
+      $ref: '#/components/schemas/QuotingQuoteStatus'
+    coverages:
+      type: array
+      items:
+        $ref: '#/components/schemas/CoverageComparison'
+    discounts:
+      type: array
+      items:
+        $ref: '#/components/schemas/DiscountComparison'
+  description: Domain entity representing quote comparison. Core business object in
+    the system.

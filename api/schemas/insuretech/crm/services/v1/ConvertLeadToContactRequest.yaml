@@ -1,0 +1,9 @@
+ConvertLeadToContactRequest:
+  type: object
+  properties:
+    lead_id:
+      type: string
+    conversion_reason:
+      type: string
+  description: Request payload for convert lead to contact operation. Contains parameters
+    required to execute the operation.

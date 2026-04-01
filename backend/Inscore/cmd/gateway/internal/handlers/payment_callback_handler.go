@@ -9,6 +9,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	paymententityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/entity/v1"
 	paymentservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/payment/services/v1"
@@ -29,11 +30,12 @@ func (h *PaymentCallbackHandler) Webhook(w http.ResponseWriter, r *http.Request)
 	resp, _, err := h.forwardCallback(r, "webhook")
 	if err != nil {
 		logger.Warn("payment webhook processing failed", zap.Error(err))
-		http.Error(w, err.Error(), callbackHTTPStatus(err))
+		httpStatus := callbackHTTPStatus(err)
+		respond.Error(w, r, httpStatus, callbackHTTPStatusToErrorCode(httpStatus), err.Error())
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
+	respond.JSON(w, r, map[string]any{
 		"ok":         resp.GetAccepted(),
 		"payment_id": resp.GetPaymentId(),
 		"status":     resp.GetStatus(),
@@ -60,7 +62,8 @@ func (h *PaymentCallbackHandler) handleBrowserReturn(w http.ResponseWriter, r *h
 	resp, payload, err := h.forwardCallback(r, callbackType)
 	if err != nil {
 		logger.Warn("payment browser callback processing failed", zap.Error(err))
-		http.Error(w, err.Error(), callbackHTTPStatus(err))
+		httpStatus := callbackHTTPStatus(err)
+		respond.Error(w, r, httpStatus, callbackHTTPStatusToErrorCode(httpStatus), err.Error())
 		return
 	}
 
@@ -83,7 +86,7 @@ func (h *PaymentCallbackHandler) handleBrowserReturn(w http.ResponseWriter, r *h
 		return
 	}
 
-	writeJSON(w, http.StatusOK, map[string]any{
+	respond.JSON(w, r, map[string]any{
 		"payment_id":     firstNonEmpty(resp.GetPaymentId(), payload.PaymentID),
 		"status":         statusValue,
 		"transaction_id": firstNonEmpty(payload.TranID, payload.ValID),
@@ -170,6 +173,31 @@ func callbackHTTPStatus(err error) int {
 		return http.StatusBadRequest
 	}
 	return http.StatusBadGateway
+}
+
+func callbackHTTPStatusToErrorCode(status int) string {
+	switch status {
+	case http.StatusBadRequest:
+		return "BAD_REQUEST"
+	case http.StatusUnauthorized:
+		return "UNAUTHORIZED"
+	case http.StatusForbidden:
+		return "FORBIDDEN"
+	case http.StatusNotFound:
+		return "NOT_FOUND"
+	case http.StatusConflict:
+		return "CONFLICT"
+	case http.StatusInternalServerError:
+		return "INTERNAL"
+	case http.StatusBadGateway:
+		return "UNAVAILABLE"
+	case http.StatusServiceUnavailable:
+		return "UNAVAILABLE"
+	case http.StatusGatewayTimeout:
+		return "DEADLINE_EXCEEDED"
+	default:
+		return "UNKNOWN"
+	}
 }
 
 func paymentGatewayField(payment *paymententityv1.Payment, key string) string {

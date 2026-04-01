@@ -1,0 +1,7 @@
+LeadAssignmentResponse:
+  type: object
+  properties:
+    lead:
+      $ref: '#/components/schemas/Lead'
+  description: Response payload for lead assignment operation. Returns operation results
+    and status.

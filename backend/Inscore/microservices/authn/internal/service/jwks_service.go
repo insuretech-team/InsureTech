@@ -5,13 +5,29 @@ import (
 	"crypto/rsa"
 	"encoding/base64"
 	"math/big"
-
-	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 )
+
+// JWK represents a JSON Web Key (RFC 7517).
+// NOTE: GetJWKS RPC was removed from auth_service.proto (API path conflict).
+// JWKS is now served directly by the API gateway. JWKSService remains as an
+// internal helper used by the gateway and integration tests.
+type JWK struct {
+	Kty string `json:"kty"`
+	Use string `json:"use"`
+	Alg string `json:"alg"`
+	Kid string `json:"kid"`
+	N   string `json:"n"`
+	E   string `json:"e"`
+}
+
+// JWKSResult holds the set of public keys returned by GetJWKSInternal.
+type JWKSResult struct {
+	Keys []*JWK
+}
 
 // JWKSService exposes the public RSA key(s) in JWK Set format.
 //
-// NOTE: TokenService already implements GetJWKS directly and AuthService
+// NOTE: TokenService already implements GetJWKSInternal directly and AuthService
 // delegates to it. JWKSService is a standalone helper for callers that need
 // JWKS generation without a full TokenService (e.g. API gateways, integration
 // tests, or CLI tooling that only holds the public key).
@@ -21,7 +37,7 @@ type JWKSService struct {
 }
 
 // NewJWKSService creates a new JWKSService with the given RSA public key and
-// key ID. publicKey may be nil; GetJWKS will return an empty key set in that
+// key ID. publicKey may be nil; GetJWKSInternal will return an empty key set in that
 // case.
 func NewJWKSService(publicKey *rsa.PublicKey, keyID string) *JWKSService {
 	return &JWKSService{
@@ -30,7 +46,7 @@ func NewJWKSService(publicKey *rsa.PublicKey, keyID string) *JWKSService {
 	}
 }
 
-// GetJWKS returns the JWK Set containing the RSA public key in RFC 7517 format.
+// GetJWKSInternal returns the JWK Set containing the RSA public key in RFC 7517 format.
 //
 // JWK structure:
 //
@@ -42,9 +58,9 @@ func NewJWKSService(publicKey *rsa.PublicKey, keyID string) *JWKSService {
 //	  "n":   "<base64url(modulus)>",
 //	  "e":   "<base64url(exponent)>"
 //	}
-func (s *JWKSService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error) {
+func (s *JWKSService) GetJWKSInternal(_ context.Context) (*JWKSResult, error) {
 	if s == nil || s.publicKey == nil {
-		return &authnservicev1.GetJWKSResponse{Keys: []*authnservicev1.JWK{}}, nil
+		return &JWKSResult{Keys: []*JWK{}}, nil
 	}
 
 	// Modulus: base64url-encode the big-endian bytes (no padding).
@@ -55,7 +71,7 @@ func (s *JWKSService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRe
 	eBig := new(big.Int).SetInt64(int64(s.publicKey.E))
 	eEncoded := base64.RawURLEncoding.EncodeToString(eBig.Bytes())
 
-	jwk := &authnservicev1.JWK{
+	jwk := &JWK{
 		Kty: "RSA",
 		Use: "sig",
 		Alg: "RS256",
@@ -64,7 +80,7 @@ func (s *JWKSService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRe
 		E:   eEncoded,
 	}
 
-	return &authnservicev1.GetJWKSResponse{
-		Keys: []*authnservicev1.JWK{jwk},
+	return &JWKSResult{
+		Keys: []*JWK{jwk},
 	}, nil
 }

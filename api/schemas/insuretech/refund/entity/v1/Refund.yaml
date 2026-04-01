@@ -12,7 +12,7 @@ Refund:
       x-unique: true
     policy_id:
       type: string
-      description: '@inject_tag: gorm:"column:policy_id;not null"'
+      description: '@inject_tag: gorm:"column:policy_id"'
     reason:
       $ref: '#/components/schemas/RefundReason'
       description: '@inject_tag: gorm:"column:reason;not null;serializer:proto_enum"'
@@ -58,11 +58,17 @@ Refund:
       allOf:
       - $ref: '#/components/schemas/AuditInfo'
       x-database-default: '{}''::jsonb'
-  description: Refund for policy cancellation (FR-093 to FR-097)
+    order_id:
+      type: string
+      description: '@inject_tag: gorm:"column:order_id"'
+    proposal_id:
+      type: string
+      description: '@inject_tag: gorm:"column:proposal_id"'
+  description: Refund for policy cancellation or paid-order reversal after insurer/proposal
+    rejection.
   required:
   - id
   - refund_number
-  - policy_id
   - reason
   - status
   - requested_by

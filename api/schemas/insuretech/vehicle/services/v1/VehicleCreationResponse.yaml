@@ -1,0 +1,7 @@
+VehicleCreationResponse:
+  type: object
+  properties:
+    vehicle:
+      $ref: '#/components/schemas/Vehicle'
+  description: Response payload for vehicle creation operation. Returns operation
+    results and status.

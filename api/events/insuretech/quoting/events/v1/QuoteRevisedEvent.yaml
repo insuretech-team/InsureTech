@@ -1,0 +1,24 @@
+QuoteRevisedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    parent_quote_id:
+      type: string
+    revision_number:
+      type: integer
+      format: int32
+    revision_reason:
+      type: string
+    previous_premium:
+      $ref: '#/components/schemas/Money'
+    new_premium:
+      $ref: '#/components/schemas/Money'
+    revised_at:
+      type: string
+      format: date-time
+  description: QuoteRevisedEvent is emitted when a quote is revised

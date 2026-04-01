@@ -1,3 +1,7 @@
+# NOTE: .env.prod MUST have LF (Unix) line endings before deployment.
+#   If edited on Windows, run:  .\n4l.ps1          (normalizes *.sh + .env* to LF)
+#   quickerdeploy.sh sources .env.prod directly; CRLF causes $'\r' bash errors.
+
 services:
   redis:
     image: redis:7-alpine
@@ -29,7 +33,7 @@ services:
       KAFKA_PROCESS_ROLES: broker,controller
       KAFKA_CONTROLLER_LISTENER_NAMES: CONTROLLER
       KAFKA_LISTENERS: INTERNAL://0.0.0.0:9092,CONTROLLER://0.0.0.0:9093,EXTERNAL://0.0.0.0:29092
-      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://localhost:9092
+      KAFKA_ADVERTISED_LISTENERS: INTERNAL://kafka:9092,EXTERNAL://127.0.0.1:29092
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: CONTROLLER:PLAINTEXT,INTERNAL:PLAINTEXT,EXTERNAL:PLAINTEXT
       KAFKA_INTER_BROKER_LISTENER_NAME: INTERNAL
       KAFKA_CONTROLLER_QUORUM_VOTERS: 1@kafka:9093
@@ -106,6 +110,14 @@ services:
     profiles: ["authn", "full"]
     env_file:
       - .env
+    environment:
+      # Override localhost addresses from .env to Docker service names
+      KYC_SERVICE_ADDRESS: "kyc:50090"
+      # Force Kafka to use internal Docker network name only — prevents sarama
+      # from adding host.docker.internal which resolves to [::1] inside containers
+      KAFKA_BROKERS: "kafka:9092"
+      # Fix legacy typo: .env has B2B_ADMIN_PASSWARD (missing 'O')
+      B2B_ADMIN_PASSWORD: "${B2B_ADMIN_PASSWARD}"
     depends_on:
       redis:
         condition: service_healthy
@@ -134,7 +146,14 @@ services:
       - .env
     environment:
       KAFKA_BROKERS: "kafka:9092"
-    # gRPC ports ΓÇö localhost only, gateway reaches authz via Docker network (authz:50070)
+      # Clear empty stubs from .env so authz falls through to the file-path resolver
+      JWT_PUBLIC_KEY_PEM: ""
+      AUTHZ_JWT_PUBLIC_KEY_PEM: ""
+      # Authz reads the RSA public key from this mounted file to validate JWTs issued by authn
+      JWT_PUBLIC_KEY_PATH: "/app/secrets/jwt_rsa_public.pem"
+    volumes:
+      - ./backend/inscore/secrets:/app/secrets:ro
+    # gRPC ports — localhost only, gateway reaches authz via Docker network (authz:50070)
     ports:
       - "127.0.0.1:50070:50070"
       - "127.0.0.1:50071:50071"
@@ -178,32 +197,52 @@ services:
 #      - "50081:50081"
 #    restart: unless-stopped
 #
-#  kyc:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/kyc/Dockerfile
-#    container_name: insuretech-kyc
-#    profiles: ["kyc", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50090:50090"
-#      - "50091:50091"
-#    restart: unless-stopped
-#
-#  partner:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/partner/Dockerfile
-#    container_name: insuretech-partner
-#    profiles: ["partner", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50100:50100"
-#      - "50101:50101"
-#    restart: unless-stopped
-#
+  kyc:
+    image: insuretech-kyc
+    build:
+      context: .
+      dockerfile: backend/infra/docker/kyc/Dockerfile
+    container_name: insuretech-kyc
+    profiles: ["kyc", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    # gRPC port — localhost only; gateway reaches kyc via Docker network (kyc:50090)
+    ports:
+      - "127.0.0.1:50090:50090"
+      - "127.0.0.1:50091:50091"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --tries=1 --timeout=3 http://localhost:50091/healthz >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
+
+
+  partner:
+    image: insuretech-partner
+    build:
+      context: .
+      dockerfile: backend/infra/docker/partner/Dockerfile
+    container_name: insuretech-partner
+    profiles: ["partner", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50100:50100"
+      - "127.0.0.1:50101:50101"
+    restart: unless-stopped
+
 #  beneficiary:
 #    build:
 #      context: .
@@ -226,64 +265,98 @@ services:
     profiles: ["b2b", "full"]
     env_file:
       - .env
-    # gRPC ports ΓÇö localhost only, gateway reaches b2b via Docker network (b2b:50112)
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    # gRPC ports — localhost only, gateway reaches b2b via Docker network (b2b:50112)
     ports:
       - "127.0.0.1:50112:50112"
       - "127.0.0.1:50113:50113"
     restart: unless-stopped
 
-#  workflow:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/workflow/Dockerfile
-#    container_name: insuretech-workflow
-#    profiles: ["workflow", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50180:50180"
-#      - "50181:50181"
-#    restart: unless-stopped
-#
-#  payment:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/payment/Dockerfile
-#    container_name: insuretech-payment
-#    profiles: ["payment", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50190:50190"
-#      - "50191:50191"
-#    restart: unless-stopped
-#
-#  fraud:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/fraud/Dockerfile
-#    container_name: insuretech-fraud
-#    profiles: ["fraud", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50220:50220"
-#      - "50221:50221"
-#    restart: unless-stopped
-#
-#  notification:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/notification/Dockerfile
-#    container_name: insuretech-notification
-#    profiles: ["notification", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50230:50230"
-#      - "50231:50231"
-#    restart: unless-stopped
-#
+  workflow:
+    image: insuretech-workflow
+    build:
+      context: .
+      dockerfile: backend/infra/docker/workflow/Dockerfile
+    container_name: insuretech-workflow
+    profiles: ["workflow", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50180:50180"
+      - "127.0.0.1:50181:50181"
+    restart: unless-stopped
+
+  payment:
+    image: insuretech-payment
+    build:
+      context: .
+      dockerfile: backend/infra/docker/payment/Dockerfile
+    container_name: insuretech-payment
+    profiles: ["payment", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50190:50190"
+      - "127.0.0.1:50191:50191"
+    restart: unless-stopped
+
+  fraud:
+    image: insuretech-fraud
+    build:
+      context: .
+      dockerfile: backend/infra/docker/fraud/Dockerfile
+    container_name: insuretech-fraud
+    profiles: ["fraud", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50220:50220"
+      - "127.0.0.1:50221:50221"
+    restart: unless-stopped
+
+  notification:
+    image: insuretech-notification
+    build:
+      context: .
+      dockerfile: backend/infra/docker/notification/Dockerfile
+    container_name: insuretech-notification
+    profiles: ["notification", "full"]
+    env_file:
+      - .env
+    environment:
+      NOTIFICATION_SERVICE_DISCOVERY_HOST: ""
+      SERVICE_DISCOVERY_HOST: ""
+      ENVIRONMENT: "production"
+      KAFKA_BROKERS: "kafka:9092"
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50230:50230"
+      - "127.0.0.1:50231:50231"
+    restart: unless-stopped
+
 #  support:
 #    build:
 #      context: .
@@ -310,19 +383,25 @@ services:
 #      - "50251:50251"
 #    restart: unless-stopped
 #
-#  media:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/media/Dockerfile
-#    container_name: insuretech-media
-#    profiles: ["media", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50260:50260"
-#      - "50261:50261"
-#    restart: unless-stopped
-#
+  media:
+    image: insuretech-media
+    build:
+      context: .
+      dockerfile: backend/infra/docker/media/Dockerfile
+    container_name: insuretech-media
+    profiles: ["media", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50260:50260"
+      - "127.0.0.1:50261:50261"
+    restart: unless-stopped
+
 #  ocr:
 #    build:
 #      context: .
@@ -335,19 +414,197 @@ services:
 #      - "50270:50270"
 #      - "50271:50271"
 #    restart: unless-stopped
-#
-#  docgen:
-#    build:
-#      context: .
-#      dockerfile: backend/infra/docker/docgen/Dockerfile
-#    container_name: insuretech-docgen
-#    profiles: ["docgen", "full"]
-#    env_file:
-#      - .env
-#    ports:
-#      - "50280:50280"
-#      - "50281:50281"
-#    restart: unless-stopped
+
+  # ── insurance ─────────────────────────────────────────────────────────────
+  # Go service: Insurance schema CRUD (products, policies, claims, etc.)
+  insurance:
+    image: insuretech-insurance
+    build:
+      context: .
+      dockerfile: backend/infra/docker/insurance/Dockerfile
+    container_name: insuretech-insurance
+    profiles: ["insurance", "full"]
+    env_file:
+      - .env
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50115:50115"
+      - "127.0.0.1:50116:50116"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 50115 >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── orders ─────────────────────────────────────────────────────────────────
+  # Go service: Order lifecycle sync layer (sync_order — port 50142/50143)
+  orders:
+    image: insuretech-orders
+    build:
+      context: .
+      dockerfile: backend/infra/docker/orders/Dockerfile
+    container_name: insuretech-orders
+    profiles: ["orders", "full"]
+    env_file:
+      - .env
+    environment:
+      PAYMENT_SERVICE_URL: "payment:50190"
+      ENVIRONMENT: "production"
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+    ports:
+      - "127.0.0.1:50142:50142"
+      - "127.0.0.1:50143:50143"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 50142 >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── polisync ───────────────────────────────────────────────────────────────
+  # C# .NET 8 service: Products, Quotes, Orders, Policy, Commission, Claims, Underwriting
+  polisync:
+    image: insuretech-polisync
+    build:
+      context: .
+      dockerfile: backend/polisync/Dockerfile
+    container_name: insuretech-polisync
+    profiles: ["polisync", "full"]
+    env_file:
+      - .env
+    environment:
+      ASPNETCORE_ENVIRONMENT: Production
+      ASPNETCORE_HTTP_PORTS: ""
+      # pgBouncer (DO managed DB pooler) — no SearchPath in connection string
+      # No Reset On Close=true required for transaction pooling mode
+      ConnectionStrings__InsuranceDb: "Host=${PGHOST};Port=${PGPORT};Database=${PGDATABASE};Username=${PGUSER};Password=${PGPASSWORD};SslMode=Require;Trust Server Certificate=true;No Reset On Close=true"
+      ConnectionStrings__CommissionDb: "Host=${PGHOST};Port=${PGPORT};Database=${PGDATABASE};Username=${PGUSER};Password=${PGPASSWORD};SslMode=Require;Trust Server Certificate=true;No Reset On Close=true"
+      ConnectionStrings__Redis: "redis:6379"
+      Kafka__BootstrapServers: "kafka:9092"
+      InsuranceService__Url: "http://insurance:50115"
+      GrpcClients__AuthnService: "http://authn:50060"
+      GrpcClients__AuthzService: "http://authz:50070"
+      GrpcClients__PartnerService: "http://partner:50100"
+      GrpcClients__OrdersService: "http://orders:50142"
+      GrpcClients__FraudService: "http://fraud:50220"
+      GrpcClients__PaymentService: "http://payment:50190"
+      GrpcClients__NotificationService: "http://notification:50230"
+      GrpcClients__KycService: "http://kyc:50090"
+      GrpcClients__StorageService: "http://storage:50290"
+      GrpcClients__DocgenService: "http://docgen:50280"
+      GrpcClients__WorkflowService: "http://workflow:50180"
+      GrpcClients__AuditService: "http://authn:50060"
+      Jwt__PublicKeyPath: "/app/secrets/jwt_rsa_public.pem"
+      Jwt__Audience: "insuretech-api"
+      Pii__EncryptionKey: "${PII_AES_KEY}"
+    volumes:
+      - ./backend/inscore/secrets:/app/secrets:ro
+    depends_on:
+      redis:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      orders:
+        condition: service_healthy
+      insurance:
+        condition: service_started
+      workflow:
+        condition: service_started
+        required: false
+    ports:
+      - "127.0.0.1:50120:50120"
+      - "127.0.0.1:50121:50121"
+      - "127.0.0.1:50130:50130"
+      - "127.0.0.1:50131:50131"
+      - "127.0.0.1:50150:50150"
+      - "127.0.0.1:50151:50151"
+      - "127.0.0.1:50160:50160"
+      - "127.0.0.1:50161:50161"
+      - "127.0.0.1:50170:50170"
+      - "127.0.0.1:50171:50171"
+      - "127.0.0.1:50210:50210"
+      - "127.0.0.1:50211:50211"
+    healthcheck:
+      test: ["CMD-SHELL", "bash -lc \"exec 3<>/dev/tcp/127.0.0.1/50121 && printf 'GET /health HTTP/1.1\\r\\nHost: localhost\\r\\nConnection: close\\r\\n\\r\\n' >&3 && grep -q '200' <&3\""]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 60s
+    restart: unless-stopped
+
+  # ── gotenberg ─────────────────────────────────────────────────────────────
+  gotenberg:
+    image: gotenberg/gotenberg:8
+    container_name: insuretech-gotenberg
+    profiles: ["docgen", "full"]
+    ports:
+      - "127.0.0.1:50330:3000"
+    restart: unless-stopped
+
+  # ── docrender ─────────────────────────────────────────────────────────────
+  docrender:
+    build:
+      context: ./backend/inscore/microservices/docgen/sidecar
+      dockerfile: Dockerfile
+    image: insuretech-docrender
+    container_name: insuretech-docrender
+    profiles: ["docgen", "full"]
+    environment:
+      WEB_CONCURRENCY: "2"
+    ports:
+      - "127.0.0.1:8500:8500"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- --tries=1 --timeout=3 http://localhost:8500/health >/dev/null 2>&1 || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 10
+      start_period: 20s
+    restart: unless-stopped
+
+  # ── docgen ────────────────────────────────────────────────────────────────
+  docgen:
+    image: insuretech-docgen
+    build:
+      context: .
+      dockerfile: backend/infra/docker/docgen/Dockerfile
+    container_name: insuretech-docgen
+    profiles: ["docgen", "full"]
+    env_file:
+      - .env
+    environment:
+      GOTENBERG_URL: "http://gotenberg:3000"
+      DOC_RENDERER_URL: "http://docrender:8500"
+      DOC_RENDERER_TIMEOUT: "60s"
+    depends_on:
+      gotenberg:
+        condition: service_started
+      docrender:
+        condition: service_healthy
+      kafka:
+        condition: service_healthy
+      storage:
+        condition: service_started
+    ports:
+      - "127.0.0.1:50280:50280"
+      - "127.0.0.1:50281:50281"
+    healthcheck:
+      test: ["CMD-SHELL", "nc -z 127.0.0.1 50280 >/dev/null 2>&1 || exit 1"]
+      interval: 10s
+      timeout: 5s
+      retries: 15
+      start_period: 20s
+    restart: unless-stopped
 
   storage:
     image: insuretech-storage
@@ -414,17 +671,41 @@ services:
         # Overridden at build time via: docker compose build --build-arg NEXT_PUBLIC_INSURETECH_API_BASE_URL=...
         # Or set B2B_PORTAL_API_BASE_URL in your .env file.
         NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${B2B_PORTAL_API_BASE_URL:-http://localhost:8080}
+        # FLVE HuggingFace Space token — baked into JS bundle for browser-side eKYC calls.
+        NEXT_PUBLIC_FLVE_API_TOKEN: ${NEXT_PUBLIC_FLVE_API_TOKEN:-${FLVE_API_TOKEN:-}}
     container_name: insuretech-b2b-portal
     profiles: ["frontend", "full"]
     env_file:
       - .env
     environment:
-      # Runtime server-side URL (read by Node.js at request time ΓÇö can differ from public URL).
+      # Runtime server-side URL (read by Node.js at request time — can differ from public URL).
       # e.g. inside Docker network, gateway is reachable as http://gateway:8080 not localhost.
       INSURETECH_API_BASE_URL: ${B2B_PORTAL_INTERNAL_API_BASE_URL:-http://gateway:8080}
       NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${B2B_PORTAL_API_BASE_URL:-http://localhost:8080}
+      INSURETECH_GATEWAY_URL: ${B2B_PORTAL_INTERNAL_API_BASE_URL:-http://gateway:8080}
     ports:
       - "3000:8081"
+    depends_on:
+      - gateway
+    restart: unless-stopped
+
+  insurer_portal:
+    image: insuretech-insurer_portal
+    build:
+      context: .
+      dockerfile: backend/infra/docker/insurer_portal/Dockerfile
+      args:
+        NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${INSURER_PORTAL_API_BASE_URL:-http://localhost:8080}
+    container_name: insuretech-insurer-portal
+    profiles: ["frontend", "full"]
+    env_file:
+      - .env
+    environment:
+      INSURETECH_API_BASE_URL: ${INSURER_PORTAL_INTERNAL_API_BASE_URL:-http://gateway:8080}
+      NEXT_PUBLIC_INSURETECH_API_BASE_URL: ${INSURER_PORTAL_API_BASE_URL:-http://localhost:8080}
+      PORT: 8081
+    ports:
+      - "127.0.0.1:3002:8081"
     depends_on:
       - gateway
     restart: unless-stopped

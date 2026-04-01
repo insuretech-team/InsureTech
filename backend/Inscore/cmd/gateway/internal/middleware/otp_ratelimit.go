@@ -11,6 +11,7 @@ import (
 	"sync"
 	"time"
 
+	"github.com/newage-saint/insuretech/backend/inscore/cmd/gateway/internal/respond"
 	"github.com/redis/go-redis/v9"
 )
 
@@ -68,14 +69,17 @@ func OTPRateLimit(maxRequests int, window time.Duration) func(http.Handler) http
 
 			rdb := getOTPRedisClient()
 			if rdb != nil {
-				// Redis path: INCR + EXPIRE (set TTL only on first increment).
+				// Redis path: INCR then EXPIRE only on first request in window.
+				// Using pipe.Expire unconditionally would reset the TTL on every
+				// request, making the fixed window effectively useless.
 				ctx := context.Background()
-				pipe := rdb.Pipeline()
-				incrCmd := pipe.Incr(ctx, key)
-				pipe.Expire(ctx, key, window)
-				_, err := pipe.Exec(ctx)
+				newCount, err := rdb.Incr(ctx, key).Result()
 				if err == nil {
-					count = int(incrCmd.Val())
+					if newCount == 1 {
+						// First request in this window — set the TTL.
+						rdb.Expire(ctx, key, window)
+					}
+					count = int(newCount)
 					ttl, _ := rdb.TTL(ctx, key).Result()
 					retryAfterSec = int(math.Ceil(ttl.Seconds()))
 					if retryAfterSec < 0 {
@@ -159,7 +163,7 @@ func IPWindowRateLimit(maxRequests int, window time.Duration) func(http.Handler)
 					retryAfter = 1
 				}
 				w.Header().Set("Retry-After", strconv.Itoa(retryAfter))
-				http.Error(w, "Rate limit exceeded. Please try again later.", http.StatusTooManyRequests)
+				respond.Error(w, r, http.StatusTooManyRequests, "RATE_LIMITED", "Rate limit exceeded. Please try again later.")
 				return
 			}
 

@@ -3,6 +3,7 @@
 Endpoint Page Generator
 Generates individual static HTML pages for EACH API endpoint
 """
+from write_guard import write_if_changed
 
 import yaml
 import json
@@ -177,10 +178,23 @@ class EndpointPageGenerator:
             response_desc = response.get('description', '')
             content = response.get('content', {})
             schema_html = ''
+            example_html = ''
             
             if 'application/json' in content:
-                schema = content['application/json'].get('schema', {})
+                json_content = content['application/json']
+                schema = json_content.get('schema', {})
                 schema_html = f'<div class="response-body">{self.render_schema(schema)}</div>'
+                
+                # Render the per-status-code example if present
+                example = json_content.get('example')
+                if example:
+                    import json as _json
+                    example_html = (
+                        '<div class="response-example">'
+                        '<div class="example-label">Example</div>'
+                        f'<pre class="json-block">{_json.dumps(example, indent=2)}</pre>'
+                        '</div>'
+                    )
             
             status_class = 'success' if status_code.startswith('2') else 'error' if status_code.startswith(('4', '5')) else 'info'
             
@@ -191,6 +205,7 @@ class EndpointPageGenerator:
                     <span class="response-desc">{response_desc}</span>
                 </div>
                 {schema_html}
+                {example_html}
             </div>
             '''
         responses_html += '</div>'
@@ -365,6 +380,17 @@ class EndpointPageGenerator:
             color: #666;
         }}
         
+        .response-example {{
+            margin-top: 10px;
+        }}
+        
+        .example-label {{
+            font-size: 0.85em;
+            font-weight: 600;
+            color: #888;
+            margin-bottom: 4px;
+        }}
+        
         .response-schema {{
             margin-top: 10px;
             color: #666;
@@ -523,8 +549,7 @@ class EndpointPageGenerator:
         
         # Write to file
         output_path = os.path.join(output_dir, f'endpoint_{endpoint_id}.html')
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         return endpoint_id
     

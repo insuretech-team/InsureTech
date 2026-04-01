@@ -7,10 +7,10 @@ import (
 	"errors"
 	"io"
 	"net/http"
-	"strings"
 	"time"
 
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/config"
 )
@@ -88,7 +88,7 @@ func (c *SSLWirelessClient) SendSMS(ctx context.Context, req *SendSMSRequest) (*
 	}
 
 	// Build API request
-	apiURL := c.config.SMS.APIBase + "/send"
+	apiURL := c.config.SMS.APIBase + "/api/v3/send-sms"
 
 	payload := map[string]interface{}{
 		"api_token": c.config.SMS.APIKey,
@@ -128,30 +128,54 @@ func (c *SSLWirelessClient) SendSMS(ctx context.Context, req *SendSMSRequest) (*
 		return nil, errors.New("failed to read response body")
 	}
 
-	// Parse response
+	// Parse response — SSL Wireless v3 API format:
+	// {"status":"SUCCESS","status_code":200,"error_message":"","smsinfo":[{"sms_status":"SUCCESS","reference_id":"..."}]}
 	var apiResp struct {
-		Status    string `json:"status"`
-		MessageID string `json:"message_id"`
-		ErrorCode string `json:"error_code"`
-		ErrorMsg  string `json:"error_msg"`
+		Status       string `json:"status"`
+		StatusCode   int    `json:"status_code"`
+		ErrorMessage string `json:"error_message"`
+		SMSInfo      []struct {
+			SMSStatus     string `json:"sms_status"`
+			StatusMessage string `json:"status_message"`
+			MSISDN        string `json:"msisdn"`
+			CSMSId        string `json:"csms_id"`
+			ReferenceID   string `json:"reference_id"`
+		} `json:"smsinfo"`
 	}
 
 	if err := json.Unmarshal(body, &apiResp); err != nil {
-		logger.Errorf("failed to parse response: %v", err)
+		logger.Errorf("failed to parse SSL Wireless response: %v | body: %s", err, string(body))
 		return nil, errors.New("failed to parse response")
 	}
 
-	// Check for errors
-	if apiResp.Status != "success" && apiResp.Status != "SUCCESS" {
+	// Check for errors — API returns STATUS in uppercase
+	if apiResp.Status != "SUCCESS" {
+		logger.Errorf("SSL Wireless send failed: status=%s error=%s body=%s", apiResp.Status, apiResp.ErrorMessage, string(body))
 		return &SendSMSResponse{
 			Status:    "FAILED",
-			ErrorCode: apiResp.ErrorCode,
-			ErrorMsg:  apiResp.ErrorMsg,
-		}, errors.New("SMS send failed: " + apiResp.ErrorCode + " - " + apiResp.ErrorMsg)
+			ErrorCode: apiResp.ErrorMessage,
+			ErrorMsg:  apiResp.ErrorMessage,
+		}, errors.New("SMS send failed: " + apiResp.ErrorMessage)
 	}
 
+	// Also check individual SMS status
+	if len(apiResp.SMSInfo) == 0 || apiResp.SMSInfo[0].SMSStatus != "SUCCESS" {
+		errMsg := "unknown error"
+		if len(apiResp.SMSInfo) > 0 {
+			errMsg = apiResp.SMSInfo[0].StatusMessage
+		}
+		logger.Errorf("SSL Wireless SMS status failed: %s", errMsg)
+		return &SendSMSResponse{
+			Status:   "FAILED",
+			ErrorMsg: errMsg,
+		}, errors.New("SMS send failed: " + errMsg)
+	}
+
+	refID := apiResp.SMSInfo[0].ReferenceID
+	logger.Infof("SSL Wireless SMS sent: reference_id=%s msisdn=%s", refID, msisdn)
+
 	return &SendSMSResponse{
-		MessageID: apiResp.MessageID,
+		MessageID: refID,
 		Status:    "PENDING",
 	}, nil
 }
@@ -171,28 +195,11 @@ func (c *SSLWirelessClient) ParseDLRWebhook(payload []byte) (*DLRWebhookPayload,
 // NormalizeMSISDN normalizes phone numbers to 8801XXXXXXXXX format
 // Accepts: +8801XXXXXXXXX, 8801XXXXXXXXX, 01XXXXXXXXX
 func NormalizeMSISDN(phone string) string {
-	// Remove spaces and dashes
-	phone = strings.ReplaceAll(phone, " ", "")
-	phone = strings.ReplaceAll(phone, "-", "")
-
-	// Remove leading +
-	phone = strings.TrimPrefix(phone, "+")
-
-	// If starts with 880, ensure format is 8801XXXXXXXXX
-	if strings.HasPrefix(phone, "880") {
-		if len(phone) == 13 && strings.HasPrefix(phone, "8801") {
-			return phone
-		}
-		return "" // Invalid
+	normalized, err := mobile.NormalizeBangladeshMobileDigits(phone)
+	if err != nil {
+		return ""
 	}
-
-	// If starts with 01, prepend 880
-	if strings.HasPrefix(phone, "01") && len(phone) == 11 {
-		return "88" + phone
-	}
-
-	// Invalid format
-	return ""
+	return normalized
 }
 
 // detectCarrier detects mobile carrier from MSISDN prefix

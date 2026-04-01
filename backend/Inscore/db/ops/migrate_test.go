@@ -73,7 +73,7 @@ func TestSQLLinter(t *testing.T) {
 	// Create temp migration files with forbidden DDL and verify linter catches them.
 
 	// Placeholder for now - the linter logic is already tested implicitly via
-	// the dbmanager command execution.
+	// the dbx command execution.
 }
 
 // Placeholder vars to satisfy imports (remove in real implementation)

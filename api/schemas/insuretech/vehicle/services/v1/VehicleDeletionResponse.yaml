@@ -1,0 +1,7 @@
+VehicleDeletionResponse:
+  type: object
+  properties:
+    success:
+      type: boolean
+  description: Response payload for vehicle deletion operation. Returns operation
+    results and status.

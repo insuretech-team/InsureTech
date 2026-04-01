@@ -6,12 +6,12 @@ import (
 
 // AIAnalysis represents a ai_analysis
 type AIAnalysis struct {
-	Result string `json:"result,omitempty"`
-	Recommendations []string `json:"recommendations,omitempty"`
-	AnalyzedAt time.Time `json:"analyzed_at,omitempty"`
-	AnalysisId string `json:"analysis_id,omitempty"`
 	AgentId string `json:"agent_id,omitempty"`
-	Type *AnalysisType `json:"type,omitempty"`
-	SubjectId string `json:"subject_id,omitempty"`
+	AnalysisId string `json:"analysis_id,omitempty"`
+	AnalyzedAt time.Time `json:"analyzed_at,omitempty"`
 	ConfidenceScore float64 `json:"confidence_score,omitempty"`
+	Recommendations []string `json:"recommendations,omitempty"`
+	Result string `json:"result,omitempty"`
+	SubjectId string `json:"subject_id,omitempty"`
+	Type *AnalysisType `json:"type,omitempty"`
 }

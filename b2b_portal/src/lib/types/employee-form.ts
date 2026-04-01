@@ -43,7 +43,9 @@ export interface EmployeeFormErrors {
   name?: string;
   employeeId?: string;
   businessId?: string;
+  email?: string;
   departmentId?: string;
   dateOfJoining?: string;
+  mobileNumber?: string;
   [key: string]: string | undefined;
 }

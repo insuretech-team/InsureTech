@@ -1,0 +1,21 @@
+LeadCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    lead_id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    email_address:
+      type: string
+    lead_source:
+      $ref: '#/components/schemas/LeadSource'
+    assigned_agent_id:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+  description: LeadCreatedEvent is emitted when a new lead is created

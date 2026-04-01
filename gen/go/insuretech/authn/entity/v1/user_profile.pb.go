@@ -29,35 +29,35 @@ type UserProfile struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	UserId                   string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty"`       // @inject_tag: gorm:"primaryKey;column:user_id;not null"
-	FullName                 string                 `protobuf:"bytes,2,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty"` // @inject_tag: gorm:"column:full_name;not null"
-	DateOfBirth              *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"`
-	Gender                   Gender                 `protobuf:"varint,4,opt,name=gender,proto3,enum=insuretech.authn.entity.v1.Gender" json:"gender,omitempty"` // @inject_tag: gorm:"column:gender;not null;serializer:proto_enum"
-	Occupation               string                 `protobuf:"bytes,5,opt,name=occupation,proto3" json:"occupation,omitempty"`                                 // @inject_tag: gorm:"column:occupation"
-	AddressLine1             string                 `protobuf:"bytes,6,opt,name=address_line1,json=addressLine1,proto3" json:"address_line1,omitempty"`         // @inject_tag: gorm:"column:address_line1;not null"
-	AddressLine2             string                 `protobuf:"bytes,7,opt,name=address_line2,json=addressLine2,proto3" json:"address_line2,omitempty"`         // @inject_tag: gorm:"column:address_line2"
-	City                     string                 `protobuf:"bytes,8,opt,name=city,proto3" json:"city,omitempty"`                                             // @inject_tag: gorm:"column:city;not null"
-	District                 string                 `protobuf:"bytes,9,opt,name=district,proto3" json:"district,omitempty"`                                     // @inject_tag: gorm:"column:district;not null"
-	Division                 string                 `protobuf:"bytes,10,opt,name=division,proto3" json:"division,omitempty"`                                    // @inject_tag: gorm:"column:division;not null"
-	PostalCode               string                 `protobuf:"bytes,11,opt,name=postal_code,json=postalCode,proto3" json:"postal_code,omitempty"`              // @inject_tag: gorm:"column:postal_code"
-	Country                  string                 `protobuf:"bytes,12,opt,name=country,proto3" json:"country,omitempty"`                                      // @inject_tag: gorm:"column:country;not null"
-	NidNumber                string                 `protobuf:"bytes,13,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`
-	ProfilePhotoUrl          string                 `protobuf:"bytes,14,opt,name=profile_photo_url,json=profilePhotoUrl,proto3" json:"profile_photo_url,omitempty"`                             // @inject_tag: gorm:"column:profile_photo_url"
-	KycVerified              bool                   `protobuf:"varint,15,opt,name=kyc_verified,json=kycVerified,proto3" json:"kyc_verified,omitempty"`                                          // @inject_tag: gorm:"column:kyc_verified;not null"
-	KycVerifiedAt            *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=kyc_verified_at,json=kycVerifiedAt,proto3" json:"kyc_verified_at,omitempty"`                                   // @inject_tag: gorm:"column:kyc_verified_at;serializer:proto_timestamp"
-	CreatedAt                *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty"`                                                 // @inject_tag: gorm:"column:created_at;not null;serializer:proto_timestamp"
-	UpdatedAt                *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty"`                                                 // @inject_tag: gorm:"column:updated_at;not null;serializer:proto_timestamp"
-	MaritalStatus            string                 `protobuf:"bytes,19,opt,name=marital_status,json=maritalStatus,proto3" json:"marital_status,omitempty"`                                     // @inject_tag: gorm:"column:marital_status"
-	Employer                 string                 `protobuf:"bytes,20,opt,name=employer,proto3" json:"employer,omitempty"`                                                                    // @inject_tag: gorm:"column:employer"
-	PermanentAddress         string                 `protobuf:"bytes,21,opt,name=permanent_address,json=permanentAddress,proto3" json:"permanent_address,omitempty"`                            // @inject_tag: gorm:"column:permanent_address"
-	EmergencyContactName     string                 `protobuf:"bytes,22,opt,name=emergency_contact_name,json=emergencyContactName,proto3" json:"emergency_contact_name,omitempty"`              // @inject_tag: gorm:"column:emergency_contact_name"
-	EmergencyContactNumber   string                 `protobuf:"bytes,23,opt,name=emergency_contact_number,json=emergencyContactNumber,proto3" json:"emergency_contact_number,omitempty"`        // @inject_tag: gorm:"column:emergency_contact_number"
-	IdType                   string                 `protobuf:"bytes,24,opt,name=id_type,json=idType,proto3" json:"id_type,omitempty"`                                                          // @inject_tag: gorm:"column:id_type"
-	IdUploadFrontUrl         string                 `protobuf:"bytes,25,opt,name=id_upload_front_url,json=idUploadFrontUrl,proto3" json:"id_upload_front_url,omitempty"`                        // @inject_tag: gorm:"column:id_upload_front_url"
-	IdUploadBackUrl          string                 `protobuf:"bytes,26,opt,name=id_upload_back_url,json=idUploadBackUrl,proto3" json:"id_upload_back_url,omitempty"`                           // @inject_tag: gorm:"column:id_upload_back_url"
-	PhotographSelfieUrl      string                 `protobuf:"bytes,27,opt,name=photograph_selfie_url,json=photographSelfieUrl,proto3" json:"photograph_selfie_url,omitempty"`                 // @inject_tag: gorm:"column:photograph_selfie_url"
-	ProofOfAddressUrl        string                 `protobuf:"bytes,28,opt,name=proof_of_address_url,json=proofOfAddressUrl,proto3" json:"proof_of_address_url,omitempty"`                     // @inject_tag: gorm:"column:proof_of_address_url"
-	ConsentPrivacyAcceptance bool                   `protobuf:"varint,29,opt,name=consent_privacy_acceptance,json=consentPrivacyAcceptance,proto3" json:"consent_privacy_acceptance,omitempty"` // @inject_tag: gorm:"column:consent_privacy_acceptance;not null"
+	UserId                   string                 `protobuf:"bytes,1,opt,name=user_id,json=userId,proto3" json:"user_id,omitempty" gorm:"primaryKey;column:user_id;not null"`
+	FullName                 string                 `protobuf:"bytes,2,opt,name=full_name,json=fullName,proto3" json:"full_name,omitempty" gorm:"column:full_name;not null"`
+	DateOfBirth              *timestamppb.Timestamp `protobuf:"bytes,3,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty" gorm:"column:date_of_birth;serializer:proto_timestamp"`
+	Gender                   Gender                 `protobuf:"varint,4,opt,name=gender,proto3,enum=insuretech.authn.entity.v1.Gender" json:"gender,omitempty" gorm:"column:gender;not null;serializer:proto_enum"`
+	Occupation               string                 `protobuf:"bytes,5,opt,name=occupation,proto3" json:"occupation,omitempty" gorm:"column:occupation"`
+	AddressLine1             string                 `protobuf:"bytes,6,opt,name=address_line1,json=addressLine1,proto3" json:"address_line1,omitempty" gorm:"column:address_line1;not null"`
+	AddressLine2             string                 `protobuf:"bytes,7,opt,name=address_line2,json=addressLine2,proto3" json:"address_line2,omitempty" gorm:"column:address_line2"`
+	City                     string                 `protobuf:"bytes,8,opt,name=city,proto3" json:"city,omitempty" gorm:"column:city;not null"`
+	District                 string                 `protobuf:"bytes,9,opt,name=district,proto3" json:"district,omitempty" gorm:"column:district;not null"`
+	Division                 string                 `protobuf:"bytes,10,opt,name=division,proto3" json:"division,omitempty" gorm:"column:division;not null"`
+	PostalCode               string                 `protobuf:"bytes,11,opt,name=postal_code,json=postalCode,proto3" json:"postal_code,omitempty" gorm:"column:postal_code"`
+	Country                  string                 `protobuf:"bytes,12,opt,name=country,proto3" json:"country,omitempty" gorm:"column:country;not null"`
+	NidNumber                string                 `protobuf:"bytes,13,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty" gorm:"column:nid_number"`
+	ProfilePhotoUrl          string                 `protobuf:"bytes,14,opt,name=profile_photo_url,json=profilePhotoUrl,proto3" json:"profile_photo_url,omitempty" gorm:"column:profile_photo_url"`
+	KycVerified              bool                   `protobuf:"varint,15,opt,name=kyc_verified,json=kycVerified,proto3" json:"kyc_verified,omitempty" gorm:"column:kyc_verified;not null"`
+	KycVerifiedAt            *timestamppb.Timestamp `protobuf:"bytes,16,opt,name=kyc_verified_at,json=kycVerifiedAt,proto3" json:"kyc_verified_at,omitempty" gorm:"column:kyc_verified_at;serializer:proto_timestamp"`
+	CreatedAt                *timestamppb.Timestamp `protobuf:"bytes,17,opt,name=created_at,json=createdAt,proto3" json:"created_at,omitempty" gorm:"column:created_at;not null;serializer:proto_timestamp"`
+	UpdatedAt                *timestamppb.Timestamp `protobuf:"bytes,18,opt,name=updated_at,json=updatedAt,proto3" json:"updated_at,omitempty" gorm:"column:updated_at;not null;serializer:proto_timestamp"`
+	MaritalStatus            string                 `protobuf:"bytes,19,opt,name=marital_status,json=maritalStatus,proto3" json:"marital_status,omitempty" gorm:"column:marital_status"`
+	Employer                 string                 `protobuf:"bytes,20,opt,name=employer,proto3" json:"employer,omitempty" gorm:"column:employer"`
+	PermanentAddress         string                 `protobuf:"bytes,21,opt,name=permanent_address,json=permanentAddress,proto3" json:"permanent_address,omitempty" gorm:"column:permanent_address"`
+	EmergencyContactName     string                 `protobuf:"bytes,22,opt,name=emergency_contact_name,json=emergencyContactName,proto3" json:"emergency_contact_name,omitempty" gorm:"column:emergency_contact_name"`
+	EmergencyContactNumber   string                 `protobuf:"bytes,23,opt,name=emergency_contact_number,json=emergencyContactNumber,proto3" json:"emergency_contact_number,omitempty" gorm:"column:emergency_contact_number"`
+	IdType                   string                 `protobuf:"bytes,24,opt,name=id_type,json=idType,proto3" json:"id_type,omitempty" gorm:"column:id_type"`
+	IdUploadFrontUrl         string                 `protobuf:"bytes,25,opt,name=id_upload_front_url,json=idUploadFrontUrl,proto3" json:"id_upload_front_url,omitempty" gorm:"column:id_upload_front_url"`
+	IdUploadBackUrl          string                 `protobuf:"bytes,26,opt,name=id_upload_back_url,json=idUploadBackUrl,proto3" json:"id_upload_back_url,omitempty" gorm:"column:id_upload_back_url"`
+	PhotographSelfieUrl      string                 `protobuf:"bytes,27,opt,name=photograph_selfie_url,json=photographSelfieUrl,proto3" json:"photograph_selfie_url,omitempty" gorm:"column:photograph_selfie_url"`
+	ProofOfAddressUrl        string                 `protobuf:"bytes,28,opt,name=proof_of_address_url,json=proofOfAddressUrl,proto3" json:"proof_of_address_url,omitempty" gorm:"column:proof_of_address_url"`
+	ConsentPrivacyAcceptance bool                   `protobuf:"varint,29,opt,name=consent_privacy_acceptance,json=consentPrivacyAcceptance,proto3" json:"consent_privacy_acceptance,omitempty" gorm:"column:consent_privacy_acceptance;not null"`
 }
 
 func (x *UserProfile) Reset() {

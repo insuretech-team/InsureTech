@@ -90,6 +90,9 @@ service AuthZService {
 
   // ── Portal Configuration ──────────────────────────────────────────────────
 
+  rpc ListPortalConfigs(ListPortalConfigsRequest) returns (ListPortalConfigsResponse) {
+    option (google.api.http) = { get: "/v1/authz/portals/configs" };
+  }
   rpc GetPortalConfig(GetPortalConfigRequest) returns (GetPortalConfigResponse) {
     option (google.api.http) = { get: "/v1/authz/portals/{portal}/config" };
   }

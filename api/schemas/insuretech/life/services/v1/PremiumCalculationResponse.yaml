@@ -1,0 +1,35 @@
+LifePremiumCalculationResponse:
+  type: object
+  properties:
+    base_premium:
+      type: string
+      format: int64
+    age_addition:
+      type: string
+      format: int64
+    condition_multiplier:
+      type: number
+      format: float
+    condition_addition:
+      type: string
+      format: int64
+    bonus_discount:
+      type: string
+      format: int64
+    total_premium:
+      type: string
+      format: int64
+    breakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/LifePremiumBreakdown'
+    applied_conditions:
+      type: array
+      items:
+        type: string
+    applied_bonuses:
+      type: array
+      items:
+        type: string
+  description: Response payload for premium calculation operation. Returns operation
+    results and status.

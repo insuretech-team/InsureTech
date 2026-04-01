@@ -4,7 +4,15 @@ namespace PoliSync.Orders.Infrastructure;
 
 public interface IOrderDataGateway
 {
-    Task<CreateOrderResponse> CreateOrderAsync(string quotationId, string customerId, string paymentMethod, CancellationToken cancellationToken = default);
+    Task<CreateOrderResponse> CreateOrderAsync(
+        string quotationId,
+        string customerId,
+        string paymentMethod,
+        CancellationToken cancellationToken = default,
+        string? productId = null,
+        string? planId = null,
+        long totalPayable = 0,
+        string currency = "BDT");
     Task<OrderView?> GetOrderAsync(string orderId, CancellationToken cancellationToken = default);
     Task<ListOrdersResponse> ListOrdersAsync(ListOrdersRequest request, CancellationToken cancellationToken = default);
     Task<InitiatePaymentResponse> InitiatePaymentAsync(string orderId, string paymentMethod, string callbackUrl, string idempotencyKey, CancellationToken cancellationToken = default);

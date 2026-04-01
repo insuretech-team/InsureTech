@@ -5,5 +5,4 @@ package models
 type DocumentsListingResponse struct {
 	Documents []*DocumentGeneration `json:"documents,omitempty"`
 	TotalCount int `json:"total_count,omitempty"`
-	Error *Error `json:"error,omitempty"`
 }

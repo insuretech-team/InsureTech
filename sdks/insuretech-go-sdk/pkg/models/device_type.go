@@ -1,0 +1,14 @@
+package models
+
+// DeviceType represents a device_type
+type DeviceType string
+
+// DeviceType values
+const (
+	DeviceTypeDEVICETYPEUNSPECIFIED DeviceType = "DEVICE_TYPE_UNSPECIFIED"
+	DeviceTypeDEVICETYPEWEB  = "DEVICE_TYPE_WEB"
+	DeviceTypeDEVICETYPEMOBILEANDROID  = "DEVICE_TYPE_MOBILE_ANDROID"
+	DeviceTypeDEVICETYPEMOBILEIOS  = "DEVICE_TYPE_MOBILE_IOS"
+	DeviceTypeDEVICETYPEAPI  = "DEVICE_TYPE_API"
+	DeviceTypeDEVICETYPEDESKTOP  = "DEVICE_TYPE_DESKTOP"
+)

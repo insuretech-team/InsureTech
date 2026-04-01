@@ -4,10 +4,14 @@
  */
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { parseMoneyDecimal, sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { parseMoneyDecimal, sdkErrorMessage, unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { EmployeeView, InsuranceType, EmployeeGender, EmployeeStatus, Money } from "@lifeplus/insuretech-sdk";
 import type { Employee as UiEmployee } from "@lib/types/b2b";
+import {
+  getBangladeshMobileValidationMessage,
+  normalizeBangladeshMobile,
+} from "@/src/lib/utils/bd-mobile";
 
 const INS: Record<string, string> = {
   INSURANCE_TYPE_UNSPECIFIED: "Unspecified", INSURANCE_TYPE_LIFE: "Life",
@@ -40,28 +44,14 @@ export async function GET(request: Request) {
     // For super_admin (PORTAL_SYSTEM) business_id is not required by backend.
     let businessId = url.searchParams.get("business_id") ?? hdrs?.businessId ?? undefined;
 
-    if (!businessId) {
-      const cookieHeader = request.headers.get("cookie") ?? "";
-      if (cookieHeader) {
-        try {
-          const base =
-            process.env.INSURETECH_API_BASE_URL ??
-            process.env.NEXT_PUBLIC_INSURETECH_API_BASE_URL ??
-            "http://localhost:8080";
-          const meRes = await fetch(`${base}/v1/b2b/organisations/me`, {
-            method: "GET",
-            headers: { cookie: cookieHeader },
-            cache: "no-store",
-          });
-          if (meRes.ok) {
-            const meData = (await meRes.json()) as Record<string, unknown>;
-            if (typeof meData.organisation_id === "string" && meData.organisation_id) {
-              businessId = meData.organisation_id;
-            }
-          }
-        } catch {
-          // proceed without — backend will enforce based on session cookie anyway
+    if (!businessId && hdrs?.portal !== "PORTAL_SYSTEM") {
+      try {
+        const meResult = await sdk.getMyOrganisation();
+        if (meResult.ok && typeof meResult.data.organisation_id === "string" && meResult.data.organisation_id) {
+          businessId = meResult.data.organisation_id;
         }
+      } catch {
+        // proceed without — backend will enforce based on session cookie anyway
       }
     }
 
@@ -75,7 +65,9 @@ export async function GET(request: Request) {
     if (!result.response.ok) {
       return NextResponse.json({ ok: false, message: sdkErrorMessage(result), employees: [] }, { status: result.response.status });
     }
-    return NextResponse.json({ ok: true, employees: (result.data?.employees ?? []).map(mapView) });
+    // SDK interceptor unwraps the envelope; result.data is the payload directly.
+    const payload = result.data as Record<string, unknown> | null;
+    return NextResponse.json({ ok: true, employees: ((payload?.employees ?? []) as unknown[]).map((v) => mapView(v as EmployeeView)) });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error", employees: [] }, { status: 502 });
   }
@@ -89,8 +81,17 @@ export async function POST(request: Request) {
     const businessId = String(body.businessId ?? "").trim();
     const cov = typeof body.coverageAmount === "number" ? body.coverageAmount : Number.parseFloat(String(body.coverageAmount ?? "0"));
     const safeCov = Number.isNaN(cov) ? 0 : cov;
+    const mobileNumber = body.mobileNumber ? String(body.mobileNumber).trim() : "";
+    const normalizedMobileNumber = mobileNumber ? normalizeBangladeshMobile(mobileNumber) : null;
+    if (mobileNumber && !normalizedMobileNumber) {
+      return NextResponse.json(
+        { ok: false, message: getBangladeshMobileValidationMessage("Employee mobile number") },
+        { status: 400 }
+      );
+    }
     const result = await sdk.createEmployee({
       body: {
+        user_id: hdrs?.userId ?? "",
         name: String(body.name ?? ""), employee_id: String(body.employeeId ?? ""),
         business_id: businessId, department_id: String(body.departmentId ?? ""),
         insurance_category: body.insuranceCategory as InsuranceType | undefined,
@@ -100,17 +101,17 @@ export async function POST(request: Request) {
           : undefined,
         number_of_dependent: Number(body.numberOfDependent ?? 0),
         email: String(body.email ?? ""),
-        mobile_number: body.mobileNumber ? String(body.mobileNumber) : undefined,
+        mobile_number: normalizedMobileNumber ?? undefined,
         date_of_birth: body.dateOfBirth ? String(body.dateOfBirth) : undefined,
         date_of_joining: body.dateOfJoining ? String(body.dateOfJoining) : undefined,
         gender: body.gender as EmployeeGender | undefined,
       },
     });
-    if (!result.response.ok) {
-      return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    }
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message }, { status: unwrapped.status });
+    const d = unwrapped.data as Record<string, unknown>;
     return NextResponse.json(
-      { ok: true, message: result.data?.message ?? "Employee created", employee: result.data?.employee ? mapView(result.data.employee) : null },
+      { ok: true, message: (d?.message as string) ?? "Employee created", employee: d?.employee ? mapView(d.employee as EmployeeView) : null },
       { status: 201 }
     );
   } catch (err) {

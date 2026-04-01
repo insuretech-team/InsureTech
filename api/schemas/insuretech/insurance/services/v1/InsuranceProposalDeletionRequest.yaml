@@ -1,0 +1,7 @@
+InsuranceProposalDeletionRequest:
+  type: object
+  properties:
+    proposal_id:
+      type: string
+  description: Request payload for insurance proposal deletion operation. Contains
+    parameters required to execute the operation.

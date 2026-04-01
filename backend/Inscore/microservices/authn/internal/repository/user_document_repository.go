@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"time"
 
@@ -50,25 +51,118 @@ func (r *UserDocumentRepository) Create(ctx context.Context, d *authnv1.UserDocu
 }
 
 func (r *UserDocumentRepository) GetByID(ctx context.Context, id string) (*authnv1.UserDocument, error) {
-	var d authnv1.UserDocument
+	// BUG FIX: Cannot use GORM First() with proto struct — *timestamppb.Timestamp fields cause errors.
+	type row struct {
+		UserDocumentId     string         `gorm:"column:user_document_id"`
+		UserId             string         `gorm:"column:user_id"`
+		DocumentTypeId     string         `gorm:"column:document_type_id"`
+		FileUrl            string         `gorm:"column:file_url"`
+		VerificationStatus string         `gorm:"column:verification_status"`
+		PolicyId           sql.NullString `gorm:"column:policy_id"`
+		VerifiedBy         sql.NullString `gorm:"column:verified_by"`
+		RejectionReason    sql.NullString `gorm:"column:rejection_reason"`
+		VerifiedAt         sql.NullTime   `gorm:"column:verified_at"`
+		CreatedAt          sql.NullTime   `gorm:"column:created_at"`
+		UpdatedAt          sql.NullTime   `gorm:"column:updated_at"`
+	}
+	var r2 row
 	err := r.db.WithContext(ctx).
 		Table("authn_schema.users_documents").
+		Select("user_document_id, user_id, document_type_id, file_url, verification_status, policy_id, verified_by, rejection_reason, verified_at, created_at, updated_at").
 		Where("user_document_id = ?", id).
-		First(&d).Error
+		Limit(1).
+		Scan(&r2).Error
 	if err != nil {
 		return nil, err
 	}
-	return &d, nil
+	if r2.UserDocumentId == "" {
+		return nil, gorm.ErrRecordNotFound
+	}
+	d := &authnv1.UserDocument{
+		UserDocumentId:     r2.UserDocumentId,
+		UserId:             r2.UserId,
+		DocumentTypeId:     r2.DocumentTypeId,
+		FileUrl:            r2.FileUrl,
+		VerificationStatus: r2.VerificationStatus,
+	}
+	if r2.PolicyId.Valid {
+		d.PolicyId = r2.PolicyId.String
+	}
+	if r2.VerifiedBy.Valid {
+		d.VerifiedBy = r2.VerifiedBy.String
+	}
+	if r2.RejectionReason.Valid {
+		d.RejectionReason = r2.RejectionReason.String
+	}
+	if r2.VerifiedAt.Valid {
+		d.VerifiedAt = timestamppb.New(r2.VerifiedAt.Time)
+	}
+	if r2.CreatedAt.Valid {
+		d.CreatedAt = timestamppb.New(r2.CreatedAt.Time)
+	}
+	if r2.UpdatedAt.Valid {
+		d.UpdatedAt = timestamppb.New(r2.UpdatedAt.Time)
+	}
+	return d, nil
 }
 
 func (r *UserDocumentRepository) ListByUser(ctx context.Context, userID string) ([]*authnv1.UserDocument, error) {
-	var docs []*authnv1.UserDocument
+	// BUG FIX: Cannot use GORM Find() with proto struct — *timestamppb.Timestamp fields
+	// (VerifiedAt, CreatedAt, UpdatedAt) cause "invalid field" GORM errors.
+	// Use raw SQL with intermediate scan variables instead.
+	type row struct {
+		UserDocumentId     string         `gorm:"column:user_document_id"`
+		UserId             string         `gorm:"column:user_id"`
+		DocumentTypeId     string         `gorm:"column:document_type_id"`
+		FileUrl            string         `gorm:"column:file_url"`
+		VerificationStatus string         `gorm:"column:verification_status"`
+		PolicyId           sql.NullString `gorm:"column:policy_id"`
+		VerifiedBy         sql.NullString `gorm:"column:verified_by"`
+		RejectionReason    sql.NullString `gorm:"column:rejection_reason"`
+		VerifiedAt         sql.NullTime   `gorm:"column:verified_at"`
+		CreatedAt          sql.NullTime   `gorm:"column:created_at"`
+		UpdatedAt          sql.NullTime   `gorm:"column:updated_at"`
+	}
+	var rows []row
 	err := r.db.WithContext(ctx).
 		Table("authn_schema.users_documents").
+		Select("user_document_id, user_id, document_type_id, file_url, verification_status, policy_id, verified_by, rejection_reason, verified_at, created_at, updated_at").
 		Where("user_id = ?", userID).
 		Order("created_at desc").
-		Find(&docs).Error
-	return docs, err
+		Scan(&rows).Error
+	if err != nil {
+		return nil, err
+	}
+	docs := make([]*authnv1.UserDocument, 0, len(rows))
+	for _, r := range rows {
+		d := &authnv1.UserDocument{
+			UserDocumentId:     r.UserDocumentId,
+			UserId:             r.UserId,
+			DocumentTypeId:     r.DocumentTypeId,
+			FileUrl:            r.FileUrl,
+			VerificationStatus: r.VerificationStatus,
+		}
+		if r.PolicyId.Valid {
+			d.PolicyId = r.PolicyId.String
+		}
+		if r.VerifiedBy.Valid {
+			d.VerifiedBy = r.VerifiedBy.String
+		}
+		if r.RejectionReason.Valid {
+			d.RejectionReason = r.RejectionReason.String
+		}
+		if r.VerifiedAt.Valid {
+			d.VerifiedAt = timestamppb.New(r.VerifiedAt.Time)
+		}
+		if r.CreatedAt.Valid {
+			d.CreatedAt = timestamppb.New(r.CreatedAt.Time)
+		}
+		if r.UpdatedAt.Valid {
+			d.UpdatedAt = timestamppb.New(r.UpdatedAt.Time)
+		}
+		docs = append(docs, d)
+	}
+	return docs, nil
 }
 
 func (r *UserDocumentRepository) UpdateVerification(ctx context.Context, id, status string, verifiedBy *string, verifiedAt *time.Time) error {

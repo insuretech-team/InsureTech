@@ -1,3 +1,14 @@
+// DEPRECATED: flve_external_client.go — replaced by flve_adapter.go
+//
+// This file implements the legacy ExternalKYCClient interface for FLVE.
+// It is kept for reference only and will be removed in a future cleanup.
+// All new code should use FLVEAdapter (flve_adapter.go) instead.
+//
+// DO NOT add new functionality here. Do not call NewFLVEExternalKYCClient
+// from new code paths.
+//
+//nolint:all
+
 package service
 
 import (
@@ -288,16 +299,31 @@ func normalizeFLVESessionID(raw string) (string, error) {
 		logger.Errorf("flve returned empty session_id")
 		return "", errors.New("flve returned empty session_id")
 	}
+	// Already a valid UUID — return as-is.
 	if u, err := uuid.Parse(id); err == nil {
 		return u.String(), nil
 	}
 
-	legacy := strings.TrimPrefix(id, "ekyc_")
-	if len(legacy) == 32 {
-		legacy = fmt.Sprintf("%s-%s-%s-%s-%s", legacy[0:8], legacy[8:12], legacy[12:16], legacy[16:20], legacy[20:32])
+	// Strip known prefixes (e.g. "ekyc_") and try again.
+	stripped := id
+	for _, prefix := range []string{"ekyc_", "kyc_", "session_"} {
+		if strings.HasPrefix(strings.ToLower(id), prefix) {
+			stripped = id[len(prefix):]
+			break
+		}
 	}
-	if u, err := uuid.Parse(legacy); err == nil {
-		return u.String(), nil
+
+	// Try inserting UUID dashes if exactly 32 hex chars remain.
+	if len(stripped) == 32 {
+		dashed := fmt.Sprintf("%s-%s-%s-%s-%s", stripped[0:8], stripped[8:12], stripped[12:16], stripped[16:20], stripped[20:32])
+		if u, err := uuid.Parse(dashed); err == nil {
+			return u.String(), nil
+		}
 	}
-	return "", fmt.Errorf("invalid flve session_id format: %q", raw)
+
+	// If still not a UUID, accept the raw string as-is.
+	// FLVE may return opaque session IDs that are not UUIDs; InsureTech stores
+	// them in provider_reference (VARCHAR 255) without requiring UUID format.
+	logger.Warnf("flve session_id %q is not UUID-shaped — storing as opaque reference", raw)
+	return id, nil
 }

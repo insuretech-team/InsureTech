@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -8,44 +8,25 @@
     android:orientation="vertical"
     tools:context=".ui.profile.ProfileFragment">
 
-    <!-- Fixed Header Section (Not Scrollable) -->
-    <RelativeLayout
-        android:layout_width="match_parent"
+    <!-- Toolbar -->
+    <include
+        android:id="@+id/profile_toolbar"
+        layout="@layout/toolbar"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/toolbar_background"
-        android:padding="16dp"
-        android:paddingTop="40dp"
-        android:paddingBottom="24dp">
-
-        <!-- Back Button -->
-        <ImageView
-            android:id="@+id/btnBack"
-            android:layout_width="40dp"
-            android:layout_height="40dp"
-            android:layout_alignParentStart="true"
-            android:layout_centerVertical="true"
-            android:src="@drawable/ic_back" />
-
-        <!-- Profile Title -->
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_centerVertical="true"
-            android:layout_marginStart="12dp"
-            android:layout_toEndOf="@id/btnBack"
-            android:text="Profile"
-            android:fontFamily="@font/karla_bold"
-            android:textColor="@android:color/white"
-            android:textSize="20sp"
-            android:textStyle="bold" />
-
-    </RelativeLayout>
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
 
     <!-- Scrollable Content Section -->
-    <ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:fillViewport="true">
+    <androidx.core.widget.NestedScrollView
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:fillViewport="true"
+        app:layout_constraintTop_toBottomOf="@id/profile_toolbar"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -110,7 +91,7 @@
                             android:layout_height="wrap_content"
                             android:layout_marginTop="4dp"
                             android:text="Profile Verified"
-                            android:textColor="#7B2CBF"
+                            android:textColor="#03A765"
                             android:textSize="12sp"
                             android:textStyle="bold" />
                     </LinearLayout>
@@ -123,7 +104,7 @@
                         android:layout_alignParentEnd="true"
                         android:layout_centerVertical="true"
                         android:src="@drawable/ic_resource_switch"
-                        app:tint="#7B2CBF" />
+                        app:tint="#03A765" />
 
                 </RelativeLayout>
 
@@ -171,7 +152,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_my_info"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -205,7 +186,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_documents"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -239,7 +220,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_beneficiary"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -299,7 +280,7 @@
                             android:layout_alignParentStart="true"
                             android:layout_centerVertical="true"
                             android:src="@drawable/ic_language"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="wrap_content"
@@ -338,7 +319,7 @@
                                 android:background="@drawable/language_btn_unselected"
                                 android:gravity="center"
                                 android:text="EN"
-                                android:textColor="#7B2CBF"
+                                android:textColor="#03A765"
                                 android:textSize="12sp"
                                 android:textStyle="bold" />
 
@@ -367,7 +348,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_permissions"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -426,7 +407,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_share"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -460,7 +441,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_rate"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -494,7 +475,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_info"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -528,7 +509,7 @@
                             android:layout_width="24dp"
                             android:layout_height="24dp"
                             android:src="@drawable/ic_privacy"
-                            app:tint="#7B2CBF" />
+                            app:tint="#03A765" />
 
                         <TextView
                             android:layout_width="0dp"
@@ -547,6 +528,6 @@
 
         </LinearLayout>
 
-    </ScrollView>
+    </androidx.core.widget.NestedScrollView>
 
-</LinearLayout>
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,0 +1,13 @@
+package models
+
+// TaskStatus represents a task_status
+type TaskStatus string
+
+// TaskStatus values
+const (
+	TaskStatusTASKSTATUSUNSPECIFIED TaskStatus = "TASK_STATUS_UNSPECIFIED"
+	TaskStatusTASKSTATUSPENDING  = "TASK_STATUS_PENDING"
+	TaskStatusTASKSTATUSINPROGRESS  = "TASK_STATUS_IN_PROGRESS"
+	TaskStatusTASKSTATUSCOMPLETED  = "TASK_STATUS_COMPLETED"
+	TaskStatusTASKSTATUSCANCELLED  = "TASK_STATUS_CANCELLED"
+)

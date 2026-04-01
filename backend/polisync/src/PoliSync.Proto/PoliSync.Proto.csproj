@@ -1,7 +1,7 @@
 <Project Sdk="Microsoft.NET.Sdk">
 
   <PropertyGroup>
-    <TargetFramework>net10.0</TargetFramework>
+    <TargetFramework>net8.0</TargetFramework>
     <ImplicitUsings>enable</ImplicitUsings>
     <Nullable>enable</Nullable>
     <LangVersion>latest</LangVersion>
@@ -18,6 +18,10 @@
   <!-- Note: Some proto files have duplicates between Core.cs and specific event files -->
   <!-- We include all files and rely on partial class merging -->
   <ItemGroup>
+    <!-- gen/csharp is 4 levels up from this .csproj:
+         Local: InsureTech/gen/csharp  (from InsureTech/backend/polisync/src/PoliSync.Proto)
+         Docker: /src/gen/csharp       (WORKDIR=/src, project at /src/backend/polisync/src/PoliSync.Proto)
+         Both resolve to ../../../../gen/csharp -->
     <Compile Include="..\..\..\..\gen\csharp\**\*.cs" LinkBase="Generated" />
   </ItemGroup>
 
@@ -27,5 +31,3 @@
   </PropertyGroup>
 
 </Project>
-
-

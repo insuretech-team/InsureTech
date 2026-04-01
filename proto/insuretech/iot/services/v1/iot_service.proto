@@ -57,7 +57,7 @@ service IoTService {
 
 message RegisterDeviceRequest {
   string device_serial = 1;
-  entity.v1.DeviceType type = 2;
+  entity.v1.IoTDeviceType type = 2;
   string manufacturer = 3;
   string model = 4;
   string policy_id = 5;

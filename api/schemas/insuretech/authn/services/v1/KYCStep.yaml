@@ -1,0 +1,25 @@
+KYCStep:
+  type: object
+  properties:
+    step_number:
+      type: integer
+      format: int32
+    challenge_type:
+      type: string
+      description: '"BLINK", "LOOK_LEFT", "LOOK_RIGHT", "CAPTURE"'
+    state:
+      type: string
+      description: '"PENDING", "IN_PROGRESS", "COMPLETED", "FAILED"'
+    instruction:
+      type: string
+      description: '"Please blink your eyes"'
+    instruction_key:
+      type: string
+      description: '"ekyc.instruction.blink" (i18n)'
+    timeout_seconds:
+      type: integer
+      format: int32
+    confidence:
+      type: number
+      format: double
+  description: Domain entity representing kyc step. Core business object in the system.

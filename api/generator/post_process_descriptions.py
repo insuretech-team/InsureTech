@@ -4,6 +4,7 @@ Post-process schemas to add descriptions from markdown files and proto comments
 import os
 import yaml
 import re
+from write_guard import yaml_dump_if_changed
 
 def load_md_description(md_file):
     """Extract description from markdown file"""
@@ -111,8 +112,7 @@ def add_descriptions_to_openapi():
     
     # Write back
     print("Writing updated openapi.yaml...")
-    with open('../openapi.yaml', 'w', encoding='utf-8') as f:
-        yaml.dump(spec, f, default_flow_style=False, sort_keys=False, allow_unicode=True, width=120)
+    yaml_dump_if_changed('../openapi.yaml', spec, default_flow_style=False, sort_keys=False, allow_unicode=True, width=120)
     
     # Calculate new coverage
     with_desc = sum(1 for s in schemas.values() if isinstance(s, dict) and s.get('description', '').strip())

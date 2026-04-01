@@ -5,7 +5,8 @@
     <color name="band_color">#8C34C7</color>
     <color name="base_color">#322F70</color>
     <color name="otp_box_color">#AEAEAE</color>
-    <color name="slider_unselected_color">#EEE1F7</color>
+    <color name="slider_unselected_color">#B1E4CF</color>
+    <color name="slider_selected_color">#03A765</color>
     <color name="text_color">#242424</color>
     <color name="band_start_color">#8C34C7</color>
     <color name="band_end_color">#702A9F</color>

@@ -14,8 +14,5 @@ CheckFraudResponse:
         type: string
     fraud_alert_id:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for check fraud operation. Returns operation results
     and status.

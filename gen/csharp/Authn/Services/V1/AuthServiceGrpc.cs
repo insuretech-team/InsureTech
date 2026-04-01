@@ -113,6 +113,14 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RevokeAllSessionsResponse> __Marshaller_insuretech_authn_services_v1_RevokeAllSessionsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RevokeAllSessionsResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.FindPortalUserRequest> __Marshaller_insuretech_authn_services_v1_FindPortalUserRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.FindPortalUserRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.FindPortalUserResponse> __Marshaller_insuretech_authn_services_v1_FindPortalUserResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.FindPortalUserResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest> __Marshaller_insuretech_authn_services_v1_SetTemporaryPasswordRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse> __Marshaller_insuretech_authn_services_v1_SetTemporaryPasswordResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest> __Marshaller_insuretech_authn_services_v1_RegisterEmailUserRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RegisterEmailUserResponse> __Marshaller_insuretech_authn_services_v1_RegisterEmailUserResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RegisterEmailUserResponse.Parser));
@@ -129,6 +137,10 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.EmailLoginResponse> __Marshaller_insuretech_authn_services_v1_EmailLoginResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.EmailLoginResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest> __Marshaller_insuretech_authn_services_v1_EmailPasswordLoginRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse> __Marshaller_insuretech_authn_services_v1_EmailPasswordLoginResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest> __Marshaller_insuretech_authn_services_v1_RequestPasswordResetByEmailRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse> __Marshaller_insuretech_authn_services_v1_RequestPasswordResetByEmailResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse.Parser));
@@ -144,6 +156,10 @@ namespace Insuretech.Authn.Services.V1 {
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.UpdateDLRStatusRequest> __Marshaller_insuretech_authn_services_v1_UpdateDLRStatusRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.UpdateDLRStatusRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.UpdateDLRStatusResponse> __Marshaller_insuretech_authn_services_v1_UpdateDLRStatusResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.UpdateDLRStatusResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest> __Marshaller_insuretech_authn_services_v1_ProvisionEmployeeUserRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse> __Marshaller_insuretech_authn_services_v1_ProvisionEmployeeUserResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.CreateAPIKeyRequest> __Marshaller_insuretech_authn_services_v1_CreateAPIKeyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.CreateAPIKeyRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -217,10 +233,6 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.ApproveKYCResponse> __Marshaller_insuretech_authn_services_v1_ApproveKYCResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.ApproveKYCResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RejectKYCRequest> __Marshaller_insuretech_authn_services_v1_RejectKYCRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RejectKYCRequest.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.RejectKYCResponse> __Marshaller_insuretech_authn_services_v1_RejectKYCResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.RejectKYCResponse.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.VerifyDocumentRequest> __Marshaller_insuretech_authn_services_v1_VerifyDocumentRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.VerifyDocumentRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.VerifyDocumentResponse> __Marshaller_insuretech_authn_services_v1_VerifyDocumentResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.VerifyDocumentResponse.Parser));
@@ -229,17 +241,13 @@ namespace Insuretech.Authn.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.CreateVoiceSessionResponse> __Marshaller_insuretech_authn_services_v1_CreateVoiceSessionResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.CreateVoiceSessionResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest> __Marshaller_insuretech_authn_services_v1_GetVoiceSessionRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse> __Marshaller_insuretech_authn_services_v1_GetVoiceSessionResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest> __Marshaller_insuretech_authn_services_v1_EndVoiceSessionRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse> __Marshaller_insuretech_authn_services_v1_EndVoiceSessionResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest> __Marshaller_insuretech_authn_services_v1_GetProfilePhotoUploadURLRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse> __Marshaller_insuretech_authn_services_v1_GetProfilePhotoUploadURLResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest> __Marshaller_insuretech_authn_services_v1_GetNotificationPreferencesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse> __Marshaller_insuretech_authn_services_v1_GetNotificationPreferencesResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest> __Marshaller_insuretech_authn_services_v1_UpdateNotificationPreferencesRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -268,10 +276,6 @@ namespace Insuretech.Authn.Services.V1 {
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest> __Marshaller_insuretech_authn_services_v1_VerifyVoiceSessionRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse> __Marshaller_insuretech_authn_services_v1_VerifyVoiceSessionResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetJWKSRequest> __Marshaller_insuretech_authn_services_v1_GetJWKSRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetJWKSRequest.Parser));
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Marshaller<global::Insuretech.Authn.Services.V1.GetJWKSResponse> __Marshaller_insuretech_authn_services_v1_GetJWKSResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Authn.Services.V1.GetJWKSResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.RegisterRequest, global::Insuretech.Authn.Services.V1.RegisterResponse> __Method_Register = new grpc::Method<global::Insuretech.Authn.Services.V1.RegisterRequest, global::Insuretech.Authn.Services.V1.RegisterResponse>(
@@ -402,6 +406,22 @@ namespace Insuretech.Authn.Services.V1 {
         __Marshaller_insuretech_authn_services_v1_RevokeAllSessionsResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.FindPortalUserRequest, global::Insuretech.Authn.Services.V1.FindPortalUserResponse> __Method_FindPortalUser = new grpc::Method<global::Insuretech.Authn.Services.V1.FindPortalUserRequest, global::Insuretech.Authn.Services.V1.FindPortalUserResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "FindPortalUser",
+        __Marshaller_insuretech_authn_services_v1_FindPortalUserRequest,
+        __Marshaller_insuretech_authn_services_v1_FindPortalUserResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest, global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse> __Method_SetTemporaryPassword = new grpc::Method<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest, global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "SetTemporaryPassword",
+        __Marshaller_insuretech_authn_services_v1_SetTemporaryPasswordRequest,
+        __Marshaller_insuretech_authn_services_v1_SetTemporaryPasswordResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest, global::Insuretech.Authn.Services.V1.RegisterEmailUserResponse> __Method_RegisterEmailUser = new grpc::Method<global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest, global::Insuretech.Authn.Services.V1.RegisterEmailUserResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -434,6 +454,14 @@ namespace Insuretech.Authn.Services.V1 {
         __Marshaller_insuretech_authn_services_v1_EmailLoginResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest, global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse> __Method_EmailPasswordLogin = new grpc::Method<global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest, global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "EmailPasswordLogin",
+        __Marshaller_insuretech_authn_services_v1_EmailPasswordLoginRequest,
+        __Marshaller_insuretech_authn_services_v1_EmailPasswordLoginResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest, global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse> __Method_RequestPasswordResetByEmail = new grpc::Method<global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest, global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -464,6 +492,14 @@ namespace Insuretech.Authn.Services.V1 {
         "UpdateDLRStatus",
         __Marshaller_insuretech_authn_services_v1_UpdateDLRStatusRequest,
         __Marshaller_insuretech_authn_services_v1_UpdateDLRStatusResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest, global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse> __Method_ProvisionEmployeeUser = new grpc::Method<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest, global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ProvisionEmployeeUser",
+        __Marshaller_insuretech_authn_services_v1_ProvisionEmployeeUserRequest,
+        __Marshaller_insuretech_authn_services_v1_ProvisionEmployeeUserResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.CreateAPIKeyRequest, global::Insuretech.Authn.Services.V1.CreateAPIKeyResponse> __Method_CreateAPIKey = new grpc::Method<global::Insuretech.Authn.Services.V1.CreateAPIKeyRequest, global::Insuretech.Authn.Services.V1.CreateAPIKeyResponse>(
@@ -610,14 +646,6 @@ namespace Insuretech.Authn.Services.V1 {
         __Marshaller_insuretech_authn_services_v1_ApproveKYCResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.RejectKYCRequest, global::Insuretech.Authn.Services.V1.RejectKYCResponse> __Method_RejectKYC = new grpc::Method<global::Insuretech.Authn.Services.V1.RejectKYCRequest, global::Insuretech.Authn.Services.V1.RejectKYCResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "RejectKYC",
-        __Marshaller_insuretech_authn_services_v1_RejectKYCRequest,
-        __Marshaller_insuretech_authn_services_v1_RejectKYCResponse);
-
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.VerifyDocumentRequest, global::Insuretech.Authn.Services.V1.VerifyDocumentResponse> __Method_VerifyDocument = new grpc::Method<global::Insuretech.Authn.Services.V1.VerifyDocumentRequest, global::Insuretech.Authn.Services.V1.VerifyDocumentResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -634,28 +662,20 @@ namespace Insuretech.Authn.Services.V1 {
         __Marshaller_insuretech_authn_services_v1_CreateVoiceSessionResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest, global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse> __Method_GetVoiceSession = new grpc::Method<global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest, global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "GetVoiceSession",
-        __Marshaller_insuretech_authn_services_v1_GetVoiceSessionRequest,
-        __Marshaller_insuretech_authn_services_v1_GetVoiceSessionResponse);
-
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest, global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse> __Method_EndVoiceSession = new grpc::Method<global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest, global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "EndVoiceSession",
-        __Marshaller_insuretech_authn_services_v1_EndVoiceSessionRequest,
-        __Marshaller_insuretech_authn_services_v1_EndVoiceSessionResponse);
-
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest, global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse> __Method_GetProfilePhotoUploadURL = new grpc::Method<global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest, global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
         "GetProfilePhotoUploadURL",
         __Marshaller_insuretech_authn_services_v1_GetProfilePhotoUploadURLRequest,
         __Marshaller_insuretech_authn_services_v1_GetProfilePhotoUploadURLResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse> __Method_GetNotificationPreferences = new grpc::Method<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetNotificationPreferences",
+        __Marshaller_insuretech_authn_services_v1_GetNotificationPreferencesRequest,
+        __Marshaller_insuretech_authn_services_v1_GetNotificationPreferencesResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse> __Method_UpdateNotificationPreferences = new grpc::Method<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse>(
@@ -712,14 +732,6 @@ namespace Insuretech.Authn.Services.V1 {
         "VerifyVoiceSession",
         __Marshaller_insuretech_authn_services_v1_VerifyVoiceSessionRequest,
         __Marshaller_insuretech_authn_services_v1_VerifyVoiceSessionResponse);
-
-    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-    static readonly grpc::Method<global::Insuretech.Authn.Services.V1.GetJWKSRequest, global::Insuretech.Authn.Services.V1.GetJWKSResponse> __Method_GetJWKS = new grpc::Method<global::Insuretech.Authn.Services.V1.GetJWKSRequest, global::Insuretech.Authn.Services.V1.GetJWKSResponse>(
-        grpc::MethodType.Unary,
-        __ServiceName,
-        "GetJWKS",
-        __Marshaller_insuretech_authn_services_v1_GetJWKSRequest,
-        __Marshaller_insuretech_authn_services_v1_GetJWKSResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -925,6 +937,30 @@ namespace Insuretech.Authn.Services.V1 {
       }
 
       /// <summary>
+      /// Find a portal user by exact email or mobile number.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.FindPortalUserResponse> FindPortalUser(global::Insuretech.Authn.Services.V1.FindPortalUserRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Set a temporary password and require the user to change it on next login.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse> SetTemporaryPassword(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
       /// Register a portal user with email (requires email, triggers email
       /// verification OTP)
       /// </summary>
@@ -975,6 +1011,18 @@ namespace Insuretech.Authn.Services.V1 {
       }
 
       /// <summary>
+      /// Login via email + password (B2B beneficiary self-service).
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse> EmailPasswordLogin(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
       /// Request password reset via email OTP
       /// </summary>
       /// <param name="request">The request received from the client.</param>
@@ -1018,6 +1066,18 @@ namespace Insuretech.Authn.Services.V1 {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.UpdateDLRStatusResponse> UpdateDLRStatus(global::Insuretech.Authn.Services.V1.UpdateDLRStatusRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Provision or fetch a managed B2B employee portal user.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse> ProvisionEmployeeUser(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -1160,12 +1220,6 @@ namespace Insuretech.Authn.Services.V1 {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.RejectKYCResponse> RejectKYC(global::Insuretech.Authn.Services.V1.RejectKYCRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
       /// <summary>
       /// ── Document Verification (Admin) ──
       /// </summary>
@@ -1190,18 +1244,6 @@ namespace Insuretech.Authn.Services.V1 {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
 
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse> GetVoiceSession(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse> EndVoiceSession(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
       /// <summary>
       /// ── Profile Photo Upload URL ──
       /// </summary>
@@ -1220,6 +1262,12 @@ namespace Insuretech.Authn.Services.V1 {
       /// <param name="request">The request received from the client.</param>
       /// <param name="context">The context of the server-side call handler being invoked.</param>
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse> GetNotificationPreferences(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse> UpdateNotificationPreferences(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::ServerCallContext context)
       {
@@ -1270,18 +1318,6 @@ namespace Insuretech.Authn.Services.V1 {
 
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse> VerifyVoiceSession(global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest request, grpc::ServerCallContext context)
-      {
-        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
-      }
-
-      /// <summary>
-      /// 🔑 JWKS 🔑
-      /// </summary>
-      /// <param name="request">The request received from the client.</param>
-      /// <param name="context">The context of the server-side call handler being invoked.</param>
-      /// <returns>The response to send back to the client (wrapped by a task).</returns>
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Authn.Services.V1.GetJWKSResponse> GetJWKS(global::Insuretech.Authn.Services.V1.GetJWKSRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -2088,6 +2124,102 @@ namespace Insuretech.Authn.Services.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_RevokeAllSessions, null, options, request);
       }
       /// <summary>
+      /// Find a portal user by exact email or mobile number.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.FindPortalUserResponse FindPortalUser(global::Insuretech.Authn.Services.V1.FindPortalUserRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return FindPortalUser(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Find a portal user by exact email or mobile number.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.FindPortalUserResponse FindPortalUser(global::Insuretech.Authn.Services.V1.FindPortalUserRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_FindPortalUser, null, options, request);
+      }
+      /// <summary>
+      /// Find a portal user by exact email or mobile number.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.FindPortalUserResponse> FindPortalUserAsync(global::Insuretech.Authn.Services.V1.FindPortalUserRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return FindPortalUserAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Find a portal user by exact email or mobile number.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.FindPortalUserResponse> FindPortalUserAsync(global::Insuretech.Authn.Services.V1.FindPortalUserRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_FindPortalUser, null, options, request);
+      }
+      /// <summary>
+      /// Set a temporary password and require the user to change it on next login.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse SetTemporaryPassword(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SetTemporaryPassword(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Set a temporary password and require the user to change it on next login.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse SetTemporaryPassword(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_SetTemporaryPassword, null, options, request);
+      }
+      /// <summary>
+      /// Set a temporary password and require the user to change it on next login.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse> SetTemporaryPasswordAsync(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return SetTemporaryPasswordAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Set a temporary password and require the user to change it on next login.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse> SetTemporaryPasswordAsync(global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_SetTemporaryPassword, null, options, request);
+      }
+      /// <summary>
       /// Register a portal user with email (requires email, triggers email
       /// verification OTP)
       /// </summary>
@@ -2288,6 +2420,54 @@ namespace Insuretech.Authn.Services.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_EmailLogin, null, options, request);
       }
       /// <summary>
+      /// Login via email + password (B2B beneficiary self-service).
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse EmailPasswordLogin(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return EmailPasswordLogin(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Login via email + password (B2B beneficiary self-service).
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse EmailPasswordLogin(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_EmailPasswordLogin, null, options, request);
+      }
+      /// <summary>
+      /// Login via email + password (B2B beneficiary self-service).
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse> EmailPasswordLoginAsync(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return EmailPasswordLoginAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Login via email + password (B2B beneficiary self-service).
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse> EmailPasswordLoginAsync(global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_EmailPasswordLogin, null, options, request);
+      }
+      /// <summary>
       /// Request password reset via email OTP
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -2478,6 +2658,54 @@ namespace Insuretech.Authn.Services.V1 {
       public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.UpdateDLRStatusResponse> UpdateDLRStatusAsync(global::Insuretech.Authn.Services.V1.UpdateDLRStatusRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_UpdateDLRStatus, null, options, request);
+      }
+      /// <summary>
+      /// Provision or fetch a managed B2B employee portal user.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse ProvisionEmployeeUser(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ProvisionEmployeeUser(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Provision or fetch a managed B2B employee portal user.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse ProvisionEmployeeUser(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ProvisionEmployeeUser, null, options, request);
+      }
+      /// <summary>
+      /// Provision or fetch a managed B2B employee portal user.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse> ProvisionEmployeeUserAsync(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ProvisionEmployeeUserAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Provision or fetch a managed B2B employee portal user.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse> ProvisionEmployeeUserAsync(global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ProvisionEmployeeUser, null, options, request);
       }
       /// <summary>
       /// Create a new API key for a user or service
@@ -2979,26 +3207,6 @@ namespace Insuretech.Authn.Services.V1 {
       {
         return CallInvoker.AsyncUnaryCall(__Method_ApproveKYC, null, options, request);
       }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.RejectKYCResponse RejectKYC(global::Insuretech.Authn.Services.V1.RejectKYCRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return RejectKYC(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.RejectKYCResponse RejectKYC(global::Insuretech.Authn.Services.V1.RejectKYCRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_RejectKYC, null, options, request);
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.RejectKYCResponse> RejectKYCAsync(global::Insuretech.Authn.Services.V1.RejectKYCRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return RejectKYCAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.RejectKYCResponse> RejectKYCAsync(global::Insuretech.Authn.Services.V1.RejectKYCRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_RejectKYC, null, options, request);
-      }
       /// <summary>
       /// ── Document Verification (Admin) ──
       /// </summary>
@@ -3095,46 +3303,6 @@ namespace Insuretech.Authn.Services.V1 {
       {
         return CallInvoker.AsyncUnaryCall(__Method_CreateVoiceSession, null, options, request);
       }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse GetVoiceSession(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetVoiceSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse GetVoiceSession(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_GetVoiceSession, null, options, request);
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse> GetVoiceSessionAsync(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetVoiceSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse> GetVoiceSessionAsync(global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_GetVoiceSession, null, options, request);
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse EndVoiceSession(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return EndVoiceSession(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse EndVoiceSession(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_EndVoiceSession, null, options, request);
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse> EndVoiceSessionAsync(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return EndVoiceSessionAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse> EndVoiceSessionAsync(global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_EndVoiceSession, null, options, request);
-      }
       /// <summary>
       /// ── Profile Photo Upload URL ──
       /// </summary>
@@ -3192,9 +3360,9 @@ namespace Insuretech.Authn.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse UpdateNotificationPreferences(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse GetNotificationPreferences(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return UpdateNotificationPreferences(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return GetNotificationPreferences(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// ── Notification Preferences ──
@@ -3203,9 +3371,9 @@ namespace Insuretech.Authn.Services.V1 {
       /// <param name="options">The options for the call.</param>
       /// <returns>The response received from the server.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse UpdateNotificationPreferences(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::CallOptions options)
+      public virtual global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse GetNotificationPreferences(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest request, grpc::CallOptions options)
       {
-        return CallInvoker.BlockingUnaryCall(__Method_UpdateNotificationPreferences, null, options, request);
+        return CallInvoker.BlockingUnaryCall(__Method_GetNotificationPreferences, null, options, request);
       }
       /// <summary>
       /// ── Notification Preferences ──
@@ -3216,9 +3384,9 @@ namespace Insuretech.Authn.Services.V1 {
       /// <param name="cancellationToken">An optional token for canceling the call.</param>
       /// <returns>The call object.</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse> UpdateNotificationPreferencesAsync(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse> GetNotificationPreferencesAsync(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
       {
-        return UpdateNotificationPreferencesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+        return GetNotificationPreferencesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
       }
       /// <summary>
       /// ── Notification Preferences ──
@@ -3226,6 +3394,26 @@ namespace Insuretech.Authn.Services.V1 {
       /// <param name="request">The request to send to the server.</param>
       /// <param name="options">The options for the call.</param>
       /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse> GetNotificationPreferencesAsync(global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetNotificationPreferences, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse UpdateNotificationPreferences(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateNotificationPreferences(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse UpdateNotificationPreferences(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_UpdateNotificationPreferences, null, options, request);
+      }
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse> UpdateNotificationPreferencesAsync(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return UpdateNotificationPreferencesAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse> UpdateNotificationPreferencesAsync(global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest request, grpc::CallOptions options)
       {
@@ -3407,54 +3595,6 @@ namespace Insuretech.Authn.Services.V1 {
       {
         return CallInvoker.AsyncUnaryCall(__Method_VerifyVoiceSession, null, options, request);
       }
-      /// <summary>
-      /// 🔑 JWKS 🔑
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
-      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
-      /// <param name="cancellationToken">An optional token for canceling the call.</param>
-      /// <returns>The response received from the server.</returns>
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.GetJWKSResponse GetJWKS(global::Insuretech.Authn.Services.V1.GetJWKSRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetJWKS(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      /// <summary>
-      /// 🔑 JWKS 🔑
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="options">The options for the call.</param>
-      /// <returns>The response received from the server.</returns>
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual global::Insuretech.Authn.Services.V1.GetJWKSResponse GetJWKS(global::Insuretech.Authn.Services.V1.GetJWKSRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.BlockingUnaryCall(__Method_GetJWKS, null, options, request);
-      }
-      /// <summary>
-      /// 🔑 JWKS 🔑
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
-      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
-      /// <param name="cancellationToken">An optional token for canceling the call.</param>
-      /// <returns>The call object.</returns>
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetJWKSResponse> GetJWKSAsync(global::Insuretech.Authn.Services.V1.GetJWKSRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
-      {
-        return GetJWKSAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
-      }
-      /// <summary>
-      /// 🔑 JWKS 🔑
-      /// </summary>
-      /// <param name="request">The request to send to the server.</param>
-      /// <param name="options">The options for the call.</param>
-      /// <returns>The call object.</returns>
-      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
-      public virtual grpc::AsyncUnaryCall<global::Insuretech.Authn.Services.V1.GetJWKSResponse> GetJWKSAsync(global::Insuretech.Authn.Services.V1.GetJWKSRequest request, grpc::CallOptions options)
-      {
-        return CallInvoker.AsyncUnaryCall(__Method_GetJWKS, null, options, request);
-      }
       /// <summary>Creates a new instance of client from given <c>ClientBaseConfiguration</c>.</summary>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       protected override AuthServiceClient NewInstance(ClientBaseConfiguration configuration)
@@ -3485,14 +3625,18 @@ namespace Insuretech.Authn.Services.V1 {
           .AddMethod(__Method_ValidateCSRF, serviceImpl.ValidateCSRF)
           .AddMethod(__Method_GetCurrentSession, serviceImpl.GetCurrentSession)
           .AddMethod(__Method_RevokeAllSessions, serviceImpl.RevokeAllSessions)
+          .AddMethod(__Method_FindPortalUser, serviceImpl.FindPortalUser)
+          .AddMethod(__Method_SetTemporaryPassword, serviceImpl.SetTemporaryPassword)
           .AddMethod(__Method_RegisterEmailUser, serviceImpl.RegisterEmailUser)
           .AddMethod(__Method_SendEmailOTP, serviceImpl.SendEmailOTP)
           .AddMethod(__Method_VerifyEmail, serviceImpl.VerifyEmail)
           .AddMethod(__Method_EmailLogin, serviceImpl.EmailLogin)
+          .AddMethod(__Method_EmailPasswordLogin, serviceImpl.EmailPasswordLogin)
           .AddMethod(__Method_RequestPasswordResetByEmail, serviceImpl.RequestPasswordResetByEmail)
           .AddMethod(__Method_ResetPasswordByEmail, serviceImpl.ResetPasswordByEmail)
           .AddMethod(__Method_BiometricAuthenticate, serviceImpl.BiometricAuthenticate)
           .AddMethod(__Method_UpdateDLRStatus, serviceImpl.UpdateDLRStatus)
+          .AddMethod(__Method_ProvisionEmployeeUser, serviceImpl.ProvisionEmployeeUser)
           .AddMethod(__Method_CreateAPIKey, serviceImpl.CreateAPIKey)
           .AddMethod(__Method_ListAPIKeys, serviceImpl.ListAPIKeys)
           .AddMethod(__Method_RevokeAPIKey, serviceImpl.RevokeAPIKey)
@@ -3511,20 +3655,17 @@ namespace Insuretech.Authn.Services.V1 {
           .AddMethod(__Method_SubmitKYCFrame, serviceImpl.SubmitKYCFrame)
           .AddMethod(__Method_CompleteKYCSession, serviceImpl.CompleteKYCSession)
           .AddMethod(__Method_ApproveKYC, serviceImpl.ApproveKYC)
-          .AddMethod(__Method_RejectKYC, serviceImpl.RejectKYC)
           .AddMethod(__Method_VerifyDocument, serviceImpl.VerifyDocument)
           .AddMethod(__Method_CreateVoiceSession, serviceImpl.CreateVoiceSession)
-          .AddMethod(__Method_GetVoiceSession, serviceImpl.GetVoiceSession)
-          .AddMethod(__Method_EndVoiceSession, serviceImpl.EndVoiceSession)
           .AddMethod(__Method_GetProfilePhotoUploadURL, serviceImpl.GetProfilePhotoUploadURL)
+          .AddMethod(__Method_GetNotificationPreferences, serviceImpl.GetNotificationPreferences)
           .AddMethod(__Method_UpdateNotificationPreferences, serviceImpl.UpdateNotificationPreferences)
           .AddMethod(__Method_EnableTOTP, serviceImpl.EnableTOTP)
           .AddMethod(__Method_VerifyTOTP, serviceImpl.VerifyTOTP)
           .AddMethod(__Method_DisableTOTP, serviceImpl.DisableTOTP)
           .AddMethod(__Method_InitiateVoiceSession, serviceImpl.InitiateVoiceSession)
           .AddMethod(__Method_SubmitVoiceSample, serviceImpl.SubmitVoiceSample)
-          .AddMethod(__Method_VerifyVoiceSession, serviceImpl.VerifyVoiceSession)
-          .AddMethod(__Method_GetJWKS, serviceImpl.GetJWKS).Build();
+          .AddMethod(__Method_VerifyVoiceSession, serviceImpl.VerifyVoiceSession).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -3550,14 +3691,18 @@ namespace Insuretech.Authn.Services.V1 {
       serviceBinder.AddMethod(__Method_ValidateCSRF, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.ValidateCSRFRequest, global::Insuretech.Authn.Services.V1.ValidateCSRFResponse>(serviceImpl.ValidateCSRF));
       serviceBinder.AddMethod(__Method_GetCurrentSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.GetCurrentSessionRequest, global::Insuretech.Authn.Services.V1.GetCurrentSessionResponse>(serviceImpl.GetCurrentSession));
       serviceBinder.AddMethod(__Method_RevokeAllSessions, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.RevokeAllSessionsRequest, global::Insuretech.Authn.Services.V1.RevokeAllSessionsResponse>(serviceImpl.RevokeAllSessions));
+      serviceBinder.AddMethod(__Method_FindPortalUser, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.FindPortalUserRequest, global::Insuretech.Authn.Services.V1.FindPortalUserResponse>(serviceImpl.FindPortalUser));
+      serviceBinder.AddMethod(__Method_SetTemporaryPassword, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.SetTemporaryPasswordRequest, global::Insuretech.Authn.Services.V1.SetTemporaryPasswordResponse>(serviceImpl.SetTemporaryPassword));
       serviceBinder.AddMethod(__Method_RegisterEmailUser, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.RegisterEmailUserRequest, global::Insuretech.Authn.Services.V1.RegisterEmailUserResponse>(serviceImpl.RegisterEmailUser));
       serviceBinder.AddMethod(__Method_SendEmailOTP, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.SendEmailOTPRequest, global::Insuretech.Authn.Services.V1.SendEmailOTPResponse>(serviceImpl.SendEmailOTP));
       serviceBinder.AddMethod(__Method_VerifyEmail, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.VerifyEmailRequest, global::Insuretech.Authn.Services.V1.VerifyEmailResponse>(serviceImpl.VerifyEmail));
       serviceBinder.AddMethod(__Method_EmailLogin, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.EmailLoginRequest, global::Insuretech.Authn.Services.V1.EmailLoginResponse>(serviceImpl.EmailLogin));
+      serviceBinder.AddMethod(__Method_EmailPasswordLogin, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.EmailPasswordLoginRequest, global::Insuretech.Authn.Services.V1.EmailPasswordLoginResponse>(serviceImpl.EmailPasswordLogin));
       serviceBinder.AddMethod(__Method_RequestPasswordResetByEmail, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailRequest, global::Insuretech.Authn.Services.V1.RequestPasswordResetByEmailResponse>(serviceImpl.RequestPasswordResetByEmail));
       serviceBinder.AddMethod(__Method_ResetPasswordByEmail, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.ResetPasswordByEmailRequest, global::Insuretech.Authn.Services.V1.ResetPasswordByEmailResponse>(serviceImpl.ResetPasswordByEmail));
       serviceBinder.AddMethod(__Method_BiometricAuthenticate, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.BiometricAuthenticateRequest, global::Insuretech.Authn.Services.V1.BiometricAuthenticateResponse>(serviceImpl.BiometricAuthenticate));
       serviceBinder.AddMethod(__Method_UpdateDLRStatus, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.UpdateDLRStatusRequest, global::Insuretech.Authn.Services.V1.UpdateDLRStatusResponse>(serviceImpl.UpdateDLRStatus));
+      serviceBinder.AddMethod(__Method_ProvisionEmployeeUser, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserRequest, global::Insuretech.Authn.Services.V1.ProvisionEmployeeUserResponse>(serviceImpl.ProvisionEmployeeUser));
       serviceBinder.AddMethod(__Method_CreateAPIKey, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.CreateAPIKeyRequest, global::Insuretech.Authn.Services.V1.CreateAPIKeyResponse>(serviceImpl.CreateAPIKey));
       serviceBinder.AddMethod(__Method_ListAPIKeys, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.ListAPIKeysRequest, global::Insuretech.Authn.Services.V1.ListAPIKeysResponse>(serviceImpl.ListAPIKeys));
       serviceBinder.AddMethod(__Method_RevokeAPIKey, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.RevokeAPIKeyRequest, global::Insuretech.Authn.Services.V1.RevokeAPIKeyResponse>(serviceImpl.RevokeAPIKey));
@@ -3576,12 +3721,10 @@ namespace Insuretech.Authn.Services.V1 {
       serviceBinder.AddMethod(__Method_SubmitKYCFrame, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.SubmitKYCFrameRequest, global::Insuretech.Authn.Services.V1.SubmitKYCFrameResponse>(serviceImpl.SubmitKYCFrame));
       serviceBinder.AddMethod(__Method_CompleteKYCSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.CompleteKYCSessionRequest, global::Insuretech.Authn.Services.V1.CompleteKYCSessionResponse>(serviceImpl.CompleteKYCSession));
       serviceBinder.AddMethod(__Method_ApproveKYC, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.ApproveKYCRequest, global::Insuretech.Authn.Services.V1.ApproveKYCResponse>(serviceImpl.ApproveKYC));
-      serviceBinder.AddMethod(__Method_RejectKYC, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.RejectKYCRequest, global::Insuretech.Authn.Services.V1.RejectKYCResponse>(serviceImpl.RejectKYC));
       serviceBinder.AddMethod(__Method_VerifyDocument, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.VerifyDocumentRequest, global::Insuretech.Authn.Services.V1.VerifyDocumentResponse>(serviceImpl.VerifyDocument));
       serviceBinder.AddMethod(__Method_CreateVoiceSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.CreateVoiceSessionRequest, global::Insuretech.Authn.Services.V1.CreateVoiceSessionResponse>(serviceImpl.CreateVoiceSession));
-      serviceBinder.AddMethod(__Method_GetVoiceSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.GetVoiceSessionRequest, global::Insuretech.Authn.Services.V1.GetVoiceSessionResponse>(serviceImpl.GetVoiceSession));
-      serviceBinder.AddMethod(__Method_EndVoiceSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.EndVoiceSessionRequest, global::Insuretech.Authn.Services.V1.EndVoiceSessionResponse>(serviceImpl.EndVoiceSession));
       serviceBinder.AddMethod(__Method_GetProfilePhotoUploadURL, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLRequest, global::Insuretech.Authn.Services.V1.GetProfilePhotoUploadURLResponse>(serviceImpl.GetProfilePhotoUploadURL));
+      serviceBinder.AddMethod(__Method_GetNotificationPreferences, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.GetNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.GetNotificationPreferencesResponse>(serviceImpl.GetNotificationPreferences));
       serviceBinder.AddMethod(__Method_UpdateNotificationPreferences, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesRequest, global::Insuretech.Authn.Services.V1.UpdateNotificationPreferencesResponse>(serviceImpl.UpdateNotificationPreferences));
       serviceBinder.AddMethod(__Method_EnableTOTP, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.EnableTOTPRequest, global::Insuretech.Authn.Services.V1.EnableTOTPResponse>(serviceImpl.EnableTOTP));
       serviceBinder.AddMethod(__Method_VerifyTOTP, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.VerifyTOTPRequest, global::Insuretech.Authn.Services.V1.VerifyTOTPResponse>(serviceImpl.VerifyTOTP));
@@ -3589,7 +3732,6 @@ namespace Insuretech.Authn.Services.V1 {
       serviceBinder.AddMethod(__Method_InitiateVoiceSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.InitiateVoiceSessionRequest, global::Insuretech.Authn.Services.V1.InitiateVoiceSessionResponse>(serviceImpl.InitiateVoiceSession));
       serviceBinder.AddMethod(__Method_SubmitVoiceSample, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.SubmitVoiceSampleRequest, global::Insuretech.Authn.Services.V1.SubmitVoiceSampleResponse>(serviceImpl.SubmitVoiceSample));
       serviceBinder.AddMethod(__Method_VerifyVoiceSession, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.VerifyVoiceSessionRequest, global::Insuretech.Authn.Services.V1.VerifyVoiceSessionResponse>(serviceImpl.VerifyVoiceSession));
-      serviceBinder.AddMethod(__Method_GetJWKS, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Authn.Services.V1.GetJWKSRequest, global::Insuretech.Authn.Services.V1.GetJWKSResponse>(serviceImpl.GetJWKS));
     }
 
   }

@@ -1,0 +1,11 @@
+RuleExpressionValidationRequest:
+  type: object
+  properties:
+    expression:
+      type: string
+    expression_type:
+      $ref: '#/components/schemas/RuleExpressionType'
+    test_inputs:
+      type: object
+  description: Request payload for rule expression validation operation. Contains
+    parameters required to execute the operation.

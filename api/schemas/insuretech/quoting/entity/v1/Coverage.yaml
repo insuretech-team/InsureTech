@@ -1,0 +1,20 @@
+Coverage:
+  type: object
+  properties:
+    coverage_id:
+      type: string
+    name:
+      type: string
+    description:
+      type: string
+    limit:
+      $ref: '#/components/schemas/Money'
+    deductible:
+      $ref: '#/components/schemas/Money'
+    premium:
+      $ref: '#/components/schemas/Money'
+    is_included:
+      type: boolean
+    is_optional:
+      type: boolean
+  description: Coverage represents a coverage item in the quote

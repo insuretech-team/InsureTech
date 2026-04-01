@@ -1,0 +1,81 @@
+LossRatioCalculation:
+  type: object
+  properties:
+    loss_ratio_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    product_id:
+      type: string
+    line_of_business:
+      type: string
+    period_start:
+      type: string
+      format: date-time
+      description: Analysis period
+    period_end:
+      type: string
+      format: date-time
+    earned_premium:
+      $ref: '#/components/schemas/Money'
+      description: Premium components
+    written_premium:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:earned_premium;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:written_premium;serializer:proto_money\""
+    incurred_losses:
+      $ref: '#/components/schemas/Money'
+      description: Loss components
+    loss_adjustment_expenses:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:incurred_losses;serializer:proto_money"'
+    total_incurred:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:loss_adjustment_expenses;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:total_incurred;serializer:proto_money\""
+    loss_ratio:
+      type: number
+      format: double
+      description: Calculated ratios
+    expense_ratio:
+      type: number
+      format: double
+    combined_ratio:
+      type: number
+      format: double
+    breakdown_json:
+      type: string
+      description: Detailed breakdown
+    development_factors_json:
+      type: string
+      description: Development factors
+    target_loss_ratio:
+      type: number
+      format: double
+      description: Target and comparison
+    comparison_period_id:
+      type: string
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "LossRatioCalculation represents a loss ratio analysis\n Maps to 'loss_ratio_calculations'\
+    \ table in actuarial_schema"
+  required:
+  - loss_ratio_id
+  - period_start
+  - period_end
+  - created_at
+  - updated_at

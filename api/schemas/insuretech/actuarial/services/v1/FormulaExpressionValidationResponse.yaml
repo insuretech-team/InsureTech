@@ -1,0 +1,19 @@
+FormulaExpressionValidationResponse:
+  type: object
+  properties:
+    is_valid:
+      type: boolean
+    errors:
+      type: array
+      items:
+        type: string
+    warnings:
+      type: array
+      items:
+        type: string
+    parsed_variables:
+      type: array
+      items:
+        type: string
+  description: Response payload for formula expression validation operation. Returns
+    operation results and status.

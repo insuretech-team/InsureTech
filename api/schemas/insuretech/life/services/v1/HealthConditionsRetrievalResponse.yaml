@@ -1,0 +1,9 @@
+HealthConditionsRetrievalResponse:
+  type: object
+  properties:
+    conditions:
+      type: array
+      items:
+        $ref: '#/components/schemas/ConditionMultiplier'
+  description: Response payload for health conditions retrieval operation. Returns
+    operation results and status.

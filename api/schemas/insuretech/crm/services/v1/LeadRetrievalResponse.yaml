@@ -1,0 +1,7 @@
+LeadRetrievalResponse:
+  type: object
+  properties:
+    lead:
+      $ref: '#/components/schemas/Lead'
+  description: Response payload for lead retrieval operation. Returns operation results
+    and status.

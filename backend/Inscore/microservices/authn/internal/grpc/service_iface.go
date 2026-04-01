@@ -26,12 +26,16 @@ type AuthServiceIface interface {
 	ValidateCSRF(ctx context.Context, req *authnservicev1.ValidateCSRFRequest) (*authnservicev1.ValidateCSRFResponse, error)
 	GetCurrentSession(ctx context.Context, req *authnservicev1.GetCurrentSessionRequest) (*authnservicev1.GetCurrentSessionResponse, error)
 	RevokeAllSessions(ctx context.Context, req *authnservicev1.RevokeAllSessionsRequest) (*authnservicev1.RevokeAllSessionsResponse, error)
+	FindPortalUser(ctx context.Context, req *authnservicev1.FindPortalUserRequest) (*authnservicev1.FindPortalUserResponse, error)
+	SetTemporaryPassword(ctx context.Context, req *authnservicev1.SetTemporaryPasswordRequest) (*authnservicev1.SetTemporaryPasswordResponse, error)
 	RegisterEmailUser(ctx context.Context, req *authnservicev1.RegisterEmailUserRequest) (*authnservicev1.RegisterEmailUserResponse, error)
 	SendEmailOTP(ctx context.Context, req *authnservicev1.SendEmailOTPRequest) (*authnservicev1.SendEmailOTPResponse, error)
 	VerifyEmail(ctx context.Context, req *authnservicev1.VerifyEmailRequest) (*authnservicev1.VerifyEmailResponse, error)
 	EmailLogin(ctx context.Context, req *authnservicev1.EmailLoginRequest) (*authnservicev1.EmailLoginResponse, error)
+	EmailPasswordLogin(ctx context.Context, req *authnservicev1.EmailPasswordLoginRequest) (*authnservicev1.EmailPasswordLoginResponse, error)
 	RequestPasswordResetByEmail(ctx context.Context, req *authnservicev1.RequestPasswordResetByEmailRequest) (*authnservicev1.RequestPasswordResetByEmailResponse, error)
 	ResetPasswordByEmail(ctx context.Context, req *authnservicev1.ResetPasswordByEmailRequest) (*authnservicev1.ResetPasswordByEmailResponse, error)
+	ProvisionEmployeeUser(ctx context.Context, req *authnservicev1.ProvisionEmployeeUserRequest) (*authnservicev1.ProvisionEmployeeUserResponse, error)
 	BiometricAuthenticate(ctx context.Context, req *authnservicev1.BiometricAuthenticateRequest) (*authnservicev1.BiometricAuthenticateResponse, error)
 	UpdateDLRStatus(ctx context.Context, req *authnservicev1.UpdateDLRStatusRequest) (*authnservicev1.UpdateDLRStatusResponse, error)
 	CreateAPIKey(ctx context.Context, req *authnservicev1.CreateAPIKeyRequest) (*authnservicev1.CreateAPIKeyResponse, error)
@@ -56,13 +60,12 @@ type AuthServiceIface interface {
 	SubmitKYCFrame(ctx context.Context, req *authnservicev1.SubmitKYCFrameRequest) (*authnservicev1.SubmitKYCFrameResponse, error)
 	CompleteKYCSession(ctx context.Context, req *authnservicev1.CompleteKYCSessionRequest) (*authnservicev1.CompleteKYCSessionResponse, error)
 	ApproveKYC(ctx context.Context, req *authnservicev1.ApproveKYCRequest) (*authnservicev1.ApproveKYCResponse, error)
-	RejectKYC(ctx context.Context, req *authnservicev1.RejectKYCRequest) (*authnservicev1.RejectKYCResponse, error)
+	// NOTE: RejectKYC, GetVoiceSession, EndVoiceSession, GetJWKS removed from proto (API path conflicts).
+	// These are now internal helpers on AuthService (unexported methods).
 	// Document Verification
 	VerifyDocument(ctx context.Context, req *authnservicev1.VerifyDocumentRequest) (*authnservicev1.VerifyDocumentResponse, error)
-	// Voice Sessions (CRUD / IVR)
+	// Voice Sessions (IVR / create only — get/end are internal)
 	CreateVoiceSession(ctx context.Context, req *authnservicev1.CreateVoiceSessionRequest) (*authnservicev1.CreateVoiceSessionResponse, error)
-	GetVoiceSession(ctx context.Context, req *authnservicev1.GetVoiceSessionRequest) (*authnservicev1.GetVoiceSessionResponse, error)
-	EndVoiceSession(ctx context.Context, req *authnservicev1.EndVoiceSessionRequest) (*authnservicev1.EndVoiceSessionResponse, error)
 	// Voice Biometric Auth (Sprint 1.10)
 	InitiateVoiceSession(ctx context.Context, req *authnservicev1.InitiateVoiceSessionRequest) (*authnservicev1.InitiateVoiceSessionResponse, error)
 	SubmitVoiceSample(ctx context.Context, req *authnservicev1.SubmitVoiceSampleRequest) (*authnservicev1.SubmitVoiceSampleResponse, error)
@@ -70,11 +73,10 @@ type AuthServiceIface interface {
 	// Profile Photo
 	GetProfilePhotoUploadURL(ctx context.Context, req *authnservicev1.GetProfilePhotoUploadURLRequest) (*authnservicev1.GetProfilePhotoUploadURLResponse, error)
 	// Notification Preferences
+	GetNotificationPreferences(ctx context.Context, req *authnservicev1.GetNotificationPreferencesRequest) (*authnservicev1.GetNotificationPreferencesResponse, error)
 	UpdateNotificationPreferences(ctx context.Context, req *authnservicev1.UpdateNotificationPreferencesRequest) (*authnservicev1.UpdateNotificationPreferencesResponse, error)
 	// TOTP / 2FA
 	EnableTOTP(ctx context.Context, req *authnservicev1.EnableTOTPRequest) (*authnservicev1.EnableTOTPResponse, error)
 	VerifyTOTP(ctx context.Context, req *authnservicev1.VerifyTOTPRequest) (*authnservicev1.VerifyTOTPResponse, error)
 	DisableTOTP(ctx context.Context, req *authnservicev1.DisableTOTPRequest) (*authnservicev1.DisableTOTPResponse, error)
-	// JWKS
-	GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error)
 }

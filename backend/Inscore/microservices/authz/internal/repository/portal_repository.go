@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"database/sql"
 	"errors"
 	"time"
 
@@ -20,6 +21,9 @@ func NewPortalRepo(db *gorm.DB) *PortalRepo { return &PortalRepo{db: db} }
 func (r *PortalRepo) Upsert(ctx context.Context, cfg *entityv1.PortalConfig) (*entityv1.PortalConfig, error) {
 	if cfg == nil {
 		return nil, errors.New("portalConfig.Upsert: nil config")
+	}
+	if cfg.Portal == entityv1.Portal_PORTAL_UNSPECIFIED {
+		return r.GetByPortal(ctx, entityv1.Portal_PORTAL_B2C)
 	}
 	portal := cfg.Portal.String()
 	var updatedBy any = nil
@@ -62,6 +66,7 @@ func (r *PortalRepo) Upsert(ctx context.Context, cfg *entityv1.PortalConfig) (*e
 }
 
 func (r *PortalRepo) GetByPortal(ctx context.Context, portal entityv1.Portal) (*entityv1.PortalConfig, error) {
+	portal = normalizePortalConfigPortal(portal)
 	var (
 		portalStr string
 		methods   pq.StringArray
@@ -86,6 +91,9 @@ func (r *PortalRepo) GetByPortal(ctx context.Context, portal entityv1.Portal) (*
 		&cfg.MaxConcurrentSessions,
 	)
 	if err != nil {
+		if errors.Is(err, sql.ErrNoRows) {
+			return nil, errors.New("portalConfig.GetByPortal: no rows in result set")
+		}
 		return nil, errors.New("portalConfig.GetByPortal: " + err.Error())
 	}
 	cfg.MfaMethods = []string(methods)
@@ -134,6 +142,13 @@ func (r *PortalRepo) List(ctx context.Context) ([]*entityv1.PortalConfig, error)
 	}
 
 	return cfgs, nil
+}
+
+func normalizePortalConfigPortal(portal entityv1.Portal) entityv1.Portal {
+	if portal == entityv1.Portal_PORTAL_UNSPECIFIED {
+		return entityv1.Portal_PORTAL_B2C
+	}
+	return portal
 }
 
 // tokenConfigRow is a plain Go struct for GORM mapping of token_configs table.
@@ -208,7 +223,7 @@ func (r *TokenConfigRepo) Create(ctx context.Context, cfg *entityv1.TokenConfig)
 	if cfg.Algorithm == "" {
 		cfg.Algorithm = "RS256"
 	}
-	
+
 	// Convert proto to map[string]any to avoid GORM reflecting timestamp fields
 	var createdAt *time.Time
 	var rotatedAt *time.Time
@@ -220,17 +235,17 @@ func (r *TokenConfigRepo) Create(ctx context.Context, cfg *entityv1.TokenConfig)
 		t := cfg.RotatedAt.AsTime()
 		rotatedAt = &t
 	}
-	
+
 	values := map[string]any{
-		"kid":            cfg.Kid,
-		"algorithm":      cfg.Algorithm,
-		"public_key_pem": cfg.PublicKeyPem,
+		"kid":             cfg.Kid,
+		"algorithm":       cfg.Algorithm,
+		"public_key_pem":  cfg.PublicKeyPem,
 		"private_key_ref": cfg.PrivateKeyRef,
-		"is_active":      cfg.IsActive,
-		"created_at":     createdAt,
-		"rotated_at":     rotatedAt,
+		"is_active":       cfg.IsActive,
+		"created_at":      createdAt,
+		"rotated_at":      rotatedAt,
 	}
-	
+
 	if err := r.db.WithContext(ctx).Table("authz_schema.token_configs").Create(values).Error; err != nil {
 		return nil, errors.New("tokenConfig.Create: " + err.Error())
 	}

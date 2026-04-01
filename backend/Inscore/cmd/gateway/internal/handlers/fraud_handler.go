@@ -1,4 +1,4 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
@@ -9,7 +9,6 @@ import (
 
 	fraudservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/fraud/services/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
@@ -41,7 +40,7 @@ func NewFraudHandler(conn *grpc.ClientConn) *FraudHandler {
 func (h *FraudHandler) Check(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.CheckFraudRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CheckFraud(ctx, &req)
@@ -80,7 +79,7 @@ func (h *FraudHandler) ListAlerts(w http.ResponseWriter, r *http.Request) {
 func (h *FraudHandler) CreateCase(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.CreateFraudCaseRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateFraudCase(ctx, &req)
@@ -98,7 +97,7 @@ func (h *FraudHandler) UpdateCase(w http.ResponseWriter, r *http.Request) {
 	caseID := r.PathValue("fraud_case_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.UpdateFraudCaseRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.FraudCaseId = caseID
@@ -127,7 +126,7 @@ func (h *FraudHandler) ListRules(w http.ResponseWriter, r *http.Request) {
 func (h *FraudHandler) CreateRule(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.CreateFraudRuleRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		return h.client.CreateFraudRule(ctx, &req)
@@ -138,7 +137,7 @@ func (h *FraudHandler) UpdateRule(w http.ResponseWriter, r *http.Request) {
 	ruleID := r.PathValue("rule_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.UpdateFraudRuleRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.RuleId = ruleID
@@ -151,7 +150,7 @@ func (h *FraudHandler) ActivateRule(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.ActivateFraudRuleRequest
 		if len(body) > 0 {
-			if err := protojson.Unmarshal(body, &req); err != nil {
+			if err := protoUnmarshal(body, &req); err != nil {
 				return nil, err
 			}
 		}
@@ -165,7 +164,7 @@ func (h *FraudHandler) DeactivateRule(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req fraudservicev1.DeactivateFraudRuleRequest
 		if len(body) > 0 {
-			if err := protojson.Unmarshal(body, &req); err != nil {
+			if err := protoUnmarshal(body, &req); err != nil {
 				return nil, err
 			}
 		}

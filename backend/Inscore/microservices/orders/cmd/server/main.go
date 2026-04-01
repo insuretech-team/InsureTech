@@ -6,7 +6,6 @@ import (
 	"net"
 	"os"
 	"os/signal"
-	"strconv"
 	"strings"
 	"syscall"
 	"time"
@@ -19,9 +18,12 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/middleware"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/orders/internal/service"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcclient"
 	kafkaconsumer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/consumer"
 	kafkaproducer "github.com/newage-saint/insuretech/backend/inscore/pkg/kafka/producer"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/kafkaapp"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/serviceaddr"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	documentservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/document/services/v1"
 	orderservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/orders/services/v1"
@@ -31,22 +33,13 @@ import (
 	"github.com/newage-saint/insuretech/ops/env"
 	"go.uber.org/zap"
 	"google.golang.org/grpc"
-	"google.golang.org/grpc/credentials/insecure"
 	"google.golang.org/grpc/health"
 	"google.golang.org/grpc/health/grpc_health_v1"
 	"google.golang.org/grpc/reflection"
 	"gopkg.in/yaml.v3"
 )
 
-type ServicesConfig struct {
-	Services map[string]struct {
-		Name  string `yaml:"name"`
-		Ports struct {
-			Grpc int `yaml:"grpc"`
-			Http int `yaml:"http"`
-		} `yaml:"ports"`
-	} `yaml:"services"`
-}
+type ServicesConfig = serviceaddr.ServicesConfig
 
 func main() {
 	// ── 1. Logger ────────────────────────────────────────────────────────────
@@ -77,9 +70,9 @@ func main() {
 		appLogger.Fatalf("Failed to parse services.yaml: %v", err)
 	}
 
-	ordersServiceConfig, exists := svcConfig.Services["orders"]
+	ordersServiceConfig, exists := svcConfig.Services["sync_order"]
 	if !exists {
-		appLogger.Fatal("configuration for 'orders' service not found in services.yaml")
+		appLogger.Fatal("configuration for 'sync_order' service not found in services.yaml")
 	}
 	cfg.GRPCPort = ordersServiceConfig.Ports.Grpc
 	appLogger.Info("service configured from services.yaml",
@@ -133,7 +126,7 @@ func main() {
 	if authzAddr == "" {
 		authzAddr = cfg.AuthzServiceURL
 	}
-	authzConn, err := grpc.NewClient(authzAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+	authzConn, err := grpcclient.NewClient(authzAddr)
 	if err != nil {
 		appLogger.Warnf("Failed to dial authz-service at %s — AuthZ interceptor will be disabled: %v", authzAddr, err)
 	} else {
@@ -145,7 +138,7 @@ func main() {
 	// ── 7. Payment gRPC client (optional — InitiatePayment fails if unavailable) ─
 	var paymentClient paymentservicev1.PaymentServiceClient
 	if cfg.PaymentServiceURL != "" {
-		payConn, err := grpc.NewClient(cfg.PaymentServiceURL, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		payConn, err := grpcclient.NewClient(cfg.PaymentServiceURL)
 		if err != nil {
 			appLogger.Warnf("Failed to dial payment-service at %s — InitiatePayment will fail: %v", cfg.PaymentServiceURL, err)
 		} else {
@@ -159,25 +152,36 @@ func main() {
 	svc := service.NewOrderService(repo, publisher, paymentClient)
 
 	// ── 9. Kafka consumer (optional) ─────────────────────────────────────────
+	var orderConsumer *kafkaapp.ManagedConsumer
 	if kafkaProducer != nil {
 		// ── Docgen gRPC client (receipt PDF generation after payment) ───────
-		docgenAddr := envOrDefault("DOCGEN_GRPC_ADDR", "docgen-service:50170")
-		docgenConn, _ := grpc.NewClient(docgenAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		docgenAddr := resolveServiceAddr(envOrDefault("DOCGEN_GRPC_ADDR", ""), svcConfig.Services, "docgen")
+		var docgenConn *grpc.ClientConn
+		if docgenAddr == "" {
+			appLogger.Warn("Docgen service address not resolved — receipt generation will be disabled until docgen is reachable")
+		} else {
+			docgenConn, _ = grpcclient.NewClient(docgenAddr)
+		}
 		var docgenClient documentservicev1.DocumentServiceClient
 		if docgenConn != nil {
 			docgenClient = documentservicev1.NewDocumentServiceClient(docgenConn)
 		}
 
 		// ── Storage gRPC client (manual-proof file validation) ────────────────
-		storageAddr := envOrDefault("STORAGE_GRPC_ADDR", "storage-service:50175")
-		storageConn, _ := grpc.NewClient(storageAddr, grpc.WithTransportCredentials(insecure.NewCredentials()))
+		storageAddr := resolveServiceAddr(envOrDefault("STORAGE_GRPC_ADDR", ""), svcConfig.Services, "storage")
+		var storageConn *grpc.ClientConn
+		if storageAddr == "" {
+			appLogger.Warn("Storage service address not resolved — manual-proof validation will be disabled until storage is reachable")
+		} else {
+			storageConn, _ = grpcclient.NewClient(storageAddr)
+		}
 		var storageClient storageservicev1.StorageServiceClient
 		if storageConn != nil {
 			storageClient = storageservicev1.NewStorageServiceClient(storageConn)
 		}
 
 		consumer := consumers.NewEventConsumer(repo, svc, docgenClient, storageClient)
-		go startEventConsumer(cfg, consumer)
+		orderConsumer = startEventConsumer(cfg, consumer)
 	}
 
 	// ── 10. gRPC server with AuthZ interceptor ────────────────────────────────
@@ -199,7 +203,7 @@ func main() {
 
 	healthSrv := health.NewServer()
 	grpc_health_v1.RegisterHealthServer(grpcServer, healthSrv)
-	healthSrv.SetServingStatus("orders", grpc_health_v1.HealthCheckResponse_SERVING)
+	healthSrv.SetServingStatus("sync_order", grpc_health_v1.HealthCheckResponse_SERVING)
 	reflection.Register(grpcServer)
 
 	addr := fmt.Sprintf("0.0.0.0:%d", cfg.GRPCPort)
@@ -209,7 +213,7 @@ func main() {
 	}
 
 	go func() {
-		appLogger.Infof("Orders gRPC server listening on %s", addr)
+		appLogger.Infof("sync-order gRPC server listening on %s", addr)
 		if err := grpcServer.Serve(lis); err != nil {
 			appLogger.Fatalf("Failed to serve: %v", err)
 		}
@@ -221,7 +225,7 @@ func main() {
 	<-quit
 
 	appLogger.Info("Shutting down Orders microservice...")
-	healthSrv.SetServingStatus("orders", grpc_health_v1.HealthCheckResponse_NOT_SERVING)
+	healthSrv.SetServingStatus("sync_order", grpc_health_v1.HealthCheckResponse_NOT_SERVING)
 
 	stopped := make(chan struct{})
 	go func() {
@@ -239,17 +243,20 @@ func main() {
 	if kafkaProducer != nil {
 		kafkaProducer.Close()
 	}
+	if orderConsumer != nil {
+		_ = orderConsumer.Close()
+	}
 }
 
 // startEventConsumer starts the Kafka consumer for payment, policy, and B2B events.
-func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) {
+func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) *kafkaapp.ManagedConsumer {
 	topics := []string{
-		events.TopicPaymentCompleted,       // payment fully confirmed
-		events.TopicPaymentFailed,          // payment gateway failure
-		events.TopicPaymentVerified,        // manual proof approved → re-trigger
-		events.TopicManualReviewRequested,  // manual proof submitted → hold
-		events.TopicManualPaymentReviewed,  // manual review decision (approve/reject)
-		events.TopicPolicyIssued,           // policy issued → fulfillment complete
+		events.TopicPaymentCompleted,         // payment fully confirmed
+		events.TopicPaymentFailed,            // payment gateway failure
+		events.TopicPaymentVerified,          // manual proof approved → re-trigger
+		events.TopicManualReviewRequested,    // manual proof submitted → hold
+		events.TopicManualPaymentReviewed,    // manual review decision (approve/reject)
+		events.TopicPolicyIssued,             // policy issued → fulfillment complete
 		events.TopicB2BPurchaseOrderApproved, // B2B PO approved → create order
 	}
 
@@ -284,14 +291,14 @@ func startEventConsumer(cfg *config.Config, consumer *consumers.EventConsumer) {
 		DLQTopic: "orders-service-dlq",
 	}
 
-	kafkaConsumer, err := kafkaconsumer.NewConsumerGroup(consumerCfg)
+	kafkaConsumer, err := kafkaapp.StartConsumerGroup(consumerCfg)
 	if err != nil {
 		appLogger.Errorf("Failed to create Kafka consumer: %v", err)
-		return
+		return nil
 	}
 
 	appLogger.Infof("Orders event consumer started, listening to topics: %v", topics)
-	kafkaConsumer.Start(context.Background())
+	return kafkaConsumer
 }
 
 // envOrDefault returns the environment variable value or falls back to defaultVal.
@@ -304,19 +311,6 @@ func envOrDefault(key, defaultVal string) string {
 
 // resolveServiceAddr resolves a service gRPC address from services.yaml,
 // falling back to the explicit override if provided.
-func resolveServiceAddr(explicit string, services map[string]struct {
-	Name  string `yaml:"name"`
-	Ports struct {
-		Grpc int `yaml:"grpc"`
-		Http int `yaml:"http"`
-	} `yaml:"ports"`
-}, key string) string {
-	if v := strings.TrimSpace(explicit); v != "" {
-		return v
-	}
-	svc, ok := services[key]
-	if !ok || svc.Ports.Grpc <= 0 {
-		return ""
-	}
-	return key + ":" + strconv.Itoa(svc.Ports.Grpc)
+func resolveServiceAddr(explicit string, services map[string]serviceaddr.Service, key string) string {
+	return serviceaddr.ResolveFromServicesMap(explicit, services, os.Getenv("ORDERS_SERVICE_DISCOVERY_HOST"), key)
 }

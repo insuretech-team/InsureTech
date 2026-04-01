@@ -3,9 +3,5 @@ InvoiceCreationResponse:
   properties:
     invoice:
       $ref: '#/components/schemas/Invoice'
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for invoice creation operation. Returns operation
     results and status.

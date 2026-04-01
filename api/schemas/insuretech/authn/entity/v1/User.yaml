@@ -6,7 +6,7 @@ User:
       description: '@inject_tag: gorm:"primaryKey;column:user_id;not null"'
     mobile_number:
       type: string
-      description: '@inject_tag: gorm:"column:mobile_number;not null"'
+      description: '@inject_tag: gorm:"column:mobile_number"'
       x-pii: true
       x-encrypted: true
       x-log-masked: true
@@ -80,9 +80,9 @@ User:
       description: '@inject_tag: gorm:"column:wallet_payment_method"'
     user_type:
       $ref: '#/components/schemas/UserType'
-      description: "UserType determines auth method: BUSINESS_BENEFICIARY and SYSTEM_USER\
-        \ use\r\n email auth (web portal) B2C_CUSTOMER and AGENT use mobile/SMS auth\r\
-        \n @inject_tag: gorm:\"column:user_type;not null;serializer:proto_enum\""
+      description: "UserType determines auth method: BUSINESS_BENEFICIARY, B2B_BENEFICIARY,\n\
+        \ and SYSTEM_USER use email auth (web portal). B2C_CUSTOMER and AGENT use\n\
+        \ mobile/SMS auth.\n @inject_tag: gorm:\"column:user_type;not null;serializer:proto_enum\""
     email_verified:
       type: boolean
       description: '@inject_tag: gorm:"column:email_verified;not null"'
@@ -101,7 +101,7 @@ User:
     biometric_token_enc:
       type: string
       description: "biometric_token_enc: AES-256-GCM encrypted biometric token (device-side\
-        \ public key / FIDO attestation)\r\n @inject_tag: gorm:\"column:biometric_token_enc\""
+        \ public key / FIDO attestation)\n @inject_tag: gorm:\"column:biometric_token_enc\""
       x-sensitive: true
       writeOnly: true
       x-log-redacted: true
@@ -109,21 +109,24 @@ User:
     biometric_token_idx:
       type: string
       description: "biometric_token_idx: HMAC-SHA256 blind index for biometric_token_enc\
-        \ equality lookup\r\n @inject_tag: gorm:\"column:biometric_token_idx\""
+        \ equality lookup\n @inject_tag: gorm:\"column:biometric_token_idx\""
     mobile_number_idx:
       type: string
       description: "mobile_number_idx: HMAC-SHA256 blind index for encrypted mobile_number\
-        \ equality lookup\r\n @inject_tag: gorm:\"column:mobile_number_idx\""
+        \ equality lookup\n @inject_tag: gorm:\"column:mobile_number_idx\""
     email_idx:
       type: string
       description: "email_idx: HMAC-SHA256 blind index for encrypted email equality\
-        \ lookup\r\n @inject_tag: gorm:\"column:email_idx\""
+        \ lookup\n @inject_tag: gorm:\"column:email_idx\""
     totp_enabled:
       type: boolean
       description: '@inject_tag: gorm:"column:totp_enabled;not null"'
     totp_secret_enc:
       type: string
       description: '@inject_tag: gorm:"column:totp_secret_enc"'
+    password_change_required:
+      type: boolean
+      description: '@inject_tag: gorm:"column:password_change_required;not null"'
     active_policies_count:
       type: integer
       format: int32
@@ -135,5 +138,5 @@ User:
     wallet_balance:
       $ref: '#/components/schemas/Money'
       description: '@inject_tag: gorm:"column:wallet_balance;not null"'
-  description: "User represents a registered user in the system\r\n Maps to 'users'\
+  description: "User represents a registered user in the system\n Maps to 'users'\
     \ table in public schema"

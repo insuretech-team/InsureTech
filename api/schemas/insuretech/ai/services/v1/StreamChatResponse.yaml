@@ -1,10 +1,5 @@
 StreamChatResponse:
   type: object
-  properties:
-    message:
-      $ref: '#/components/schemas/Message'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
+  properties: {}
   description: Response payload for stream chat operation. Returns operation results
     and status.

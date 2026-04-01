@@ -25,9 +25,15 @@ class ProfileFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        setupToolbar()
+    }
 
-        binding.btnBack.setOnClickListener {
-            findNavController().popBackStack()
+    private fun setupToolbar() {
+        binding.profileToolbar.apply {
+            backButton.setOnClickListener {
+                requireActivity().onBackPressed()
+            }
+            toolbarTitle.text = "Profile"
         }
 
         binding.layoutMyInfo.setOnClickListener {

@@ -1,0 +1,5 @@
+PortalConfigsListingRequest:
+  type: object
+  properties: {}
+  description: Request payload for listing portal configs listing items. Supports
+    filtering, sorting, and pagination.

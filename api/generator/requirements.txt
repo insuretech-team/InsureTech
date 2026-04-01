@@ -1,2 +1,4 @@
 protobuf>=4.25.0
 pyyaml>=6.0
+python-dotenv>=1.0.1
+requests>=2.32.0

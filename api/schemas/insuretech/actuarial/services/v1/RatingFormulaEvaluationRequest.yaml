@@ -1,0 +1,16 @@
+RatingFormulaEvaluationRequest:
+  type: object
+  properties:
+    formula_id:
+      type: string
+    formula_code:
+      type: string
+    variables:
+      type: object
+    calculation_reference:
+      type: string
+    calculated_by:
+      type: string
+    save_calculation:
+      type: boolean
+  description: Rating formula evaluation

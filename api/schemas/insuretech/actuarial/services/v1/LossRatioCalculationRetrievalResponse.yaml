@@ -1,0 +1,9 @@
+LossRatioCalculationRetrievalResponse:
+  type: object
+  properties:
+    loss_ratio:
+      $ref: '#/components/schemas/LossRatioCalculation'
+    found:
+      type: boolean
+  description: Response payload for loss ratio calculation retrieval operation. Returns
+    operation results and status.

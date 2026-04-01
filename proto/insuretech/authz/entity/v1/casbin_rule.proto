@@ -66,21 +66,25 @@ message CasbinRule {
     index : {index_name : "idx_casbin_rules_v0" index_type : INDEX_TYPE_BTREE}
   } ];
 
-  // v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
+  // v1: domain   (p-line: portal:tenant) | role (g-line: role:<name>)
+  // NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+  //   v0 = member/user,  v1 = role,  v2 = domain
   // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
   string v1 = 4 [ (insuretech.common.v1.column) = {
     column_name : "v1"
     sql_type : "TEXT"
-    comment : "p: domain (portal:tenant)  g: domain"
+    comment : "p: domain (portal:tenant)  g: role (role:<name>)"
     index : {index_name : "idx_casbin_rules_v1" index_type : INDEX_TYPE_BTREE}
   } ];
 
-  // v2: object   (p-line: svc:resource) | role (g-line: role:<name>)
+  // v2: object   (p-line: svc:resource) | domain (g-line: portal:tenant)
+  // NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+  //   v0 = member/user,  v1 = role,  v2 = domain
   // @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
   string v2 = 5 [ (insuretech.common.v1.column) = {
     column_name : "v2"
     sql_type : "TEXT"
-    comment : "p: object (svc:service/resource)  g: role"
+    comment : "p: object (svc:service/resource)  g: domain (portal:tenant)"
   } ];
 
   // v3: action   (p-line: HTTP verb / domain action)

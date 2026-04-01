@@ -1,0 +1,13 @@
+RecalculateRequest:
+  type: object
+  properties:
+    calculation_id:
+      type: string
+    updated_parameters:
+      type: object
+    recalculated_by:
+      type: string
+    reason:
+      type: string
+  description: Request payload for recalculate operation. Contains parameters required
+    to execute the operation.

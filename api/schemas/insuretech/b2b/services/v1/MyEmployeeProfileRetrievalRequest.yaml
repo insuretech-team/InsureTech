@@ -1,0 +1,5 @@
+MyEmployeeProfileRetrievalRequest:
+  type: object
+  properties: {}
+  description: Request payload for retrieving my employee profile retrieval information.
+    May include filters and pagination parameters.

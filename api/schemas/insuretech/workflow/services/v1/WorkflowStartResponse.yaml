@@ -3,10 +3,5 @@ WorkflowStartResponse:
   properties:
     workflow_instance_id:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for workflow start operation. Returns operation results
     and status.

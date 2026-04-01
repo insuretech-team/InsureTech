@@ -3,9 +3,5 @@ DisputeClaimResponse:
   properties:
     dispute_id:
       type: string
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for dispute claim operation. Returns operation results
     and status.

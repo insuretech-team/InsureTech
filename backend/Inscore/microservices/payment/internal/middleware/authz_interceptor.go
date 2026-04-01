@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"google.golang.org/grpc"
@@ -57,16 +58,15 @@ func (i *PaymentAuthZInterceptor) UnaryServerInterceptor() grpc.UnaryServerInter
 			return nil, status.Error(codes.Unauthenticated, "missing metadata")
 		}
 
-		userID := firstMD(md, "x-user-id")
+		userID := grpcmeta.First(md, "x-user-id")
 		if userID == "" {
 			return nil, status.Error(codes.Unauthenticated, "x-user-id required")
 		}
 
-		portalRaw := firstMD(md, "x-portal")
-		portalNorm := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(portalRaw), "PORTAL_"))
+		portalNorm := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
 		isSystemPortal := portalNorm == "system"
 
-		orgID := firstMD(md, "x-business-id")
+		orgID := grpcmeta.First(md, "x-business-id")
 
 		// B2B portal requires org context for non-webhook methods.
 		if !isSystemPortal && portalNorm == "b2b" && orgID == "" {
@@ -144,8 +144,8 @@ func mapPaymentMethodToResourceAction(method string) (resource, action string) {
 
 // resolvePaymentAuthzDomain builds the Casbin domain string from metadata.
 func resolvePaymentAuthzDomain(md metadata.MD, orgID string) string {
-	portal := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(firstMD(md, "x-portal")), "PORTAL_"))
-	tenantID := firstMD(md, "x-tenant-id")
+	portal := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
+	tenantID := grpcmeta.First(md, "x-tenant-id")
 
 	switch portal {
 	case "system":
@@ -192,14 +192,4 @@ func isSkipMethod(method string) bool {
 // These are authenticated via HMAC signature in the service layer, not via JWT/session.
 func isWebhookMethod(method string) bool {
 	return strings.Contains(method, "HandleGatewayWebhook")
-}
-
-// firstMD returns the first non-empty value for a metadata key, or "".
-func firstMD(md metadata.MD, key string) string {
-	for _, v := range md.Get(key) {
-		if v = strings.TrimSpace(v); v != "" {
-			return v
-		}
-	}
-	return ""
 }

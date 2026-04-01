@@ -1,8 +1,4 @@
 package models
 
-
-// RiskScoreUpdateResponse represents a risk_score_update_response
-type RiskScoreUpdateResponse struct {
-	Message string `json:"message,omitempty"`
-	Error *Error `json:"error,omitempty"`
-}
+// RiskScoreUpdateResponse represents a risk_score_update_response (empty response)
+type RiskScoreUpdateResponse struct{}

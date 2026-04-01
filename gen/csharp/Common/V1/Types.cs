@@ -3210,7 +3210,7 @@ namespace Insuretech.Common.V1 {
     public const int MobileNumberFieldNumber = 1;
     private string mobileNumber_ = "";
     /// <summary>
-    /// +880 1XXX XXXXXX
+    /// Canonical format: +8801XXXXXXXXX
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]

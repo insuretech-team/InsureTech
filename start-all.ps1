@@ -82,7 +82,7 @@ if ($KillAll) {
     }
 
     # 3. Stop any PowerShell background jobs in this session
-    $jobs = Get-Job -ErrorAction SilentlyContinue
+    $jobs = @(Get-Job -ErrorAction SilentlyContinue)
     if ($jobs) {
         $jobs | Stop-Job -ErrorAction SilentlyContinue
         $jobs | Remove-Job -Force -ErrorAction SilentlyContinue
@@ -158,7 +158,7 @@ function Convert-ToWslPath {
     return ($fullPath -replace '\\', '/')
 }
 
-function Escape-ForBashSingleQuote {
+function Format-BashSingleQuotedString {
     param([string]$Value)
     return $Value -replace "'", "'""'""'"
 }
@@ -187,19 +187,24 @@ $AllServices = @(
     [PSCustomObject]@{ Name="authz";        RelPath="backend/inscore/microservices/authz/cmd/server/main.go";  GrpcPort=50070; HttpPort=0;    Kind="REAL" }
 
     # ── Core services ─────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="fraud";        RelPath="backend/inscore/cmd/fraud/main.go";        GrpcPort=50220; HttpPort=0;    Kind="REAL" }
-    [PSCustomObject]@{ Name="partner";      RelPath="backend/inscore/cmd/partner/main.go";      GrpcPort=50100; HttpPort=0;    Kind="REAL" }
-    [PSCustomObject]@{ Name="kyc";          RelPath="backend/inscore/cmd/kyc/main.go";          GrpcPort=50090; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="fraud";        RelPath="backend/inscore/microservices/fraud/cmd/server/main.go";        GrpcPort=50220; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="partner";      RelPath="backend/inscore/microservices/partner/cmd/server/main.go";      GrpcPort=50100; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="kyc";          RelPath="backend/inscore/microservices/kyc/cmd/server/main.go";          GrpcPort=50090; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="insurance";    RelPath="backend/inscore/microservices/insurance/cmd/server/main.go";    GrpcPort=50115; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="orders";       RelPath="backend/inscore/microservices/orders/cmd/server/main.go";       GrpcPort=50142; HttpPort=0;    Kind="REAL" }
     [PSCustomObject]@{ Name="beneficiary";  RelPath="backend/inscore/cmd/beneficiary/main.go";  GrpcPort=50110; HttpPort=0;    Kind="STUB" }
     [PSCustomObject]@{ Name="b2b";          RelPath="backend/inscore/cmd/b2b/main.go";          GrpcPort=50112; HttpPort=0;    Kind="REAL" }
     [PSCustomObject]@{ Name="audit";        RelPath="backend/inscore/cmd/audit/main.go";        GrpcPort=50080; HttpPort=0;    Kind="STUB" }
-    [PSCustomObject]@{ Name="workflow";     RelPath="backend/inscore/cmd/workflow/main.go";     GrpcPort=50180; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="workflow";     RelPath="backend/inscore/microservices/workflow/cmd/server/main.go";     GrpcPort=50180; HttpPort=0;    Kind="REAL" }
+
+    # ── Payment ───────────────────────────────────────────────────────────────
+    [PSCustomObject]@{ Name="payment";      RelPath="backend/inscore/cmd/payment/main.go"; GrpcPort=50190; HttpPort=0;    Kind="REAL" }
 
     # ── Comms / Media ─────────────────────────────────────────────────────────
-    [PSCustomObject]@{ Name="notification"; RelPath="backend/inscore/cmd/notification/main.go"; GrpcPort=50230; HttpPort=0;    Kind="STUB" }
+    [PSCustomObject]@{ Name="notification"; RelPath="backend/inscore/microservices/notification/cmd/server/main.go"; GrpcPort=50230; HttpPort=0;    Kind="REAL" }
     [PSCustomObject]@{ Name="support";      RelPath="backend/inscore/cmd/support/main.go";      GrpcPort=50240; HttpPort=0;    Kind="STUB" }
-    [PSCustomObject]@{ Name="media";        RelPath="backend/inscore/cmd/media/main.go";        GrpcPort=50260; HttpPort=0;    Kind="REAL" }
-    [PSCustomObject]@{ Name="docgen";       RelPath="backend/inscore/cmd/docgen/main.go";       GrpcPort=50280; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="media";        RelPath="backend/inscore/microservices/media/cmd/server/main.go";        GrpcPort=50260; HttpPort=0;    Kind="REAL" }
+    [PSCustomObject]@{ Name="docgen";       RelPath="backend/inscore/microservices/docgen/cmd/server/main.go";       GrpcPort=50280; HttpPort=0;    Kind="REAL" }
     [PSCustomObject]@{ Name="ocr";          RelPath="backend/inscore/cmd/ocr/main.go";          GrpcPort=50270; HttpPort=0;    Kind="STUB" }
     [PSCustomObject]@{ Name="webrtc-server";RelPath="backend/inscore/cmd/webrtc-server/main.go";GrpcPort=50250; HttpPort=0;    Kind="REAL" }
     [PSCustomObject]@{ Name="conference";   RelPath="backend/inscore/cmd/conference/main.go";   GrpcPort=0;     HttpPort=0;    Kind="REAL" }
@@ -217,7 +222,7 @@ $AllServices = @(
 # ── Filter by -Services if provided ──────────────────────────────────────────
 if ($Services -ne "") {
     $requested = $Services -split "," | ForEach-Object { $_.Trim().ToLower() }
-    $AllServices = $AllServices | Where-Object { $requested -contains $_.Name.ToLower() }
+    $AllServices = @($AllServices | Where-Object { $requested -contains $_.Name.ToLower() })
     if ($AllServices.Count -eq 0) {
         Write-Error "No services matched the filter: $Services"
         exit 1
@@ -250,12 +255,21 @@ function Build-ServiceBinary {
     )
     $exePath = Join-Path $BinDir "$($Svc.Name).exe"
 
+    # Always delete the old binary before building to ensure a clean rebuild.
+    # This prevents stale binaries from being run when source code has changed.
+    if (Test-Path $exePath) {
+        Remove-Item $exePath -Force -ErrorAction SilentlyContinue
+        Write-Info "[$($Svc.Name)] Removed stale binary."
+    }
+
     Push-Location $serviceDir
     try {
+        Write-Info "[$($Svc.Name)] Building from $serviceDir ..."
         & go build -o $exePath .
         if ($LASTEXITCODE -ne 0 -or -not (Test-Path $exePath)) {
             throw "go build failed for $($Svc.Name)"
         }
+        Write-Ok "[$($Svc.Name)] Build complete → $exePath"
     } finally {
         Pop-Location
     }
@@ -452,9 +466,9 @@ try {
     }
 
     # Close real-service windows
-    foreach ($pid in $WindowPIDs) {
+    foreach ($windowPid in $WindowPIDs) {
         try {
-            Stop-Process -Id $pid -Force -ErrorAction SilentlyContinue
+            Stop-Process -Id $windowPid -Force -ErrorAction SilentlyContinue
         } catch { }
     }
     if ($WindowPIDs.Count -gt 0) {

@@ -83,20 +83,20 @@ type ReportExecution struct {
 	sizeCache     protoimpl.SizeCache
 	unknownFields protoimpl.UnknownFields
 
-	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`                                                             // @inject_tag: gorm:"primaryKey;column:execution_id;not null"
-	ReportDefinitionId string                 `protobuf:"bytes,2,opt,name=report_definition_id,json=reportDefinitionId,proto3" json:"report_definition_id,omitempty"` // @inject_tag: gorm:"column:report_definition_id;not null"
-	ReportScheduleId   string                 `protobuf:"bytes,3,opt,name=report_schedule_id,json=reportScheduleId,proto3" json:"report_schedule_id,omitempty"`       // @inject_tag: gorm:"column:report_schedule_id"
-	Parameters         string                 `protobuf:"bytes,4,opt,name=parameters,proto3" json:"parameters,omitempty"`                                             // @inject_tag: gorm:"column:parameters"
-	Status             ExecutionStatus        `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.report.entity.v1.ExecutionStatus" json:"status,omitempty"`   // @inject_tag: gorm:"column:status;not null;serializer:proto_enum"
-	FileUrl            string                 `protobuf:"bytes,6,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty"`                                    // @inject_tag: gorm:"column:file_url"
-	FileFormat         string                 `protobuf:"bytes,7,opt,name=file_format,json=fileFormat,proto3" json:"file_format,omitempty"`                           // @inject_tag: gorm:"column:file_format"
-	FileSizeBytes      int64                  `protobuf:"varint,8,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty"`               // @inject_tag: gorm:"column:file_size_bytes"
-	RowCount           int32                  `protobuf:"varint,9,opt,name=row_count,json=rowCount,proto3" json:"row_count,omitempty"`                                // @inject_tag: gorm:"column:row_count"
-	ErrorMessage       string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty"`                    // @inject_tag: gorm:"column:error_message"
-	ExecutedBy         string                 `protobuf:"bytes,11,opt,name=executed_by,json=executedBy,proto3" json:"executed_by,omitempty"`                          // @inject_tag: gorm:"column:executed_by"
-	StartedAt          *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty"`                             // @inject_tag: gorm:"column:started_at;not null;serializer:proto_timestamp"
-	CompletedAt        *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty"`                       // @inject_tag: gorm:"column:completed_at;serializer:proto_timestamp"
-	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,14,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty"`                             // @inject_tag: gorm:"column:audit_info;not null"
+	Id                 string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty" gorm:"primaryKey;column:execution_id;not null"`
+	ReportDefinitionId string                 `protobuf:"bytes,2,opt,name=report_definition_id,json=reportDefinitionId,proto3" json:"report_definition_id,omitempty" gorm:"column:report_definition_id;not null"`
+	ReportScheduleId   string                 `protobuf:"bytes,3,opt,name=report_schedule_id,json=reportScheduleId,proto3" json:"report_schedule_id,omitempty" gorm:"column:report_schedule_id"`
+	Parameters         string                 `protobuf:"bytes,4,opt,name=parameters,proto3" json:"parameters,omitempty" gorm:"column:parameters"`
+	Status             ExecutionStatus        `protobuf:"varint,5,opt,name=status,proto3,enum=insuretech.report.entity.v1.ExecutionStatus" json:"status,omitempty" gorm:"column:status;not null;serializer:proto_enum"`
+	FileUrl            string                 `protobuf:"bytes,6,opt,name=file_url,json=fileUrl,proto3" json:"file_url,omitempty" gorm:"column:file_url"`
+	FileFormat         string                 `protobuf:"bytes,7,opt,name=file_format,json=fileFormat,proto3" json:"file_format,omitempty" gorm:"column:file_format"`
+	FileSizeBytes      int64                  `protobuf:"varint,8,opt,name=file_size_bytes,json=fileSizeBytes,proto3" json:"file_size_bytes,omitempty" gorm:"column:file_size_bytes"`
+	RowCount           int32                  `protobuf:"varint,9,opt,name=row_count,json=rowCount,proto3" json:"row_count,omitempty" gorm:"column:row_count"`
+	ErrorMessage       string                 `protobuf:"bytes,10,opt,name=error_message,json=errorMessage,proto3" json:"error_message,omitempty" gorm:"column:error_message"`
+	ExecutedBy         string                 `protobuf:"bytes,11,opt,name=executed_by,json=executedBy,proto3" json:"executed_by,omitempty" gorm:"column:executed_by"`
+	StartedAt          *timestamppb.Timestamp `protobuf:"bytes,12,opt,name=started_at,json=startedAt,proto3" json:"started_at,omitempty" gorm:"column:started_at;not null;serializer:proto_timestamp"`
+	CompletedAt        *timestamppb.Timestamp `protobuf:"bytes,13,opt,name=completed_at,json=completedAt,proto3" json:"completed_at,omitempty" gorm:"column:completed_at;serializer:proto_timestamp"`
+	AuditInfo          *v1.AuditInfo          `protobuf:"bytes,14,opt,name=audit_info,json=auditInfo,proto3" json:"audit_info,omitempty" gorm:"column:audit_info;not null"`
 }
 
 func (x *ReportExecution) Reset() {

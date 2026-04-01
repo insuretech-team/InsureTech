@@ -5,8 +5,5 @@ PartnerCreationResponse:
       type: string
     partner:
       $ref: '#/components/schemas/Partner'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for partner creation operation. Returns operation
     results and status.

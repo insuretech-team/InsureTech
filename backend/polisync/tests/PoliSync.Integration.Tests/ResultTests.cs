@@ -33,67 +33,57 @@ public sealed class ResultTests
     [Fact]
     public void NotFound_HasNotFoundKind()
     {
-        var result = Result<string>.NotFound("Resource not found");
-        result.Error!.Kind.Should().Be(ResultErrorKind.NotFound);
+        var error = Error.NotFound("Resource", "123");
+        error.Code.Should().Be("NOT_FOUND");
     }
 
     [Fact]
     public void Unauthorized_HasUnauthorizedKind()
     {
-        var result = Result<string>.Unauthorized("Access denied");
-        result.Error!.Kind.Should().Be(ResultErrorKind.Unauthorized);
+        var error = Error.Unauthorized("Access denied");
+        error.Code.Should().Be("UNAUTHORIZED");
     }
 
     [Fact]
     public void Conflict_HasConflictKind()
     {
-        var result = Result<string>.Conflict("Already exists");
-        result.Error!.Kind.Should().Be(ResultErrorKind.Conflict);
+        var error = Error.Conflict("Already exists");
+        error.Code.Should().Be("CONFLICT");
     }
 
     [Fact]
     public void Map_OnSuccess_TransformsValue()
     {
-        var result = Result<int>.Ok(42).Map(x => x.ToString());
-        result.IsSuccess.Should().BeTrue();
-        result.Value.Should().Be("42");
+        var result = Result<int>.Ok(42).Match(
+            onSuccess: x => x.ToString(),
+            onFailure: _ => "failed");
+
+        result.Should().Be("42");
     }
 
     [Fact]
-    public void Map_OnFailure_PreservesError()
+    public void Match_OnFailure_UsesFailureBranch()
     {
-        var result = Result<int>.Fail("ERR", "oops").Map(x => x.ToString());
-        result.IsFailure.Should().BeTrue();
-        result.Error!.Code.Should().Be("ERR");
-    }
+        var result = Result<int>.Fail("ERR", "oops").Match(
+            onSuccess: x => x.ToString(),
+            onFailure: error => error.Code);
 
-    [Fact]
-    public void GetValueOrThrow_OnSuccess_ReturnsValue()
-    {
-        var result = Result<string>.Ok("value");
-        result.GetValueOrThrow().Should().Be("value");
-    }
-
-    [Fact]
-    public void GetValueOrThrow_OnFailure_ThrowsInvalidOperationException()
-    {
-        var result = Result<string>.Fail("ERR", "oops");
-        var act = () => result.GetValueOrThrow();
-        act.Should().Throw<InvalidOperationException>().WithMessage("*ERR*oops*");
+        result.Should().Be("ERR");
     }
 
     // ── ResultExtensions: Error → RpcException mapping ────────────────────
 
     [Theory]
-    [InlineData(ResultErrorKind.NotFound,     StatusCode.NotFound)]
-    [InlineData(ResultErrorKind.Unauthorized, StatusCode.PermissionDenied)]
-    [InlineData(ResultErrorKind.Conflict,     StatusCode.AlreadyExists)]
-    [InlineData(ResultErrorKind.Validation,   StatusCode.InvalidArgument)]
-    [InlineData(ResultErrorKind.Internal,     StatusCode.Internal)]
-    [InlineData(ResultErrorKind.DomainError,  StatusCode.InvalidArgument)]
-    public void ToRpcException_MapsCorrectStatusCode(ResultErrorKind kind, StatusCode expected)
+    [InlineData("NOT_FOUND", StatusCode.NotFound)]
+    [InlineData("UNAUTHORIZED", StatusCode.Unauthenticated)]
+    [InlineData("FORBIDDEN", StatusCode.PermissionDenied)]
+    [InlineData("CONFLICT", StatusCode.AlreadyExists)]
+    [InlineData("VALIDATION_ERROR", StatusCode.InvalidArgument)]
+    [InlineData("INTERNAL_ERROR", StatusCode.Internal)]
+    [InlineData("UNKNOWN", StatusCode.Unknown)]
+    public void ToRpcException_MapsCorrectStatusCode(string code, StatusCode expected)
     {
-        var error = new ResultError("CODE", "message", kind);
+        var error = new Error(code, "message");
         var ex = error.ToRpcException();
         ex.StatusCode.Should().Be(expected);
         ex.Status.Detail.Should().Be("message");

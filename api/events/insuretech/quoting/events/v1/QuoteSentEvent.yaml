@@ -1,0 +1,18 @@
+QuoteSentEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    customer_id:
+      type: string
+    sent_method:
+      type: string
+      description: EMAIL, SMS, PORTAL
+    sent_at:
+      type: string
+      format: date-time
+  description: QuoteSentEvent is emitted when a quote is sent to customer

@@ -47,6 +47,11 @@ func (r *KYCVerificationRepository) GetByEntity(ctx context.Context, entityType,
 	return r.getOne(ctx, "entity_type = ? AND entity_id = ?", entityType, entityID)
 }
 
+// GetByProviderReference looks up a KYC verification by its FLVE session UUID (provider_reference).
+func (r *KYCVerificationRepository) GetByProviderReference(ctx context.Context, providerRef string) (*kycv1.KYCVerification, error) {
+	return r.getOne(ctx, "provider_reference = ?", providerRef)
+}
+
 const kycCols = `verification_id, type, entity_type, entity_id, method, provider, provider_reference, status, rejection_reason, verified_by, verified_at, expires_at`
 
 func scanKYCVerification(row interface{ Scan(...any) error }) (*kycv1.KYCVerification, error) {
@@ -135,6 +140,23 @@ func (r *KYCVerificationRepository) Delete(ctx context.Context, id string) error
 	return r.db.WithContext(ctx).Table("authn_schema.kyc_verifications").Where("verification_id = ?", id).Delete(map[string]any{}).Error
 }
 
+// SetStatus sets the status column directly using a raw string (e.g. "PENDING_REVIEW").
+func (r *KYCVerificationRepository) SetStatus(ctx context.Context, id string, status string) error {
+	return r.db.WithContext(ctx).Table("authn_schema.kyc_verifications").
+		Where("verification_id = ?", id).
+		Update("status", status).Error
+}
+
+// AppendVerificationResult appends a JSON snapshot to the verification_result JSONB column.
+func (r *KYCVerificationRepository) AppendVerificationResult(ctx context.Context, id string, jsonSnapshot string) error {
+	return r.db.WithContext(ctx).Exec(
+		`update authn_schema.kyc_verifications
+		 set verification_result = coalesce(verification_result, '[]'::jsonb) || ?::jsonb
+		 where verification_id = ?`,
+		"["+jsonSnapshot+"]", id,
+	).Error
+}
+
 func (r *KYCVerificationRepository) getOne(ctx context.Context, where string, args ...any) (*kycv1.KYCVerification, error) {
 	q := `select ` + kycCols + ` from authn_schema.kyc_verifications where ` + where + ` limit 1`
 	row := r.db.WithContext(ctx).Raw(q, args...).Row()
@@ -181,4 +203,10 @@ func verificationStatusFromString(s string) kycv1.VerificationStatus {
 		return kycv1.VerificationStatus(v)
 	}
 	return kycv1.VerificationStatus_VERIFICATION_STATUS_UNSPECIFIED
+}
+
+// verificationStatusToStringDB converts a proto enum to its canonical DB string.
+// PENDING_REVIEW is stored as-is (not as "IN_PROGRESS") since the proto now supports it.
+func verificationStatusToStringDB(s kycv1.VerificationStatus) string {
+	return strings.TrimPrefix(s.String(), "VERIFICATION_STATUS_")
 }

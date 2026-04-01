@@ -1,4 +1,4 @@
-package handlers
+﻿package handlers
 
 import (
 	"context"
@@ -7,7 +7,6 @@ import (
 
 	mediaservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/media/services/v1"
 	"google.golang.org/grpc"
-	"google.golang.org/protobuf/encoding/protojson"
 	"google.golang.org/protobuf/proto"
 )
 
@@ -40,7 +39,7 @@ func NewMediaHandler(conn *grpc.ClientConn) *MediaHandler {
 func (h *MediaHandler) Upload(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req mediaservicev1.UploadMediaRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		if req.TenantId == "" {
@@ -119,7 +118,7 @@ func (h *MediaHandler) Validate(w http.ResponseWriter, r *http.Request) {
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req mediaservicev1.ValidateMediaRequest
 		if len(body) > 0 {
-			if err := protojson.Unmarshal(body, &req); err != nil {
+			if err := protoUnmarshal(body, &req); err != nil {
 				return nil, err
 			}
 		}
@@ -133,7 +132,7 @@ func (h *MediaHandler) RequestProcessing(w http.ResponseWriter, r *http.Request)
 	mediaID := r.PathValue("media_id")
 	callUnary(w, r, func(ctx context.Context, body []byte) (proto.Message, error) {
 		var req mediaservicev1.RequestProcessingRequest
-		if err := protojson.Unmarshal(body, &req); err != nil {
+		if err := protoUnmarshal(body, &req); err != nil {
 			return nil, err
 		}
 		req.MediaId = mediaID

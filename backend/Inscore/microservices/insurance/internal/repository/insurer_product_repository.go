@@ -23,6 +23,30 @@ func NewInsurerProductRepository(db *gorm.DB) *InsurerProductRepository {
 	return &InsurerProductRepository{db: db}
 }
 
+func insurerProductStatusToDB(status insurerv1.ProductStatus) string {
+	switch status {
+	case insurerv1.ProductStatus_PRODUCT_STATUS_INACTIVE:
+		return "INACTIVE"
+	case insurerv1.ProductStatus_PRODUCT_STATUS_DISCONTINUED:
+		return "DISCONTINUED"
+	default:
+		return "ACTIVE"
+	}
+}
+
+func parseInsurerProductStatusDB(value string) insurerv1.ProductStatus {
+	switch strings.ToUpper(strings.TrimSpace(value)) {
+	case "ACTIVE", "PRODUCT_STATUS_ACTIVE", "1":
+		return insurerv1.ProductStatus_PRODUCT_STATUS_ACTIVE
+	case "INACTIVE", "PRODUCT_STATUS_INACTIVE", "2":
+		return insurerv1.ProductStatus_PRODUCT_STATUS_INACTIVE
+	case "DISCONTINUED", "PRODUCT_STATUS_DISCONTINUED", "3":
+		return insurerv1.ProductStatus_PRODUCT_STATUS_DISCONTINUED
+	default:
+		return insurerv1.ProductStatus_PRODUCT_STATUS_UNSPECIFIED
+	}
+}
+
 func (r *InsurerProductRepository) Create(ctx context.Context, product *insurerv1.InsurerProduct) (*insurerv1.InsurerProduct, error) {
 	if product.Id == "" {
 		return nil, fmt.Errorf("product_id is required")
@@ -104,7 +128,7 @@ func (r *InsurerProductRepository) Create(ctx context.Context, product *insurerv
 		product.ProductId,
 		product.Code,
 		product.Name,
-		strings.ToUpper(product.Status.String()),
+		insurerProductStatusToDB(product.Status),
 		minSumAssured,
 		minSumAssuredCurrency,
 		maxSumAssured,
@@ -237,10 +261,7 @@ func (r *InsurerProductRepository) GetByID(ctx context.Context, productID string
 
 	// Parse enum
 	if statusStr.Valid {
-		k := strings.ToUpper(statusStr.String)
-		if v, ok := insurerv1.ProductStatus_value[k]; ok {
-			p.Status = insurerv1.ProductStatus(v)
-		}
+		p.Status = parseInsurerProductStatusDB(statusStr.String)
 	}
 
 	// Set timestamps
@@ -353,7 +374,7 @@ func (r *InsurerProductRepository) Update(ctx context.Context, product *insurerv
 		product.ProductId,
 		product.Code,
 		product.Name,
-		strings.ToUpper(product.Status.String()),
+		insurerProductStatusToDB(product.Status),
 		minSumAssured,
 		minSumAssuredCurrency,
 		maxSumAssured,
@@ -507,10 +528,7 @@ func (r *InsurerProductRepository) ListByInsurerID(ctx context.Context, insurerI
 
 		// Parse enum
 		if statusStr.Valid {
-			k := strings.ToUpper(statusStr.String)
-			if v, ok := insurerv1.ProductStatus_value[k]; ok {
-				p.Status = insurerv1.ProductStatus(v)
-			}
+			p.Status = parseInsurerProductStatusDB(statusStr.String)
 		}
 
 		// Set timestamps

@@ -27,6 +27,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jung-kurt/gofpdf"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/docgen/internal/kafka"
+	"github.com/newage-saint/insuretech/backend/inscore/microservices/docgen/internal/renderer"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/docgen/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	documentv1 "github.com/newage-saint/insuretech/gen/go/insuretech/document/entity/v1"
@@ -63,6 +64,9 @@ type DocumentService struct {
 	templateDirPath string
 	gotenbergURL    string
 	pdfTimeout      time.Duration
+	// sidecarClient is the optional Python docrender sidecar for DOCX and
+	// WeasyPrint PDF generation. May be nil when the sidecar is not configured.
+	sidecarClient *renderer.SidecarClient
 }
 
 func NewDocumentService(
@@ -103,12 +107,23 @@ func (s *DocumentService) SetPDFRenderer(gotenbergURL string, timeout time.Durat
 	}
 }
 
+// SetDocRenderer configures the Python docrender sidecar used for DOCX and
+// high-quality WeasyPrint PDF generation. sidecarURL example: "http://localhost:8500".
+func (s *DocumentService) SetDocRenderer(sidecarURL string, timeout time.Duration) {
+	url := strings.TrimSpace(sidecarURL)
+	if url == "" {
+		return
+	}
+	s.sidecarClient = renderer.NewSidecarClient(url, timeout)
+}
+
 func (s *DocumentService) GenerateDocument(
 	ctx context.Context,
 	templateID, entityType, entityID string,
 	data *structpb.Struct,
 	includeQRCode bool,
 	tenantID, generatedBy string,
+	outputFormatHint string, // per-request override; empty = use template default
 ) (*documentv1.DocumentGeneration, error) {
 	if strings.TrimSpace(templateID) == "" {
 		return nil, fmt.Errorf("%w: template_id is required", ErrInvalidInput)
@@ -191,7 +206,12 @@ func (s *DocumentService) GenerateDocument(
 	}
 	renderedHTML = s.inlineTemplateLocalAssets(renderedHTML)
 
-	fileContent, contentType, fileExt, err := buildOutput(renderedHTML, tpl.OutputFormat, s.gotenbergURL, s.pdfTimeout)
+	// Resolve effective output format: per-request hint overrides template default.
+	effectiveFormat := tpl.OutputFormat
+	if hint := strings.TrimSpace(strings.ToLower(outputFormatHint)); hint != "" {
+		effectiveFormat = parseOutputFormatHint(hint)
+	}
+	fileContent, contentType, fileExt, err := buildOutput(ctx, renderedHTML, tpl.TemplateContent, payload, tpl.Name, effectiveFormat, s.gotenbergURL, s.pdfTimeout, s.sidecarClient)
 	if err != nil {
 		return nil, err
 	}
@@ -285,6 +305,63 @@ func (s *DocumentService) GenerateDocument(
 	}()
 
 	return created, nil
+}
+
+// GenerateOptions controls per-request generation behaviour.
+type GenerateOptions struct {
+	// IncludeQRCode embeds a QR code data URI in the payload.
+	IncludeQRCode bool
+	// OutputFormatHint overrides the template's configured output_format.
+	// Accepts: "pdf", "html", "docx", "xlsx" (case-insensitive).
+	// Empty string means use the template's default.
+	OutputFormatHint string
+	// AltMedia signals that the caller wants raw file bytes returned
+	// directly in the response (Google API ?$alt=media style).
+	AltMedia bool
+}
+
+// GenerateResult is returned by GenerateDocumentEx.
+type GenerateResult struct {
+	DocumentID  string
+	FileURL     string
+	// FileBytes is populated when AltMedia=true.
+	FileBytes   []byte
+	ContentType string
+	Filename    string
+}
+
+// GenerateDocumentEx is the primary generation entry point.
+// It honours per-request format overrides and the alt=media flag.
+// The legacy GenerateDocument method delegates here.
+func (s *DocumentService) GenerateDocumentEx(
+	ctx context.Context,
+	templateID, entityType, entityID string,
+	data *structpb.Struct,
+	tenantID, generatedBy string,
+	opts GenerateOptions,
+) (*GenerateResult, error) {
+	doc, err := s.GenerateDocument(ctx, templateID, entityType, entityID, data, opts.IncludeQRCode, tenantID, generatedBy, opts.OutputFormatHint)
+	if err != nil {
+		return nil, err
+	}
+	result := &GenerateResult{
+		DocumentID: doc.Id,
+		FileURL:    doc.FileUrl,
+	}
+	// When alt=media requested, decode the raw bytes from the stored data.
+	if opts.AltMedia && doc.Data != "" {
+		var rawData map[string]any
+		if jsonErr := json.Unmarshal([]byte(doc.Data), &rawData); jsonErr == nil {
+			if b64, ok := rawData["_rendered_content_b64"].(string); ok && b64 != "" {
+				if decoded, decErr := base64.StdEncoding.DecodeString(b64); decErr == nil {
+					result.FileBytes   = decoded
+					result.ContentType = asString(rawData["_content_type"])
+					result.Filename    = asString(rawData["_filename"])
+				}
+			}
+		}
+	}
+	return result, nil
 }
 
 func (s *DocumentService) GetDocument(ctx context.Context, documentID string) (*documentv1.DocumentGeneration, error) {
@@ -609,6 +686,43 @@ func (s *DocumentService) bootstrapDefaultTemplates(ctx context.Context) error {
 			Type:        documentv1.DocumentType_DOCUMENT_TYPE_RECEIPT,
 			Description: "Legacy purchase order alias to B2B PO template",
 		},
+		// ── Insurance proposal & claim templates ──────────────────────────────
+		{
+			Name:        "motor_proposal",
+			Relative:    filepath.Join("insurance", "motor_proposal.html"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_POLICY_CERTIFICATE,
+			Description: "Motor insurance proposal form (Class 1/2/3+)",
+		},
+		{
+			Name:        "fire_proposal",
+			Relative:    filepath.Join("insurance", "fire_proposal.html"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_POLICY_CERTIFICATE,
+			Description: "Fire & allied perils insurance proposal form",
+		},
+		{
+			Name:        "omp_proposal",
+			Relative:    filepath.Join("insurance", "omp_proposal.html"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_POLICY_CERTIFICATE,
+			Description: "Office / commercial package (OMP) proposal form",
+		},
+		{
+			Name:        "motor_claim",
+			Relative:    filepath.Join("insurance", "motor_claim.html"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_CLAIM_FORM,
+			Description: "Motor insurance claim form",
+		},
+		{
+			Name:        "general_claim",
+			Relative:    filepath.Join("insurance", "general_claim.html"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_CLAIM_FORM,
+			Description: "General insurance claim form (fire, OMP, miscellaneous)",
+		},
+		{
+			Name:        "overseas_mediclaim_proposal",
+			Relative:    filepath.Join("insurance", "overseas_mediclaim_proposal.json"),
+			Type:        documentv1.DocumentType_DOCUMENT_TYPE_POLICY_CERTIFICATE,
+			Description: "Overseas Mediclaim Proposal Form (Travel Insurance) — Business & Holidays",
+		},
 	}
 
 	for _, spec := range specs {
@@ -773,21 +887,170 @@ func isWithinDir(path, root string) bool {
 	return strings.HasPrefix(pathLower, rootLower+string(filepath.Separator))
 }
 
-func buildOutput(renderedHTML string, format documentv1.OutputFormat, gotenbergURL string, timeout time.Duration) ([]byte, string, string, error) {
+// parseOutputFormatHint converts a string hint ("pdf", "docx", "xlsx", "html")
+// to the corresponding OutputFormat enum value.
+func parseOutputFormatHint(hint string) documentv1.OutputFormat {
+	switch strings.ToLower(strings.TrimSpace(hint)) {
+	case "pdf":
+		return documentv1.OutputFormat_OUTPUT_FORMAT_PDF
+	case "docx":
+		return documentv1.OutputFormat_OUTPUT_FORMAT_DOCX
+	case "xlsx":
+		return documentv1.OutputFormat_OUTPUT_FORMAT_XLSX
+	case "html":
+		return documentv1.OutputFormat_OUTPUT_FORMAT_HTML
+	default:
+		return documentv1.OutputFormat_OUTPUT_FORMAT_UNSPECIFIED
+	}
+}
+
+func buildOutput(
+	ctx context.Context,
+	renderedHTML string,
+	templateContent string,
+	payload map[string]any,
+	templateName string,
+	format documentv1.OutputFormat,
+	gotenbergURL string,
+	timeout time.Duration,
+	sidecar *renderer.SidecarClient,
+) ([]byte, string, string, error) {
 	switch format {
 	case documentv1.OutputFormat_OUTPUT_FORMAT_HTML, documentv1.OutputFormat_OUTPUT_FORMAT_UNSPECIFIED:
 		return []byte(renderedHTML), "text/html; charset=utf-8", ".html", nil
+
 	case documentv1.OutputFormat_OUTPUT_FORMAT_PDF:
-		pdfBytes, err := renderPDF(renderedHTML, gotenbergURL, timeout)
+		// Try Gotenberg (Chromium-based, best quality for complex HTML/CSS).
+		// Fall back to WeasyPrint sidecar, then to the basic gofpdf fallback.
+		if strings.TrimSpace(gotenbergURL) != "" {
+			pdf, err := renderPDFWithGotenberg(renderedHTML, gotenbergURL, timeout)
+			if err == nil {
+				return pdf, "application/pdf", ".pdf", nil
+			}
+			logger.Warnf("gotenberg pdf conversion failed, trying weasyprint sidecar: %v", err)
+		}
+		if sidecar != nil {
+			pdf, err := sidecar.RenderPDF(ctx, renderedHTML)
+			if err == nil {
+				return pdf, "application/pdf", ".pdf", nil
+			}
+			logger.Warnf("weasyprint sidecar pdf conversion failed, falling back to basic renderer: %v", err)
+		}
+		pdf, err := renderPDFFallback(renderedHTML)
 		if err != nil {
 			return nil, "", "", err
 		}
-		return pdfBytes, "application/pdf", ".pdf", nil
+		return pdf, "application/pdf", ".pdf", nil
+
 	case documentv1.OutputFormat_OUTPUT_FORMAT_DOCX:
-		return nil, "", "", fmt.Errorf("%w: DOCX", ErrUnsupportedOutput)
+		if sidecar == nil {
+			return nil, "", "", fmt.Errorf("%w: DOCX requires the docrender sidecar (DOC_RENDERER_URL). Please configure it", ErrUnsupportedOutput)
+		}
+		docxBytes, err := sidecar.RenderDOCX(ctx, renderer.DocxRequest{
+			TemplateContent: templateContent,
+			Data:            payload,
+			Title:           asString(payload["policy_title"]),
+			Author:          "InsureTech",
+			Subject:         templateName,
+		})
+		if err != nil {
+			return nil, "", "", fmt.Errorf("docx render failed: %w", err)
+		}
+		return docxBytes,
+			"application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+			".docx", nil
+
+	case documentv1.OutputFormat_OUTPUT_FORMAT_XLSX:
+		xlsxBytes, err := buildXLSXOutput(payload, templateName)
+		if err != nil {
+			return nil, "", "", fmt.Errorf("xlsx render failed: %w", err)
+		}
+		return xlsxBytes,
+			"application/vnd.openxmlformats-officedocument.spreadsheetml.sheet",
+			".xlsx", nil
+
 	default:
 		return nil, "", "", fmt.Errorf("%w: unknown output format", ErrUnsupportedOutput)
 	}
+}
+
+// buildXLSXOutput converts a document payload into a rich styled Excel workbook.
+// It auto-detects line items, summary fields, and totals from the standard payload keys.
+func buildXLSXOutput(payload map[string]any, templateName string) ([]byte, error) {
+	// ── Line items ────────────────────────────────────────────────────────────
+	var items []map[string]any
+	if rawItems, ok := payload["items"]; ok {
+		if list, ok := rawItems.([]any); ok {
+			for _, it := range list {
+				if m, ok := it.(map[string]any); ok {
+					items = append(items, m)
+				}
+			}
+		}
+	}
+
+	itemCols := []renderer.XLSXColumn{
+		{Key: "description", Header: "Description",  Width: 38},
+		{Key: "quantity",    Header: "Qty",           Width: 8},
+		{Key: "unit_price",  Header: "Unit Price",    Width: 14, IsMoney: true},
+		{Key: "amount",      Header: "Amount",        Width: 14, IsMoney: true},
+	}
+
+	// ── Totals ────────────────────────────────────────────────────────────────
+	var totals []renderer.XLSXTotalRow
+	if v := asString(payload["subtotal"]); v != "" && v != "0.00" {
+		totals = append(totals, renderer.XLSXTotalRow{Label: "Subtotal", Value: v})
+	}
+	if v := asString(payload["tax"]); v != "" && v != "0.00" {
+		totals = append(totals, renderer.XLSXTotalRow{Label: "Tax", Value: v})
+	}
+	if v := asString(payload["service_fee"]); v != "" && v != "0.00" {
+		totals = append(totals, renderer.XLSXTotalRow{Label: "Service Fee", Value: v})
+	}
+	if v := asString(payload["shipping_cost"]); v != "" && v != "0.00" {
+		totals = append(totals, renderer.XLSXTotalRow{Label: "Shipping", Value: v})
+	}
+	if v := asString(payload["total"]); v != "" {
+		totals = append(totals, renderer.XLSXTotalRow{Label: "TOTAL", Value: v, IsBold: true})
+	}
+
+	// ── Summary fields (all non-item, non-private keys) ───────────────────────
+	summary := make(map[string]any)
+	skipKeys := map[string]bool{
+		"items": true, "subtotal": true, "tax": true, "total": true,
+		"service_fee": true, "shipping_cost": true, "processing_fee": true,
+		"qr_code_data_uri": true,
+	}
+	for k, v := range payload {
+		if strings.HasPrefix(k, "_") || skipKeys[k] {
+			continue
+		}
+		switch v.(type) {
+		case string, float64, float32, int, int32, int64, bool:
+			summary[k] = v
+		}
+	}
+
+	title := asString(payload["policy_title"])
+	if title == "" {
+		title = asString(payload["invoice_number"])
+	}
+	if title == "" {
+		title = templateName
+	}
+
+	opts := renderer.XLSXOptions{
+		Title:       title,
+		Author:      "InsureTech",
+		Subject:     templateName,
+		Description: asString(payload["description"]),
+		Items:       items,
+		ItemColumns: itemCols,
+		Summary:     summary,
+		Totals:      totals,
+	}
+
+	return renderer.RenderXLSX(opts)
 }
 
 func renderPDF(renderedHTML, gotenbergURL string, timeout time.Duration) ([]byte, error) {
@@ -943,6 +1206,73 @@ func applyBusinessDefaults(templateName string, payload map[string]any) {
 		if _, ok := payload["benefits"]; !ok {
 			payload["benefits"] = []any{"Coverage details will be provided by insurer"}
 		}
+
+	case "overseas_mediclaim":
+		setIfMissing(payload, "company_name", "Pragati Insurance Limited")
+		setIfMissing(payload, "proposal_id", "OMP-"+time.Now().UTC().Format("20060102150405"))
+		setIfMissing(payload, "generated_at", time.Now().UTC().Format("02 Jan 2006 15:04 UTC"))
+		setIfMissing(payload, "plan_type", "")
+		setIfMissing(payload, "trip_purpose", "")
+		setIfMissing(payload, "departure_date", "")
+		setIfMissing(payload, "days_abroad", "")
+		setIfMissing(payload, "itinerary", "")
+		setIfMissing(payload, "q1_good_health", "")
+		setIfMissing(payload, "q2a_nervous", "")
+		setIfMissing(payload, "q2b_heart", "")
+		setIfMissing(payload, "q2c_hernia", "")
+		setIfMissing(payload, "q2d_respiratory", "")
+		setIfMissing(payload, "q2e_specialist", "")
+		setIfMissing(payload, "q2f_future", "")
+		setIfMissing(payload, "q3_additional_facts", "")
+		setIfMissing(payload, "q4_winter_sports", "")
+		setIfMissing(payload, "known_ailment_1", "")
+		setIfMissing(payload, "known_ailment_2", "")
+		setIfMissing(payload, "known_ailment_3", "")
+		setIfMissing(payload, "known_ailment_4", "")
+		setIfMissing(payload, "signature_place", "")
+		setIfMissing(payload, "signature_date", "")
+		if _, ok := payload["illness_history"]; !ok {
+			payload["illness_history"] = []any{
+				map[string]any{"nature_of_illness": "", "date_first_treated": "", "practitioner_details": ""},
+				map[string]any{"nature_of_illness": "", "date_first_treated": "", "practitioner_details": ""},
+				map[string]any{"nature_of_illness": "", "date_first_treated": "", "practitioner_details": ""},
+			}
+		}
+		if _, ok := payload["product_benefits"]; !ok {
+			payload["product_benefits"] = []any{
+				map[string]any{"number": "01.", "benefit": "Medical Expenses & Hospitalization abroad (Worldwide excl. USA/Canada)", "limit": "US$ 50,000 — Excess USD 100"},
+				map[string]any{"number": "02.", "benefit": "Medical Expenses & Hospitalization abroad (Worldwide incl. USA/Canada)", "limit": "US$ 100,000 — Excess USD 100"},
+				map[string]any{"number": "03.", "benefit": "Medical Expenses & Hospitalization for Schengen Countries", "limit": "Euro 30,000 — Nil deductible"},
+				map[string]any{"number": "04.", "benefit": "Transport or Repatriation in case of Illness or Accident", "limit": "Actual Expenses"},
+				map[string]any{"number": "05.", "benefit": "Emergency Dental Care", "limit": "US$ 500 — Excess US$ 50"},
+				map[string]any{"number": "06.", "benefit": "Repatriation of Family Member Travelling with the Insured", "limit": "Actual Expenses"},
+				map[string]any{"number": "07.", "benefit": "Repatriation of Mortal Remains", "limit": "Actual Expenses"},
+				map[string]any{"number": "08.", "benefit": "Travel of one immediate family member", "limit": "US$ 100/day — Max US$ 1,000"},
+				map[string]any{"number": "09.", "benefit": "Emergency return home following death of a close family member", "limit": "Actual Expenses"},
+			}
+		}
+
+	case "proposal":
+		setIfMissing(payload, "proposal_id", "PROP-"+time.Now().UTC().Format("20060102150405"))
+		setIfMissing(payload, "proposal_number", "PROP-"+time.Now().UTC().Format("20060102150405"))
+		setIfMissing(payload, "proposal_date", now)
+		setIfMissing(payload, "generated_at", time.Now().UTC().Format("02 Jan 2006 15:04 UTC"))
+		setIfMissing(payload, "coverage_start_date", now)
+		setIfMissing(payload, "coverage_end_date", time.Now().UTC().AddDate(1, 0, 0).Format("2006-01-02"))
+		setIfMissing(payload, "total_premium", "0.00")
+		setIfMissing(payload, "stamp_duty", "0.00")
+		setIfMissing(payload, "vat_amount", "0.00")
+		setIfMissing(payload, "basic_premium", "0.00")
+
+	case "claim":
+		setIfMissing(payload, "claim_id", "CLM-"+time.Now().UTC().Format("20060102150405"))
+		setIfMissing(payload, "claim_number", "CLM-"+time.Now().UTC().Format("20060102150405"))
+		setIfMissing(payload, "claim_date", now)
+		setIfMissing(payload, "generated_at", time.Now().UTC().Format("02 Jan 2006 15:04 UTC"))
+		setIfMissing(payload, "net_claim_amount", "0.00")
+		setIfMissing(payload, "deductible_amount", "0.00")
+		setIfMissing(payload, "total_loss_amount", "0.00")
+		setIfMissing(payload, "claim_status", "New")
 	}
 }
 
@@ -955,6 +1285,12 @@ func templateKind(templateName string) string {
 		return "purchase_order"
 	case name == "policy_document":
 		return "policy_document"
+	case strings.Contains(name, "mediclaim"):
+		return "overseas_mediclaim"
+	case strings.Contains(name, "proposal"):
+		return "proposal"
+	case strings.Contains(name, "claim"):
+		return "claim"
 	default:
 		return name
 	}

@@ -1,0 +1,232 @@
+syntax = "proto3";
+
+package insuretech.life.services.v1;
+
+option go_package = "github.com/newage-saint/insuretech/gen/go/insuretech/life/services/v1;lifeservicev1";
+option csharp_namespace = "Insuretech.Life.Services.V1";
+
+import "google/protobuf/struct.proto";
+import "google/protobuf/timestamp.proto";
+import "insuretech/common/v1/error.proto";
+import "insuretech/common/v1/types.proto";
+import "insuretech/life/entity/v1/life.proto";
+
+// LifeInsuranceService provides life insurance products and quote management
+service LifeInsuranceService {
+  // Get a life insurance product
+  rpc GetLifeProduct(GetLifeProductRequest) returns (GetLifeProductResponse);
+
+  // List life insurance products
+  rpc ListLifeProducts(ListLifeProductsRequest) returns (ListLifeProductsResponse);
+
+  // Create a life insurance product
+  rpc CreateLifeProduct(CreateLifeProductRequest) returns (CreateLifeProductResponse);
+
+  // Update a life insurance product
+  rpc UpdateLifeProduct(UpdateLifeProductRequest) returns (UpdateLifeProductResponse);
+
+  // Delete a life insurance product
+  rpc DeleteLifeProduct(DeleteLifeProductRequest) returns (DeleteLifeProductResponse);
+
+  // Calculate premium for life insurance
+  rpc CalculatePremium(CalculatePremiumRequest) returns (CalculatePremiumResponse);
+
+  // Generate a life insurance quote
+  rpc GenerateQuote(GenerateQuoteRequest) returns (GenerateQuoteResponse);
+
+  // Get a life insurance quote
+  rpc GetQuote(GetQuoteRequest) returns (GetQuoteResponse);
+
+  // Get quote by number
+  rpc GetQuoteByNumber(GetQuoteByNumberRequest) returns (GetQuoteResponse);
+
+  // List life insurance quotes
+  rpc ListQuotes(ListQuotesRequest) returns (ListQuotesResponse);
+
+  // Convert quote to policy
+  rpc ConvertQuoteToPolicy(ConvertQuoteToPolicyRequest) returns (ConvertQuoteToPolicyResponse);
+
+  // Get health conditions list
+  rpc GetHealthConditions(GetHealthConditionsRequest) returns (GetHealthConditionsResponse);
+}
+
+message GetLifeProductRequest {
+  string product_id = 1;
+}
+
+message GetLifeProductResponse {
+  entity.v1.LifeProduct product = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListLifeProductsRequest {
+  entity.v1.LifeProductType product_type = 1;
+  bool only_active = 2;
+  string filter = 3;
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message ListLifeProductsResponse {
+  repeated entity.v1.LifeProduct products = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message CreateLifeProductRequest {
+  string product_code = 1;
+  string product_name = 2;
+  entity.v1.LifeProductType product_type = 3;
+  string description = 4;
+  int64 base_rate = 5;
+  entity.v1.AgeAdditionConfig age_addition_config = 6;
+  repeated entity.v1.ConditionMultiplier condition_multipliers = 7;
+  repeated entity.v1.BonusConfig bonuses = 8;
+  int64 min_sum_assured = 9;
+  int64 max_sum_assured = 10;
+  int32 min_entry_age = 11;
+  int32 max_entry_age = 12;
+  int32 min_policy_term = 13;
+  int32 max_policy_term = 14;
+  map<string, string> metadata = 15;
+}
+
+message CreateLifeProductResponse {
+  entity.v1.LifeProduct product = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message UpdateLifeProductRequest {
+  string product_id = 1;
+  string product_name = 2;
+  string description = 3;
+  int64 base_rate = 4;
+  entity.v1.AgeAdditionConfig age_addition_config = 5;
+  repeated entity.v1.ConditionMultiplier condition_multipliers = 6;
+  repeated entity.v1.BonusConfig bonuses = 7;
+  int64 min_sum_assured = 8;
+  int64 max_sum_assured = 9;
+  int32 min_entry_age = 10;
+  int32 max_entry_age = 11;
+  int32 min_policy_term = 12;
+  int32 max_policy_term = 13;
+  bool is_active = 14;
+  map<string, string> metadata = 15;
+}
+
+message UpdateLifeProductResponse {
+  entity.v1.LifeProduct product = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message DeleteLifeProductRequest {
+  string product_id = 1;
+  bool permanent = 2;
+}
+
+message DeleteLifeProductResponse {
+  bool success = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message CalculatePremiumRequest {
+  string product_id = 1;
+  entity.v1.InsuredPerson insured_person = 2;
+  int32 age_at_entry = 3;
+  int32 policy_term_years = 4;
+  int64 sum_assured = 5;
+  repeated string bonus_codes = 6;
+}
+
+message CalculatePremiumResponse {
+  int64 base_premium = 1;
+  int64 age_addition = 2;
+  float condition_multiplier = 3;
+  int64 condition_addition = 4;
+  int64 bonus_discount = 5;
+  int64 total_premium = 6;
+  repeated entity.v1.PremiumBreakdown breakdown = 7;
+  repeated string applied_conditions = 8;
+  repeated string applied_bonuses = 9;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 10;
+}
+
+message GenerateQuoteRequest {
+  string product_id = 1;
+  string customer_id = 2;
+  string agent_id = 3;
+  entity.v1.InsuredPerson insured_person = 4;
+  int32 age_at_entry = 5;
+  int32 policy_term_years = 6;
+  int64 sum_assured = 7;
+  repeated string bonus_codes = 8;
+  int32 validity_days = 9;
+  map<string, string> metadata = 10;
+}
+
+message GenerateQuoteResponse {
+  entity.v1.LifeQuote quote = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message GetQuoteRequest {
+  string quote_id = 1;
+}
+
+message GetQuoteByNumberRequest {
+  string quote_number = 1;
+}
+
+message GetQuoteResponse {
+  entity.v1.LifeQuote quote = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}
+
+message ListQuotesRequest {
+  string customer_id = 1;
+  string product_id = 2;
+  entity.v1.LifeQuoteStatus status = 3;
+  int32 page_size = 4;
+  string page_token = 5;
+}
+
+message ListQuotesResponse {
+  repeated entity.v1.LifeQuote quotes = 1;
+  string next_page_token = 2;
+  int32 total_count = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message ConvertQuoteToPolicyRequest {
+  string quote_id = 1;
+  string policy_id = 2;
+  string converted_by = 3;
+}
+
+message ConvertQuoteToPolicyResponse {
+  string quote_id = 1;
+  string policy_id = 2;
+  google.protobuf.Timestamp converted_at = 3;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 4;
+}
+
+message GetHealthConditionsRequest {
+  string product_id = 1;
+}
+
+message GetHealthConditionsResponse {
+  repeated entity.v1.ConditionMultiplier conditions = 1;
+  // Error information if operation failed
+  insuretech.common.v1.Error error = 2;
+}

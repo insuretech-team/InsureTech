@@ -12,9 +12,24 @@ KYCSessionCompletionResponse:
       format: double
     profile_image_url:
       type: string
-    message:
+    provider_reference:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
+      description: FLVE session_id
+    session_state:
+      type: string
+      description: '"EKYC_SESSION_COMPLETED"'
+    identity_match:
+      type: boolean
+      description: face match result
+    match_score:
+      type: number
+      format: double
+      description: cosine similarity
+    summary:
+      $ref: '#/components/schemas/KYCSessionSummary'
+      description: step-by-step results
+    completed_at:
+      type: string
+      description: ISO timestamp
   description: Response payload for kyc session completion operation. Returns operation
     results and status.

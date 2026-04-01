@@ -1,0 +1,29 @@
+LossRatioInput:
+  type: object
+  properties:
+    product_id:
+      type: string
+    line_of_business:
+      type: string
+    period_start:
+      type: string
+      format: date-time
+    period_end:
+      type: string
+      format: date-time
+    earned_premium:
+      type: number
+      format: double
+    written_premium:
+      type: number
+      format: double
+    incurred_losses:
+      type: number
+      format: double
+    loss_adjustment_expenses:
+      type: number
+      format: double
+    operating_expenses:
+      type: number
+      format: double
+  description: LossRatioInput represents input for loss ratio calculations

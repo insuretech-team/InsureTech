@@ -1,9 +1,5 @@
 RemoveOrgMemberResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
+  properties: {}
   description: Response payload for remove org member operation. Returns operation
     results and status.

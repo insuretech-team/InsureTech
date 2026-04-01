@@ -29,6 +29,43 @@ func TestSeedAdminUser_SkipAndNilDB(t *testing.T) {
 	require.NoError(t, err)
 }
 
+func TestSeedB2bAdminUser_SkipAndValidation(t *testing.T) {
+	err := SeedB2bAdminUser(context.Background(), nil)
+	require.NoError(t, err)
+
+	t.Setenv("B2B_ADMIN", "")
+	t.Setenv("B2B_ADMIN_MOBILE", "")
+	t.Setenv("B2B_ADMIN_PASSWORD", "")
+	t.Setenv("B2B_ADMIN_PASSWARD", "")
+	err = SeedB2bAdminUser(context.Background(), nil)
+	require.NoError(t, err)
+
+	t.Setenv("B2B_ADMIN", "b2b_admin@example.com")
+	t.Setenv("B2B_ADMIN_MOBILE", "bad-mobile")
+	t.Setenv("B2B_ADMIN_PASSWARD", "SeedPass!1")
+	err = SeedB2bAdminUser(context.Background(), nil)
+	require.Error(t, err)
+}
+
+func TestNormalizeAdminEmail(t *testing.T) {
+	got, err := normalizeAdminEmail(` "Faruk.Hannan@LifePlusBD.com" `)
+	require.NoError(t, err)
+	require.Equal(t, "faruk.hannan@lifeplusbd.com", got)
+
+	_, err = normalizeAdminEmail("not-an-email")
+	require.Error(t, err)
+}
+
+func TestSeedB2bAdminUser_AcceptsPreferredPasswordEnv(t *testing.T) {
+	t.Setenv("B2B_ADMIN", ` "b2b_admin@example.com" `)
+	t.Setenv("B2B_ADMIN_MOBILE", "01712345678")
+	t.Setenv("B2B_ADMIN_PASSWORD", ` "SeedPass!1" `)
+	t.Setenv("B2B_ADMIN_PASSWARD", "")
+
+	err := SeedB2bAdminUser(context.Background(), nil)
+	require.NoError(t, err)
+}
+
 func TestNormalizeAdminMobile(t *testing.T) {
 	got, err := normalizeAdminMobile("01347-210751")
 	require.NoError(t, err)
@@ -78,7 +115,7 @@ func cleanupSeededAdmin(t *testing.T, dbConn *gorm.DB, email string) {
 	_ = dbConn.Exec(`DELETE FROM authn_schema.users WHERE email = ?`, email).Error
 }
 
-func TestSeedAdminUser_LiveDB_CreateAndUpdate(t *testing.T) {
+func TestSeedAdminUser_LiveDB_CreateAndPreserveExistingCredentials(t *testing.T) {
 	if testing.Short() {
 		t.Skip("skipping live DB test")
 	}
@@ -87,9 +124,10 @@ func TestSeedAdminUser_LiveDB_CreateAndUpdate(t *testing.T) {
 	userRepo := repository.NewUserRepository(dbConn)
 
 	email := "seed_admin_" + fmt.Sprintf("%d", time.Now().UnixNano()) + "@example.com"
-	mobile := fmt.Sprintf("+8801%09d", time.Now().UnixNano()%1_000_000_000)
+	rawMobile := fmt.Sprintf("017%08d", time.Now().UnixNano()%100000000)
+	mobile := "+880" + rawMobile[1:]
 	t.Setenv("ADMIN_EMAIL", email)
-	t.Setenv("ADMIN_MOBILE", mobile)
+	t.Setenv("ADMIN_MOBILE", rawMobile)
 	t.Setenv("ADMIN_PASSWORD", "SeedPass!1")
 	t.Cleanup(func() { cleanupSeededAdmin(t, dbConn, email) })
 
@@ -105,8 +143,40 @@ func TestSeedAdminUser_LiveDB_CreateAndUpdate(t *testing.T) {
 	require.NoError(t, SeedAdminUser(ctx, dbConn))
 	u2, err := userRepo.GetByEmail(ctx, email)
 	require.NoError(t, err)
-	require.NotEqual(t, oldHash, u2.PasswordHash)
-	require.NoError(t, bcrypt.CompareHashAndPassword([]byte(u2.PasswordHash), []byte("SeedPass!2")))
+	require.Equal(t, oldHash, u2.PasswordHash)
+	require.NoError(t, bcrypt.CompareHashAndPassword([]byte(u2.PasswordHash), []byte("SeedPass!1")))
+}
+
+func TestSeedB2bAdminUser_LiveDB_CreateAndPreserveExistingCredentials(t *testing.T) {
+	if testing.Short() {
+		t.Skip("skipping live DB test")
+	}
+	dbConn := testSeederLiveDB(t)
+	ctx := context.Background()
+	userRepo := repository.NewUserRepository(dbConn)
+
+	email := "seed_b2b_admin_" + fmt.Sprintf("%d", time.Now().UnixNano()) + "@example.com"
+	rawMobile := fmt.Sprintf("017%08d", time.Now().UnixNano()%100000000)
+	mobile := "+880" + rawMobile[1:]
+	t.Setenv("B2B_ADMIN", email)
+	t.Setenv("B2B_ADMIN_MOBILE", rawMobile)
+	t.Setenv("B2B_ADMIN_PASSWARD", "SeedPass!1")
+	t.Cleanup(func() { cleanupSeededAdmin(t, dbConn, email) })
+
+	require.NoError(t, SeedB2bAdminUser(ctx, dbConn))
+	u, err := userRepo.GetByEmail(ctx, email)
+	require.NoError(t, err)
+	require.Equal(t, mobile, u.MobileNumber)
+	require.True(t, u.EmailVerified)
+	require.NotEmpty(t, u.PasswordHash)
+
+	oldHash := u.PasswordHash
+	t.Setenv("B2B_ADMIN_PASSWARD", "SeedPass!2")
+	require.NoError(t, SeedB2bAdminUser(ctx, dbConn))
+	u2, err := userRepo.GetByEmail(ctx, email)
+	require.NoError(t, err)
+	require.Equal(t, oldHash, u2.PasswordHash)
+	require.NoError(t, bcrypt.CompareHashAndPassword([]byte(u2.PasswordHash), []byte("SeedPass!1")))
 }
 
 func TestSeedDocumentTypes_LiveDB_Idempotent(t *testing.T) {

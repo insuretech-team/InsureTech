@@ -83,14 +83,14 @@ func initLegacyDB(dsn string) error {
 	}
 
 	// Run SQL migrations/seeders frominsuretech folders recursively
-	// (migrations now handled by ops package and dbmanager CLI)
+	// (migrations now handled by ops package and dbx CLI)
 	// if err := runSQLMigrationsFromDir(sqlDB, "inscore/db/migrations"); err != nil {
 	// 	appLogger.Fatalf("Failed to run SQL migrations: %v", err)
 	// 	return err
 	// }
 
 	// Run proto-driven migrations (ensure tables/columns from protobuf descriptors)
-	// (migrations now handled by ops package and dbmanager CLI)
+	// (migrations now handled by ops package and dbx CLI)
 	// if err := runProtoMigrations(sqlDB); err != nil {
 	// 	appLogger.Fatalf("Failed to run proto migrations: %v", err)
 	// 	return err
@@ -100,7 +100,7 @@ func initLegacyDB(dsn string) error {
 	// 	appLogger.Warnf("Failed to run seeders: %v", err)
 	// }
 
-	appLogger.Info("Legacy database initialization completed (migrations should be run via dbmanager CLI)")
+	appLogger.Info("Legacy database initialization completed (migrations should be run via dbx CLI)")
 	appLogger.Info("Database connection established")
 	return nil
 }

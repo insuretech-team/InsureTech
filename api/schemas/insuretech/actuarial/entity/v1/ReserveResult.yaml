@@ -1,0 +1,27 @@
+ReserveResult:
+  type: object
+  properties:
+    case_reserve:
+      type: number
+      format: double
+    ibnr_reserve:
+      type: number
+      format: double
+    ibner_reserve:
+      type: number
+      format: double
+    expense_reserve:
+      type: number
+      format: double
+    total_reserve:
+      type: number
+      format: double
+    lower_bound:
+      type: number
+      format: double
+    upper_bound:
+      type: number
+      format: double
+    method_used:
+      type: string
+  description: ReserveResult represents the result of reserve calculations

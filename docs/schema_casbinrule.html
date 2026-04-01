@@ -250,11 +250,11 @@
     
     <div class="container">
         <div class="card">
-            <div class="description">---------------------------------------------------------------------------
- 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
-    Casbin gorm-adapter reads/writes this table directly.
-    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
-    g-type rows: ptype="g"  → role assignment: sub, dom, role
+            <div class="description">---------------------------------------------------------------------------
+ 1. CasbinRule — raw Casbin policy/grouping rows stored in PostgreSQL.
+    Casbin gorm-adapter reads/writes this table directly.
+    p-type rows: ptype="p"  → policy line: sub, dom, obj, act, eft
+    g-type rows: ptype="g"  → role assignment: sub, dom, role
  ---------------------------------------------------------------------------</div>
         </div>
         
@@ -316,7 +316,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">ptype: "p" = policy line, "g" = role-inheritance line
+                <td class="field-description">ptype: "p" = policy line, "g" = role-inheritance line
  @inject_tag: gorm:"size:10;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -331,7 +331,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v0: subject  (p-line) | member (g-line)
+                <td class="field-description">v0: subject  (p-line) | member (g-line)
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -346,7 +346,9 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
+                <td class="field-description">v1: domain   (p-line: portal:tenant) | role (g-line: role:<name>)
+ NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+   v0 = member/user,  v1 = role,  v2 = domain
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -361,7 +363,9 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v2: object   (p-line: svc:resource) | role (g-line: role:<name>)
+                <td class="field-description">v2: object   (p-line: svc:resource) | domain (g-line: portal:tenant)
+ NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+   v0 = member/user,  v1 = role,  v2 = domain
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -376,7 +380,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v3: action   (p-line: HTTP verb / domain action)
+                <td class="field-description">v3: action   (p-line: HTTP verb / domain action)
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -391,7 +395,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v4: effect   (p-line: allow | deny)
+                <td class="field-description">v4: effect   (p-line: allow | deny)
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             
@@ -406,7 +410,7 @@
                 </td>
                 <td class="field-nullable">YES</td>
                 <td class="field-constraints"><small>—</small></td>
-                <td class="field-description">v5: reserved for future ABAC conditions / attribute matchers
+                <td class="field-description">v5: reserved for future ABAC conditions / attribute matchers
  @inject_tag: gorm:"size:256;uniqueIndex:unique_index"</td>
             </tr>
             

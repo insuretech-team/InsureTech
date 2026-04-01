@@ -6,10 +6,10 @@ import (
 
 // DeviceOfflineEvent represents a device_offline_event
 type DeviceOfflineEvent struct {
-	EventId string `json:"event_id,omitempty"`
 	DeviceId string `json:"device_id,omitempty"`
 	DeviceSerial string `json:"device_serial,omitempty"`
+	EventId string `json:"event_id,omitempty"`
 	LastSeenAt time.Time `json:"last_seen_at,omitempty"`
-	Timestamp time.Time `json:"timestamp,omitempty"`
 	OfflineDurationMinutes int `json:"offline_duration_minutes,omitempty"`
+	Timestamp time.Time `json:"timestamp,omitempty"`
 }

@@ -1,9 +1,5 @@
 RoleDeletionResponse:
   type: object
-  properties:
-    message:
-      type: string
-    error:
-      $ref: '#/components/schemas/Error'
+  properties: {}
   description: Response payload for role deletion operation. Returns operation results
     and status.

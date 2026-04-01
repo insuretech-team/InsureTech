@@ -1,0 +1,17 @@
+QuoteAcceptedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    quote_id:
+      type: string
+    quote_number:
+      type: string
+    customer_id:
+      type: string
+    accepted_premium:
+      $ref: '#/components/schemas/Money'
+    accepted_at:
+      type: string
+      format: date-time
+  description: QuoteAcceptedEvent is emitted when customer accepts a quote

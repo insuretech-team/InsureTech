@@ -3,7 +3,5 @@ SessionRetrievalResponse:
   properties:
     session:
       $ref: '#/components/schemas/Session'
-    error:
-      $ref: '#/components/schemas/Error'
   description: Response payload for session retrieval operation. Returns operation
     results and status.

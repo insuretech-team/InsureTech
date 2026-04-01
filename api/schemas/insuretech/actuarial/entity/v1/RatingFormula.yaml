@@ -1,0 +1,80 @@
+RatingFormula:
+  type: object
+  properties:
+    formula_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    formula_code:
+      type: string
+      x-unique: true
+    formula_name:
+      type: string
+    description:
+      type: string
+    category:
+      $ref: '#/components/schemas/FormulaCategory'
+    insurance_type:
+      type: string
+    formula_expression:
+      type: string
+      description: The formula expression
+    variables_json:
+      type: string
+      description: Variable definitions
+    sort_order:
+      type: integer
+      format: int32
+      description: Sort order for calculation sequence
+      default: 100
+    version:
+      type: integer
+      format: int32
+      description: Versioning
+      default: 1
+    parent_formula_id:
+      type: string
+    status:
+      allOf:
+      - $ref: '#/components/schemas/FormulaStatus'
+      x-database-default: DRAFT
+    valid_from:
+      type: string
+      format: date-time
+      description: Validity period
+      x-database-default: CURRENT_TIMESTAMP
+    valid_until:
+      type: string
+      format: date-time
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "RatingFormula represents a P&C rating formula for premium calculation\n\
+    \ Maps to 'rating_formulas' table in actuarial_schema"
+  required:
+  - formula_id
+  - formula_code
+  - formula_name
+  - category
+  - insurance_type
+  - formula_expression
+  - variables_json
+  - sort_order
+  - version
+  - status
+  - valid_from
+  - created_at
+  - updated_at

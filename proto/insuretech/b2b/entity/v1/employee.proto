@@ -124,10 +124,12 @@ message Employee {
   } ];
   // @inject_tag: gorm:"column:email"
 
-  // Mobile number (BD format: +8801XXXXXXXXX)
+  // Mobile number stored in canonical BD E.164 format: +8801XXXXXXXXX
   string mobile_number = 15 [ (insuretech.common.v1.column) = {
     column_name : "mobile_number"
     sql_type : "VARCHAR(20)"
+    check_constraint : "mobile_number IS NULL OR mobile_number ~ '^\\+880(13|14|15|16|17|18|19)[0-9]{8}$'"
+    comment : "Canonical Bangladesh mobile format: +8801XXXXXXXXX"
   } ];
   // @inject_tag: gorm:"column:mobile_number"
 

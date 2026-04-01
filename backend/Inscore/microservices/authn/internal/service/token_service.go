@@ -24,10 +24,10 @@ import (
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/config"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/repository"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"golang.org/x/crypto/bcrypt"
-	"google.golang.org/grpc/metadata"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -250,7 +250,14 @@ func portalForUserType(userType string) string {
 		return "system"
 	case "USER_TYPE_BUSINESS_BENEFICIARY", authnentityv1.UserType_USER_TYPE_BUSINESS_BENEFICIARY.String():
 		return "business"
-	case "USER_TYPE_PARTNER", authnentityv1.UserType_USER_TYPE_PARTNER.String():
+	case "USER_TYPE_PARTNER",
+		authnentityv1.UserType_USER_TYPE_PARTNER.String(),
+		"USER_TYPE_BUSINESS_ADMIN",
+		authnentityv1.UserType_USER_TYPE_BUSINESS_ADMIN.String(),
+		"USER_TYPE_B2B_ORG_ADMIN",
+		authnentityv1.UserType_USER_TYPE_B2B_ORG_ADMIN.String(),
+		"USER_TYPE_B2B_BENEFICIARY",
+		authnentityv1.UserType_USER_TYPE_B2B_BENEFICIARY.String():
 		return "b2b"
 	case "USER_TYPE_AGENT", authnentityv1.UserType_USER_TYPE_AGENT.String():
 		return "agent"
@@ -557,13 +564,9 @@ func (s *TokenService) ValidateJWT(ctx context.Context, tokenString string) (*au
 	}
 
 	// Device binding check: if caller sent x-device-id metadata, it must match token claim.
-	if md, ok := metadata.FromIncomingContext(ctx); ok {
-		mdDeviceIDs := md.Get("x-device-id")
-		if len(mdDeviceIDs) > 0 {
-			reqDeviceID := mdDeviceIDs[0]
-			if reqDeviceID != "" && claims.DeviceID != "" && reqDeviceID != claims.DeviceID {
-				return &authnservicev1.ValidateTokenResponse{Valid: false}, nil
-			}
+	if reqDeviceID := grpcmeta.ExtractDeviceID(ctx); reqDeviceID != "" {
+		if claims.DeviceID != "" && reqDeviceID != claims.DeviceID {
+			return &authnservicev1.ValidateTokenResponse{Valid: false}, nil
 		}
 	}
 
@@ -717,10 +720,12 @@ func (s *TokenService) RevokeSession(ctx context.Context, sessionID string) erro
 	return s.sessionRepo.Revoke(ctx, sessionID)
 }
 
-// GetJWKS builds a JWKS response from the loaded RSA public key.
-func (s *TokenService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSRequest) (*authnservicev1.GetJWKSResponse, error) {
+// GetJWKSInternal builds a JWKS result from the loaded RSA public key.
+// NOTE: GetJWKS RPC was removed from auth_service.proto (API path conflict).
+// JWKS is now served directly by the API gateway using this internal helper.
+func (s *TokenService) GetJWKSInternal(_ context.Context) (*JWKSResult, error) {
 	if s.rsaPublicKey == nil {
-		return &authnservicev1.GetJWKSResponse{Keys: []*authnservicev1.JWK{}}, nil
+		return &JWKSResult{Keys: []*JWK{}}, nil
 	}
 
 	// n = base64url(pubKey.N.Bytes())
@@ -732,7 +737,7 @@ func (s *TokenService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSR
 	eBytes := eBig.Bytes()
 	eEncoded := base64.RawURLEncoding.EncodeToString(eBytes)
 
-	jwk := &authnservicev1.JWK{
+	jwk := &JWK{
 		Kty: "RSA",
 		Use: "sig",
 		Alg: "RS256",
@@ -741,8 +746,8 @@ func (s *TokenService) GetJWKS(ctx context.Context, req *authnservicev1.GetJWKSR
 		E:   eEncoded,
 	}
 
-	return &authnservicev1.GetJWKSResponse{
-		Keys: []*authnservicev1.JWK{jwk},
+	return &JWKSResult{
+		Keys: []*JWK{jwk},
 	}, nil
 }
 

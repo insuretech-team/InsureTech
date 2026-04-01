@@ -2,6 +2,7 @@ package repository
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -13,6 +14,14 @@ import (
 
 type CommissionRepository struct {
 	db *gorm.DB
+}
+
+func commissionTypeToDBValue(v partnerv1.CommissionType) string {
+	return strings.TrimPrefix(v.String(), "COMMISSION_TYPE_")
+}
+
+func commissionStatusToDBValue(v partnerv1.CommissionStatus) string {
+	return strings.TrimPrefix(v.String(), "COMMISSION_STATUS_")
 }
 
 func NewCommissionRepository(db *gorm.DB) *CommissionRepository {
@@ -38,10 +47,10 @@ func (r *CommissionRepository) Create(ctx context.Context, comm *partnerv1.Commi
 		"partner_id":        nil,
 		"agent_id":          nil,
 		"payment_id":        nil,
-		"type":              comm.Type.String(),
+		"type":              commissionTypeToDBValue(comm.Type),
 		"commission_amount": comm.CommissionAmount.Amount, // Stored as BIGINT in paisa
 		"commission_rate":   comm.CommissionRate,
-		"status":            comm.Status.String(),
+		"status":            commissionStatusToDBValue(comm.Status),
 		"created_at":        now,
 		"updated_at":        now,
 	}
@@ -75,7 +84,7 @@ func (r *CommissionRepository) GetByID(ctx context.Context, id string) (*partner
 func (r *CommissionRepository) ListPendingByPartner(ctx context.Context, partnerID string, limit int) ([]*partnerv1.Commission, error) {
 	var comms []*partnerv1.Commission
 	err := r.db.WithContext(ctx).Table("partner_schema.commissions").
-		Where("partner_id = ? AND status = ?", partnerID, partnerv1.CommissionStatus_COMMISSION_STATUS_PENDING.String()).
+		Where("partner_id = ? AND status = ?", partnerID, commissionStatusToDBValue(partnerv1.CommissionStatus_COMMISSION_STATUS_PENDING)).
 		Limit(limit).
 		Find(&comms).Error
 	return comms, err
@@ -86,7 +95,7 @@ func (r *CommissionRepository) MarkAsPaid(ctx context.Context, commissionID, pay
 	return r.db.WithContext(ctx).Table("partner_schema.commissions").
 		Where("commission_id = ?", commissionID).
 		Updates(map[string]interface{}{
-			"status":     partnerv1.CommissionStatus_COMMISSION_STATUS_PAID.String(),
+			"status":     commissionStatusToDBValue(partnerv1.CommissionStatus_COMMISSION_STATUS_PAID),
 			"payment_id": paymentID,
 			"paid_at":    time.Now(),
 			"updated_at": time.Now(),
@@ -149,7 +158,7 @@ func (r *CommissionRepository) SumByPartnerAndDateRange(ctx context.Context, par
 func (r *CommissionRepository) ExistsByPolicyAndType(ctx context.Context, policyID string, cType partnerv1.CommissionType) (bool, error) {
 	var count int64
 	err := r.db.WithContext(ctx).Table("partner_schema.commissions").
-		Where("policy_id = ? AND type = ?", policyID, cType.String()).
+		Where("policy_id = ? AND type = ?", policyID, commissionTypeToDBValue(cType)).
 		Count(&count).Error
 	if err != nil {
 		return false, err

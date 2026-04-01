@@ -27,7 +27,7 @@ namespace Insuretech.Authz.Entity.V1 {
             "CixpbnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MS9jYXNiaW5fcnVsZS5wcm90",
             "bxIaaW5zdXJldGVjaC5hdXRoei5lbnRpdHkudjEaH2dvb2dsZS9wcm90b2J1",
             "Zi90aW1lc3RhbXAucHJvdG8aHWluc3VyZXRlY2gvY29tbW9uL3YxL2RiLnBy",
-            "b3RvGiZpbnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MS9lbnVtcy5wcm90byKg",
+            "b3RvGiZpbnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MS9lbnVtcy5wcm90byK+",
             "BgoKQ2FzYmluUnVsZRJeCgJpZBgBIAEoA0JOkrUYSgoCaWQSCUJJR1NFUklB",
             "TBgBKAFaNUF1dG8taW5jcmVtZW50IHByaW1hcnkga2V5IChnb3JtLWFkYXB0",
             "ZXIgcmVxdWlyZW1lbnQpUgJpZBJ8CgVwdHlwZRgCIAEoCUJmkrUYYgoFcHR5",
@@ -35,23 +35,24 @@ namespace Insuretech.Authz.Entity.V1 {
             "Wi5DYXNiaW4gcG9saWN5IHR5cGU6IHAgKHBvbGljeSkgb3IgZyAoZ3JvdXBp",
             "bmcpUgVwdHlwZRJoCgJ2MBgDIAEoCUJYkrUYVAoCdjASBFRFWFRSFwoTaWR4",
             "X2Nhc2Jpbl9ydWxlc192MBACWi9wOiBzdWJqZWN0ICh1c2VyOjxpZD4gfCBy",
-            "b2xlOjxuYW1lPikgIGc6IG1lbWJlclICdjASXQoCdjEYBCABKAlCTZK1GEkK",
-            "AnYxEgRURVhUUhcKE2lkeF9jYXNiaW5fcnVsZXNfdjEQAlokcDogZG9tYWlu",
-            "IChwb3J0YWw6dGVuYW50KSAgZzogZG9tYWluUgJ2MRJJCgJ2MhgFIAEoCUI5",
-            "krUYNQoCdjISBFRFWFRaKXA6IG9iamVjdCAoc3ZjOnNlcnZpY2UvcmVzb3Vy",
-            "Y2UpICBnOiByb2xlUgJ2MhJHCgJ2MxgGIAEoCUI3krUYMwoCdjMSBFRFWFRa",
-            "J3A6IGFjdGlvbiAoR0VUfFBPU1R8UFVUfFBBVENIfERFTEVURXwqKVICdjMS",
-            "OAoCdjQYByABKAlCKJK1GCQKAnY0EgRURVhUWhhwOiBlZmZlY3QgKGFsbG93",
-            "IHwgZGVueSlSAnY0Ej8KAnY1GAggASgJQi+StRgrCgJ2NRIEVEVYVFofcmVz",
-            "ZXJ2ZWQ6IEFCQUMgY29uZGl0aW9uIHN0cmluZ1ICdjU6XIq1GFgKDGNhc2Jp",
-            "bl9ydWxlcxIMYXV0aHpfc2NoZW1hGAEgASo0UmF3IENhc2JpbiBQRVJNIG1v",
-            "ZGVsIHJvd3MgKGdvcm0tYWRhcHRlciBjb21wYXRpYmxlKUABQosCCh5jb20u",
-            "aW5zdXJldGVjaC5hdXRoei5lbnRpdHkudjFCD0Nhc2JpblJ1bGVQcm90b1AB",
-            "Wk1naXRodWIuY29tL25ld2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9p",
-            "bnN1cmV0ZWNoL2F1dGh6L2VudGl0eS92MTtlbnRpdHl2MaICA0lBRaoCGklu",
-            "c3VyZXRlY2guQXV0aHouRW50aXR5LlYxygIaSW5zdXJldGVjaFxBdXRoelxF",
-            "bnRpdHlcVjHiAiZJbnN1cmV0ZWNoXEF1dGh6XEVudGl0eVxWMVxHUEJNZXRh",
-            "ZGF0YeoCHUluc3VyZXRlY2g6OkF1dGh6OjpFbnRpdHk6OlYxYgZwcm90bzM="));
+            "b2xlOjxuYW1lPikgIGc6IG1lbWJlclICdjASaQoCdjEYBCABKAlCWZK1GFUK",
+            "AnYxEgRURVhUUhcKE2lkeF9jYXNiaW5fcnVsZXNfdjEQAlowcDogZG9tYWlu",
+            "IChwb3J0YWw6dGVuYW50KSAgZzogcm9sZSAocm9sZTo8bmFtZT4pUgJ2MRJb",
+            "CgJ2MhgFIAEoCUJLkrUYRwoCdjISBFRFWFRaO3A6IG9iamVjdCAoc3ZjOnNl",
+            "cnZpY2UvcmVzb3VyY2UpICBnOiBkb21haW4gKHBvcnRhbDp0ZW5hbnQpUgJ2",
+            "MhJHCgJ2MxgGIAEoCUI3krUYMwoCdjMSBFRFWFRaJ3A6IGFjdGlvbiAoR0VU",
+            "fFBPU1R8UFVUfFBBVENIfERFTEVURXwqKVICdjMSOAoCdjQYByABKAlCKJK1",
+            "GCQKAnY0EgRURVhUWhhwOiBlZmZlY3QgKGFsbG93IHwgZGVueSlSAnY0Ej8K",
+            "AnY1GAggASgJQi+StRgrCgJ2NRIEVEVYVFofcmVzZXJ2ZWQ6IEFCQUMgY29u",
+            "ZGl0aW9uIHN0cmluZ1ICdjU6XIq1GFgKDGNhc2Jpbl9ydWxlcxIMYXV0aHpf",
+            "c2NoZW1hGAEgASo0UmF3IENhc2JpbiBQRVJNIG1vZGVsIHJvd3MgKGdvcm0t",
+            "YWRhcHRlciBjb21wYXRpYmxlKUABQosCCh5jb20uaW5zdXJldGVjaC5hdXRo",
+            "ei5lbnRpdHkudjFCD0Nhc2JpblJ1bGVQcm90b1ABWk1naXRodWIuY29tL25l",
+            "d2FnZS1zYWludC9pbnN1cmV0ZWNoL2dlbi9nby9pbnN1cmV0ZWNoL2F1dGh6",
+            "L2VudGl0eS92MTtlbnRpdHl2MaICA0lBRaoCGkluc3VyZXRlY2guQXV0aHou",
+            "RW50aXR5LlYxygIaSW5zdXJldGVjaFxBdXRoelxFbnRpdHlcVjHiAiZJbnN1",
+            "cmV0ZWNoXEF1dGh6XEVudGl0eVxWMVxHUEJNZXRhZGF0YeoCHUluc3VyZXRl",
+            "Y2g6OkF1dGh6OjpFbnRpdHk6OlYxYgZwcm90bzM="));
       descriptor = pbr::FileDescriptor.FromGeneratedCode(descriptorData,
           new pbr::FileDescriptor[] { global::Google.Protobuf.WellKnownTypes.TimestampReflection.Descriptor, global::Insuretech.Common.V1.DbReflection.Descriptor, global::Insuretech.Authz.Entity.V1.EnumsReflection.Descriptor, },
           new pbr::GeneratedClrTypeInfo(null, null, new pbr::GeneratedClrTypeInfo[] {
@@ -173,7 +174,9 @@ namespace Insuretech.Authz.Entity.V1 {
     public const int V1FieldNumber = 4;
     private string v1_ = "";
     /// <summary>
-    /// v1: domain   (p-line: portal:tenant) | domain (g-line: portal:tenant)
+    /// v1: domain   (p-line: portal:tenant) | role (g-line: role:&lt;name>)
+    /// NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+    ///   v0 = member/user,  v1 = role,  v2 = domain
     /// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
@@ -189,7 +192,9 @@ namespace Insuretech.Authz.Entity.V1 {
     public const int V2FieldNumber = 5;
     private string v2_ = "";
     /// <summary>
-    /// v2: object   (p-line: svc:resource) | role (g-line: role:&lt;name>)
+    /// v2: object   (p-line: svc:resource) | domain (g-line: portal:tenant)
+    /// NOTE: For g3 grouping rules the Casbin column order is (sub, role, domain):
+    ///   v0 = member/user,  v1 = role,  v2 = domain
     /// @inject_tag: gorm:"size:256;uniqueIndex:unique_index"
     /// </summary>
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]

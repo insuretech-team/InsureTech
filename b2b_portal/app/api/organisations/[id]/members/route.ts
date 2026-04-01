@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { makeSdkClient } from "@lib/sdk/b2b-sdk-client";
-import { sdkErrorMessage } from "@lib/sdk/api-helpers";
+import { sdkErrorMessage, unwrapSdkResult } from "@lib/sdk/api-helpers";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 import type { OrgMember, OrgMemberRole } from "@lifeplus/insuretech-sdk";
 
@@ -19,17 +19,10 @@ export async function GET(request: Request, { params }: RouteContext) {
     });
 
 
-    if (!result.response.ok) {
-      return NextResponse.json(
-        { ok: false, message: sdkErrorMessage(result), members: [] },
-        { status: result.response.status }
-      );
-    }
-
-    return NextResponse.json({
-      ok: true,
-      members: (result.data?.members ?? []) as OrgMember[],
-    });
+    const unwrapped = unwrapSdkResult(result);
+    if (!unwrapped.ok) return NextResponse.json({ ok: false, message: unwrapped.message, members: [] }, { status: unwrapped.status });
+    const d = unwrapped.data as Record<string, unknown>;
+    return NextResponse.json({ ok: true, members: ((d?.members ?? []) as OrgMember[]) });
   } catch (err) {
     return NextResponse.json(
       { ok: false, message: err instanceof Error ? err.message : "Error", members: [] },
@@ -55,10 +48,10 @@ export async function POST(request: Request, { params }: RouteContext) {
       path: { organisation_id: id },
       body: { organisation_id: id, user_id: userId, role },
     });
-    if (!result.response.ok) {
-      return NextResponse.json({ ok: false, message: sdkErrorMessage(result) }, { status: result.response.status });
-    }
-    return NextResponse.json({ ok: true, message: result.data?.message ?? "Member added", member: result.data?.member });
+    const unwrappedPost = unwrapSdkResult(result);
+    if (!unwrappedPost.ok) return NextResponse.json({ ok: false, message: unwrappedPost.message }, { status: unwrappedPost.status });
+    const dp = unwrappedPost.data as Record<string, unknown>;
+    return NextResponse.json({ ok: true, message: (dp?.message as string) ?? "Member added", member: dp?.member });
   } catch (err) {
     return NextResponse.json({ ok: false, message: err instanceof Error ? err.message : "Error" }, { status: 502 });
   }

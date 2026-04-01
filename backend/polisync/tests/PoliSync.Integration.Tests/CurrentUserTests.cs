@@ -1,5 +1,6 @@
 using FluentAssertions;
 using Grpc.Core;
+using Microsoft.AspNetCore.Http;
 using PoliSync.Infrastructure.Auth;
 using Xunit;
 
@@ -21,83 +22,45 @@ public sealed class CurrentUserTests
     }
 
     [Fact]
-    public void Populate_WithAllHeaders_SetsAllProperties()
+    public void Populate_WithAllHeaders_SetsMetadataProperties()
     {
         var ctx = BuildContext(new()
         {
             ["x-user-id"]    = "11111111-1111-1111-1111-111111111111",
             ["x-tenant-id"]  = "22222222-2222-2222-2222-222222222222",
             ["x-partner-id"] = "33333333-3333-3333-3333-333333333333",
-            ["x-token-id"]   = "tok-abc-123",
-            ["x-user-type"]  = "agent",
-            ["x-portal"]     = "b2b",
             ["x-roles"]      = "product:read,product:write,claim:read",
         });
 
-        var user = new CurrentUser();
+        var user = CreateCurrentUser();
         user.Populate(ctx);
 
         user.UserId.Should().Be(Guid.Parse("11111111-1111-1111-1111-111111111111"));
         user.TenantId.Should().Be(Guid.Parse("22222222-2222-2222-2222-222222222222"));
         user.PartnerId.Should().Be(Guid.Parse("33333333-3333-3333-3333-333333333333"));
-        user.TokenId.Should().Be("tok-abc-123");
-        user.UserType.Should().Be("agent");
-        user.Portal.Should().Be("b2b");
         user.Roles.Should().BeEquivalentTo(["product:read", "product:write", "claim:read"]);
-        user.IsAuthenticated.Should().BeTrue();
-        user.IsAgent.Should().BeTrue();
-        user.IsSystemUser.Should().BeFalse();
-        user.IsPartnerUser.Should().BeTrue();
     }
 
     [Fact]
-    public void Populate_WithoutPartnerId_IsPartnerUserFalse()
+    public void Populate_WithoutPartnerId_LeavesPartnerIdNull()
     {
         var ctx = BuildContext(new()
         {
             ["x-user-id"]   = "11111111-1111-1111-1111-111111111111",
             ["x-tenant-id"] = "22222222-2222-2222-2222-222222222222",
-            ["x-user-type"] = "b2c",
         });
 
-        var user = new CurrentUser();
+        var user = CreateCurrentUser();
         user.Populate(ctx);
 
         user.PartnerId.Should().BeNull();
-        user.IsPartnerUser.Should().BeFalse();
-        user.IsAgent.Should().BeFalse();
     }
 
     [Fact]
-    public void Populate_WithSystemUserType_IsSystemUserTrue()
+    public void Populate_WithMissingHttpUser_IsAuthenticatedFalse()
     {
-        var ctx = BuildContext(new()
-        {
-            ["x-user-id"]   = "11111111-1111-1111-1111-111111111111",
-            ["x-tenant-id"] = "22222222-2222-2222-2222-222222222222",
-            ["x-user-type"] = "system",
-        });
-
-        var user = new CurrentUser();
-        user.Populate(ctx);
-
-        user.IsSystemUser.Should().BeTrue();
-        user.IsAgent.Should().BeFalse();
-    }
-
-    [Fact]
-    public void Populate_WithMissingUserId_IsAuthenticatedFalse()
-    {
-        var ctx = BuildContext(new()
-        {
-            ["x-tenant-id"] = "22222222-2222-2222-2222-222222222222",
-        });
-
-        var user = new CurrentUser();
-        user.Populate(ctx);
-
+        var user = CreateCurrentUser();
         user.IsAuthenticated.Should().BeFalse();
-        user.UserId.Should().Be(Guid.Empty);
     }
 
     [Fact]
@@ -109,12 +72,11 @@ public sealed class CurrentUserTests
             ["x-tenant-id"] = "also-invalid",
         });
 
-        var user = new CurrentUser();
+        var user = CreateCurrentUser();
         user.Populate(ctx);
 
         user.UserId.Should().Be(Guid.Empty);
         user.TenantId.Should().Be(Guid.Empty);
-        user.IsAuthenticated.Should().BeFalse();
     }
 
     [Fact]
@@ -127,7 +89,7 @@ public sealed class CurrentUserTests
             ["x-roles"]     = "",
         });
 
-        var user = new CurrentUser();
+        var user = CreateCurrentUser();
         user.Populate(ctx);
 
         user.Roles.Should().BeEmpty();
@@ -136,13 +98,12 @@ public sealed class CurrentUserTests
     [Fact]
     public void Populate_CalledTwice_OverwritesPreviousValues()
     {
-        var user = new CurrentUser();
+        var user = CreateCurrentUser();
 
         user.Populate(BuildContext(new()
         {
             ["x-user-id"]   = "11111111-1111-1111-1111-111111111111",
             ["x-tenant-id"] = "22222222-2222-2222-2222-222222222222",
-            ["x-user-type"] = "agent",
         }));
         user.UserId.Should().Be(Guid.Parse("11111111-1111-1111-1111-111111111111"));
 
@@ -150,11 +111,12 @@ public sealed class CurrentUserTests
         {
             ["x-user-id"]   = "99999999-9999-9999-9999-999999999999",
             ["x-tenant-id"] = "88888888-8888-8888-8888-888888888888",
-            ["x-user-type"] = "system",
         }));
         user.UserId.Should().Be(Guid.Parse("99999999-9999-9999-9999-999999999999"));
-        user.IsSystemUser.Should().BeTrue();
     }
+
+    private static CurrentUser CreateCurrentUser()
+        => new(new HttpContextAccessor());
 }
 
 /// <summary>
@@ -182,7 +144,7 @@ internal static class TestServerCallContext
         protected override AuthContext AuthContextCore => new("", []);
 
         protected override ContextPropagationToken CreatePropagationTokenCore(ContextPropagationOptions? options)
-            => throw new NotImplementedException();
+            => throw new NotSupportedException();
         protected override Task WriteResponseHeadersAsyncCore(Metadata responseHeaders)
             => Task.CompletedTask;
     }

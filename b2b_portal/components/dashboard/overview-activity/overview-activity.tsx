@@ -41,12 +41,14 @@ type ActivityApiResponse = {
   ok: boolean;
   activities?: Array<{ id: string; type: string; title: string; subtitle: string; createdAt: string }>;
   message?: string;
+  needsOrganisation?: boolean;
 };
 
 const OverviewActivity = () => {
   const [activities, setActivities] = React.useState<ActivityItem[]>([]);
   const [loading, setLoading] = React.useState(true);
   const [error, setError] = React.useState("");
+  const [notice, setNotice] = React.useState("");
 
   React.useEffect(() => {
     let cancelled = false;
@@ -55,6 +57,7 @@ const OverviewActivity = () => {
       .then((payload: ActivityApiResponse) => {
         if (cancelled) return;
         if (payload.ok && payload.activities) {
+          setNotice(payload.needsOrganisation ? (payload.message ?? "") : "");
           setActivities(payload.activities.map((a) => ({
             id:       a.id,
             icon:     iconFor(a.type),
@@ -80,6 +83,8 @@ const OverviewActivity = () => {
         </div>
       ) : error ? (
         <p className="text-sm text-muted-foreground py-4 text-center">{error}</p>
+      ) : notice ? (
+        <p className="text-sm text-muted-foreground py-4 text-center">{notice}</p>
       ) : activities.length === 0 ? (
         <p className="text-sm text-muted-foreground py-4 text-center">No recent activity.</p>
       ) : (

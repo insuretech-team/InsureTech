@@ -3,8 +3,5 @@ PolicyPolicyRetrievalResponse:
   properties:
     policy:
       $ref: '#/components/schemas/Policy'
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for policy retrieval operation. Returns operation
     results and status.

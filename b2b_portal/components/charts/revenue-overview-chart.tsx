@@ -58,7 +58,7 @@ const RevenueOverviewChart = () => {
                 border: "1px solid #E5E7EB",
                 fontSize: 12,
               }}
-              formatter={(value: number | string | undefined) => [
+              formatter={(value) => [
                 `${Number(value ?? 0).toLocaleString()}`,
                 "Revenue",
               ]}

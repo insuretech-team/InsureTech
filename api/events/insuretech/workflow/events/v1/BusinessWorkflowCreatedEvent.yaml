@@ -1,0 +1,18 @@
+BusinessWorkflowCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    business_workflow_id:
+      type: string
+    workflow_name:
+      type: string
+    workflow_type:
+      $ref: '#/components/schemas/BusinessWorkflowType'
+    created_by:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+  description: BusinessWorkflowCreatedEvent is emitted when a new business workflow
+    is created

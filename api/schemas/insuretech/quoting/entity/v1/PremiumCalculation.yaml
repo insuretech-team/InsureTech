@@ -1,0 +1,24 @@
+PremiumCalculation:
+  type: object
+  properties:
+    base_premium:
+      $ref: '#/components/schemas/Money'
+    risk_adjustment:
+      $ref: '#/components/schemas/Money'
+    optional_coverages_total:
+      $ref: '#/components/schemas/Money'
+    discounts_total:
+      $ref: '#/components/schemas/Money'
+    taxes:
+      $ref: '#/components/schemas/Money'
+    fees:
+      $ref: '#/components/schemas/Money'
+    total_premium:
+      $ref: '#/components/schemas/Money'
+    currency:
+      type: string
+    breakdown:
+      type: array
+      items:
+        $ref: '#/components/schemas/QuotingPremiumBreakdown'
+  description: PremiumCalculation represents the calculated premium breakdown

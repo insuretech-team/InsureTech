@@ -1,4 +1,4 @@
-PricingRule:
+ProductsPricingRule:
   type: object
   properties:
     rule_id:

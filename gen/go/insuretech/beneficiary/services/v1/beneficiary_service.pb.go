@@ -33,7 +33,7 @@ type CreateIndividualBeneficiaryRequest struct {
 	DateOfBirth  string `protobuf:"bytes,3,opt,name=date_of_birth,json=dateOfBirth,proto3" json:"date_of_birth,omitempty"`
 	Gender       string `protobuf:"bytes,4,opt,name=gender,proto3" json:"gender,omitempty"`
 	NidNumber    string `protobuf:"bytes,5,opt,name=nid_number,json=nidNumber,proto3" json:"nid_number,omitempty"`
-	MobileNumber string `protobuf:"bytes,6,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`
+	MobileNumber string `protobuf:"bytes,6,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"` // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
 	Email        string `protobuf:"bytes,7,opt,name=email,proto3" json:"email,omitempty"`
 	PartnerId    string `protobuf:"bytes,8,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`
 }
@@ -208,7 +208,7 @@ type CreateBusinessBeneficiaryRequest struct {
 	TradeLicenseNumber string `protobuf:"bytes,3,opt,name=trade_license_number,json=tradeLicenseNumber,proto3" json:"trade_license_number,omitempty"`
 	TinNumber          string `protobuf:"bytes,4,opt,name=tin_number,json=tinNumber,proto3" json:"tin_number,omitempty"`
 	FocalPersonName    string `protobuf:"bytes,5,opt,name=focal_person_name,json=focalPersonName,proto3" json:"focal_person_name,omitempty"`
-	FocalPersonMobile  string `protobuf:"bytes,6,opt,name=focal_person_mobile,json=focalPersonMobile,proto3" json:"focal_person_mobile,omitempty"`
+	FocalPersonMobile  string `protobuf:"bytes,6,opt,name=focal_person_mobile,json=focalPersonMobile,proto3" json:"focal_person_mobile,omitempty"` // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
 	PartnerId          string `protobuf:"bytes,7,opt,name=partner_id,json=partnerId,proto3" json:"partner_id,omitempty"`
 }
 
@@ -490,7 +490,7 @@ type UpdateBeneficiaryRequest struct {
 	unknownFields protoimpl.UnknownFields
 
 	BeneficiaryId string `protobuf:"bytes,1,opt,name=beneficiary_id,json=beneficiaryId,proto3" json:"beneficiary_id,omitempty"`
-	MobileNumber  string `protobuf:"bytes,2,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"`
+	MobileNumber  string `protobuf:"bytes,2,opt,name=mobile_number,json=mobileNumber,proto3" json:"mobile_number,omitempty"` // Accepts 017..., +880..., or 00880... and is normalized to +8801XXXXXXXXX.
 	Email         string `protobuf:"bytes,3,opt,name=email,proto3" json:"email,omitempty"`
 	Address       string `protobuf:"bytes,4,opt,name=address,proto3" json:"address,omitempty"`
 }

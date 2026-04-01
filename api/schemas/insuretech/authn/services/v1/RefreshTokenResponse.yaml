@@ -19,8 +19,5 @@ RefreshTokenResponse:
       type: string
       format: date-time
       description: When session expires
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for refresh token operation. Returns operation results
     and status.

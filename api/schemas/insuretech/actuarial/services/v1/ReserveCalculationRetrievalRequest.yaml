@@ -1,0 +1,9 @@
+ReserveCalculationRetrievalRequest:
+  type: object
+  properties:
+    reserve_id:
+      type: string
+    claim_id:
+      type: string
+  description: Request payload for retrieving reserve calculation retrieval information.
+    May include filters and pagination parameters.

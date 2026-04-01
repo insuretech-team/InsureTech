@@ -1,0 +1,14 @@
+KYCHeadPose:
+  type: object
+  properties:
+    yaw:
+      type: number
+      format: double
+    pitch:
+      type: number
+      format: double
+    roll:
+      type: number
+      format: double
+  description: Domain entity representing kyc head pose. Core business object in the
+    system.

@@ -35,14 +35,14 @@ public class CreateProductCommandHandler : IRequestHandler<CreateProductCommand,
             }
 
             // Validate business rules
-            if (request.MinSumInsuredAmount >= request.MaxSumInsuredAmount)
+            if (request.MinSumInsuredAmount > request.MaxSumInsuredAmount)
             {
-                return Result<Product>.Failure("Min sum insured must be less than max sum insured");
+                return Result<Product>.Failure("Min sum insured must be less than or equal to max sum insured");
             }
 
-            if (request.MinTenureMonths >= request.MaxTenureMonths)
+            if (request.MinTenureMonths > request.MaxTenureMonths)
             {
-                return Result<Product>.Failure("Min tenure must be less than max tenure");
+                return Result<Product>.Failure("Min tenure must be less than or equal to max tenure");
             }
 
             if (request.BasePremiumAmount <= 0)

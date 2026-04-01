@@ -11,8 +11,5 @@ RefundCalculationResponse:
       $ref: '#/components/schemas/Money'
     calculation_details:
       type: string
-    error:
-      $ref: '#/components/schemas/Error'
-      description: Error information if operation failed
   description: Response payload for refund calculation operation. Returns operation
     results and status.

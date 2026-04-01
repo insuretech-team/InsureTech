@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"strings"
 
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/grpcmeta"
 	appLogger "github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
 	authzservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/services/v1"
 	"google.golang.org/grpc"
@@ -52,16 +53,15 @@ func (i *OrderAuthZInterceptor) UnaryServerInterceptor() grpc.UnaryServerInterce
 			return nil, status.Error(codes.Unauthenticated, "missing metadata")
 		}
 
-		userID := firstMD(md, "x-user-id")
+		userID := grpcmeta.First(md, "x-user-id")
 		if userID == "" {
 			return nil, status.Error(codes.Unauthenticated, "x-user-id required")
 		}
 
-		portalRaw := firstMD(md, "x-portal")
-		portalNorm := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(portalRaw), "PORTAL_"))
+		portalNorm := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
 		isSystemPortal := portalNorm == "system"
 
-		orgID := firstMD(md, "x-business-id")
+		orgID := grpcmeta.First(md, "x-business-id")
 
 		// Non-system portals without org context: allow bootstrap methods, deny others.
 		if !isSystemPortal && orgID == "" {
@@ -154,8 +154,8 @@ func mapOrderMethodToResourceAction(method string) (resource, action string) {
 
 // resolveOrderAuthzDomain builds the Casbin domain string from metadata.
 func resolveOrderAuthzDomain(md metadata.MD, orgID string) string {
-	portal := strings.ToLower(strings.TrimPrefix(strings.TrimSpace(firstMD(md, "x-portal")), "PORTAL_"))
-	tenantID := firstMD(md, "x-tenant-id")
+	portal := grpcmeta.NormalizePortal(grpcmeta.First(md, "x-portal"))
+	tenantID := grpcmeta.First(md, "x-tenant-id")
 
 	switch portal {
 	case "system":

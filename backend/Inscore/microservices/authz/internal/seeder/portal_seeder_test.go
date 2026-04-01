@@ -44,10 +44,10 @@ func (f *fakeRoleRepo) GetByNameAndPortal(_ context.Context, name string, portal
 	return nil, errors.New("not found")
 }
 func (f *fakeRoleRepo) Update(context.Context, *authzentityv1.Role) (*authzentityv1.Role, error) {
-	return nil, errors.New("not implemented")
+	return nil, nil
 }
 func (f *fakeRoleRepo) SoftDelete(context.Context, string) error {
-	return errors.New("not implemented")
+	return nil
 }
 func (f *fakeRoleRepo) List(context.Context, authzentityv1.Portal, bool, int, int) ([]*authzentityv1.Role, error) {
 	return nil, nil
@@ -70,10 +70,10 @@ func (f *fakePolicyRepo) Create(_ context.Context, pr *authzentityv1.PolicyRule)
 	return pr, nil
 }
 func (f *fakePolicyRepo) Update(context.Context, *authzentityv1.PolicyRule) (*authzentityv1.PolicyRule, error) {
-	return nil, errors.New("not implemented")
+	return nil, nil
 }
 func (f *fakePolicyRepo) SoftDelete(context.Context, string) error {
-	return errors.New("not implemented")
+	return nil
 }
 func (f *fakePolicyRepo) List(context.Context, string, bool, int, int) ([]*authzentityv1.PolicyRule, error) {
 	return nil, nil
@@ -94,11 +94,14 @@ type fakePortalCfgRepo struct {
 }
 
 func (f *fakePortalCfgRepo) GetByPortal(context.Context, authzentityv1.Portal) (*authzentityv1.PortalConfig, error) {
-	return nil, errors.New("not implemented")
+	return nil, errors.New("not found")
 }
 func (f *fakePortalCfgRepo) Upsert(_ context.Context, pc *authzentityv1.PortalConfig) (*authzentityv1.PortalConfig, error) {
 	f.upserts++
 	return pc, nil
+}
+func (f *fakePortalCfgRepo) List(context.Context) ([]*authzentityv1.PortalConfig, error) {
+	return nil, nil
 }
 
 type fakeTokenCfgRepo struct {

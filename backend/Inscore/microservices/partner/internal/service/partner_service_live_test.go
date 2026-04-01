@@ -2,9 +2,11 @@ package service
 
 import (
 	"context"
+	"fmt"
 	"os"
 	"sync"
 	"testing"
+	"time"
 
 	"github.com/google/uuid"
 	"github.com/newage-saint/insuretech/backend/inscore/db"
@@ -79,14 +81,19 @@ func TestPartnerService_Live_CRUDLifecycle(t *testing.T) {
 	ctx := context.Background()
 	svc, dbConn := newLivePartnerService(t)
 
-	partnerID := "svc_partner_" + uuid.New().String()[:8]
+	partnerID := uuid.New().String()
+	shortID := partnerID[:8]
+	tinNumber := fmt.Sprintf("%012d", time.Now().UnixNano()%1_000_000_000_000)
 	partner := &partnerv1.Partner{
 		PartnerId:                 partnerID,
-		OrganizationName:          "Service Live Org " + partnerID,
+		OrganizationName:          "SvcOrg-" + shortID,
 		Type:                      partnerv1.PartnerType_PARTNER_TYPE_AGENT_NETWORK,
-		TradeLicense:              "TL-SVC-" + partnerID,
-		TinNumber:                 "TIN-SVC-" + partnerID,
-		ContactEmail:              partnerID + "@test.com",
+		TradeLicense:              "TL" + shortID,
+		TinNumber:                 tinNumber,
+		BankAccount:               "1234567890",
+		BankName:                  "Test Bank",
+		BankBranch:                "Main",
+		ContactEmail:              shortID + "@t.co",
 		ContactPhone:              "+8801700000099",
 		AcquisitionCommissionRate: 7.5,
 		RenewalCommissionRate:     4.0,
@@ -105,7 +112,7 @@ func TestPartnerService_Live_CRUDLifecycle(t *testing.T) {
 		PartnerId: partnerID,
 	})
 	require.NoError(t, err)
-	require.Equal(t, "Service Live Org "+partnerID, getResp.Partner.OrganizationName)
+	require.Equal(t, "SvcOrg-"+shortID, getResp.Partner.OrganizationName)
 
 	// Update
 	updateResp, err := svc.UpdatePartner(ctx, &partnerservicev1.UpdatePartnerRequest{
@@ -148,16 +155,23 @@ func TestPartnerService_Live_VerifyAndStatusUpdate(t *testing.T) {
 	ctx := context.Background()
 	svc, dbConn := newLivePartnerService(t)
 
-	partnerID := "verify_" + uuid.New().String()[:8]
+	partnerID := uuid.New().String()
+	shortID := partnerID[:8]
+	tinNumber := fmt.Sprintf("%012d", time.Now().UnixNano()%1_000_000_000_000)
 	t.Cleanup(func() { cleanupLivePartner(t, dbConn, partnerID) })
 
 	_, err := svc.CreatePartner(ctx, &partnerservicev1.CreatePartnerRequest{
 		Partner: &partnerv1.Partner{
 			PartnerId:        partnerID,
-			OrganizationName: "Verify Org " + partnerID,
+			OrganizationName: "Verify-" + shortID,
 			Type:             partnerv1.PartnerType_PARTNER_TYPE_CORPORATE,
-			TradeLicense:     "TL-V-" + partnerID,
-			ContactEmail:     partnerID + "@verify.com",
+			TradeLicense:     "TL" + shortID,
+			TinNumber:        tinNumber,
+			BankAccount:      "1234567890",
+			BankName:         "Test Bank",
+			BankBranch:       "Main",
+			ContactEmail:     shortID + "@v.co",
+			ContactPhone:     "+8801700000098",
 		},
 	})
 	require.NoError(t, err)

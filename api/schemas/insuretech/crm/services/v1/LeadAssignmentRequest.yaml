@@ -1,0 +1,9 @@
+LeadAssignmentRequest:
+  type: object
+  properties:
+    lead_id:
+      type: string
+    agent_id:
+      type: string
+  description: Request payload for lead assignment operation. Contains parameters
+    required to execute the operation.

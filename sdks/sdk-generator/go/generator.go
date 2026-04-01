@@ -1,16 +1,38 @@
 package main
 
 import (
+	"bytes"
 	"fmt"
 	"io/ioutil"
 	"log"
 	"os"
 	"path/filepath"
+	"sort"
 	"strings"
 	"text/template"
 
 	"gopkg.in/yaml.v3"
 )
+
+// writeFileIfChanged writes content to path only when the file doesn't exist or
+// its content differs from the new content. Returns true if the file was written.
+// This prevents unnecessary rebuilds in git and avoids redundant downstream steps.
+func writeFileIfChanged(path string, content []byte, perm os.FileMode) error {
+	if existing, err := ioutil.ReadFile(path); err == nil {
+		if bytes.Equal(existing, content) {
+			return nil // identical — skip write
+		}
+	}
+	if err := os.MkdirAll(filepath.Dir(path), 0755); err != nil {
+		return err
+	}
+	return ioutil.WriteFile(path, content, perm)
+}
+
+// writeFileIfChangedStr is writeFileIfChanged for string content.
+func writeFileIfChangedStr(path string, content string, perm os.FileMode) error {
+	return writeFileIfChanged(path, []byte(content), perm)
+}
 
 // getProjectRoot finds the project root directory by looking for go.mod or a marker file
 func getProjectRoot() (string, error) {
@@ -309,16 +331,13 @@ func generateBaseFiles(config *GeneratorConfig) error {
 			return fmt.Errorf("failed to parse template %s: %w", tmplFile, err)
 		}
 
-		// Create output file
-		outFile, err := os.Create(outputFile)
-		if err != nil {
-			return fmt.Errorf("failed to create output file %s: %w", outputFile, err)
-		}
-		defer outFile.Close()
-
-		// Execute template
-		if err := tmpl.Execute(outFile, config); err != nil {
+		// Execute template into buffer, then write only if changed
+		var buf bytes.Buffer
+		if err := tmpl.Execute(&buf, config); err != nil {
 			return fmt.Errorf("failed to execute template %s: %w", tmplFile, err)
+		}
+		if err := writeFileIfChanged(outputFile, buf.Bytes(), 0644); err != nil {
+			return fmt.Errorf("failed to write output file %s: %w", outputFile, err)
 		}
 
 		log.Printf("  ✓ Generated: %s\n", outputFile)
@@ -353,8 +372,8 @@ func generateClientWithServices(config *GeneratorConfig, serviceNames []string) 
 	templateStr = strings.ReplaceAll(templateStr, "{{.ServiceFields}}", serviceFields.String())
 	templateStr = strings.ReplaceAll(templateStr, "{{.ServiceInitializers}}", serviceInits.String())
 
-	// Write to file
-	if err := ioutil.WriteFile(outputFile, []byte(templateStr), 0644); err != nil {
+	// Write only if changed
+	if err := writeFileIfChangedStr(outputFile, templateStr, 0644); err != nil {
 		return fmt.Errorf("failed to write client file: %w", err)
 	}
 
@@ -374,7 +393,7 @@ require (
 `, config.ModulePath)
 
 	outputFile := filepath.Join(config.OutputPath, "go.mod")
-	return ioutil.WriteFile(outputFile, []byte(content), 0644)
+	return writeFileIfChangedStr(outputFile, content, 0644)
 }
 
 // generateReadme generates the README.md file
@@ -426,7 +445,7 @@ Version: %s
 `, config.ModulePath, config.ModulePath, config.Version, config.License)
 
 	outputFile := filepath.Join(config.OutputPath, "README.md")
-	return ioutil.WriteFile(outputFile, []byte(content), 0644)
+	return writeFileIfChangedStr(outputFile, content, 0644)
 }
 
 // schemaNameRegistry maps a lowercase filename key to the canonical (first-seen) schema name.
@@ -499,7 +518,7 @@ func generateModels(spec *OpenAPISpec, config *GeneratorConfig) error {
 		}
 
 		outputFile := filepath.Join(modelsPath, filename)
-		if err := ioutil.WriteFile(outputFile, []byte(modelContent), 0644); err != nil {
+		if err := writeFileIfChangedStr(outputFile, modelContent, 0644); err != nil {
 			return fmt.Errorf("failed to write model file %s: %w", filename, err)
 		}
 
@@ -534,8 +553,15 @@ func generateModelCode(name string, schema Schema) string {
 		return generateEnumCode(name, schema)
 	}
 
-	if schema.Type != "object" || len(schema.Properties) == 0 {
+	// Enums are handled above; skip non-object types entirely.
+	if schema.Type != "object" && schema.Type != "" {
 		return ""
+	}
+	// For object schemas with no properties (e.g. empty response bodies),
+	// still generate an empty struct so service files can reference the type.
+	if len(schema.Properties) == 0 {
+		return fmt.Sprintf("package models\n\n// %s represents a %s (empty response)\ntype %s struct{}\n",
+			name, toSnakeCase(name), name)
 	}
 
 	var code strings.Builder
@@ -562,8 +588,15 @@ func generateModelCode(name string, schema Schema) string {
 	code.WriteString(fmt.Sprintf("// %s represents a %s\n", name, toSnakeCase(name)))
 	code.WriteString(fmt.Sprintf("type %s struct {\n", name))
 
-	// Add properties
-	for propName, prop := range schema.Properties {
+	// Add properties — sorted by name for deterministic output (Go maps iterate randomly)
+	propNames := make([]string, 0, len(schema.Properties))
+	for propName := range schema.Properties {
+		propNames = append(propNames, propName)
+	}
+	sort.Strings(propNames)
+
+	for _, propName := range propNames {
+		prop := schema.Properties[propName]
 		goType := mapTypeToGo(prop)
 		jsonTag := toSnakeCase(propName)
 		required := contains(schema.Required, propName)
@@ -588,8 +621,30 @@ func generateServices(spec *OpenAPISpec, config *GeneratorConfig) ([]string, err
 	// Parse all operations and build method metadata
 	methodsByService := make(map[string][]MethodMetadata)
 
-	for path, operations := range spec.Paths {
-		for httpMethod, operation := range operations {
+	// Sort paths for deterministic operation ordering across runs
+	sortedPaths := make([]string, 0, len(spec.Paths))
+	for path := range spec.Paths {
+		sortedPaths = append(sortedPaths, path)
+	}
+	sort.Strings(sortedPaths)
+
+	// Sort HTTP methods for deterministic ordering within each path
+	httpMethodOrder := map[string]int{"get": 0, "post": 1, "put": 2, "patch": 3, "delete": 4}
+
+	for _, path := range sortedPaths {
+		operations := spec.Paths[path]
+		// Sort HTTP methods deterministically
+		sortedMethods := make([]string, 0, len(operations))
+		for httpMethod := range operations {
+			sortedMethods = append(sortedMethods, httpMethod)
+		}
+		sort.Slice(sortedMethods, func(i, j int) bool {
+			oi, oj := httpMethodOrder[sortedMethods[i]], httpMethodOrder[sortedMethods[j]]
+			if oi != oj { return oi < oj }
+			return sortedMethods[i] < sortedMethods[j]
+		})
+		for _, httpMethod := range sortedMethods {
+			operation := operations[httpMethod]
 			// Extract service name from operation tags or path
 			serviceName := extractServiceName(operation, path)
 			if serviceName == "" {
@@ -608,13 +663,17 @@ func generateServices(spec *OpenAPISpec, config *GeneratorConfig) ([]string, err
 
 	log.Printf("  Found %d service groups with methods\n", len(methodsByService))
 
-	// Track service names for client generation
+	// Sort service names for deterministic client.go field order
 	serviceNames := make([]string, 0, len(methodsByService))
+	for serviceName := range methodsByService {
+		serviceNames = append(serviceNames, serviceName)
+	}
+	sort.Strings(serviceNames)
 
 	// Generate a service file for each group
 	generatedCount := 0
-	for serviceName, methods := range methodsByService {
-		serviceNames = append(serviceNames, serviceName)
+	for _, serviceName := range serviceNames {
+		methods := methodsByService[serviceName]
 		serviceCode := generateServiceCodeWithMetadata(serviceName, methods, spec, config)
 		if serviceCode == "" {
 			continue
@@ -623,7 +682,7 @@ func generateServices(spec *OpenAPISpec, config *GeneratorConfig) ([]string, err
 		filename := toSnakeCase(serviceName) + "_service.go"
 		outputFile := filepath.Join(servicesPath, filename)
 
-		if err := ioutil.WriteFile(outputFile, []byte(serviceCode), 0644); err != nil {
+		if err := writeFileIfChangedStr(outputFile, serviceCode, 0644); err != nil {
 			return nil, fmt.Errorf("failed to write service file %s: %w", filename, err)
 		}
 

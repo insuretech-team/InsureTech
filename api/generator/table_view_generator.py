@@ -3,6 +3,7 @@
 Table View Generator
 Generates table view pages for schemas and DTOs grouped by domain
 """
+from write_guard import write_if_changed
 
 import yaml
 import json
@@ -341,8 +342,7 @@ class TableViewGenerator:
         
         # Write to file
         output_path = os.path.join(output_dir, f'{file_prefix}_{domain}.html')
-        with open(output_path, 'w', encoding='utf-8') as f:
-            f.write(html)
+        write_if_changed(output_path, html)
         
         return f'{file_prefix}_{domain}.html'
     

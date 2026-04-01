@@ -1,0 +1,26 @@
+ReserveInput:
+  type: object
+  properties:
+    claim_id:
+      type: string
+    calculation_method:
+      type: string
+      description: CHAIN_LADDER, BORNHUETTER_FERGUSON, MACK, etc.
+    triangle_data_json:
+      type: string
+    case_reserve:
+      type: number
+      format: double
+    reported_claims:
+      type: number
+      format: double
+    paid_claims:
+      type: number
+      format: double
+    development_periods:
+      type: integer
+      format: int32
+    confidence_level:
+      type: number
+      format: double
+  description: ReserveInput represents input for reserve calculations

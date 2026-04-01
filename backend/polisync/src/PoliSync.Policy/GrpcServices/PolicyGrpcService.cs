@@ -207,14 +207,14 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
         }
     }
 
-    public override async Task<RenewPolicyResponse> RenewPolicy(RenewPolicyRequest request, ServerCallContext context)
+    public override async Task<RenewPolicyTenureResponse> RenewPolicy(RenewPolicyTenureRequest request, ServerCallContext context)
     {
         try
         {
             var current = await _policyDataGateway.GetPolicyAsync(request.PolicyId, GetCancellationToken(context));
             if (current is null)
             {
-                return new RenewPolicyResponse { Error = BuildError("NOT_FOUND", "Policy not found") };
+                return new RenewPolicyTenureResponse { Error = BuildError("NOT_FOUND", "Policy not found") };
             }
 
             var tenureMonths = request.TenureMonths <= 0 ? current.TenureMonths : request.TenureMonths;
@@ -242,7 +242,7 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
             }
 
             var created = await _policyDataGateway.CreatePolicyAsync(renewed, GetCancellationToken(context));
-            return new RenewPolicyResponse
+            return new RenewPolicyTenureResponse
             {
                 NewPolicyId = created.PolicyId,
                 NewPolicyNumber = created.PolicyNumber,
@@ -253,7 +253,7 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
         catch (RpcException ex)
         {
             _logger.LogError(ex, "RenewPolicy failed with gRPC status {Status}", ex.StatusCode);
-            return new RenewPolicyResponse { Error = BuildError("UPSTREAM_ERROR", $"Insurance service error: {ex.StatusCode}") };
+            return new RenewPolicyTenureResponse { Error = BuildError("UPSTREAM_ERROR", $"Insurance service error: {ex.StatusCode}") };
         }
     }
 

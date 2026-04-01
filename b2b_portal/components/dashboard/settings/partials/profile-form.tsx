@@ -6,7 +6,7 @@ import { Field, FieldGroup } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
-import { authClient } from "@lib/sdk";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 
 const focusPurple =
   "focus-visible:ring-primary focus-visible:border-primary focus-visible:ring-2";
@@ -31,7 +31,7 @@ const ProfileForm = () => {
   const [message, setMessage] = useState<{ text: string; ok: boolean } | null>(null);
 
   useEffect(() => {
-    authClient.getProfile().then((res) => {
+    bffClient.auth.getProfile().then((res) => {
       if (res.ok && res.profile) {
         setProfile(res.profile as ProfileData);
       }
@@ -48,7 +48,7 @@ const ProfileForm = () => {
     // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const { email, mobile_number, ...editableFields } = profile;
     try {
-      const res = await authClient.updateProfile(editableFields as Record<string, unknown>);
+      const res = await bffClient.auth.updateProfile(editableFields as Record<string, unknown>);
       setMessage({ text: res.message ?? (res.ok ? "Profile updated." : "Update failed."), ok: res.ok });
       if (res.ok) {
         // Notify the header to re-fetch the profile and refresh the avatar + display name.

@@ -5,7 +5,7 @@
  * DELETE → Delete document       (DELETE /v1/documents/{id})
  */
 import { NextResponse } from "next/server";
-import { makeDocgenClient } from "@lib/sdk/docgen-sdk-client";
+import { makeDocgenClient } from "@lib/sdk/b2b-sdk-client";
 import { resolvePortalHeaders } from "@lib/sdk/session-headers";
 
 type RouteContext = { params: Promise<{ id: string }> };

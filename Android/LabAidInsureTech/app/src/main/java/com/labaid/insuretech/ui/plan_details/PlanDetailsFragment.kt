@@ -37,7 +37,7 @@ class PlanDetailsFragment : Fragment() {
 
     private fun setupToolbar() {
         binding.planDetailsToolbar.apply {
-            ivBack.setOnClickListener {
+            backButton.setOnClickListener {
                 requireActivity().onBackPressed()
             }
             toolbarTitle.text = "Plan Details"

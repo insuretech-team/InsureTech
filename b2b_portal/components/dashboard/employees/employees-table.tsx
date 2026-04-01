@@ -4,13 +4,13 @@ import * as React from "react";
 import { DataTable } from "@/components/dashboard/employees/data-table/data-table";
 import { buildEmployeeColumns } from "@/components/dashboard/employees/data-table/columns";
 import DashboardLayout from "../dashboard-layout";
-import { employeeClient } from "@lib/sdk/employee-client";
-import { organisationClient } from "@lib/sdk/organisation-client";
-import { authClient } from "@lib/sdk/auth-client";
+import { bffClient } from "@lib/sdk/b2b-sdk-client";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import type { Employee, Organisation } from "@lib/types/b2b";
+import { usePortalPrincipal } from "@lib/auth/portal-session-context";
 
 export default function EmployeesPage() {
+  const principal = usePortalPrincipal();
   const [organisations, setOrganisations] = React.useState<Organisation[]>([]);
   const [selectedOrgId, setSelectedOrgId] = React.useState("");
   const [resolvedOrg, setResolvedOrg] = React.useState<Organisation | null>(null);
@@ -19,42 +19,41 @@ export default function EmployeesPage() {
   // true = b2b_admin (locked to own org), false = super_admin (sees dropdown)
   const [isB2BAdmin, setIsB2BAdmin] = React.useState<boolean | null>(null);
 
-  // Step 1: Determine role from session, then load org context accordingly.
+  // Step 1: Determine role from the server-hydrated portal session, then load org context accordingly.
   React.useEffect(() => {
     let cancelled = false;
+    const role = principal?.role ?? "";
+    const isSuperAdmin = role === "SYSTEM_ADMIN";
 
-    void authClient.getSession().then((response) => {
-      if (cancelled) return;
-      const session = response.session;
-      const role = session?.principal.role ?? "";
-      const isSuperAdmin = role === "SYSTEM_ADMIN";
-      setIsB2BAdmin(!isSuperAdmin);
+    if (!role) {
+      setIsB2BAdmin(null);
+      return () => {
+        cancelled = true;
+      };
+    }
 
-      if (isSuperAdmin) {
-        // Super admin: load all orgs for the dropdown
-        void organisationClient.list().then((listResult) => {
-          if (cancelled || !listResult.ok) return;
-          const rows = listResult.organisations ?? [];
-          setOrganisations(rows);
-          setSelectedOrgId((current) => current || rows[0]?.id || "");
-        });
-      } else {
-        // B2B admin: resolve their own org from /organisations/me
-        void organisationClient.getMe().then((result) => {
-          if (cancelled || !result.ok) return;
-          if (result.organisation?.id) {
-            setResolvedOrg(result.organisation);
-            setOrganisations([result.organisation]);
-            setSelectedOrgId(result.organisation.id);
-          }
-        });
-      }
-    }).catch(() => {
-      if (!cancelled) setIsB2BAdmin(true);
-    });
+    setIsB2BAdmin(!isSuperAdmin);
+
+    if (isSuperAdmin) {
+      void bffClient.organisations.list().then((listResult) => {
+        if (cancelled || !listResult.ok) return;
+        const rows = listResult.organisations ?? [];
+        setOrganisations(rows);
+        setSelectedOrgId((current) => current || rows[0]?.id || "");
+      });
+    } else {
+      void bffClient.organisations.getMe().then((result) => {
+        if (cancelled || !result.ok) return;
+        if (result.organisation?.id) {
+          setResolvedOrg(result.organisation);
+          setOrganisations([result.organisation]);
+          setSelectedOrgId(result.organisation.id);
+        }
+      });
+    }
 
     return () => { cancelled = true; };
-  }, []);
+  }, [principal?.role]);
 
   const reload = React.useCallback(async () => {
     if (!selectedOrgId) {
@@ -66,7 +65,7 @@ export default function EmployeesPage() {
     try {
       // Pass business_id explicitly so the API route has it for both roles.
       // The route will also auto-resolve it from the session as a fallback.
-      const result = await employeeClient.list({ businessId: selectedOrgId });
+      const result = await bffClient.employees.list({ businessId: selectedOrgId });
       setData(result.ok ? (result.employees ?? []) : []);
     } finally {
       setLoading(false);

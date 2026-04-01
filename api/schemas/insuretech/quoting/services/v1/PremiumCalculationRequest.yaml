@@ -1,0 +1,9 @@
+QuotingPremiumCalculationRequest:
+  type: object
+  properties:
+    product_id:
+      type: string
+    parameters:
+      $ref: '#/components/schemas/QuoteParameters'
+  description: Request payload for premium calculation operation. Contains parameters
+    required to execute the operation.

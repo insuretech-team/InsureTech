@@ -1,11 +1,17 @@
 package service
 
 import (
+	"bytes"
 	"context"
 	"crypto/rand"
 	"errors"
 	"fmt"
 	"math/big"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
+	"text/template"
 	"time"
 
 	"github.com/newage-saint/insuretech/backend/inscore/pkg/logger"
@@ -16,10 +22,13 @@ import (
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/events"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/repository"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authn/internal/sms"
+	"github.com/newage-saint/insuretech/backend/inscore/pkg/mobile"
 	authnentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/entity/v1"
 	authnservicev1 "github.com/newage-saint/insuretech/gen/go/insuretech/authn/services/v1"
 	"github.com/redis/go-redis/v9"
 	"golang.org/x/crypto/bcrypt"
+	"google.golang.org/grpc/codes"
+	"google.golang.org/grpc/status"
 	"google.golang.org/protobuf/types/known/timestamppb"
 )
 
@@ -70,18 +79,40 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 		channel = "sms" // Default
 	}
 
-	// Validate recipient format
+	// Normalize purpose: req.Type should be a purpose (login, registration,
+	// reset_password, mobile_login) not a channel name. If a caller mistakenly
+	// passes a channel name (SMS, WHATSAPP, EMAIL) as the type, remap it to
+	// the default "login" purpose and use it as the channel hint instead.
+	purpose := strings.ToLower(strings.TrimSpace(req.Type))
+	switch purpose {
+	case "sms":
+		purpose = "login"
+		channel = "sms"
+	case "whatsapp":
+		purpose = "login"
+		channel = "sms"
+	case "email":
+		purpose = "login"
+		channel = "email"
+	case "":
+		purpose = "login"
+	}
+
+	// Validate and normalize recipient format. SMS recipients are stored in the
+	// canonical 8801XXXXXXXXX provider format even though callers may send
+	// 017..., +880..., or 00880....
 	recipient := req.Recipient
 	if channel == "sms" {
-		if !sms.ValidateMSISDN(recipient) {
-			logger.Errorf("invalid mobile number format")
-			return nil, errors.New("invalid mobile number format")
+		normalizedRecipient, normalizeErr := normalizeSMSRecipient(recipient)
+		if normalizeErr != nil {
+			logger.Errorf("invalid SMS recipient format: %v", normalizeErr)
+			return nil, normalizeErr
 		}
-		recipient = sms.NormalizeMSISDN(recipient)
+		recipient = normalizedRecipient
 	}
 
 	// Check rate limiting
-	if err := s.checkRateLimit(ctx, recipient, req.Type); err != nil {
+	if err := s.checkRateLimit(ctx, recipient, purpose); err != nil {
 		cooldown := s.calculateCooldown(ctx, recipient)
 		return &authnservicev1.SendOTPResponse{
 			Message:         fmt.Sprintf("Rate limit exceeded. Please try again in %d seconds", int(cooldown.Seconds())),
@@ -111,7 +142,7 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 		OtpId:     otpID,
 		UserId:    "", // Will be set on verification if needed
 		OtpHash:   string(otpHash),
-		Purpose:   req.Type,
+		Purpose:   purpose,
 		Recipient: recipient,
 		Channel:   channel,
 		ExpiresAt: timestamppb.New(expiresAt),
@@ -125,16 +156,26 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 	var senderID string
 
 	if channel == "sms" {
-		// Build SMS message
-		message := fmt.Sprintf("Your verification code is: %s. Valid for %d minutes. Do not share this code.",
-			otpCode, int(s.config.Security.OTPExpiry.Minutes()))
+		// Build SMS message from template (Bengali + English).
+		// Falls back to English-only if template cannot be loaded.
+		message := buildSMSOTPMessage(otpCode, int(s.config.Security.OTPExpiry.Minutes()))
 
 		// Send via SSL Wireless
+		// Default to masking if the provider has masking configured and the
+		// request does not explicitly opt-out (UseMasking=false with masking available
+		// would fall through to non-masking, which may not be configured).
+		useMasking := req.UseMasking
+		if !useMasking && s.config.SMS.MaskingEnabled && !s.config.SMS.NonMaskingEnabled {
+			useMasking = true
+		}
+		// SSL Wireless requires csms_id to be numeric (max 8 digits).
+		// Use last 8 digits of a unix nano timestamp for uniqueness.
+		csmsID := fmt.Sprintf("%08d", time.Now().UnixNano()%100000000)
 		smsReq := &sms.SendSMSRequest{
 			MSISDN:     recipient,
 			Message:    message,
-			UseMasking: req.UseMasking,
-			CSMSId:     otpID,
+			UseMasking: useMasking,
+			CSMSId:     csmsID,
 		}
 
 		smsResp, err := s.smsClient.SendSMS(ctx, smsReq)
@@ -163,7 +204,7 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 		emailResp, err := s.emailClient.SendOTP(&email.SendOTPRequest{
 			To:        recipient,
 			OTPCode:   otpCode,
-			Purpose:   req.Type,
+			Purpose:   purpose,
 			ExpiryMin: expiryMin,
 		})
 		if err != nil {
@@ -174,7 +215,7 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 		senderID = s.config.Email.From
 		otpEntity.DlrStatus = "DELIVERED" // email has no async DLR; assume delivered on send
 	} else {
-		return nil, fmt.Errorf("unsupported channel: %s", channel)
+		return nil, fmt.Errorf("unsupported channel: %q; valid channels are: sms, email", channel)
 	}
 
 	// Save to database
@@ -184,7 +225,7 @@ func (s *OTPService) SendOTP(ctx context.Context, req *authnservicev1.SendOTPReq
 	}
 
 	// Update rate limit counter
-	s.incrementRateLimit(ctx, recipient, req.Type)
+	s.incrementRateLimit(ctx, recipient, purpose)
 
 	return &authnservicev1.SendOTPResponse{
 		OtpId:            otpID,
@@ -381,44 +422,38 @@ func (s *OTPService) HandleDLR(ctx context.Context, payload []byte) error {
 // checkRateLimit checks if the recipient has exceeded rate limits.
 // Uses Redis when available (INCR + EXPIRE sliding window), falls back to DB counts.
 func (s *OTPService) checkRateLimit(ctx context.Context, recipient, otpType string) error {
-	const otpPerHourLimit = 3
+	// Per-hour limit from config (OTP_RATE_LIMIT_MAX env var, default 100).
+	// Previously was hardcoded to 3 which ignored the env setting.
+	otpPerHourLimit := s.config.Security.RateLimitPerHour
+	if otpPerHourLimit <= 0 {
+		otpPerHourLimit = 100 // safe default
+	}
 	if s.redisClient != nil {
-		// Per-hour window (Sprint 5 baseline: 3/hour/recipient).
+		// Per-hour window — read current count without incrementing.
+		// incrementRateLimit (called after successful send) handles the actual Incr.
 		hourKey := fmt.Sprintf("otp_rl:hour:%s:%s", otpType, recipient)
-		hourCount, err := s.redisClient.Incr(ctx, hourKey).Result()
-		if err == nil {
-			if hourCount == 1 {
-				s.redisClient.Expire(ctx, hourKey, time.Hour)
-			}
-			if hourCount > otpPerHourLimit {
-				logger.Errorf("rate limit exceeded: too many OTPs in last hour")
-				return errors.New("rate limit exceeded: too many OTPs in last hour")
+		if hourVal, err := s.redisClient.Get(ctx, hourKey).Int64(); err == nil {
+			if hourVal >= int64(otpPerHourLimit) {
+				logger.Warnf("hourly OTP limit exceeded for recipient (Redis): %s", recipient)
+				return status.Errorf(codes.ResourceExhausted, "hourly OTP limit exceeded. Please try again later")
 			}
 		}
 
 		// Per-minute window
 		minKey := fmt.Sprintf("otp_rl:min:%s:%s", otpType, recipient)
-		minCount, err := s.redisClient.Incr(ctx, minKey).Result()
-		if err == nil {
-			if minCount == 1 {
-				s.redisClient.Expire(ctx, minKey, time.Minute)
-			}
-			if minCount > int64(s.config.Security.RateLimitPerMinute) {
-				logger.Errorf("rate limit exceeded: too many OTPs in last minute")
-				return errors.New("rate limit exceeded: too many OTPs in last minute")
+		if minVal, err := s.redisClient.Get(ctx, minKey).Int64(); err == nil {
+			if minVal >= int64(s.config.Security.RateLimitPerMinute) {
+				logger.Warnf("per-minute OTP limit exceeded for recipient (Redis): %s", recipient)
+				return status.Errorf(codes.ResourceExhausted, "Rate limit exceeded. Please try again later")
 			}
 		}
 
 		// Per-day window
 		dayKey := fmt.Sprintf("otp_rl:day:%s:%s", otpType, recipient)
-		dayCount, err := s.redisClient.Incr(ctx, dayKey).Result()
-		if err == nil {
-			if dayCount == 1 {
-				s.redisClient.Expire(ctx, dayKey, 24*time.Hour)
-			}
-			if dayCount > int64(s.config.Security.RateLimitPerDay) {
-				logger.Errorf("daily OTP limit exceeded")
-				return errors.New("daily OTP limit exceeded")
+		if dayVal, err := s.redisClient.Get(ctx, dayKey).Int64(); err == nil {
+			if dayVal >= int64(s.config.Security.RateLimitPerDay) {
+				logger.Warnf("daily OTP limit exceeded for recipient (Redis): %s", recipient)
+				return status.Errorf(codes.ResourceExhausted, "daily OTP limit exceeded. Please try again tomorrow")
 			}
 		}
 		return nil
@@ -430,8 +465,8 @@ func (s *OTPService) checkRateLimit(ctx context.Context, recipient, otpType stri
 		logger.Errorf("failed to check hourly limit: %v", err)
 		return errors.New("failed to check hourly limit")
 	}
-	if hourlyCount >= otpPerHourLimit {
-		return fmt.Errorf("hourly limit exceeded: %d OTPs in last hour", hourlyCount)
+	if hourlyCount >= int64(otpPerHourLimit) {
+		return status.Errorf(codes.ResourceExhausted, "hourly OTP limit exceeded. Please try again later")
 	}
 
 	recentCount, err := s.otpRepo.CountRecentOTPs(ctx, recipient, time.Now().Add(-1*time.Minute))
@@ -440,7 +475,7 @@ func (s *OTPService) checkRateLimit(ctx context.Context, recipient, otpType stri
 		return errors.New("failed to check rate limit")
 	}
 	if recentCount >= int64(s.config.Security.RateLimitPerMinute) {
-		return fmt.Errorf("rate limit exceeded: %d OTPs in last minute", recentCount)
+		return status.Errorf(codes.ResourceExhausted, "rate limit exceeded. Please try again later")
 	}
 
 	dailyCount, err := s.otpRepo.CountRecentOTPs(ctx, recipient, time.Now().Add(-24*time.Hour))
@@ -449,7 +484,7 @@ func (s *OTPService) checkRateLimit(ctx context.Context, recipient, otpType stri
 		return errors.New("failed to check daily limit")
 	}
 	if dailyCount >= int64(s.config.Security.RateLimitPerDay) {
-		return fmt.Errorf("daily limit exceeded: %d OTPs in last 24 hours", dailyCount)
+		return status.Errorf(codes.ResourceExhausted, "daily OTP limit exceeded. Please try again tomorrow")
 	}
 
 	return nil
@@ -483,12 +518,76 @@ func (s *OTPService) incrementRateLimit(ctx context.Context, recipient, otpType 
 
 	// Best-effort writes; SendOTP already persisted OTP in DB and should not fail because
 	// Redis rate-counter updates are temporarily unavailable.
-	_, _ = s.redisClient.Incr(ctx, hourKey).Result()
-	_, _ = s.redisClient.Expire(ctx, hourKey, time.Hour).Result()
-	_, _ = s.redisClient.Incr(ctx, minKey).Result()
-	_, _ = s.redisClient.Expire(ctx, minKey, time.Minute).Result()
-	_, _ = s.redisClient.Incr(ctx, dayKey).Result()
-	_, _ = s.redisClient.Expire(ctx, dayKey, 24*time.Hour).Result()
+	// Only set TTL on first increment (newCount==1) so we use a fixed window,
+	// not a sliding window that resets on every request.
+	if n, err := s.redisClient.Incr(ctx, hourKey).Result(); err == nil && n == 1 {
+		_, _ = s.redisClient.Expire(ctx, hourKey, time.Hour).Result()
+	}
+	if n, err := s.redisClient.Incr(ctx, minKey).Result(); err == nil && n == 1 {
+		_, _ = s.redisClient.Expire(ctx, minKey, time.Minute).Result()
+	}
+	if n, err := s.redisClient.Incr(ctx, dayKey).Result(); err == nil && n == 1 {
+		_, _ = s.redisClient.Expire(ctx, dayKey, 24*time.Hour).Result()
+	}
+}
+
+// buildSMSOTPMessage renders the OTP SMS from templates/common/otp_sms.txt.
+// The template uses Bengali script for LabaidInsureTech branding.
+// Falls back to a plain English message if the template file cannot be found or parsed.
+func buildSMSOTPMessage(code string, expiryMinutes int) string {
+	// Locate template relative to this source file (works both locally and in Docker).
+	// In Docker the binary is at /app/server and templates at /app/backend/inscore/templates/...
+	// Try multiple candidate paths in order.
+	candidates := []string{
+		// Docker container path (binary at /app/server)
+		"/app/backend/inscore/templates/common/otp_sms.txt",
+		// Relative to binary working directory
+		"backend/inscore/templates/common/otp_sms.txt",
+		"templates/common/otp_sms.txt",
+	}
+
+	// Also try relative to this source file (local dev)
+	_, thisFile, _, ok := runtime.Caller(0)
+	if ok {
+		srcRel := filepath.Join(filepath.Dir(thisFile), "..", "..", "..", "..", "templates", "common", "otp_sms.txt")
+		candidates = append(candidates, srcRel)
+	}
+
+	var tmplContent string
+	for _, p := range candidates {
+		b, err := os.ReadFile(p)
+		if err == nil {
+			tmplContent = string(b)
+			break
+		}
+	}
+
+	if tmplContent == "" {
+		// Fallback: plain English
+		return fmt.Sprintf("Your InsureTech verification code is: %s. Valid for %d minutes. Do not share this code.", code, expiryMinutes)
+	}
+
+	tmpl, err := template.New("otp_sms").Parse(tmplContent)
+	if err != nil {
+		logger.Errorf("failed to parse OTP SMS template: %v", err)
+		return fmt.Sprintf("Your InsureTech verification code is: %s. Valid for %d minutes. Do not share this code.", code, expiryMinutes)
+	}
+
+	data := struct {
+		Code          string
+		ExpiryMinutes int
+	}{
+		Code:          code,
+		ExpiryMinutes: expiryMinutes,
+	}
+
+	var buf bytes.Buffer
+	if err := tmpl.Execute(&buf, data); err != nil {
+		logger.Errorf("failed to render OTP SMS template: %v", err)
+		return fmt.Sprintf("Your InsureTech verification code is: %s. Valid for %d minutes. Do not share this code.", code, expiryMinutes)
+	}
+
+	return strings.TrimSpace(buf.String())
 }
 
 // generateOTPCode generates a random numeric OTP code
@@ -514,4 +613,12 @@ func generateOTPCode(length int) (string, error) {
 	// Format with leading zeros
 	format := fmt.Sprintf("%%0%dd", length)
 	return fmt.Sprintf(format, n.Int64()), nil
+}
+
+func normalizeSMSRecipient(recipient string) (string, error) {
+	normalized, err := mobile.NormalizeBangladeshMobileDigits(strings.TrimSpace(recipient))
+	if err != nil {
+		return "", errors.New("invalid mobile number format: use 01712345678, +8801712345678, or 008801712345678")
+	}
+	return normalized, nil
 }

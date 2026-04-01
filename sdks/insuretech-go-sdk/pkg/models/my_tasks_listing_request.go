@@ -5,6 +5,6 @@ package models
 type MyTasksListingRequest struct {
 	Page int `json:"page,omitempty"`
 	PageSize int `json:"page_size,omitempty"`
-	Status string `json:"status"`
 	Priority string `json:"priority,omitempty"`
+	Status string `json:"status"`
 }

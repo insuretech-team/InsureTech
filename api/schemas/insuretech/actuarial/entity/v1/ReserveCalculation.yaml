@@ -1,0 +1,78 @@
+ReserveCalculation:
+  type: object
+  properties:
+    reserve_id:
+      type: string
+      x-primary-key: true
+      x-database-default: gen_random_uuid()
+    claim_id:
+      type: string
+    policy_id:
+      type: string
+    reserve_type:
+      $ref: '#/components/schemas/ReserveType'
+    case_reserve:
+      $ref: '#/components/schemas/Money'
+      description: Reserve amounts
+    ibnr_reserve:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:case_reserve;serializer:proto_money"'
+    expense_reserve:
+      $ref: '#/components/schemas/Money'
+      description: '@inject_tag: gorm:"column:ibnr_reserve;serializer:proto_money"'
+    total_reserve:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:expense_reserve;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:total_reserve;serializer:proto_money\""
+    calculation_method:
+      type: string
+      description: Calculation method
+    confidence_level:
+      type: number
+      format: double
+      description: Confidence interval
+      default: 0.95
+    lower_bound:
+      $ref: '#/components/schemas/Money'
+    upper_bound:
+      $ref: '#/components/schemas/Money'
+      description: "@inject_tag: gorm:\"column:lower_bound;serializer:proto_money\"\
+        \n @inject_tag: gorm:\"column:upper_bound;serializer:proto_money\""
+    triangle_data_json:
+      type: string
+      description: Triangular data for chain ladder
+    status:
+      allOf:
+      - $ref: '#/components/schemas/ReserveStatus'
+      x-database-default: PENDING
+    reviewed_by:
+      type: string
+    reviewed_at:
+      type: string
+      format: date-time
+    metadata:
+      type: object
+      additionalProperties:
+        type: string
+      description: '@inject_tag: gorm:"column:metadata;serializer:json"'
+    created_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    updated_at:
+      type: string
+      format: date-time
+      x-database-default: CURRENT_TIMESTAMP
+    deleted_at:
+      type: string
+      format: date-time
+  description: "ReserveCalculation represents a reserve calculation for claims\n Maps\
+    \ to 'reserve_calculations' table in actuarial_schema"
+  required:
+  - reserve_id
+  - claim_id
+  - policy_id
+  - reserve_type
+  - status
+  - created_at
+  - updated_at

@@ -1,0 +1,93 @@
+{
+  "id": "mediclaim_medical_history",
+  "font": "Times New Roman",
+  "nav_color": "1F3864",
+  "nav_light_color": "E9EFF7",
+  "company": {
+    "name": "PRAGATI INSURANCE PLC",
+    "address": "20-21 Kawran Bazar, Dhaka-1215  |  Tel: 9133680-2  |  Fax: 880-2-55013694",
+    "web": "info@pragatiinsurance.com  |  www.pragatiinsurance.com"
+  },
+  "sections": [
+    { "type": "header", "logo_key": "logo_path" },
+    { "type": "divider" },
+    { "type": "title", "text": "OVERSEAS MEDICLAIM — MEDICAL HISTORY FORM" },
+    { "type": "subtitle", "text": "To be completed by the Proposer / Spouse", "italic": true },
+    { "type": "divider" },
+    { "type": "notice", "text": "PLEASE ANSWER THE FOLLOWING QUESTIONS IN YES OR NO. A DASH IS NOT SUFFICIENT. GIVE FULL DETAILS WHERE REQUIRED. FAILURE TO DISCLOSE ANY MATERIAL FACT MAY NULLIFY YOUR COVER." },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Proposer Full Name (as in passport)", "value": "{{ proposer_name }}" },
+        { "number": "", "label": "Passport Number", "value": "{{ passport_number }}" },
+        { "number": "", "label": "Date of Birth", "value": "{{ date_of_birth }}" },
+        { "number": "", "label": "Age (in completed years)", "value": "{{ age }}" },
+        { "number": "", "label": "Proposed Date of Departure", "value": "{{ departure_date }}" }
+      ]
+    },
+    { "type": "heading", "text": "SECTION I — GENERAL HEALTH", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 4.2,
+      "rows": [
+        { "number": "1.", "label": "Are you in good health and free from physical and mental disease or infirmity?", "value": "{{ q1_good_health }}" },
+        { "number": "2(a).", "label": "Any nervous, mental or psychiatric disease, slipped disc or other spinal disorder, fainting episode, blackout, fit or paralysis of any kind?", "value": "{{ q2a_nervous }}" },
+        { "number": "2(b).", "label": "High blood pressure, heart diseases including ischemic heart disease, piles, varicose veins, other circulatory disorders or rheumatic fever?", "value": "{{ q2b_heart }}" },
+        { "number": "2(c).", "label": "Hernia, any rheumatic or joint disease, urinary disease or diabetes?", "value": "{{ q2c_hernia }}" },
+        { "number": "2(d).", "label": "Any respiratory or allergic disease, or any disorder of the stomach, bowel or gallbladder?", "value": "{{ q2d_respiratory }}" },
+        { "number": "2(e).", "label": "Any other complaint requiring specialist consultation, surgical or hospital treatment or investigations?", "value": "{{ q2e_specialist }}" },
+        { "number": "2(f).", "label": "Any complaint or tendency that may necessitate such consultation or treatment in the future?", "value": "{{ q2f_future }}" },
+        { "number": "3.", "label": "Any additional facts affecting the proposed insurance which should be disclosed to the Insurers?", "value": "{{ q3_additional_facts }}" },
+        { "number": "4.", "label": "Any intention of engaging in winter sports or pastimes rendering you liable to personal injury?", "value": "{{ q4_winter_sports }}" }
+      ]
+    },
+    { "type": "heading", "text": "SECTION II — ILLNESS HISTORY (Last 12 Months)", "level": 1 },
+    {
+      "type": "paragraph",
+      "text": "Please give particulars of any illness, disease or accident sustained during the 12 months preceding the first day of Insurance:"
+    },
+    {
+      "type": "table",
+      "headers": ["Nature of Illness / Disease and Treatment Received", "Date First Treated", "Name & Address of Attending Medical Practitioner / Surgeon with Telephone No."],
+      "rows_key": "illness_history",
+      "columns": ["nature_of_illness", "date_first_treated", "practitioner_details"],
+      "col_widths": [2.8, 1.2, 2.46]
+    },
+    { "type": "heading", "text": "SECTION III — KNOWN CONDITIONS FOR OVERSEAS TRIP", "level": 1 },
+    {
+      "type": "paragraph",
+      "text": "Please give details of any knowledge of any positive existence or presence of any ailment, sickness or injury which may require medical attention whilst on tour abroad:"
+    },
+    {
+      "type": "key_value",
+      "label_width": 0.4,
+      "rows": [
+        { "number": "1.", "label": "", "value": "{{ known_ailment_1 }}" },
+        { "number": "2.", "label": "", "value": "{{ known_ailment_2 }}" },
+        { "number": "3.", "label": "", "value": "{{ known_ailment_3 }}" },
+        { "number": "4.", "label": "", "value": "{{ known_ailment_4 }}" }
+      ]
+    },
+    { "type": "heading", "text": "SECTION IV — USUAL PHYSICIAN", "level": 1 },
+    {
+      "type": "key_value",
+      "label_width": 3.0,
+      "rows": [
+        { "number": "", "label": "Name and Address of Usual Physician & Registration No.", "value": "{{ physician_name_address }}" },
+        { "number": "", "label": "Telephone No. (Consulting Room / Office / Residence)", "value": "{{ physician_telephone }}" }
+      ]
+    },
+    { "type": "notice", "text": "I hereby declare that the above statements are true and complete to the best of my knowledge. I consent to the insurers seeking medical information from any doctor who has attended me concerning anything which affects my physical or mental health." },
+    {
+      "type": "signature",
+      "signatories": [
+        { "label": "Proposer Signature & Date", "name": "{{ proposer_name }}" },
+        { "label": "Spouse Signature (if applicable)", "name": "" },
+        { "label": "Place", "name": "{{ signature_place }}" }
+      ]
+    },
+    { "type": "divider" },
+    { "type": "footer", "text": "Ref: {{ proposal_id }}   |   Generated: {{ generated_at }}" }
+  ]
+}

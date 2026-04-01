@@ -1,0 +1,7 @@
+VehicleModelsRetrievalRequest:
+  type: object
+  properties:
+    vehicle_type:
+      $ref: '#/components/schemas/VehicleType'
+  description: Request payload for retrieving vehicle models retrieval information.
+    May include filters and pagination parameters.

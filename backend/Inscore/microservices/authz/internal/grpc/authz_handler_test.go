@@ -62,9 +62,9 @@ func (f *fakeEnforcer) Enforce(context.Context, string, string, string, string) 
 	return true, "p", nil
 }
 func (f *fakeEnforcer) AddPolicy(string, string, string, string, string) error { return nil }
-func (f *fakeEnforcer) RemovePolicy(string, string, string, string) error       { return nil }
-func (f *fakeEnforcer) AddRoleForUserInDomain(string, string, string) error     { return nil }
-func (f *fakeEnforcer) DeleteRoleForUserInDomain(string, string, string) error   { return nil }
+func (f *fakeEnforcer) RemovePolicy(string, string, string, string) error      { return nil }
+func (f *fakeEnforcer) AddRoleForUserInDomain(string, string, string) error    { return nil }
+func (f *fakeEnforcer) DeleteRoleForUserInDomain(string, string, string) error { return nil }
 func (f *fakeEnforcer) GetRolesForUserInDomain(string, string) ([]string, error) {
 	return []string{"role:admin"}, nil
 }
@@ -127,6 +127,9 @@ func (f *fakePortalRepo) GetByPortal(context.Context, authzentityv1.Portal) (*au
 }
 func (f *fakePortalRepo) Upsert(context.Context, *authzentityv1.PortalConfig) (*authzentityv1.PortalConfig, error) {
 	return &authzentityv1.PortalConfig{Portal: authzentityv1.Portal_PORTAL_SYSTEM, MfaRequired: true}, nil
+}
+func (f *fakePortalRepo) List(context.Context) ([]*authzentityv1.PortalConfig, error) {
+	return nil, nil
 }
 
 type fakeAuditRepo struct{}

@@ -7,14 +7,16 @@ package service
 //
 // Redis key:  sessions:active:<userID>
 // Member:     sessionID (string UUID)
-// Score:      expiry unix timestamp (int64)
+// Score:      creation unix timestamp (int64)
 //
 // Algorithm on TrackSession:
-//   1. ZADD  key score=expiry.Unix() member=sessionID
-//   2. ZREMRANGEBYSCORE key -inf <now>     — purge expired entries
-//   3. ZCARD key                           — count remaining active sessions
-//   4. If count > maxSessions: ZPOPMIN key (count-maxSessions) → evicted IDs
-//   5. Return evicted IDs so the caller can revoke them.
+//   1. ZADD  key score=now.Unix() member=sessionID
+//   2. ZCARD key                           — count active sessions
+//   3. If count > maxSessions: ZPOPMIN key (count-maxSessions) → evicted IDs
+//   4. Return evicted IDs so the caller can revoke them.
+//
+// Uses creation time as the score so ZPOPMIN always evicts the oldest-created
+// session regardless of session type (JWT vs SERVER_SIDE) or TTL differences.
 
 import (
 	"context"
@@ -55,12 +57,15 @@ func (sl *SessionLimiter) key(userID string) string {
 }
 
 // TrackSession registers sessionID in the active-session sorted set for
-// userID, removes expired entries, and evicts the oldest sessions if the
-// per-user limit is exceeded.
+// userID and evicts the oldest-created sessions if the per-user limit is
+// exceeded.
+//
+// Score = creation timestamp (not expiry), so ZPOPMIN always evicts the
+// oldest-created session regardless of session type or TTL differences.
 //
 // Returns the list of evicted session IDs.  The caller is responsible for
 // revoking those sessions (e.g. via TokenService.RevokeSession).
-func (sl *SessionLimiter) TrackSession(ctx context.Context, userID, sessionID string, expiry time.Time) (evicted []string, err error) {
+func (sl *SessionLimiter) TrackSession(ctx context.Context, userID, sessionID string, _ time.Time) (evicted []string, err error) {
 	if sl.rdb == nil {
 		// No Redis — limiter is a no-op (single-instance deployments use DB-level revocation).
 		return nil, nil
@@ -69,33 +74,29 @@ func (sl *SessionLimiter) TrackSession(ctx context.Context, userID, sessionID st
 	k := sl.key(userID)
 	now := time.Now().UTC()
 
-	// 1. ZADD key score=expiry.Unix() member=sessionID
+	// 1. ZADD key score=now.Unix() member=sessionID
+	//    Score is creation time so the oldest-created session has the lowest
+	//    score and gets evicted first — never the brand-new session.
 	if err := sl.rdb.ZAdd(ctx, k, redis.Z{
-		Score:  float64(expiry.Unix()),
+		Score:  float64(now.Unix()),
 		Member: sessionID,
 	}).Err(); err != nil {
 		logger.Errorf("session_limiter ZADD: %v", err)
 		return nil, errors.New("session_limiter ZADD")
 	}
 
-	// 2. Remove expired sessions (score < now)
-	if err := sl.rdb.ZRemRangeByScore(ctx, k, "-inf", strconv.FormatInt(now.Unix(), 10)).Err(); err != nil {
-		// Non-fatal: continue even if cleanup fails.
-		_ = err
-	}
-
-	// 3. Count active sessions
+	// 2. Count active sessions
 	count, err := sl.rdb.ZCard(ctx, k).Result()
 	if err != nil {
 		logger.Errorf("session_limiter ZCARD: %v", err)
 		return nil, errors.New("session_limiter ZCARD")
 	}
 
-	// 4. Evict oldest sessions if over the limit
+	// 3. Evict oldest-created sessions if over the limit
 	if count > int64(sl.maxSessions) {
 		overflow := count - int64(sl.maxSessions)
 
-		// ZPOPMIN returns members with the lowest scores (oldest expiry = oldest sessions)
+		// ZPOPMIN returns members with the lowest scores (oldest creation time)
 		result, err := sl.rdb.ZPopMin(ctx, k, overflow).Result()
 		if err != nil {
 			logger.Errorf("session_limiter ZPOPMIN: %v", err)

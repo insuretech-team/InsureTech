@@ -122,6 +122,10 @@ namespace Insuretech.B2b.Services.V1 {
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.GetEmployeeResponse> __Marshaller_insuretech_b2b_services_v1_GetEmployeeResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.GetEmployeeResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest> __Marshaller_insuretech_b2b_services_v1_ListEmployeeLoginOrganisationsRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse> __Marshaller_insuretech_b2b_services_v1_ListEmployeeLoginOrganisationsResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.CreateEmployeeRequest> __Marshaller_insuretech_b2b_services_v1_CreateEmployeeRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.CreateEmployeeRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.CreateEmployeeResponse> __Marshaller_insuretech_b2b_services_v1_CreateEmployeeResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.CreateEmployeeResponse.Parser));
@@ -133,6 +137,18 @@ namespace Insuretech.B2b.Services.V1 {
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.DeleteEmployeeRequest> __Marshaller_insuretech_b2b_services_v1_DeleteEmployeeRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.DeleteEmployeeRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.DeleteEmployeeResponse> __Marshaller_insuretech_b2b_services_v1_DeleteEmployeeResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.DeleteEmployeeResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest> __Marshaller_insuretech_b2b_services_v1_ActivateEmployeeRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse> __Marshaller_insuretech_b2b_services_v1_ActivateEmployeeResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest> __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeProfileRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse> __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeProfileResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest> __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeCoverageRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse> __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeCoverageResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogRequest> __Marshaller_insuretech_b2b_services_v1_ListPurchaseOrderCatalogRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
@@ -287,6 +303,14 @@ namespace Insuretech.B2b.Services.V1 {
         __Marshaller_insuretech_b2b_services_v1_GetEmployeeResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest, global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse> __Method_ListEmployeeLoginOrganisations = new grpc::Method<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest, global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ListEmployeeLoginOrganisations",
+        __Marshaller_insuretech_b2b_services_v1_ListEmployeeLoginOrganisationsRequest,
+        __Marshaller_insuretech_b2b_services_v1_ListEmployeeLoginOrganisationsResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.B2b.Services.V1.CreateEmployeeRequest, global::Insuretech.B2b.Services.V1.CreateEmployeeResponse> __Method_CreateEmployee = new grpc::Method<global::Insuretech.B2b.Services.V1.CreateEmployeeRequest, global::Insuretech.B2b.Services.V1.CreateEmployeeResponse>(
         grpc::MethodType.Unary,
         __ServiceName,
@@ -309,6 +333,30 @@ namespace Insuretech.B2b.Services.V1 {
         "DeleteEmployee",
         __Marshaller_insuretech_b2b_services_v1_DeleteEmployeeRequest,
         __Marshaller_insuretech_b2b_services_v1_DeleteEmployeeResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest, global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse> __Method_ActivateEmployee = new grpc::Method<global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest, global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ActivateEmployee",
+        __Marshaller_insuretech_b2b_services_v1_ActivateEmployeeRequest,
+        __Marshaller_insuretech_b2b_services_v1_ActivateEmployeeResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse> __Method_GetMyEmployeeProfile = new grpc::Method<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetMyEmployeeProfile",
+        __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeProfileRequest,
+        __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeProfileResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse> __Method_GetMyEmployeeCoverage = new grpc::Method<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "GetMyEmployeeCoverage",
+        __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeCoverageRequest,
+        __Marshaller_insuretech_b2b_services_v1_GetMyEmployeeCoverageResponse);
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogRequest, global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogResponse> __Method_ListPurchaseOrderCatalog = new grpc::Method<global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogRequest, global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogResponse>(
@@ -557,6 +605,18 @@ namespace Insuretech.B2b.Services.V1 {
       }
 
       /// <summary>
+      /// List organisations matching a partial name/code for employee activation.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse> ListEmployeeLoginOrganisations(global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
       /// Create a new employee.
       /// </summary>
       /// <param name="request">The request received from the client.</param>
@@ -588,6 +648,43 @@ namespace Insuretech.B2b.Services.V1 {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.B2b.Services.V1.DeleteEmployeeResponse> DeleteEmployee(global::Insuretech.B2b.Services.V1.DeleteEmployeeRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Start employee self-service activation using organisation code +
+      /// employee_id + email.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse> ActivateEmployee(global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Resolve the authenticated employee's own profile.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse> GetMyEmployeeProfile(global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Resolve the authenticated employee's assigned plan and coverage.
+      /// </summary>
+      /// <param name="request">The request received from the client.</param>
+      /// <param name="context">The context of the server-side call handler being invoked.</param>
+      /// <returns>The response to send back to the client (wrapped by a task).</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse> GetMyEmployeeCoverage(global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -1486,6 +1583,54 @@ namespace Insuretech.B2b.Services.V1 {
         return CallInvoker.AsyncUnaryCall(__Method_GetEmployee, null, options, request);
       }
       /// <summary>
+      /// List organisations matching a partial name/code for employee activation.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse ListEmployeeLoginOrganisations(global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListEmployeeLoginOrganisations(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// List organisations matching a partial name/code for employee activation.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse ListEmployeeLoginOrganisations(global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ListEmployeeLoginOrganisations, null, options, request);
+      }
+      /// <summary>
+      /// List organisations matching a partial name/code for employee activation.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse> ListEmployeeLoginOrganisationsAsync(global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ListEmployeeLoginOrganisationsAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// List organisations matching a partial name/code for employee activation.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse> ListEmployeeLoginOrganisationsAsync(global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ListEmployeeLoginOrganisations, null, options, request);
+      }
+      /// <summary>
       /// Create a new employee.
       /// </summary>
       /// <param name="request">The request to send to the server.</param>
@@ -1628,6 +1773,154 @@ namespace Insuretech.B2b.Services.V1 {
       public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.DeleteEmployeeResponse> DeleteEmployeeAsync(global::Insuretech.B2b.Services.V1.DeleteEmployeeRequest request, grpc::CallOptions options)
       {
         return CallInvoker.AsyncUnaryCall(__Method_DeleteEmployee, null, options, request);
+      }
+      /// <summary>
+      /// Start employee self-service activation using organisation code +
+      /// employee_id + email.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse ActivateEmployee(global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ActivateEmployee(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Start employee self-service activation using organisation code +
+      /// employee_id + email.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse ActivateEmployee(global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_ActivateEmployee, null, options, request);
+      }
+      /// <summary>
+      /// Start employee self-service activation using organisation code +
+      /// employee_id + email.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse> ActivateEmployeeAsync(global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return ActivateEmployeeAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Start employee self-service activation using organisation code +
+      /// employee_id + email.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse> ActivateEmployeeAsync(global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_ActivateEmployee, null, options, request);
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's own profile.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse GetMyEmployeeProfile(global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMyEmployeeProfile(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's own profile.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse GetMyEmployeeProfile(global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetMyEmployeeProfile, null, options, request);
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's own profile.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse> GetMyEmployeeProfileAsync(global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMyEmployeeProfileAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's own profile.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse> GetMyEmployeeProfileAsync(global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetMyEmployeeProfile, null, options, request);
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's assigned plan and coverage.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse GetMyEmployeeCoverage(global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMyEmployeeCoverage(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's assigned plan and coverage.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The response received from the server.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse GetMyEmployeeCoverage(global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.BlockingUnaryCall(__Method_GetMyEmployeeCoverage, null, options, request);
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's assigned plan and coverage.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="headers">The initial metadata to send with the call. This parameter is optional.</param>
+      /// <param name="deadline">An optional deadline for the call. The call will be cancelled if deadline is hit.</param>
+      /// <param name="cancellationToken">An optional token for canceling the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse> GetMyEmployeeCoverageAsync(global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest request, grpc::Metadata headers = null, global::System.DateTime? deadline = null, global::System.Threading.CancellationToken cancellationToken = default(global::System.Threading.CancellationToken))
+      {
+        return GetMyEmployeeCoverageAsync(request, new grpc::CallOptions(headers, deadline, cancellationToken));
+      }
+      /// <summary>
+      /// Resolve the authenticated employee's assigned plan and coverage.
+      /// </summary>
+      /// <param name="request">The request to send to the server.</param>
+      /// <param name="options">The options for the call.</param>
+      /// <returns>The call object.</returns>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual grpc::AsyncUnaryCall<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse> GetMyEmployeeCoverageAsync(global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest request, grpc::CallOptions options)
+      {
+        return CallInvoker.AsyncUnaryCall(__Method_GetMyEmployeeCoverage, null, options, request);
       }
       /// <summary>
       /// List purchasable product plans for purchase orders.
@@ -1852,9 +2145,13 @@ namespace Insuretech.B2b.Services.V1 {
           .AddMethod(__Method_DeleteDepartment, serviceImpl.DeleteDepartment)
           .AddMethod(__Method_ListEmployees, serviceImpl.ListEmployees)
           .AddMethod(__Method_GetEmployee, serviceImpl.GetEmployee)
+          .AddMethod(__Method_ListEmployeeLoginOrganisations, serviceImpl.ListEmployeeLoginOrganisations)
           .AddMethod(__Method_CreateEmployee, serviceImpl.CreateEmployee)
           .AddMethod(__Method_UpdateEmployee, serviceImpl.UpdateEmployee)
           .AddMethod(__Method_DeleteEmployee, serviceImpl.DeleteEmployee)
+          .AddMethod(__Method_ActivateEmployee, serviceImpl.ActivateEmployee)
+          .AddMethod(__Method_GetMyEmployeeProfile, serviceImpl.GetMyEmployeeProfile)
+          .AddMethod(__Method_GetMyEmployeeCoverage, serviceImpl.GetMyEmployeeCoverage)
           .AddMethod(__Method_ListPurchaseOrderCatalog, serviceImpl.ListPurchaseOrderCatalog)
           .AddMethod(__Method_ListPurchaseOrders, serviceImpl.ListPurchaseOrders)
           .AddMethod(__Method_GetPurchaseOrder, serviceImpl.GetPurchaseOrder)
@@ -1885,9 +2182,13 @@ namespace Insuretech.B2b.Services.V1 {
       serviceBinder.AddMethod(__Method_DeleteDepartment, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.DeleteDepartmentRequest, global::Insuretech.B2b.Services.V1.DeleteDepartmentResponse>(serviceImpl.DeleteDepartment));
       serviceBinder.AddMethod(__Method_ListEmployees, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.ListEmployeesRequest, global::Insuretech.B2b.Services.V1.ListEmployeesResponse>(serviceImpl.ListEmployees));
       serviceBinder.AddMethod(__Method_GetEmployee, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.GetEmployeeRequest, global::Insuretech.B2b.Services.V1.GetEmployeeResponse>(serviceImpl.GetEmployee));
+      serviceBinder.AddMethod(__Method_ListEmployeeLoginOrganisations, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsRequest, global::Insuretech.B2b.Services.V1.ListEmployeeLoginOrganisationsResponse>(serviceImpl.ListEmployeeLoginOrganisations));
       serviceBinder.AddMethod(__Method_CreateEmployee, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.CreateEmployeeRequest, global::Insuretech.B2b.Services.V1.CreateEmployeeResponse>(serviceImpl.CreateEmployee));
       serviceBinder.AddMethod(__Method_UpdateEmployee, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.UpdateEmployeeRequest, global::Insuretech.B2b.Services.V1.UpdateEmployeeResponse>(serviceImpl.UpdateEmployee));
       serviceBinder.AddMethod(__Method_DeleteEmployee, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.DeleteEmployeeRequest, global::Insuretech.B2b.Services.V1.DeleteEmployeeResponse>(serviceImpl.DeleteEmployee));
+      serviceBinder.AddMethod(__Method_ActivateEmployee, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.ActivateEmployeeRequest, global::Insuretech.B2b.Services.V1.ActivateEmployeeResponse>(serviceImpl.ActivateEmployee));
+      serviceBinder.AddMethod(__Method_GetMyEmployeeProfile, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeProfileResponse>(serviceImpl.GetMyEmployeeProfile));
+      serviceBinder.AddMethod(__Method_GetMyEmployeeCoverage, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageRequest, global::Insuretech.B2b.Services.V1.GetMyEmployeeCoverageResponse>(serviceImpl.GetMyEmployeeCoverage));
       serviceBinder.AddMethod(__Method_ListPurchaseOrderCatalog, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogRequest, global::Insuretech.B2b.Services.V1.ListPurchaseOrderCatalogResponse>(serviceImpl.ListPurchaseOrderCatalog));
       serviceBinder.AddMethod(__Method_ListPurchaseOrders, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.ListPurchaseOrdersRequest, global::Insuretech.B2b.Services.V1.ListPurchaseOrdersResponse>(serviceImpl.ListPurchaseOrders));
       serviceBinder.AddMethod(__Method_GetPurchaseOrder, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.B2b.Services.V1.GetPurchaseOrderRequest, global::Insuretech.B2b.Services.V1.GetPurchaseOrderResponse>(serviceImpl.GetPurchaseOrder));

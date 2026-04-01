@@ -1,4 +1,4 @@
-QuoteConvertedEvent:
+UnderwritingQuoteConvertedEvent:
   type: object
   properties:
     event_id:

@@ -4,6 +4,9 @@ import (
 	"context"
 	"testing"
 	"time"
+
+	authzentityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
+	"github.com/stretchr/testify/require"
 )
 
 func TestPortalConfigCache_GetDefaultConfig(t *testing.T) {
@@ -13,11 +16,11 @@ func TestPortalConfigCache_GetDefaultConfig(t *testing.T) {
 	}
 
 	tests := []struct {
-		name                 string
-		portal               string
-		expectedMFARequired  bool
-		expectedMinLength    int32
-		expectedSessionTTL   int32
+		name                string
+		portal              string
+		expectedMFARequired bool
+		expectedMinLength   int32
+		expectedSessionTTL  int32
 	}{
 		{
 			name:                "customer portal",
@@ -308,5 +311,42 @@ func TestPortalConfigCache_IsMFARequired(t *testing.T) {
 				t.Errorf("IsMFARequired() = %v, want %v", required, tt.expectedRequired)
 			}
 		})
+	}
+}
+
+func TestNewPortalConfigCache_NilConnAndRefreshTTL(t *testing.T) {
+	cache := NewPortalConfigCache(nil, 2*time.Minute)
+
+	require.Nil(t, cache.authzClient)
+	require.NotNil(t, cache.configs)
+	require.Equal(t, 2*time.Minute, cache.ttl)
+}
+
+func TestPortalConfigCache_GetRefreshTokenTTL(t *testing.T) {
+	cache := &PortalConfigCache{
+		configs: make(map[string]*PortalConfig),
+		ttl:     5 * time.Minute,
+	}
+
+	ttl, err := cache.GetRefreshTokenTTL(context.Background(), "system")
+	require.NoError(t, err)
+	require.Equal(t, 24*time.Hour, ttl)
+}
+
+func TestStringToPortalEnum(t *testing.T) {
+	tests := map[string]authzentityv1.Portal{
+		"customer":  authzentityv1.Portal_PORTAL_B2C,
+		"b2c":       authzentityv1.Portal_PORTAL_B2C,
+		"agent":     authzentityv1.Portal_PORTAL_AGENT,
+		"business":  authzentityv1.Portal_PORTAL_BUSINESS,
+		"partner":   authzentityv1.Portal_PORTAL_B2B,
+		"b2b":       authzentityv1.Portal_PORTAL_B2B,
+		"system":    authzentityv1.Portal_PORTAL_SYSTEM,
+		"regulator": authzentityv1.Portal_PORTAL_REGULATOR,
+		"unknown":   authzentityv1.Portal_PORTAL_UNSPECIFIED,
+	}
+
+	for portal, expected := range tests {
+		require.Equal(t, expected, stringToPortalEnum(portal))
 	}
 }

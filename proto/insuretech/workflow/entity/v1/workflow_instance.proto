@@ -128,7 +128,18 @@ message WorkflowInstance {
       comment: "Audit trail stored as JSON"
     }
   ];
-  // @inject_tag: gorm:"column:audit_info;not null"
+  // @inject_tag: gorm:"-"
+
+  string correlation_id = 12 [(insuretech.common.v1.column) = {
+    column_name: "correlation_id"
+    sql_type: "UUID"
+    comment: "Distributed tracing correlation ID — links workflow instance to originating request"
+    index: {
+      index_name: "idx_workflow_instances_correlation_id"
+      index_type: INDEX_TYPE_BTREE
+    }
+  }];
+  // @inject_tag: gorm:"column:correlation_id"
 }
 
 enum InstanceStatus {

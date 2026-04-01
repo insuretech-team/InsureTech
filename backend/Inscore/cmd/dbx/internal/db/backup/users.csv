@@ -1,0 +1,1 @@
+user_id,mobile_number,email,password_hash,status,created_at,updated_at,last_login_at,created_by,updated_by,login_attempts,locked_until,deleted_at

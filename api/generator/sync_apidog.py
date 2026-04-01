@@ -134,7 +134,7 @@ def import_to_apidog(api_token: str, project_id: str, openapi_spec: dict, spec_p
             try:
                 error_data = response.json()
                 print(f"  Error: {error_data.get('message', response.text)}")
-            except:
+            except Exception as e:
                 print(f"  Response: {response.text[:500]}")
             return False
             

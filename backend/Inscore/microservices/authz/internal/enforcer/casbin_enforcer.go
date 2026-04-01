@@ -8,7 +8,7 @@ package enforcer
 //   [role_definition]     g = _, _, _          (user → role, domain-scoped)
 //   [policy_effect]       e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 //   [matchers]            m = g(r.sub, p.sub, r.dom) && r.dom == p.dom &&
-//                             keyMatch2(r.obj, p.obj) && actionMatch(r.act, p.act)
+//                             objMatch(r.obj, p.obj) && actionMatch(r.act, p.act)
 //
 // Domain format:  "portal:tenant_id"  e.g. "system:root", "agent:tenant-abc"
 // Subject format: "user:<uuid>"       e.g. "user:550e8400-..."
@@ -25,9 +25,7 @@ import (
 
 	"github.com/casbin/casbin/v3"
 	"github.com/casbin/casbin/v3/model"
-	gormadapter "github.com/casbin/gorm-adapter/v3"
 	"github.com/newage-saint/insuretech/backend/inscore/microservices/authz/internal/domain"
-	entityv1 "github.com/newage-saint/insuretech/gen/go/insuretech/authz/entity/v1"
 	"gorm.io/gorm"
 )
 
@@ -45,7 +43,7 @@ g = _, _, _
 e = some(where (p.eft == allow)) && !some(where (p.eft == deny))
 
 [matchers]
-m = g(r.sub, p.sub, r.dom) && r.dom == p.dom && keyMatch2(r.obj, p.obj) && actionMatch(r.act, p.act)
+m = g(r.sub, p.sub, r.dom) && r.dom == p.dom && objMatch(r.obj, p.obj) && actionMatch(r.act, p.act)
 `
 
 // CasbinEnforcer wraps casbin.SyncedEnforcer and implements domain.EnforcerIface.
@@ -54,13 +52,17 @@ type CasbinEnforcer struct {
 	mu       sync.RWMutex
 }
 
-// New creates a CasbinEnforcer backed by the gorm-adapter (casbin_rules table in authz_schema).
+// New creates a CasbinEnforcer backed by pgAdapter which uses raw SQL against
+// authz_schema.casbin_rules — the table defined in the proto source of truth.
 // modelPath: path to a .conf file; empty = use built-in PERM model above.
 func New(db *gorm.DB, modelPath string) (*CasbinEnforcer, error) {
-	// gorm-adapter: table = casbin_rules, schema = authz_schema, auto-create table.
-	adapter, err := gormadapter.NewAdapterByDBWithCustomTable(db, &entityv1.CasbinRule{}, "casbin_rules")
+	// Use custom pgAdapter (raw SQL) instead of gorm-adapter so the schema-qualified
+	// table name "authz_schema.casbin_rules" is always used. The gorm-adapter v3 API
+	// does not support schema-qualified names — it creates a table named literally
+	// "authz_schema.casbin_rules" in the public schema when passed that string.
+	adapter, err := newPGAdapter(db)
 	if err != nil {
-		return nil, errors.New("casbin gorm-adapter init: " + err.Error())
+		return nil, errors.New("casbin pg-adapter init: " + err.Error())
 	}
 
 	var m model.Model
@@ -95,6 +97,10 @@ func registerMatcherFunctions(e *casbin.SyncedEnforcer) {
 	e.AddFunction("actionMatch", domain.ActionMatchExpressionFunc)
 	// Backward-compatible safety net for external models still using regexMatch.
 	e.AddFunction("regexMatch", domain.ActionMatchExpressionFunc)
+	// objMatch: safe object matching that does NOT interpret ":service" as a
+	// named-parameter wildcard (unlike keyMatch2). Supports exact match, "svc:*"
+	// super-wildcard, "/*" prefix matching, and single-segment shell glob.
+	e.AddFunction("objMatch", domain.ObjMatchExpressionFunc)
 }
 
 // StartAutoReload starts background policy reloading every interval.

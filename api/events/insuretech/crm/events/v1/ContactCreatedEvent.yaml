@@ -1,0 +1,23 @@
+ContactCreatedEvent:
+  type: object
+  properties:
+    event_id:
+      type: string
+    contact_id:
+      type: string
+    first_name:
+      type: string
+    last_name:
+      type: string
+    email_address:
+      type: string
+    phone_number:
+      type: string
+    contact_type:
+      $ref: '#/components/schemas/ContactType'
+    created_by:
+      type: string
+    created_at:
+      type: string
+      format: date-time
+  description: ContactCreatedEvent is emitted when a new contact is created

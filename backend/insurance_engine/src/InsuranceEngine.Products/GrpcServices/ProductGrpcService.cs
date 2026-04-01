@@ -60,8 +60,6 @@ public sealed class ProductGrpcService : ProductService.ProductServiceBase
             MaxSumInsured: (decimal)request.Product.MaxSumInsured.Amount / 100m,
             MinTenureMonths: request.Product.MinTenureMonths,
             MaxTenureMonths: request.Product.MaxTenureMonths,
-            MinAge: request.Product.MinAge,
-            MaxAge: request.Product.MaxAge,
             CreatedBy: "System"
         );
 

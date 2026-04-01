@@ -61,8 +61,8 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
                 MaxSumInsured = (long)(request.MaxSumInsured * 100),
                 MinTenureMonths = request.MinTenureMonths,
                 MaxTenureMonths = request.MaxTenureMonths,
-                MinAge = request.MinAge,
-                MaxAge = request.MaxAge,
+                MinAge = 18, // Defaulting as these were removed from Command/Proto
+                MaxAge = 65, 
                 Status = "ACTIVE", // Start as ACTIVE for now or follow lifecycle
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow,

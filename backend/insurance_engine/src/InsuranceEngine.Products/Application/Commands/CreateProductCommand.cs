@@ -13,6 +13,4 @@ public sealed record CreateProductCommand(
     decimal MaxSumInsured,
     int MinTenureMonths,
     int MaxTenureMonths,
-    int MinAge,
-    int MaxAge,
     string? CreatedBy) : IRequest<CreateProductResponse>;

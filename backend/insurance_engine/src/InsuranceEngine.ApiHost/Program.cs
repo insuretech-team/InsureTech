@@ -61,6 +61,10 @@ builder.Services.AddMediatR(cfg =>
     cfg.RegisterServicesFromAssembly(typeof(RequestQuoteCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(SubmitClaimCommand).Assembly);
     cfg.RegisterServicesFromAssembly(typeof(CalculateCommissionCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Cancellations.Application.Commands.CancelPolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Renewals.Application.Commands.RenewPolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Endorsements.Application.Commands.UpdatePolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.FraudDetection.Application.Commands.CheckFraudCommand).Assembly);
 });
 
 var app = builder.Build();
@@ -78,6 +82,9 @@ app.MapGrpcService<BeneficiaryGrpcService>();
 app.MapGrpcService<InsuranceEngine.Products.GrpcServices.ProductGrpcService>();
 app.MapGrpcService<InsuranceEngine.Policy.GrpcServices.PolicyGrpcService>();
 app.MapGrpcService<InsuranceEngine.Claims.GrpcServices.ClaimGrpcService>();
+app.MapGrpcService<InsuranceEngine.Renewals.GrpcServices.RenewalGrpcService>();
+app.MapGrpcService<InsuranceEngine.Endorsements.GrpcServices.EndorsementGrpcService>();
+app.MapGrpcService<InsuranceEngine.FraudDetection.GrpcServices.FraudGrpcService>();
 
 app.MapGet("/", () => new
 {

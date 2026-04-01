@@ -29,6 +29,24 @@ public sealed class RequestQuoteCommandHandler : IRequestHandler<RequestQuoteCom
             var quoteId = Guid.NewGuid();
             var quoteNumber = $"QT-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
+            // TM-001: Age Limits (18 - 65)
+            if (request.ApplicantAge < 18 || request.ApplicantAge > 65)
+            {
+                return new RequestQuoteResponse
+                {
+                    Error = new Error { Code = "INVALID_AGE", Message = "Applicant age must be between 18 and 65 years." }
+                };
+            }
+
+            // TM-001: Sum Assured Bounds (Max 1,000,000 BDT for auto-quoting)
+            if (request.SumAssured < 5000 || request.SumAssured > 1000000)
+            {
+                return new RequestQuoteResponse
+                {
+                    Error = new Error { Code = "INVALID_SUM_ASSURED", Message = "Sum Assured must be between 5,000 and 1,000,000 BDT for this product." }
+                };
+            }
+
             var basePremium = CalculateBasePremium(request.SumAssured, request.TermYears, request.ApplicantAge, request.Smoker);
             var riderPremium = (request.RiderCodes?.Count ?? 0) * (long)(basePremium * 0.05m);
             var taxAmount = (long)((basePremium + riderPremium) * 0.15m);
@@ -178,6 +196,15 @@ public sealed class ApproveUnderwritingCommandHandler : IRequestHandler<ApproveU
             var quote = await _quoteRepository.GetByIdAsync(Guid.Parse(request.QuoteId), cancellationToken);
             if (quote == null)
                 return new ApproveUnderwritingResponse { Error = new Error { Code = "QUOTE_NOT_FOUND", Message = "Quote not found" } };
+
+            // FR-177: Ensure health declaration exists before approval
+            if (quote.Status != "PENDING_UNDERWRITING")
+            {
+                return new ApproveUnderwritingResponse 
+                { 
+                    Error = new Error { Code = "PRECONDITION_FAILED", Message = "Health declaration must be submitted before underwriting approval." } 
+                };
+            }
 
             var decision = new UnderwritingDecisionEntity
             {

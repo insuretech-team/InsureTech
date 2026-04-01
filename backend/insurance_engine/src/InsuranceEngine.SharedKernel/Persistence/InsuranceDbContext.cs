@@ -43,7 +43,30 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("products");
             entity.HasKey(e => e.ProductId);
-            entity.Property(e => e.ProductId).HasColumnName("product_id").HasDefaultValueSql("gen_random_uuid()");
+            
+            // Handle PostgreSQL-specific default values
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.ProductId).HasColumnName("product_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.ProductId).HasColumnName("product_id");
+                // CURRENT_TIMESTAMP is standard, but SQLite is picky.
+                if (Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+                {
+                    entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                    entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                }
+                else
+                {
+                    entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                    entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+                }
+            }
+
             entity.Property(e => e.ProductCode).HasColumnName("product_code").HasMaxLength(50).IsRequired();
             entity.Property(e => e.ProductName).HasColumnName("product_name").HasMaxLength(255).IsRequired();
             entity.Property(e => e.Category).HasColumnName("category").HasMaxLength(50).IsRequired();
@@ -58,15 +81,25 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.MinAge).HasColumnName("min_age").IsRequired();
             entity.Property(e => e.MaxAge).HasColumnName("max_age").IsRequired();
             entity.Property(e => e.TermsUrl).HasColumnName("terms_url").HasMaxLength(500);
-            entity.Property(e => e.Questions).HasColumnName("questions").HasColumnType("JSONB");
             entity.Property(e => e.Version).HasColumnName("version").HasDefaultValue(1).IsRequired();
-            entity.Property(e => e.Exclusions).HasColumnName("exclusions").HasColumnType("TEXT[]");
             entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("DRAFT").IsRequired();
-            entity.Property(e => e.ProductAttributes).HasColumnName("product_attributes").HasColumnType("JSONB");
+            entity.Property(e => e.IsMandatory).HasColumnName("is_mandatory").HasDefaultValue(false);
             entity.Property(e => e.CreatedBy).HasColumnName("created_by").IsRequired();
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+
+            // Handle PostgreSQL-specific types
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.Questions).HasColumnName("questions").HasColumnType("JSONB");
+                entity.Property(e => e.Exclusions).HasColumnName("exclusions").HasColumnType("TEXT[]");
+                entity.Property(e => e.ProductAttributes).HasColumnName("product_attributes").HasColumnType("JSONB");
+            }
+            else
+            {
+                entity.Property(e => e.Questions).HasColumnName("questions");
+                entity.Property(e => e.Exclusions).HasColumnName("exclusions");
+                entity.Property(e => e.ProductAttributes).HasColumnName("product_attributes");
+            }
 
             // Indexes
             entity.HasIndex(e => e.ProductCode).IsUnique().HasDatabaseName("idx_products_product_code");
@@ -82,7 +115,28 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("policies");
             entity.HasKey(e => e.PolicyId);
-            entity.Property(e => e.PolicyId).HasColumnName("policy_id").HasDefaultValueSql("gen_random_uuid()");
+
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.PolicyId).HasColumnName("policy_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.PolicyId).HasColumnName("policy_id");
+                if (Database.IsRelational())
+                {
+                    entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                    entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                }
+                else
+                {
+                    entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                    entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+                }
+            }
+
             entity.Property(e => e.PolicyNumber).HasColumnName("policy_number").HasMaxLength(50).IsRequired();
             entity.Property(e => e.ProductId).HasColumnName("product_id").IsRequired();
             entity.Property(e => e.CustomerId).HasColumnName("customer_id").IsRequired();
@@ -96,8 +150,22 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.SumInsured).HasColumnName("sum_insured").IsRequired();
             entity.Property(e => e.SumInsuredCurrency).HasColumnName("sum_insured_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
             entity.Property(e => e.TenureMonths).HasColumnName("tenure_months").IsRequired();
-            entity.Property(e => e.StartDate).HasColumnName("start_date").HasColumnType("DATE").IsRequired();
-            entity.Property(e => e.EndDate).HasColumnName("end_date").HasColumnType("DATE").IsRequired();
+            
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.StartDate).HasColumnName("start_date").HasColumnType("DATE").IsRequired();
+                entity.Property(e => e.EndDate).HasColumnName("end_date").HasColumnType("DATE").IsRequired();
+                entity.Property(e => e.EnrollmentStartDate).HasColumnName("enrollment_start_date").HasColumnType("DATE");
+                entity.Property(e => e.EnrollmentEndDate).HasColumnName("enrollment_end_date").HasColumnType("DATE");
+            }
+            else
+            {
+                entity.Property(e => e.StartDate).HasColumnName("start_date").IsRequired();
+                entity.Property(e => e.EndDate).HasColumnName("end_date").IsRequired();
+                entity.Property(e => e.EnrollmentStartDate).HasColumnName("enrollment_start_date");
+                entity.Property(e => e.EnrollmentEndDate).HasColumnName("enrollment_end_date");
+            }
+
             entity.Property(e => e.IssuedAt).HasColumnName("issued_at");
             entity.Property(e => e.PolicyDocumentUrl).HasColumnName("policy_document_url");
             entity.Property(e => e.PaymentFrequency).HasColumnName("payment_frequency").HasMaxLength(50);
@@ -110,12 +178,19 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.HasExistingPolicies).HasColumnName("has_existing_policies").HasDefaultValue(false);
             entity.Property(e => e.ClaimsHistorySummary).HasColumnName("claims_history_summary");
             entity.Property(e => e.ProviderName).HasColumnName("provider_name").HasMaxLength(255);
-            entity.Property(e => e.EnrollmentStartDate).HasColumnName("enrollment_start_date").HasColumnType("DATE");
-            entity.Property(e => e.EnrollmentEndDate).HasColumnName("enrollment_end_date").HasColumnType("DATE");
-            entity.Property(e => e.UnderwritingData).HasColumnName("underwriting_data").HasColumnType("JSONB");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            entity.Property(e => e.AutoRenewalEnabled).HasColumnName("auto_renewal_enabled").HasDefaultValue(false);
+            entity.Property(e => e.AutoRenewalCount).HasColumnName("auto_renewal_count").HasDefaultValue(0);
+            entity.Property(e => e.CertificateUrl).HasColumnName("certificate_url");
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
+
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.UnderwritingData).HasColumnName("underwriting_data").HasColumnType("JSONB");
+            }
+            else
+            {
+                entity.Property(e => e.UnderwritingData).HasColumnName("underwriting_data");
+            }
 
             // Indexes
             entity.HasIndex(e => e.PolicyNumber).IsUnique().HasDatabaseName("idx_policies_policy_number");
@@ -140,18 +215,20 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("policy_nominees");
             entity.HasKey(e => e.NomineeId);
-            entity.Property(e => e.NomineeId).HasColumnName("nominee_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
-            entity.Property(e => e.FullName).HasColumnName("full_name").HasMaxLength(255).IsRequired();
-            entity.Property(e => e.Relationship).HasColumnName("relationship").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.SharePercentage).HasColumnName("share_percentage").HasColumnType("DECIMAL(5,2)").IsRequired();
-            entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth").HasColumnType("DATE").IsRequired();
-            entity.Property(e => e.NidNumber).HasColumnName("nid_number").HasMaxLength(17);
-            entity.Property(e => e.PhoneNumber).HasColumnName("phone_number").HasMaxLength(20);
-            entity.Property(e => e.NomineeDobText).HasColumnName("nominee_dob_text").HasMaxLength(15);
-            entity.Property(e => e.NomineeSharePercent).HasColumnName("nominee_share_percent").HasColumnType("DECIMAL(5,2)");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.NomineeId).HasColumnName("nominee_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth").HasColumnType("DATE").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.NomineeId).HasColumnName("nominee_id");
+                entity.Property(e => e.DateOfBirth).HasColumnName("date_of_birth").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+            }
 
             entity.HasIndex(e => e.PolicyId).HasDatabaseName("idx_policy_nominees_policy_id");
             entity.HasOne(e => e.Policy).WithMany(p => p.Nominees).HasForeignKey(e => e.PolicyId).OnDelete(DeleteBehavior.Cascade);
@@ -161,16 +238,18 @@ public class InsuranceDbContext : DbContext
         modelBuilder.Entity<PolicyRiderEntity>(entity =>
         {
             entity.ToTable("policy_riders");
-            entity.HasKey(e => e.RiderId);
-            entity.Property(e => e.RiderId).HasColumnName("rider_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
-            entity.Property(e => e.RiderName).HasColumnName("rider_name").HasMaxLength(255).IsRequired();
-            entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
-            entity.Property(e => e.PremiumCurrency).HasColumnName("premium_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.CoverageAmount).HasColumnName("coverage_amount").IsRequired();
-            entity.Property(e => e.CoverageCurrency).HasColumnName("coverage_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.RiderId).HasColumnName("rider_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.RiderId).HasColumnName("rider_id");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+            }
 
             entity.HasIndex(e => e.PolicyId).HasDatabaseName("idx_policy_riders_policy_id");
             entity.HasOne(e => e.Policy).WithMany(p => p.Riders).HasForeignKey(e => e.PolicyId).OnDelete(DeleteBehavior.Cascade);
@@ -180,35 +259,31 @@ public class InsuranceDbContext : DbContext
         modelBuilder.Entity<ClaimEntity>(entity =>
         {
             entity.ToTable("claims");
-            entity.HasKey(e => e.ClaimId);
-            entity.Property(e => e.ClaimId).HasColumnName("claim_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.ClaimNumber).HasColumnName("claim_number").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
-            entity.Property(e => e.CustomerId).HasColumnName("customer_id").IsRequired();
-            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("SUBMITTED").IsRequired();
-            entity.Property(e => e.Type).HasColumnName("type").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.ClaimedAmount).HasColumnName("claimed_amount").IsRequired();
-            entity.Property(e => e.ClaimedCurrency).HasColumnName("claimed_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.ApprovedAmount).HasColumnName("approved_amount");
-            entity.Property(e => e.ApprovedCurrency).HasColumnName("approved_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.SettledAmount).HasColumnName("settled_amount");
-            entity.Property(e => e.SettledCurrency).HasColumnName("settled_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.IncidentDate).HasColumnName("incident_date").HasColumnType("DATE").IsRequired();
-            entity.Property(e => e.IncidentDescription).HasColumnName("incident_description").IsRequired();
-            entity.Property(e => e.SubmittedAt).HasColumnName("submitted_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.ApprovedAt).HasColumnName("approved_at");
-            entity.Property(e => e.SettledAt).HasColumnName("settled_at");
-            entity.Property(e => e.RejectionReason).HasColumnName("rejection_reason");
-            entity.Property(e => e.PlaceOfIncident).HasColumnName("place_of_incident");
-            entity.Property(e => e.BankDetailsForPayout).HasColumnName("bank_details_for_payout");
-            entity.Property(e => e.AppealOptionAvailable).HasColumnName("appeal_option_available").HasDefaultValue(false);
-            entity.Property(e => e.InAppMessages).HasColumnName("in_app_messages").HasColumnType("JSONB");
-            entity.Property(e => e.ProcessingType).HasColumnName("processing_type").HasMaxLength(50).HasDefaultValue("MANUAL").IsRequired();
-            entity.Property(e => e.DeductibleAmount).HasColumnName("deductible_amount");
-            entity.Property(e => e.CoPayAmount).HasColumnName("co_pay_amount");
-            entity.Property(e => e.ProcessorNotes).HasColumnName("processor_notes");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.ClaimId).HasColumnName("claim_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.IncidentDate).HasColumnName("incident_date").HasColumnType("DATE").IsRequired();
+                entity.Property(e => e.SubmittedAt).HasColumnName("submitted_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.ClaimId).HasColumnName("claim_id");
+                entity.Property(e => e.IncidentDate).HasColumnName("incident_date").IsRequired();
+                entity.Property(e => e.SubmittedAt).HasColumnName("submitted_at").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+            }
+
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.InAppMessages).HasColumnName("in_app_messages").HasColumnType("JSONB");
+            }
+            else
+            {
+                entity.Property(e => e.InAppMessages).HasColumnName("in_app_messages");
+            }
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
             // Indexes
@@ -231,16 +306,21 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("claim_documents");
             entity.HasKey(e => e.DocumentId);
-            entity.Property(e => e.DocumentId).HasColumnName("document_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.ClaimId).HasColumnName("claim_id").IsRequired();
-            entity.Property(e => e.DocumentType).HasColumnName("document_type").HasMaxLength(100).IsRequired();
-            entity.Property(e => e.FileUrl).HasColumnName("file_url").IsRequired();
-            entity.Property(e => e.FileHash).HasColumnName("file_hash").HasMaxLength(64).IsRequired();
-            entity.Property(e => e.UploadedAt).HasColumnName("uploaded_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.Verified).HasColumnName("verified").HasDefaultValue(false).IsRequired();
-            entity.Property(e => e.VerifiedBy).HasColumnName("verified_by");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.DocumentId).HasColumnName("document_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.UploadedAt).HasColumnName("uploaded_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.DocumentId).HasColumnName("document_id");
+                entity.Property(e => e.UploadedAt).HasColumnName("uploaded_at").IsRequired();
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+            }
 
             entity.HasIndex(e => e.ClaimId).HasDatabaseName("idx_claim_documents_claim_id");
             entity.HasIndex(e => e.FileHash).HasDatabaseName("idx_claim_documents_file_hash");
@@ -252,17 +332,17 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("claim_approvals");
             entity.HasKey(e => e.ApprovalId);
-            entity.Property(e => e.ApprovalId).HasColumnName("approval_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.ClaimId).HasColumnName("claim_id").IsRequired();
-            entity.Property(e => e.ApproverId).HasColumnName("approver_id").IsRequired();
-            entity.Property(e => e.ApproverRole).HasColumnName("approver_role").HasMaxLength(100).IsRequired();
-            entity.Property(e => e.ApprovalLevel).HasColumnName("approval_level").IsRequired();
-            entity.Property(e => e.Decision).HasColumnName("decision").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
-            entity.Property(e => e.ApprovedAmount).HasColumnName("approved_amount");
-            entity.Property(e => e.ApprovedCurrency).HasColumnName("approved_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.Notes).HasColumnName("notes");
-            entity.Property(e => e.ApprovedAt).HasColumnName("approved_at");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.ApprovalId).HasColumnName("approval_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP");
+            }
+            else
+            {
+                entity.Property(e => e.ApprovalId).HasColumnName("approval_id");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at");
+            }
 
             entity.HasIndex(e => e.ClaimId).HasDatabaseName("idx_claim_approvals_claim_id");
             entity.HasIndex(e => e.ApproverId).HasDatabaseName("idx_claim_approvals_approver_id");
@@ -274,14 +354,26 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("fraud_checks");
             entity.HasKey(e => e.FraudCheckId);
-            entity.Property(e => e.FraudCheckId).HasColumnName("fraud_check_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.ClaimId).HasColumnName("claim_id").IsRequired();
-            entity.Property(e => e.FraudScore).HasColumnName("fraud_score").HasColumnType("DECIMAL(5,2)").IsRequired();
-            entity.Property(e => e.RiskFactors).HasColumnName("risk_factors").HasColumnType("TEXT[]");
-            entity.Property(e => e.Flagged).HasColumnName("flagged").HasDefaultValue(false).IsRequired();
-            entity.Property(e => e.ReviewedBy).HasColumnName("reviewed_by");
-            entity.Property(e => e.ReviewedAt).HasColumnName("reviewed_at");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.FraudCheckId).HasColumnName("fraud_check_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.FraudCheckId).HasColumnName("fraud_check_id");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+            }
+
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.RiskFactors).HasColumnName("risk_factors").HasColumnType("TEXT[]");
+            }
+            else
+            {
+                entity.Property(e => e.RiskFactors).HasColumnName("risk_factors");
+            }
 
             entity.HasIndex(e => e.ClaimId).IsUnique().HasDatabaseName("idx_fraud_checks_claim_id");
             entity.HasIndex(e => e.Flagged).HasDatabaseName("idx_fraud_checks_flagged");
@@ -293,15 +385,17 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("product_riders");
             entity.HasKey(e => e.RiderId);
-            entity.Property(e => e.RiderId).HasColumnName("rider_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.ProductId).HasColumnName("product_id").IsRequired();
-            entity.Property(e => e.NameEn).HasColumnName("name_en").HasMaxLength(255).IsRequired();
-            entity.Property(e => e.NameBn).HasColumnName("name_bn").HasMaxLength(255).IsRequired();
-            entity.Property(e => e.AdditionalPremium).HasColumnName("additional_premium").IsRequired();
-            entity.Property(e => e.AdditionalPremiumCurrency).HasColumnName("additional_premium_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.AdditionalCoverage).HasColumnName("additional_coverage").IsRequired();
-            entity.Property(e => e.AdditionalCoverageCurrency).HasColumnName("additional_coverage_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.RiderId).HasColumnName("rider_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.RiderId).HasColumnName("rider_id");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+            }
 
             entity.HasIndex(e => e.ProductId).HasDatabaseName("idx_product_riders_product_id");
             entity.HasOne(e => e.Product).WithMany(p => p.Riders).HasForeignKey(e => e.ProductId).OnDelete(DeleteBehavior.Cascade);
@@ -312,31 +406,30 @@ public class InsuranceDbContext : DbContext
         {
             entity.ToTable("quotes");
             entity.HasKey(e => e.QuoteId);
-            entity.Property(e => e.QuoteId).HasColumnName("quote_id").HasDefaultValueSql("gen_random_uuid()");
-            entity.Property(e => e.QuoteNumber).HasColumnName("quote_number").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.BeneficiaryId).HasColumnName("beneficiary_id").IsRequired();
-            entity.Property(e => e.InsurerProductId).HasColumnName("insurer_product_id").IsRequired();
-            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("DRAFT").IsRequired();
-            entity.Property(e => e.SumAssured).HasColumnName("sum_assured").IsRequired();
-            entity.Property(e => e.SumAssuredCurrency).HasColumnName("sum_assured_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.TermYears).HasColumnName("term_years").IsRequired();
-            entity.Property(e => e.PremiumPaymentMode).HasColumnName("premium_payment_mode").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.BasePremium).HasColumnName("base_premium").IsRequired();
-            entity.Property(e => e.BasePremiumCurrency).HasColumnName("base_premium_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.RiderPremium).HasColumnName("rider_premium");
-            entity.Property(e => e.TaxAmount).HasColumnName("tax_amount");
-            entity.Property(e => e.TotalPremium).HasColumnName("total_premium").IsRequired();
-            entity.Property(e => e.TotalPremiumCurrency).HasColumnName("total_premium_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
-            entity.Property(e => e.PremiumCalculation).HasColumnName("premium_calculation").HasColumnType("JSONB");
-            entity.Property(e => e.SelectedRiders).HasColumnName("selected_riders").HasColumnType("JSONB");
-            entity.Property(e => e.ApplicantAge).HasColumnName("applicant_age").IsRequired();
-            entity.Property(e => e.ApplicantOccupation).HasColumnName("applicant_occupation");
-            entity.Property(e => e.Smoker).HasColumnName("smoker").HasDefaultValue(false).IsRequired();
-            entity.Property(e => e.ValidUntil).HasColumnName("valid_until").IsRequired();
-            entity.Property(e => e.ConvertedPolicyId).HasColumnName("converted_policy_id");
-            entity.Property(e => e.ConvertedAt).HasColumnName("converted_at");
-            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
-            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            if (Database.IsRelational())
+            {
+                entity.Property(e => e.QuoteId).HasColumnName("quote_id").HasDefaultValueSql("gen_random_uuid()");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            }
+            else
+            {
+                entity.Property(e => e.QuoteId).HasColumnName("quote_id");
+                entity.Property(e => e.CreatedAt).HasColumnName("created_at").IsRequired();
+                entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").IsRequired();
+            }
+
+            if (Database.ProviderName == "Npgsql.EntityFrameworkCore.PostgreSQL")
+            {
+                entity.Property(e => e.PremiumCalculation).HasColumnName("premium_calculation").HasColumnType("JSONB");
+                entity.Property(e => e.SelectedRiders).HasColumnName("selected_riders").HasColumnType("JSONB");
+            }
+            else
+            {
+                entity.Property(e => e.PremiumCalculation).HasColumnName("premium_calculation");
+                entity.Property(e => e.SelectedRiders).HasColumnName("selected_riders");
+            }
             entity.Property(e => e.DeletedAt).HasColumnName("deleted_at");
 
             entity.HasIndex(e => e.QuoteNumber).IsUnique().HasDatabaseName("idx_quotes_quote_number");
@@ -359,6 +452,14 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.Smoker).HasColumnName("smoker").IsRequired();
             entity.Property(e => e.AlcoholConsumer).HasColumnName("alcohol_consumer").IsRequired();
             entity.Property(e => e.OccupationRiskLevel).HasColumnName("occupation_risk_level").HasMaxLength(50);
+            entity.Property(e => e.Bmi).HasColumnName("bmi").HasColumnType("DECIMAL(5,2)");
+            entity.Property(e => e.IsCurrentlyHospitalized).HasColumnName("is_currently_hospitalized").HasDefaultValue(false);
+            entity.Property(e => e.MedicalExamResults).HasColumnName("medical_exam_results").HasColumnType("JSONB");
+            entity.Property(e => e.MedicalExamStatus).HasColumnName("medical_exam_status").HasMaxLength(50).HasDefaultValue("NOT_REQUIRED");
+            entity.Property(e => e.MedicalExamDate).HasColumnName("medical_exam_date");
+            entity.Property(e => e.MedicalRecordNumbers).HasColumnName("medical_record_numbers").HasColumnType("TEXT[]");
+            entity.Property(e => e.MedicalComments).HasColumnName("medical_comments");
+            entity.Property(e => e.MedicalReviewStatus).HasColumnName("medical_review_status").HasMaxLength(50).HasDefaultValue("PENDING");
             entity.Property(e => e.MedicalExamRequired).HasColumnName("medical_exam_required").HasDefaultValue(false).IsRequired();
             entity.Property(e => e.AutoApprovalPossible).HasColumnName("auto_approval_possible").HasDefaultValue(false).IsRequired();
             entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
@@ -397,10 +498,8 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.CommissionNumber).HasColumnName("commission_number").HasMaxLength(50).IsRequired();
             entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
             entity.Property(e => e.CommissionType).HasColumnName("commission_type").HasMaxLength(50).HasDefaultValue("ACQUISITION").IsRequired();
-            entity.Property(e => e.RecipientType).HasColumnName("recipient_type").HasMaxLength(50).IsRequired();
-            entity.Property(e => e.RecipientId).HasColumnName("recipient_id").IsRequired();
-            entity.Property(e => e.PremiumAmount).HasColumnName("premium_amount").IsRequired();
-            entity.Property(e => e.PremiumCurrency).HasColumnName("premium_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
+            entity.Property(e => e.PartnerId).HasColumnName("partner_id");
+            entity.Property(e => e.AgentId).HasColumnName("agent_id");
             entity.Property(e => e.CommissionRate).HasColumnName("commission_rate").IsRequired();
             entity.Property(e => e.CommissionAmount).HasColumnName("commission_amount").IsRequired();
             entity.Property(e => e.CommissionCurrency).HasColumnName("commission_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
@@ -421,7 +520,7 @@ public class InsuranceDbContext : DbContext
         // ===== Commission Payout Configuration =====
         modelBuilder.Entity<CommissionPayoutEntity>(entity =>
         {
-            entity.ToTable("commission_payouts");
+            entity.ToTable("commission_payouts", "payment_schema");
             entity.HasKey(e => e.PayoutId);
             entity.Property(e => e.PayoutId).HasColumnName("payout_id").HasDefaultValueSql("gen_random_uuid()");
             entity.Property(e => e.PayoutNumber).HasColumnName("payout_number").HasMaxLength(50).IsRequired();
@@ -430,8 +529,8 @@ public class InsuranceDbContext : DbContext
             entity.Property(e => e.TotalAmount).HasColumnName("total_amount").IsRequired();
             entity.Property(e => e.TotalCurrency).HasColumnName("total_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
             entity.Property(e => e.CommissionCount).HasColumnName("commission_count").IsRequired();
-            entity.Property(e => e.PeriodStart).HasColumnName("period_start").HasMaxLength(20).IsRequired();
-            entity.Property(e => e.PeriodEnd).HasColumnName("period_end").HasMaxLength(20).IsRequired();
+            entity.Property(e => e.PeriodStart).HasColumnName("period_start").IsRequired();
+            entity.Property(e => e.PeriodEnd).HasColumnName("period_end").IsRequired();
             entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
             entity.Property(e => e.PaymentMethod).HasColumnName("payment_method").HasMaxLength(50);
             entity.Property(e => e.PaymentReference).HasColumnName("payment_reference").HasMaxLength(255);

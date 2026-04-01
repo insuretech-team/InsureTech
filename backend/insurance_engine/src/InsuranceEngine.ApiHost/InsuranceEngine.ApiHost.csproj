@@ -15,6 +15,10 @@
     <ProjectReference Include="..\InsuranceEngine.Underwriting\InsuranceEngine.Underwriting.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Claims\InsuranceEngine.Claims.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Commission\InsuranceEngine.Commission.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Cancellations\InsuranceEngine.Cancellations.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Renewals\InsuranceEngine.Renewals.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Endorsements\InsuranceEngine.Endorsements.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.FraudDetection\InsuranceEngine.FraudDetection.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
   </ItemGroup>
   <ItemGroup>

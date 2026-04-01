@@ -128,7 +128,15 @@ public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimComma
             }
 
             // Kafka event
-            var evt = new ClaimSubmittedEvent(claim.Id, claim.ClaimNumber, claim.PolicyId, (long)(request.ClaimAmount * 100));
+            var evt = new ClaimSubmittedEvent(
+                claimEntity.ClaimId, 
+                claimEntity.ClaimNumber, 
+                claimEntity.PolicyId, 
+                claimEntity.CustomerId, 
+                claimEntity.ClaimedAmount,
+                policy.PartnerId,
+                policy.AgentId
+            );
             await _kafkaPublisher.PublishAsync("insurance.claims.submitted", evt);
 
             _logger.LogInformation("Claim submitted: {ClaimNumber} for Policy: {PolicyId}", claim.ClaimNumber, request.PolicyId);
@@ -197,13 +205,22 @@ public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCom
             claim.UpdatedAt = DateTime.UtcNow;
             await _claimRepository.UpdateAsync(claim, cancellationToken);
 
-            // Record approval
+            // FR-542-545: Tiered Approval Matrix Mapping
+            var approverRole = approvalLevel switch
+            {
+                1 => "ClaimsOfficer",
+                2 => "ClaimsManager",
+                3 => "JointApproval",
+                4 => "Board",
+                _ => "ClaimsOfficer"
+            };
+
             await _approvalRepository.AddAsync(new ClaimApprovalEntity
             {
                 ApprovalId = Guid.NewGuid(),
                 ClaimId = claim.ClaimId,
                 ApproverId = Guid.Parse(request.ApproverId),
-                ApproverRole = "ClaimsOfficer",
+                ApproverRole = approverRole,
                 ApprovalLevel = approvalLevel,
                 Decision = "APPROVED",
                 ApprovedAmount = (long)(request.ApprovedAmount * 100),
@@ -213,7 +230,7 @@ public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCom
                 CreatedAt = DateTime.UtcNow
             }, cancellationToken);
 
-            await _kafkaPublisher.PublishAsync("insurance.claims.approved", new { ClaimId = claim.ClaimId, ApprovedAmount = claim.ApprovedAmount });
+            await _kafkaPublisher.PublishAsync("insurance.claims.approved", new { ClaimId = claim.ClaimId, ApprovedAmount = claim.ApprovedAmount, Level = approvalLevel });
 
             _logger.LogInformation("Claim approved: {ClaimNumber}, Amount: {ApprovedAmount}", claim.ClaimNumber, request.ApprovedAmount);
 
@@ -226,12 +243,17 @@ public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCom
         }
     }
 
+    // FR-086/542-545: Tiered Approval Matrix:
+    // BDT 0–10K: Officer (Level 1)
+    // BDT 10K–50K: Manager (Level 2)
+    // BDT 50K–2L: Joint (BA + FP) (Level 3)
+    // BDT 2L+: Board (Level 4)
     private static int DetermineApprovalLevel(decimal amount) => amount switch
     {
-        <= 50_000 => 1,   // L1: Claims Officer
-        <= 500_000 => 2,  // L2: Claims Manager
-        <= 2_000_000 => 3, // L3: Business Admin
-        _ => 4             // Board level
+        <= 10_000 => 1,
+        <= 50_000 => 2,
+        <= 200_000 => 3,
+        _ => 4
     };
 }
 

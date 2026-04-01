@@ -10,6 +10,9 @@
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Cancellations\InsuranceEngine.Cancellations.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Renewals\InsuranceEngine.Renewals.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Endorsements\InsuranceEngine.Endorsements.csproj" />
   </ItemGroup>
 
   <ItemGroup>

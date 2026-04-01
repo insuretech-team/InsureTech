@@ -67,10 +67,8 @@ public sealed class GetProductQueryHandler : IRequestHandler<GetProductQuery, Ge
         product.MaxSumInsured = new Money { Amount = entity.MaxSumInsured, Currency = entity.MaxSumInsuredCurrency };
         product.MinTenureMonths = entity.MinTenureMonths;
         product.MaxTenureMonths = entity.MaxTenureMonths;
-        product.MinAge = entity.MinAge;
-        product.MaxAge = entity.MaxAge;
-        product.TermsUrl = entity.TermsUrl ?? "";
-
+        // MinAge, MaxAge, TermsUrl removed as they are not in the Proto definition
+        
         product.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc));
         product.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.UpdatedAt, DateTimeKind.Utc));
 

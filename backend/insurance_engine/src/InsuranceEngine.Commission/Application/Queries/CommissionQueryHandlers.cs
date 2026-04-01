@@ -34,8 +34,8 @@ public sealed class GetCommissionQueryHandler : IRequestHandler<GetCommissionQue
             CommissionAmount = new Money { Amount = e.CommissionAmount, Currency = e.CommissionCurrency }
         };
 
-        if (e.RecipientType == "PARTNER") c.PartnerId = e.RecipientId.ToString();
-        else if (e.RecipientType == "AGENT") c.AgentId = e.RecipientId.ToString();
+        if (e.PartnerId.HasValue) c.PartnerId = e.PartnerId.Value.ToString();
+        if (e.AgentId.HasValue) c.AgentId = e.AgentId.Value.ToString();
 
         if (System.Enum.TryParse<Insuretech.Partner.Entity.V1.CommissionType>(e.CommissionType, true, out var ct)) c.Type = ct;
         if (System.Enum.TryParse<Insuretech.Partner.Entity.V1.CommissionStatus>(e.Status, true, out var cs)) c.Status = cs;
@@ -58,7 +58,7 @@ public sealed class ListCommissionsQueryHandler : IRequestHandler<ListCommission
     {
         Expression<Func<CommissionEntity, bool>> predicate = c => c.DeletedAt == null;
         var recipientId = Guid.Parse(request.RecipientId);
-        predicate = Combine(predicate, c => c.RecipientId == recipientId);
+        predicate = Combine(predicate, c => c.PartnerId == recipientId || c.AgentId == recipientId);
 
         if (!string.IsNullOrEmpty(request.Status))
         {
@@ -101,7 +101,7 @@ public sealed class GetCommissionStatementQueryHandler : IRequestHandler<GetComm
     public async Task<GetCommissionStatementResponse> Handle(GetCommissionStatementQuery request, CancellationToken cancellationToken)
     {
         var recipientId = Guid.Parse(request.RecipientId);
-        var all = await _repository.FindAsync(c => c.RecipientId == recipientId && c.DeletedAt == null, cancellationToken);
+        var all = await _repository.FindAsync(c => (c.PartnerId == recipientId || c.AgentId == recipientId) && c.DeletedAt == null, cancellationToken);
 
         var totalEarned = all.Sum(c => c.CommissionAmount);
         var totalPaid = all.Where(c => c.Status == "PAID").Sum(c => c.CommissionAmount);

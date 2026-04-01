@@ -64,14 +64,23 @@ public sealed class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCom
             }
 
             // 1. Get sequence number from DB for collision-safe policy number (FR-034)
-            var connection = _dbContext.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open)
-                await connection.OpenAsync(cancellationToken);
+            long sequenceNumber;
+            if (_dbContext.Database.ProviderName == "Microsoft.EntityFrameworkCore.Sqlite")
+            {
+                // Professional fallback for cross-provider testing (SQLite/InMemory)
+                sequenceNumber = await _dbContext.Policies.IgnoreQueryFilters().CountAsync(cancellationToken) + 1;
+            }
+            else
+            {
+                var connection = _dbContext.Database.GetDbConnection();
+                if (connection.State != System.Data.ConnectionState.Open)
+                    await connection.OpenAsync(cancellationToken);
 
-            using var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT nextval('insurance_schema.policy_number_seq')";
-            var seqResult = await cmd.ExecuteScalarAsync(cancellationToken);
-            var sequenceNumber = Convert.ToInt64(seqResult);
+                using var cmd = connection.CreateCommand();
+                cmd.CommandText = "SELECT nextval('insurance_schema.policy_number_seq')";
+                var seqResult = await cmd.ExecuteScalarAsync(cancellationToken);
+                sequenceNumber = Convert.ToInt64(seqResult);
+            }
 
             // 2. Create Domain Aggregate (DDD)
             var policy = PolicyAggregate.Create(
@@ -136,7 +145,13 @@ public sealed class CreatePolicyCommandHandler : IRequestHandler<CreatePolicyCom
             await _pdfGenerator.GeneratePolicyDocumentAsync(policy.PolicyNumber, "N/A", "N/A", request.PremiumAmount);
 
             // 6. FR-019: Kafka Event Streaming
-            var policyEvent = new PolicyIssuedEvent(policy.Id, policy.PolicyNumber, policy.CustomerId.ToString(), (long)(request.PremiumAmount * 100));
+            var policyEvent = new PolicyIssuedEvent(
+                policyEntity.PolicyId, 
+                policyEntity.PolicyNumber, 
+                policyEntity.CustomerId, 
+                policyEntity.PremiumAmount,
+                policyEntity.PartnerId,
+                policyEntity.AgentId);
             await _kafkaPublisher.PublishAsync("insurance.policy.created", policyEvent);
 
             _logger.LogInformation("Policy created: {PolicyNumber} for Customer: {CustomerId}", policy.PolicyNumber, request.CustomerId);

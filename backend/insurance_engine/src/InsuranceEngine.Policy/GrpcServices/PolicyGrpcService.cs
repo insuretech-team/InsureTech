@@ -4,6 +4,9 @@ using Microsoft.Extensions.Logging;
 using Insuretech.Policy.Services.V1;
 using InsuranceEngine.Policy.Application.Queries;
 using InsuranceEngine.Policy.Application.Commands;
+using InsuranceEngine.Cancellations.Application.Commands;
+using InsuranceEngine.Renewals.Application.Commands;
+using InsuranceEngine.Endorsements.Application.Commands;
 
 namespace InsuranceEngine.Policy.GrpcServices;
 
@@ -111,8 +114,8 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
     }
 
     // RPC 6: RenewPolicy
-    public override async Task<RenewPolicyResponse> RenewPolicy(
-        RenewPolicyRequest request, ServerCallContext context)
+    public override async Task<RenewPolicyTenureResponse> RenewPolicy(
+        RenewPolicyTenureRequest request, ServerCallContext context)
     {
         if (string.IsNullOrEmpty(request.PolicyId))
         {

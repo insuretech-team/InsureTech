@@ -126,9 +126,7 @@ public sealed class SearchProductsQueryHandler : IRequestHandler<SearchProductsQ
         product.MaxSumInsured = new Money { Amount = entity.MaxSumInsured, Currency = entity.MaxSumInsuredCurrency };
         product.MinTenureMonths = entity.MinTenureMonths;
         product.MaxTenureMonths = entity.MaxTenureMonths;
-        product.MinAge = entity.MinAge;
-        product.MaxAge = entity.MaxAge;
-        product.TermsUrl = entity.TermsUrl ?? "";
+        // MinAge, MaxAge, TermsUrl removed as they are missing in Proto definition
 
         product.CreatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.CreatedAt, DateTimeKind.Utc));
         product.UpdatedAt = Timestamp.FromDateTime(DateTime.SpecifyKind(entity.UpdatedAt, DateTimeKind.Utc));

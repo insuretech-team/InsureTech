@@ -51,11 +51,11 @@ public sealed class CalculateCommissionCommandHandler : IRequestHandler<Calculat
                 CommissionNumber = $"COM-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}",
                 PolicyId = Guid.Parse(request.PolicyId),
                 CommissionType = request.CommissionType,
-                RecipientType = request.RecipientType,
-                RecipientId = Guid.Parse(request.RecipientId),
-                PremiumAmount = policy.PremiumAmount,
+                PartnerId = request.RecipientType == "PARTNER" ? Guid.Parse(request.RecipientId) : null,
+                AgentId = request.RecipientType == "AGENT" ? Guid.Parse(request.RecipientId) : null,
                 CommissionRate = rate,
                 CommissionAmount = commissionAmount,
+                CommissionCurrency = "BDT",
                 CalculationBreakdown = breakdown,
                 Status = "PENDING",
                 CreatedAt = DateTime.UtcNow,
@@ -123,7 +123,7 @@ public sealed class CreatePayoutCommandHandler : IRequestHandler<CreatePayoutCom
             else
             {
                 commissions = await _commissionRepository.FindAsync(
-                    c => c.RecipientId == recipientId && c.Status == "PENDING" && c.DeletedAt == null, cancellationToken);
+                    c => (c.PartnerId == recipientId || c.AgentId == recipientId) && c.Status == "PENDING" && c.DeletedAt == null, cancellationToken);
             }
 
             if (commissions.Count == 0)
@@ -138,8 +138,8 @@ public sealed class CreatePayoutCommandHandler : IRequestHandler<CreatePayoutCom
                 RecipientId = recipientId,
                 TotalAmount = totalAmount,
                 CommissionCount = commissions.Count,
-                PeriodStart = request.PeriodStart,
-                PeriodEnd = request.PeriodEnd,
+                PeriodStart = DateTime.Parse(request.PeriodStart),
+                PeriodEnd = DateTime.Parse(request.PeriodEnd),
                 Status = "PENDING",
                 CreatedAt = DateTime.UtcNow,
                 UpdatedAt = DateTime.UtcNow

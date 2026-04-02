@@ -21,7 +21,7 @@ public class BeneficiaryEntity
     public string Type { get; set; } = string.Empty; // INDIVIDUAL, BUSINESS
 
     [Column("code")]
-    public string Code { get; set; } = string.Empty; // BEN-XXXXXX
+    public string Code { get; set; } = $"BEN-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
     [Column("status")]
     public string Status { get; set; } = "PENDING_KYC";

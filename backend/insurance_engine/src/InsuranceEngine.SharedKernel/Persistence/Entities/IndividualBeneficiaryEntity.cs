@@ -21,7 +21,7 @@ public class IndividualBeneficiaryEntity
     public string? FullNameBn { get; set; }
 
     [Column("date_of_birth")]
-    public DateTime DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; } = DateTime.UnixEpoch;
 
     [Column("gender")]
     public string Gender { get; set; } = string.Empty;

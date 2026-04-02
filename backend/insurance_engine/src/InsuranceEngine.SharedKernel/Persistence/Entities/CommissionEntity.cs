@@ -15,7 +15,7 @@ public class CommissionEntity
     public Guid CommissionId { get; set; }
 
     [Column("commission_number")]
-    public string CommissionNumber { get; set; } = string.Empty;
+    public string CommissionNumber { get; set; } = $"COM-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
     [Column("policy_id")]
     public Guid PolicyId { get; set; }

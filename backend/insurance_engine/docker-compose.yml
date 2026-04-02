@@ -1,0 +1,43 @@
+services:
+  insurance-engine:
+    build:
+      context: ../../
+      dockerfile: backend/insurance_engine/Dockerfile
+    container_name: insuretech-insurance-engine-local
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__InsuranceDb=Host=db;Port=5432;Database=insuretech;Username=postgres;Password=postgres;SslMode=Prefer
+      - ConnectionStrings__Redis=redis:6379
+    ports:
+      - "5001:8080" # gRPC / HTTP
+    depends_on:
+      db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+
+  db:
+    image: postgres:16-alpine
+    container_name: insuretech-db-local
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=insuretech
+    ports:
+      - "5432:5432"
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: insuretech-redis-local
+    ports:
+      - "6379:6379"
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 5s
+      retries: 5

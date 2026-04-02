@@ -15,7 +15,7 @@ public class CommissionPayoutEntity
     public Guid PayoutId { get; set; }
 
     [Column("payout_number")]
-    public string PayoutNumber { get; set; } = string.Empty;
+    public string PayoutNumber { get; set; } = $"PAY-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
     [Column("recipient_type")]
     public string RecipientType { get; set; } = string.Empty; // PARTNER, AGENT

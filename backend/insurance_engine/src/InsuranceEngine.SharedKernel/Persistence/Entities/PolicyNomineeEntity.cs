@@ -27,7 +27,7 @@ public class PolicyNomineeEntity
     public double SharePercentage { get; set; }
 
     [Column("date_of_birth")]
-    public DateTime DateOfBirth { get; set; }
+    public DateTime DateOfBirth { get; set; } = DateTime.UnixEpoch;
 
     [Column("nid_number")]
     public string? NidNumber { get; set; } // PII, encrypted

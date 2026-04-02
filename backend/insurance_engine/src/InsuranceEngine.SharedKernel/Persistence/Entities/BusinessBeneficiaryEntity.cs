@@ -39,7 +39,7 @@ public class BusinessBeneficiaryEntity
     public string? BinNumber { get; set; }
 
     [Column("business_type")]
-    public string BusinessType { get; set; } = string.Empty;
+    public string BusinessType { get; set; } = "CORPORATE";
 
     [Column("industry_sector")]
     public string? IndustrySector { get; set; }

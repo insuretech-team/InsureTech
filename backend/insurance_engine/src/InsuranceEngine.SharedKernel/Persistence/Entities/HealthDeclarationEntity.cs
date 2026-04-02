@@ -51,16 +51,16 @@ public class HealthDeclarationEntity
     public string? OccupationRiskLevel { get; set; }
 
     [Column("medical_exam_required")]
-    public bool MedicalExamRequired { get; set; }
+    public bool MedicalExamRequired { get; set; } = false;
 
     [Column("medical_exam_completed")]
-    public bool MedicalExamCompleted { get; set; }
+    public bool MedicalExamCompleted { get; set; } = false;
 
     [Column("medical_exam_results")]
     public string? MedicalExamResults { get; set; } // JSONB
 
     [Column("medical_exam_status")]
-    public string? MedicalExamStatus { get; set; }
+    public string? MedicalExamStatus { get; set; } = "NOT_REQUIRED";
 
     [Column("medical_exam_date")]
     public DateTime? MedicalExamDate { get; set; }
@@ -72,13 +72,13 @@ public class HealthDeclarationEntity
     public string? MedicalComments { get; set; }
 
     [Column("medical_review_status")]
-    public string? MedicalReviewStatus { get; set; }
+    public string? MedicalReviewStatus { get; set; } = "PENDING";
 
     [Column("medical_documents")]
     public string? MedicalDocuments { get; set; } // JSONB
 
     [Column("auto_approval_possible")]
-    public bool AutoApprovalPossible { get; set; }
+    public bool AutoApprovalPossible { get; set; } = false;
 
     [Column("created_at")]
     public DateTime CreatedAt { get; set; }

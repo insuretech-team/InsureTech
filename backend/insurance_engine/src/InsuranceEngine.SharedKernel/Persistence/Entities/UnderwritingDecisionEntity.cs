@@ -39,7 +39,7 @@ public class UnderwritingDecisionEntity
     public string? Conditions { get; set; } // JSONB
 
     [Column("premium_adjusted")]
-    public bool PremiumAdjusted { get; set; }
+    public bool PremiumAdjusted { get; set; } = false;
 
     [Column("adjusted_premium")]
     public long? AdjustedPremium { get; set; }

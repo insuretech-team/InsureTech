@@ -15,7 +15,7 @@ public class ProductEntity
     public Guid ProductId { get; set; }
 
     [Column("tenant_id")]
-    public string TenantId { get; set; } = string.Empty;
+    public string TenantId { get; set; } = "default";
 
     [Column("product_code")]
     public string ProductCode { get; set; } = string.Empty;
@@ -24,7 +24,7 @@ public class ProductEntity
     public string ProductName { get; set; } = string.Empty;
 
     [Column("product_type")]
-    public string ProductType { get; set; } = string.Empty;
+    public string ProductType { get; set; } = "GENERAL";
 
     [Column("category")]
     public string Category { get; set; } = string.Empty;
@@ -99,7 +99,7 @@ public class ProductEntity
     public int Version { get; set; } = 1;
 
     [Column("is_mandatory")]
-    public bool IsMandatory { get; set; }
+    public bool IsMandatory { get; set; } = false;
 
     // Navigation properties
     public ICollection<PolicyEntity> Policies { get; set; } = new List<PolicyEntity>();

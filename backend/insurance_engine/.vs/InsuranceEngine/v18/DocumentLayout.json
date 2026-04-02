@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "D:\\InsureTech\\backend\\insurance_engine\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{B943E586-42DA-4D81-BFE0-E48719D650B6}|src\\InsuranceEngine.ApiHost\\InsuranceEngine.ApiHost.csproj|d:\\insuretech\\backend\\insurance_engine\\src\\insuranceengine.apihost\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{B943E586-42DA-4D81-BFE0-E48719D650B6}|src\\InsuranceEngine.ApiHost\\InsuranceEngine.ApiHost.csproj|solutionrelative:src\\insuranceengine.apihost\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Users\\Rizve Rahman Reza\\AppData\\Local\\SourceServer\\556ab0660616c03256c4d467a9130bb67ec0e137d79baea379e03b609ab50b89\\gen\\csharp\\Products\\Services\\V1\\ProductServiceGrpc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
@@ -22,6 +26,19 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "Program.cs",
+              "DocumentMoniker": "D:\\InsureTech\\backend\\insurance_engine\\src\\InsuranceEngine.ApiHost\\Program.cs",
+              "RelativeDocumentMoniker": "src\\InsuranceEngine.ApiHost\\Program.cs",
+              "ToolTip": "D:\\InsureTech\\backend\\insurance_engine\\src\\InsuranceEngine.ApiHost\\Program.cs",
+              "RelativeToolTip": "src\\InsuranceEngine.ApiHost\\Program.cs",
+              "ViewState": "AgIAACsAAAAAAAAAAAAswDwAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-02T01:56:50.314Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ProductServiceGrpc.cs",
               "DocumentMoniker": "C:\\Users\\Rizve Rahman Reza\\AppData\\Local\\SourceServer\\556ab0660616c03256c4d467a9130bb67ec0e137d79baea379e03b609ab50b89\\gen\\csharp\\Products\\Services\\V1\\ProductServiceGrpc.cs",
               "ToolTip": "C:\\Users\\Rizve Rahman Reza\\AppData\\Local\\SourceServer\\556ab0660616c03256c4d467a9130bb67ec0e137d79baea379e03b609ab50b89\\gen\\csharp\\Products\\Services\\V1\\ProductServiceGrpc.cs",
@@ -32,7 +49,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "BeneficiariesController.cs",
               "DocumentMoniker": "D:\\InsureTech\\backend\\insurance_engine\\src\\InsuranceEngine.ApiHost\\Controllers\\BeneficiariesController.cs",
               "RelativeDocumentMoniker": "src\\InsuranceEngine.ApiHost\\Controllers\\BeneficiariesController.cs",

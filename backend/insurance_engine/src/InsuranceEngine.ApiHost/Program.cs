@@ -1,20 +1,33 @@
 using Microsoft.EntityFrameworkCore;
-using Microsoft.OpenApi.Models;
-using InsuranceEngine.Beneficiary.Application.Commands;
-using InsuranceEngine.Products.Application.Commands;
-using InsuranceEngine.Policy.Application.Commands;
-using InsuranceEngine.Underwriting.Application.Commands;
-using InsuranceEngine.Claims.Application.Commands; // ClaimCommands
-using InsuranceEngine.Commission.Application.Commands; // CalculateCommissionCommand
-using InsuranceEngine.Beneficiary.GrpcServices;
 using InsuranceEngine.SharedKernel.Persistence;
 using InsuranceEngine.SharedKernel.Infrastructure;
+using InsuranceEngine.Beneficiary.GrpcServices;
+using InsuranceEngine.Products.GrpcServices;
+using InsuranceEngine.Policy.GrpcServices;
+using InsuranceEngine.Claims.GrpcServices;
+using InsuranceEngine.Renewals.GrpcServices;
+using InsuranceEngine.Endorsements.GrpcServices;
+using InsuranceEngine.FraudDetection.GrpcServices;
+using InsuranceEngine.Underwriting.GrpcServices;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services
-builder.Services.AddControllers();
-builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddMediatR(cfg =>
+{
+    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Beneficiary.Application.Commands.CreateIndividualBeneficiaryCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Products.Application.Commands.CreateProductCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Policy.Application.Commands.CreatePolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Underwriting.Application.Commands.RequestQuoteCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Claims.Application.Commands.SubmitClaimCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Commission.Application.Commands.CalculateCommissionCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Cancellations.Application.Commands.CancelPolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Renewals.Application.Commands.RenewPolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Endorsements.Application.Commands.UpdatePolicyCommand).Assembly);
+    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.FraudDetection.Application.Commands.CheckFraudCommand).Assembly);
+});
+
 builder.Services.AddDistributedMemoryCache(); // FR-028 Product caching (TODO: Replace with Redis)
 builder.Services.AddSingleton<IPdfGenerator, MockPdfGenerator>(); // FR-035 PDF generation
 builder.Services.AddSingleton<IKafkaPublisher, MockKafkaPublisher>(); // FR-019 Kafka streaming
@@ -23,21 +36,10 @@ builder.Services.AddSingleton<IKafkaPublisher, MockKafkaPublisher>(); // FR-019 
 builder.Services.AddGrpc(options =>
 {
     options.Interceptors.Add<GlobalGrpcErrorInterceptor>();
-}).AddJsonTranscoding();
-builder.Services.AddGrpcReflection();
-builder.Services.AddGrpcSwagger();
-builder.Services.AddSwaggerGen(c =>
-{
-    c.SwaggerDoc("v1", new Microsoft.OpenApi.Models.OpenApiInfo { Title = "Insurance Engine API", Version = "v1" });
-    c.IgnoreObsoleteProperties();
-    c.IgnoreObsoleteActions();
-    c.CustomSchemaIds(type => type.FullName);
-    
-    // Fix Resolver error for well-known types
-    c.MapType<Google.Protobuf.WellKnownTypes.Value>(() => new OpenApiSchema { Type = "object", AdditionalPropertiesAllowed = true });
-    c.MapType<Google.Protobuf.WellKnownTypes.Struct>(() => new OpenApiSchema { Type = "object", AdditionalPropertiesAllowed = true });
-    c.MapType<Google.Protobuf.WellKnownTypes.ListValue>(() => new OpenApiSchema { Type = "array", Items = new OpenApiSchema { Type = "object", AdditionalPropertiesAllowed = true } });
+    options.MaxReceiveMessageSize = 16 * 1024 * 1024; // 16MB
+    options.MaxSendMessageSize = 16 * 1024 * 1024;
 });
+builder.Services.AddGrpcReflection();
 
 // Database — Full EF Core (Option A)
 var connectionString = builder.Configuration.GetConnectionString("InsuranceDb");
@@ -51,40 +53,23 @@ builder.Services.AddScoped<DbContext>(sp => sp.GetRequiredService<InsuranceDbCon
 // Repository pattern
 builder.Services.AddScoped(typeof(IRepository<>), typeof(EfRepository<>));
 
-// MediatR
-builder.Services.AddMediatR(cfg =>
-{
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(CreateIndividualBeneficiaryCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(CreateProductCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(CreatePolicyCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(RequestQuoteCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(SubmitClaimCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(CalculateCommissionCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Cancellations.Application.Commands.CancelPolicyCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Renewals.Application.Commands.RenewPolicyCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.Endorsements.Application.Commands.UpdatePolicyCommand).Assembly);
-    cfg.RegisterServicesFromAssembly(typeof(InsuranceEngine.FraudDetection.Application.Commands.CheckFraudCommand).Assembly);
-});
+builder.Services.AddAuthorization();
 
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
-app.UseSwagger();
-app.UseSwaggerUI();
-
+// Authorization
 app.UseAuthorization();
-app.MapControllers();
 app.MapGrpcReflectionService();
 
 // Map gRPC services
 app.MapGrpcService<BeneficiaryGrpcService>();
-app.MapGrpcService<InsuranceEngine.Products.GrpcServices.ProductGrpcService>();
-app.MapGrpcService<InsuranceEngine.Policy.GrpcServices.PolicyGrpcService>();
-app.MapGrpcService<InsuranceEngine.Claims.GrpcServices.ClaimGrpcService>();
-app.MapGrpcService<InsuranceEngine.Renewals.GrpcServices.RenewalGrpcService>();
-app.MapGrpcService<InsuranceEngine.Endorsements.GrpcServices.EndorsementGrpcService>();
-app.MapGrpcService<InsuranceEngine.FraudDetection.GrpcServices.FraudGrpcService>();
+app.MapGrpcService<ProductGrpcService>();
+app.MapGrpcService<PolicyGrpcService>();
+app.MapGrpcService<ClaimGrpcService>();
+app.MapGrpcService<RenewalGrpcService>();
+app.MapGrpcService<EndorsementGrpcService>();
+app.MapGrpcService<FraudGrpcService>();
+app.MapGrpcService<UnderwritingGrpcService>();
 
 app.MapGet("/", () => new
 {

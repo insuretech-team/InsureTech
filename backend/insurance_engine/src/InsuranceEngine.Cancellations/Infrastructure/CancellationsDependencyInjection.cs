@@ -18,7 +18,7 @@ public static class CancellationsDependencyInjection
             cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
         });
         // Add module-specific gateways
-        services.AddScoped<Infrastructure.ICancellationDataGateway, Infrastructure.GoCancellationDataGateway>();
+        services.AddScoped<ICancellationDataGateway, Infrastructure.GoCancellationDataGateway>();
 
         return services;
     }

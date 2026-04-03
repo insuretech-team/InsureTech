@@ -11,6 +11,7 @@
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj" />
   </ItemGroup>
 
   <ItemGroup>

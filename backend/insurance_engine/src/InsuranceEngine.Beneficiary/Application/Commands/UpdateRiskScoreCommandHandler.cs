@@ -2,8 +2,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Beneficiary.Services.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.Grpc.Gateways;
-
 namespace InsuranceEngine.Beneficiary.Application.Commands;
 
 public sealed class UpdateRiskScoreCommandHandler : IRequestHandler<UpdateRiskScoreCommand, UpdateRiskScoreResponse>

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Insuretech.Products.Services.V1;
 using Insuretech.Products.Entity.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.Grpc.Gateways;
 
 namespace InsuranceEngine.Products.Application.Commands;
 
@@ -41,14 +40,14 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
                 Status = ProductStatus.Active
             };
 
-            var createdProduct = await _gateway.CreateProductAsync(product, cancellationToken);
+            var productId = await _gateway.CreateProductAsync(product, cancellationToken);
 
             _logger.LogInformation("Product created successfully via Go SSOT: {ProductId} ({ProductCode})", 
-                createdProduct.ProductId, createdProduct.ProductCode);
+                productId, request.ProductCode);
 
             return new CreateProductResponse
             {
-                ProductId = createdProduct.ProductId,
+                ProductId = productId,
                 Message = "Product created successfully"
             };
         }

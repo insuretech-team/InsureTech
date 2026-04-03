@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using InsuranceEngine.Grpc.Gateways;
 using Insuretech.Policy.Entity.V1;
 
 namespace InsuranceEngine.Policy.Application.Commands;
@@ -23,8 +22,8 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
     {
         try
         {
-            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (policy == null)
+            var policyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policyResponse.Policy == null)
                 return Result<string>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
             var newNominee = new Nominee
@@ -39,8 +38,13 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
                 NomineeDobText = request.NomineeDobText
             };
 
-            policy.Nominees.Add(newNominee);
-            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
+            var nominees = policyResponse.Policy.Nominees.ToList();
+            nominees.Add(newNominee);
+
+            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, nominees, null, cancellationToken);
+            
+            if (updateResponse.Error != null)
+                return Result<string>.Fail("UPDATE_FAILED", updateResponse.Error.Message);
 
             _logger.LogInformation("Nominee added via Go SSOT: {NomineeId} to Policy: {PolicyId}", newNominee.NomineeId, request.PolicyId);
             return Result<string>.Ok(newNominee.NomineeId);
@@ -68,11 +72,12 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
     {
         try
         {
-            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (policy == null)
+            var policyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policyResponse.Policy == null)
                 return Result<bool>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            var nominee = policy.Nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
+            var nominees = policyResponse.Policy.Nominees.ToList();
+            var nominee = nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
             if (nominee == null)
                 return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found in policy");
 
@@ -84,7 +89,10 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
             if (request.NidNumber != null) nominee.NidNumber = request.NidNumber;
             if (request.PhoneNumber != null) nominee.PhoneNumber = request.PhoneNumber;
             
-            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
+            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, nominees, null, cancellationToken);
+            
+            if (updateResponse.Error != null)
+                return Result<bool>.Fail("UPDATE_FAILED", updateResponse.Error.Message);
 
             _logger.LogInformation("Nominee updated via Go SSOT: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);
@@ -112,16 +120,21 @@ public sealed class DeleteNomineeCommandHandler : IRequestHandler<DeleteNomineeC
     {
         try
         {
-            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (policy == null)
+            var policyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policyResponse.Policy == null)
                 return Result<bool>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            var nominee = policy.Nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
+            var nominees = policyResponse.Policy.Nominees.ToList();
+            var nominee = nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
             if (nominee == null)
                 return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found in policy");
 
-            policy.Nominees.Remove(nominee);
-            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
+            nominees.Remove(nominee);
+            
+            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, nominees, null, cancellationToken);
+            
+            if (updateResponse.Error != null)
+                return Result<bool>.Fail("UPDATE_FAILED", updateResponse.Error.Message);
 
             _logger.LogInformation("Nominee deleted via Go SSOT: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);

@@ -17,7 +17,7 @@ public sealed class GoPolicyDataGateway : IPolicyDataGateway
         _client = client;
     }
 
-    public async Task<PolicyEntity?> GetPolicyAsync(string policyId, CancellationToken ct = default)
+    public async Task<GetPolicyResponse> GetPolicyAsync(string policyId, CancellationToken ct = default)
     {
         try
         {
@@ -25,39 +25,42 @@ public sealed class GoPolicyDataGateway : IPolicyDataGateway
                 new GetPolicyRequest { PolicyId = policyId }, 
                 _client.BuildCallOptions(ct));
             
-            return response.Policy;
+            return response;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
         {
-            return null;
+            return new GetPolicyResponse();
         }
     }
 
-    public async Task<IReadOnlyList<PolicyEntity>> ListPoliciesAsync(int page, int pageSize, string customerId = "", CancellationToken ct = default)
+    public async Task<ListUserPoliciesResponse> ListUserPoliciesAsync(ListUserPoliciesRequest request, CancellationToken ct = default)
     {
-        var response = await _client.Policies.ListUserPoliciesAsync(
-            new ListUserPoliciesRequest { Page = page, PageSize = pageSize, CustomerId = customerId }, 
-            _client.BuildCallOptions(ct));
-            
-        return response.Policies.ToList();
+        return await _client.Policies.ListUserPoliciesAsync(request, _client.BuildCallOptions(ct));
     }
 
-    public async Task<PolicyEntity> CreatePolicyAsync(PolicyEntity policy, CancellationToken ct = default)
+    public async Task<CreatePolicyResponse> CreatePolicyAsync(CreatePolicyRequest request, CancellationToken ct = default)
     {
-        var response = await _client.Policies.CreatePolicyAsync(
-            new CreatePolicyRequest { Policy = policy }, 
-            _client.BuildCallOptions(ct));
-            
-        return response.Policy;
+        return await _client.Policies.CreatePolicyAsync(request, _client.BuildCallOptions(ct));
     }
 
-    public async Task<PolicyEntity> UpdatePolicyAsync(PolicyEntity policy, CancellationToken ct = default)
+    public async Task<UpdatePolicyResponse> UpdatePolicyAsync(string policyId, List<Insuretech.Policy.Entity.V1.Nominee>? nominees, string? address, CancellationToken ct = default)
     {
-        var response = await _client.Policies.UpdatePolicyAsync(
-            new UpdatePolicyRequest { Policy = policy }, 
-            _client.BuildCallOptions(ct));
-            
-        return response.Policy;
+        var request = new UpdatePolicyRequest
+        {
+            PolicyId = policyId
+        };
+        
+        if (nominees != null)
+        {
+            request.Nominees.AddRange(nominees);
+        }
+        
+        if (address != null)
+        {
+            request.Address = address;
+        }
+        
+        return await _client.Policies.UpdatePolicyAsync(request, _client.BuildCallOptions(ct));
     }
 
     public async Task<CancelPolicyResponse> CancelPolicyAsync(CancelPolicyRequest request, CancellationToken ct = default)
@@ -65,13 +68,25 @@ public sealed class GoPolicyDataGateway : IPolicyDataGateway
         return await _client.Policies.CancelPolicyAsync(request, _client.BuildCallOptions(ct));
     }
 
-    public async Task<ApproveCancellationResponse> ApproveCancellationAsync(ApproveCancellationRequest request, CancellationToken ct = default)
-    {
-        return await _client.Policies.ApproveCancellationAsync(request, _client.BuildCallOptions(ct));
-    }
-
     public async Task<RenewPolicyTenureResponse> RenewPolicyAsync(RenewPolicyTenureRequest request, CancellationToken ct = default)
     {
         return await _client.Policies.RenewPolicyAsync(request, _client.BuildCallOptions(ct));
+    }
+
+    public async Task<GeneratePolicyDocumentResponse> GeneratePolicyDocumentAsync(string policyId, CancellationToken ct = default)
+    {
+        return await _client.Policies.GeneratePolicyDocumentAsync(
+            new GeneratePolicyDocumentRequest { PolicyId = policyId }, 
+            _client.BuildCallOptions(ct));
+    }
+
+    public async Task<IssuePolicyResponse> IssuePolicyAsync(IssuePolicyRequest request, CancellationToken ct = default)
+    {
+        return await _client.Policies.IssuePolicyAsync(request, _client.BuildCallOptions(ct));
+    }
+
+    public async Task<ApproveCancellationResponse> ApproveCancellationAsync(ApproveCancellationRequest request, CancellationToken ct = default)
+    {
+        return await _client.Policies.ApproveCancellationAsync(request, _client.BuildCallOptions(ct));
     }
 }

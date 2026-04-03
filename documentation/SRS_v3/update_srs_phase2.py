@@ -1,544 +1,140 @@
 """
-Phase 2: Update proto structure to proto/Insuretech/v1/
-and add detailed CQRS/MediatR Insurance Engine structure
+Phase 2: Feature Implementation Updates for SRS v3.11 Compliance
+================================================================
+
+This script documents the M2 (Must Have Phase 2) requirements and their
+current implementation status in the InsuranceEngine project.
+
+Changes:
+1. Document M2 feature status
+2. Identify implementation gaps
+3. Provide roadmap for completion
 """
 
-import re
-
-# Read the current file
-with open("SRS_V3_FINAL_DRAFT.md", "r", encoding="utf-8") as f:
-    content = f.read()
-
-# 4. Update all proto syntax declarations to use proper structure
-old_proto_syntax = 'syntax = "proto3";\n\npackage labaid.entities;'
-new_proto_syntax = '''syntax = "proto3";
-
-package insuretech.v1.entities;
-
-option csharp_namespace = "Insuretech.V1.Entities";
-option go_package = "insuretech/v1/entities";
-option java_package = "com.insuretech.v1.entities";
-option java_multiple_files = true;'''
-
-content = content.replace(old_proto_syntax, new_proto_syntax)
-
-# Also update other proto packages
-content = content.replace('package labaid.entities', 'package insuretech.v1.entities')
-content = content.replace('package labaid.insurance', 'package insuretech.v1.services')
-content = content.replace('option csharp_namespace = "LabAid.Insurance.Grpc";', 'option csharp_namespace = "Insuretech.V1.Services";')
-content = content.replace('option csharp_namespace = "LabAid.Entities";', 'option csharp_namespace = "Insuretech.V1.Entities";')
-content = content.replace('option go_package = "labaid/entities";', 'option go_package = "insuretech/v1/entities";')
-
-# 5. Update proto file organization structure
-old_proto_structure = """### 6.4 Proto File Organization
-
-```
-proto/
-├── entities/
-│   ├── user.proto
-│   ├── policy.proto
-│   ├── claim.proto
-│   ├── payment.proto
-│   ├── partner.proto
-│   ├── product.proto
-│   ├── quote.proto
-│   ├── kyc_document.proto
-│   ├── audit_log.proto
-│   └── notification_log.proto
-├── services/
-│   ├── insurance_engine.proto
-│   ├── partner_management.proto
-│   ├── ai_engine.proto
-│   ├── payment_service.proto
-│   ├── notification_service.proto
-│   └── analytics_service.proto
-└── common/
-    ├── localized_string.proto
-    ├── pagination.proto
-    └── error.proto
-```"""
-
-new_proto_structure = """### 6.4 Proto File Organization
-
-```
-proto/
-├── insuretech/
-│   └── v1/
-│       ├── entities/
-│       │   ├── user.proto
-│       │   ├── policy.proto
-│       │   ├── claim.proto
-│       │   ├── payment.proto
-│       │   ├── partner.proto
-│       │   ├── product.proto
-│       │   ├── quote.proto
-│       │   ├── kyc_document.proto
-│       │   ├── audit_log.proto
-│       │   └── notification_log.proto
-│       ├── events/
-│       │   ├── policy_events.proto
-│       │   ├── claim_events.proto
-│       │   ├── payment_events.proto
-│       │   └── user_events.proto
-│       ├── services/
-│       │   ├── insurance_engine.proto
-│       │   ├── partner_management.proto
-│       │   ├── ai_engine.proto
-│       │   ├── payment_service.proto
-│       │   ├── notification_service.proto
-│       │   └── analytics_service.proto
-│       └── common/
-│           ├── localized_string.proto
-│           ├── pagination.proto
-│           ├── error.proto
-│           └── metadata.proto
-```
-
-**Versioning Strategy:**
-- `v1` = Current production API
-- `v2` = Breaking changes (future)
-- Maintain backward compatibility within same version"""
-
-content = content.replace(old_proto_structure, new_proto_structure)
-
-# 6. Add detailed CQRS/MediatR Insurance Engine structure
-detailed_insurance_engine = """
-[[[PAGEBREAK]]]
-
-### 4.5 Insurance Engine - Detailed CQRS Architecture
-
-The Insurance Engine is the core domain service built with **C# .NET 8**, implementing **CQRS (Command Query Responsibility Segregation)** with **MediatR** for clean separation of concerns.
-
-**Technology Stack:**
-- **.NET 8** - LTS framework
-- **MediatR 12.x** - In-process messaging and CQRS
-- **FluentValidation 11.x** - Request validation
-- **AutoMapper 12.x** - Object-to-object mapping
-- **Entity Framework Core 8.x** - ORM for PostgreSQL
-- **Grpc.AspNetCore 2.x** - gRPC server
-- **Polly 8.x** - Resilience and transient fault handling
-- **Serilog** - Structured logging
-
-#### 4.5.1 CQRS Pattern Implementation
-
-```
-InsuranceEngine/
-├── API/
-│   ├── Grpc/
-│   │   ├── Services/
-│   │   │   ├── InsuranceEngineGrpcService.cs
-│   │   │   ├── PolicyGrpcService.cs
-│   │   │   └── PremiumGrpcService.cs
-│   │   └── Interceptors/
-│   │       ├── LoggingInterceptor.cs
-│   │       └── ExceptionInterceptor.cs
-│   └── Program.cs
-├── Application/
-│   ├── Commands/               # Write operations (CQRS)
-│   │   ├── Policies/
-│   │   │   ├── IssuePolicy/
-│   │   │   │   ├── IssuePolicyCommand.cs
-│   │   │   │   ├── IssuePolicyCommandHandler.cs
-│   │   │   │   ├── IssuePolicyCommandValidator.cs
-│   │   │   │   └── IssuePolicyCommandTests.cs
-│   │   │   ├── CancelPolicy/
-│   │   │   │   ├── CancelPolicyCommand.cs
-│   │   │   │   └── CancelPolicyCommandHandler.cs
-│   │   │   └── RenewPolicy/
-│   │   │       ├── RenewPolicyCommand.cs
-│   │   │       └── RenewPolicyCommandHandler.cs
-│   │   ├── Quotes/
-│   │   │   └── CreateQuote/
-│   │   │       ├── CreateQuoteCommand.cs
-│   │   │       └── CreateQuoteCommandHandler.cs
-│   │   └── Claims/
-│   │       ├── SubmitClaim/
-│   │       │   ├── SubmitClaimCommand.cs
-│   │       │   └── SubmitClaimCommandHandler.cs
-│   │       └── ApproveClaim/
-│   │           ├── ApproveClaimCommand.cs
-│   │           └── ApproveClaimCommandHandler.cs
-│   ├── Queries/                # Read operations (CQRS)
-│   │   ├── Policies/
-│   │   │   ├── GetPolicyById/
-│   │   │   │   ├── GetPolicyByIdQuery.cs
-│   │   │   │   └── GetPolicyByIdQueryHandler.cs
-│   │   │   ├── GetPoliciesByUser/
-│   │   │   │   ├── GetPoliciesByUserQuery.cs
-│   │   │   │   └── GetPoliciesByUserQueryHandler.cs
-│   │   │   └── SearchPolicies/
-│   │   │       ├── SearchPoliciesQuery.cs
-│   │   │       └── SearchPoliciesQueryHandler.cs
-│   │   ├── Premium/
-│   │   │   └── CalculatePremium/
-│   │   │       ├── CalculatePremiumQuery.cs
-│   │   │       └── CalculatePremiumQueryHandler.cs
-│   │   └── Claims/
-│   │       └── GetClaimStatus/
-│   │           ├── GetClaimStatusQuery.cs
-│   │           └── GetClaimStatusQueryHandler.cs
-│   ├── Behaviors/              # MediatR Pipeline Behaviors
-│   │   ├── ValidationBehavior.cs
-│   │   ├── LoggingBehavior.cs
-│   │   ├── PerformanceBehavior.cs
-│   │   └── TransactionBehavior.cs
-│   ├── DTOs/
-│   │   ├── PolicyDto.cs
-│   │   ├── QuoteDto.cs
-│   │   └── ClaimDto.cs
-│   └── Mappings/
-│       └── AutoMapperProfile.cs
-├── Domain/
-│   ├── Entities/
-│   │   ├── Policy.cs
-│   │   ├── Quote.cs
-│   │   ├── Claim.cs
-│   │   ├── Premium.cs
-│   │   └── Nominee.cs
-│   ├── ValueObjects/
-│   │   ├── Money.cs
-│   │   ├── PolicyNumber.cs
-│   │   └── DateRange.cs
-│   ├── Events/                 # Domain Events
-│   │   ├── PolicyIssuedEvent.cs
-│   │   ├── PolicyCancelledEvent.cs
-│   │   ├── ClaimSubmittedEvent.cs
-│   │   └── ClaimApprovedEvent.cs
-│   ├── Interfaces/
-│   │   ├── IPolicyRepository.cs
-│   │   ├── IQuoteRepository.cs
-│   │   └── IClaimRepository.cs
-│   └── Services/               # Domain Services
-│       ├── PremiumCalculationService.cs
-│       ├── UnderwritingService.cs
-│       └── RiskAssessmentService.cs
-├── Infrastructure/
-│   ├── Persistence/
-│   │   ├── InsuranceDbContext.cs
-│   │   ├── Configurations/
-│   │   │   ├── PolicyConfiguration.cs
-│   │   │   └── ClaimConfiguration.cs
-│   │   └── Repositories/
-│   │       ├── PolicyRepository.cs
-│   │       ├── QuoteRepository.cs
-│   │       └── ClaimRepository.cs
-│   ├── GrpcClients/           # Adapters to other services
-│   │   ├── PartnerManagementClient.cs
-│   │   ├── AIEngineClient.cs
-│   │   ├── PaymentServiceClient.cs
-│   │   └── NotificationServiceClient.cs
-│   └── EventBus/
-│       └── KafkaEventPublisher.cs
-└── Proto/
-    └── insuretech/
-        └── v1/
-            ├── services/
-            │   └── insurance_engine.proto
-            └── entities/
-                ├── policy.proto
-                ├── quote.proto
-                └── claim.proto
-```
-
-#### 4.5.2 MediatR Request/Response Flow
-
-```csharp
-// Command Example: Issue Policy
-public class IssuePolicyCommand : IRequest<IssuePolicyResponse>
-{
-    public string UserId { get; set; }
-    public string ProductId { get; set; }
-    public decimal SumAssured { get; set; }
-    public int TenureYears { get; set; }
-    public List<NomineeDto> Nominees { get; set; }
-}
-
-public class IssuePolicyCommandHandler : IRequestHandler<IssuePolicyCommand, IssuePolicyResponse>
-{
-    private readonly IPolicyRepository _policyRepository;
-    private readonly ILogger<IssuePolicyCommandHandler> _logger;
-    private readonly IPartnerManagementClient _partnerClient;
-    private readonly IEventPublisher _eventPublisher;
-
-    public IssuePolicyCommandHandler(
-        IPolicyRepository policyRepository,
-        ILogger<IssuePolicyCommandHandler> logger,
-        IPartnerManagementClient partnerClient,
-        IEventPublisher eventPublisher)
-    {
-        _policyRepository = policyRepository;
-        _logger = logger;
-        _partnerClient = partnerClient;
-        _eventPublisher = eventPublisher;
-    }
-
-    public async Task<IssuePolicyResponse> Handle(IssuePolicyCommand request, CancellationToken cancellationToken)
-    {
-        // 1. Validate business rules
-        // 2. Create domain entity
-        var policy = Policy.Create(
-            userId: request.UserId,
-            productId: request.ProductId,
-            sumAssured: new Money(request.SumAssured, "BDT"),
-            tenure: request.TenureYears
-        );
-
-        // 3. Add nominees
-        foreach (var nomineeDto in request.Nominees)
-        {
-            policy.AddNominee(nomineeDto.Name, nomineeDto.Relationship, nomineeDto.SharePercentage);
-        }
-
-        // 4. Persist
-        await _policyRepository.AddAsync(policy, cancellationToken);
-        await _policyRepository.UnitOfWork.SaveChangesAsync(cancellationToken);
-
-        // 5. Publish domain event
-        await _eventPublisher.PublishAsync(new PolicyIssuedEvent(policy.Id, policy.PolicyNumber), cancellationToken);
-
-        _logger.LogInformation("Policy {PolicyNumber} issued for user {UserId}", policy.PolicyNumber, request.UserId);
-
-        return new IssuePolicyResponse
-        {
-            PolicyId = policy.Id,
-            PolicyNumber = policy.PolicyNumber,
-            Status = policy.Status.ToString()
-        };
-    }
-}
-```
-
-```csharp
-// Query Example: Get Policy By ID
-public class GetPolicyByIdQuery : IRequest<PolicyDto>
-{
-    public string PolicyId { get; set; }
-}
-
-public class GetPolicyByIdQueryHandler : IRequestHandler<GetPolicyByIdQuery, PolicyDto>
-{
-    private readonly IPolicyRepository _policyRepository;
-    private readonly IMapper _mapper;
-
-    public async Task<PolicyDto> Handle(GetPolicyByIdQuery request, CancellationToken cancellationToken)
-    {
-        var policy = await _policyRepository.GetByIdAsync(request.PolicyId, cancellationToken);
-        
-        if (policy == null)
-            throw new NotFoundException($"Policy {request.PolicyId} not found");
-
-        return _mapper.Map<PolicyDto>(policy);
-    }
-}
-```
-
-#### 4.5.3 FluentValidation Example
-
-```csharp
-public class IssuePolicyCommandValidator : AbstractValidator<IssuePolicyCommand>
-{
-    public IssuePolicyCommandValidator()
-    {
-        RuleFor(x => x.UserId)
-            .NotEmpty().WithMessage("User ID is required");
-
-        RuleFor(x => x.ProductId)
-            .NotEmpty().WithMessage("Product ID is required");
-
-        RuleFor(x => x.SumAssured)
-            .GreaterThan(0).WithMessage("Sum assured must be greater than 0")
-            .LessThanOrEqualTo(10000000).WithMessage("Sum assured cannot exceed 1 Crore BDT");
-
-        RuleFor(x => x.TenureYears)
-            .InclusiveBetween(1, 30).WithMessage("Tenure must be between 1 and 30 years");
-
-        RuleFor(x => x.Nominees)
-            .NotEmpty().WithMessage("At least one nominee is required")
-            .Must(HaveValidSharePercentages).WithMessage("Nominee share percentages must sum to 100");
-    }
-
-    private bool HaveValidSharePercentages(List<NomineeDto> nominees)
-    {
-        return Math.Abs(nominees.Sum(n => n.SharePercentage) - 100) < 0.01;
-    }
-}
-```
-
-#### 4.5.4 MediatR Pipeline Behaviors
-
-```csharp
-// Validation Behavior - Automatically validates all commands/queries
-public class ValidationBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
-{
-    private readonly IEnumerable<IValidator<TRequest>> _validators;
-
-    public ValidationBehavior(IEnumerable<IValidator<TRequest>> validators)
-    {
-        _validators = validators;
-    }
-
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-    {
-        if (!_validators.Any()) return await next();
-
-        var context = new ValidationContext<TRequest>(request);
-        
-        var validationResults = await Task.WhenAll(
-            _validators.Select(v => v.ValidateAsync(context, cancellationToken)));
-
-        var failures = validationResults
-            .SelectMany(r => r.Errors)
-            .Where(f => f != null)
-            .ToList();
-
-        if (failures.Any())
-            throw new ValidationException(failures);
-
-        return await next();
-    }
-}
-
-// Logging Behavior
-public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
-{
-    private readonly ILogger<LoggingBehavior<TRequest, TResponse>> _logger;
-
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-    {
-        var requestName = typeof(TRequest).Name;
-        _logger.LogInformation("Handling {RequestName}", requestName);
-
-        var response = await next();
-
-        _logger.LogInformation("Handled {RequestName}", requestName);
-
-        return response;
-    }
-}
-
-// Performance Behavior
-public class PerformanceBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>
-    where TRequest : IRequest<TResponse>
-{
-    private readonly ILogger<PerformanceBehavior<TRequest, TResponse>> _logger;
-    private readonly Stopwatch _timer;
-
-    public PerformanceBehavior(ILogger<PerformanceBehavior<TRequest, TResponse>> logger)
-    {
-        _timer = new Stopwatch();
-        _logger = logger;
-    }
-
-    public async Task<TResponse> Handle(TRequest request, RequestHandlerDelegate<TResponse> next, CancellationToken cancellationToken)
-    {
-        _timer.Start();
-
-        var response = await next();
-
-        _timer.Stop();
-
-        var elapsedMilliseconds = _timer.ElapsedMilliseconds;
-
-        if (elapsedMilliseconds > 500) // Log slow requests
-        {
-            var requestName = typeof(TRequest).Name;
-            _logger.LogWarning("Long Running Request: {Name} ({ElapsedMilliseconds} milliseconds) {@Request}",
-                requestName, elapsedMilliseconds, request);
-        }
-
-        return response;
-    }
-}
-```
-
-#### 4.5.5 Dependency Injection Setup
-
-```csharp
-// Program.cs
-var builder = WebApplication.CreateBuilder(args);
-
-// Add MediatR
-builder.Services.AddMediatR(cfg => {
-    cfg.RegisterServicesFromAssembly(typeof(Program).Assembly);
+def update_srs_phase2():
+    print("=" * 70)
+    print("SRS Phase 2 Update - M2 Feature Implementation")
+    print("=" * 70)
     
-    // Add pipeline behaviors (order matters!)
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(PerformanceBehavior<,>));
-    cfg.AddBehavior(typeof(IPipelineBehavior<,>), typeof(TransactionBehavior<,>));
-});
+    m2_items = {
+        "Products (FG-003)": [
+            ("FR-023", "Product details display", "IMPLEMENTED", "Full product info shown"),
+            ("FR-023-A", "Unit-wise plan purchase", "IMPLEMENTED", "Coverage adjustment supported"),
+            ("FR-023-B", "Risk assessment questions", "PARTIAL", "Basic health declaration exists"),
+            ("FR-024", "Premium calculator", "IMPLEMENTED", "With age/occupation loadings"),
+            ("FR-025", "Product comparison", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-027", "Product variants with riders", "NOT IMPLEMENTED", "Future enhancement"),
+        ],
+        "Policy (FG-004)": [
+            ("FR-035", "Digital policy PDF with QR", "MOCK", "Mock implementation only"),
+            ("FR-036", "Policy doc via SMS/email", "NOT IMPLEMENTED", "Needs notification service"),
+            ("FR-037", "Instant policy activation", "IMPLEMENTED", "Via Kafka event"),
+            ("FR-043", "Renewal reminders", "IMPLEMENTED", "Daily background job"),
+            ("FR-044", "Manual policy renewal", "IMPLEMENTED", "RenewPolicy RPC"),
+            ("FR-047", "Grace period (30 days)", "PARTIAL", "Entity exists, workflow partial"),
+        ],
+        "Cancellation (FG-005)": [
+            ("FR-053", "Pro-rata refund calculation", "PARTIAL", "In Go backend"),
+            ("FR-054", "Refund via MFS (7 days)", "NOT IMPLEMENTED", "Needs payment integration"),
+            ("FR-055", "Status update and notifications", "NOT IMPLEMENTED", "Needs notification service"),
+        ],
+        "Endorsements (FG-005)": [
+            ("FR-056", "Endorsement for address/sum/nominee", "IMPLEMENTED", "Via UpdatePolicy"),
+            ("FR-058", "Pro-rata refund for sum decrease", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-059", "Endorsement document generation", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-060", "Approval for sum changes >10%", "NOT IMPLEMENTED", "Future enhancement"),
+        ],
+        "Claims (FG-008)": [
+            ("FR-084", "Partner/insurer notification", "NOT IMPLEMENTED", "Needs webhook system"),
+            ("FR-085", "Real-time claim status tracking", "PARTIAL", "Basic status updates"),
+            ("FR-086", "Tiered approval workflow", "IMPLEMENTED", "4 levels implemented"),
+            ("FR-090", "Partner verification notes", "IMPLEMENTED", "Approval notes supported"),
+            ("FR-091", "Joint approval (BA+FP)", "IMPLEMENTED", "Multi-role approval"),
+            ("FR-101", "Claims reimbursement workflow", "PARTIAL", "Basic workflow exists"),
+        ],
+        "Fraud Detection (FG-016)": [
+            ("FR-175", "Flag claims <48hrs of purchase", "PARTIAL", "Basic check only"),
+            ("FR-176", "Detect >2 claims/12mo patterns", "NOT IMPLEMENTED", "Needs pattern analysis"),
+            ("FR-177", "Flag 100% coverage claims", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-178", "Medical provider validation", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-180", "Fraud detection dashboard", "NOT IMPLEMENTED", "Future enhancement"),
+        ],
+        "Partner Management (FG-009)": [
+            ("FR-102", "Partner onboarding workflow", "IMPLEMENTED in Go", "Partner service"),
+            ("FR-103", "Partner information collection", "IMPLEMENTED in Go", "Partner service"),
+            ("FR-106", "Commission calculation", "PARTIAL", "Basic gateway"),
+            ("FR-108", "Partner purchase on behalf", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-109", "Focal Person portal", "IMPLEMENTED in Go", "Partner service"),
+        ],
+        "Payment (FG-007)": [
+            ("FR-070", "Multiple payment methods", "NOT IMPLEMENTED", "Needs payment service"),
+            ("FR-071", "bKash integration", "NOT IMPLEMENTED", "Future integration"),
+            ("FR-073", "Manual payment with proof", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-076", "Partial payment/installments", "NOT IMPLEMENTED", "Future enhancement"),
+        ],
+    }
+    
+    print("\n📋 M2 (Phase 2) Implementation Status:")
+    print("-" * 70)
+    
+    total = 0
+    implemented = 0
+    partial = 0
+    
+    for area, items in m2_items.items():
+        print(f"\n{area}:")
+        for fr_id, desc, status, notes in items:
+            total += 1
+            if status == "IMPLEMENTED" or status == "IMPLEMENTED in Go":
+                implemented += 1
+                icon = "✅"
+            elif status == "PARTIAL" or status == "MOCK":
+                partial += 1
+                icon = "⚠️"
+            else:
+                icon = "❌"
+            print(f"  {icon} {fr_id}: {desc}")
+            print(f"     Status: {status} | {notes}")
+    
+    not_implemented = total - implemented - partial
+    compliance = ((implemented + partial * 0.5) / total) * 100
+    
+    print(f"\n{'=' * 70}")
+    print(f"M2 Compliance Summary:")
+    print(f"  ✅ Fully Implemented: {implemented}/{total} ({implemented/total*100:.1f}%)")
+    print(f"  ⚠️ Partial/Mock:    {partial}/{total} ({partial/total*100:.1f}%)")
+    print(f"  ❌ Not Implemented:  {not_implemented}/{total} ({not_implemented/total*100:.1f}%)")
+    print(f"  📊 Weighted Score:   {compliance:.1f}%")
+    print(f"{'=' * 70}")
+    
+    # Priority roadmap
+    print("\n🗺️  M2 Priority Roadmap:")
+    print("-" * 70)
+    print("  P1 (Immediate):")
+    print("    - Real Kafka integration")
+    print("    - Payment gateway (bKash/Nagad)")
+    print("    - Notification system (SMS/Email)")
+    print("    - PDF document generation")
+    print("")
+    print("  P2 (Next Sprint):")
+    print("    - Pro-rata refund calculation in C#")
+    print("    - Grace period workflow completion")
+    print("    - Partner commission payout")
+    print("    - Fraud pattern detection")
+    print("")
+    print("  P3 (Future):")
+    print("    - Endorsement document generation")
+    print("    - Product comparison feature")
+    print("    - Product variants/rider configuration")
+    
+    return {
+        "total": total,
+        "implemented": implemented,
+        "partial": partial,
+        "not_implemented": not_implemented,
+        "weighted_compliance": compliance
+    }
 
-// Add FluentValidation
-builder.Services.AddValidatorsFromAssembly(typeof(Program).Assembly);
-
-// Add AutoMapper
-builder.Services.AddAutoMapper(typeof(Program).Assembly);
-
-// Add gRPC
-builder.Services.AddGrpc(options =>
-{
-    options.Interceptors.Add<LoggingInterceptor>();
-    options.Interceptors.Add<ExceptionInterceptor>();
-});
-
-// Add EF Core
-builder.Services.AddDbContext<InsuranceDbContext>(options =>
-    options.UseNpgsql(builder.Configuration.GetConnectionString("InsuranceDb")));
-
-// Add Repositories
-builder.Services.AddScoped<IPolicyRepository, PolicyRepository>();
-builder.Services.AddScoped<IQuoteRepository, QuoteRepository>();
-builder.Services.AddScoped<IClaimRepository, ClaimRepository>();
-
-// Add Domain Services
-builder.Services.AddScoped<PremiumCalculationService>();
-builder.Services.AddScoped<UnderwritingService>();
-builder.Services.AddScoped<RiskAssessmentService>();
-
-// Add gRPC Clients (to other services)
-builder.Services.AddGrpcClient<PartnerManagement.PartnerManagementClient>(o =>
-{
-    o.Address = new Uri(builder.Configuration["Services:PartnerManagement"]);
-});
-
-var app = builder.Build();
-
-// Map gRPC services
-app.MapGrpcService<InsuranceEngineGrpcService>();
-app.MapGrpcService<PolicyGrpcService>();
-app.MapGrpcService<PremiumGrpcService>();
-
-app.Run();
-```
-
-**Key Benefits of CQRS + MediatR:**
-
-1. **Separation of Concerns:** Commands (write) and Queries (read) are separate
-2. **Single Responsibility:** Each handler does one thing
-3. **Testability:** Easy to unit test handlers in isolation
-4. **Cross-Cutting Concerns:** Validation, logging, performance tracking via pipeline behaviors
-5. **Scalability:** Can scale read and write models independently
-6. **Maintainability:** Easy to add new features without modifying existing code
-
-"""
-
-# Insert before the current 4.4 section
-content = content.replace("### 4.4 VSA Internal Structure Example", detailed_insurance_engine + "\n\n### 4.4 VSA Internal Structure Example")
-
-print("✅ Phase 2 complete!")
-print("- Updated proto structure to proto/insuretech/v1/")
-print("- Added events/ folder to proto structure")
-print("- Added detailed CQRS/MediatR Insurance Engine documentation with:")
-print("  * Complete folder structure")
-print("  * MediatR command/query examples with syntax highlighting")
-print("  * FluentValidation examples")
-print("  * Pipeline behaviors (Validation, Logging, Performance)")
-print("  * Dependency injection setup")
-
-# Write back
-with open("SRS_V3_FINAL_DRAFT.md", "w", encoding="utf-8") as f:
-    f.write(content)
-
-print("\nFile updated successfully!")
+if __name__ == "__main__":
+    result = update_srs_phase2()
+    print(f"\n✅ Phase 2 analysis complete!")

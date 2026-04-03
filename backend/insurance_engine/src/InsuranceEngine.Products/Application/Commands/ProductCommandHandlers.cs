@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using InsuranceEngine.Grpc.Gateways;
 using Insuretech.Products.Entity.V1;
 using Insuretech.Common.V1;
 

@@ -2,8 +2,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Commission.Services.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.Grpc.Gateways;
-
 namespace InsuranceEngine.Commission.Application.Commands;
 
 // ===== CalculateCommission =====

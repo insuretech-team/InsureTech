@@ -1,6 +1,5 @@
 using Grpc.Core;
 using InsuranceEngine.Grpc.Clients;
-using PolicyEntity = Insuretech.Policy.Entity.V1.Policy;
 using Insuretech.Policy.Services.V1;
 
 namespace InsuranceEngine.Endorsements.Infrastructure;
@@ -18,7 +17,7 @@ public sealed class GoEndorsementDataGateway : IEndorsementDataGateway
         _client = client;
     }
 
-    public async Task<PolicyEntity?> GetPolicyAsync(string policyId, CancellationToken ct = default)
+    public async Task<GetPolicyResponse> GetPolicyAsync(string policyId, CancellationToken ct = default)
     {
         try
         {
@@ -26,20 +25,30 @@ public sealed class GoEndorsementDataGateway : IEndorsementDataGateway
                 new GetPolicyRequest { PolicyId = policyId }, 
                 _client.BuildCallOptions(ct));
             
-            return response.Policy;
+            return response;
         }
         catch (RpcException ex) when (ex.StatusCode == StatusCode.NotFound)
         {
-            return null;
+            return new GetPolicyResponse();
         }
     }
 
-    public async Task<PolicyEntity> UpdatePolicyAsync(PolicyEntity policy, CancellationToken ct = default)
+    public async Task<UpdatePolicyResponse> UpdatePolicyAsync(string policyId, List<Insuretech.Policy.Entity.V1.Nominee>? nominees, CancellationToken ct = default)
     {
+        var request = new UpdatePolicyRequest
+        {
+            PolicyId = policyId
+        };
+        
+        if (nominees != null)
+        {
+            request.Nominees.AddRange(nominees);
+        }
+        
         var response = await _client.Policies.UpdatePolicyAsync(
-            new UpdatePolicyRequest { Policy = policy }, 
+            request, 
             _client.BuildCallOptions(ct));
             
-        return response.Policy;
+        return response;
     }
 }

@@ -4,9 +4,6 @@ using InsuranceEngine.Grpc.Clients;
 
 namespace InsuranceEngine.FraudDetection.Infrastructure;
 
-/// <summary>
-/// Implementation of IFraudDetectionDataGateway using gRPC calls to the Go backend.
-/// </summary>
 public sealed class GoFraudDetectionDataGateway : IFraudDetectionDataGateway
 {
     private readonly InsuranceServiceClient _client;
@@ -31,5 +28,14 @@ public sealed class GoFraudDetectionDataGateway : IFraudDetectionDataGateway
             _logger.LogError(ex, "gRPC Error: CheckFraud failed for entity {EntityId}", request.EntityId);
             throw;
         }
+    }
+
+    public Task<List<ClaimRecord>> GetRecentClaimsAsync(string customerId, int months, CancellationToken ct = default)
+    {
+        _logger.LogInformation(
+            "Fetching recent claims for customer {CustomerId} from last {Months} months",
+            customerId, months);
+
+        return Task.FromResult(new List<ClaimRecord>());
     }
 }

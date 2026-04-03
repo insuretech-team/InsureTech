@@ -1,7 +1,7 @@
-using InsuranceEngine.Grpc.Gateways;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using InsuranceEngine.Claims.Application;
+using InsuranceEngine.Claims.Infrastructure;
 
 namespace InsuranceEngine.Claims;
 
@@ -13,14 +13,12 @@ public static class ClaimsDependencyInjection
 {
     public static IServiceCollection AddClaimsModule(this IServiceCollection services)
     {
-        // Register MediatR for this assembly using the AssemblyMarker
         services.AddMediatR(cfg => 
         {
             cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
         });
 
-        // Add module-specific gateways
-        services.AddScoped<IClaimDataGateway, GoClaimDataGateway>();
+        services.AddScoped<IClaimDataGateway, GoClaimsDataGateway>();
         
         return services;
     }

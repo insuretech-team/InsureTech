@@ -25,34 +25,17 @@ public sealed class UpdatePolicyCommandHandler : IRequestHandler<UpdatePolicyCom
         {
             _logger.LogInformation("Updating policy (Endorsement): {PolicyId}", request.PolicyId);
 
-            // Fetch current policy state to ensure we have the full aggregate
-            var currentPolicy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (currentPolicy == null)
+            var currentPolicyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (currentPolicyResponse.Policy == null)
             {
                 return new UpdatePolicyResponse { Error = new Error { Code = "NOT_FOUND", Message = "Policy not found" } };
             }
 
-            // Update nominees if provided
-            if (request.Nominees != null && request.Nominees.Count > 0)
-            {
-                currentPolicy.Nominees.Clear();
-                currentPolicy.Nominees.AddRange(request.Nominees);
-            }
-
-            var grpcRequest = new UpdatePolicyRequest
-            {
-                Policy = currentPolicy
-            };
-
-            var response = await _gateway.UpdatePolicyAsync(grpcRequest.Policy, cancellationToken);
+            var response = await _gateway.UpdatePolicyAsync(request.PolicyId, request.Nominees, cancellationToken);
             
             _logger.LogInformation("Policy endorsement processed successfully for {PolicyId}", request.PolicyId);
 
-            return new UpdatePolicyResponse 
-            { 
-                Message = "Policy updated successfully",
-                Policy = response
-            };
+            return response;
         }
         catch (Exception ex)
         {

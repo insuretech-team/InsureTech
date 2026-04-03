@@ -12,6 +12,7 @@
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Policy\InsuranceEngine.Policy.csproj" />
   </ItemGroup>
 
   <ItemGroup>

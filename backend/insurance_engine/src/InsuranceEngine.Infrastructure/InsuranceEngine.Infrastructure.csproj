@@ -9,12 +9,22 @@
   <ItemGroup>
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
-    <!-- Other modules will be added as needed by DbContext -->
+    <ProjectReference Include="..\InsuranceEngine.Claims\InsuranceEngine.Claims.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Policy\InsuranceEngine.Policy.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Renewals\InsuranceEngine.Renewals.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Cancellations\InsuranceEngine.Cancellations.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Endorsements\InsuranceEngine.Endorsements.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.FraudDetection\InsuranceEngine.FraudDetection.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Commission\InsuranceEngine.Commission.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj" />
   </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="10.0.5" />
     <PackageReference Include="Npgsql.EntityFrameworkCore.PostgreSQL" Version="10.0.1" />
     <PackageReference Include="EFCore.NamingConventions" Version="10.0.1" />
+    <PackageReference Include="Confluent.Kafka" Version="2.13.2" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="10.0.5" />
+    <PackageReference Include="Microsoft.Extensions.Logging.Abstractions" Version="10.0.5" />
   </ItemGroup>
 </Project>

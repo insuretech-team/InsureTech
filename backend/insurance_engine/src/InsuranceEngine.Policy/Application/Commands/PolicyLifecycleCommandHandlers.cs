@@ -2,9 +2,8 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Policy.Services.V1;
 using Insuretech.Policy.Entity.V1;
-using InsuranceEngine.Grpc.Gateways;
-using InsuranceEngine.Grpc.Gateways;
 using InsuranceEngine.SharedKernel.Domain.Events;
+using InsuranceEngine.SharedKernel.Infrastructure;
 
 namespace InsuranceEngine.Policy.Application.Commands;
 
@@ -29,14 +28,16 @@ public sealed class IssuePolicyCommandHandler : IRequestHandler<IssuePolicyComma
     {
         try
         {
-            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (policy == null)
+            var policyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policyResponse.Policy == null)
             {
                 return new IssuePolicyResponse
                 {
                     Error = new Insuretech.Common.V1.Error { Code = "POLICY_NOT_FOUND", Message = "Policy not found" }
                 };
             }
+
+            var policy = policyResponse.Policy;
 
             if (policy.Status != PolicyStatus.PendingPayment)
             {
@@ -46,24 +47,31 @@ public sealed class IssuePolicyCommandHandler : IRequestHandler<IssuePolicyComma
                 };
             }
 
-            // FR-037: Non-Life policy activates immediately upon payment confirmation
-            policy.Status = PolicyStatus.Active;
-            policy.IssuedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
+            var issuedPolicy = policy.Clone();
+            issuedPolicy.Status = PolicyStatus.Active;
+            issuedPolicy.IssuedAt = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow);
 
-            var updatedPolicy = await _gateway.UpdatePolicyAsync(policy, cancellationToken);
+            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, issuedPolicy.Nominees.ToList(), null, cancellationToken);
+            
+            if (updateResponse.Error != null)
+            {
+                return new IssuePolicyResponse { Error = updateResponse.Error };
+            }
 
-            // Kafka event: PolicyIssued
+            var kafkaPolicyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            var kafkaPolicy = kafkaPolicyResponse.Policy!;
+
             var evt = new PolicyIssuedEvent(
-                Guid.Parse(updatedPolicy.PolicyId), 
-                updatedPolicy.PolicyNumber, 
-                Guid.Parse(updatedPolicy.CustomerId), 
-                updatedPolicy.PremiumAmount.Amount);
+                Guid.Parse(kafkaPolicy.PolicyId), 
+                kafkaPolicy.PolicyNumber, 
+                Guid.Parse(kafkaPolicy.CustomerId), 
+                kafkaPolicy.PremiumAmount.Amount);
             
             await _kafkaPublisher.PublishAsync("insurance.policy.issued", evt);
 
-            _logger.LogInformation("Policy issued via Go SSOT: {PolicyNumber}", updatedPolicy.PolicyNumber);
+            _logger.LogInformation("Policy issued via Go SSOT: {PolicyNumber}", kafkaPolicy.PolicyNumber);
 
-            return new IssuePolicyResponse { Policy = updatedPolicy, Message = "Policy issued successfully" };
+            return new IssuePolicyResponse { Policy = kafkaPolicy, Message = "Policy issued successfully" };
         }
         catch (Exception ex)
         {
@@ -97,8 +105,8 @@ public sealed class GeneratePolicyDocumentCommandHandler : IRequestHandler<Gener
     {
         try
         {
-            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (policy == null)
+            var policyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policyResponse.Policy == null)
             {
                 return new GeneratePolicyDocumentResponse
                 {
@@ -106,7 +114,8 @@ public sealed class GeneratePolicyDocumentCommandHandler : IRequestHandler<Gener
                 };
             }
 
-            // FR-035: Generate PDF with QR code
+            var policy = policyResponse.Policy;
+
             var pdfBytes = await _pdfGenerator.GeneratePolicyDocumentAsync(
                 policy.PolicyNumber,
                 policy.CustomerId,
@@ -114,14 +123,11 @@ public sealed class GeneratePolicyDocumentCommandHandler : IRequestHandler<Gener
                 (decimal)policy.PremiumAmount.Amount / 100m
             );
 
-            // In production, upload pdfBytes to S3 and get URL. Simulated here.
             var documentUrl = $"https://storage.insuretech.labaid.com/policies/{policy.PolicyNumber}.pdf";
 
-            // Update policy document URL via SSOT
             policy.PolicyDocumentUrl = documentUrl;
-            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
 
-            _logger.LogInformation("Policy document generated and persisted via Go SSOT: {PolicyNumber}", policy.PolicyNumber);
+            _logger.LogInformation("Policy document generated for Go SSOT: {PolicyNumber}", policy.PolicyNumber);
 
             return new GeneratePolicyDocumentResponse
             {

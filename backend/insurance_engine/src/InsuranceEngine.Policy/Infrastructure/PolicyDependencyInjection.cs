@@ -1,7 +1,7 @@
-using InsuranceEngine.Grpc.Gateways;
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using InsuranceEngine.Policy.Application;
+using InsuranceEngine.Policy.Infrastructure;
 
 namespace InsuranceEngine.Policy;
 

@@ -2,8 +2,6 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Fraud.Services.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.Grpc.Gateways;
-
 namespace InsuranceEngine.FraudDetection.Application.Commands;
 
 public sealed class CheckFraudCommandHandler : IRequestHandler<CheckFraudCommand, CheckFraudResponse>

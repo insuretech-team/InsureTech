@@ -1,79 +1,164 @@
 """
-Phase 3: Add missing Traceability Matrix section and prepare for Word regeneration
+Phase 3: Enhancement & Future Features for SRS v3.11 Compliance
+=================================================================
+
+This script documents M3, D (Desirable), and F (Future) requirements
+along with their current status and implementation roadmap.
+
+Changes:
+1. Document M3 feature status
+2. Document Desirable and Future features
+3. Provide long-term roadmap
 """
 
-import re
+def update_srs_phase3():
+    print("=" * 70)
+    print("SRS Phase 3 Update - M3/D/F Feature Status")
+    print("=" * 70)
+    
+    # M3 Features (Enhancement - August 2025)
+    m3_items = {
+        "Products (FG-003)": [
+            ("FR-028", "Redis caching 5-min TTL", "IMPLEMENTED", "DistributedCacheService"),
+            ("FR-029", "Multi-language descriptions", "NOT IMPLEMENTED", "Future enhancement"),
+        ],
+        "Policy (FG-004)": [
+            ("FR-038", "Cooling-off period (5 days)", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-049", "Policy doc download with history", "PARTIAL", "Download exists, no history"),
+        ],
+        "Claims (FG-008)": [
+            ("FR-085", "Real-time claim status tracking", "PARTIAL", "Basic status"),
+            ("FR-087", "Document OCR verification", "NOT IMPLEMENTED", "Needs OCR integration"),
+            ("FR-088", "Chat interface for claims", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-092", "Auto-payment upon approval", "NOT IMPLEMENTED", "Needs payment integration"),
+            ("FR-093", "Zero Human Touch Claims (<10K)", "NOT IMPLEMENTED", "Future enhancement"),
+            ("FR-094", "Fraud detection rules", "PARTIAL", "Basic check only"),
+        ],
+        "IoT Integration (FG-013)": [
+            ("FR-153", "IoT device integration", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-154", "Device lifecycle management", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-155", "IoT telemetry processing", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-157", "UBI pricing calculation", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+        ],
+        "AI Features (FG-014)": [
+            ("FR-161", "AI chatbot for assistance", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-163", "AI fraud detection", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-166", "AI document verification", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+        ],
+        "Voice Features (FG-015)": [
+            ("FR-167", "Bengali STT", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-168", "Voice-guided purchase", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-170", "Bengali TTS", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-172", "Voice command taxonomy", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+        ],
+        "Analytics (FG-018)": [
+            ("FR-195", "Standard reports", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+            ("FR-197", "KPI tracking", "NOT IMPLEMENTED", "Future (Phase 2.5/3)"),
+        ],
+    }
+    
+    # Desirable (D) Features
+    d_items = [
+        ("FR-007", "Biometric authentication", "Implemented in Go"),
+        ("FR-019", "Hierarchical role inheritance", "Implemented in Go"),
+        ("FR-027", "Product variants with riders", "Not implemented"),
+        ("FR-042", "Family Insurance Wallet", "Not implemented"),
+        ("FR-067", "Gamified renewal rewards", "Not implemented"),
+        ("FR-089", "WebRTC video verification", "Not implemented"),
+        ("FR-107", "Partner API integration", "Not implemented"),
+        ("FR-119", "Sandbox for developers", "Not implemented"),
+        ("FR-121", "Partner analytics API", "Not implemented"),
+        ("FR-125", "Commission configuration", "Not implemented"),
+        ("FR-163", "ML-based fraud detection", "Not implemented"),
+        ("FR-164", "Predictive analytics", "Not implemented"),
+    ]
+    
+    # Future (F) Features
+    f_items = [
+        ("FR-013", "SAML Identity Provider", "Future consideration"),
+        ("FR-117", "Hospital EHR API", "Future consideration"),
+        ("FR-122", "BI Tool integration", "Future consideration"),
+        ("FR-124", "White-label branding", "Future consideration"),
+        ("FR-146", "IoT UBI protocol", "Phase 2.5/3"),
+        ("FR-161", "AI chatbot", "Phase 2.5/3"),
+        ("FR-164", "Predictive analytics", "Phase 2.5/3"),
+        ("FR-199", "Behavior analytics", "Phase 2.5/3"),
+        ("FR-200", "Churn prediction", "Phase 2.5/3"),
+        ("FR-221", "Blockchain reinsurance", "Future consideration"),
+    ]
+    
+    print("\n📋 M3 (Enhancement - August 2025) Implementation Status:")
+    print("-" * 70)
+    
+    m3_total = 0
+    m3_implemented = 0
+    
+    for area, items in m3_items.items():
+        print(f"\n{area}:")
+        for fr_id, desc, status, notes in items:
+            m3_total += 1
+            if status == "IMPLEMENTED":
+                m3_implemented += 1
+                icon = "✅"
+            elif status == "PARTIAL":
+                icon = "⚠️"
+            else:
+                icon = "❌"
+            print(f"  {icon} {fr_id}: {desc}")
+    
+    print(f"\n{'=' * 70}")
+    print(f"M3 Compliance: {m3_implemented}/{m3_total} ({m3_implemented/m3_total*100:.1f}%)")
+    
+    print("\n📋 Desirable (D) Features Status:")
+    print("-" * 70)
+    for fr_id, desc, status in d_items:
+        icon = "✅" if "Implemented" in status else "❌"
+        print(f"  {icon} {fr_id}: {desc}")
+    
+    print("\n📋 Future (F) Features Status:")
+    print("-" * 70)
+    for fr_id, desc, status in f_items:
+        print(f"  ⏳ {fr_id}: {desc} - {status}")
+    
+    # Long-term roadmap
+    print("\n" + "=" * 70)
+    print("🗺️  LONG-TERM ROADMAP")
+    print("=" * 70)
+    print("""
+    Phase 2.5 (Q4 2025):
+    ├── Real Kafka Integration
+    ├── Payment Gateway (bKash/Nagad)
+    ├── Notification System (SMS/Email)
+    ├── PDF Document Generation
+    ├── Pro-rata Refund Calculation
+    └── Grace Period Workflow
+    
+    Phase 3 (Q1 2026):
+    ├── IoT Integration
+    │   ├── Device Registration
+    │   ├── Telemetry Processing
+    │   └── UBI Pricing
+    ├── AI Features
+    │   ├── Fraud Detection ML
+    │   ├── Document OCR
+    │   └── AI Chatbot
+    └── Voice Features
+        ├── Bengali STT/TTS
+        └── Voice-guided Workflows
+    
+    Future (2026+):
+    ├── Blockchain Reinsurance
+    ├── Advanced Analytics
+    ├── White-label Branding
+    └── Cross-border Insurance
+    """)
+    
+    return {
+        "m3_total": m3_total,
+        "m3_implemented": m3_implemented,
+        "m3_compliance": m3_implemented / m3_total * 100 if m3_total > 0 else 0
+    }
 
-# Read the current file
-with open("SRS_V3_FINAL_DRAFT.md", "r", encoding="utf-8") as f:
-    content = f.read()
-
-# Add the missing Traceability Matrix & Change Control section
-traceability_section = """
-## 13. Traceability Matrix & Change Control
-
-### 13.1 Requirements Traceability
-
-| Business Objective | Related Functional Requirements | Success Metrics |
-|--------------------|----------------------------------|-----------------|
-| **Digital Onboarding: 40,000 policies by 2026** | FR-001 to FR-016 (User Management), FR-033 to FR-040 (Policy Purchase) | Monthly policy acquisition rate |
-| **API Performance Optimization** | FR-107 to FR-118 (API Design), NFR-008 (gRPC <100ms) | API response time metrics |
-| **Financial Transaction Integrity** | DomainServices (TigerBeetle integration), SEC-003 (PCI-DSS) | Transaction accuracy and speed |
-| **Regulatory Compliance** | SEC-011 to SEC-020 (IDRA/AML/CFT) | Audit compliance score |
-| **Partner Management Excellence** | FR-011 (Focal Person), FR-086 to FR-092 | Number of active partners |
-| **Claims Efficiency** | FR-041 to FR-058, FR-133 to FR-137 | Average claim TAT |
-| **VSA Architecture Implementation** | Section 4 (Architecture), CQRS/MediatR in C# services | Code maintainability score |
-| **Proto-First Data Models** | Section 6 (Proto Buffers), proto/insuretech/v1/ structure | Cross-language compatibility |
-
-### 13.2 Change Control Process
-
-**Approval Hierarchy:**
-
-1. **Dev** submits change request (Pull Request)
-2. **Repository Admin** reviews code changes and architecture impact
-3. **Database Admin** reviews data model impact (Proto changes, migrations)
-4. **System Admin** reviews infrastructure impact (deployment, scaling)
-5. **Business Admin** approves business impact and compliance
-6. **Focal Person** approves partner-related changes
-7. **CTO** final approval for major architectural changes
-
-**Change Categories:**
-
-| Category | Examples | Approval Level | Testing Required |
-|----------|----------|----------------|------------------|
-| **P1 - Critical** | Security patches, production bugs | System Admin + CTO | Hotfix testing |
-| **P2 - High** | New features, API changes | Business Admin + Repository Admin | Full regression |
-| **P3 - Medium** | UI/UX improvements, refactoring | Repository Admin | Feature testing |
-| **P4 - Low** | Documentation, code comments | Dev | Peer review |
-
-**Proto File Change Control:**
-- All `.proto` file changes require Database Admin review
-- Breaking changes to proto (field removal, type changes) require major version bump
-- Adding optional fields is backward-compatible (minor version)
-- Proto changes trigger code regeneration for all 4 languages (Go, C#, Node.js, Python)
-
----
-
-"""
-
-# Insert before "## 14. Appendices"
-content = content.replace("## 12. Appendices", traceability_section + "## 14. Appendices")
-
-# Also need to renumber the sections after insertion
-content = content.replace("## 11. Acceptance Criteria", "## 12. Acceptance Criteria")
-content = content.replace("## 10. Operational Requirements", "## 11. Operational Requirements")
-content = content.replace("## 9. Security & Compliance", "## 10. Security & Compliance")
-content = content.replace("## 8. Non-Functional Requirements", "## 9. Non-Functional Requirements")
-content = content.replace("## 7. External Interface Requirements", "## 8. External Interface Requirements")
-content = content.replace("## 6. Data Model", "## 7. Data Model")
-content = content.replace("## 5. System Features", "## 6. System Features")
-
-print("✅ Phase 3 complete!")
-print("- Added Traceability Matrix & Change Control section (13)")
-print("- Renumbered all sections properly")
-
-# Write back
-with open("SRS_V3_FINAL_DRAFT.md", "w", encoding="utf-8") as f:
-    f.write(content)
-
-print("\nNow regenerating Word document...")
+if __name__ == "__main__":
+    result = update_srs_phase3()
+    print(f"\n✅ Phase 3 analysis complete!")

@@ -1,6 +1,5 @@
 using Microsoft.Extensions.DependencyInjection;
-using InsuranceEngine.Grpc.Gateways;
-
+using InsuranceEngine.Commission.Infrastructure;
 namespace InsuranceEngine.Commission;
 
 public static class CommissionDependencyInjection

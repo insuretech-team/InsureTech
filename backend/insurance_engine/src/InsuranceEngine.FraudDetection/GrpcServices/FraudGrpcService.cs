@@ -3,6 +3,7 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Fraud.Services.V1;
 using InsuranceEngine.FraudDetection.Application.Commands;
+using InsuranceEngine.FraudDetection;
 using System.Threading.Tasks;
 
 namespace InsuranceEngine.FraudDetection.GrpcServices;
@@ -10,15 +11,19 @@ namespace InsuranceEngine.FraudDetection.GrpcServices;
 public sealed class FraudGrpcService : FraudService.FraudServiceBase
 {
     private readonly IMediator _mediator;
+    private readonly IFraudDetectionService _fraudService;
     private readonly ILogger<FraudGrpcService> _logger;
 
-    public FraudGrpcService(IMediator mediator, ILogger<FraudGrpcService> logger)
+    public FraudGrpcService(
+        IMediator mediator,
+        IFraudDetectionService fraudService,
+        ILogger<FraudGrpcService> logger)
     {
         _mediator = mediator;
+        _fraudService = fraudService;
         _logger = logger;
     }
 
-    // RPC: CheckFraud
     public override async Task<CheckFraudResponse> CheckFraud(
         CheckFraudRequest request, ServerCallContext context)
     {

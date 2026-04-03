@@ -5,7 +5,7 @@ namespace InsuranceEngine.SharedKernel.Infrastructure;
 
 public interface IKafkaPublisher
 {
-    Task PublishAsync<T>(string topic, T message);
+    Task PublishAsync<T>(string topic, T message) where T : class;
 }
 
 public class MockKafkaPublisher : IKafkaPublisher
@@ -17,7 +17,7 @@ public class MockKafkaPublisher : IKafkaPublisher
         _logger = logger;
     }
 
-    public Task PublishAsync<T>(string topic, T message)
+    public Task PublishAsync<T>(string topic, T message) where T : class
     {
         _logger.LogInformation("Streaming event to Kafka Topic [{Topic}]: {Message}", topic, System.Text.Json.JsonSerializer.Serialize(message));
         return Task.CompletedTask;

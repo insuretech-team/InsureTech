@@ -37,6 +37,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceEngine.Policy.Test
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceEngine.SharedKernel.Tests", "tests\InsuranceEngine.SharedKernel.Tests\InsuranceEngine.SharedKernel.Tests.csproj", "{378BE5A6-9706-416E-8C4D-2540284D986F}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceEngine.Infrastructure.Tests", "tests\InsuranceEngine.Infrastructure.Tests\InsuranceEngine.Infrastructure.Tests.csproj", "{7A8B9C0D-1234-5678-9ABC-DEF012345678}"
+EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceEngine.Infrastructure", "src\InsuranceEngine.Infrastructure\InsuranceEngine.Infrastructure.csproj", "{DD442D39-22BE-4A4A-BF44-B0726CA13DAD}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InsuranceEngine.Grpc", "src\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj", "{A21837B5-788F-4FEC-A3D9-BC9E04E79575}"

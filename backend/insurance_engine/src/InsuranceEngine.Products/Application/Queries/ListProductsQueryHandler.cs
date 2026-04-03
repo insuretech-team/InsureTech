@@ -1,7 +1,6 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Products.Services.V1;
-using InsuranceEngine.Grpc.Gateways;
 using Microsoft.Extensions.Caching.Distributed;
 using System.Text.Json;
 

@@ -11,6 +11,10 @@ using Insuretech.Renewal.Services.V1;
 using Insuretech.Endorsement.Services.V1;
 using Insuretech.Fraud.Services.V1;
 using Insuretech.Commission.Services.V1;
+using Insuretech.Notification.Services.V1;
+using Insuretech.Document.Services.V1;
+using Insuretech.Refund.Services.V1;
+using Insuretech.Payment.Services.V1;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 
@@ -42,6 +46,10 @@ public sealed class InsuranceServiceClient : IDisposable
         Endorsements = new EndorsementService.EndorsementServiceClient(_channel);
         Fraud = new FraudService.FraudServiceClient(_channel);
         Commissions = new CommissionService.CommissionServiceClient(_channel);
+        Notifications = new NotificationService.NotificationServiceClient(_channel);
+        Documents = new DocumentService.DocumentServiceClient(_channel);
+        Refunds = new RefundService.RefundServiceClient(_channel);
+        Payments = new PaymentService.PaymentServiceClient(_channel);
     }
 
     public InsuranceService.InsuranceServiceClient Insurance { get; }
@@ -55,6 +63,10 @@ public sealed class InsuranceServiceClient : IDisposable
     public EndorsementService.EndorsementServiceClient Endorsements { get; }
     public FraudService.FraudServiceClient Fraud { get; }
     public CommissionService.CommissionServiceClient Commissions { get; }
+    public NotificationService.NotificationServiceClient Notifications { get; }
+    public DocumentService.DocumentServiceClient Documents { get; }
+    public RefundService.RefundServiceClient Refunds { get; }
+    public PaymentService.PaymentServiceClient Payments { get; }
 
     /// <summary>
     /// Builds gRPC CallOptions with X-* identity headers forwarded from the active HTTP request.

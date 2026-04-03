@@ -1,5 +1,8 @@
 namespace InsuranceEngine.SharedKernel.CQRS;
 
+/// <summary>
+/// Result pattern for operations without return value
+/// </summary>
 public sealed class Result
 {
     public Error? Error { get; }
@@ -12,6 +15,7 @@ public sealed class Result
     }
 
     public static Result Ok() => new(null);
+
     public static Result Success() => Ok();
     
     public static Result Fail(string code, string message) => 
@@ -19,6 +23,9 @@ public sealed class Result
 
     public static Result Failure(string message) =>
         Fail("OPERATION_FAILED", message);
+    
+    public static Result NotFound(string code, string message) =>
+        Fail(code, message);
     
     public static Result Fail(Error error) => new(error);
 
@@ -28,13 +35,15 @@ public sealed class Result
         Result<T>.Fail(code, message);
 }
 
+/// <summary>
+/// Result pattern for operations with return value
+/// </summary>
 public sealed class Result<T>
 {
     public T? Value { get; }
     public Error? Error { get; }
     public bool IsSuccess => Error is null;
     public bool IsFailure => !IsSuccess;
-    public bool IsNotFound => Error?.Code == "NOT_FOUND";
 
     private Result(T? value, Error? error)
     {
@@ -43,6 +52,7 @@ public sealed class Result<T>
     }
 
     public static Result<T> Ok(T value) => new(value, null);
+
     public static Result<T> Success(T value) => Ok(value);
     
     public static Result<T> Fail(string code, string message) => 
@@ -51,10 +61,10 @@ public sealed class Result<T>
     public static Result<T> Failure(string message) =>
         Fail("OPERATION_FAILED", message);
     
+    public static Result<T> NotFound(string code, string message) =>
+        Fail(code, message);
+    
     public static Result<T> Fail(Error error) => new(default, error);
-
-    public static Result<T> NotFound(string entity, string id) => 
-        Fail(Error.NotFound(entity, id));
 
     public TResult Match<TResult>(
         Func<T, TResult> onSuccess,
@@ -64,10 +74,14 @@ public sealed class Result<T>
     }
 }
 
+/// <summary>
+/// Error record for Result pattern
+/// </summary>
 public sealed record Error(string Code, string Message)
 {
     public static readonly Error None = new(string.Empty, string.Empty);
     
+    // Common error codes
     public static Error NotFound(string entity, string id) => 
         new("NOT_FOUND", $"{entity} with id {id} not found");
     

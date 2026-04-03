@@ -80,17 +80,17 @@ public class ClaimEntity
     [Column("processing_type")]
     public string ProcessingType { get; set; } = "MANUAL";
 
-    [Column("claim_source")]
-    public string? ClaimSource { get; set; } // JSONB
-
-    [Column("is_priority")]
-    public bool IsPriority { get; set; }
-
     [Column("deductible_amount")]
     public long? DeductibleAmount { get; set; }
 
+    [Column("deductible_currency")]
+    public string DeductibleCurrency { get; set; } = "BDT";
+
     [Column("co_pay_amount")]
     public long? CoPayAmount { get; set; }
+
+    [Column("co_pay_currency")]
+    public string CoPayCurrency { get; set; } = "BDT";
 
     [Column("processor_notes")]
     public string? ProcessorNotes { get; set; }

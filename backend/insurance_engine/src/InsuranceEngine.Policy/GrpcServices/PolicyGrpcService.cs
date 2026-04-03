@@ -161,4 +161,23 @@ public sealed class PolicyGrpcService : PolicyService.PolicyServiceBase
             new IssuePolicyCommand(request.PolicyId, request.QuoteId, request.PaymentId), 
             context.CancellationToken);
     }
+
+    // RPC 9: ApproveCancellation (Phase 3 / FR-052)
+    public override async Task<ApproveCancellationResponse> ApproveCancellation(
+        ApproveCancellationRequest request, ServerCallContext context)
+    {
+        if (string.IsNullOrEmpty(request.PolicyId))
+        {
+            throw new RpcException(new Status(StatusCode.InvalidArgument, "Policy ID is required"));
+        }
+
+        var command = new ApproveCancellationCommand(
+            PolicyId: request.PolicyId,
+            Role: request.Role,
+            ApproverId: request.ApproverId,
+            Notes: request.Notes
+        );
+
+        return await _mediator.Send(command, context.CancellationToken);
+    }
 }

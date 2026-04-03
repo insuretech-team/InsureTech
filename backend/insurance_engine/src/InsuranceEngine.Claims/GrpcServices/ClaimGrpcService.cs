@@ -109,7 +109,8 @@ public sealed class ClaimGrpcService : ClaimService.ClaimServiceBase
             ClaimId: request.ClaimId,
             ApproverId: request.ApproverId,
             ApprovedAmount: request.ApprovedAmount != null ? (decimal)request.ApprovedAmount.Amount / 100m : 0m,
-            Notes: request.Notes
+            Notes: request.Notes,
+            Role: request.Role
         );
 
         return await _mediator.Send(command, context.CancellationToken);

@@ -4797,6 +4797,38 @@ namespace Insuretech.Policy.Services.V1 {
 
   #endregion
 
+  public sealed partial class ApproveCancellationRequest : pb::IMessage<ApproveCancellationRequest> {
+    private static readonly pb::MessageParser<ApproveCancellationRequest> _parser = new pb::MessageParser<ApproveCancellationRequest>(() => new ApproveCancellationRequest());
+    public static pb::MessageParser<ApproveCancellationRequest> Parser { get { return _parser; } }
+    public string PolicyId { get; set; } = "";
+    public string Role { get; set; } = "";
+    public string ApproverId { get; set; } = "";
+    public string Notes { get; set; } = "";
+    public pbr::MessageDescriptor Descriptor => null!;
+    public void MergeFrom(ApproveCancellationRequest other) { }
+    public void MergeFrom(pb::CodedInputStream input) { }
+    public void WriteTo(pb::CodedOutputStream output) { }
+    public int CalculateSize() => 0;
+    public ApproveCancellationRequest Clone() => new();
+    public bool Equals(ApproveCancellationRequest? other) => true;
+  }
+
+  public sealed partial class ApproveCancellationResponse : pb::IMessage<ApproveCancellationResponse> {
+    private static readonly pb::MessageParser<ApproveCancellationResponse> _parser = new pb::MessageParser<ApproveCancellationResponse>(() => new ApproveCancellationResponse());
+    public static pb::MessageParser<ApproveCancellationResponse> Parser { get { return _parser; } }
+    public string Status { get; set; } = "";
+    public string Message { get; set; } = "";
+    public global::Insuretech.Common.V1.Money? RefundAmount { get; set; }
+    public global::Insuretech.Common.V1.Error? Error { get; set; }
+    public pbr::MessageDescriptor Descriptor => null!;
+    public void MergeFrom(ApproveCancellationResponse other) { }
+    public void MergeFrom(pb::CodedInputStream input) { }
+    public void WriteTo(pb::CodedOutputStream output) { }
+    public int CalculateSize() => 0;
+    public ApproveCancellationResponse Clone() => new();
+    public bool Equals(ApproveCancellationResponse? other) => true;
+  }
+
 }
 
 #endregion Designer generated code

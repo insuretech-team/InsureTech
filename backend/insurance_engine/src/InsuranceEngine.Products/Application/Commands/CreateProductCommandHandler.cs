@@ -1,23 +1,22 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Products.Services.V1;
-using InsuranceEngine.Products.Domain;
-using InsuranceEngine.SharedKernel.Domain;
-using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
+using Insuretech.Products.Entity.V1;
+using Insuretech.Common.V1;
+using InsuranceEngine.Grpc.Gateways;
 
 namespace InsuranceEngine.Products.Application.Commands;
 
 public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductCommand, CreateProductResponse>
 {
-    private readonly IRepository<ProductEntity> _productRepository;
+    private readonly IProductDataGateway _gateway;
     private readonly ILogger<CreateProductCommandHandler> _logger;
 
     public CreateProductCommandHandler(
-        IRepository<ProductEntity> productRepository,
+        IProductDataGateway gateway,
         ILogger<CreateProductCommandHandler> logger)
     {
-        _productRepository = productRepository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -25,58 +24,31 @@ public sealed class CreateProductCommandHandler : IRequestHandler<CreateProductC
     {
         try
         {
-            // 1. Create Domain Aggregate (DDD)
-            // Note: In a full VSA with isolated storage, the aggregate might be used.
-            // But since we are using EF Core (Option A), we can map directly to the entity 
-            // after domain validation logic.
-            
-            var productCode = request.ProductCode;
-            if (string.IsNullOrWhiteSpace(productCode))
-                throw new ArgumentException("Product code is required");
+            // Note: Validation logic (uniqueness etc.) is now handled by the Go backend (SSOT).
+            // We map directly from the C# command to the Proto Product message.
 
-            // Check uniqueness
-            if (await _productRepository.ExistsAsync(p => p.ProductCode == productCode, cancellationToken))
+            var product = new Product
             {
-                return new CreateProductResponse
-                {
-                    Error = new Insuretech.Common.V1.Error
-                    {
-                        Code = "DUPLICATE_PRODUCT",
-                        Message = $"Product with code {productCode} already exists"
-                    }
-                };
-            }
-
-            // 2. Create Entity and Persist
-            var entity = new ProductEntity
-            {
-                ProductId = Guid.NewGuid(),
-                ProductCode = productCode,
+                ProductCode = request.ProductCode,
                 ProductName = request.ProductName,
-                Category = request.Category,
+                Category = Enum.TryParse<ProductCategory>(request.Category, true, out var category) ? category : ProductCategory.Unspecified,
                 Description = request.Description,
-                BasePremium = (long)(request.BasePremium * 100), // Store in paisa
-                BasePremiumCurrency = "BDT",
-                MinSumInsured = (long)(request.MinSumInsured * 100),
-                MaxSumInsured = (long)(request.MaxSumInsured * 100),
+                BasePremium = new Money { Amount = (long)(request.BasePremium * 100), Currency = "BDT" },
+                MinSumInsured = new Money { Amount = (long)(request.MinSumInsured * 100), Currency = "BDT" },
+                MaxSumInsured = new Money { Amount = (long)(request.MaxSumInsured * 100), Currency = "BDT" },
                 MinTenureMonths = request.MinTenureMonths,
                 MaxTenureMonths = request.MaxTenureMonths,
-                MinAge = 18, // Defaulting as these were removed from Command/Proto
-                MaxAge = 65, 
-                Status = "ACTIVE", // Start as ACTIVE for now or follow lifecycle
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow,
-                CreatedBy = request.CreatedBy ?? "SYSTEM",
-                Version = 1
+                Status = ProductStatus.Active
             };
 
-            await _productRepository.AddAsync(entity, cancellationToken);
+            var createdProduct = await _gateway.CreateProductAsync(product, cancellationToken);
 
-            _logger.LogInformation("Product created successfully: {ProductId} ({ProductCode})", entity.ProductId, entity.ProductCode);
+            _logger.LogInformation("Product created successfully via Go SSOT: {ProductId} ({ProductCode})", 
+                createdProduct.ProductId, createdProduct.ProductCode);
 
             return new CreateProductResponse
             {
-                ProductId = entity.ProductId.ToString(),
+                ProductId = createdProduct.ProductId,
                 Message = "Product created successfully"
             };
         }

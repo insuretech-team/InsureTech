@@ -1,24 +1,21 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
+using InsuranceEngine.Grpc.Gateways;
+using Insuretech.Policy.Entity.V1;
 
 namespace InsuranceEngine.Policy.Application.Commands;
 
 public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand, Result<string>>
 {
-    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
-    private readonly IRepository<PolicyEntity> _policyRepository;
+    private readonly IPolicyDataGateway _gateway;
     private readonly ILogger<AddNomineeCommandHandler> _logger;
 
     public AddNomineeCommandHandler(
-        IRepository<PolicyNomineeEntity> nomineeRepository,
-        IRepository<PolicyEntity> policyRepository,
+        IPolicyDataGateway gateway,
         ILogger<AddNomineeCommandHandler> logger)
     {
-        _nomineeRepository = nomineeRepository;
-        _policyRepository = policyRepository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -26,30 +23,27 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
     {
         try
         {
-            // Validate policy exists
-            var policy = await _policyRepository.GetByIdAsync(Guid.Parse(request.PolicyId), cancellationToken);
+            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
             if (policy == null)
                 return Result<string>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            var entity = new PolicyNomineeEntity
+            var newNominee = new Nominee
             {
-                NomineeId = Guid.NewGuid(),
-                PolicyId = Guid.Parse(request.PolicyId),
+                NomineeId = Guid.NewGuid().ToString(),
                 FullName = request.FullName,
                 Relationship = request.Relationship,
-                SharePercentage = request.SharePercentage,
-                DateOfBirth = request.DateOfBirth ?? DateTime.UtcNow,
+                SharePercentage = (double)request.SharePercentage,
+                DateOfBirth = request.DateOfBirth.HasValue ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(request.DateOfBirth.Value.ToUniversalTime()) : null,
                 NidNumber = request.NidNumber,
                 PhoneNumber = request.PhoneNumber,
-                NomineeDobText = request.NomineeDobText,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                NomineeDobText = request.NomineeDobText
             };
 
-            await _nomineeRepository.AddAsync(entity, cancellationToken);
+            policy.Nominees.Add(newNominee);
+            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
 
-            _logger.LogInformation("Nominee added: {NomineeId} to Policy: {PolicyId}", entity.NomineeId, request.PolicyId);
-            return Result<string>.Ok(entity.NomineeId.ToString());
+            _logger.LogInformation("Nominee added via Go SSOT: {NomineeId} to Policy: {PolicyId}", newNominee.NomineeId, request.PolicyId);
+            return Result<string>.Ok(newNominee.NomineeId);
         }
         catch (Exception ex)
         {
@@ -61,12 +55,12 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
 
 public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeCommand, Result<bool>>
 {
-    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
+    private readonly IPolicyDataGateway _gateway;
     private readonly ILogger<UpdateNomineeCommandHandler> _logger;
 
-    public UpdateNomineeCommandHandler(IRepository<PolicyNomineeEntity> nomineeRepository, ILogger<UpdateNomineeCommandHandler> logger)
+    public UpdateNomineeCommandHandler(IPolicyDataGateway gateway, ILogger<UpdateNomineeCommandHandler> logger)
     {
-        _nomineeRepository = nomineeRepository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -74,21 +68,25 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
     {
         try
         {
-            var nominee = await _nomineeRepository.GetByIdAsync(Guid.Parse(request.NomineeId), cancellationToken);
-            if (nominee == null || nominee.PolicyId != Guid.Parse(request.PolicyId))
-                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found");
+            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policy == null)
+                return Result<bool>.NotFound("POLICY_NOT_FOUND", "Policy not found");
+
+            var nominee = policy.Nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
+            if (nominee == null)
+                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found in policy");
 
             if (request.FullName != null) nominee.FullName = request.FullName;
             if (request.Relationship != null) nominee.Relationship = request.Relationship;
-            if (request.SharePercentage.HasValue) nominee.SharePercentage = request.SharePercentage.Value;
-            if (request.DateOfBirth.HasValue) nominee.DateOfBirth = request.DateOfBirth.Value;
+            if (request.SharePercentage.HasValue) nominee.SharePercentage = (double)request.SharePercentage.Value;
+            if (request.DateOfBirth.HasValue) 
+                nominee.DateOfBirth = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(request.DateOfBirth.Value.ToUniversalTime());
             if (request.NidNumber != null) nominee.NidNumber = request.NidNumber;
             if (request.PhoneNumber != null) nominee.PhoneNumber = request.PhoneNumber;
             
-            nominee.UpdatedAt = DateTime.UtcNow;
-            await _nomineeRepository.UpdateAsync(nominee, cancellationToken);
+            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
 
-            _logger.LogInformation("Nominee updated: {NomineeId}", request.NomineeId);
+            _logger.LogInformation("Nominee updated via Go SSOT: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);
         }
         catch (Exception ex)
@@ -101,12 +99,12 @@ public sealed class UpdateNomineeCommandHandler : IRequestHandler<UpdateNomineeC
 
 public sealed class DeleteNomineeCommandHandler : IRequestHandler<DeleteNomineeCommand, Result<bool>>
 {
-    private readonly IRepository<PolicyNomineeEntity> _nomineeRepository;
+    private readonly IPolicyDataGateway _gateway;
     private readonly ILogger<DeleteNomineeCommandHandler> _logger;
 
-    public DeleteNomineeCommandHandler(IRepository<PolicyNomineeEntity> nomineeRepository, ILogger<DeleteNomineeCommandHandler> logger)
+    public DeleteNomineeCommandHandler(IPolicyDataGateway gateway, ILogger<DeleteNomineeCommandHandler> logger)
     {
-        _nomineeRepository = nomineeRepository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -114,13 +112,18 @@ public sealed class DeleteNomineeCommandHandler : IRequestHandler<DeleteNomineeC
     {
         try
         {
-            var nominee = await _nomineeRepository.GetByIdAsync(Guid.Parse(request.NomineeId), cancellationToken);
-            if (nominee == null || nominee.PolicyId != Guid.Parse(request.PolicyId))
-                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found");
+            var policy = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
+            if (policy == null)
+                return Result<bool>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            await _nomineeRepository.DeleteAsync(nominee, cancellationToken);
+            var nominee = policy.Nominees.FirstOrDefault(n => n.NomineeId == request.NomineeId);
+            if (nominee == null)
+                return Result<bool>.NotFound("NOMINEE_NOT_FOUND", "Nominee not found in policy");
 
-            _logger.LogInformation("Nominee deleted: {NomineeId}", request.NomineeId);
+            policy.Nominees.Remove(nominee);
+            await _gateway.UpdatePolicyAsync(policy, cancellationToken);
+
+            _logger.LogInformation("Nominee deleted via Go SSOT: {NomineeId}", request.NomineeId);
             return Result<bool>.Ok(true);
         }
         catch (Exception ex)

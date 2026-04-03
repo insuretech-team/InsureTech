@@ -8,7 +8,9 @@ using InsuranceEngine.Policy.Application.Commands;
 using InsuranceEngine.SharedKernel.Persistence;
 using InsuranceEngine.SharedKernel.Persistence.Entities;
 using InsuranceEngine.SharedKernel.Infrastructure;
-using InsuranceEngine.SharedKernel.Domain.Events;
+using InsuranceEngine.SharedKernel.Infrastructure.DataGateways;
+using InsuranceEngine.Products.Domain.Entities;
+using InsuranceEngine.Infrastructure.Persistence;
 using Insuretech.Policy.Services.V1;
 
 namespace InsuranceEngine.Policy.Tests;
@@ -22,6 +24,7 @@ public class CreatePolicyCommandHandlerTests : IDisposable
     private readonly Mock<ILogger<CreatePolicyCommandHandler>> _loggerMock;
     private readonly Mock<IPdfGenerator> _pdfGeneratorMock;
     private readonly Mock<IKafkaPublisher> _kafkaPublisherMock;
+    private readonly Mock<ISequenceDataGateway> _sequenceGatewayMock;
     private readonly InsuranceDbContext _dbContext;
     private readonly SqliteConnection _connection;
     private readonly CreatePolicyCommandHandler _handler;
@@ -35,6 +38,7 @@ public class CreatePolicyCommandHandlerTests : IDisposable
         _loggerMock = new Mock<ILogger<CreatePolicyCommandHandler>>();
         _pdfGeneratorMock = new Mock<IPdfGenerator>();
         _kafkaPublisherMock = new Mock<IKafkaPublisher>();
+        _sequenceGatewayMock = new Mock<ISequenceDataGateway>();
 
         // Use SQLite in-memory for professional relational testing
         _connection = new SqliteConnection("Filename=:memory:");
@@ -54,7 +58,7 @@ public class CreatePolicyCommandHandlerTests : IDisposable
             _productRepoMock.Object,
             _nomineeRepoMock.Object,
             _riderRepoMock.Object,
-            _dbContext,
+            _sequenceGatewayMock.Object,
             _loggerMock.Object,
             _pdfGeneratorMock.Object,
             _kafkaPublisherMock.Object);

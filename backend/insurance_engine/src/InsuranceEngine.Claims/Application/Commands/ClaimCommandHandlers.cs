@@ -1,40 +1,32 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Claims.Services.V1;
+using Insuretech.Claims.Entity.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
-using InsuranceEngine.SharedKernel.Infrastructure;
+using InsuranceEngine.Grpc.Gateways;
+using InsuranceEngine.Grpc.Gateways;
+using InsuranceEngine.Grpc.Gateways;
 using InsuranceEngine.SharedKernel.Domain.Events;
-using InsuranceEngine.Claims.Domain;
-using Microsoft.EntityFrameworkCore;
 using Google.Protobuf.WellKnownTypes;
-using System.Security.Cryptography;
 
 namespace InsuranceEngine.Claims.Application.Commands;
 
 // ===== SubmitClaim =====
 public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimCommand, SubmitClaimResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
-    private readonly IRepository<PolicyEntity> _policyRepository;
-    private readonly IRepository<ClaimDocumentEntity> _documentRepository;
-    private readonly InsuranceDbContext _dbContext;
+    private readonly IClaimsDataGateway _claimsGateway;
+    private readonly IPolicyDataGateway _policyGateway;
     private readonly ILogger<SubmitClaimCommandHandler> _logger;
     private readonly IKafkaPublisher _kafkaPublisher;
 
     public SubmitClaimCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
-        IRepository<PolicyEntity> policyRepository,
-        IRepository<ClaimDocumentEntity> documentRepository,
-        InsuranceDbContext dbContext,
+        IClaimsDataGateway claimsGateway,
+        IPolicyDataGateway policyGateway,
         ILogger<SubmitClaimCommandHandler> logger,
         IKafkaPublisher kafkaPublisher)
     {
-        _claimRepository = claimRepository;
-        _policyRepository = policyRepository;
-        _documentRepository = documentRepository;
-        _dbContext = dbContext;
+        _claimsGateway = claimsGateway;
+        _policyGateway = policyGateway;
         _logger = logger;
         _kafkaPublisher = kafkaPublisher;
     }
@@ -43,8 +35,8 @@ public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimComma
     {
         try
         {
-            // Validate policy exists and is ACTIVE
-            var policy = await _policyRepository.GetByIdAsync(Guid.Parse(request.PolicyId), cancellationToken);
+            // Validate policy exists and is ACTIVE via Go SSOT
+            var policy = await _policyGateway.GetPolicyAsync(request.PolicyId, cancellationToken);
             if (policy == null)
             {
                 return new SubmitClaimResponse
@@ -52,7 +44,7 @@ public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimComma
                     Error = new Error { Code = "POLICY_NOT_FOUND", Message = "Policy not found" }
                 };
             }
-            if (policy.Status != "ACTIVE")
+            if (policy.Status != Insuretech.Policy.Entity.V1.PolicyStatus.Active)
             {
                 return new SubmitClaimResponse
                 {
@@ -60,91 +52,57 @@ public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimComma
                 };
             }
 
-            // Get sequence number for claim number (FR-083)
-            var connection = _dbContext.Database.GetDbConnection();
-            if (connection.State != System.Data.ConnectionState.Open)
-                await connection.OpenAsync(cancellationToken);
+            // Note: Sequence numbers, ZHTC Auto-Approval, and status logic 
+            // are now handled by the Go backend (SSOT).
 
-            using var cmd = connection.CreateCommand();
-            cmd.CommandText = "SELECT nextval('insurance_schema.claim_number_seq')";
-            var seqResult = await cmd.ExecuteScalarAsync(cancellationToken);
-            var sequenceNumber = Convert.ToInt64(seqResult);
-
-            // Domain: Create Claim
-            var claim = ClaimAggregate.Submit(
-                policyId: Guid.Parse(request.PolicyId),
-                type: request.ClaimType,
-                amount: request.ClaimAmount,
-                description: request.Description,
-                sequenceNumber: sequenceNumber,
-                documentContent: null
-            );
-
-            // Parse incident date
-            DateTime incidentDate;
-            if (!DateTime.TryParse(request.IncidentDate, out incidentDate))
-                incidentDate = DateTime.UtcNow;
-
-            var claimEntity = new ClaimEntity
+            var claimReq = new Insuretech.Claims.Entity.V1.Claim
             {
-                ClaimId = claim.Id,
-                ClaimNumber = claim.ClaimNumber,
-                PolicyId = Guid.Parse(request.PolicyId),
-                CustomerId = Guid.Parse(request.CustomerId),
-                Status = "SUBMITTED",
-                Type = request.ClaimType,
-                ClaimedAmount = (long)(request.ClaimAmount * 100),
-                ClaimedCurrency = "BDT",
-                ApprovedCurrency = "BDT",
-                SettledCurrency = "BDT",
-                IncidentDate = incidentDate,
+                PolicyId = request.PolicyId,
+                CustomerId = request.CustomerId,
+                Type = MapToClaimType(request.ClaimType),
+                ClaimedAmount = new Money { Amount = (long)(request.ClaimAmount * 100), Currency = "BDT" },
                 IncidentDescription = request.Description,
-                SubmittedAt = DateTime.UtcNow,
-                ProcessingType = "MANUAL",
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                IncidentDate = Timestamp.FromDateTime(DateTime.TryParse(request.IncidentDate, out var dt) ? dt.ToUniversalTime() : DateTime.UtcNow),
+                PlaceOfIncident = request.PlaceOfIncident ?? string.Empty
             };
 
-            await _claimRepository.AddAsync(claimEntity, cancellationToken);
-
-            // Add initial document URLs (if any)
+            var createdClaim = await _claimsGateway.CreateClaimAsync(claimReq, cancellationToken);
+            
+            // Add initial documents via Go Gateway
             if (request.DocumentUrls != null)
             {
                 foreach (var url in request.DocumentUrls)
                 {
-                    await _documentRepository.AddAsync(new ClaimDocumentEntity
+                    await _claimsGateway.CreateClaimDocumentAsync(new ClaimDocument
                     {
-                        DocumentId = Guid.NewGuid(),
-                        ClaimId = claimEntity.ClaimId,
+                        ClaimId = createdClaim.ClaimId,
                         DocumentType = "supporting_document",
                         FileUrl = url,
-                        FileHash = ComputeHash(url),
-                        Verified = false,
-                        UploadedAt = DateTime.UtcNow,
-                        CreatedAt = DateTime.UtcNow,
-                        UpdatedAt = DateTime.UtcNow
+                        Verified = false
                     }, cancellationToken);
                 }
             }
 
-            // Kafka event
+            // Kafka event: We still publish from C# as specified in architecture, 
+            // but Go backend should ideally be the source.
             var evt = new ClaimSubmittedEvent(
-                claimEntity.ClaimId, 
-                claimEntity.ClaimNumber, 
-                claimEntity.PolicyId, 
-                claimEntity.CustomerId, 
-                claimEntity.ClaimedAmount,
+                Guid.Parse(createdClaim.ClaimId), 
+                createdClaim.ClaimNumber, 
+                Guid.Parse(createdClaim.PolicyId), 
+                Guid.Parse(createdClaim.CustomerId), 
+                createdClaim.ClaimedAmount.Amount,
                 policy.PartnerId,
                 policy.AgentId
             );
             await _kafkaPublisher.PublishAsync("insurance.claims.submitted", evt);
 
-            _logger.LogInformation("Claim submitted: {ClaimNumber} for Policy: {PolicyId}", claim.ClaimNumber, request.PolicyId);
+            _logger.LogInformation("Claim submitted via Go SSOT: {ClaimNumber} for Policy: {PolicyId}", 
+                createdClaim.ClaimNumber, request.PolicyId);
 
             return new SubmitClaimResponse
             {
-                ClaimId = claim.Id.ToString(),
-                ClaimNumber = claim.ClaimNumber,
+                ClaimId = createdClaim.ClaimId,
+                ClaimNumber = createdClaim.ClaimNumber,
                 Message = "Claim submitted successfully"
             };
         }
@@ -158,29 +116,30 @@ public sealed class SubmitClaimCommandHandler : IRequestHandler<SubmitClaimComma
         }
     }
 
-    private static string ComputeHash(string input)
+    private static ClaimType MapToClaimType(string type) => type switch
     {
-        var bytes = SHA256.HashData(System.Text.Encoding.UTF8.GetBytes(input));
-        return Convert.ToHexStringLower(bytes);
-    }
+        "HEALTH" => ClaimType.HealthHospitalization,
+        "MOTOR" => ClaimType.MotorAccident,
+        "TRAVEL" => ClaimType.TravelMedical,
+        "DEVICE" => ClaimType.DeviceDamage,
+        "DEATH" => ClaimType.Death,
+        _ => ClaimType.Unspecified
+    };
 }
 
 // ===== ApproveClaim =====
 public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCommand, ApproveClaimResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
-    private readonly IRepository<ClaimApprovalEntity> _approvalRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly IKafkaPublisher _kafkaPublisher;
     private readonly ILogger<ApproveClaimCommandHandler> _logger;
 
     public ApproveClaimCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
-        IRepository<ClaimApprovalEntity> approvalRepository,
+        IClaimsDataGateway claimsGateway,
         IKafkaPublisher kafkaPublisher,
         ILogger<ApproveClaimCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
-        _approvalRepository = approvalRepository;
+        _claimsGateway = claimsGateway;
         _kafkaPublisher = kafkaPublisher;
         _logger = logger;
     }
@@ -189,50 +148,52 @@ public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCom
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new ApproveClaimResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            if (claim.Status != "SUBMITTED" && claim.Status != "UNDER_REVIEW")
+            if (claim.Status != ClaimStatus.Submitted && claim.Status != ClaimStatus.UnderReview)
                 return new ApproveClaimResponse { Error = new Error { Code = "INVALID_STATUS", Message = $"Claim cannot be approved from status '{claim.Status}'" } };
 
-            // FR-086: Tiered Approval Matrix
             var approvalLevel = DetermineApprovalLevel(request.ApprovedAmount);
+            var role = request.Role ?? "Unknown";
 
-            claim.Status = "APPROVED";
-            claim.ApprovedAmount = (long)(request.ApprovedAmount * 100);
-            claim.ApprovedAt = DateTime.UtcNow;
-            claim.UpdatedAt = DateTime.UtcNow;
-            await _claimRepository.UpdateAsync(claim, cancellationToken);
-
-            // FR-542-545: Tiered Approval Matrix Mapping
-            var approverRole = approvalLevel switch
+            // Record Approval via Go Gateway
+            await _claimsGateway.CreateClaimApprovalAsync(new ClaimApproval
             {
-                1 => "ClaimsOfficer",
-                2 => "ClaimsManager",
-                3 => "JointApproval",
-                4 => "Board",
-                _ => "ClaimsOfficer"
-            };
-
-            await _approvalRepository.AddAsync(new ClaimApprovalEntity
-            {
-                ApprovalId = Guid.NewGuid(),
                 ClaimId = claim.ClaimId,
-                ApproverId = Guid.Parse(request.ApproverId),
-                ApproverRole = approverRole,
+                ApproverId = request.ApproverId,
+                ApproverRole = role,
                 ApprovalLevel = approvalLevel,
-                Decision = "APPROVED",
-                ApprovedAmount = (long)(request.ApprovedAmount * 100),
-                ApprovedCurrency = "BDT",
-                Notes = request.Notes,
-                ApprovedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow
+                Decision = ApprovalDecision.Approved,
+                ApprovedAmount = new Money { Amount = (long)(request.ApprovedAmount * 100), Currency = "BDT" },
+                Notes = request.Notes
             }, cancellationToken);
 
-            await _kafkaPublisher.PublishAsync("insurance.claims.approved", new { ClaimId = claim.ClaimId, ApprovedAmount = claim.ApprovedAmount, Level = approvalLevel });
+            // Level 3 Joint Approval Logic check
+            if (approvalLevel == 3)
+            {
+                // In a pure SSOT, Go backend should decide if 'fully approved'
+                // Here we simulate the logic: if both signatures exist, set to Approved.
+                var totalSignatures = claim.Approvals.Count(a => a.ApprovalLevel == 3) + 1;
+                if (totalSignatures < 2)
+                {
+                    claim.Status = ClaimStatus.UnderReview;
+                    await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
+                    return new ApproveClaimResponse { Message = "Approval recorded. Waiting for remaining signature." };
+                }
+            }
 
-            _logger.LogInformation("Claim approved: {ClaimNumber}, Amount: {ApprovedAmount}", claim.ClaimNumber, request.ApprovedAmount);
+            // Mark as Approved in Go SSOT
+            claim.Status = ClaimStatus.Approved;
+            claim.ApprovedAmount = new Money { Amount = (long)(request.ApprovedAmount * 100), Currency = "BDT" };
+            claim.ApprovedAt = Timestamp.FromDateTime(DateTime.UtcNow);
+            
+            await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
+
+            await _kafkaPublisher.PublishAsync("insurance.claims.approved", new { ClaimId = claim.ClaimId, ApprovedAmount = claim.ApprovedAmount.Amount, Level = approvalLevel });
+
+            _logger.LogInformation("Claim approved via Go SSOT: {ClaimNumber} by {Role}", claim.ClaimNumber, role);
 
             return new ApproveClaimResponse { Message = "Claim approved successfully" };
         }
@@ -260,19 +221,16 @@ public sealed class ApproveClaimCommandHandler : IRequestHandler<ApproveClaimCom
 // ===== RejectClaim =====
 public sealed class RejectClaimCommandHandler : IRequestHandler<RejectClaimCommand, RejectClaimResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
-    private readonly IRepository<ClaimApprovalEntity> _approvalRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly IKafkaPublisher _kafkaPublisher;
     private readonly ILogger<RejectClaimCommandHandler> _logger;
 
     public RejectClaimCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
-        IRepository<ClaimApprovalEntity> approvalRepository,
+        IClaimsDataGateway claimsGateway,
         IKafkaPublisher kafkaPublisher,
         ILogger<RejectClaimCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
-        _approvalRepository = approvalRepository;
+        _claimsGateway = claimsGateway;
         _kafkaPublisher = kafkaPublisher;
         _logger = logger;
     }
@@ -281,36 +239,34 @@ public sealed class RejectClaimCommandHandler : IRequestHandler<RejectClaimComma
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new RejectClaimResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            if (claim.Status == "SETTLED" || claim.Status == "REJECTED")
+            if (claim.Status == ClaimStatus.Settled || claim.Status == ClaimStatus.Rejected)
                 return new RejectClaimResponse { Error = new Error { Code = "INVALID_STATUS", Message = $"Claim cannot be rejected from status '{claim.Status}'" } };
 
-            claim.Status = "REJECTED";
+            // Reject in Go SSOT
+            claim.Status = ClaimStatus.Rejected;
             claim.RejectionReason = request.Reason;
-            claim.AppealOptionAvailable = true; // Customer can dispute
-            claim.UpdatedAt = DateTime.UtcNow;
-            await _claimRepository.UpdateAsync(claim, cancellationToken);
+            claim.AppealOptionAvailable = true;
+            
+            await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
 
-            await _approvalRepository.AddAsync(new ClaimApprovalEntity
+            // Record rejection via Go Gateway
+            await _claimsGateway.CreateClaimApprovalAsync(new ClaimApproval
             {
-                ApprovalId = Guid.NewGuid(),
                 ClaimId = claim.ClaimId,
-                ApproverId = Guid.Parse(request.ApproverId),
+                ApproverId = request.ApproverId,
                 ApproverRole = "ClaimsOfficer",
                 ApprovalLevel = 1,
-                Decision = "REJECTED",
-                Notes = request.Reason,
-                ApprovedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow,
-                ApprovedCurrency = "BDT"
+                Decision = ApprovalDecision.Rejected,
+                Notes = request.Reason
             }, cancellationToken);
 
             await _kafkaPublisher.PublishAsync("insurance.claims.rejected", new { ClaimId = claim.ClaimId, Reason = request.Reason });
 
-            _logger.LogInformation("Claim rejected: {ClaimNumber}, Reason: {Reason}", claim.ClaimNumber, request.Reason);
+            _logger.LogInformation("Claim rejected via Go SSOT: {ClaimNumber}, Reason: {Reason}", claim.ClaimNumber, request.Reason);
 
             return new RejectClaimResponse { Message = "Claim rejected" };
         }
@@ -325,16 +281,16 @@ public sealed class RejectClaimCommandHandler : IRequestHandler<RejectClaimComma
 // ===== SettleClaim =====
 public sealed class SettleClaimCommandHandler : IRequestHandler<SettleClaimCommand, SettleClaimResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly IKafkaPublisher _kafkaPublisher;
     private readonly ILogger<SettleClaimCommandHandler> _logger;
 
     public SettleClaimCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
+        IClaimsDataGateway claimsGateway,
         IKafkaPublisher kafkaPublisher,
         ILogger<SettleClaimCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
+        _claimsGateway = claimsGateway;
         _kafkaPublisher = kafkaPublisher;
         _logger = logger;
     }
@@ -343,35 +299,37 @@ public sealed class SettleClaimCommandHandler : IRequestHandler<SettleClaimComma
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new SettleClaimResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            if (claim.Status != "APPROVED")
+            if (claim.Status != ClaimStatus.Approved)
                 return new SettleClaimResponse { Error = new Error { Code = "INVALID_STATUS", Message = $"Claim must be APPROVED to settle, current: '{claim.Status}'" } };
 
-            claim.Status = "SETTLED";
-            claim.SettledAmount = claim.ApprovedAmount; // Settle for approved amount
-            claim.SettledAt = DateTime.UtcNow;
-            claim.UpdatedAt = DateTime.UtcNow;
-            await _claimRepository.UpdateAsync(claim, cancellationToken);
+            // Settle in Go SSOT
+            claim.Status = ClaimStatus.Settled;
+            claim.SettledAmount = claim.ApprovedAmount;
+            claim.SettledAt = Timestamp.FromDateTime(DateTime.UtcNow);
+            
+            await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
 
             var paymentId = $"PAY-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
             await _kafkaPublisher.PublishAsync("insurance.claims.settled", new
             {
                 ClaimId = claim.ClaimId,
-                SettledAmount = claim.SettledAmount,
+                SettledAmount = claim.SettledAmount.Amount,
                 PaymentMethod = request.PaymentMethod,
                 PaymentId = paymentId
             });
 
-            _logger.LogInformation("Claim settled: {ClaimNumber}, Amount: {Amount}", claim.ClaimNumber, claim.SettledAmount);
+            _logger.LogInformation("Claim settled via Go SSOT: {ClaimNumber}, Amount: {Amount}", 
+                claim.ClaimNumber, claim.SettledAmount.Amount);
 
             return new SettleClaimResponse
             {
                 Message = "Claim settled successfully",
-                SettledAmount = new Money { Amount = claim.SettledAmount ?? 0, Currency = "BDT" },
+                SettledAmount = claim.SettledAmount,
                 PaymentId = paymentId
             };
         }
@@ -386,17 +344,14 @@ public sealed class SettleClaimCommandHandler : IRequestHandler<SettleClaimComma
 // ===== UploadDocument =====
 public sealed class UploadDocumentCommandHandler : IRequestHandler<UploadDocumentCommand, UploadDocumentResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
-    private readonly IRepository<ClaimDocumentEntity> _documentRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly ILogger<UploadDocumentCommandHandler> _logger;
 
     public UploadDocumentCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
-        IRepository<ClaimDocumentEntity> documentRepository,
+        IClaimsDataGateway claimsGateway,
         ILogger<UploadDocumentCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
-        _documentRepository = documentRepository;
+        _claimsGateway = claimsGateway;
         _logger = logger;
     }
 
@@ -404,46 +359,36 @@ public sealed class UploadDocumentCommandHandler : IRequestHandler<UploadDocumen
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new UploadDocumentResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            // Compute SHA-256 hash for integrity verification
-            var fileHash = Convert.ToHexStringLower(SHA256.HashData(request.FileData));
-
-            // Simulate S3 upload — in production, upload to actual S3 bucket
+            // Simulate S3 upload
             var documentUrl = $"https://storage.insuretech.labaid.com/claims/{claim.ClaimNumber}/{request.FileName}";
 
-            var document = new ClaimDocumentEntity
+            var document = new ClaimDocument
             {
-                DocumentId = Guid.NewGuid(),
                 ClaimId = claim.ClaimId,
                 DocumentType = request.DocumentType,
                 FileUrl = documentUrl,
-                FileHash = fileHash,
-                Verified = false,
-                UploadedAt = DateTime.UtcNow,
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                Verified = false
             };
 
-            await _documentRepository.AddAsync(document, cancellationToken);
+            var createdDoc = await _claimsGateway.CreateClaimDocumentAsync(document, cancellationToken);
 
-            // If claim was pending documents, transition back to under_review
-            if (claim.Status == "PENDING_DOCUMENTS")
+            // If claim was pending documents, transition back to under_review in Go SSOT
+            if (claim.Status == ClaimStatus.PendingDocuments)
             {
-                claim.Status = "UNDER_REVIEW";
-                claim.UpdatedAt = DateTime.UtcNow;
-                await _claimRepository.UpdateAsync(claim, cancellationToken);
+                claim.Status = ClaimStatus.UnderReview;
+                await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
             }
 
-            _logger.LogInformation("Document uploaded: {DocumentId} for Claim: {ClaimNumber}", document.DocumentId, claim.ClaimNumber);
+            _logger.LogInformation("Document uploaded via Go SSOT: {DocumentId} for Claim: {ClaimNumber}", createdDoc.DocumentId, claim.ClaimNumber);
 
             return new UploadDocumentResponse
             {
-                DocumentId = document.DocumentId.ToString(),
-                DocumentUrl = documentUrl,
-                FileHash = fileHash
+                DocumentId = createdDoc.DocumentId,
+                DocumentUrl = documentUrl
             };
         }
         catch (Exception ex)
@@ -457,16 +402,16 @@ public sealed class UploadDocumentCommandHandler : IRequestHandler<UploadDocumen
 // ===== RequestMoreDocuments =====
 public sealed class RequestMoreDocumentsCommandHandler : IRequestHandler<RequestMoreDocumentsCommand, RequestMoreDocumentsResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly IKafkaPublisher _kafkaPublisher;
     private readonly ILogger<RequestMoreDocumentsCommandHandler> _logger;
 
     public RequestMoreDocumentsCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
+        IClaimsDataGateway claimsGateway,
         IKafkaPublisher kafkaPublisher,
         ILogger<RequestMoreDocumentsCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
+        _claimsGateway = claimsGateway;
         _kafkaPublisher = kafkaPublisher;
         _logger = logger;
     }
@@ -475,14 +420,13 @@ public sealed class RequestMoreDocumentsCommandHandler : IRequestHandler<Request
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new RequestMoreDocumentsResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            claim.Status = "PENDING_DOCUMENTS";
-            claim.UpdatedAt = DateTime.UtcNow;
+            claim.Status = ClaimStatus.PendingDocuments;
 
-            // Store required document types as in-app message
+            // Store required document types as in-app message via Go SSOT
             var docTypes = string.Join(", ", request.RequiredDocumentTypes);
             var messageText = request.Message ?? $"Please upload the following documents: {docTypes}";
             claim.InAppMessages = System.Text.Json.JsonSerializer.Serialize(new[]
@@ -490,7 +434,7 @@ public sealed class RequestMoreDocumentsCommandHandler : IRequestHandler<Request
                 new { timestamp = DateTime.UtcNow.ToString("o"), type = "document_request", message = messageText, requiredTypes = request.RequiredDocumentTypes }
             });
 
-            await _claimRepository.UpdateAsync(claim, cancellationToken);
+            await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
 
             await _kafkaPublisher.PublishAsync("insurance.claims.documents_requested", new
             {
@@ -499,7 +443,7 @@ public sealed class RequestMoreDocumentsCommandHandler : IRequestHandler<Request
                 Message = messageText
             });
 
-            _logger.LogInformation("Document request sent for Claim: {ClaimNumber}", claim.ClaimNumber);
+            _logger.LogInformation("Document request sent via Go SSOT for Claim: {ClaimNumber}", claim.ClaimNumber);
 
             return new RequestMoreDocumentsResponse { Message = messageText };
         }
@@ -514,16 +458,16 @@ public sealed class RequestMoreDocumentsCommandHandler : IRequestHandler<Request
 // ===== DisputeClaim =====
 public sealed class DisputeClaimCommandHandler : IRequestHandler<DisputeClaimCommand, DisputeClaimResponse>
 {
-    private readonly IRepository<ClaimEntity> _claimRepository;
+    private readonly IClaimsDataGateway _claimsGateway;
     private readonly IKafkaPublisher _kafkaPublisher;
     private readonly ILogger<DisputeClaimCommandHandler> _logger;
 
     public DisputeClaimCommandHandler(
-        IRepository<ClaimEntity> claimRepository,
+        IClaimsDataGateway claimsGateway,
         IKafkaPublisher kafkaPublisher,
         ILogger<DisputeClaimCommandHandler> logger)
     {
-        _claimRepository = claimRepository;
+        _claimsGateway = claimsGateway;
         _kafkaPublisher = kafkaPublisher;
         _logger = logger;
     }
@@ -532,24 +476,24 @@ public sealed class DisputeClaimCommandHandler : IRequestHandler<DisputeClaimCom
     {
         try
         {
-            var claim = await _claimRepository.GetByIdAsync(Guid.Parse(request.ClaimId), cancellationToken);
+            var claim = await _claimsGateway.GetClaimAsync(request.ClaimId, cancellationToken);
             if (claim == null)
                 return new DisputeClaimResponse { Error = new Error { Code = "CLAIM_NOT_FOUND", Message = "Claim not found" } };
 
-            if (claim.Status != "REJECTED")
+            if (claim.Status != ClaimStatus.Rejected)
                 return new DisputeClaimResponse { Error = new Error { Code = "INVALID_STATUS", Message = "Only rejected claims can be disputed" } };
 
             if (!claim.AppealOptionAvailable)
                 return new DisputeClaimResponse { Error = new Error { Code = "APPEAL_NOT_AVAILABLE", Message = "Appeal option is not available for this claim" } };
 
-            // Verify customer owns the claim
-            if (claim.CustomerId != Guid.Parse(request.CustomerId))
+            // Verify customer owns the claim via Go SSOT data
+            if (claim.CustomerId != request.CustomerId)
                 return new DisputeClaimResponse { Error = new Error { Code = "UNAUTHORIZED", Message = "You are not authorized to dispute this claim" } };
 
-            claim.Status = "DISPUTED";
-            claim.AppealOptionAvailable = false; // One-time appeal
-            claim.UpdatedAt = DateTime.UtcNow;
-            await _claimRepository.UpdateAsync(claim, cancellationToken);
+            claim.Status = ClaimStatus.Disputed;
+            claim.AppealOptionAvailable = false; 
+
+            await _claimsGateway.UpdateClaimAsync(claim, cancellationToken);
 
             var disputeId = $"DSP-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}";
 
@@ -561,7 +505,7 @@ public sealed class DisputeClaimCommandHandler : IRequestHandler<DisputeClaimCom
                 SupportingDocs = request.SupportingDocumentUrls
             });
 
-            _logger.LogInformation("Claim disputed: {ClaimNumber}, DisputeId: {DisputeId}", claim.ClaimNumber, disputeId);
+            _logger.LogInformation("Claim disputed via Go SSOT: {ClaimNumber}, DisputeId: {DisputeId}", claim.ClaimNumber, disputeId);
 
             return new DisputeClaimResponse
             {

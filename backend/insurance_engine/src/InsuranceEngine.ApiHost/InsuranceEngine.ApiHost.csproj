@@ -8,6 +8,7 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\InsuranceEngine.Infrastructure\InsuranceEngine.Infrastructure.csproj" />
     <ProjectReference Include="..\InsuranceEngine.SharedKernel\InsuranceEngine.SharedKernel.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Beneficiary\InsuranceEngine.Beneficiary.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Products\InsuranceEngine.Products.csproj" />
@@ -20,10 +21,13 @@
     <ProjectReference Include="..\InsuranceEngine.Endorsements\InsuranceEngine.Endorsements.csproj" />
     <ProjectReference Include="..\InsuranceEngine.FraudDetection\InsuranceEngine.FraudDetection.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="Grpc.AspNetCore" Version="2.76.0" />
     <PackageReference Include="Grpc.AspNetCore.Server.Reflection" Version="2.76.0" />
+    <PackageReference Include="Hangfire.AspNetCore" Version="1.8.23" />
+    <PackageReference Include="Hangfire.PostgreSql" Version="1.21.1" />
     <PackageReference Include="MediatR" Version="14.1.0" />
     <PackageReference Include="Microsoft.AspNetCore.Grpc.JsonTranscoding" Version="10.0.5" />
     <PackageReference Include="Microsoft.AspNetCore.Grpc.Swagger" Version="0.10.5" />

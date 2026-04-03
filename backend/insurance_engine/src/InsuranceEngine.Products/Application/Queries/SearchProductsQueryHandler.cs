@@ -4,7 +4,7 @@ using Insuretech.Products.Services.V1;
 using Insuretech.Products.Entity.V1;
 using Insuretech.Common.V1;
 using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
+using InsuranceEngine.Products.Domain.Entities;
 using Google.Protobuf.WellKnownTypes;
 using System.Linq.Expressions;
 using Microsoft.EntityFrameworkCore;

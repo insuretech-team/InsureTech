@@ -41,11 +41,17 @@ public class PolicyEntity
     [Column("premium_amount")]
     public long PremiumAmount { get; set; }
 
+    [NotMapped]
+    public long Premium { get => PremiumAmount; set => PremiumAmount = value; }
+
     [Column("premium_currency")]
     public string PremiumCurrency { get; set; } = "BDT";
 
-    [Column("sum_insured")]
-    public long SumInsured { get; set; }
+    [Column("sum_insured_amount")]
+    public long SumInsuredAmount { get; set; }
+
+    [NotMapped]
+    public long SumInsured { get => SumInsuredAmount; set => SumInsuredAmount = value; }
 
     [Column("sum_insured_currency")]
     public string SumInsuredCurrency { get; set; } = "BDT";
@@ -68,14 +74,32 @@ public class PolicyEntity
     [Column("payment_frequency")]
     public string? PaymentFrequency { get; set; }
 
-    [Column("vat_tax")]
-    public long? VatTax { get; set; }
+    [Column("vat_tax_amount")]
+    public long? VatTaxAmount { get; set; }
 
-    [Column("service_fee")]
-    public long? ServiceFee { get; set; }
+    [NotMapped]
+    public long? VatTax { get => VatTaxAmount; set => VatTaxAmount = value; }
 
-    [Column("total_payable")]
-    public long? TotalPayable { get; set; }
+    [Column("vat_tax_currency")]
+    public string VatTaxCurrency { get; set; } = "BDT";
+
+    [Column("service_fee_amount")]
+    public long? ServiceFeeAmount { get; set; }
+
+    [NotMapped]
+    public long? ServiceFee { get => ServiceFeeAmount; set => ServiceFeeAmount = value; }
+
+    [Column("service_fee_currency")]
+    public string ServiceFeeCurrency { get; set; } = "BDT";
+
+    [Column("total_payable_amount")]
+    public long? TotalPayableAmount { get; set; }
+
+    [NotMapped]
+    public long? TotalPayable { get => TotalPayableAmount; set => TotalPayableAmount = value; }
+
+    [Column("total_payable_currency")]
+    public string TotalPayableCurrency { get; set; } = "BDT";
 
     [Column("payment_gateway_reference")]
     public string? PaymentGatewayReference { get; set; }
@@ -98,15 +122,6 @@ public class PolicyEntity
     [Column("enrollment_start_date")]
     public DateTime? EnrollmentStartDate { get; set; }
 
-    [Column("auto_renewal_enabled")]
-    public bool AutoRenewalEnabled { get; set; }
-
-    [Column("auto_renewal_count")]
-    public int AutoRenewalCount { get; set; }
-
-    [Column("certificate_url")]
-    public string? CertificateUrl { get; set; }
-
     [Column("enrollment_end_date")]
     public DateTime? EnrollmentEndDate { get; set; }
 
@@ -122,8 +137,10 @@ public class PolicyEntity
     [Column("deleted_at")]
     public DateTime? DeletedAt { get; set; }
 
+    [Column("cancellation_approvals")]
+    public string? CancellationApprovals { get; set; } // JSONB
+
     // Navigation properties
-    public ProductEntity Product { get; set; } = null!;
     public ICollection<PolicyNomineeEntity> Nominees { get; set; } = new List<PolicyNomineeEntity>();
     public ICollection<PolicyRiderEntity> Riders { get; set; } = new List<PolicyRiderEntity>();
     public ICollection<ClaimEntity> Claims { get; set; } = new List<ClaimEntity>();

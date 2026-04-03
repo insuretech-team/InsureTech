@@ -2,27 +2,20 @@ using MediatR;
 using Microsoft.Extensions.Logging;
 using Insuretech.Beneficiary.Services.V1;
 using Insuretech.Common.V1;
-using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
+using InsuranceEngine.Grpc.Gateways;
 
 namespace InsuranceEngine.Beneficiary.Application.Commands;
 
 public sealed class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<CreateBusinessBeneficiaryCommand, CreateBusinessBeneficiaryResponse>
 {
-    private readonly IRepository<BeneficiaryEntity> _beneficiaryRepo;
-    private readonly IRepository<BusinessBeneficiaryEntity> _businessRepo;
+    private readonly IBeneficiaryDataGateway _gateway;
     private readonly ILogger<CreateBusinessBeneficiaryCommandHandler> _logger;
 
     public CreateBusinessBeneficiaryCommandHandler(
-        IRepository<BeneficiaryEntity> beneficiaryRepo,
-        IRepository<BusinessBeneficiaryEntity> businessRepo,
+        IBeneficiaryDataGateway gateway,
         ILogger<CreateBusinessBeneficiaryCommandHandler> logger)
     {
-        _beneficiaryRepo = beneficiaryRepo;
-        _businessRepo = businessRepo;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -30,54 +23,37 @@ public sealed class CreateBusinessBeneficiaryCommandHandler : IRequestHandler<Cr
     {
         try
         {
-            var exists = await _businessRepo.ExistsAsync(x => x.TradeLicenseNumber == request.TradeLicenseNumber, cancellationToken);
-            if (exists)
-                return new CreateBusinessBeneficiaryResponse { Error = new Error { Code = "DUPLICATE_BUSINESS", Message = "Business with this Trade License already exists" } };
+            _logger.LogInformation("Creating business beneficiary for user: {UserId}", request.UserId);
 
-            var beneficiaryId = Guid.NewGuid();
-            var code = $"BEN-B-{Guid.NewGuid().ToString()[..8].ToUpper()}";
-
-            var beneficiary = new BeneficiaryEntity
+            var grpcRequest = new CreateBusinessBeneficiaryRequest
             {
-                BeneficiaryId = beneficiaryId,
-                UserId = Guid.Parse(request.UserId),
-                Type = "BUSINESS",
-                Code = code,
-                Status = "PENDING_KYC",
-                KycStatus = "NOT_STARTED",
-                PartnerId = string.IsNullOrEmpty(request.PartnerId) ? null : Guid.Parse(request.PartnerId),
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
-            };
-
-            var business = new BusinessBeneficiaryEntity
-            {
-                BeneficiaryId = Guid.NewGuid(),
-                ParentBeneficiaryId = beneficiaryId,
+                UserId = request.UserId,
                 BusinessName = request.BusinessName,
                 TradeLicenseNumber = request.TradeLicenseNumber,
                 TinNumber = request.TinNumber,
                 FocalPersonName = request.FocalPersonName,
-                FocalPersonContact = $"{{\"mobile\":\"{request.FocalPersonMobile}\"}}",
-                BusinessType = "PRIVATE_LIMITED", // Default
-                CreatedAt = DateTime.UtcNow,
-                UpdatedAt = DateTime.UtcNow
+                FocalPersonMobile = request.FocalPersonMobile,
+                PartnerId = request.PartnerId ?? ""
             };
 
-            await _beneficiaryRepo.AddAsync(beneficiary, cancellationToken);
-            await _businessRepo.AddAsync(business, cancellationToken);
-
-            return new CreateBusinessBeneficiaryResponse
+            var response = await _gateway.CreateBusinessBeneficiaryAsync(grpcRequest, cancellationToken);
+            
+            if (response.Error != null)
             {
-                BeneficiaryId = beneficiaryId.ToString(),
-                BeneficiaryCode = code,
-                Message = "Business beneficiary created successfully"
-            };
+                _logger.LogWarning("Business beneficiary creation failed: {ErrorCode} - {ErrorMessage}", response.Error.Code, response.Error.Message);
+            }
+            else
+            {
+                _logger.LogInformation("Business beneficiary created successfully: {BeneficiaryId} ({BeneficiaryCode})", 
+                    response.BeneficiaryId, response.BeneficiaryCode);
+            }
+
+            return response;
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to create business beneficiary");
-            return new CreateBusinessBeneficiaryResponse { Error = new Error { Code = "INTERNAL_ERROR", Message = ex.Message } };
+            _logger.LogError(ex, "Failed to create business beneficiary via gateway");
+            return new CreateBusinessBeneficiaryResponse { Error = new Error { Code = "GATEWAY_ERROR", Message = ex.Message } };
         }
     }
 }

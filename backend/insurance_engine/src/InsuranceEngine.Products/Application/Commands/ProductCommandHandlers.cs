@@ -1,19 +1,20 @@
 using MediatR;
 using Microsoft.Extensions.Logging;
 using InsuranceEngine.SharedKernel.CQRS;
-using InsuranceEngine.SharedKernel.Persistence;
-using InsuranceEngine.SharedKernel.Persistence.Entities;
+using InsuranceEngine.Grpc.Gateways;
+using Insuretech.Products.Entity.V1;
+using Insuretech.Common.V1;
 
 namespace InsuranceEngine.Products.Application.Commands;
 
 public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductCommand, Result<bool>>
 {
-    private readonly IRepository<ProductEntity> _repository;
+    private readonly IProductDataGateway _gateway;
     private readonly ILogger<UpdateProductCommandHandler> _logger;
 
-    public UpdateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<UpdateProductCommandHandler> logger)
+    public UpdateProductCommandHandler(IProductDataGateway gateway, ILogger<UpdateProductCommandHandler> logger)
     {
-        _repository = repository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -21,23 +22,29 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
     {
         try
         {
-            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            var product = await _gateway.GetProductAsync(request.ProductId, cancellationToken);
             if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
 
-            // Update fields
+            // Update fields in the Proto object
             if (request.ProductName != null) product.ProductName = request.ProductName;
             if (request.Description != null) product.Description = request.Description;
-            if (request.BasePremium.HasValue) product.BasePremium = (long)(request.BasePremium.Value * 100);
-            if (request.MinSumInsured.HasValue) product.MinSumInsured = (long)(request.MinSumInsured.Value * 100);
-            if (request.MaxSumInsured.HasValue) product.MaxSumInsured = (long)(request.MaxSumInsured.Value * 100);
+            
+            if (request.BasePremium.HasValue) 
+                product.BasePremium = new Money { Amount = (long)(request.BasePremium.Value * 100), Currency = "BDT" };
+            
+            if (request.MinSumInsured.HasValue) 
+                product.MinSumInsured = new Money { Amount = (long)(request.MinSumInsured.Value * 100), Currency = "BDT" };
+            
+            if (request.MaxSumInsured.HasValue) 
+                product.MaxSumInsured = new Money { Amount = (long)(request.MaxSumInsured.Value * 100), Currency = "BDT" };
+            
             if (request.MinTenureMonths.HasValue) product.MinTenureMonths = request.MinTenureMonths.Value;
             if (request.MaxTenureMonths.HasValue) product.MaxTenureMonths = request.MaxTenureMonths.Value;
             
-            product.UpdatedAt = DateTime.UtcNow;
-            await _repository.UpdateAsync(product, cancellationToken);
+            await _gateway.UpdateProductAsync(product, cancellationToken);
 
-            _logger.LogInformation("Product updated: {ProductId}", request.ProductId);
+            _logger.LogInformation("Product updated via Go Gateway: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
         }
         catch (Exception ex)
@@ -50,12 +57,12 @@ public sealed class UpdateProductCommandHandler : IRequestHandler<UpdateProductC
 
 public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProductCommand, Result<bool>>
 {
-    private readonly IRepository<ProductEntity> _repository;
+    private readonly IProductDataGateway _gateway;
     private readonly ILogger<ActivateProductCommandHandler> _logger;
 
-    public ActivateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<ActivateProductCommandHandler> logger)
+    public ActivateProductCommandHandler(IProductDataGateway gateway, ILogger<ActivateProductCommandHandler> logger)
     {
-        _repository = repository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -63,13 +70,12 @@ public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProd
     {
         try
         {
-            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            var product = await _gateway.GetProductAsync(request.ProductId, cancellationToken);
             if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
 
-            product.Status = "ACTIVE";
-            product.UpdatedAt = DateTime.UtcNow;
-            await _repository.UpdateAsync(product, cancellationToken);
+            product.Status = ProductStatus.Active;
+            await _gateway.UpdateProductAsync(product, cancellationToken);
 
             _logger.LogInformation("Product activated: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
@@ -84,12 +90,12 @@ public sealed class ActivateProductCommandHandler : IRequestHandler<ActivateProd
 
 public sealed class DeactivateProductCommandHandler : IRequestHandler<DeactivateProductCommand, Result<bool>>
 {
-    private readonly IRepository<ProductEntity> _repository;
+    private readonly IProductDataGateway _gateway;
     private readonly ILogger<DeactivateProductCommandHandler> _logger;
 
-    public DeactivateProductCommandHandler(IRepository<ProductEntity> repository, ILogger<DeactivateProductCommandHandler> logger)
+    public DeactivateProductCommandHandler(IProductDataGateway gateway, ILogger<DeactivateProductCommandHandler> logger)
     {
-        _repository = repository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -97,13 +103,12 @@ public sealed class DeactivateProductCommandHandler : IRequestHandler<Deactivate
     {
         try
         {
-            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            var product = await _gateway.GetProductAsync(request.ProductId, cancellationToken);
             if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
 
-            product.Status = "INACTIVE";
-            product.UpdatedAt = DateTime.UtcNow;
-            await _repository.UpdateAsync(product, cancellationToken);
+            product.Status = ProductStatus.Inactive;
+            await _gateway.UpdateProductAsync(product, cancellationToken);
 
             _logger.LogInformation("Product deactivated: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);
@@ -118,12 +123,12 @@ public sealed class DeactivateProductCommandHandler : IRequestHandler<Deactivate
 
 public sealed class DiscontinueProductCommandHandler : IRequestHandler<DiscontinueProductCommand, Result<bool>>
 {
-    private readonly IRepository<ProductEntity> _repository;
+    private readonly IProductDataGateway _gateway;
     private readonly ILogger<DiscontinueProductCommandHandler> _logger;
 
-    public DiscontinueProductCommandHandler(IRepository<ProductEntity> repository, ILogger<DiscontinueProductCommandHandler> logger)
+    public DiscontinueProductCommandHandler(IProductDataGateway gateway, ILogger<DiscontinueProductCommandHandler> logger)
     {
-        _repository = repository;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -131,13 +136,12 @@ public sealed class DiscontinueProductCommandHandler : IRequestHandler<Discontin
     {
         try
         {
-            var product = await _repository.GetByIdAsync(Guid.Parse(request.ProductId), cancellationToken);
+            var product = await _gateway.GetProductAsync(request.ProductId, cancellationToken);
             if (product == null)
                 return Result<bool>.NotFound("PRODUCT_NOT_FOUND", "Product not found");
 
-            product.Status = "DISCONTINUED";
-            product.UpdatedAt = DateTime.UtcNow;
-            await _repository.UpdateAsync(product, cancellationToken);
+            product.Status = ProductStatus.Discontinued;
+            await _gateway.UpdateProductAsync(product, cancellationToken);
 
             _logger.LogInformation("Product discontinued: {ProductId}", request.ProductId);
             return Result<bool>.Ok(true);

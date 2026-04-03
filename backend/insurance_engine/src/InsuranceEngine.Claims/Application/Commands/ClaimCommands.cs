@@ -16,7 +16,8 @@ public sealed record ApproveClaimCommand(
     string ClaimId, 
     string ApproverId, 
     decimal ApprovedAmount,
-    string? Notes = null) : IRequest<ApproveClaimResponse>;
+    string? Notes = null,
+    string? Role = null) : IRequest<ApproveClaimResponse>;
 
 public sealed record RejectClaimCommand(
     string ClaimId, 

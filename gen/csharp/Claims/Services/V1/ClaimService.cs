@@ -149,7 +149,7 @@ namespace Insuretech.Claims.Services.V1 {
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.ListUserClaimsResponse), global::Insuretech.Claims.Services.V1.ListUserClaimsResponse.Parser, new[]{ "Claims", "TotalCount", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.UploadDocumentRequest), global::Insuretech.Claims.Services.V1.UploadDocumentRequest.Parser, new[]{ "ClaimId", "DocumentType", "FileData", "FileName", "MimeType" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.UploadDocumentResponse), global::Insuretech.Claims.Services.V1.UploadDocumentResponse.Parser, new[]{ "DocumentId", "DocumentUrl", "FileHash", "Error" }, null, null, null, null),
-            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.ApproveClaimRequest), global::Insuretech.Claims.Services.V1.ApproveClaimRequest.Parser, new[]{ "ClaimId", "ApproverId", "ApprovedAmount", "Notes" }, null, null, null, null),
+            new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.ApproveClaimRequest), global::Insuretech.Claims.Services.V1.ApproveClaimRequest.Parser, new[]{ "ClaimId", "ApproverId", "ApprovedAmount", "Notes", "Role" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.ApproveClaimResponse), global::Insuretech.Claims.Services.V1.ApproveClaimResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.RejectClaimRequest), global::Insuretech.Claims.Services.V1.RejectClaimRequest.Parser, new[]{ "ClaimId", "ApproverId", "Reason" }, null, null, null, null),
             new pbr::GeneratedClrTypeInfo(typeof(global::Insuretech.Claims.Services.V1.RejectClaimResponse), global::Insuretech.Claims.Services.V1.RejectClaimResponse.Parser, new[]{ "Message", "Error" }, null, null, null, null),
@@ -2646,6 +2646,7 @@ namespace Insuretech.Claims.Services.V1 {
       approverId_ = other.approverId_;
       approvedAmount_ = other.approvedAmount_ != null ? other.approvedAmount_.Clone() : null;
       notes_ = other.notes_;
+      role_ = other.role_;
       _unknownFields = pb::UnknownFieldSet.Clone(other._unknownFields);
     }
 
@@ -2703,6 +2704,18 @@ namespace Insuretech.Claims.Services.V1 {
       }
     }
 
+    /// <summary>Field number for the "role" field.</summary>
+    public const int RoleFieldNumber = 5;
+    private string role_ = "";
+    [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
+    [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
+    public string Role {
+      get { return role_; }
+      set {
+        role_ = pb::ProtoPreconditions.CheckNotNull(value, "value");
+      }
+    }
+
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute]
     [global::System.CodeDom.Compiler.GeneratedCode("protoc", null)]
     public override bool Equals(object other) {
@@ -2722,6 +2735,7 @@ namespace Insuretech.Claims.Services.V1 {
       if (ApproverId != other.ApproverId) return false;
       if (!object.Equals(ApprovedAmount, other.ApprovedAmount)) return false;
       if (Notes != other.Notes) return false;
+      if (Role != other.Role) return false;
       return Equals(_unknownFields, other._unknownFields);
     }
 
@@ -2733,6 +2747,7 @@ namespace Insuretech.Claims.Services.V1 {
       if (ApproverId.Length != 0) hash ^= ApproverId.GetHashCode();
       if (approvedAmount_ != null) hash ^= ApprovedAmount.GetHashCode();
       if (Notes.Length != 0) hash ^= Notes.GetHashCode();
+      if (Role.Length != 0) hash ^= Role.GetHashCode();
       if (_unknownFields != null) {
         hash ^= _unknownFields.GetHashCode();
       }

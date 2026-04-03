@@ -80,6 +80,10 @@ namespace Insuretech.Policy.Services.V1 {
     static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.IssuePolicyRequest> __Marshaller_insuretech_policy_services_v1_IssuePolicyRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.IssuePolicyRequest.Parser));
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.IssuePolicyResponse> __Marshaller_insuretech_policy_services_v1_IssuePolicyResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.IssuePolicyResponse.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.ApproveCancellationRequest> __Marshaller_insuretech_policy_services_v1_ApproveCancellationRequest = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.ApproveCancellationRequest.Parser));
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Marshaller<global::Insuretech.Policy.Services.V1.ApproveCancellationResponse> __Marshaller_insuretech_policy_services_v1_ApproveCancellationResponse = grpc::Marshallers.Create(__Helper_SerializeMessage, context => __Helper_DeserializeMessage(context, global::Insuretech.Policy.Services.V1.ApproveCancellationResponse.Parser));
 
     [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
     static readonly grpc::Method<global::Insuretech.Policy.Services.V1.CreatePolicyRequest, global::Insuretech.Policy.Services.V1.CreatePolicyResponse> __Method_CreatePolicy = new grpc::Method<global::Insuretech.Policy.Services.V1.CreatePolicyRequest, global::Insuretech.Policy.Services.V1.CreatePolicyResponse>(
@@ -144,6 +148,14 @@ namespace Insuretech.Policy.Services.V1 {
         "IssuePolicy",
         __Marshaller_insuretech_policy_services_v1_IssuePolicyRequest,
         __Marshaller_insuretech_policy_services_v1_IssuePolicyResponse);
+
+    [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+    static readonly grpc::Method<global::Insuretech.Policy.Services.V1.ApproveCancellationRequest, global::Insuretech.Policy.Services.V1.ApproveCancellationResponse> __Method_ApproveCancellation = new grpc::Method<global::Insuretech.Policy.Services.V1.ApproveCancellationRequest, global::Insuretech.Policy.Services.V1.ApproveCancellationResponse>(
+        grpc::MethodType.Unary,
+        __ServiceName,
+        "ApproveCancellation",
+        __Marshaller_insuretech_policy_services_v1_ApproveCancellationRequest,
+        __Marshaller_insuretech_policy_services_v1_ApproveCancellationResponse);
 
     /// <summary>Service descriptor</summary>
     public static global::Google.Protobuf.Reflection.ServiceDescriptor Descriptor
@@ -247,6 +259,15 @@ namespace Insuretech.Policy.Services.V1 {
       /// <returns>The response to send back to the client (wrapped by a task).</returns>
       [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
       public virtual global::System.Threading.Tasks.Task<global::Insuretech.Policy.Services.V1.IssuePolicyResponse> IssuePolicy(global::Insuretech.Policy.Services.V1.IssuePolicyRequest request, grpc::ServerCallContext context)
+      {
+        throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
+      }
+
+      /// <summary>
+      /// Approve policy cancellation
+      /// </summary>
+      [global::System.CodeDom.Compiler.GeneratedCode("grpc_csharp_plugin", null)]
+      public virtual global::System.Threading.Tasks.Task<global::Insuretech.Policy.Services.V1.ApproveCancellationResponse> ApproveCancellation(global::Insuretech.Policy.Services.V1.ApproveCancellationRequest request, grpc::ServerCallContext context)
       {
         throw new grpc::RpcException(new grpc::Status(grpc::StatusCode.Unimplemented, ""));
       }
@@ -685,7 +706,8 @@ namespace Insuretech.Policy.Services.V1 {
           .AddMethod(__Method_CancelPolicy, serviceImpl.CancelPolicy)
           .AddMethod(__Method_RenewPolicy, serviceImpl.RenewPolicy)
           .AddMethod(__Method_GeneratePolicyDocument, serviceImpl.GeneratePolicyDocument)
-          .AddMethod(__Method_IssuePolicy, serviceImpl.IssuePolicy).Build();
+          .AddMethod(__Method_IssuePolicy, serviceImpl.IssuePolicy)
+          .AddMethod(__Method_ApproveCancellation, serviceImpl.ApproveCancellation).Build();
     }
 
     /// <summary>Register service method with a service binder with or without implementation. Useful when customizing the service binding logic.
@@ -703,6 +725,7 @@ namespace Insuretech.Policy.Services.V1 {
       serviceBinder.AddMethod(__Method_RenewPolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.RenewPolicyTenureRequest, global::Insuretech.Policy.Services.V1.RenewPolicyTenureResponse>(serviceImpl.RenewPolicy));
       serviceBinder.AddMethod(__Method_GeneratePolicyDocument, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentRequest, global::Insuretech.Policy.Services.V1.GeneratePolicyDocumentResponse>(serviceImpl.GeneratePolicyDocument));
       serviceBinder.AddMethod(__Method_IssuePolicy, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.IssuePolicyRequest, global::Insuretech.Policy.Services.V1.IssuePolicyResponse>(serviceImpl.IssuePolicy));
+      serviceBinder.AddMethod(__Method_ApproveCancellation, serviceImpl == null ? null : new grpc::UnaryServerMethod<global::Insuretech.Policy.Services.V1.ApproveCancellationRequest, global::Insuretech.Policy.Services.V1.ApproveCancellationResponse>(serviceImpl.ApproveCancellation));
     }
 
   }

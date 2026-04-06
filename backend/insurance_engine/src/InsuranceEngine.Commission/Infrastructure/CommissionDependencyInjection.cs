@@ -1,13 +1,17 @@
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.EntityFrameworkCore;
 using InsuranceEngine.Commission.Infrastructure;
+
 namespace InsuranceEngine.Commission;
 
 public static class CommissionDependencyInjection
 {
-    public static IServiceCollection AddCommissionModule(this IServiceCollection services)
+    public static IServiceCollection AddCommissionModule(this IServiceCollection services, string connectionString)
     {
-        // Data Gateways (PoliSync Standard)
-        services.AddScoped<ICommissionDataGateway, GoCommissionDataGateway>();
+        services.AddDbContext<CommissionDbContext>(options =>
+            options.UseNpgsql(connectionString));
+
+        services.AddScoped<ICommissionDataGateway, SqlCommissionDataGateway>();
         
         return services;
     }

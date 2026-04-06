@@ -31,6 +31,18 @@ public class InsuranceDbContext : DbContext
     public DbSet<BeneficiaryEntity> Beneficiaries => Set<BeneficiaryEntity>();
     public DbSet<IndividualBeneficiaryEntity> IndividualBeneficiaries => Set<IndividualBeneficiaryEntity>();
     public DbSet<BusinessBeneficiaryEntity> BusinessBeneficiaries => Set<BusinessBeneficiaryEntity>();
+    
+    // ===== Endorsement Tables =====
+    public DbSet<EndorsementEntity> Endorsements => Set<EndorsementEntity>();
+    public DbSet<EndorsementDocumentEntity> EndorsementDocuments => Set<EndorsementDocumentEntity>();
+    
+    // ===== Fraud Alert Tables =====
+    public DbSet<FraudAlertEntity> FraudAlerts => Set<FraudAlertEntity>();
+    public DbSet<FraudDashboardSummaryEntity> FraudDashboardSummaries => Set<FraudDashboardSummaryEntity>();
+    
+    // ===== Cancellation Tables =====
+    public DbSet<CancellationEntity> Cancellations => Set<CancellationEntity>();
+    public DbSet<RefundEntity> Refunds => Set<RefundEntity>();
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -636,6 +648,150 @@ public class InsuranceDbContext : DbContext
             entity.HasIndex(e => e.ParentBeneficiaryId).IsUnique().HasDatabaseName("idx_business_beneficiaries_parent_beneficiary_id");
             entity.HasIndex(e => e.TradeLicenseNumber).IsUnique().HasDatabaseName("idx_business_beneficiaries_trade_license");
             entity.HasIndex(e => e.TinNumber).IsUnique().HasDatabaseName("idx_business_beneficiaries_tin");
+        });
+
+        // ===== Endorsement Configuration =====
+        modelBuilder.Entity<EndorsementEntity>(entity =>
+        {
+            entity.ToTable("endorsements");
+            entity.HasKey(e => e.EndorsementId);
+            entity.Property(e => e.EndorsementId).HasColumnName("endorsement_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.EndorsementNumber).HasColumnName("endorsement_number").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
+            entity.Property(e => e.Type).HasColumnName("type").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
+            entity.Property(e => e.Reason).HasColumnName("reason");
+            entity.Property(e => e.Changes).HasColumnName("changes").HasColumnType("JSONB");
+            entity.Property(e => e.OldSumAssured).HasColumnName("old_sum_assured");
+            entity.Property(e => e.NewSumAssured).HasColumnName("new_sum_assured");
+            entity.Property(e => e.RefundAmount).HasColumnName("refund_amount");
+            entity.Property(e => e.AdditionalPremium).HasColumnName("additional_premium");
+            entity.Property(e => e.EffectiveDate).HasColumnName("effective_date");
+            entity.Property(e => e.ApprovedBy).HasColumnName("approved_by");
+            entity.Property(e => e.RejectedBy).HasColumnName("rejected_by");
+            entity.Property(e => e.RejectionReason).HasColumnName("rejection_reason");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.EndorsementNumber).IsUnique().HasDatabaseName("idx_endorsements_number");
+            entity.HasIndex(e => e.PolicyId).HasDatabaseName("idx_endorsements_policy_id");
+            entity.HasIndex(e => e.Status).HasDatabaseName("idx_endorsements_status");
+            entity.HasOne(e => e.Policy).WithMany().HasForeignKey(x => x.PolicyId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ===== Endorsement Document Configuration =====
+        modelBuilder.Entity<EndorsementDocumentEntity>(entity =>
+        {
+            entity.ToTable("endorsement_documents");
+            entity.HasKey(e => e.DocumentId);
+            entity.Property(e => e.DocumentId).HasColumnName("document_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.EndorsementId).HasColumnName("endorsement_id").IsRequired();
+            entity.Property(e => e.DocumentType).HasColumnName("document_type").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.DocumentNumber).HasColumnName("document_number").HasMaxLength(50);
+            entity.Property(e => e.FileUrl).HasColumnName("file_url").HasMaxLength(500);
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
+            entity.Property(e => e.GeneratedAt).HasColumnName("generated_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.EndorsementId).HasDatabaseName("idx_endorsement_documents_endorsement_id");
+            entity.HasOne(e => e.Endorsement).WithMany().HasForeignKey(x => x.EndorsementId).OnDelete(DeleteBehavior.Cascade);
+        });
+
+        // ===== Fraud Alert Configuration =====
+        modelBuilder.Entity<FraudAlertEntity>(entity =>
+        {
+            entity.ToTable("fraud_alerts");
+            entity.HasKey(e => e.AlertId);
+            entity.Property(e => e.AlertId).HasColumnName("alert_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.AlertNumber).HasColumnName("alert_number").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.EntityType).HasColumnName("entity_type").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.EntityId).HasColumnName("entity_id").IsRequired();
+            entity.Property(e => e.AlertType).HasColumnName("alert_type").HasMaxLength(100).IsRequired();
+            entity.Property(e => e.Severity).HasColumnName("severity").HasMaxLength(20).IsRequired();
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("OPEN").IsRequired();
+            entity.Property(e => e.Description).HasColumnName("description");
+            entity.Property(e => e.FraudScore).HasColumnName("fraud_score").IsRequired();
+            entity.Property(e => e.RecommendedAction).HasColumnName("recommended_action");
+            entity.Property(e => e.ResolvedBy).HasColumnName("resolved_by");
+            entity.Property(e => e.ResolutionNotes).HasColumnName("resolution_notes");
+            entity.Property(e => e.ResolvedAt).HasColumnName("resolved_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.AlertNumber).IsUnique().HasDatabaseName("idx_fraud_alerts_number");
+            entity.HasIndex(e => e.EntityId).HasDatabaseName("idx_fraud_alerts_entity_id");
+            entity.HasIndex(e => e.Status).HasDatabaseName("idx_fraud_alerts_status");
+            entity.HasIndex(e => e.Severity).HasDatabaseName("idx_fraud_alerts_severity");
+        });
+
+        // ===== Fraud Dashboard Summary Configuration =====
+        modelBuilder.Entity<FraudDashboardSummaryEntity>(entity =>
+        {
+            entity.ToTable("fraud_dashboard_summaries");
+            entity.HasKey(e => e.SummaryId);
+            entity.Property(e => e.SummaryId).HasColumnName("summary_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.SummaryDate).HasColumnName("summary_date").IsRequired();
+            entity.Property(e => e.TotalFlagsToday).HasColumnName("total_flags_today").IsRequired();
+            entity.Property(e => e.HighRiskFlags).HasColumnName("high_risk_flags").IsRequired();
+            entity.Property(e => e.MediumRiskFlags).HasColumnName("medium_risk_flags").IsRequired();
+            entity.Property(e => e.LowRiskFlags).HasColumnName("low_risk_flags").IsRequired();
+            entity.Property(e => e.PendingReviewCount).HasColumnName("pending_review_count").IsRequired();
+            entity.Property(e => e.ResolvedCount).HasColumnName("resolved_count").IsRequired();
+            entity.Property(e => e.AverageFraudScore).HasColumnName("average_fraud_score").IsRequired();
+            entity.Property(e => e.TopFraudTypes).HasColumnName("top_fraud_types");
+            entity.Property(e => e.GeneratedAt).HasColumnName("generated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.SummaryDate).IsUnique().HasDatabaseName("idx_fraud_dashboard_summaries_date");
+        });
+
+        // ===== Cancellation Configuration =====
+        modelBuilder.Entity<CancellationEntity>(entity =>
+        {
+            entity.ToTable("cancellations");
+            entity.HasKey(e => e.CancellationId);
+            entity.Property(e => e.CancellationId).HasColumnName("cancellation_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.CancellationNumber).HasColumnName("cancellation_number").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
+            entity.Property(e => e.CancellationType).HasColumnName("cancellation_type").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.Reason).HasColumnName("reason");
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
+            entity.Property(e => e.RefundAmount).HasColumnName("refund_amount");
+            entity.Property(e => e.RefundStatus).HasColumnName("refund_status").HasMaxLength(50);
+            entity.Property(e => e.EffectiveDate).HasColumnName("effective_date");
+            entity.Property(e => e.ApprovedBy).HasColumnName("approved_by");
+            entity.Property(e => e.RejectedBy).HasColumnName("rejected_by");
+            entity.Property(e => e.RejectionReason).HasColumnName("rejection_reason");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.CancellationNumber).IsUnique().HasDatabaseName("idx_cancellations_number");
+            entity.HasIndex(e => e.PolicyId).HasDatabaseName("idx_cancellations_policy_id");
+            entity.HasIndex(e => e.Status).HasDatabaseName("idx_cancellations_status");
+        });
+
+        // ===== Refund Configuration =====
+        modelBuilder.Entity<RefundEntity>(entity =>
+        {
+            entity.ToTable("refunds");
+            entity.HasKey(e => e.RefundId);
+            entity.Property(e => e.RefundId).HasColumnName("refund_id").HasDefaultValueSql("gen_random_uuid()");
+            entity.Property(e => e.RefundNumber).HasColumnName("refund_number").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.CancellationId).HasColumnName("cancellation_id").IsRequired();
+            entity.Property(e => e.PolicyId).HasColumnName("policy_id").IsRequired();
+            entity.Property(e => e.RefundType).HasColumnName("refund_type").HasMaxLength(50).IsRequired();
+            entity.Property(e => e.RefundAmount).HasColumnName("refund_amount").IsRequired();
+            entity.Property(e => e.RefundCurrency).HasColumnName("refund_currency").HasMaxLength(3).HasDefaultValue("BDT").IsRequired();
+            entity.Property(e => e.Status).HasColumnName("status").HasMaxLength(50).HasDefaultValue("PENDING").IsRequired();
+            entity.Property(e => e.PaymentMethod).HasColumnName("payment_method").HasMaxLength(50);
+            entity.Property(e => e.PaymentReference).HasColumnName("payment_reference").HasMaxLength(255);
+            entity.Property(e => e.ProcessedAt).HasColumnName("processed_at");
+            entity.Property(e => e.CreatedAt).HasColumnName("created_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+            entity.Property(e => e.UpdatedAt).HasColumnName("updated_at").HasDefaultValueSql("CURRENT_TIMESTAMP").IsRequired();
+
+            entity.HasIndex(e => e.RefundNumber).IsUnique().HasDatabaseName("idx_refunds_number");
+            entity.HasIndex(e => e.CancellationId).HasDatabaseName("idx_refunds_cancellation_id");
+            entity.HasIndex(e => e.PolicyId).HasDatabaseName("idx_refunds_policy_id");
+            entity.HasIndex(e => e.Status).HasDatabaseName("idx_refunds_status");
         });
     }
 }

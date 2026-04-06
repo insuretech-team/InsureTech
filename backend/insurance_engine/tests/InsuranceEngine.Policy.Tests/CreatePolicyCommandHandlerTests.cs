@@ -122,8 +122,8 @@ public class CreatePolicyCommandHandlerTests
                 Relationship = "Child",
                 SharePercentage = 50,
                 DateOfBirth = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(new DateTime(2015, 5, 15).ToUniversalTime()),
-                NidNumber = null,
-                PhoneNumber = null
+                NidNumber = "",
+                PhoneNumber = ""
             }
         };
 

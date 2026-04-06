@@ -1,6 +1,3 @@
-using System.Text.Json;
-using Google.Protobuf;
-using Google.Protobuf.WellKnownTypes;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -108,28 +105,26 @@ public class FraudDetectionService : IFraudDetectionService
             }
         }
 
-        var goResponse = await _gateway.CheckFraudAsync(new Insuretech.Fraud.Services.V1.CheckFraudRequest
+        var fraudCheck = new InsuranceEngine.SharedKernel.Persistence.Entities.FraudCheckEntity
         {
+            FraudCheckId = Guid.NewGuid().ToString(),
             EntityId = request.EntityId,
             EntityType = request.EntityType,
-            Data = FraudDetectionExtensions.ConvertToStruct(request.Metadata ?? new Dictionary<string, string>())
-        }, ct);
+            CheckType = "COMPREHENSIVE",
+            FraudScore = 0,
+            RiskLevel = "LOW",
+            Flagged = false,
+            ClaimId = request.ClaimId,
+            CustomerId = request.CustomerId,
+            CheckedAt = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow
+        };
 
-        if (goResponse.IsFraudDetected)
-        {
-            indicators.Add(new FraudIndicator
-            {
-                Code = "GO_BACKEND",
-                Description = "Go backend fraud detection triggered",
-                ScoreContribution = goResponse.FraudScore,
-                Severity = goResponse.RiskLevel,
-                FrId = "FR-175-FR-181"
-            });
-        }
+        await _gateway.CreateFraudCheckAsync(fraudCheck, ct);
 
         result.Indicators = indicators;
         result.FraudScore = indicators.Sum(i => i.ScoreContribution);
-        result.IsFraudDetected = result.FraudScore >= 50 || goResponse.IsFraudDetected;
+        result.IsFraudDetected = result.FraudScore >= 50;
         result.RiskLevel = DetermineRiskLevel(result.FraudScore);
         result.Recommendation = GenerateRecommendation(result);
 
@@ -155,11 +150,12 @@ public class FraudDetectionService : IFraudDetectionService
         {
             CustomerId = customerId,
             TotalClaimsInPeriod = recentClaims.Count,
-            TotalClaimAmount = recentClaims.Sum(c => c.ClaimAmount)
+            TotalClaimAmount = recentClaims.Sum(c => c.ClaimAmount ?? 0)
         };
 
         var claimTypeGroups = recentClaims
-            .GroupBy(c => c.ClaimType)
+            .Where(c => !string.IsNullOrEmpty(c.ClaimType))
+            .GroupBy(c => c.ClaimType!)
             .ToList();
 
         foreach (var group in claimTypeGroups)
@@ -168,8 +164,8 @@ public class FraudDetectionService : IFraudDetectionService
             {
                 ClaimType = group.Key,
                 Count = group.Count(),
-                TotalAmount = group.Sum(c => c.ClaimAmount),
-                ClaimIds = group.Select(c => c.ClaimId).ToList()
+                TotalAmount = group.Sum(c => c.ClaimAmount ?? 0),
+                ClaimIds = group.Where(c => !string.IsNullOrEmpty(c.ClaimId)).Select(c => c.ClaimId!).ToList()
             };
 
             analysis.Patterns.Add(pattern);
@@ -545,45 +541,4 @@ public class MockFraudDetectionService : IFraudDetectionService
         return Task.FromResult(new FraudIndicator { Code = "FR-177", ScoreContribution = 0, Severity = "LOW" });
     }
 }
-
-public static class FraudDetectionExtensions
-{
-    public static Struct ConvertToStruct(Dictionary<string, string> dict)
-    {
-        var struct_ = new Struct();
-        foreach (var kvp in dict)
-        {
-            struct_.Fields[kvp.Key] = Value.ForString(kvp.Value);
-        }
-        return struct_;
-    }
-
-    public static FraudCheckRequest ToFraudCheckRequest(
-        this Insuretech.Fraud.Services.V1.CheckFraudRequest request)
-    {
-        return new FraudCheckRequest
-        {
-            EntityId = request.EntityId,
-            EntityType = request.EntityType,
-            Metadata = TryParseMetadata(request.Data)
-        };
-    }
-
-    private static Dictionary<string, string>? TryParseMetadata(Struct? data)
-    {
-        if (data == null || data.Fields.Count == 0) return null;
-        try 
-        { 
-            var result = new Dictionary<string, string>();
-            foreach (var kvp in data.Fields)
-            {
-                if (kvp.Value.KindCase == Value.KindOneofCase.StringValue)
-                    result[kvp.Key] = kvp.Value.StringValue;
-            }
-            return result;
-        }
-        catch { return null; }
-    }
-}
-
 

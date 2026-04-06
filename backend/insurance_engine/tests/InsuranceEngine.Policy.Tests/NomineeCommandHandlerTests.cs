@@ -42,7 +42,8 @@ public class AddNomineeCommandHandlerTests
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsNotFound.Should().BeTrue();
+        result.IsFailure.Should().BeTrue();
+        result.Error?.Code.Should().Be("POLICY_NOT_FOUND");
     }
 
     [Fact]
@@ -59,22 +60,17 @@ public class AddNomineeCommandHandlerTests
             "+8801912345678",
             null);
 
-        var existingPolicy = new Insuretech.Policy.Entity.V1.Policy
-        {
-            PolicyId = policyId,
-            PolicyNumber = "POL-2026-0001",
-            Nominees = { }
-        };
+        var existingPolicy = CreatePolicyWithNominees(policyId, new List<Nominee>());
 
         _gatewayMock.Setup(g => g.GetPolicyAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetPolicyResponse { Policy = existingPolicy });
 
-        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Nominee>>(), It.IsAny<Insuretech.Policy.Services.V1.Policy?>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new UpdatePolicyResponse { PolicyId = policyId });
+        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<List<Nominee>?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new UpdatePolicyResponse { Error = null, Message = "Success" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsOk.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
         result.Value.Should().NotBeEmpty();
     }
 
@@ -92,22 +88,39 @@ public class AddNomineeCommandHandlerTests
             "+88017111234567",
             "15-06-1985");
 
-        var existingPolicy = new Insuretech.Policy.Entity.V1.Policy
-        {
-            PolicyId = policyId,
-            PolicyNumber = "POL-2026-0003",
-            Nominees = { }
-        };
+        var existingPolicy = CreatePolicyWithNominees(policyId, new List<Nominee>());
 
         _gatewayMock.Setup(g => g.GetPolicyAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetPolicyResponse { Policy = existingPolicy });
 
-        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Nominee>>(), It.IsAny<Insuretech.Policy.Services.V1.Policy?>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new UpdatePolicyResponse { PolicyId = policyId });
+        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<List<Nominee>?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new UpdatePolicyResponse { Error = null, Message = "Success" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsOk.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    private static Insuretech.Policy.Entity.V1.Policy CreatePolicyWithNominees(string policyId, List<Nominee> nominees)
+    {
+        var policy = new Insuretech.Policy.Entity.V1.Policy
+        {
+            PolicyId = policyId,
+            PolicyNumber = "POL-2026-0001",
+            ProductId = "PROD-001",
+            CustomerId = "CUST-001",
+            Status = Insuretech.Policy.Entity.V1.PolicyStatus.Active,
+            PremiumAmount = new Insuretech.Common.V1.Money { Amount = 1239, Currency = "BDT" },
+            SumInsured = new Insuretech.Common.V1.Money { Amount = 50000, Currency = "BDT" },
+            TenureMonths = 1,
+            StartDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow),
+            EndDate = Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(DateTime.UtcNow.AddMonths(1))
+        };
+        foreach (var n in nominees)
+        {
+            policy.Nominees.Add(n);
+        }
+        return policy;
     }
 }
 
@@ -140,22 +153,18 @@ public class UpdateNomineeCommandHandlerTests
             null,
             null);
 
-        var existingPolicy = new Insuretech.Policy.Entity.V1.Policy
+        var existingPolicy = CreatePolicyWithNominees(policyId, new List<Nominee>
         {
-            PolicyId = policyId,
-            PolicyNumber = "POL-2026-0001",
-            Nominees = new List<Nominee>
-            {
-                new Nominee { NomineeId = "different-id", FullName = "Other", Relationship = "Child", SharePercentage = 100 }
-            }
-        };
+            new Nominee { NomineeId = "different-id", FullName = "Other", Relationship = "Child", SharePercentage = 100 }
+        });
 
         _gatewayMock.Setup(g => g.GetPolicyAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetPolicyResponse { Policy = existingPolicy });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsNotFound.Should().BeTrue();
+        result.IsFailure.Should().BeTrue();
+        result.Error?.Code.Should().Be("NOMINEE_NOT_FOUND");
     }
 
     [Fact]
@@ -174,25 +183,34 @@ public class UpdateNomineeCommandHandlerTests
             null,
             null);
 
-        var existingPolicy = new Insuretech.Policy.Entity.V1.Policy
+        var existingPolicy = CreatePolicyWithNominees(policyId, new List<Nominee>
         {
-            PolicyId = policyId,
-            PolicyNumber = "POL-2026-0001",
-            Nominees = new List<Nominee>
-            {
-                new Nominee { NomineeId = nomineeId, FullName = "Original Name", Relationship = "Child", SharePercentage = 100 }
-            }
-        };
+            new Nominee { NomineeId = nomineeId, FullName = "Original Name", Relationship = "Child", SharePercentage = 100 }
+        });
 
         _gatewayMock.Setup(g => g.GetPolicyAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetPolicyResponse { Policy = existingPolicy });
 
-        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Nominee>>(), It.IsAny<Insuretech.Policy.Services.V1.Policy?>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new UpdatePolicyResponse { PolicyId = policyId });
+        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<List<Nominee>?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new UpdatePolicyResponse { Error = null, Message = "Success" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsOk.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    private static Insuretech.Policy.Entity.V1.Policy CreatePolicyWithNominees(string policyId, List<Nominee> nominees)
+    {
+        var policy = new Insuretech.Policy.Entity.V1.Policy
+        {
+            PolicyId = policyId,
+            PolicyNumber = "POL-2026-0001"
+        };
+        foreach (var n in nominees)
+        {
+            policy.Nominees.Add(n);
+        }
+        return policy;
     }
 }
 
@@ -217,24 +235,33 @@ public class DeleteNomineeCommandHandlerTests
         
         var command = new DeleteNomineeCommand(policyId, nomineeId);
 
-        var existingPolicy = new Insuretech.Policy.Entity.V1.Policy
+        var existingPolicy = CreatePolicyWithNominees(policyId, new List<Nominee>
         {
-            PolicyId = policyId,
-            PolicyNumber = "POL-2026-0001",
-            Nominees = new List<Nominee>
-            {
-                new Nominee { NomineeId = nomineeId, FullName = "To Delete", Relationship = "Spouse", SharePercentage = 100 }
-            }
-        };
+            new Nominee { NomineeId = nomineeId, FullName = "To Delete", Relationship = "Spouse", SharePercentage = 100 }
+        });
 
         _gatewayMock.Setup(g => g.GetPolicyAsync(It.IsAny<string>(), It.IsAny<CancellationToken>()))
             .ReturnsAsync(new GetPolicyResponse { Policy = existingPolicy });
 
-        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<IEnumerable<Nominee>>(), It.IsAny<Insuretech.Policy.Services.V1.Policy?>(), It.IsAny<CancellationToken>()))
-            .ReturnsAsync(new UpdatePolicyResponse { PolicyId = policyId });
+        _gatewayMock.Setup(g => g.UpdatePolicyAsync(It.IsAny<string>(), It.IsAny<List<Nominee>?>(), It.IsAny<string?>(), It.IsAny<CancellationToken>()))
+            .ReturnsAsync(new UpdatePolicyResponse { Error = null, Message = "Success" });
 
         var result = await _handler.Handle(command, CancellationToken.None);
 
-        result.IsOk.Should().BeTrue();
+        result.IsSuccess.Should().BeTrue();
+    }
+
+    private static Insuretech.Policy.Entity.V1.Policy CreatePolicyWithNominees(string policyId, List<Nominee> nominees)
+    {
+        var policy = new Insuretech.Policy.Entity.V1.Policy
+        {
+            PolicyId = policyId,
+            PolicyNumber = "POL-2026-0001"
+        };
+        foreach (var n in nominees)
+        {
+            policy.Nominees.Add(n);
+        }
+        return policy;
     }
 }

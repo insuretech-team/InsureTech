@@ -8,11 +8,11 @@ namespace InsuranceEngine.Endorsements.Application.Commands;
 
 public sealed class UpdatePolicyCommandHandler : IRequestHandler<UpdatePolicyCommand, UpdatePolicyResponse>
 {
-    private readonly IEndorsementDataGateway _gateway;
+    private readonly ISqlEndorsementDataGateway _gateway;
     private readonly ILogger<UpdatePolicyCommandHandler> _logger;
 
     public UpdatePolicyCommandHandler(
-        IEndorsementDataGateway gateway,
+        ISqlEndorsementDataGateway gateway,
         ILogger<UpdatePolicyCommandHandler> logger)
     {
         _gateway = gateway;
@@ -23,24 +23,48 @@ public sealed class UpdatePolicyCommandHandler : IRequestHandler<UpdatePolicyCom
     {
         try
         {
-            _logger.LogInformation("Updating policy (Endorsement): {PolicyId}", request.PolicyId);
+            _logger.LogInformation("Processing policy endorsement: {PolicyId}", request.PolicyId);
 
-            var currentPolicyResponse = await _gateway.GetPolicyAsync(request.PolicyId, cancellationToken);
-            if (currentPolicyResponse.Policy == null)
+            var endorsementId = Guid.NewGuid().ToString();
+            var endorsementNumber = $"END-{DateTime.UtcNow:yyyyMMdd}-{endorsementId[..8].ToUpper()}";
+
+            var changes = new Dictionary<string, object>();
+            if (request.Nominees != null)
             {
-                return new UpdatePolicyResponse { Error = new Error { Code = "NOT_FOUND", Message = "Policy not found" } };
+                changes["nominees"] = request.Nominees.Select(n => new { 
+                    fullName = n.FullName, 
+                    relationship = n.Relationship,
+                    sharePercentage = n.SharePercentage 
+                }).ToList();
+            }
+            if (!string.IsNullOrEmpty(request.Address))
+            {
+                changes["address"] = request.Address;
             }
 
-            var response = await _gateway.UpdatePolicyAsync(request.PolicyId, request.Nominees, cancellationToken);
-            
-            _logger.LogInformation("Policy endorsement processed successfully for {PolicyId}", request.PolicyId);
+            var endorsement = new InsuranceEngine.SharedKernel.Persistence.Entities.EndorsementEntity
+            {
+                EndorsementId = endorsementId,
+                EndorsementNumber = endorsementNumber,
+                PolicyId = request.PolicyId,
+                Type = request.Nominees != null ? EndorsementType.NomineeChange : EndorsementType.ContactChange,
+                Status = "PROCESSED",
+                Changes = System.Text.Json.JsonSerializer.Serialize(changes),
+                EffectiveDate = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow,
+                UpdatedAt = DateTime.UtcNow
+            };
 
-            return response;
+            await _gateway.CreateAsync(endorsement, cancellationToken);
+
+            _logger.LogInformation("Policy endorsement created successfully: {EndorsementNumber}", endorsementNumber);
+
+            return new UpdatePolicyResponse();
         }
         catch (Exception ex)
         {
-            _logger.LogError(ex, "Failed to update policy via gateway: {PolicyId}", request.PolicyId);
-            return new UpdatePolicyResponse { Error = new Error { Code = "GATEWAY_ERROR", Message = ex.Message } };
+            _logger.LogError(ex, "Failed to process policy endorsement: {PolicyId}", request.PolicyId);
+            return new UpdatePolicyResponse { Error = new Error { Code = "ENDORSEMENT_ERROR", Message = ex.Message } };
         }
     }
 }

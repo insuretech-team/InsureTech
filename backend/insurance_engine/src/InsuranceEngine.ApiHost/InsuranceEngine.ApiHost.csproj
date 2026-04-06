@@ -20,6 +20,7 @@
     <ProjectReference Include="..\InsuranceEngine.Renewals\InsuranceEngine.Renewals.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Endorsements\InsuranceEngine.Endorsements.csproj" />
     <ProjectReference Include="..\InsuranceEngine.FraudDetection\InsuranceEngine.FraudDetection.csproj" />
+    <ProjectReference Include="..\InsuranceEngine.Quoting\InsuranceEngine.Quoting.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Proto\InsuranceEngine.Proto.csproj" />
     <ProjectReference Include="..\InsuranceEngine.Grpc\InsuranceEngine.Grpc.csproj" />
   </ItemGroup>

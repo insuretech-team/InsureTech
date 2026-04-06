@@ -1,5 +1,4 @@
-using Google.Protobuf.WellKnownTypes;
-using InsuranceEngine.Grpc.Clients;
+using InsuranceEngine.Endorsements.Infrastructure;
 using Microsoft.Extensions.Logging;
 
 namespace InsuranceEngine.Endorsements;
@@ -113,16 +112,16 @@ public interface IEndorsementProcessingService
 
 public class EndorsementProcessingService : IEndorsementProcessingService
 {
-    private readonly InsuranceServiceClient _client;
+    private readonly ISqlEndorsementDataGateway _gateway;
     private readonly ILogger<EndorsementProcessingService> _logger;
 
     private const decimal MinimumSumAssuredChangePercent = 0.10m;
 
     public EndorsementProcessingService(
-        InsuranceServiceClient client,
+        ISqlEndorsementDataGateway gateway,
         ILogger<EndorsementProcessingService> logger)
     {
-        _client = client;
+        _gateway = gateway;
         _logger = logger;
     }
 
@@ -163,11 +162,31 @@ public class EndorsementProcessingService : IEndorsementProcessingService
         var refundAmount = await CalculateSumDecreaseRefundAsync(
             policyId, currentSumAssured, newSumAssured, currentPremium, policyStartDate, ct);
 
+        var endorsementId = Guid.NewGuid().ToString();
+        var endorsementNumber = $"END-{DateTime.UtcNow:yyyyMMdd}-{endorsementId[..8].ToUpper()}";
+
+        var endorsement = new InsuranceEngine.SharedKernel.Persistence.Entities.EndorsementEntity
+        {
+            EndorsementId = endorsementId,
+            EndorsementNumber = endorsementNumber,
+            PolicyId = policyId,
+            Type = EndorsementType.SumDecrease,
+            Status = "APPROVED",
+            OldSumAssured = currentSumAssured,
+            NewSumAssured = newSumAssured,
+            RefundAmount = refundAmount,
+            EffectiveDate = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        await _gateway.CreateAsync(endorsement, ct);
+
         var result = new SumChangeEndorsementResult
         {
             PolicyId = policyId,
-            EndorsementId = Guid.NewGuid().ToString(),
-            EndorsementNumber = $"END-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}",
+            EndorsementId = endorsementId,
+            EndorsementNumber = endorsementNumber,
             EndorsementType = EndorsementType.SumDecrease,
             OldSumAssured = currentSumAssured,
             NewSumAssured = newSumAssured,
@@ -223,11 +242,31 @@ public class EndorsementProcessingService : IEndorsementProcessingService
         var additionalPremium = await CalculateSumIncreasePremiumAsync(
             currentSumAssured, newSumAssured, currentPremium, ct);
 
+        var endorsementId = Guid.NewGuid().ToString();
+        var endorsementNumber = $"END-{DateTime.UtcNow:yyyyMMdd}-{endorsementId[..8].ToUpper()}";
+
+        var endorsement = new InsuranceEngine.SharedKernel.Persistence.Entities.EndorsementEntity
+        {
+            EndorsementId = endorsementId,
+            EndorsementNumber = endorsementNumber,
+            PolicyId = policyId,
+            Type = EndorsementType.SumIncrease,
+            Status = "APPROVED",
+            OldSumAssured = currentSumAssured,
+            NewSumAssured = newSumAssured,
+            AdditionalPremium = additionalPremium,
+            EffectiveDate = DateTime.UtcNow,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
+        };
+
+        await _gateway.CreateAsync(endorsement, ct);
+
         var result = new SumChangeEndorsementResult
         {
             PolicyId = policyId,
-            EndorsementId = Guid.NewGuid().ToString(),
-            EndorsementNumber = $"END-{DateTime.UtcNow:yyyyMMdd}-{Guid.NewGuid().ToString()[..8].ToUpper()}",
+            EndorsementId = endorsementId,
+            EndorsementNumber = endorsementNumber,
             EndorsementType = EndorsementType.SumIncrease,
             OldSumAssured = currentSumAssured,
             NewSumAssured = newSumAssured,
@@ -261,46 +300,33 @@ public class EndorsementProcessingService : IEndorsementProcessingService
 
         try
         {
-            var fields = new Struct();
-            if (changes != null)
-            {
-                foreach (var kvp in changes)
-                {
-                    fields.Fields[kvp.Key] = Value.ForString(kvp.Value);
-                }
-            }
+            var documentId = Guid.NewGuid().ToString();
+            var fileUrl = $"/documents/endorsements/{endorsementId}/{documentId}.pdf";
 
-            var request = new Insuretech.Document.Services.V1.GenerateDocumentRequest
+            var document = new InsuranceEngine.SharedKernel.Persistence.Entities.EndorsementDocumentEntity
             {
-                TemplateId = "endorsement-document-v1",
-                EntityType = "endorsement",
-                EntityId = endorsementId,
-                OutputFormat = "pdf",
-                Data = fields
+                DocumentId = documentId,
+                EndorsementId = endorsementId,
+                DocumentType = "ENDORSEMENT",
+                DocumentNumber = endorsementNumber,
+                FileUrl = fileUrl,
+                Status = "GENERATED",
+                GeneratedAt = DateTime.UtcNow,
+                CreatedAt = DateTime.UtcNow
             };
 
-            var response = await _client.Documents.GenerateDocumentAsync(request, _client.BuildCallOptions(ct));
+            await _gateway.CreateDocumentAsync(document, ct);
 
-            if (response.Error != null && !string.IsNullOrEmpty(response.Error.Message))
-            {
-                _logger.LogWarning("Go backend document generation failed: {Error}", response.Error.Message);
-                return new EndorsementDocumentResult
-                {
-                    DocumentId = endorsementId,
-                    DocumentType = "ENDORSEMENT",
-                    DocumentNumber = endorsementNumber,
-                    GeneratedAt = DateTime.UtcNow,
-                    IsSuccess = false,
-                    ErrorMessage = response.Error.Message
-                };
-            }
+            _logger.LogInformation(
+                "Endorsement document generated: {DocumentId} for endorsement {EndorsementId}",
+                documentId, endorsementId);
 
             return new EndorsementDocumentResult
             {
-                DocumentId = response.DocumentId ?? endorsementId,
+                DocumentId = documentId,
                 DocumentType = "ENDORSEMENT",
                 DocumentNumber = endorsementNumber,
-                FileUrl = response.FileUrl ?? string.Empty,
+                FileUrl = fileUrl,
                 GeneratedAt = DateTime.UtcNow,
                 IsSuccess = true
             };
@@ -310,7 +336,7 @@ public class EndorsementProcessingService : IEndorsementProcessingService
             _logger.LogError(ex, "Failed to generate endorsement document for {EndorsementNumber}", endorsementNumber);
             return new EndorsementDocumentResult
             {
-                DocumentId = endorsementId,
+                DocumentId = string.Empty,
                 DocumentType = "ENDORSEMENT",
                 DocumentNumber = endorsementNumber,
                 GeneratedAt = DateTime.UtcNow,

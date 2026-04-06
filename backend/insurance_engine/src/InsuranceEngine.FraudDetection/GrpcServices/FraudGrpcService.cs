@@ -34,8 +34,7 @@ public sealed class FraudGrpcService : FraudService.FraudServiceBase
 
         var command = new CheckFraudCommand(
             request.EntityType,
-            request.EntityId,
-            request.Data
+            request.EntityId
         );
 
         return await _mediator.Send(command, context.CancellationToken);

@@ -26,22 +26,37 @@ public sealed class AddNomineeCommandHandler : IRequestHandler<AddNomineeCommand
             if (policyResponse.Policy == null)
                 return Result<string>.NotFound("POLICY_NOT_FOUND", "Policy not found");
 
-            var newNominee = new Nominee
+            _logger.LogDebug("Creating nominee: {FullName}, {Relationship}, {Share}", request.FullName, request.Relationship, request.SharePercentage);
+            
+            Nominee newNominee;
+            newNominee = new Nominee
             {
                 NomineeId = Guid.NewGuid().ToString(),
-                FullName = request.FullName,
-                Relationship = request.Relationship,
+                PolicyId = request.PolicyId,
+                FullName = request.FullName ?? "",
+                Relationship = request.Relationship ?? "",
                 SharePercentage = (double)request.SharePercentage,
                 DateOfBirth = request.DateOfBirth.HasValue ? Google.Protobuf.WellKnownTypes.Timestamp.FromDateTime(request.DateOfBirth.Value.ToUniversalTime()) : null,
-                NidNumber = request.NidNumber,
-                PhoneNumber = request.PhoneNumber,
-                NomineeDobText = request.NomineeDobText
+                NidNumber = request.NidNumber ?? "",
+                PhoneNumber = request.PhoneNumber ?? "",
+                NomineeDobText = request.NomineeDobText ?? ""
             };
 
-            var nominees = policyResponse.Policy.Nominees.ToList();
-            nominees.Add(newNominee);
+            _logger.LogDebug("Getting existing nominees, count: {Count}", policyResponse.Policy.Nominees?.Count ?? 0);
+            
+            var nomineesToUpdate = new List<Nominee>();
+            if (policyResponse.Policy.Nominees != null)
+            {
+                foreach (var existing in policyResponse.Policy.Nominees)
+                {
+                    nomineesToUpdate.Add(existing);
+                }
+            }
+            nomineesToUpdate.Add(newNominee);
+            
+            _logger.LogDebug("After adding new nominee, count: {Count}", nomineesToUpdate.Count);
 
-            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, nominees, null, cancellationToken);
+            var updateResponse = await _gateway.UpdatePolicyAsync(request.PolicyId, nomineesToUpdate, null, cancellationToken);
             
             if (updateResponse.Error != null)
                 return Result<string>.Fail("UPDATE_FAILED", updateResponse.Error.Message);

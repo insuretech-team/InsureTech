@@ -25,6 +25,7 @@ using InsuranceEngine.Claims;
 using InsuranceEngine.Underwriting;
 using InsuranceEngine.Beneficiary;
 using InsuranceEngine.Commission;
+using InsuranceEngine.Quoting;
 using InsuranceEngine.Infrastructure.Notifications;
 using InsuranceEngine.Infrastructure.Documents;
 using InsuranceEngine.Infrastructure.Refunds;
@@ -34,24 +35,29 @@ using InsuranceEngine.Infrastructure;
 using InsuranceEngine.Infrastructure.Renewals;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Logging;
+using InsuranceEngine.SharedKernel.Domain.Security;
+using InsuranceEngine.SharedKernel.Infrastructure.Security;
 
 var builder = WebApplication.CreateBuilder(args);
+
+var connectionString = builder.Configuration.GetConnectionString("InsuranceDb");
 
 // Add services
 builder.Services.AddHttpContextAccessor();
 builder.Services.AddSingleton<GrpcClientFactory>();
 builder.Services.AddScoped<InsuranceServiceClient>();
 
-builder.Services.AddProductsModule();
-builder.Services.AddPolicyModule();
-builder.Services.AddClaimsModule();
-builder.Services.AddUnderwritingModule();
-builder.Services.AddBeneficiaryModule();
-builder.Services.AddCommissionModule();
-builder.Services.AddFraudDetectionModule();
-builder.Services.AddCancellationsModule();
-builder.Services.AddRenewalsModule();
-builder.Services.AddEndorsementsModule();
+builder.Services.AddProductsModule(connectionString);
+builder.Services.AddPolicyModule(connectionString);
+builder.Services.AddClaimsModule(builder.Configuration, connectionString);
+builder.Services.AddUnderwritingModule(connectionString);
+builder.Services.AddBeneficiaryModule(connectionString);
+builder.Services.AddCommissionModule(connectionString);
+builder.Services.AddFraudDetectionModule(connectionString);
+builder.Services.AddCancellationsModule(connectionString);
+builder.Services.AddRenewalsModule(connectionString);
+builder.Services.AddEndorsementsModule(connectionString);
+builder.Services.AddQuotingModule(connectionString);
 
 builder.Services.AddMediatR(cfg =>
 {
@@ -59,7 +65,6 @@ builder.Services.AddMediatR(cfg =>
 });
 
 // 1. Hangfire Background Task Setup (Phase 1 / ST-001)
-var connectionString = builder.Configuration.GetConnectionString("InsuranceDb");
 builder.Services.AddHangfire(config => config
     .SetDataCompatibilityLevel(CompatibilityLevel.Version_180)
     .UseSimpleAssemblyNameTypeSerializer()
@@ -73,6 +78,10 @@ builder.Services.AddHangfireServer();
 builder.Services.AddScoped<PolicyBackgroundJobs>(); // FR-048 Background tasks
 
 builder.Services.AddDistributedMemoryCache(); // FR-028 Product caching (TODO: Replace with Redis)
+builder.Services.AddSingleton<IQrCodeService, QrCodeService>();
+
+// M1-1 (Security): PII Encryption Parity (ST-001)
+builder.Services.AddSingleton<ICryptoService, BouncyGcmCryptoService>();
 
 // M1-3: PDF Generation Service (FR-035)
 // Use real DocumentService when Go backend is available, otherwise mock

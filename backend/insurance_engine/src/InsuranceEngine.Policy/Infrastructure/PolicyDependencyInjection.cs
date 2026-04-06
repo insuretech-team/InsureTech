@@ -2,6 +2,7 @@ using Microsoft.Extensions.DependencyInjection;
 using MediatR;
 using InsuranceEngine.Policy.Application;
 using InsuranceEngine.Policy.Infrastructure;
+using Microsoft.EntityFrameworkCore;
 
 namespace InsuranceEngine.Policy;
 
@@ -11,16 +12,17 @@ namespace InsuranceEngine.Policy;
 /// </summary>
 public static class PolicyDependencyInjection
 {
-    public static IServiceCollection AddPolicyModule(this IServiceCollection services)
+    public static IServiceCollection AddPolicyModule(this IServiceCollection services, string connectionString)
     {
-        // Register MediatR for this assembly using the AssemblyMarker
         services.AddMediatR(cfg => 
         {
             cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
         });
 
-        // Add module-specific gateways
-        services.AddScoped<IPolicyDataGateway, GoPolicyDataGateway>();
+        services.AddDbContext<PolicyDbContext>(options =>
+            options.UseNpgsql(connectionString));
+
+        services.AddScoped<IPolicyDataGateway, SqlPolicyDataGateway>();
         
         return services;
     }

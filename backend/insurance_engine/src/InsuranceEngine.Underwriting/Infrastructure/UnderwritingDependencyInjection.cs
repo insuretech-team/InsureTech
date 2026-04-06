@@ -1,26 +1,24 @@
 using Microsoft.Extensions.DependencyInjection;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
 using InsuranceEngine.Underwriting.Application;
 using InsuranceEngine.Underwriting.Infrastructure;
 
 namespace InsuranceEngine.Underwriting;
 
-/// <summary>
-/// Registers all Underwriting module services into the DI container.
-/// Follows the professional pattern used in PoliSync.
-/// </summary>
 public static class UnderwritingDependencyInjection
 {
-    public static IServiceCollection AddUnderwritingModule(this IServiceCollection services)
+    public static IServiceCollection AddUnderwritingModule(this IServiceCollection services, string connectionString)
     {
-        // Register MediatR for this assembly using the AssemblyMarker
         services.AddMediatR(cfg => 
         {
             cfg.RegisterServicesFromAssembly(typeof(AssemblyMarker).Assembly);
         });
 
-        // Add module-specific gateways
-        services.AddScoped<IUnderwritingDataGateway, GoUnderwritingDataGateway>();
+        services.AddDbContext<UnderwritingDbContext>(options =>
+            options.UseNpgsql(connectionString));
+
+        services.AddScoped<IUnderwritingDataGateway, SqlUnderwritingDataGateway>();
         
         return services;
     }

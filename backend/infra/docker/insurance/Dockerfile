@@ -8,11 +8,10 @@ WORKDIR /app
 # Copy pre-built Linux binary
 COPY bin/insurance/server ./server
 
-# Copy runtime configs and secrets
+# Copy runtime configs
 COPY ops ./ops
 COPY go.mod ./go.mod
-COPY backend/inscore/configs ./backend/inscore/configs
-COPY backend/inscore/configs ./inscore/configs
-COPY backend/inscore/secrets ./backend/inscore/secrets
+COPY backend/Inscore/configs ./backend/inscore/configs
+COPY backend/Inscore/configs ./inscore/configs
 
 CMD ["./server"]
